@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title></title>
+  <title>What Is Graal</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -22,7 +22,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
-<body class="error-page">
+<body class="guides">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -43,7 +43,7 @@
               <a href="/get-started/" class="">Get Started</a>
             </li>
             <li>
-              <a href="/guides/" class="">Guides</a>
+              <a href="/guides/" class="active">Guides</a>
             </li>
             <li>
               <a href="/extensions/" class="">Extensions</a>
@@ -58,14 +58,28 @@
   </div>
 </div>
 
-    <div class="grid-wrapper error-page-content">
-  <div class="grid__item width-12-12 message">
-    <h1 id="error-404">Error 404</h1>
-
-<h2 id="protons-as-planetsthe-pathway-to-normal-spaceis-found-in-the-nav">Protons as planets,<br />the pathway to normal space<br />is found in the nav.</h2>
-
-<p>A haiku for you.</p>
-
+    <div class="grid-wrapper guides">
+  <div class="grid__item width-12-12">
+    <h1 class="text-caps">What Is Graal</h1>
+    <div class="sect1">
+<h2 id="what-is-graalvm">What is GraalVM</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://www.graalvm.org/">GraalVM</a> GraalVM is a universal virtual machine for running applications written in
+various different languages, as well as providing the ability to compile JVM bytecode to a native executable (this
+native executable runs a special virtual machine called SubstrateVM). These native executable&#8217;s start much faster
+and can use a lot less memory that a traditional JVM, however not every JVM feature is supported, and some are more
+limited than normal.</p>
+</div>
+<div class="paragraph">
+<p>For example by default reflection in GraalVM will not work, unless a class/member has been explicitly registered for
+reflection. This is normally achieved by listing every class, method, field and constructor in a JSON file, and passing
+this as a parameter into the native image build. This obviously gets quite cumbersome for all but the most trivial projects.
+Quarkus provides a framework that makes it easy to work around these annotations, and programmatically determine what should
+be registered.</p>
+</div>
+</div>
+</div>
   </div>
 </div>
 
