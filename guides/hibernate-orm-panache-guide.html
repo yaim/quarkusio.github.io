@@ -58,13 +58,13 @@
 
     <div class="grid-wrapper guides">
   <div class="grid__item width-12-12">
-    <h1 class="text-caps">Quarkus - Simplified Hibernate ORM and JPA with Panache</h1>
+    <h1 class="text-caps">Quarkus - Simplified Hibernate ORM with Panache</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Hibernate ORM is the de facto JPA implementation and offers you the full breadth of an Object Relational Mapper.
 It makes complex mappings possible, but it does not make simple and common mappings trivial.
-Panache focuses on making your entities trivial and fun to write in Quarkus.</p>
+Hibernate ORM with Panache focuses on making your entities trivial and fun to write in Quarkus.</p>
 </div>
 </div>
 </div>
@@ -72,7 +72,7 @@ Panache focuses on making your entities trivial and fun to write in Quarkus.</p>
 <h2 id="first-an-example">First: an example</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>What we&#8217;re doing in Panache is allow you to write your Hibernate entities like this:</p>
+<p>What we&#8217;re doing in Panache is allow you to write your Hibernate ORM entities like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -97,12 +97,25 @@ public class Person extends PanacheEntity {
 </div>
 </div>
 <div class="paragraph">
-<p>Does this look interesting? Read on!</p>
+<p>You have noticed how much more compact and readable the code is?
+Does this look interesting? Read on!</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+the <code>list()</code> method might be surprising at first. It takes fragments of HQL (JP-QL) queries and contextualize the rest. That makes for very concise but yet readable code.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="setting-up-and-configuring-panache-jpa">Setting up and configuring Panache JPA</h2>
+<h2 id="setting-up-and-configuring-hibernate-orm-with-panache">Setting up and configuring Hibernate ORM with Panache</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To get started:</p>
@@ -110,7 +123,7 @@ public class Person extends PanacheEntity {
 <div class="ulist">
 <ul>
 <li>
-<p>add your settings in <code>microprofile-config.properties</code></p>
+<p>add your settings in <code>application.properties</code></p>
 </li>
 <li>
 <p>annotate your entities with <code>@Entity</code> and make them extend <code>PanacheEntity</code></p>
@@ -132,7 +145,7 @@ public class Person extends PanacheEntity {
 <p>the Panache JPA extension</p>
 </li>
 <li>
-<p>your JDBC driver extension (<code>quarkus-jdbc-postgresql-deployment</code>, <code>quarkus-jdbc-h2-deployment</code>, <code>quarkus-jdbc-mariadb-deployment</code>, &#8230;&#8203;)</p>
+<p>your JDBC driver extension (<code>quarkus-jdbc-postgresql</code>, <code>quarkus-jdbc-h2</code>, <code>quarkus-jdbc-mariadb</code>, &#8230;&#8203;)</p>
 </li>
 </ul>
 </div>
@@ -142,21 +155,21 @@ public class Person extends PanacheEntity {
     &lt;!-- Hibernate ORM specific dependencies --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-panache-jpa-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-hibernate-orm-panache&lt;/artifactId&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 
     &lt;!-- JDBC driver dependencies --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-jdbc-postgresql-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-jdbc-postgresql&lt;/artifactId&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then add the relevant configuration properties in <code>microprofile-config.properties</code>.</p>
+<p>Then add the relevant configuration properties in <code>application.properties</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -211,7 +224,8 @@ public class Person extends PanacheEntity {
 </div>
 <div class="paragraph">
 <p>And thanks to our field access rewrite, when your users read <code>person.name</code> they will actually call your <code>getName()</code> accessor,
-and similarly for field writes and the setter.</p>
+and similarly for field writes and the setter.
+This allows for proper encapsulation at runtime as all fields calls will be replaced by the corresponding getter/setter calls.</p>
 </div>
 </div>
 </div>
@@ -219,7 +233,7 @@ and similarly for field writes and the setter.</p>
 <h2 id="most-useful-operations">Most useful operations</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have written your entity, here are the most common operations you would be able to do:</p>
+<p>Once you have written your entity, here are the most common operations you will be able to do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -264,7 +278,15 @@ Person.deleteAll();</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Naturally, all <code>list</code> methods have equivalent <code>stream</code> versions.</p>
+<p>All <code>list</code> methods have equivalent <code>stream</code> versions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;String&gt; namesButEmmanuels = Person.streamAll()
+    .map(p -&gt; p.name.toLowerCase() )
+    .filter( n -&gt; ! "emmanuel".equals(n) )
+    .collect(Collectors.toList());</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -296,7 +318,13 @@ List&lt;Person&gt; page7 = livingPersons.page(Page.of(7, 25)).list();
 int numberOfPages = livingPersons.pageCount();
 
 // get the total number of entities returned by this query without paging
-int count = livingPersons.count();</code></pre>
+int count = livingPersons.count();
+
+// and you can chain methods of course
+return Person.find("status", Status.Alive)
+    .page(Page.ofSize(25))
+    .nextPage()
+    .stream()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -320,7 +348,10 @@ int count = livingPersons.count();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">List&lt;Person&gt; persons = Person.list(Sort.by("name").and("birth"));</code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;Person&gt; persons = Person.list(Sort.by("name").and("birth"));
+
+// and with more restrictions
+List&lt;Person&gt; persons = Person.list("status", Sort.by("name").and("birth"), Status.Alive);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -404,7 +435,7 @@ at the end.</p>
 <pre class="highlight"><code class="language-java" data-lang="java">Map&lt;String, Object&gt; params = new HashMap&lt;&gt;();
 params.put("name", "stef");
 params.put("status", Status.Alive);
-Person.find("name = :name and status = :status", "stef", Status.Alive);</code></pre>
+Person.find("name = :name and status = :status", params);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -484,7 +515,7 @@ go back to specifying your ID and using getters and setters if that&#8217;s your
 <h2 id="custom-ids">Custom IDs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>IDs are often a touchy subject, and not everyone&#8217;s up for letting them handled by the framework, but once again we
+<p>IDs are often a touchy subject, and not everyone&#8217;s up for letting them handled by the framework, once again we
 have you covered.</p>
 </div>
 <div class="paragraph">
@@ -525,10 +556,10 @@ public class PersonRepository implements PanacheRepositoryBase&lt;Person,Integer
 </div>
 </div>
 <div class="sect1">
-<h2 id="how-and-why-we-simplify-hibernate-mapping">How and why we simplify Hibernate mapping</h2>
+<h2 id="how-and-why-we-simplify-hibernate-orm-mappings">How and why we simplify Hibernate ORM mappings</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When it comes to writing hibernate entities, there are a number of annoying things that users have grown used to
+<p>When it comes to writing Hibernate ORM entities, there are a number of annoying things that users have grown used to
 reluctantly deal with, such as:</p>
 </div>
 <div class="ulist">
@@ -561,7 +592,7 @@ model usage.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>In Panache, we took an opinionated approach to tackle all these problems:</p>
+<p>With Panache, we took an opinionated approach to tackle all these problems:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -587,7 +618,7 @@ your entity <code>Person</code> by typing <code>Person.</code> and getting compl
 </ul>
 </div>
 <div class="paragraph">
-<p>That&#8217;s all there is to it: with Panache, Hibernate has never looked so trim.</p>
+<p>That&#8217;s all there is to it: with Panache, Hibernate ORM has never looked so trim and neat.</p>
 </div>
 </div>
 </div>
