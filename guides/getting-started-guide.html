@@ -108,61 +108,6 @@ This guide covers:</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Quarkus releases are not yet available on Maven Central, so you need to configure the repositories.
-It is recommended to add the following repositories in the <code>~/.m2/settings.xml</code> file (using an auto-activated profile):</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;profiles&gt;
-    ...
-    &lt;profile&gt;
-      &lt;id&gt;Quarkus&lt;/id&gt;
-      &lt;activation&gt;
-        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
-      &lt;/activation&gt;
-      &lt;repositories&gt;
-        &lt;repository&gt;
-            &lt;id&gt;Quarkus-release&lt;/id&gt;
-            &lt;name&gt;Quarkus - Releases&lt;/name&gt;
-            &lt;url&gt;http://ec2-18-234-117-118.compute-1.amazonaws.com:8081/nexus/content/repositories/releases/&lt;/url&gt;
-            &lt;layout&gt;default&lt;/layout&gt;
-            &lt;releases&gt;
-                &lt;enabled&gt;true&lt;/enabled&gt;
-                &lt;updatePolicy&gt;never&lt;/updatePolicy&gt;
-            &lt;/releases&gt;
-            &lt;snapshots&gt;
-                &lt;enabled&gt;false&lt;/enabled&gt;
-            &lt;/snapshots&gt;
-        &lt;/repository&gt;
-      &lt;/repositories&gt;
-      &lt;pluginRepositories&gt;
-        &lt;pluginRepository&gt;
-            &lt;id&gt;Quarkus-release&lt;/id&gt;
-            &lt;name&gt;Quarkus - Releases&lt;/name&gt;
-            &lt;url&gt;http://ec2-18-234-117-118.compute-1.amazonaws.com:8081/nexus/content/repositories/releases/&lt;/url&gt;
-            &lt;layout&gt;default&lt;/layout&gt;
-            &lt;releases&gt;
-                &lt;enabled&gt;true&lt;/enabled&gt;
-                &lt;updatePolicy&gt;never&lt;/updatePolicy&gt;
-            &lt;/releases&gt;
-            &lt;snapshots&gt;
-                &lt;enabled&gt;false&lt;/enabled&gt;
-            &lt;/snapshots&gt;
-        &lt;/pluginRepository&gt;
-      &lt;/pluginRepositories&gt;
-    &lt;/profile&gt;
-    ...
-&lt;/profiles&gt;
-
-&lt;activeProfiles&gt;
-    &lt;activeProfile&gt;Quarkus&lt;/activeProfile&gt;
-&lt;/activeProfiles&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Alternatively you add the repositories in your <code>pom.xml</code> file.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
