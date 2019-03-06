@@ -92,13 +92,14 @@ to your project by running the following from the command line in your project b
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-infinispan-client-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-infinispan-client&lt;/artifactId&gt;
+        &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The Infinispan client is configurable in the <code>microprofile-config.properties</code> file that can be
-provided in the <code>META-INF</code> directory. These are the properties that
+<p>The Infinispan client is configurable in the <code>application.properties</code> file that can be
+provided in the <code>src/main/resources</code> directory. These are the properties that
 can be configured in this file:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -193,6 +194,19 @@ buf schema and a marshaller for each user type(s).</p>
 Annotation based proto stream marshalling is not yet supported in
 the Quarkus Infinispan client. This will be added soon, allowing you to only annotate your classes,
 skipping the following steps.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This version has an issue currently requiring the Query DSL module as a dependency when running in
+native mode with proto buf based marshalling. This should be remedied in a future version.
 </td>
 </tr>
 </table>
@@ -393,7 +407,7 @@ hotrod-client.properties as mentioned above.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>infinispan.client.hotrod.marshaller=com.example.MyMarshaller</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">infinispan.client.hotrod.marshaller=com.example.MyMarshaller</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -419,14 +433,14 @@ the field, constructor or method. In the below code we utilize field and constru
 <div class="listingblock">
 <div class="title">SomeClass.java</div>
 <div class="content">
-<pre>    @Inject SomeClass(RemoteCacheManager remoteCacheManager) {
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Inject SomeClass(RemoteCacheManager remoteCacheManager) {
        this.remoteCacheManager = remoteCacheManager;
     }
 
     @Inject @Remote("myCache")
     RemoteCache&lt;String, Book&gt; cache;
 
-    RemoteCacheManager remoteCacheManager;</pre>
+    RemoteCacheManager remoteCacheManager;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -590,12 +604,12 @@ the Quarkus Infinispan Client extension.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">DIGEST-MD5</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong class="green">Y</strong></p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Requires steps from Encryption section above</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">PLAIN</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong class="green">Y</strong></p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Requires steps from Encryption section above</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EXTERNAL</p></td>

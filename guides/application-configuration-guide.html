@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Configuring Your Application</title>
+  <title>Application Configuration Guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -60,7 +60,7 @@
 
     <div class="grid-wrapper guides">
   <div class="grid__item width-12-12">
-    <h1 class="text-caps">Quarkus - Configuring Your Application</h1>
+    <h1 class="text-caps">Application Configuration Guide</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -91,9 +91,6 @@ In this guide, we learn how to configure your application.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Remember, you need to configure Maven as indicated in the <a href="maven-config.html">Maven configuration page</a>.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -119,7 +116,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:$1.0.0.Alpha1-SNAPSHOT:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=application-configuration \
     -DclassName="org.acme.config.GreetingResource" \
@@ -186,7 +183,7 @@ private Optional&lt;String&gt; name;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The first property is <em>mandatory</em>. If you do not provide a value, the build fails.
+<p>If you do not provide a value for the first property, it will have a <code>null</code> value.
 The second property injects the given default value if the configuration file does not provide a value.
 The third property is optional. The injected <code>Optional</code> is empty as the configuration file does not provide a value.</p>
 </div>
@@ -213,7 +210,7 @@ Edit the <code>src/main/resources/application.properties</code> with the followi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code># Your configuration properties
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell"># Your configuration properties
 greeting.message = hello
 greeting.name = quarkus</code></pre>
 </div>
@@ -223,7 +220,7 @@ greeting.name = quarkus</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>$ curl http://localhost:8080/greeting
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ curl http://localhost:8080/greeting
 hello quarkus!</code></pre>
 </div>
 </div>
@@ -290,6 +287,82 @@ You can add the <code>greeting.suffix</code>, remove the other properties, chang
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>mvn clean package</code> and executed using the <code>-runner.jar</code> file.
 You can also generate the native executable with <code>mvn clean package -Pnative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="overriding-properties-at-runtime">Overriding properties at runtime</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus does much of its configuration and bootstrap at build time.
+Most properties will then be read and set during the build time step.
+To change them, make sure to repackage your application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn clean package</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Extensions do define <em>some</em> properties as overridable at runtime.
+A canonical example is the database URL, username and password which is only known specifically in your target environment.
+This is a tradeoff as the more runtime properties are available, the less build time prework Quarkus can do. The list of runtime properties is therefore lean.</p>
+</div>
+<div class="paragraph">
+<p>You can override these runtime properties with the following mechanisms (in decreasing priority):</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>using system properties:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>for a runner jar: <code>java -Dquarkus.datasource.password=youshallnotpass -jar target/myapp-runner.jar</code></p>
+</li>
+<li>
+<p>for a native image: <code>./target/myapp-runner -Dquarkus.datasource.password=youshallnotpass</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>using environment variables:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>for a runner jar: <code>export QUARKUS_DATASOURCE_PASSWORD=youshallnotpass ; java -jar target/myapp-runner.jar</code></p>
+</li>
+<li>
+<p>for a native image: <code>export QUARKUS_DATASOURCE_PASSWORD=youshallnotpass ; ./target/myapp-runner</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Environment variables names are following the conversion rules of <a href="https://github.com/eclipse/microprofile-config/blob/master/spec/src/main/asciidoc/configsources.asciidoc#default-configsources">Eclipse MicroProfile</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more-info-on-how-to-configure">More info on how to configure</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus relies on Eclipse MicroProfile and inherit its features.</p>
+</div>
+<div class="paragraph">
+<p>There are converters that convert your property file content from <code>String</code> to typed Java types. See the list <a href="https://github.com/eclipse/microprofile-config/blob/master/spec/src/main/asciidoc/converters.asciidoc">in the specification</a>.</p>
 </div>
 </div>
 </div>

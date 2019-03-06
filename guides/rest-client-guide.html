@@ -91,9 +91,6 @@ with very little effort.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Remember, you need to configure Maven as indicated in the <a href="maven-config.html">Maven configuration page</a>.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -119,7 +116,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:1.0.0.Alpha1-SNAPSHOT:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=rest-client \
     -DclassName="org.acme.restclient.CountriesResource" \
@@ -297,12 +294,12 @@ it is heavily recommended to annotate your endpoints with them to define precise
 <h2 id="create-the-configuration">Create the configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In order to determine the base URL to which REST calls will be made, the REST Client uses configuration from <code>META-INF/microprofile-config.properties</code>.
+<p>In order to determine the base URL to which REST calls will be made, the REST Client uses configuration from <code>application.properties</code>.
 The name of the property needs to follow a certain convention which is best displayed in the following code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code># Your configuration properties
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell"># Your configuration properties
 org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest</code></pre>
 </div>
 </div>

@@ -79,7 +79,7 @@ In Quarkus, you just need to:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>add your settings in <code>microprofile-config.properties</code></p>
+<p>add your settings in <code>application.properties</code></p>
 </li>
 <li>
 <p>annotate your entities with <code>@Entity</code> and friends</p>
@@ -98,7 +98,7 @@ In Quarkus, you just need to:</p>
 <p>the Hibernate ORM extension</p>
 </li>
 <li>
-<p>your JDBC driver extension (<code>quarkus-jdbc-postgresql-deployment</code>, <code>quarkus-jdbc-h2-deployment</code>, <code>quarkus-jdbc-mariadb-deployment</code>, &#8230;&#8203;)</p>
+<p>your JDBC driver extension (<code>quarkus-jdbc-postgresql</code>, <code>quarkus-jdbc-h2</code>, <code>quarkus-jdbc-mariadb</code>, &#8230;&#8203;)</p>
 </li>
 </ul>
 </div>
@@ -108,14 +108,14 @@ In Quarkus, you just need to:</p>
     &lt;!-- Hibernate ORM specific dependencies --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-hibernate-orm-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-hibernate-orm&lt;/artifactId&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 
     &lt;!-- JDBC driver dependencies --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-jdbc-postgresql-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-jdbc-postgresql&lt;/artifactId&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;</code></pre>
@@ -123,7 +123,7 @@ In Quarkus, you just need to:</p>
 </div>
 <div class="paragraph">
 <p>Annotate your persistent objects with <code>@Entity</code>,
-then add the relevant configuration properties in <code>microprofile-config.properties</code>.</p>
+then add the relevant configuration properties in <code>application.properties</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -134,7 +134,7 @@ quarkus.datasource.password: connor</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note that these configuration properties are not the same ones as made available in <code>microprofile-config.properties</code>: they might differ in names, casing and don&#8217;t necessarily map 1:1 to each other.</p>
+<p>Note that these configuration properties are not the same ones as made available in <code>application.properties</code>: they might differ in names, casing and don&#8217;t necessarily map 1:1 to each other.</p>
 </div>
 <div class="paragraph">
 <p>An <code>EntityManagerFactory</code> will be created based on Quarkus <code>datasource</code> configuration as long as the Hibernate ORM extension is declared in your <code>pom.xml</code>.
@@ -337,7 +337,7 @@ Whether statistics collection is enabled.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Do not mix <code>persistence.xml</code> and <code>quarkus.hibernate-orm.*</code> properties in <code>microprofile-config.properties</code>.
+<p>Do not mix <code>persistence.xml</code> and <code>quarkus.hibernate-orm.*</code> properties in <code>application.properties</code>.
 Quarkus will raise an exception.
 Make up your mind on which approach you want to use.</p>
 </div>
@@ -357,7 +357,7 @@ Make up your mind on which approach you want to use.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>docker run --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 --name postgres-quarkus-hibernate -e POSTGRES_USER=hibernate -e POSTGRES_PASSWORD=hibernate -e POSTGRES_DB=hibernate_db -p 5432:5432 postgres:10.5</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker run --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 --name postgres-quarkus-hibernate -e POSTGRES_USER=hibernate -e POSTGRES_PASSWORD=hibernate -e POSTGRES_DB=hibernate_db -p 5432:5432 postgres:10.5</code></pre>
 </div>
 </div>
 </td>
@@ -510,7 +510,7 @@ query.setHint("org.hibernate.cacheable", Boolean.TRUE);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you have a NamedQuery then you can enable caching directly on its definition, which will usually be on an entity:</p>
+<p>If you have a <code>NamedQuery</code> then you can enable caching directly on its definition, which will usually be on an entity:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -544,17 +544,33 @@ public class Fruit {
 <p>All regions are bounded by size and time by default. The defaults are <code>10000</code> max entries, and <code>100</code> seconds as maximum idle time.</p>
 </div>
 <div class="paragraph">
-<p>The size of each region can be customized via the <code>hibernate.cache.&lt;region_name&gt;.memory.object.count</code> property (Replace <em>&lt;region_name&gt;</em> with the actual region name).</p>
+<p>The size of each region can be customized via the <code>quarkus.hibernate-orm.cache."&lt;region_name&gt;".memory.object-count</code> property (Replace <em>&lt;region_name&gt;</em> with the actual region name).</p>
 </div>
 <div class="paragraph">
-<p>To set the maximum idle time, provide the number of seconds via the <code>hibernate.cache.&lt;region_name&gt;.expiration.max_idle</code> property (Replace <em>&lt;region_name&gt;</em> with the actual region name).</p>
+<p>To set the maximum idle time, provide the number of seconds via the <code>quarkus.hibernate-orm.cache."&lt;region_name&gt;".expiration.max-idle</code> property (Replace <em>&lt;region_name&gt;</em> with the actual region name).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The double quotes are mandatory if your region name contains a dot. For instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>quarkus.hibernate-orm.cache."com.acme.MyEntity".memory.object-count=1000</code></pre>
 </div>
 </div>
+</td>
+</tr>
+</table>
 </div>
 </div>
-<div class="sect1">
-<h2 id="limitations-of-caching">Limitations of Caching</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="limitations-of-caching">Limitations of Caching</h3>
 <div class="paragraph">
 <p>The caching technology provided within Quarkus is currently quite rudimentary and limited.</p>
 </div>
@@ -598,6 +614,7 @@ public class Fruit {
 </div>
 <div class="paragraph">
 <p>When second-level cache is disabled, all cache annotations are ignored and all queries are run ignoring caches; this is generally useful only to diagnose issues.</p>
+</div>
 </div>
 </div>
 </div>

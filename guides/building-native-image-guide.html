@@ -101,7 +101,7 @@
 <li>
 <p>GraalVM installed from the <a href="http://www.graalvm.org/downloads/">GraalVM web site</a>.
 Using the community edition is enough.
-At least version {graal-version} is required.</p>
+Version 1.0.0-rc12 is required.</p>
 </li>
 <li>
 <p>The <code>GRAALVM_HOME</code> environment variable configured appropriately</p>
@@ -140,9 +140,6 @@ At least version {graal-version} is required.</p>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>Remember, you need to configure Maven as indicated in the <a href="maven-config.html">Maven configuration page</a>.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -169,7 +166,7 @@ It improves the startup time of the application, and produces a minimal disk foo
 The executable would have everything to run the application including the "JVM" (shrunk to be just enough to run the application), and the application.</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="/guides/images/native-image-process.png" alt="Creating a native executable" width="640"></span></p>
+<p><span class="image"><img src="/guides/images/native-image-process.png" alt="Creating a native executable"></span></p>
 </div>
 <div class="paragraph">
 <p>Before going further, be sure that the <code>GRAALVM_HOME</code> environment variable is configured appropriately.</p>
@@ -213,7 +210,7 @@ The executable would have everything to run the application including the "JVM" 
 </div>
 <div class="paragraph">
 <p>In addition to the regular files, the build also produces <code>target/quarkus-quickstart-runner</code>.
-You can run it using: <code>target/quarkus-quickstart-runner.jar</code>.</p>
+You can run it using: <code>./target/quarkus-quickstart-runner</code>.</p>
 </div>
 </div>
 </div>
@@ -282,7 +279,7 @@ The executable is retrieved using the <code>native.image.path</code> system prop
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn package verify -Pnative
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn package verify -Pnative
 ...
 [quarkus-quickstart-runner:50955]     universe:     391.96 ms
 [quarkus-quickstart-runner:50955]      (parse):     904.37 ms
@@ -300,7 +297,7 @@ The executable is retrieved using the <code>native.image.path</code> system prop
 [INFO] -------------------------------------------------------
 [INFO] Running org.acme.quickstart.GreetingResourceIT
 Executing [/Users/starksm/Dev/JBoss/Protean/starksm64-quarkus-quickstarts/getting-started-native/target/quarkus-quickstart-runner, -Dquarkus.http.port=8081, -Dtest.url=http://localhost:8081, -Dquarkus.log.file.path=target/quarkus.log]
-2019-02-28 16:52:42,020 INFO  [io.quarkus] (main) Quarkus 1.0.0.Alpha1-SNAPSHOT started in 0.007s. Listening on: http://localhost:8080
+2019-02-28 16:52:42,020 INFO  [io.quarkus] (main) Quarkus started in 0.007s. Listening on: http://localhost:8080
 2019-02-28 16:52:42,021 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.081 s - in org.acme.quickstart.GreetingResourceIT
 [INFO]
@@ -330,13 +327,16 @@ Before going further, be sure to have a working Docker environment.
 </div>
 <div class="paragraph">
 <p>You can run the application in a Docker container using the JAR produced by the Quarkus Maven Plugin.
-However, in this guide we focus on creating a Docker image using the produced native executable.
-Because the Docker container may not use the same <em>executable</em> format as the one produced by default, we must instruct the Maven build to produce an
- executable from inside a Docker container:</p>
+However, in this guide we focus on creating a Docker image using the produced native executable.</p>
+</div>
+<div class="paragraph">
+<p>By default, the native image is tailored for your operating system (Linux, macOS, Windows etc).
+Because the Docker container may not use the same <em>executable</em> format as the one produced by your operating system,
+we will instruct the Maven build to produce an executable from inside a Docker container:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn package -Pnative -Dnative-image.docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn package -Pnative -Dnative-image.docker-build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -346,7 +346,7 @@ The project generation has provided a <code>Dockerfile</code> in the <code>src/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>FROM registry.fedoraproject.org/fedora-minimal
+<pre class="highlightjs highlight"><code class="language-dockerfile hljs" data-lang="dockerfile">FROM registry.fedoraproject.org/fedora-minimal
 WORKDIR /work/
 COPY target/*-runner /work/application
 RUN chmod 775 /work
@@ -359,7 +359,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>docker build -f src/main/docker/Dockerfile -t quarkus-quickstart/quickstart .</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker build -f src/main/docker/Dockerfile -t quarkus-quickstart/quickstart .</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -367,7 +367,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>docker run -i --rm -p 8080:8080 quarkus-quickstart/quickstart</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker run -i --rm -p 8080:8080 quarkus-quickstart/quickstart</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">

@@ -103,9 +103,6 @@ or <a href="https://github.com/openshift-cloud-functions/Documentation/blob/mast
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Remember, you need to configure Maven as indicated in the <a href="maven-config.html">Maven configuration page</a>.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -153,7 +150,7 @@ The Kubernetes Service Account that will have access to Container Registry secre
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you are not using private GitHub repository then you don&#8217;t need the <code>Deploy Key</code> created and added to the Build Service Account</p>
+<p>If you are not using private GitHub repo then you dont need the <code>Deploy Key</code> created and added to the Build Service Account</p>
 </div>
 </td>
 </tr>
@@ -231,7 +228,7 @@ you need to run the following maven command to make them passed to the Knative r
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn -Dgithub.deploy.key=$(cat ~/.ssh/quarkus-quickstarts | base64 -w 0) \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn -Dgithub.deploy.key=$(cat ~/.ssh/quarkus-quickstarts | base64 -w 0) \
     -Dgithub.keyscan=$(ssh-keyscan github.com | base64 -w 0) \
     -Dcontainer.registry.url='https://quay.io/v2' \
     -Dcontainer.registry.user='demo' \
@@ -258,7 +255,7 @@ and copy them to <code>${project.build.directory}/knative</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply --recursive --filename target/knative</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">kubectl apply --recursive --filename target/knative</code></pre>
 </div>
 </div>
 </div>
@@ -271,7 +268,7 @@ and copy them to <code>${project.build.directory}/knative</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">INGRESSGATEWAY=istio-ingressgateway
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">INGRESSGATEWAY=istio-ingressgateway
 IP_ADDRESS="$(minikube ip):$(kubectl get svc $INGRESSGATEWAY --namespace istio-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')" <b class="conum">(1)</b>
 
 curl -v -H 'Host: getting-started-knative.example.com' $IP_ADDRESS/hello/greeting/redhat</code></pre>

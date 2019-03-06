@@ -137,16 +137,16 @@ public class SubjectExposingResource {
 <h2 id="setting-it-up">Setting it up</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You need to add the security extension dependency explicitly if you want to enable security behaviors.
+<p>You need to add the elytron-security extension dependency explicitly if you want to enable security behaviors.
 Add the following to your <code>pom.xml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependencies&gt;
-    &lt;!-- Security extension --&gt;
+    &lt;!-- Elytron Security extension --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-security-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-elytron-security&lt;/artifactId&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;</code></pre>
 </div>
@@ -157,7 +157,7 @@ Add the following to your <code>pom.xml</code>:</p>
 <h2 id="configuration">Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The security extension currently supports two different realms for the storage of authentication
+<p>The elytron-security extension currently supports two different realms for the storage of authentication
 and authorization information. Both support storage of this information in properties type files. The next two sections detail the specific configuration properties.</p>
 </div>
 <div class="sect2">
@@ -205,7 +205,7 @@ and authorization information. Both support storage of this information in prope
 </tbody>
 </table>
 <div class="listingblock">
-<div class="title">example microprofile-config.properties file section for property files realm</div>
+<div class="title">example application.properties file section for property files realm</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.security.file.enabled=true
 quarkus.security.file.users=test-users.properties
@@ -271,7 +271,7 @@ noadmin=user</code></pre>
 <div class="sect2">
 <h3 id="embedded-realm-configuration">Embedded Realm Configuration</h3>
 <div class="paragraph">
-<p>The embedded realm also supports mapping of users to password and users to roles. It uses the main microprofile-config.properties Quarkus configuration file to embed this information. To enable and configure it, the following configuration properties are used:</p>
+<p>The embedded realm also supports mapping of users to password and users to roles. It uses the main application.properties Quarkus configuration file to embed this information. To enable and configure it, the following configuration properties are used:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -313,10 +313,10 @@ noadmin=user</code></pre>
 </tbody>
 </table>
 <div class="paragraph">
-<p>The following is an example microprofile-config.properties file section illustrating the embedded realm configuration:</p>
+<p>The following is an example application.properties file section illustrating the embedded realm configuration:</p>
 </div>
 <div class="listingblock">
-<div class="title">example microprofile-config.properties file section for embedded realm</div>
+<div class="title">example application.properties file section for embedded realm</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.security.embedded.enabled=true
 quarkus.security.embedded.users.scott=jb0ss
@@ -333,7 +333,7 @@ quarkus.security.embedded.auth-mechanism=CUSTOM</code></pre>
 <div class="sect3">
 <h4 id="embedded-users">Embedded Users</h4>
 <div class="paragraph">
-<p>The user to password mappings are specified in the microprofile-config.properties by property names of the form <code>quarkus.security.embedded.users.&lt;user&gt;=&lt;password&gt;</code>. The following <a href="#Example Passwords">[Example Passwords]</a> illustrates the syntax with the 4 user to password mappings shown in lines 2-5:</p>
+<p>The user to password mappings are specified in the <code>application.properties</code> file by property names of the form <code>quarkus.security.embedded.users.&lt;user&gt;=&lt;password&gt;</code>. The following <a href="#Example Passwords">[Example Passwords]</a> illustrates the syntax with the 4 user to password mappings shown in lines 2-5:</p>
 </div>
 <div class="listingblock">
 <div class="title">Example Passwords</div>
@@ -363,7 +363,7 @@ quarkus.security.embedded.roles.noadmin=user</code></pre>
 <div class="sect3">
 <h4 id="embedded-roles">Embedded Roles</h4>
 <div class="paragraph">
-<p>The user to role mappings are specified in the microprofile-config.properties by property names of the form <code>quarkus.security.embedded.roles.&lt;user&gt;=role1[,role2[,role3[,&#8230;&#8203;]]]</code>. The following <a href="#Example Roles">[Example Roles]</a> illustrates the syntax with the 4 user to role mappings shown in lines 6-9:</p>
+<p>The user to role mappings are specified in the <code>application.properties</code> file by property names of the form <code>quarkus.security.embedded.roles.&lt;user&gt;=role1[,role2[,role3[,&#8230;&#8203;]]]</code>. The following <a href="#Example Roles">[Example Roles]</a> illustrates the syntax with the 4 user to role mappings shown in lines 6-9:</p>
 </div>
 <div class="listingblock">
 <div class="title">Example Roles</div>
@@ -394,7 +394,7 @@ quarkus.security.embedded.roles.noadmin=user</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="augmenting-the-security-extension-advanced-topic">Augmenting the Security Extension <em>Advanced Topic</em></h2>
+<h2 id="augmenting-the-elytron-security-extension-advanced-topic">Augmenting the Elytron Security Extension <em>Advanced Topic</em></h2>
 <div class="sectionbody">
 <div class="admonitionblock tip">
 <table>
@@ -404,14 +404,14 @@ quarkus.security.embedded.roles.noadmin=user</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Augmenting the security extension is an advanced topic that relies on writing a Quarkus extension and understanding all that entails. This only needs to be done if you have security stores and authentication mechanisms that are not supported by existing Quarkus extensions.</p>
+<p>Augmenting the elytron-security extension is an advanced topic that relies on writing a Quarkus extension and understanding all that entails. This only needs to be done if you have security stores and authentication mechanisms that are not supported by existing Quarkus extensions.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The security extension has support for overriding its Elytron <code>org.wildfly.security.auth.server.SecurityRealm</code> and the Undertow <code>io.undertow.security.idm.IdentityManager</code> used for authentication and authorization decisions. If  your application needs to integrate with alternative identity stores and/or authentication mechanisms, then you can use this advanced feature to do so. In order to do this, one would write an Quarkus extension as described in <a href="extension-authors-guide.html">Extension Authors Guide</a> to produce <code>SecurityRealmBuildItem</code> and/or <code>IdentityManagerBuildItem</code> items as detailed in the following sections. The JWT RBAC extension described in the <a href="jwt-guide.html">JWT RBAC Security</a> is an example of an extension that makes use of these extension points.</p>
+<p>The elytron-security extension has support for overriding its Elytron <code>org.wildfly.security.auth.server.SecurityRealm</code> and the Undertow <code>io.undertow.security.idm.IdentityManager</code> used for authentication and authorization decisions. If  your application needs to integrate with alternative identity stores and/or authentication mechanisms, then you can use this advanced feature to do so. In order to do this, one would write an Quarkus extension as described in <a href="extension-authors-guide.html">Extension Authors Guide</a> to produce <code>SecurityRealmBuildItem</code> and/or <code>IdentityManagerBuildItem</code> items as detailed in the following sections. The JWT RBAC extension described in the <a href="jwt-guide.html">JWT RBAC Security</a> is an example of an extension that makes use of these extension points.</p>
 </div>
 <div class="sect2">
 <h3 id="adding-a-new-security-realm">Adding a new Security Realm</h3>
@@ -488,10 +488,10 @@ class SmallRyeJwtProcessor {
 <div class="sect2">
 <h3 id="overriding-the-undertow-identitymanager-implementation">Overriding the Undertow IdentityManager Implementation</h3>
 <div class="paragraph">
-<p>The default <code>io.undertow.security.idm.IdentityManager</code> installed by the security extension is based on password authentication. It passes a <code>org.wildfly.security.evidence.PasswordGuessEvidence</code> representation of the caller authentication credentials to the security realm to validate a user. If you extend the security extension with a security realm that supports this form of evidence,  you can use the default <code>IdentityManager</code> provided by the security extension. Your extension would need to produce a <code>io.quarkus.security.PasswordRealmBuildItem</code> to indicate that your extension security realm supports <code>PasswordGuessEvidence</code>.</p>
+<p>The default <code>io.undertow.security.idm.IdentityManager</code> installed by the elytron-security extension is based on password authentication. It passes a <code>org.wildfly.security.evidence.PasswordGuessEvidence</code> representation of the caller authentication credentials to the security realm to validate a user. If you extend the elytron-security extension with a security realm that supports this form of evidence,  you can use the default <code>IdentityManager</code> provided by the elytron-security extension. Your extension would need to produce a <code>io.quarkus.security.PasswordRealmBuildItem</code> to indicate that your extension security realm supports <code>PasswordGuessEvidence</code>.</p>
 </div>
 <div class="paragraph">
-<p>If on the other hand, your security realm requires another form of authentication credential evidence, you will need to override the default security extension implementation with one of your own. This requires that your extension produces an <code>io.quarkus.security.IdentityManagerBuildItem</code> with the <code>IdentityManager</code> implementation.</p>
+<p>If on the other hand, your security realm requires another form of authentication credential evidence, you will need to override the default elytron-security extension implementation with one of your own. This requires that your extension produces an <code>io.quarkus.security.IdentityManagerBuildItem</code> with the <code>IdentityManager</code> implementation.</p>
 </div>
 <div class="paragraph">
 <p>An example of this can also be seen in the MicroProfile JWT RBAC extension. Since the security realm the JWT extension installs is based on JWT auth tokens rather than passwords, it must install an identity manager that is able to extract the token and present that to the security realm. This requires a custom <code>IdentityManager</code>. The relevant JWT extension code fragment is shown in the following listing:</p>
@@ -527,7 +527,7 @@ class SmallRyeJwtProcessor {
 <p>Have the runtime module create the runtime IdentityManager instance, which is an io.quarkus.smallrye.jwt.runtime.auth.JwtIdentityManager.</p>
 </li>
 <li>
-<p>Produce an <code>IdentityManagerBuildItem</code> with the <code>JwtIdentityManager</code> so that the security extension installs that as the application identity manager.</p>
+<p>Produce an <code>IdentityManagerBuildItem</code> with the <code>JwtIdentityManager</code> so that the elytron-security extension installs that as the application identity manager.</p>
 </li>
 </ol>
 </div>

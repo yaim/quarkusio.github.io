@@ -121,7 +121,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 <h2 id="looks-like-it-works-out-of-the-box">Looks like it works out of the box?!?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you open the application&#8217;s configuration file (<code>src/main/resources/META-INF/microprofile-config.properties</code>), you can see the following line:</p>
+<p>If you open the application&#8217;s configuration file (<code>src/main/resources/application.properties</code>), you can see the following line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -213,7 +213,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 <p>First, let&#8217;s disable it without changing the REST service URL and see how it goes.</p>
 </div>
 <div class="paragraph">
-<p>Open <code>src/main/resources/META-INF/microprofile-config.properties</code> and add the following line:</p>
+<p>Open <code>src/main/resources/application.properties</code> and add the following line:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -240,7 +240,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 <p>This error is the one you obtain when trying to use SSL while it was not explicitly enabled in your native image.</p>
 </div>
 <div class="paragraph">
-<p>Now, let&#8217;s change the REST service URL to <strong>not</strong> use SSL in <code>src/main/resources/META-INF/microprofile-config.properties</code>:</p>
+<p>Now, let&#8217;s change the REST service URL to <strong>not</strong> use SSL in <code>src/main/resources/application.properties</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -299,7 +299,7 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>git checkout -- src/main/resources/META-INF/microprofile-config.properties</code></pre>
+<pre class="highlightjs highlight"><code>git checkout -- src/main/resources/application.properties</code></pre>
 </div>
 </div>
 <div class="paragraph">

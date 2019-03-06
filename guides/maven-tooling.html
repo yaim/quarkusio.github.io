@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Project Scaffolding and IDE</title>
+  <title>Building Quarkus apps with Maven</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -60,17 +60,115 @@
 
     <div class="grid-wrapper guides">
   <div class="grid__item width-12-12">
-    <h1 class="text-caps">Quarkus - Project Scaffolding and IDE</h1>
+    <h1 class="text-caps">Building Quarkus apps with Maven</h1>
     <div class="sect1">
-<h2 id="project-creation">Creating a new project</h2>
+<h2 id="build-tool-maven">Maven configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Remember, you need to configure Maven as indicated in the <a href="maven-config.html">Maven configuration page</a>.
-Then, you can scaffold a new project with:</p>
+<p>If you have not used <a href="#project-creation">project scaffolding</a>, add the following elements in your <code>pom.xml</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt; <b class="conum">(1)</b>
+            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+            &lt;artifactId&gt;quarkus-bom&lt;/artifactId&gt;
+            &lt;version&gt;${quarkus.version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
+
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt; <b class="conum">(2)</b>
+            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+            &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;${quarkus.version}&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;build&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+
+&lt;profiles&gt;
+    &lt;profile&gt; <b class="conum">(3)</b>
+        &lt;id&gt;native&lt;/id&gt;
+        &lt;build&gt;
+            &lt;plugins&gt;
+                &lt;plugin&gt; <b class="conum">(3)</b>
+                    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+                    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
+                    &lt;version&gt;${quarkus.version}&lt;/version&gt;
+                    &lt;executions&gt;
+                        &lt;execution&gt;
+                            &lt;goals&gt;
+                                &lt;goal&gt;native-image&lt;/goal&gt;
+                            &lt;/goals&gt;
+                            &lt;configuration&gt;
+                                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
+                            &lt;/configuration&gt;
+                        &lt;/execution&gt;
+                    &lt;/executions&gt;
+                &lt;/plugin&gt;
+                &lt;plugin&gt; <b class="conum">(4)</b>
+                    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                    &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
+                    &lt;version&gt;${surefire.version}&lt;/version&gt;
+                    &lt;executions&gt;
+                        &lt;execution&gt;
+                            &lt;goals&gt;
+                                &lt;goal&gt;integration-test&lt;/goal&gt;
+                                &lt;goal&gt;verify&lt;/goal&gt;
+                            &lt;/goals&gt;
+                            &lt;configuration&gt;
+                                &lt;systemProperties&gt;
+                                    &lt;native.image.path&gt;${project.build.directory}/${project.build.finalName}-runner&lt;/native.image.path&gt;
+                                &lt;/systemProperties&gt;
+                            &lt;/configuration&gt;
+                        &lt;/execution&gt;
+                    &lt;/executions&gt;
+                &lt;/plugin&gt;
+            &lt;/plugins&gt;
+        &lt;/build&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Optionally use a BOM file to omit the version of the different Quarkus dependencies.</p>
+</li>
+<li>
+<p>Use the Quarkus Maven plugin that will hook into the build process</p>
+</li>
+<li>
+<p>Use a native profile and plugin to activate GraalVM compilation</p>
+</li>
+<li>
+<p>If you want to test your native image with Integration Tests, add the following plugin configuration. Test names <code>*IT</code> and annotated <code>@SubstrateTest</code> will be run against the native image. See the <a href="building-native-image-guide.html">Native image guide</a> for more info.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="project-creation">Creating a new project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With Maven, you can scaffold a new project with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
     -DprojectGroupId=my-groupId \
     -DprojectArtifactId=my-artifactId \
     -DprojectVersion=my-version \
@@ -140,8 +238,8 @@ for user inputs. You can disable (and use default values) this interactive mode 
 </tbody>
 </table>
 <div class="paragraph">
-<p>If you decide to generate a REST resource (using the <code>className</code> attribute), the endpoint is exposed at: <code><a href="http://localhost:8080/$root/$path" class="bare">http://localhost:8080/$root/$path</a></code>.
-If you use the default <code>root</code> and <code>path</code>, the URL is: <a href="http://localhost:8080/hello" class="bare">http://localhost:8080/hello</a>.</p>
+<p>If you decide to generate a REST resource (using the <code>className</code> attribute), the endpoint is exposed at: <code><a href="http://localhost:8080/$path" class="bare">http://localhost:8080/$path</a></code>.
+If you use the default <code>path</code>, the URL is: <a href="http://localhost:8080/hello" class="bare">http://localhost:8080/hello</a>.</p>
 </div>
 <div class="paragraph">
 <p>The project is either generated in the current directory or in a directory named after the passed artifactId.
@@ -157,12 +255,19 @@ Instructions to build the image and run the container are written in the <code>D
 <h2 id="dealing-with-extensions">Dealing with extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can list extensions with: <code>mvn quarkus:list-extensions</code>.
-You can enable an extension using:</p>
+<p>From inside a Quarkus project, you can obtain a list of the available extensions with:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn quarkus:add-extension -Dextensions="validation"</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn quarkus:list-extensions</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can enable an extension using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn quarkus:add-extension -Dextensions="hibernate-validator"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -179,12 +284,25 @@ Run you application with:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You can then update the application sources, resources and configurations.
-The changes are automatically reflected in your running application.</p>
+The changes are automatically reflected in your running application.
+This is great to do development spanning UI and database as you see changes reflected immediately.</p>
+</div>
+<div class="paragraph">
+<p><code>quarkus:dev</code> enables hot deployment with background compilation, which means
+that when you modify your Java files or your resource files and refresh your browser these changes will automatically take effect.
+This works too for resource files like the configuration property file.
+The act of
+refreshing the browser triggers a scan of the workspace, and if any changes are detected the Java files are compiled,
+and the application is redeployed, then your request is serviced by the redeployed application. If there are any issues
+with compilation or deployment an error page will let you know.</p>
+</div>
+<div class="paragraph">
+<p>Hit <code>CTRL+C</code> to stop the application.</p>
 </div>
 </div>
 </div>
@@ -196,7 +314,7 @@ The changes are automatically reflected in your running application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn compile quarkus:dev -Ddebug=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn compile quarkus:dev -Ddebug=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -278,6 +396,75 @@ The next screen list the found modules; select the generated project and click o
 </div>
 <div class="paragraph">
 <p>Open the project directory in VS Code. If you have installed the Java Extension Pack (grouping a set of Java extensions), the project is loaded as a Maven project.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="building-a-native-image">Building a native image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Native images make Quarkus applications ideal for containers and serverless workloads.</p>
+</div>
+<div class="paragraph">
+<p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 1.0.0-rc12.
+Verify that your <code>pom.xml</code> has the proper <code>native</code> profile (see <a href="#build-tool-maven">Maven configuration</a>).</p>
+</div>
+<div class="paragraph">
+<p>Create a native executable using: <code>mvn package -Pnative</code>.
+A native executable will be present in <code>target/</code>.</p>
+</div>
+<div class="paragraph">
+<p>To run Integration Tests on the native executable, make sure to have the proper Maven plugin configured (see <a href="#build-tool-maven">Maven configuration</a>) and launch the <code>verify</code> goal.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn package verify -Pnative
+...
+[quarkus-quickstart-runner:50955]     universe:     391.96 ms
+[quarkus-quickstart-runner:50955]      (parse):     904.37 ms
+[quarkus-quickstart-runner:50955]     (inline):   1,143.32 ms
+[quarkus-quickstart-runner:50955]    (compile):   6,228.44 ms
+[quarkus-quickstart-runner:50955]      compile:   9,130.58 ms
+[quarkus-quickstart-runner:50955]        image:   2,101.42 ms
+[quarkus-quickstart-runner:50955]        write:     803.18 ms
+[quarkus-quickstart-runner:50955]      [total]:  33,520.15 ms
+[INFO]
+[INFO] --- maven-failsafe-plugin:2.22.0:integration-test (default) @ quarkus-quickstart-native ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.acme.quickstart.GreetingResourceIT
+Executing [/Users/starksm/Dev/JBoss/Protean/starksm64-quarkus-quickstarts/getting-started-native/target/quarkus-quickstart-runner, -Dquarkus.http.port=8081, -Dtest.url=http://localhost:8081, -Dquarkus.log.file.path=target/quarkus.log]
+2019-02-28 16:52:42,020 INFO  [io.quarkus] (main) Quarkus started in 0.007s. Listening on: http://localhost:8080
+2019-02-28 16:52:42,021 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.081 s - in org.acme.quickstart.GreetingResourceIT
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+
+...</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="build-a-container-friendly-executable">Build a container friendly executable</h3>
+<div class="paragraph">
+<p>The native executable will be specific to your operating system.
+To create an executable that will run in a container, use the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn package -Pnative -Dnative-image.docker-build=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The produced executable will be a 64 bit Linux executable, so depending on your operating system it may no longer be runnable.
+However, it&#8217;s not an issue as we are going to copy it to a Docker container.</p>
+</div>
+<div class="paragraph">
+<p>You can follow the <a href="building-native-image-guide.html">Build a native image guide</a> as well as <a href="kubernetes-guide.html">Deploying Application to Kubernetes and OpenShift</a> for more information.</p>
+</div>
 </div>
 </div>
 </div>

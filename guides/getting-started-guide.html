@@ -152,7 +152,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:1.0.0.Alpha1-SNAPSHOT:create \
+<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
@@ -174,7 +174,7 @@ However, you can go right to the completed example.</p>
 <p>an associated unit test</p>
 </li>
 <li>
-<p>a landing page accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code></p>
+<p>a landing page that is accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code> after starting the application</p>
 </li>
 <li>
 <p>an example of <code>Dockerfile</code></p>
@@ -221,21 +221,6 @@ In addition, you can see the <code>quarkus-maven-plugin</code> responsible of th
 &lt;/build&gt;</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="title">What&#8217;s Quarkus?</div>
-<div class="paragraph">
-<p>Quarkus can be seen as Quarkus core.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>If we focus on the dependencies section, you can see 2 extensions allowing the development of REST applications:</p>
 </div>
@@ -243,11 +228,11 @@ In addition, you can see the <code>quarkus-maven-plugin</code> responsible of th
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-resteasy-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-resteasy&lt;/artifactId&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-arc-deployment&lt;/artifactId&gt;
+        &lt;artifactId&gt;quarkus-arc&lt;/artifactId&gt;
     &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -260,7 +245,7 @@ In addition, you can see the <code>quarkus-maven-plugin</code> responsible of th
 <td class="content">
 <div class="title">What&#8217;s ArC?</div>
 <div class="paragraph">
-<p>ArC is a CDI-based dependency injection solution - see also <a href="cdi-reference.html">Contexts and Dependency Injection</a>.</p>
+<p>ArC is a CDI-based dependency injection solution tailored for Quarkus architecture - see also <a href="cdi-reference.html">Contexts and Dependency Injection</a>.</p>
 </div>
 </td>
 </tr>
@@ -303,8 +288,8 @@ public class GreetingResource {
 <td class="content">
 <div class="title">Differences with vanilla Jax-RS</div>
 <div class="paragraph">
-<p>With Quarkus no need to create an <code>Application</code> class. It&#8217;s supported but not required. In addition, only one instance
-of the resource is created and not one per request. You can configure this using the different <code>XScoped</code> annotations.</p>
+<p>With Quarkus there is no need to create an <code>Application</code> class. It&#8217;s supported but not required. In addition, only one instance
+of the resource is created and not one per request. You can configure this using the different <code>*Scoped</code> annotations (<code>ApplicationScoped</code>, <code>RequestScoped</code>, etc).</p>
 </div>
 </td>
 </tr>
@@ -322,7 +307,7 @@ Use: <code>mvn compile quarkus:dev</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-terminal hljs" data-lang="terminal">[INFO] --------------------&lt; org.acme:quarkus-quickstart &gt;---------------------
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">[INFO] --------------------&lt; org.acme:quarkus-quickstart &gt;---------------------
 [INFO] Building quarkus-quickstart 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
@@ -334,11 +319,11 @@ Use: <code>mvn compile quarkus:dev</code>:</p>
 [INFO] Changes detected - recompiling the module!
 [INFO] Compiling 2 source files to /Users/starksm/Dev/JBoss/Protean/starksm64-quarkus-quickstarts/getting-started/target/classes
 [INFO]
-[INFO] --- quarkus-maven-plugin:1.0.0.Alpha1-SNAPSHOT:dev (default-cli) @ quarkus-quickstart ---
+[INFO] --- quarkus-maven-plugin:&lt;version&gt;:dev (default-cli) @ quarkus-quickstart ---
 Listening for transport dt_socket at address: 5005
 2019-02-28 17:05:22,347 INFO  [io.qua.dep.QuarkusAugmentor] (main) Beginning quarkus augmentation
 2019-02-28 17:05:22,635 INFO  [io.qua.dep.QuarkusAugmentor] (main) Quarkus augmentation completed in 288ms
-2019-02-28 17:05:22,770 INFO  [io.quarkus] (main) Quarkus 1.0.0.Alpha1-SNAPSHOT started in 0.668s. Listening on: http://localhost:8080
+2019-02-28 17:05:22,770 INFO  [io.quarkus] (main) Quarkus started in 0.668s. Listening on: http://localhost:8080
 2019-02-28 17:05:22,771 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]</code></pre>
 </div>
 </div>
@@ -352,7 +337,7 @@ hello</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Hit <code>CTRL+C</code> to stop the application, but you can also keep it running and enjoy the blasting fast hot-reload.</p>
+<p>Hit <code>CTRL+C</code> to stop the application, but you can also keep it running and enjoy the blazing fast hot-reload.</p>
 </div>
 </div>
 </div>
@@ -425,9 +410,10 @@ Then check that <a href="http://localhost:8080/hello/greeting/quarkus" class="ba
 <div class="sectionbody">
 <div class="paragraph">
 <p><code>quarkus:dev</code> runs Quarkus in development mode. This enables hot deployment with background compilation, which means
-that when you modify your Java files and refresh your browser these changes will automatically take effect. The act of
-refreshing the browser triggers a scan of the workspace, and if any changes are detected the Java files are compiled,
-and the application is redeployed, then your request is serviced by the redeployed application. If there are any issues
+that when you modify your Java files your resource files and refresh your browser these changes will automatically take effect.
+This works too for resource files like the configuration property file.
+Refreshing the browser triggers a scan of the workspace, and if any changes are detected the Java files are recompiled
+and the application is redeployed; your request is then serviced by the redeployed application. If there are any issues
 with compilation or deployment an error page will let you know.</p>
 </div>
 <div class="paragraph">
@@ -456,7 +442,7 @@ can pass <code>-Ddebug</code> on the command line. If you don&#8217;t want the d
 &lt;dependency&gt;
     &lt;groupId&gt;io.rest-assured&lt;/groupId&gt;
     &lt;artifactId&gt;rest-assured&lt;/artifactId&gt;
-    &lt;version&gt;{restassured-version}&lt;/version&gt;
+    &lt;version&gt;3.3.0&lt;/version&gt;
     &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -612,12 +598,12 @@ So if you want to deploy your application somewhere, you need to copy the <em>ru
 public CompletionStage&lt;String&gt; hello() {
     return CompletableFuture.supplyAsync(() -&gt; {
         return "hello";
-    });http://[]
+    });
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The async version of the code is available in the <a href="https://github.com/quarkusio/quarkus-quickstarts">Github</a> repository, in the <code>getting-started-async</code> directory.</p>
+<p>The async version of the code is available in the <a href="https://github.com/quarkusio/quarkus-quickstarts">GitHub</a> repository, in the <code>getting-started-async</code> directory.</p>
 </div>
 </div>
 </div>
@@ -630,7 +616,7 @@ However, there is much more.
 We recommend continuing the journey with the <a href="building-native-image-guide.html">building a native image guide</a>, where you learn about the native executable creation and the packaging in a container.</p>
 </div>
 <div class="paragraph">
-<p>In addition, the <a href="ide-configuration.html">developer guide</a> document explains how to:</p>
+<p>In addition, the <a href="tooling.html">tooling guide</a> document explains how to:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -642,6 +628,9 @@ We recommend continuing the journey with the <a href="building-native-image-guid
 </li>
 <li>
 <p>import the project in your favorite IDE</p>
+</li>
+<li>
+<p>and more</p>
 </li>
 </ul>
 </div>

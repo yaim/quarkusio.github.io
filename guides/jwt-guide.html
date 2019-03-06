@@ -70,9 +70,1214 @@ secured access to the JAX-RS endpoints.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="todo">TODO</h2>
+<h2 id="configuration">Configuration</h2>
 <div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smalllrye-jwt.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine if the jwt extension is enabled. Enabled by default if you include the smallrye-jwt dependency, so this would be used to disable it.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smalllrye-jwt.realm-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Quarkus-JWT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for security realm.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smalllrye-jwt.auth-mechanism</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MP-JWT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for authentication mechanism</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mp.jwt.verify.publickey</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The <code>mp.jwt.verify.publickey</code> config property allows the Public Key text itself to be supplied as a string.  The Public Key will be parsed from the supplied string in the order defined in section <a href="#supported-public-key-formats">Supported Public Key Formats</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mp.jwt.verify.publickey.location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Config property allows for an external or internal location of Public Key to be specified.  The value may be a relative path or a URL.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mp.jwt.verify.issuer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Config property specifies the value of the <code>iss</code> (issuer)
+                           claim of the JWT that the server will accept as valid.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="supported-public-key-formats">Supported Public Key Formats</h3>
+<div class="paragraph">
+<p>Public Keys may be formatted in any of the following formats, specified in order of
+precedence:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Public Key Cryptography Standards #8 (PKCS#8) PEM</p>
+</li>
+<li>
+<p>JSON Web Key (JWK)</p>
+</li>
+<li>
+<p>JSON Web Key Set (JWKS)</p>
+</li>
+<li>
+<p>JSON Web Key (JWK) Base64 URL encoded</p>
+</li>
+<li>
+<p>JSON Web Key Set (JWKS) Base64 URL encoded</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We recommend that you follow the instructions in the next sections and create the application step by step.
+However, you can skip right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip/archive/master.zip">archive</a>.</p>
+</div>
+<div class="paragraph">
+<p>The solution is located in the <code>using-jwt-rbac</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">directory</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-the-maven-project">Creating the Maven project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, we need a new project. Create a new project with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=using-jwt-rbac \
+    -DclassName="org.acme.jwt.TokenSecuredResource" \
+    -Dpath="/secured" \
+    -Dextensions="resteasy-jsonb, smallrye-jwt"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command generates the Maven project with a REST endpoint and imports the <code>smallrye-jwt</code> extension, which includes the MicroProfile JWT RBAC support.</p>
+</div>
+<div class="sect2">
+<h3 id="examine-the-jax-rs-resource">Examine the JAX-RS resource</h3>
+<div class="paragraph">
+<p>Open the <code>src/main/java/org/acme/jwt/TokenSecuredResource.java</code> file and see the following content:</p>
+</div>
+<div class="listingblock">
+<div class="title">Basic REST Endpoint</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/secured")
+public class TokenSecuredResource {
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return "hello";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is a basic REST endpoint that does not have any of the Smallrye JWT specific features, so let&#8217;s add some.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The MicroProfile JWT RBAC 1.1.1 specification details the annotations and behaviors we will make use of in
+this quickstart. See <a href="https://github.com/eclipse/microprofile-jwt-auth/releases/download/1.1.1/microprofile-jwt-auth-spec.html">HTML</a>
+ and <a href="https://github.com/eclipse/microprofile-jwt-auth/releases/download/1.1.1/microprofile-jwt-auth-spec.pdf">PDF</a> versions of the specification for the details.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">REST Endpoint V1</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+
+import java.security.Principal;
+
+import javax.annotation.security.PermitAll;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+/**
+ * Version 1 of the TokenSecuredResource
+ */
+@Path("/secured")
+public class TokenSecuredResource {
+
+    @Inject
+    JsonWebToken jwt; <b class="conum">(1)</b>
+
+    @GET()
+    @Path("permit-all")
+    @PermitAll <b class="conum">(2)</b>
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(@Context SecurityContext ctx) { <b class="conum">(3)</b>
+        Principal caller =  ctx.getUserPrincipal(); <b class="conum">(4)</b>
+        String name = caller == null ? "anonymous" : caller.getName();
+        boolean hasJWT = jwt != null;
+        String helloReply = String.format("hello + %s, isSecure: %s, authScheme: %s, hasJWT: %s", name, ctx.isSecure(), ctx.getAuthenticationScheme(), hasJWT);
+        return helloReply; <b class="conum">(5)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Here we inject the JsonWebToken interface, and extension of the java.security.Principal interface that provides access to the claims associated with the current authenticated token.</p>
+</li>
+<li>
+<p>@PermitAll is a JSR 250 common security annotation that indicates that the given endpoint is accessible by any caller, authenticated or not.</p>
+</li>
+<li>
+<p>Here we inject the JAX-RS SecurityContext to inspect the security state of the call.</p>
+</li>
+<li>
+<p>Here we obtain the current request user/caller <code>Principal</code>. For an unsecured call this will be null, so we build the user name by checking <code>caller</code> against null.</p>
+</li>
+<li>
+<p>The reply we build up makes use of the caller name, the <code>isSecure()</code> and <code>getAuthenticationScheme()</code> states of the request <code>SecurityContext</code>, and whether a non-null <code>JsonWebToken</code> was injected.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="run-the-application">Run the application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we are ready to run our application. Use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn compile quarkus:dev</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and you should see output similar to:</p>
+</div>
+<div class="listingblock">
+<div class="title">quarkus:dev Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ mvn compile quarkus:dev
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
+[INFO] Building using-jwt-rbac 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+...
+Listening for transport dt_socket at address: 5005
+2019-03-03 07:23:06,988 INFO  [io.qua.dep.QuarkusAugmentor] (main) Beginning quarkus augmentation
+2019-03-03 07:23:07,328 INFO  [io.qua.dep.QuarkusAugmentor] (main) Quarkus augmentation completed in 340ms
+2019-03-03 07:23:07,493 INFO  [io.quarkus] (main) Quarkus started in 0.769s. Listening on: http://127.0.0.1:8080
+2019-03-03 07:23:07,493 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb, security, smallrye-jwt]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now that the REST endpoint is running, we can access it using a command line tool like curl:</p>
+</div>
+<div class="listingblock">
+<div class="title">curl command for /secured/permit-all</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ curl http://127.0.0.1:8080/secured/permit-all; echo
+hello + anonymous, isSecure: false, authScheme: null, hasJWT: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We have not provided any JWT in our request, so we would not expect that there is any security state seen by the endpoint, and
+the response is consistent with that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>user name is anonymous</p>
+</li>
+<li>
+<p>isSecure is false as https is not used</p>
+</li>
+<li>
+<p>authScheme is null</p>
+</li>
+<li>
+<p>hasJWT is false</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Use Ctrl-C to stop the Quarkus server.</p>
+</div>
+<div class="paragraph">
+<p>So now let&#8217;s actually secure something. Take a look at the new endpoint method <code>helloRolesAllowed</code> in the following:</p>
+</div>
+<div class="listingblock">
+<div class="title">REST Endpoint V2</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+
+import java.security.Principal;
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+/**
+ * Version 2 of the TokenSecuredResource
+ */
+@Path("/secured")
+public class TokenSecuredResource {
+
+    @Inject
+    JsonWebToken jwt;
+
+    @GET()
+    @Path("permit-all")
+    @PermitAll
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(@Context SecurityContext ctx) {
+        Principal caller =  ctx.getUserPrincipal();
+        String name = caller == null ? "anonymous" : caller.getName();
+        String helloReply = String.format("hello + %s, isSecure: %s, authScheme: %s", name, ctx.isSecure(), ctx.getAuthenticationScheme());
+        return helloReply;
+    }
+
+    @GET()
+    @Path("roles-allowed") <b class="conum">(1)</b>
+    @RolesAllowed({"Echoer", "Subscriber"}) <b class="conum">(2)</b>
+    @Produces(MediaType.TEXT_PLAIN)
+    public String helloRolesAllowed(@Context SecurityContext ctx) {
+        Principal caller =  ctx.getUserPrincipal();
+        String name = caller == null ? "anonymous" : caller.getName();
+        boolean hasJWT = jwt != null;
+        String helloReply = String.format("hello + %s, isSecure: %s, authScheme: %s, hasJWT: %s", name, ctx.isSecure(), ctx.getAuthenticationScheme(), hasJWT);
+        return helloReply;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>This new endpoint will be located at /secured/roles-allowed</p>
+</li>
+<li>
+<p>@RolesAllowed is a JSR 250 common security annotation that indicates that the given endpoint is accessible by a caller if
+they have either a "Echoer" or "Subscriber" role assigned.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>After you make this addition to your <code>TokenSecuredResource</code>, rerun the <code>mvn compile quarkus:dev</code> command, and then try <code>curl -v <a href="http://127.0.0.1:8080/secured/roles-allowed" class="bare">http://127.0.0.1:8080/secured/roles-allowed</a>; echo</code> to attempt to access the new endpoint. Your output should be:</p>
+</div>
+<div class="listingblock">
+<div class="title">curl command for /secured/roles-allowed</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ curl -v http://127.0.0.1:8080/secured/roles-allowed; echo
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 8080 (#0)
+&gt; GET /secured/roles-allowed HTTP/1.1
+&gt; Host: 127.0.0.1:8080
+&gt; User-Agent: curl/7.54.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 401 Unauthorized
+&lt; Connection: keep-alive
+&lt; Content-Type: text/html;charset=UTF-8
+&lt; Content-Length: 14
+&lt; Date: Sun, 03 Mar 2019 16:32:34 GMT
+&lt;
+* Connection #0 to host 127.0.0.1 left intact
+Not authorized</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Excellent, we have not provided any JWT in the request, so we should not be able to access the endpoint, and we were not. Instead we received an HTTP 401 Unauthorized error. We need to obtain and pass in a valid JWT to access that endpoint. There are two steps to this, 1) configuring our Smallrye JWT extension with information on how to validate a JWT, and 2) generating a matching JWT with the appropriate claims.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-the-smallrye-jwt-extension-security-information">Configuring the Smallrye JWT Extension Security Information</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the <a href="#configuration">Configuration</a> section we introduce the <code>application.properties</code> file that affect the Smallrye JWT extension.</p>
+</div>
+<div class="sect2">
+<h3 id="setting-up-application-properties">Setting up application.properties</h3>
+<div class="literalblock">
+<div class="content">
+<pre>For part A of step 1, create a using-jwt-rbac/src/main/resources/application.properties with the following content:</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">application.properties for TokenSecuredResource</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">mp.jwt.verify.publickey.location=publicKey.pem <b class="conum">(1)</b>
+mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac <b class="conum">(2)</b>
+
+quarkus.smalllrye-jwt.auth-mechanism=MP-JWT <b class="conum">(3)</b>
+quarkus.smalllrye-jwt.enabled=true <b class="conum">(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>We are setting public key location to point to a classpath publicKey.pem resource location. We will add this key in part B, <a href="#adding-a-public-key">Adding a Public Key</a>.</p>
+</li>
+<li>
+<p>We are setting the issuer to the URL string <code><a href="https://quarkus.io/using-jwt-rbac" class="bare">https://quarkus.io/using-jwt-rbac</a></code>.</p>
+</li>
+<li>
+<p>We are setting the authentication mechanism name to MP-JWT. This is not strictly required to allow our quickstart to work, but it is the MicroProfile JWT RBAC specification standard name for the token based authentication mechanism.</p>
+</li>
+<li>
+<p>We are enabling the Smallrye JWT. Also not required since this is the default,
+but we are making it explicit.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-a-public-key">Adding a Public Key</h3>
+<div class="paragraph">
+<p>The <a href="https://tools.ietf.org/html/rfc7519">JWT specification</a> defines various levels of security of JWTs that one can use.
+The MicroProfile JWT RBAC specification requires that JWTs that are signed with the RSA-256 signature algorithm. This in
+turn requires a RSA public key pair. On the REST endpoint server side, you need to configure the location of the RSA public
+key to use to verify the JWT sent along with requests. The <code>mp.jwt.verify.publickey.location=publicKey.pem</code> setting configured
+previously expects that the public key is available on the classpath as <code>publicKey.pem</code>. To accomplish this, copy the following
+content to a using-jwt-rbac/src/main/resources/META-INF/resources/publicKey.pem file.</p>
+</div>
+<div class="listingblock">
+<div class="title">RSA Public Key PEM Content</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlivFI8qB4D0y2jy0CfEq
+Fyy46R0o7S8TKpsx5xbHKoU1VWg6QkQm+ntyIv1p4kE1sPEQO73+HY8+Bzs75XwR
+TYL1BmR1w8J5hmjVWjc6R2BTBGAYRPFRhor3kpM6ni2SPmNNhurEAHw7TaqszP5e
+UF/F9+KEBWkwVta+PZ37bwqSE4sCb1soZFrVz/UT/LF4tYpuVYt3YbqToZ3pZOZ9
+AX2o1GCG3xwOjkc4x0W7ezbQZdC9iftPxVHR8irOijJRRjcPDtA6vPKpzLl6CyYn
+sIYPd99ltwxTHjr3npfv/3Lw50bAkbT4HeLFxTx4flEoZLKO/g0bAoV2uqBhkA9x
+nQIDAQAB
+-----END PUBLIC KEY-----</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="generating-a-jwt">Generating a JWT</h3>
+<div class="paragraph">
+<p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the
+<a href="https://bitbucket.org/connect2id/nimbus-jose-jwt/wiki/Home">Nimbus JOSE+JWT</a> library and the TokenUtils class shown in the following listing. Take this source and place it into using-jwt-rbac/src/test/java/org/acme/jwt/TokenUtils.java.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+JWT libraries for many different programming languages can be found at the JWT.io website <a href="https://jwt.io/#libraries">JWT Libraries</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">JWT utility class</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+
+import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
+
+import java.io.InputStream;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import java.util.Map;
+
+import org.eclipse.microprofile.jwt.Claims;
+
+import com.nimbusds.jose.JOSEObjectType;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+
+/**
+ * Utilities for generating a JWT for testing
+ */
+public class TokenUtils {
+
+    private TokenUtils() {
+        // no-op: utility class
+    }
+
+    /**
+     * Utility method to generate a JWT string from a JSON resource file that is signed by the privateKey.pem
+     * test resource key, possibly with invalid fields.
+     *
+     * @param jsonResName - name of test resources file
+     * @param timeClaims - used to return the exp, iat, auth_time claims
+     * @return the JWT string
+     * @throws Exception on parse failure
+     */
+    public static String generateTokenString(String jsonResName, Map&lt;String, Long&gt; timeClaims)
+            throws Exception {
+        // Use the test private key associated with the test public key for a valid signature
+        PrivateKey pk = readPrivateKey("/privateKey.pem");
+        return generateTokenString(pk, "/privateKey.pem", jsonResName, timeClaims);
+    }
+
+    /**
+     * Utility method to generate a JWT string from a JSON resource file that is signed by the privateKey.pem
+     * test resource key, possibly with invalid fields.
+     *
+     * @param pk - the private key to sign the token with
+     * @param kid - the kid claim to assign to the token
+     * @param jsonResName - name of test resources file
+     * @param timeClaims - used to return the exp, iat, auth_time claims
+     * @return the JWT string
+     * @throws Exception on parse failure
+     */
+    public static String generateTokenString(PrivateKey pk, String kid, String jsonResName, Map&lt;String, Long&gt; timeClaims) throws Exception {
+        InputStream contentIS = TokenUtils.class.getResourceAsStream(jsonResName);
+        if (contentIS == null) {
+            throw new IllegalStateException("Failed to find resource: " + jsonResName);
+        }
+        byte[] tmp = new byte[4096];
+        int length = contentIS.read(tmp);
+        byte[] content = new byte[length];
+        System.arraycopy(tmp, 0, content, 0, length);
+
+        JSONParser parser = new JSONParser(DEFAULT_PERMISSIVE_MODE);
+        JSONObject jwtContent = parser.parse(content, JSONObject.class);
+        long currentTimeInSecs = currentTimeInSecs();
+        long exp = currentTimeInSecs + 300;
+        long iat = currentTimeInSecs;
+        long authTime = currentTimeInSecs;
+        boolean expWasInput = false;
+        // Check for an input exp to override the default of now + 300 seconds
+        if (timeClaims != null &amp;&amp; timeClaims.containsKey(Claims.exp.name())) {
+            exp = timeClaims.get(Claims.exp.name());
+            expWasInput = true;
+        }
+        // iat and auth_time should be before any input exp value
+        if (expWasInput) {
+            iat = exp - 5;
+            authTime = exp - 5;
+        }
+        jwtContent.put(Claims.iat.name(), iat);
+        jwtContent.put(Claims.auth_time.name(), authTime);
+        // Return the token time values if requested
+        if (timeClaims != null) {
+            timeClaims.put(Claims.iat.name(), iat);
+            timeClaims.put(Claims.auth_time.name(), authTime);
+            timeClaims.put(Claims.exp.name(), exp);
+        }
+
+        // Create RSA-signer with the private key
+        JWSSigner signer = new RSASSASigner(pk);
+        JWTClaimsSet claimsSet = JWTClaimsSet.parse(jwtContent);
+        JWSAlgorithm alg = JWSAlgorithm.RS256;
+        JWSHeader jwtHeader = new JWSHeader.Builder(alg)
+                .keyID(kid)
+                .type(JOSEObjectType.JWT)
+                .build();
+        SignedJWT signedJWT = new SignedJWT(jwtHeader, claimsSet);
+        signedJWT.sign(signer);
+        return signedJWT.serialize();
+    }
+
+    /**
+     * Read a PEM encoded private key from the classpath
+     *
+     * @param pemResName - key file resource name
+     * @return PrivateKey
+     * @throws Exception on decode failure
+     */
+    public static PrivateKey readPrivateKey(final String pemResName) throws Exception {
+        InputStream contentIS = TokenUtils.class.getResourceAsStream(pemResName);
+        byte[] tmp = new byte[4096];
+        int length = contentIS.read(tmp);
+        return decodePrivateKey(new String(tmp, 0, length, "UTF-8"));
+    }
+
+    /**
+     * Generate a new RSA keypair.
+     *
+     * @param keySize - the size of the key
+     * @return KeyPair
+     * @throws NoSuchAlgorithmException on failure to load RSA key generator
+     */
+    public static KeyPair generateKeyPair(final int keySize) throws NoSuchAlgorithmException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(keySize);
+        return keyPairGenerator.genKeyPair();
+    }
+
+    /**
+     * Decode a PEM encoded private key string to an RSA PrivateKey
+     *
+     * @param pemEncoded - PEM string for private key
+     * @return PrivateKey
+     * @throws Exception on decode failure
+     */
+    public static PrivateKey decodePrivateKey(final String pemEncoded) throws Exception {
+        byte[] encodedBytes = toEncodedBytes(pemEncoded);
+
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encodedBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        return kf.generatePrivate(keySpec);
+    }
+
+    /**
+     * Decode a PEM encoded public key string to an RSA PublicKey
+     *
+     * @param pemEncoded - PEM string for private key
+     * @return PublicKey
+     * @throws Exception on decode failure
+     */
+    public static PublicKey decodePublicKey(String pemEncoded) throws Exception {
+        byte[] encodedBytes = toEncodedBytes(pemEncoded);
+
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(encodedBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        return kf.generatePublic(spec);
+    }
+
+    private static byte[] toEncodedBytes(final String pemEncoded) {
+        final String normalizedPem = removeBeginEnd(pemEncoded);
+        return Base64.getDecoder().decode(normalizedPem);
+    }
+
+    private static String removeBeginEnd(String pem) {
+        pem = pem.replaceAll("-----BEGIN (.*)-----", "");
+        pem = pem.replaceAll("-----END (.*)----", "");
+        pem = pem.replaceAll("\r\n", "");
+        pem = pem.replaceAll("\n", "");
+        return pem.trim();
+    }
+
+    /**
+     * @return the current time in seconds since epoch
+     */
+    public static int currentTimeInSecs() {
+        long currentTimeMS = System.currentTimeMillis();
+        return (int) (currentTimeMS / 1000);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next take the code from the following listing and place into using-jwt-rbac/src/test/java/org/acme/jwt/GenerateToken.java</p>
+</div>
+<div class="listingblock">
+<div class="title">GenerateToken main Driver Class</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+
+import java.util.HashMap;
+
+import org.eclipse.microprofile.jwt.Claims;
+
+/**
+ * A simple utility class to generate and print a JWT token string to stdout. Can be run with:
+ * mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test
+ */
+public class GenerateToken {
+    /**
+     *
+     * @param args - [0]: optional name of classpath resource for json document of claims to add; defaults to "/JwtClaims.json"
+     *             [1]: optional time in seconds for expiration of generated token; defaults to 300
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        String claimsJson = "/JwtClaims.json";
+        if (args.length &gt; 0) {
+            claimsJson = args[0];
+        }
+        HashMap&lt;String, Long&gt; timeClaims = new HashMap&lt;&gt;();
+        if (args.length &gt; 1) {
+            long duration = Long.parseLong(args[1]);
+            long exp = TokenUtils.currentTimeInSecs() + duration;
+            timeClaims.put(Claims.exp.name(), exp);
+        }
+        String token = TokenUtils.generateTokenString(claimsJson, timeClaims);
+        System.out.println(token);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To get these classes to compile and run, you need to add the following dependency to your using-jwt-rbac/pom.xml:</p>
+</div>
+<div class="listingblock">
+<div class="title">nimbus-jose-jwt library dependency</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;dependency&gt;
+      &lt;groupId&gt;com.nimbusds&lt;/groupId&gt;
+      &lt;artifactId&gt;nimbus-jose-jwt&lt;/artifactId&gt;
+      &lt;version&gt;6.7&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we need the content of the RSA private key that corresponds to the public key we have in the TokenSecuredResource application. Take the following PEM content and place it into using-jwt-rbac/src/test/resources/privateKey.pem.</p>
+</div>
+<div class="listingblock">
+<div class="title">RSA Private Key PEM Content</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCWK8UjyoHgPTLa
+PLQJ8SoXLLjpHSjtLxMqmzHnFscqhTVVaDpCRCb6e3Ii/WniQTWw8RA7vf4djz4H
+OzvlfBFNgvUGZHXDwnmGaNVaNzpHYFMEYBhE8VGGiveSkzqeLZI+Y02G6sQAfDtN
+qqzM/l5QX8X34oQFaTBW1r49nftvCpITiwJvWyhkWtXP9RP8sXi1im5Vi3dhupOh
+nelk5n0BfajUYIbfHA6ORzjHRbt7NtBl0L2J+0/FUdHyKs6KMlFGNw8O0Dq88qnM
+uXoLJiewhg9332W3DFMeOveel+//cvDnRsCRtPgd4sXFPHh+UShkso7+DRsChXa6
+oGGQD3GdAgMBAAECggEAAjfTSZwMHwvIXIDZB+yP+pemg4ryt84iMlbofclQV8hv
+6TsI4UGwcbKxFOM5VSYxbNOisb80qasb929gixsyBjsQ8284bhPJR7r0q8h1C+jY
+URA6S4pk8d/LmFakXwG9Tz6YPo3pJziuh48lzkFTk0xW2Dp4SLwtAptZY/+ZXyJ6
+96QXDrZKSSM99Jh9s7a0ST66WoxSS0UC51ak+Keb0KJ1jz4bIJ2C3r4rYlSu4hHB
+Y73GfkWORtQuyUDa9yDOem0/z0nr6pp+pBSXPLHADsqvZiIhxD/O0Xk5I6/zVHB3
+zuoQqLERk0WvA8FXz2o8AYwcQRY2g30eX9kU4uDQAQKBgQDmf7KGImUGitsEPepF
+KH5yLWYWqghHx6wfV+fdbBxoqn9WlwcQ7JbynIiVx8MX8/1lLCCe8v41ypu/eLtP
+iY1ev2IKdrUStvYRSsFigRkuPHUo1ajsGHQd+ucTDf58mn7kRLW1JGMeGxo/t32B
+m96Af6AiPWPEJuVfgGV0iwg+HQKBgQCmyPzL9M2rhYZn1AozRUguvlpmJHU2DpqS
+34Q+7x2Ghf7MgBUhqE0t3FAOxEC7IYBwHmeYOvFR8ZkVRKNF4gbnF9RtLdz0DMEG
+5qsMnvJUSQbNB1yVjUCnDAtElqiFRlQ/k0LgYkjKDY7LfciZl9uJRl0OSYeX/qG2
+tRW09tOpgQKBgBSGkpM3RN/MRayfBtmZvYjVWh3yjkI2GbHA1jj1g6IebLB9SnfL
+WbXJErCj1U+wvoPf5hfBc7m+jRgD3Eo86YXibQyZfY5pFIh9q7Ll5CQl5hj4zc4Y
+b16sFR+xQ1Q9Pcd+BuBWmSz5JOE/qcF869dthgkGhnfVLt/OQzqZluZRAoGAXQ09
+nT0TkmKIvlza5Af/YbTqEpq8mlBDhTYXPlWCD4+qvMWpBII1rSSBtftgcgca9XLB
+MXmRMbqtQeRtg4u7dishZVh1MeP7vbHsNLppUQT9Ol6lFPsd2xUpJDc6BkFat62d
+Xjr3iWNPC9E9nhPPdCNBv7reX7q81obpeXFMXgECgYEAmk2Qlus3OV0tfoNRqNpe
+Mb0teduf2+h3xaI1XDIzPVtZF35ELY/RkAHlmWRT4PCdR0zXDidE67L6XdJyecSt
+FdOUH8z5qUraVVebRFvJqf/oGsXc4+ex1ZKUTbY0wqY1y9E39yvB3MaTmZFuuqk8
+f3cg+fr8aou7pr9SHhJlZCU=
+-----END PRIVATE KEY-----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And finally, we need to define what claims to include in the JWT. The <code>TokenUtils</code> class uses a json resource on the classpath
+to define the non-time sensitive claims, so take the content from the following listing and place it into
+using-jwt-rbac/src/test/resources/JwtClaims.json:</p>
+</div>
+<div class="listingblock">
+<div class="title">JwtClaims.json claims document</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "iss": "https://quarkus.io/using-jwt-rbac",
+    "jti": "a-123",
+    "sub": "jdoe-using-jwt-rbac",
+    "upn": "jdoe@quarkus.io",
+    "preferred_username": "jdoe",
+    "aud": "using-jwt-rbac",
+    "birthdate": "2001-07-13",
+    "roleMappings": {
+        "group1": "Group1MappedRole",
+        "group2": "Group2MappedRole"
+    },
+    "groups": [
+        "Echoer",
+        "Tester",
+        "Subscriber",
+        "group2"
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s explore the content of this document in more detail to understand how the claims will affect our application security.</p>
+</div>
+<div class="listingblock">
+<div class="title">JwtClaims.json claims document</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "iss": "https://quarkus.io/using-jwt-rbac", <b class="conum">(1)</b>
+    "jti": "a-123",
+    "sub": "jdoe-using-jwt-rbac",
+    "upn": "jdoe@quarkus.io", <b class="conum">(2)</b>
+    "preferred_username": "jdoe",
+    "aud": "using-jwt-rbac",
+    "birthdate": "2001-07-13",
+    "roleMappings": { <b class="conum">(3)</b>
+        "group1": "Group1MappedRole",
+        "group2": "Group2MappedRole"
+    },
+    "groups": [ <b class="conum">(4)</b>
+        "Echoer",
+        "Tester",
+        "Subscriber",
+        "group2"
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>The <code>iss</code> claim is the issuer of the JWT. This needs to match the server side <code>mp.jwt.verify.issuer</code>
+in order for the token to be accepted as valid.</p>
+</li>
+<li>
+<p>The <code>upn</code> claim is defined by the MicroProfile JWT RBAC spec as preferred claim to use for the
+<code>Principal</code> seen via the container security APIs.</p>
+</li>
+<li>
+<p>The <code>roleMappings</code> claim can be used to map from a role defined in the <code>groups</code> claim
+to an application level role defined in a <code>@RolesAllowed</code> annotation. We won&#8217;t use this
+feature in this quickstart, but it can be useful when the IDM providing the token has
+roles that do not directly align with those defined by the application.</p>
+</li>
+<li>
+<p>The <code>group</code> claim provides the groups and top-level roles associated with the JWT bearer.
+In this quickstart we are only using the top-level role mapping which means the JWT will
+be seen to have the roles "Echoer", "Tester", "Subscriber" and "group2". The full set of roles would
+also include a "Group2MappedRole" due to the <code>roleMappings</code> claim having a mapping from
+"group2" to "Group2MappedRole".</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Now we can generate a JWT to use with <code>TokenSecuredResource</code> endpoint. To do this, run the following command:</p>
+</div>
+<div class="listingblock">
+<div class="title">Command to Generate JWT</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+You may need to run <code>mvn test-compile</code> before this if you are working strictly from the command line and not an IDE that
+automatically compiles code as you write it.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">Sample JWT Generation Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
+[INFO] Building using-jwt-rbac 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from jboss: https://repository.jboss.org/nexus/content/groups/public/net/minidev/json-smart/maven-metadata.xml
+[INFO]
+[INFO] --- exec-maven-plugin:1.6.0:java (default-cli) @ using-jwt-rbac ---
+Setting exp: 1551659976 / Sun Mar 03 16:39:36 PST 2019
+	Added claim: sub, value: jdoe-using-jwt-rbac
+	Added claim: aud, value: [using-jwt-rbac]
+	Added claim: upn, value: jdoe@quarkus.io
+	Added claim: birthdate, value: 2001-07-13
+	Added claim: auth_time, value: 1551659676
+	Added claim: iss, value: https://quarkus.io/using-jwt-rbac
+	Added claim: roleMappings, value: {"group2":"Group2MappedRole","group1":"Group1MappedRole"}
+	Added claim: groups, value: ["Echoer","Tester","Subscriber","group2"]
+	Added claim: preferred_username, value: jdoe
+	Added claim: exp, value: Sun Mar 03 16:39:36 PST 2019
+	Added claim: iat, value: Sun Mar 03 16:34:36 PST 2019
+	Added claim: jti, value: a-123
+eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjU5Njc2LCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY1OTk3NiwiaWF0IjoxNTUxNjU5Njc2LCJqdGkiOiJhLTEyMyJ9.O9tx_wNNS4qdpFhxeD1e7v4aBNWz1FCq0UV8qmXd7dW9xM4hA5TO-ZREk3ApMrL7_rnX8z81qGPIo_R8IfHDyNaI1SLD56gVX-NaOLS2OjfcbO3zOWJPKR_BoZkYACtMoqlWgIwIRC-wJKUJU025dHZiNL0FWO4PjwuCz8hpZYXIuRscfFhXKrDX1fh3jDhTsOEFfu67ACd85f3BdX9pe-ayKSVLh_RSbTbBPeyoYPE59FW7H5-i8IE-Gqu838Hz0i38ksEJFI25eR-AJ6_PSUD0_-TV3NjXhF3bFIeT4VSaIZcpibekoJg0cQm-4ApPEcPLdgTejYHA-mupb8hSwg
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.682 s
+[INFO] Finished at: 2019-03-03T16:34:36-08:00
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The JWT string is the base64 encoded string that has 3 parts separated by '.' characters:
+<code>eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjUyMDkxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY1MjM5MSwiaWF0IjoxNTUxNjUyMDkxLCJqdGkiOiJhLTEyMyJ9.aPA4Rlc4kw7n_OZZRRk25xZydJy_J_3BRR8ryYLyHTO1o68_aNWWQCgpnAuOW64svPhPnLYYnQzK-l2vHX34B64JySyBD4y_vRObGmdwH_SEufBAWZV7mkG3Y4mTKT3_4EWNu4VH92IhdnkGI4GJB6yHAEzlQI6EdSOa4Nq8Gp4uPGqHsUZTJrA3uIW0TbNshFBm47-oVM3ZUrBz57JKtr0e9jv0HjPQWyvbzx1HuxZd6eA8ow8xzvooKXFxoSFCMnxotd3wagvYQ9ysBa89bgzL-lhjWtusuMFDUVYwFqADE7oOSOD4Vtclgq8svznBQ-YpfTHfb9QEcofMlpyjNA</code></p>
+</div>
+<div class="paragraph">
+<p>If you start playing around with the code and/or the solution code, you will only be able
+to use a given token for 5-6 minutes because that is the default expiration period + grace period. To use
+a longer expiration, pass in the lifetime of the token in seconds as the second argument to the <code>GenerateToken</code> class using
+<code>-Dexec.args=&#8230;&#8203;</code>. The first argument is the classpath resource name of the json document containing the claims to add to
+the JWT, and should be '/JwtClaims.json' for this quickstart.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example Command to Generate JWT with Lifetime of 3600 Seconds</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test -Dexec.args="/JwtClaims.json 3600"
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
+[INFO] Building using-jwt-rbac 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from jboss: https://repository.jboss.org/nexus/content/groups/public/net/minidev/json-smart/maven-metadata.xml
+[INFO]
+[INFO] --- exec-maven-plugin:1.6.0:java (default-cli) @ using-jwt-rbac ---
+Setting exp: 1551663155 / Sun Mar 03 17:32:35 PST 2019
+	Added claim: sub, value: jdoe-using-jwt-rbac
+	Added claim: aud, value: [using-jwt-rbac]
+	Added claim: upn, value: jdoe@quarkus.io
+	Added claim: birthdate, value: 2001-07-13
+	Added claim: auth_time, value: 1551659555
+	Added claim: iss, value: https://quarkus.io/using-jwt-rbac
+	Added claim: roleMappings, value: {"group2":"Group2MappedRole","group1":"Group1MappedRole"}
+	Added claim: groups, value: ["Echoer","Tester","Subscriber","group2"]
+	Added claim: preferred_username, value: jdoe
+	Added claim: exp, value: Sun Mar 03 17:32:35 PST 2019
+	Added claim: iat, value: Sun Mar 03 16:32:35 PST 2019
+	Added claim: jti, value: a-123
+eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjU5NTU1LCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY2MzE1NSwiaWF0IjoxNTUxNjU5NTU1LCJqdGkiOiJhLTEyMyJ9.QUfvHUstBHySis40QjecA7GbNEhM_kNWPRvgT7RShqIRJxr3A3pC3uO1p6Swx-7qiR21YYmGM3-hgXJPky-dKSGye_aLOXbNsqBn8RYmrrzFIlhtkZPhdqY60wYoMC4zk13oZKozUeVr5F-tLKtkXxoTQT1QWYH0YLk5BhpD1uJVpF8jiPk-CiLBn36Qee6cS2nBW1s7e2amnzgROeLAR5f1TQYPFHA9ULK9OxXq4ciMciwC_BCIykyR0pkBHhhhGjMcTxvwNMq6zRTwMGxvz-IZ53Gi8P_gl8ntT_NAJ5gd4RTmeqbWDFcrjBsCDRN92ixH50q_XDrcOs-s9800Gw
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.685 s
+[INFO] Finished at: 2019-03-03T16:32:35-08:00
+[INFO] ------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="finally-secured-access-to-securedroles-allowed">Finally, Secured Access to /secured/roles-allowed</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now let&#8217;s use this to make a secured request to the /secured/roles-allowed endpoint. Make sure you have the Quarkus server running using the <code>mvn compile quarkus:dev</code> command, and then run the following command, making sure to use your version of the generated JWT from the previous step:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjUyMDkxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY1MjM5MSwiaWF0IjoxNTUxNjUyMDkxLCJqdGkiOiJhLTEyMyJ9.aPA4Rlc4kw7n_OZZRRk25xZydJy_J_3BRR8ryYLyHTO1o68_aNWWQCgpnAuOW64svPhPnLYYnQzK-l2vHX34B64JySyBD4y_vRObGmdwH_SEufBAWZV7mkG3Y4mTKT3_4EWNu4VH92IhdnkGI4GJB6yHAEzlQI6EdSOa4Nq8Gp4uPGqHsUZTJrA3uIW0TbNshFBm47-oVM3ZUrBz57JKtr0e9jv0HjPQWyvbzx1HuxZd6eA8ow8xzvooKXFxoSFCMnxotd3wagvYQ9ysBa89bgzL-lhjWtusuMFDUVYwFqADE7oOSOD4Vtclgq8svznBQ-YpfTHfb9QEcofMlpyjNA" http://127.0.0.1:8080/secured/roles-allowed; echo</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">curl Command for /secured/roles-allowed With JWT</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ curl -H "Authorization: Bearer eyJraWQ..." http://127.0.0.1:8080/secured/roles-allowed; echo
+hello + jdoe@quarkus.io, isSecure: false, authScheme: MP-JWT, hasJWT: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Success! We now have:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a non-anonymous caller name of <a href="mailto:jdoe@quarkus.io">jdoe@quarkus.io</a></p>
+</li>
+<li>
+<p>an authentication scheme of MP-JWT</p>
+</li>
+<li>
+<p>a non-null JsonWebToken</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-the-jsonwebtoken-and-claim-injection">Using the JsonWebToken and Claim Injection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that we can generate a JWT to access our secured REST endpoints, let&#8217;s see what more we can do with the <code>JsonWebToken</code>
+interface and the JWT claims. The <code>org.eclipse.microprofile.jwt.JsonWebToken</code> interface extends the <code>java.security.Principal</code>
+interface, and is in fact the type of the object that is returned by the <code>javax.ws.rs.core.SecurityContext#getUserPrincipal()</code> call we
+used previously. This means that code that does not use CDI but does have access to the REST container <code>SecurityContext</code> can get
+hold of the caller <code>JsonWebToken</code> interface by casting the <code>SecurityContext#getUserPrincipal()</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>JsonWebToken</code> interface defines methods for accessing claims in the underlying JWT. It provides accessors for common
+claims that are required by the MicroProfile JWT RBAC specification as well as arbitrary claims that may exist in the JWT.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s expand our <code>TokenSecuredResource</code> with another endpoint /secured/winners. The <code>winners()</code> method, some hypothetical lottery
+ winning number generator, whose code is shown in the following list:</p>
+</div>
+<div class="listingblock">
+<div class="title">TokenSecuredResource#winners Method Addition</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.json.JsonString;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+
+/**
+ * Version 3 of the TokenSecuredResource
+ */
+ @Path("/secured")
+ public class TokenSecuredResourceV3 {
+
+     @Inject
+     JsonWebToken jwt;
+
+...
+
+    @GET
+    @Path("winners")
+    @Produces(MediaType.TEXT_PLAIN)
+    @RolesAllowed("Subscriber")
+    public String winners() {
+        int remaining = 6;
+        ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
+
+        // If the JWT contains a birthdate claim, use the day of the month as a pick
+        if (jwt.containsClaim(Claims.birthdate.name())) { <b class="conum">(1)</b>
+            String bdayString = jwt.getClaim(Claims.birthdate.name()); <b class="conum">(2)</b>
+            LocalDate bday = LocalDate.parse(bdayString);
+            numbers.add(bday.getDayOfMonth()); <b class="conum">(3)</b>
+            remaining --;
+        }
+        // Fill remaining picks with random numbers
+        while(remaining &gt; 0) { <b class="conum">(4)</b>
+            int pick = (int) Math.rint(64 * Math.random() + 1);
+            numbers.add(pick);
+            remaining --;
+        }
+        return numbers.toString();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Here we use the injected <code>JsonWebToken</code> to check for a <code>birthday</code> claim.</p>
+</li>
+<li>
+<p>If it exists, we obtain the claim value as a <code>String</code>, and then convert it to a <code>LocalDate</code>.</p>
+</li>
+<li>
+<p>The day of month value of the <code>birthday</code> claim is inserted as the first winning number pick.</p>
+</li>
+<li>
+<p>The remainder of the winning number picks are random numbers.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This illustrates how you can use the JWT to not only provide identity and role based authorization, but as a stateless container
+of information associated with the authenticated caller that can be used to alter you business method logic.
+Add this <code>winners</code> method to your <code>TokenSecuredResource</code> code, and run the following command, replacing <em>YOUR_TOKEN</em> with
+a new JWT or a long lived JWT you generated previously:</p>
+</div>
+<div class="listingblock">
+<div class="title">curl command for /secured/winners</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8080/secured/winners; echo</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Example output using my generated token is shown in the following example output. Note that the first pick corresponds to the day of month of
+the birthdate claim from the <code>JwtClaims.json</code> content.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example Output for /secured/winners</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjY2MDMzLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY2NjMzMywiaWF0IjoxNTUxNjY2MDMzLCJqdGkiOiJhLTEyMyJ9.LqJ5LlCrVIbCcRAus4aNHv7UfvuUgrcEVOwBxwfPY4c-YCaUxK0owxbtP2WtR5__yTFXpdplR6gVJWwv4Hw8c_sP8MRQi_5bdnTqZt3TeJsepx0cm7AIwJCopmpbuNjIgLVLZ_6VP3ZkZ2VK9SDO-9yBMPWWp2bnLILdwfYsOuJbFB_bWxSQYnTioms7NZjVefVY8eqawwfRq75PhB7W2iw-Ni2puVFjnpTiAZeCUCur-zjQ50QG6zSCZpVqPcI5JZ2-KeJKheiglYCYp0cauTdVgXjdlXCGQbAU0xirLxJXNsxg2GZxgV9luGwy1y3BdezwoM2m4mXviuHJP-lziA" http://localhost:8080/secured/winners; echo
+[13, 47, 42, 45, 19, 25]</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="claims-injection">Claims Injection</h3>
+<div class="paragraph">
+<p>In the previous <code>winners()</code> method we accessed the <code>birthday</code> claim through the <code>JsonWebToken</code> interface. MicroProfile JWT RBAC also supports
+the direct injection of claim values from the JWT using CDI injection and the MicroProfile JWT RBAC <code>@Claim</code> qualifier. Here is an alternative
+version of the <code>winners()</code> method that injects the <code>birthday</code> claim value as an <code>Optional&lt;JsonString&gt;</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">TokenSecuredResource#winners2 Method Addition</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Optional;
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+/**
+ * Version 4 of the TokenSecuredResource
+ */
+@Path("/secured")
+public class TokenSecuredResource {
+
+    @Inject
+    JsonWebToken jwt;
+    @Inject <b class="conum">(1)</b>
+    @Claim(standard = Claims.birthdate) <b class="conum">(2)</b>
+    Optional&lt;String&gt; birthdate; <b class="conum">(3)</b>
+
+    ...
+
+    @GET
+    @Path("winners2")
+    @Produces(MediaType.TEXT_PLAIN)
+    @RolesAllowed("Subscriber")
+    public String winners2() {
+        int remaining = 6;
+        ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
+
+        // If the JWT contains a birthdate claim, use the day of the month as a pick
+        if (birthdate.isPresent()) { <b class="conum">(4)</b>
+            String bdayString = birthdate.get(); <b class="conum">(5)</b>
+            LocalDate bday = LocalDate.parse(bdayString);
+            numbers.add(bday.getDayOfMonth());
+            remaining --;
+        }
+        // Fill remaining picks with random numbers
+        while(remaining &gt; 0) {
+            int pick = (int) Math.rint(64 * Math.random() + 1);
+            numbers.add(pick);
+            remaining --;
+        }
+        return numbers.toString();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>We use CDI <code>@Inject</code> along with&#8230;&#8203;</p>
+</li>
+<li>
+<p>an MicroProfile JWT RBAC <code>@Claim(standard = Claims.birthdate)</code> qualifier to inject the <code>birthdate</code> claim directly as</p>
+</li>
+<li>
+<p>an <code>Optional&lt;String&gt;</code> value.</p>
+</li>
+<li>
+<p>Now we check whether the injected <code>birthdate</code> field is present</p>
+</li>
+<li>
+<p>and if it is, get its value.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The remainder of the code is the same as before. Update your <code>TokenSecuredResource</code> to either add or replace the current
+<code>winners()</code> method, and then invoke the following command with <em>YOUR_TOKEN</em> replaced:</p>
+</div>
+<div class="listingblock">
+<div class="title">curl command for /secured/winners2</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8080/secured/winners2; echo</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example Output for /secured/winners2</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">Scotts-iMacPro:using-jwt-rbac starksm$ curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjY3MzEzLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY3MDkxMywiaWF0IjoxNTUxNjY3MzEzLCJqdGkiOiJhLTEyMyJ9.c2QJAK3a1VOYL6vOt40VSEAy9wXPBEjVbqApTTNG8V8UDkQZ6HiOR9-rKOFX3WmTtQVru3O9zDu2_T2_v8kTmCkT-ThxodqC4VxD_QVx1v6BaSJ9-MX1Q7nrkD0Mk1V6x0Cqd6jmHxtJy0Ep8IgeMw2Y5gL9a1NgWVeldXP6cdHrHcYKYGnZKmYp7VpqZBoONPIS_QmWXm-JerwVpwt0juEtZUQoGCJdp7-GZA31QyEN64gCMKfdhYNnLuWQaom3i0uF_LfXtlMHdRU0kzDnLrnGw99ynTAex7ah7zG10ZbanK-PI-nD6wcTbE9WqriwohHM9BFJoBmF81RRk5uMsw" http://localhost:8080/secured/winners2; echo
+[13, 38, 36, 38, 36, 22]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="explore-the-solution">Explore the Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The solution repository located in the <code>using-jwt-rbac</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">directory</a> contains all of the versions we have
+worked through in this quickstart guide as well as some additional endpoints that illustrate subresources with injection
+of <code>JsonWebToken`s and its claims into those using the CDI APIs. We suggest that you check out the quickstart solutions and
+explore the `using-jwt-rbac</code> directory to learn more about the Smallrye JWT extension features.</p>
+</div>
 </div>
 </div>
   </div>
