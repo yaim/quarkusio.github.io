@@ -3,11 +3,13 @@
 
 <head>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/dracula.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,8 +18,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
   <!-- End Google Tag Manager -->
-
-
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body class="guides">
@@ -154,7 +156,7 @@ inherit the correct configuration.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-xml" data-lang="xml">&lt;dependencies&gt;
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;dependencies&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
       &lt;artifactId&gt;quarkus-core-runtime&lt;/artifactId&gt;
@@ -191,7 +193,7 @@ and possibly the deployment artifacts of other Quarkus modules if you want to us
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
   &lt;artifactId&gt;quarkus-core-deployment&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
@@ -499,7 +501,7 @@ this change is complete.</p>
 <h3 id="configuration-example">4.6. Configuration Example</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-java" data-lang="java">import io.quarkus.runtime.annotations.ConfigItem;
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigGroup;
 
 import java.io.File;
@@ -579,7 +581,7 @@ key type.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-properties" data-lang="properties">quarkus.log.file.enable=true
+<pre class="highlightjs highlight nowrap"><code class="language-properties hljs" data-lang="properties">quarkus.log.file.enable=true
 quarkus.log.file.level=DEBUG
 quarkus.log.file.path=/tmp/debug.log</code></pre>
 </div>
@@ -664,7 +666,7 @@ their deployment modules should also be added as test scoped dependencies.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">package io.quarkus.health.test;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.quarkus.health.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -741,7 +743,7 @@ public class FailingUnitTest {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">package io.quarkus.hibernate.orm;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.quarkus.hibernate.orm;
 
 import io.quarkus.deployment.configuration.ConfigurationError;
 import io.quarkus.test.QuarkusUnitTest;
@@ -859,7 +861,7 @@ memory in a runtime class loader. To have these classes written out to disk for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ mvn clean install -Dio.quarkus.DEBUG_GENERATED_CLASSES_DIR=./target/app-generated-classes</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mvn clean install -Dio.quarkus.DEBUG_GENERATED_CLASSES_DIR=./target/app-generated-classes</code></pre>
 </div>
 </div>
 </div>

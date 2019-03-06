@@ -3,11 +3,13 @@
 
 <head>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/dracula.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,8 +18,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
   <!-- End Google Tag Manager -->
-
-
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body class="guides">
@@ -123,7 +125,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest</code></pre>
+<pre class="highlightjs highlight"><code>org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -134,7 +136,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>mvn clean install -Pnative</code></pre>
+<pre class="highlightjs highlight"><code>mvn clean install -Pnative</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -142,7 +144,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>[INFO] ------------------------------------------------------------------------
+<pre class="highlightjs highlight"><code>[INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
@@ -155,7 +157,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>[INFO] [io.quarkus.creator.phase.nativeimage.NativeImagePhase] /opt/graalvm/bin/native-image -J-Djava.util.logging.manager=org.jboss.logmanager.LogManager -J-Dcom.sun.xml.internal.bind.v2.bytecode.ClassTailor.noOptimize=true -H:InitialCollectionPolicy=com.oracle.svm.core.genscavenge.CollectionPolicy$BySpaceAndTime -jar rest-client-1.0-SNAPSHOT-runner.jar -J-Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -H:+PrintAnalysisCallTree -H:EnableURLProtocols=http,https --enable-all-security-services -H:-SpawnIsolates -H:+JNI --no-server -H:-UseServiceLoaderFeature -H:+StackTrace</code></pre>
+<pre class="highlightjs highlight"><code>[INFO] [io.quarkus.creator.phase.nativeimage.NativeImagePhase] /opt/graalvm/bin/native-image -J-Djava.util.logging.manager=org.jboss.logmanager.LogManager -J-Dcom.sun.xml.internal.bind.v2.bytecode.ClassTailor.noOptimize=true -H:InitialCollectionPolicy=com.oracle.svm.core.genscavenge.CollectionPolicy$BySpaceAndTime -jar rest-client-1.0-SNAPSHOT-runner.jar -J-Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -H:+PrintAnalysisCallTree -H:EnableURLProtocols=http,https --enable-all-security-services -H:-SpawnIsolates -H:+JNI --no-server -H:-UseServiceLoaderFeature -H:+StackTrace</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -163,7 +165,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>-H:EnableURLProtocols=http,https --enable-all-security-services -H:+JNI</code></pre>
+<pre class="highlightjs highlight"><code>-H:EnableURLProtocols=http,https --enable-all-security-services -H:+JNI</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -193,7 +195,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>$ ls -lh target/rest-client-1.0-SNAPSHOT-runner
+<pre class="highlightjs highlight"><code>$ ls -lh target/rest-client-1.0-SNAPSHOT-runner
 -rwxrwxr-x. 1 gsmet gsmet 34M Feb 22 15:27 target/rest-client-1.0-SNAPSHOT-runner</code></pre>
 </div>
 </div>
@@ -215,7 +217,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>quarkus.ssl.native=false</code></pre>
+<pre class="highlightjs highlight"><code>quarkus.ssl.native=false</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -223,7 +225,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>mvn clean install -Pnative</code></pre>
+<pre class="highlightjs highlight"><code>mvn clean install -Pnative</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -231,7 +233,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>Exception handling request to /country/name/greece: com.oracle.svm.core.jdk.UnsupportedFeatureError: Accessing an URL protocol that was not enabled. The URL protocol https is supported but not enabled by default. It must be enabled by adding the --enable-url-protocols=https option to the native-image command.</code></pre>
+<pre class="highlightjs highlight"><code>Exception handling request to /country/name/greece: com.oracle.svm.core.jdk.UnsupportedFeatureError: Accessing an URL protocol that was not enabled. The URL protocol https is supported but not enabled by default. It must be enabled by adding the --enable-url-protocols=https option to the native-image command.</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -242,7 +244,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>org.acme.restclient.CountriesService/mp-rest/url=http://restcountries.eu/rest</code></pre>
+<pre class="highlightjs highlight"><code>org.acme.restclient.CountriesService/mp-rest/url=http://restcountries.eu/rest</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -250,7 +252,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>mvn clean install -Pnative</code></pre>
+<pre class="highlightjs highlight"><code>mvn clean install -Pnative</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -258,7 +260,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>[INFO] [io.quarkus.creator.phase.nativeimage.NativeImagePhase] /opt/graalvm/bin/native-image -J-Djava.util.logging.manager=org.jboss.logmanager.LogManager -J-Dcom.sun.xml.internal.bind.v2.bytecode.ClassTailor.noOptimize=true -H:InitialCollectionPolicy=com.oracle.svm.core.genscavenge.CollectionPolicy$BySpaceAndTime -jar rest-client-1.0-SNAPSHOT-runner.jar -J-Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -H:+PrintAnalysisCallTree -H:EnableURLProtocols=http -H:-SpawnIsolates -H:-JNI --no-server -H:-UseServiceLoaderFeature -H:+StackTrace</code></pre>
+<pre class="highlightjs highlight"><code>[INFO] [io.quarkus.creator.phase.nativeimage.NativeImagePhase] /opt/graalvm/bin/native-image -J-Djava.util.logging.manager=org.jboss.logmanager.LogManager -J-Dcom.sun.xml.internal.bind.v2.bytecode.ClassTailor.noOptimize=true -H:InitialCollectionPolicy=com.oracle.svm.core.genscavenge.CollectionPolicy$BySpaceAndTime -jar rest-client-1.0-SNAPSHOT-runner.jar -J-Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -H:+PrintAnalysisCallTree -H:EnableURLProtocols=http -H:-SpawnIsolates -H:-JNI --no-server -H:-UseServiceLoaderFeature -H:+StackTrace</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -266,7 +268,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>[INFO] ------------------------------------------------------------------------
+<pre class="highlightjs highlight"><code>[INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------</code></pre>
 </div>
@@ -277,7 +279,7 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>$ ls -lh target/rest-client-1.0-SNAPSHOT-runner
+<pre class="highlightjs highlight"><code>$ ls -lh target/rest-client-1.0-SNAPSHOT-runner
 -rwxrwxr-x. 1 gsmet gsmet 25M Feb 22 15:19 target/rest-client-1.0-SNAPSHOT-runner</code></pre>
 </div>
 </div>
@@ -297,7 +299,7 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>git checkout -- src/main/resources/META-INF/microprofile-config.properties</code></pre>
+<pre class="highlightjs highlight"><code>git checkout -- src/main/resources/META-INF/microprofile-config.properties</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -305,7 +307,7 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>mvn clean install -Pnative</code></pre>
+<pre class="highlightjs highlight"><code>mvn clean install -Pnative</code></pre>
 </div>
 </div>
 </div>
@@ -355,7 +357,7 @@ and an exception too: <code>java.security.InvalidAlgorithmParameterException: th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>./target/rest-client-1.0-SNAPSHOT-runner -Djava.library.path=&lt;new-graalvm-home&gt;/jre/lib/amd64 -Djavax.net.ssl.trustStore=&lt;new-graalvm-home&gt;/jre/lib/security/cacerts</code></pre>
+<pre class="highlightjs highlight"><code>./target/rest-client-1.0-SNAPSHOT-runner -Djava.library.path=&lt;new-graalvm-home&gt;/jre/lib/amd64 -Djavax.net.ssl.trustStore=&lt;new-graalvm-home&gt;/jre/lib/security/cacerts</code></pre>
 </div>
 </div>
 <div class="paragraph">

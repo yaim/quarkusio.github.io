@@ -3,11 +3,13 @@
 
 <head>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/dracula.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,8 +18,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
   <!-- End Google Tag Manager -->
-
-
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body class="guides">
@@ -177,7 +179,7 @@ The executable would have everything to run the application including the "JVM" 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;profiles&gt;
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;profiles&gt;
     &lt;profile&gt;
         &lt;id&gt;native&lt;/id&gt;
         &lt;build&gt;
@@ -226,7 +228,7 @@ You can run it using: <code>target/quarkus-quickstart-runner.jar</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;plugin&gt;
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
     &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
     &lt;version&gt;${surefire.version}&lt;/version&gt;
@@ -251,7 +253,7 @@ You can run it using: <code>target/quarkus-quickstart-runner.jar</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quickstart;
 
 
 import io.quarkus.test.junit.SubstrateTest;
@@ -280,7 +282,7 @@ The executable is retrieved using the <code>native.image.path</code> system prop
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>mvn package verify -Pnative
+<pre class="highlightjs highlight"><code>mvn package verify -Pnative
 ...
 [quarkus-quickstart-runner:50955]     universe:     391.96 ms
 [quarkus-quickstart-runner:50955]      (parse):     904.37 ms
@@ -334,7 +336,7 @@ Because the Docker container may not use the same <em>executable</em> format as 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">mvn package -Pnative -Dnative-image.docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">mvn package -Pnative -Dnative-image.docker-build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -344,7 +346,7 @@ The project generation has provided a <code>Dockerfile</code> in the <code>src/m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>FROM registry.fedoraproject.org/fedora-minimal
+<pre class="highlightjs highlight"><code>FROM registry.fedoraproject.org/fedora-minimal
 WORKDIR /work/
 COPY target/*-runner /work/application
 RUN chmod 775 /work
@@ -357,7 +359,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>docker build -f src/main/docker/Dockerfile -t quarkus-quickstart/quickstart .</code></pre>
+<pre class="highlightjs highlight"><code>docker build -f src/main/docker/Dockerfile -t quarkus-quickstart/quickstart .</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -365,7 +367,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>docker run -i --rm -p 8080:8080 quarkus-quickstart/quickstart</code></pre>
+<pre class="highlightjs highlight"><code>docker run -i --rm -p 8080:8080 quarkus-quickstart/quickstart</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">

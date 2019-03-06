@@ -3,11 +3,13 @@
 
 <head>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/dracula.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,8 +18,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
   <!-- End Google Tag Manager -->
-
-
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body class="guides">
@@ -88,7 +90,7 @@ Let&#8217;s take a very simple application handling <em>fruits</em>. The code wo
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Path("fruits")
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Path("fruits")
 @Produces("application/json")
 @Consumes("application/json")
 public class FruitResource {
@@ -146,7 +148,7 @@ Quarkus provides a way to call HTTP endpoint easily.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Path("/v2")
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Path("/v2")
 @RegisterRestClient
 public interface CountriesService {
 
@@ -165,7 +167,7 @@ public interface CountriesService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Path("/country")
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Path("/country")
 public class CountriesResource {
 
     @Inject
@@ -188,7 +190,7 @@ The URL is configured in the application configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-text" data-lang="text"># the format is interface-name/mp-rest/url=the-service-url
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text"># the format is interface-name/mp-rest/url=the-service-url
 org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest</code></pre>
 </div>
 </div>
@@ -215,7 +217,7 @@ First, you can implement asynchronous HTTP endpoint as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@GET
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@GET
 @Path("/greeting/{name}")
 public CompletionStage&lt;String&gt; greetings(@PathParam("name") String name) {
     return reactiveService.getAsyncGreetings(name);
@@ -232,7 +234,7 @@ Generating a <em>server-sent event</em> response with Quarkus is just as simple:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Produces(MediaType.SERVER_SENT_EVENTS)
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Produces(MediaType.SERVER_SENT_EVENTS)
 @GET
 @Path("/neo")
 public Publisher&lt;String&gt; stream() {
@@ -246,7 +248,7 @@ To provide this stream, you can either use <a href="https://github.com/ReactiveX
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Produces(MediaType.SERVER_SENT_EVENTS)
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Produces(MediaType.SERVER_SENT_EVENTS)
 @GET
 @Path("/neo")
 public Publisher&lt;String&gt; stream() {
@@ -270,7 +272,7 @@ But no worries, Quarkus is perfectly suited to implement message-driven microser
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@ApplicationScoped
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
 public class HealthDataProcessor {
 
   @Incoming("health")
@@ -292,7 +294,7 @@ You can also express your message processing logic using reactive programming as
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Incoming("health")
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Incoming("health")
 @Outgoing("output")
 public Publisher&lt;KafkaMessage&lt;String, JsonObject&gt;&gt; filterState(Flowable&lt;MqttMessage&gt; input) {
     return input
@@ -318,7 +320,7 @@ If you are using AWS Lambda, your Quarkus function looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">public class HelloLambda implements RequestHandler&lt;HelloRequest, String&gt; {
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class HelloLambda implements RequestHandler&lt;HelloRequest, String&gt; {
 
     @Inject
     HelloGreeter greeter;

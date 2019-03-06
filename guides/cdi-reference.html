@@ -3,11 +3,13 @@
 
 <head>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/dracula.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,8 +18,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
   <!-- End Google Tag Manager -->
-
-
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body class="guides">
@@ -140,7 +142,7 @@ This involves injection fields, constructors and initializers, observer methods,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@ApplicationScoped
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
 public class CounterBean {
 
     @Inject
@@ -166,7 +168,7 @@ public class CounterBean {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@ApplicationScoped
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
 public class CounterBean {
 
     private final CounterService service;
@@ -334,7 +336,7 @@ However, <code>BeanDefiningAnnotationBuildItem</code> can be used to extend the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
 BeanDefiningAnnotationBuildItem additionalBeanDefiningAnnotation() {
     return new BeanDefiningAnnotationBuildItem(DotName.createSimple("javax.ws.rs.Path")));
 }</code></pre>
@@ -372,7 +374,7 @@ An integrator must also provide a corresponding <code>io.quarkus.arc.ResourceRef
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
 void setupResourceInjection(BuildProducer&lt;ResourceAnnotationBuildItem&gt; resourceAnnotations, BuildProducer&lt;GeneratedResourceBuildItem&gt; resources) {
     resources.produce(new GeneratedResourceBuildItem("META-INF/services/io.quarkus.arc.ResourceReferenceProvider",
         JPAResourceReferenceProvider.class.getName().getBytes()));
@@ -389,7 +391,7 @@ Additional bean classes are transparently added to the application index process
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
 List&lt;AdditionalBeanBuildItem&gt; additionalBeans() {
      return Arrays.asList(
           new AdditionalBeanBuildItem(SmallRyeHealthReporter.class),
@@ -439,7 +441,7 @@ Here is how to do it - use the <code>AnnotationsTransformerBuildItem</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
 AnnotationsTransformerBuildItem transform() {
     return new AnnotationsTransformerBuildItem(new AnnotationsTransformer() {
 
@@ -465,7 +467,7 @@ Register a <code>BeanDeploymentValidatorBuildItem</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
 BeanDeploymentValidatorBuildItem beanDeploymentValidator() {
     return new BeanDeploymentValidatorBuildItem(new BeanDeploymentValidator() {
          public void validate(ValidationContext validationContext) {

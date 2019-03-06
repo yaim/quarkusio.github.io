@@ -3,11 +3,13 @@
 
 <head>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/dracula.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,8 +18,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
   <!-- End Google Tag Manager -->
-
-
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body class="guides">
@@ -117,7 +119,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>mvn io.quarkus:quarkus-maven-plugin:$1.0.0.Alpha1-SNAPSHOT:create \
+<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:$1.0.0.Alpha1-SNAPSHOT:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=application-configuration \
     -DclassName="org.acme.config.GreetingResource" \
@@ -160,7 +162,7 @@ The injection uses 2 annotations: <code>@Inject</code> and <code>@ConfigProperty
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Inject
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Inject
 @ConfigProperty(name = "greeting.message")
 private String message;</code></pre>
 </div>
@@ -170,7 +172,7 @@ private String message;</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@Inject
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Inject
 @ConfigProperty(name = "greeting.message")
 private String message;
 
@@ -193,7 +195,7 @@ The third property is optional. The injected <code>Optional</code> is empty as t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">@GET
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@GET
 @Produces(MediaType.TEXT_PLAIN)
 public String hello() {
     return message + " " + name.orElse("world") + suffix;
@@ -211,7 +213,7 @@ Edit the <code>src/main/resources/application.properties</code> with the followi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code># Your configuration properties
+<pre class="highlightjs highlight"><code># Your configuration properties
 greeting.message = hello
 greeting.name = quarkus</code></pre>
 </div>
@@ -221,7 +223,7 @@ greeting.name = quarkus</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>$ curl http://localhost:8080/greeting
+<pre class="highlightjs highlight"><code>$ curl http://localhost:8080/greeting
 hello quarkus!</code></pre>
 </div>
 </div>
@@ -249,7 +251,7 @@ Edit the <code>src/test/java/org/acme/config/GreetingResourceTest.java</code> fi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">package org.acme.config;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.config;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

@@ -3,11 +3,13 @@
 
 <head>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/dracula.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,8 +18,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
   <!-- End Google Tag Manager -->
-
-
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body class="guides">
@@ -104,7 +106,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>mvn io.quarkus:quarkus-maven-plugin:$1.0.0.Alpha1-SNAPSHOT:create \
+<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:$1.0.0.Alpha1-SNAPSHOT:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=rest-kotlin \
     -DclassName="org.acme.rest.GreetingResource" \
@@ -121,7 +123,7 @@ configured to work with Kotlin. Furthermore  the <code>org.acme.rest.GreetingRes
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">package org.acme.rest
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">package org.acme.rest
 
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -163,7 +165,7 @@ class GreetingResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;plugin&gt;
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
     &lt;artifactId&gt;kotlin-maven-plugin&lt;/artifactId&gt;
     &lt;groupId&gt;org.jetbrains.kotlin&lt;/groupId&gt;
     &lt;version&gt;${kotlin.version}&lt;/version&gt;
@@ -240,7 +242,7 @@ code and immediately see their changes reflected.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">fun hello() = "hi"</code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">fun hello() = "hi"</code></pre>
 </div>
 </div>
 <div class="paragraph">
