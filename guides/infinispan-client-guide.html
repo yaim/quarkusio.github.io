@@ -68,8 +68,8 @@
 provides functionality to allow the client that can connect to said server when running in Quarkus.</p>
 </div>
 <div class="paragraph">
-<p>More information can be found about Infinispan at <a href="http://www.infinispan.org" class="bare">http://www.infinispan.org</a> and the client/server at
-<a href="http://infinispan.org/docs/dev/user_guide/user_guide.html#client_server" class="bare">http://infinispan.org/docs/dev/user_guide/user_guide.html#client_server</a></p>
+<p>More information can be found about Infinispan at <a href="https://infinispan.org" class="bare">https://infinispan.org</a> and the client/server at
+<a href="https://infinispan.org/docs/dev/user_guide/user_guide.html#client_server" class="bare">https://infinispan.org/docs/dev/user_guide/user_guide.html#client_server</a></p>
 </div>
 </div>
 </div>
@@ -149,7 +149,7 @@ some additional steps that are detailed here. Let&#8217;s say we have the follow
 <div class="listingblock">
 <div class="title">Author.java</div>
 <div class="content">
-<pre>public class Author {
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Author {
    private final String name;
    private final String surname;
 
@@ -158,13 +158,13 @@ some additional steps that are detailed here. Let&#8217;s say we have the follow
       this.surname = Objects.requireNonNull(surname);
    }
    // Getter/Setter/equals/hashCode/toString ommitted
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Book.java</div>
 <div class="content">
-<pre>public class Book {
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Book {
    private final String title;
    private final String description;
    private final int publicationYear;
@@ -177,7 +177,7 @@ some additional steps that are detailed here. Let&#8217;s say we have the follow
       this.authors = Objects.requireNonNull(authors);
    }
    // Getter/Setter/equals/hashCode/toString ommitted
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -296,7 +296,7 @@ The type name must match the <code>&lt;protobuf package&gt;.&lt;protobuf message
 <div class="listingblock">
 <div class="title">AuthorMarshaller.java</div>
 <div class="content">
-<pre>public class AuthorMarshaller implements MessageMarshaller&lt;Author&gt; {
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class AuthorMarshaller implements MessageMarshaller&lt;Author&gt; {
 
    @Override
    public String getTypeName() {
@@ -320,13 +320,13 @@ The type name must match the <code>&lt;protobuf package&gt;.&lt;protobuf message
       String surname = reader.readString("surname");
       return new Author(name, surname);
    }
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">BookMarshaller.java</div>
 <div class="content">
-<pre>public class BookMarshaller implements MessageMarshaller&lt;Book&gt; {
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class BookMarshaller implements MessageMarshaller&lt;Book&gt; {
 
    @Override
    public String getTypeName() {
@@ -354,7 +354,7 @@ The type name must match the <code>&lt;protobuf package&gt;.&lt;protobuf message
       Set&lt;Author&gt; authors = reader.readCollection("authors", new HashSet&lt;&gt;(), Author.class);
       return new Book(title, description, publicationYear, authors);
    }
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -488,7 +488,7 @@ you must add another optional depdency: <code>infinispan-query-dsl</code> to sta
 </div>
 <div class="paragraph">
 <p>With this added you can use Infinispan querying just as you would normally, nothing special required.
-You can read more about this at <a href="http://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl" class="bare">http://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl</a>.</p>
+You can read more about this at <a href="https://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl" class="bare">https://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl</a>.</p>
 </div>
 <div class="paragraph">
 <p>You can use either the Query DSL or the Ickle Query language with the Quarkus infinispan client
@@ -536,7 +536,7 @@ a regular expression so that only a subset of caches have near caching applied t
 <div class="paragraph">
 <p>The first step is to configure the <code>hotrod-client.properties</code> file to point to your truststore
 and/or keystore. This is further detailed at
-<a href="http://infinispan.org/docs/dev/user_guide/user_guide.html#hr_encryption" class="bare">http://infinispan.org/docs/dev/user_guide/user_guide.html#hr_encryption</a>.</p>
+<a href="https://infinispan.org/docs/dev/user_guide/user_guide.html#hr_encryption" class="bare">https://infinispan.org/docs/dev/user_guide/user_guide.html#hr_encryption</a>.</p>
 </div>
 <div class="paragraph">
 <p>The reason that Quarkus is different is that SubstrateVM does not come with security
@@ -629,7 +629,7 @@ the Quarkus Infinispan Client extension.</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p>The guide for configuring these can be found at <a href="http://infinispan.org/docs/dev/user_guide/user_guide.html#authentication" class="bare">http://infinispan.org/docs/dev/user_guide/user_guide.html#authentication</a>.
+<p>The guide for configuring these can be found at <a href="https://infinispan.org/docs/dev/user_guide/user_guide.html#authentication" class="bare">https://infinispan.org/docs/dev/user_guide/user_guide.html#authentication</a>.
 However you need to configure these through the <code>hotrod-client.properties</code> file if using Dependency Injection.</p>
 </div>
 </div>
