@@ -82,7 +82,42 @@
 <div class="sect2">
 <h3 id="live-coding">Live Coding</h3>
 <div class="paragraph">
-<p>Build applications faster with <a href="https://quarkus.io/live-coding">live coding</a>: fix bugs just by saving your code and reloading your browser.</p>
+<p>One of the major productivity problems that face most Java developers is traditional Java
+development workflow. For most web developers this will generally be:</p>
+</div>
+<div class="paragraph">
+<p><em>Write Code</em> &#8594; <em>Compile</em> &#8594; <em>Deploy</em> &#8594; <em>Refresh Browser</em> &#8594; <em>Repeat</em></p>
+</div>
+<div class="paragraph">
+<p>This can be a major drain on productivity, as the compile + redeploy cycle can often take
+up to a minute or more. Quarkus aims to solve this problem with its <em>Live Coding</em>
+feature. When running in development mode the workflow is simply:</p>
+</div>
+<div class="paragraph">
+<p><em>Write Code</em> &#8594; <em>Refresh Browser</em> &#8594; <em>Repeat</em></p>
+</div>
+<div class="paragraph">
+<p>This will work out of the box, with no special setup required. This works for Java file, application config,
+and static resources.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When you run <code>mvn compile quarkus:dev</code> Quarkus will launch in development mode. When
+it receives a HTTP request it will hold the request, and check to see if any application source
+files have been changed. If they have it will transparently compile the changed files, redeploy
+the application with the changed files, and then the HTTP request will continue to the redeployed
+application. Quarkus redeploys are much faster than a traditional app server, so for all but the largest
+applications this should take well under a second.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
