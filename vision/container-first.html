@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Developer Joy</title>
+  <title>Container First</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -23,7 +23,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
-<body class="guides">
+<body class="vision">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -44,7 +44,7 @@
               <a href="/get-started/" class="">Get Started</a>
             </li>
             <li>
-              <a href="/guides/" class="active">Guides</a>
+              <a href="/guides/" class="">Guides</a>
             </li>
             <li>
               <a href="/extensions/" class="">Extensions</a>
@@ -59,51 +59,44 @@
   </div>
 </div>
 
-    <div class="grid-wrapper guides">
+    <div class="grid-wrapper gs-header">
   <div class="grid__item width-12-12">
-    <h1 class="text-caps">Quarkus - Developer Joy</h1>
-    <div class="sect1">
-<h2 id="beyond-simply-working-were-aiming-for-joy">Beyond simply working, we&#8217;re aiming for Joy</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Quarkus is not just about being great for writing Web Applications or Micro-Services. We&#8217;re focusing on more than the feature set: we make sure that every feature works well, simply, with little to no configuration, in the most intuitive way possible. It should be trivial to develop simple things, and easy to develop the more complex ones.</p>
-</div>
-<div class="paragraph">
-<p>We&#8217;ve looked for the most useful extensions, we&#8217;ve made sure they all work together, that every use-case is covered, that out-of-the-box configuration is the most sensible, that every error helps you to resolve it. More than productivity: using Quarkus should be enjoyable.</p>
-</div>
-<div class="sect2">
-<h3 id="unified-configuration">Unified configuration</h3>
-<div class="paragraph">
-<p>Gone are the days of a thousand configuration files and formats. We&#8217;re aiming for cohesion, so a single configuration file is all it takes for Quarkus applications to configure every single extension. Not only that, but we&#8217;ve made sure that every configurable option has the most useful and sensible defaults so you can get started with no configuration whatsoever.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="live-coding">Live Coding</h3>
-<div class="paragraph">
-<p>Build applications faster with <a href="https://quarkus.io/live-coding">live coding</a>: fix bugs just by saving your code and reloading your browser.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="works-on-all-the-things">Works on all the things</h3>
-<div class="paragraph">
-<p>There&#8217;s nothing worse than getting different results when running your application or tests under Maven, Gradle, or the IDE. Whatever your workflow, Quarkus applications or tests are trivial to run in any environment, so pick your favorite tool and we make sure you get the same results as easily as possible.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="opinionated">Opinionated</h3>
-<div class="paragraph">
-<p>We get it: there are a thousand ways to write the same code. Every company has traditions about how a project should be structured, and that can be fine. But it makes it really hard to write simple documentation, to onboard new developers, and to make things simple.</p>
-</div>
-<div class="paragraph">
-<p>Quarkus will focus on what we feel is the simplest and most useful way to use any given feature. We will work hard to trim that particular feature to its most useful essence, and to document it thoroughly, in an intuitive manner. That&#8217;s analysing up-front how to best use that feature and helping you avoid that analysis, through our experience, and guiding you in what we think is the best way to do things. That&#8217;s taking an opinion on how you should do things and voicing it.</p>
-</div>
-<div class="paragraph">
-<p>Perhaps you&#8217;ll disagree with our opinion, or you&#8217;ll have a much more complex use-case that will not be solved by our recommended way, but that&#8217;s fine. Don&#8217;t worry: we will not prevent you from more advanced usage on the features we provide or the frameworks we integrate.</p>
-</div>
-</div>
-</div>
-</div>
+    <h1 class="text-caps">Container First</h1>
   </div>
+</div>
+<div class="paragraph">
+<p>From the outset Quarkus has been designed around a container first philosophy.  What
+this means in real terms is that Quarkus is optimised for low memory usage and fast
+startup times in the following ways:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">First Class Support for Graal/SubstrateVM</dt>
+<dd>
+<p>Substrate support has been an important part of the design for Quarkus from the beginning.
+When an application is compiled down to a native image it starts much faster and can run with a
+much smaller heap than a standard JVM. Quarkus are all tested in Substrate, and can run
+without the <code>-H:+ReportUnsupportedElementsAtRuntime</code> flag.</p>
+</dd>
+<dt class="hdlist1">Build Time Metadata Processing</dt>
+<dd>
+<p>As much processing as possible is done at build time, so your application will only contain the
+classes that are actually needed at runtime. In a traditional model all the classes required
+to perform the initial application deployment hang around for the life of the application, even though
+they are only used once. With Quarkus they are not even loaded into the production JVM. This
+results in less memory usage, and also faster startup time as all metadata processing has already been done.</p>
+</dd>
+<dt class="hdlist1">Reduction in Reflection Usage</dt>
+<dd>
+<p>As much as possible Quarkus tries to avoid reflection, reducing startup time and memory usage.</p>
+</dd>
+<dt class="hdlist1">Native Image Pre Boot</dt>
+<dd>
+<p>When running in a native image Quarkus pre-boots as much of the framework as possible during
+the native image build process. This means that the resulting native image has already run most
+of the startup code and serialized the result into the executable, resulting in even faster startup.</p>
+</dd>
+</dl>
 </div>
 
   </div>
