@@ -61,11 +61,13 @@
   <div class="grid__item width-12-12">
     <div class="home-hero">
       <h1 class="styled-logo">Quarkus</h1>
-      <p>is a Cloud-Native, Container-First stack<br />for creating Java applications tailored for Graal VM & HotSpot, crafted from the best of breed Java libraries and standards.</p>
+      <h2>Supersonic Subatomic Java</h2>
+      <p>A Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards</p>
       <a href="/get-started/" class="button-cta secondary">Get Started with Quarkus</a>
     </div>
   </div>
 </div>
+
   <div class="full-width-bg component homepage-highlights-band">
   <div class="width-12-12 highlights-alternating-inline-block">
     <div class="grid-wrapper">
@@ -80,10 +82,14 @@
   <div class="tab">
 <pre>
   <code>
-  function sayHi(fName){
-    var custName = fName;
-    alert('Hi ' + custName);
-  }
+    @Inject
+    SayService say;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return say.hello();
+    }
   </code>                       
 </pre>
   </div>
@@ -93,14 +99,19 @@
   <div class="tab">
 <pre>
   <code>
-  $ Hello world!
-  $ Hello world!
-  $ Hello world!
-  $ Hello world!
+    @Inject @Stream("kafka")
+    Publisher&lt;String&gt; reactiveSay;
+
+    @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    public Publisher&lt;String&gt; stream() {
+        return reactiveSay;
+    }
   </code>                       
 </pre>
   </div>
 </div>
+
       </div>
     </div>
   </div>
