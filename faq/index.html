@@ -71,6 +71,30 @@
 
 <p>Quarkus is published in Maven Central, check out <a href="/extensions">which extensions</a> you need and just import them in your <code class="highlighter-rouge">pom.xml</code> to get Quarkus.</p>
 
+<h2 id="what-is-a-quarkus-extension">What is a Quarkus extension?</h2>
+
+<p>One of the main goals of Quarkus is ease of extensibility. This will allow 3rd party projects to easily
+take advantage of the work we have done to make it easier to target GraalVM. We provide a simple injection
+based API to control how Substrate treats your library, including an easy way to register items for reflection
+with no JSON files in sight.</p>
+
+<p>We are also aiming to provide a support for a full <a href="/extensions">extension ecosystem</a>, to make it easy to discover and consume
+3rd party extensions, as well as providing easier version management.</p>
+
+<h2 id="what-is-graalvm">What is GraalVM</h2>
+
+<p><a href="https://www.graalvm.org">GraalVM</a> is a universal virtual machine for running applications written in
+various different languages, as well as providing the ability to compile JVM bytecode to a native executable (this
+native executable runs a special virtual machine called SubstrateVM). These native executable’s start much faster
+and can use a lot less memory that a traditional JVM, however not every JVM feature is supported, and some are more
+limited than normal.</p>
+
+<p>For example by default reflection in GraalVM will not work, unless a class/member has been explicitly registered for
+reflection. This is normally achieved by listing every class, method, field and constructor in a JSON file, and passing
+this as a parameter into the native image build. This obviously gets quite cumbersome for all but the most trivial projects.
+Quarkus provides a framework that makes it easy to work around these annotations, and programmatically determine what should
+be registered.</p>
+
 <h2 id="how-do-you-unify-imperative-and-reactive-programming">How do you unify imperative and reactive programming?</h2>
 
 <p><a href="/vision/continuum">Learn more</a>.</p>
