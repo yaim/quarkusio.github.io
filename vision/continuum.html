@@ -132,18 +132,18 @@ public class FruitResource {
 </div>
 </div>
 <div class="paragraph">
-<p>If you are a JavaEE or Spring user, this development model should look familiar.
+<p>If you are a Java EE or Spring user, this development model should look familiar.
 You expose a <em>resource</em> containing methods annotated with <code>@GET</code>, <code>@POST</code>&#8230;&#8203; to handle the different requests.
 The <em>path</em> is specified using the <code>@Path</code> annotation.</p>
 </div>
 <div class="paragraph">
-<p>JPA users have recognized the <code>EntityManager</code> used to access the database.
-Finally, methods requiring running in a transaction are simply annotated with <code>@Transactional</code>.</p>
+<p>JPA users will recognize the <code>EntityManager</code> used to access the database.
+Finally, methods requiring a transaction are simply annotated with <code>@Transactional</code>.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s now imagine you need to access another HTTP endpoint.
-You can use a HTTP client directly, but, it&#8217;s often a boring task and the code can quickly become repetitive.
-Quarkus provides a way to call HTTP endpoint easily.</p>
+You can use a HTTP client directly, this is nothing more than repeating boilerplate code.
+Quarkus provides a way to call HTTP endpoint easily using the MicroProfile Rest Client API.</p>
 </div>
 <div class="paragraph">
 <p>First declare your service as follows:</p>
@@ -187,7 +187,7 @@ public class CountriesResource {
 </div>
 <div class="paragraph">
 <p>But you may be wondering where the URL is configured as it&#8217;s not in the code.
-Remember, it must not be in the code, because the url likely depends on the environment.
+Remember, it must not be hard-coded because the url likely depends on the environment.
 The URL is configured in the application configuration:</p>
 </div>
 <div class="listingblock">
@@ -197,7 +197,7 @@ org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest</
 </div>
 </div>
 <div class="paragraph">
-<p>So the url can be updated during the deployment, or at launch time using system properties or environment variables.</p>
+<p>The url can now be updated during the deployment or at launch time using system properties or environment variables.</p>
 </div>
 </div>
 </div>
@@ -227,8 +227,8 @@ public CompletionStage&lt;String&gt; greetings(@PathParam("name") String name) {
 </div>
 </div>
 <div class="paragraph">
-<p>Your method actions can compose asynchronous operations and completes the result when everything is done without blocking the threads.
-This way you can greatly improve your resource consumption and elasticity.</p>
+<p>Method actions can compose asynchronous operations and complete the result when everything is done without blocking threads.
+This greatly improves resource consumption and elasticity.</p>
 </div>
 <div class="paragraph">
 <p>But, what about streams?
@@ -317,7 +317,7 @@ public Publisher&lt;KafkaMessage&lt;String, JsonObject&gt;&gt; filterState(Flowa
 <h2 id="functions-as-a-service-and-serverless">Functions as a Service and Serverless</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Thanks to their stellar startup time and low memory usage, you can implement Quarkus functions to be used in serverless environments.
+<p>Thanks to their stellar startup time and low memory usage, you can implement functions using Quarkus to be used in serverless environments.
 If you are using AWS Lambda, your Quarkus function looks like:</p>
 </div>
 <div class="listingblock">
@@ -335,7 +335,7 @@ If you are using AWS Lambda, your Quarkus function looks like:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You can use any of the Quarkus features in your function, benefit from the fast startup and embrace this new world without having to change your programming language.</p>
+<p>You can use any of the Quarkus features in your function and benefit from the fast startup and low memory utilization. With Quarkus, you can embrace this new world without having to change your programming language.</p>
 </div>
 </div>
 </div>
