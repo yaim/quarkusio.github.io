@@ -159,31 +159,36 @@ it is very misleading in environments like Kubernetes/OpenShift.</p>
 <dl>
 <dt class="hdlist1">Linux</dt>
 <dd>
-<p>The linux <a href="https://linux.die.net/man/1/pmap">pmap</a> tool provides a report on the native memory map for a process</p>
-<div class="literalblock">
-<div class="content">
-<pre>pmap -x &lt;pid&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>13150:   /data/quarkus-application -Xmx100m -Xmn70m
-Address           Kbytes     RSS   Dirty Mode  Mapping
-0000000000400000   55652   30592       0 r-x-- quarkus-application
-0000000003c58000       4       4       4 r-x-- quarkus-application
-0000000003c59000    5192    4628     748 rwx-- quarkus-application
-00000000054c0000     912     156     156 rwx--   [ anon ]
-...
-00007fcd13400000    1024    1024    1024 rwx--   [ anon ]
-...
-00007fcd13952000       8       4       0 r-x-- libfreebl3.so
-...
----------------- ------- ------- -------
-total kB         9726508  256092  220900</pre>
-</div>
-</div>
+<p>The linux <a href="https://linux.die.net/man/1/pmap">pmap</a> and <a href="https://linux.die.net/man/1/ps">ps</a> tools provide a report on the native memory map for a process</p>
 </dd>
 </dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell"> $ ps -o pid,rss,command -p &lt;pid&gt;
+
+   PID   RSS COMMAND
+ 11229 12628 ./target/getting-started-1.0-SNAPSHOT-runner</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell"> $ pmap -x &lt;pid&gt;
+
+ 13150:   /data/quarkus-application -Xmx100m -Xmn70m
+ Address           Kbytes     RSS   Dirty Mode  Mapping
+ 0000000000400000   55652   30592       0 r-x-- quarkus-application
+ 0000000003c58000       4       4       4 r-x-- quarkus-application
+ 0000000003c59000    5192    4628     748 rwx-- quarkus-application
+ 00000000054c0000     912     156     156 rwx--   [ anon ]
+ ...
+ 00007fcd13400000    1024    1024    1024 rwx--   [ anon ]
+ ...
+ 00007fcd13952000       8       4       0 r-x-- libfreebl3.so
+ ...
+ ---------------- ------- ------- -------
+ total kB         9726508  256092  220900</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Each Memory region that has been allocated for the process is listed;</p>
@@ -215,10 +220,6 @@ total kB         9726508  256092  220900</pre>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">Windows</dt>
-<dd>
-<p>TODO</p>
-</dd>
 <dt class="hdlist1">macOS</dt>
 <dd>
 <p>On macOS, you can use <code>ps x -o pid,rss,command -p &lt;PID&gt;</code> which list the RSS for a given process in KB (1024 bytes).</p>
@@ -251,7 +252,54 @@ Otherwise, you will miss the time the framework <em>actually</em> takes to initi
 <p>Here is how we measure startup time in our tests.</p>
 </div>
 <div class="paragraph">
-<p>TODO</p>
+<p>We create a sample application that logs timestamps for certain points in the application lifecycle.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Path("/")
+public class GreetingEndpoint {
+
+    private static final String template = "Hello, %s!";
+
+    @GET
+    @Path("/greeting")
+    @Produces("application/json")
+    public Greeting greeting(@QueryParam("name") String name) {
+        System.out.println(new SimpleDateFormat("HH:mm:ss.SSS").format(new java.util.Date(System.currentTimeMillis())));
+        String suffix = name != null ? name : "World";
+        return new Greeting(String.format(template, suffix));
+    }
+
+    void onStart(@Observes StartupEvent startup) {
+        System.out.println(new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We start looping in a shell, sending requests to the rest endpoint of the sample application we are testing.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/api/greeting)" != "200" ]]; do sleep .00001; done</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In a separate terminal, we start the timing application that we are testing, printing the time the application starts</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ date +"%H:%M:%S.%s" &amp;&amp;  ./target/quarkus-timing-runner
+
+16:17:01.1551889021
+16:17:01.626
+2019-03-06 16:17:01,626 INFO  [io.quarkus] (main) Quarkus 0.11.0 started in 0.035s. Listening on: http://127.0.0.1:8080
+2019-03-06 16:17:01,626 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb]
+16:17:01.637</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The difference between the final timestamp and the first timestamp is the total startup time for the application to serve the first request.</p>
 </div>
 </div>
 </div>

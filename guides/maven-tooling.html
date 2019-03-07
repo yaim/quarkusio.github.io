@@ -62,105 +62,6 @@
   <div class="grid__item width-12-12">
     <h1 class="text-caps">Building Quarkus apps with Maven</h1>
     <div class="sect1">
-<h2 id="build-tool-maven">Maven configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you have not used <a href="#project-creation">project scaffolding</a>, add the following elements in your <code>pom.xml</code></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependencyManagement&gt;
-    &lt;dependencies&gt;
-        &lt;dependency&gt; <b class="conum">(1)</b>
-            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-            &lt;artifactId&gt;quarkus-bom&lt;/artifactId&gt;
-            &lt;version&gt;${quarkus.version}&lt;/version&gt;
-            &lt;type&gt;pom&lt;/type&gt;
-            &lt;scope&gt;import&lt;/scope&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-&lt;/dependencyManagement&gt;
-
-&lt;build&gt;
-    &lt;plugins&gt;
-        &lt;plugin&gt; <b class="conum">(2)</b>
-            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-            &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
-            &lt;version&gt;${quarkus.version}&lt;/version&gt;
-            &lt;executions&gt;
-                &lt;execution&gt;
-                    &lt;goals&gt;
-                        &lt;goal&gt;build&lt;/goal&gt;
-                    &lt;/goals&gt;
-                &lt;/execution&gt;
-            &lt;/executions&gt;
-        &lt;/plugin&gt;
-    &lt;/plugins&gt;
-&lt;/build&gt;
-
-&lt;profiles&gt;
-    &lt;profile&gt; <b class="conum">(3)</b>
-        &lt;id&gt;native&lt;/id&gt;
-        &lt;build&gt;
-            &lt;plugins&gt;
-                &lt;plugin&gt; <b class="conum">(3)</b>
-                    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-                    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
-                    &lt;version&gt;${quarkus.version}&lt;/version&gt;
-                    &lt;executions&gt;
-                        &lt;execution&gt;
-                            &lt;goals&gt;
-                                &lt;goal&gt;native-image&lt;/goal&gt;
-                            &lt;/goals&gt;
-                            &lt;configuration&gt;
-                                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
-                            &lt;/configuration&gt;
-                        &lt;/execution&gt;
-                    &lt;/executions&gt;
-                &lt;/plugin&gt;
-                &lt;plugin&gt; <b class="conum">(4)</b>
-                    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                    &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
-                    &lt;version&gt;${surefire.version}&lt;/version&gt;
-                    &lt;executions&gt;
-                        &lt;execution&gt;
-                            &lt;goals&gt;
-                                &lt;goal&gt;integration-test&lt;/goal&gt;
-                                &lt;goal&gt;verify&lt;/goal&gt;
-                            &lt;/goals&gt;
-                            &lt;configuration&gt;
-                                &lt;systemProperties&gt;
-                                    &lt;native.image.path&gt;${project.build.directory}/${project.build.finalName}-runner&lt;/native.image.path&gt;
-                                &lt;/systemProperties&gt;
-                            &lt;/configuration&gt;
-                        &lt;/execution&gt;
-                    &lt;/executions&gt;
-                &lt;/plugin&gt;
-            &lt;/plugins&gt;
-        &lt;/build&gt;
-    &lt;/profile&gt;
-&lt;/profiles&gt;</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<ol>
-<li>
-<p>Optionally use a BOM file to omit the version of the different Quarkus dependencies.</p>
-</li>
-<li>
-<p>Use the Quarkus Maven plugin that will hook into the build process</p>
-</li>
-<li>
-<p>Use a native profile and plugin to activate GraalVM compilation</p>
-</li>
-<li>
-<p>If you want to test your native image with Integration Tests, add the following plugin configuration. Test names <code>*IT</code> and annotated <code>@SubstrateTest</code> will be run against the native image. See the <a href="building-native-image-guide.html">Native image guide</a> for more info.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="project-creation">Creating a new project</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -465,6 +366,105 @@ However, it&#8217;s not an issue as we are going to copy it to a Docker containe
 <div class="paragraph">
 <p>You can follow the <a href="building-native-image-guide.html">Build a native image guide</a> as well as <a href="kubernetes-guide.html">Deploying Application to Kubernetes and OpenShift</a> for more information.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="build-tool-maven">Maven configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you have not used <a href="#project-creation">project scaffolding</a>, add the following elements in your <code>pom.xml</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt; <b class="conum">(1)</b>
+            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+            &lt;artifactId&gt;quarkus-bom&lt;/artifactId&gt;
+            &lt;version&gt;${quarkus.version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
+
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt; <b class="conum">(2)</b>
+            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+            &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;${quarkus.version}&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;build&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+
+&lt;profiles&gt;
+    &lt;profile&gt; <b class="conum">(3)</b>
+        &lt;id&gt;native&lt;/id&gt;
+        &lt;build&gt;
+            &lt;plugins&gt;
+                &lt;plugin&gt; <b class="conum">(3)</b>
+                    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+                    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
+                    &lt;version&gt;${quarkus.version}&lt;/version&gt;
+                    &lt;executions&gt;
+                        &lt;execution&gt;
+                            &lt;goals&gt;
+                                &lt;goal&gt;native-image&lt;/goal&gt;
+                            &lt;/goals&gt;
+                            &lt;configuration&gt;
+                                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
+                            &lt;/configuration&gt;
+                        &lt;/execution&gt;
+                    &lt;/executions&gt;
+                &lt;/plugin&gt;
+                &lt;plugin&gt; <b class="conum">(4)</b>
+                    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                    &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
+                    &lt;version&gt;${surefire.version}&lt;/version&gt;
+                    &lt;executions&gt;
+                        &lt;execution&gt;
+                            &lt;goals&gt;
+                                &lt;goal&gt;integration-test&lt;/goal&gt;
+                                &lt;goal&gt;verify&lt;/goal&gt;
+                            &lt;/goals&gt;
+                            &lt;configuration&gt;
+                                &lt;systemProperties&gt;
+                                    &lt;native.image.path&gt;${project.build.directory}/${project.build.finalName}-runner&lt;/native.image.path&gt;
+                                &lt;/systemProperties&gt;
+                            &lt;/configuration&gt;
+                        &lt;/execution&gt;
+                    &lt;/executions&gt;
+                &lt;/plugin&gt;
+            &lt;/plugins&gt;
+        &lt;/build&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Optionally use a BOM file to omit the version of the different Quarkus dependencies.</p>
+</li>
+<li>
+<p>Use the Quarkus Maven plugin that will hook into the build process</p>
+</li>
+<li>
+<p>Use a native profile and plugin to activate GraalVM compilation</p>
+</li>
+<li>
+<p>If you want to test your native image with Integration Tests, add the following plugin configuration. Test names <code>*IT</code> and annotated <code>@SubstrateTest</code> will be run against the native image. See the <a href="building-native-image-guide.html">Native image guide</a> for more info.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
