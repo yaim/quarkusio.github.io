@@ -175,10 +175,14 @@ the <code>list()</code> method might be surprising at first. It takes fragments 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.datasource.url: jdbc:postgresql://localhost:5432/mydatabase
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># configure your datasource
+quarkus.datasource.url: jdbc:postgresql://localhost:5432/mydatabase
 quarkus.datasource.driver: org.postgresql.Driver
 quarkus.datasource.username: sarah
-quarkus.datasource.password: connor</code></pre>
+quarkus.datasource.password: connor
+
+# drop and create the database at startup (use `update` to only update the schema)
+quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 </div>
 </div>
 </div>
