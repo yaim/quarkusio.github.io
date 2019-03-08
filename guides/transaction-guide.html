@@ -106,21 +106,15 @@ Add the following to your <code>pom.xml</code>:</p>
 <div class="paragraph">
 <p>The easiest way to define your transaction boundaries is to use the <code>@Transactional</code> annotation on your entry method (<code>javax.transaction.Transactional</code>).</p>
 </div>
-<div class="exampleblock">
+<div class="listingblock">
 <div class="content">
-<div class="paragraph">
-<p>@ApplicationScoped
-public class SantaClausService {</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>@Inject ChildDAO childDAO;
-@Inject SantaClausDAO santaDAO;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    @Transactional <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+public class SantaClausService {
+
+    @Inject ChildDAO childDAO;
+    @Inject SantaClausDAO santaDAO;
+
+    @Transactional <b class="conum">(1)</b>
     public void getAGiftFromSanta(Child child, String giftDescription) {
         // some transaction work
         Gift gift = childDAO.addToGiftList(child, giftDescription);
@@ -131,9 +125,7 @@ public class SantaClausService {</p>
             santaDAO.addToSantaTodoList(gift);
         }
     }
-}</pre>
-</div>
-</div>
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -189,22 +181,16 @@ You can override whether an exception forces the rollback or not by using <code>
 <p>You can also programmatically ask for a transaction to be marked for rollback.
 Inject a <code>TransactionManager</code> for this.</p>
 </div>
-<div class="exampleblock">
+<div class="listingblock">
 <div class="content">
-<div class="paragraph">
-<p>@ApplicationScoped
-public class SantaClausService {</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>@Inject TransactionManager tm; <b class="conum">(1)</b>
-@Inject ChildDAO childDAO;
-@Inject SantaClausDAO santaDAO;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    @Transactional
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+public class SantaClausService {
+
+    @Inject TransactionManager tm; <b class="conum">(1)</b>
+    @Inject ChildDAO childDAO;
+    @Inject SantaClausDAO santaDAO;
+
+    @Transactional
     public void getAGiftFromSanta(Child child, String giftDescription) throws Exception {
         // some transaction work
         Gift gift = childDAO.addToGiftList(child, giftDescription);
@@ -215,9 +201,7 @@ public class SantaClausService {</p>
             santaDAO.addToSantaTodoList(gift);
         }
     }
-}</pre>
-</div>
-</div>
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -236,22 +220,16 @@ public class SantaClausService {</p>
 <div class="paragraph">
 <p>The less easy way is to inject a <code>UserTransaction</code> and use the various transaction demarcation methods.</p>
 </div>
-<div class="exampleblock">
+<div class="listingblock">
 <div class="content">
-<div class="paragraph">
-<p>@ApplicationScoped
-public class SantaClausService {</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>@Inject ChildDAO childDAO
-@Inject SantaClausDAO santaDAO
-@Inject UserTransaction transaction</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    public void getAGiftFromSanta(Child child, String giftDescription) throws Exception {
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+public class SantaClausService {
+
+    @Inject ChildDAO childDAO
+    @Inject SantaClausDAO santaDAO
+    @Inject UserTransaction transaction
+
+    public void getAGiftFromSanta(Child child, String giftDescription) throws Exception {
         // some transaction work
         try {
             transaction.begin();
@@ -264,9 +242,7 @@ public class SantaClausService {</p>
             transaction.rollback();
         }
     }
-}</pre>
-</div>
-</div>
+}</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
