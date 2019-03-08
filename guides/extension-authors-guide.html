@@ -247,7 +247,7 @@ method invocation, once the method is complete they are no longer valid.</p>
 <p><code>SimpleBuildItem</code> instances (at some point we may support <code>Optional&lt;SimpleBuildItem&gt;</code>, but it is not implemented yet)</p>
 </li>
 <li>
-<p><code>List&lt;? extension MultiBuildItem&gt;</code> instances</p>
+<p><code>List&lt;? extends MultiBuildItem&gt;</code> instances</p>
 </li>
 <li>
 <p><code>BuildProducer&lt;? extends BuildItem&gt;</code> instances</p>
@@ -792,7 +792,7 @@ public class PersistenceAndQuarkusConfigTest {
 <div class="sectionbody">
 <div class="paragraph">
 <p>There Quarkus provides a lot of build items that control aspects of the native image build. This allows for extensions
-to programmatically perform tests such as registering classes for reflection or adding static resources to the native
+to programmatically perform tasks such as registering classes for reflection or adding static resources to the native
 image. Some of these build items are listed below:</p>
 </div>
 <div class="dlist">
