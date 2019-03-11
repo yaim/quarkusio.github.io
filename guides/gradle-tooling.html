@@ -104,12 +104,8 @@ Here is a complete sample file for a simple rest project:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">apply plugin: 'java'
-apply plugin: 'maven'
 apply plugin: 'io.quarkus.gradle.plugin' <b class="conum">(1)</b>
 
-
-group = 'org.acme'
-version = '1.0-SNAPSHOT'
 
 buildscript { <b class="conum">(2)</b>
 
@@ -178,7 +174,7 @@ dependencies { <b class="conum">(4)</b>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus comes with a built-in development mode.
-Run you application with:</p>
+Run your application with:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -297,10 +293,10 @@ The next screen list the found modules; select the generated project and click o
 </div>
 </div>
 <div class="sect1">
-<h2 id="building-a-native-image">Building a native image</h2>
+<h2 id="building-a-native-executable">Building a native executable</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Native images make Quarkus applications ideal for containers and serverless workloads.</p>
+<p>Native executables make Quarkus applications ideal for containers and serverless workloads.</p>
 </div>
 <div class="paragraph">
 <p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 1.0.0-rc12.</p>

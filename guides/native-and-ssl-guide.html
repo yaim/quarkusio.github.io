@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using SSL With Native Images</title>
+  <title>Quarkus - Using SSL With Native Executables</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -60,15 +60,15 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using SSL With Native Images</h1>
+    <h1 class="text-caps">Quarkus - Using SSL With Native Executables</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>We are quickly moving to an SSL-everywhere world so being able to use SSL is crucial.</p>
 </div>
 <div class="paragraph">
-<p>In this guide, we will discuss how you can get your native images to support SSL,
-as native images don&#8217;t support it out of the box.</p>
+<p>In this guide, we will discuss how you can get your native executables to support SSL,
+as native executables don&#8217;t support it out of the box.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -77,7 +77,7 @@ as native images don&#8217;t support it out of the box.</p>
 <div class="title">Note</div>
 </td>
 <td class="content">
-If you don&#8217;t plan on using native images, you can pass your way as in JDK mode, SSL is supported without further manipulations.
+If you don&#8217;t plan on using native executables, you can pass your way as in JDK mode, SSL is supported without further manipulations.
 </td>
 </tr>
 </table>
@@ -132,7 +132,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 <p>which configures our REST client to connect to an SSL REST service.</p>
 </div>
 <div class="paragraph">
-<p>Now let&#8217;s build the application as a native image and run the tests:</p>
+<p>Now let&#8217;s build the application as a native executable and run the tests:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -153,7 +153,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 <p>So, yes, it appears it works out of the box and this guide is pretty useless.</p>
 </div>
 <div class="paragraph">
-<p>It&#8217;s not. The magic happens when building the native image:</p>
+<p>It&#8217;s not. The magic happens when building the native executable:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -169,7 +169,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 </div>
 </div>
 <div class="paragraph">
-<p>They enable the native SSL support for your native image.</p>
+<p>They enable the native SSL support for your native executable.</p>
 </div>
 <div class="paragraph">
 <p>As SSL is ipso facto the standard nowadays, we decided to enable its support automatically for some of our extensions:</p>
@@ -191,7 +191,7 @@ If you don&#8217;t plan on using native images, you can pass your way as in JDK 
 <p>As long as you have one of those extensions in your project, the SSL support will be enabled by default.</p>
 </div>
 <div class="paragraph">
-<p>Now, let&#8217;s just check the size of our native image as it will be useful later:</p>
+<p>Now, let&#8217;s just check the size of our native executable as it will be useful later:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -229,7 +229,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The native image tests will fail with the following error:</p>
+<p>The native executable tests will fail with the following error:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -237,7 +237,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This error is the one you obtain when trying to use SSL while it was not explicitly enabled in your native image.</p>
+<p>This error is the one you obtain when trying to use SSL while it was not explicitly enabled in your native executable.</p>
 </div>
 <div class="paragraph">
 <p>Now, let&#8217;s change the REST service URL to <strong>not</strong> use SSL in <code>src/main/resources/application.properties</code>:</p>
@@ -256,7 +256,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If you check carefully the native image build options, you can see that the SSL related options are gone:</p>
+<p>If you check carefully the native executable build options, you can see that the SSL related options are gone:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -274,7 +274,7 @@ So if you are sure you don&#8217;t need it, you can disable it entirely.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You remember we checked the size of the native image with SSL enabled?
+<p>You remember we checked the size of the native executable with SSL enabled?
 Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 <div class="listingblock">
@@ -284,7 +284,7 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Yes, it is now <strong>25 MB</strong> whereas it used to be <strong>34 MB</strong>. SSL comes with a 9 MB overhead in native image size.</p>
+<p>Yes, it is now <strong>25 MB</strong> whereas it used to be <strong>34 MB</strong>. SSL comes with a 9 MB overhead in native executable size.</p>
 </div>
 <div class="paragraph">
 <p>And there&#8217;s more to it.</p>
@@ -303,7 +303,7 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>And let&#8217;s build the native image again:</p>
+<p>And let&#8217;s build the native executable again:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -335,7 +335,7 @@ This file contains the root certificates.</p>
 <p>move your GraalVM directory to another place (let&#8217;s call it <code>&lt;new-graalvm-home&gt;</code>)</p>
 </li>
 <li>
-<p>run the native image <code>./target/rest-client-1.0-SNAPSHOT-runner</code></p>
+<p>run the native executable <code>./target/rest-client-1.0-SNAPSHOT-runner</code></p>
 </li>
 <li>
 <p>in a browser, go to <code><a href="http://localhost:8080/country/name/greece" class="bare">http://localhost:8080/country/name/greece</a></code></p>
@@ -414,12 +414,12 @@ If you have issues with some certificates, your best bet is to include the <code
 <h2 id="conclusion">Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We make building native images easy and, even if the SSL support in GraalVM is still requiring some serious thinking,
+<p>We make building native executable easy and, even if the SSL support in GraalVM is still requiring some serious thinking,
 it should be mostly transparent when using Quarkus.</p>
 </div>
 <div class="paragraph">
 <p>Hopefully, the situation will improve in the future:
-the native image size overhead will be reduced and the SunCE library might not be needed anymore.</p>
+the native executables size overhead will be reduced and the SunCE library might not be needed anymore.</p>
 </div>
 <div class="paragraph">
 <p>We track GraalVM progress on a regular basis so we will promptly integrate in Quarkus any improvement with respect to SSL support.</p>
