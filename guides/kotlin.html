@@ -103,7 +103,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=rest-kotlin \
     -DclassName="org.acme.rest.GreetingResource" \
@@ -229,7 +229,7 @@ for example, then <code>&lt;option&gt;all-open:annotation=javax.enterprise.conte
 code and immediately see their changes reflected.</p>
 </div>
 <div class="paragraph">
-<p>To see this feature in action, first execute: <code>mvn compile quarkus:dev</code></p>
+<p>To see this feature in action, first execute: <code>./mvnw compile quarkus:dev</code></p>
 </div>
 <div class="paragraph">
 <p>When executing an HTTP GET request against <code><a href="http://localhost:8080/greeting" class="bare">http://localhost:8080/greeting</a></code>, you should get <code>hello</code> as a response.</p>
@@ -254,7 +254,7 @@ code and immediately see their changes reflected.</p>
 <h2 id="packaging-the-application">Packaging the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>mvn clean package</code> and executed using the <code>-runner.jar</code> file. You can also build the native executable using <code>mvn package -Pnative</code>.</p>
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file. You can also build the native executable using <code>./mvnw package -Pnative</code>.</p>
 </div>
 </div>
 </div>

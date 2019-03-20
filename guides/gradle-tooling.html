@@ -65,7 +65,7 @@
 <h2 id="gradle-configuration">Gradle configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Configure Gradle as indicated in the <a href="gradle-config.html">Gradle configuration page</a>.</p>
+<p>Configure your project as indicated in the <a href="gradle-config.html">Gradle configuration page</a>.</p>
 </div>
 <div class="paragraph">
 <p>At the moment there is no way of automatically generating a new project using the Quarkus Gradle plugin,
@@ -73,22 +73,20 @@ luckily setting up a Quarkus project with Gradle is very simple. You only need t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">apply plugin: 'io.quarkus.gradle.plugin'</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
+    id 'java'
+    id 'io.quarkus.gradle.plugin' version '0.12.0'
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note: If you did not follow the steps indicated in the <a href="gradle-config.html">Gradle configuration page</a>
-you need to add this block to your 'build.gradle' file as well:</p>
+<p>or, if you use the Gradle Kotlin DSL:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'io.quarkus:quarkus-gradle-plugin:0.11.0'
-  }
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">plugins {
+    java
+    id("io.quarkus.gradle.plugin") version "0.12.0"
 }</code></pre>
 </div>
 </div>
@@ -99,39 +97,26 @@ you need to add this block to your 'build.gradle' file as well:</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>For now we have to manually create a Gradle project file for Quarkus.
-Here is a complete sample file for a simple rest project:</p>
+Here is a complete sample file for a simple REST project:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">apply plugin: 'java'
-apply plugin: 'io.quarkus.gradle.plugin' <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
+    id 'java'
+    id 'io.quarkus.gradle.plugin' version '0.12.0' <b class="conum">(1)</b>
+}
 
-
-buildscript { <b class="conum">(2)</b>
-
-  repositories {
+repositories {
     mavenCentral()
+
+    // this is temporary, all dependencies should be in central soon
     maven {
-      //this is temporary, all dependencies should be in central soon
-      url 'http://repository.jboss.org/nexus/content/groups/public'
+        url = 'http://repository.jboss.org/nexus/content/groups/public'
     }
-  }
-  dependencies {
-    classpath 'io.quarkus:quarkus-gradle-plugin:0.11.0'
-  }
 }
 
-repositories { <b class="conum">(3)</b>
-  mavenCentral()
-  maven {
-    url 'http://repository.jboss.org/nexus/content/groups/public'
-  }
-}
-
-dependencies { <b class="conum">(4)</b>
-  compileOnly group: 'io.quarkus', name: 'quarkus-resteasy', version:'0.11.0'
-  testOnly group: 'io.quarkus', name: 'quarkus-junit5', version:'0.11.0'
-  testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
+dependencies { <b class="conum">(2)</b>
+    implementation 'io.quarkus:quarkus-resteasy:0.12.0'
 }</code></pre>
 </div>
 </div>
@@ -141,15 +126,63 @@ dependencies { <b class="conum">(4)</b>
 <p>The Quarkus plugin needs to be applied.</p>
 </li>
 <li>
-<p>The buildscript block can be omitted if you added it to your '~/.gradle/init.gradle' file.</p>
-</li>
-<li>
-<p>The repositories block can be omitted if you added it to your '~/.gradle/init.gradle' file.</p>
-</li>
-<li>
-<p>This dependency is needed for a rest application similar to the getting started example.</p>
+<p>This dependency is needed for a REST application similar to the getting started example.
+Quarkus also need this dependency for running tests, to provide this we use the <code>implementation</code> configuration.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s the same build script, using the Gradle Kotlin DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">plugins {
+    java
+    id("io.quarkus.gradle.plugin") version "0.12.0"
+}
+
+repositories {
+    mavenCentral()
+
+    // this is temporary, all dependencies should be in central soon
+    maven(url = uri("http://repository.jboss.org/nexus/content/groups/public"))
+}
+
+dependencies {
+    implementation("io.quarkus:quarkus-resteasy:0.12.0")
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enable-tests">Enable Tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus uses Junit5 and to enable it in Gradle we need to add a section to our build file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">test {
+  useJUnitPlatform()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To follow up our Rest example from above, we would also need to add two test dependencies:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">testCompile group: 'io.quarkus', name: 'quarkus-junit5', version: '0.12.0'
+testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: Quarkus do not allow both <a href="getting-started-testing.html">QuarkusTests</a> and <a href="getting-started-testing.html#native-executable-testing">SubstrateTests</a> to run in the same test run.
+SubstrateTests should be seen as integration tests and moved to a different folder
+as recommended here:
+<a href="https://docs.gradle.org/current/userguide/java_testing.html#sec:configuring_java_integration_tests">Configuring integration tests</a>.
+Quarkus supports running Substrate tests with Gradle, but the <code>quarkusNative</code> task is required to be completed first.</p>
 </div>
 </div>
 </div>
@@ -161,7 +194,7 @@ dependencies { <b class="conum">(4)</b>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">gradle list-extensions</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./gradlew listExtensions</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -178,7 +211,7 @@ Run your application with:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">gradle quarkus-dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./gradlew quarkusDev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -187,7 +220,7 @@ The changes are automatically reflected in your running application.
 This is great to do development spanning UI and database as you see changes reflected immediately.</p>
 </div>
 <div class="paragraph">
-<p><code>quarkus-dev</code> enables hot deployment with background compilation, which means that when you modify
+<p><code>quarkusDev</code> enables hot deployment with background compilation, which means that when you modify
 your Java files or your resource files and refresh your browser these changes will automatically take effect.
 This works too for resource files like the configuration property file.
 The act of refreshing the browser triggers a scan of the workspace, and if any changes are detected the
@@ -207,7 +240,7 @@ redeployed application. If there are any issues with compilation or deployment a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">gradle quarkus-dev --debug=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./gradlew quarkusDev --debug=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -227,12 +260,12 @@ The only requirement is the ability to import a Gradle project.</p>
 </div>
 <div class="paragraph">
 <p>In Eclipse, click on: <code>File &#8594; Import</code>.
-In the wizard, select: <code>Maven &#8594; Existing Gradle Project</code>.
+In the wizard, select: <code>Gradle &#8594; Existing Gradle Project</code>.
 On the next screen, select the root location of the project.
 The next screen list the found modules; select the generated project and click on <code>Finish</code>. Done!</p>
 </div>
 <div class="paragraph">
-<p>In a separated terminal, run <code>gradle quarkus-dev</code>, and enjoy a highly productive environment.</p>
+<p>In a separated terminal, run <code>./gradlew quarkusDev</code>, and enjoy a highly productive environment.</p>
 </div>
 <div class="paragraph">
 <p><strong>IntelliJ</strong></p>
@@ -260,7 +293,7 @@ The next screen list the found modules; select the generated project and click o
 </ol>
 </div>
 <div class="paragraph">
-<p>In a separated terminal or in the embedded terminal, run <code>gradle quarkus-dev</code>. Enjoy!</p>
+<p>In a separated terminal or in the embedded terminal, run <code>./gradlew quarkusDev</code>. Enjoy!</p>
 </div>
 <div class="paragraph">
 <p><strong>Apache Netbeans</strong></p>
@@ -282,7 +315,7 @@ The next screen list the found modules; select the generated project and click o
 </ol>
 </div>
 <div class="paragraph">
-<p>In a separated terminal or the embedded terminal, go to the project root and run <code>gradle quarkus-dev</code>. Enjoy!</p>
+<p>In a separated terminal or the embedded terminal, go to the project root and run <code>./gradlew quarkusDev</code>. Enjoy!</p>
 </div>
 <div class="paragraph">
 <p><strong>Visual Studio Code</strong></p>
@@ -299,10 +332,10 @@ The next screen list the found modules; select the generated project and click o
 <p>Native executables make Quarkus applications ideal for containers and serverless workloads.</p>
 </div>
 <div class="paragraph">
-<p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 1.0.0-rc12.</p>
+<p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 1.0.0-rc13.</p>
 </div>
 <div class="paragraph">
-<p>Create a native executable using: <code>gradle quarkus-native</code>.
+<p>Create a native executable using: <code>./gradlew quarkusNative</code>.
 A native executable will be present in <code>build/</code>.</p>
 </div>
 <div class="sect2">
@@ -313,7 +346,7 @@ To create an executable that will run in a container, use the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">gradle quarkus-native --docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./gradlew quarkusNative --docker-build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">

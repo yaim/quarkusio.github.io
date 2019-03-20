@@ -152,7 +152,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
@@ -177,7 +177,7 @@ However, you can go right to the completed example.</p>
 <p>a landing page that is accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code> after starting the application</p>
 </li>
 <li>
-<p>an example of <code>Dockerfile</code></p>
+<p>example <code>Dockerfile</code> files for both <code>native</code> and <code>jvm</code> modes</p>
 </li>
 <li>
 <p>the application configuration file</p>
@@ -303,7 +303,7 @@ of the resource is created and not one per request. You can configure this using
 <div class="sectionbody">
 <div class="paragraph">
 <p>Now we are ready to run our application.
-Use: <code>mvn compile quarkus:dev</code>:</p>
+Use: <code>./mvnw compile quarkus:dev</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -400,7 +400,7 @@ public class GreetingResource {
 </div>
 </div>
 <div class="paragraph">
-<p>If you stopped the application, restart the application with <code>mvn compile quarkus:dev</code>.
+<p>If you stopped the application, restart the application with <code>./mvnw compile quarkus:dev</code>.
 Then check that <a href="http://localhost:8080/hello/greeting/quarkus" class="bare">http://localhost:8080/hello/greeting/quarkus</a> returns <code>hello quarkus</code>.</p>
 </div>
 </div>
@@ -527,7 +527,7 @@ public class GreetingResourceTest {
 <p>These tests use <a href="http://rest-assured.io/">RestAssured</a>, but feel free to use your favorite library.</p>
 </div>
 <div class="paragraph">
-<p>You can run the test from your IDE directly (be sure you stopped the application first), or from Maven using: <code>mvn test</code>.</p>
+<p>You can run the test from your IDE directly (be sure you stopped the application first), or from Maven using: <code>./mvnw test</code>.</p>
 </div>
 <div class="paragraph">
 <p>By default tests will run on port <code>8081</code> so as not to conflict with the running application. We automatically
@@ -552,7 +552,7 @@ property called <code>test.url</code> that is set to the base test URL for situa
 <h2 id="packaging-and-run-the-application">9. Packaging and run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The application is packaged using <code>mvn package</code>.
+<p>The application is packaged using <code>./mvnw package</code>.
 It produces 2 jar files:</p>
 </div>
 <div class="ulist">

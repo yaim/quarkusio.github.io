@@ -256,7 +256,10 @@ public class CounterBean {
 <div class="ulist">
 <ul>
 <li>
-<p><code>@Dependent</code>, <code>@ApplicationScoped</code>, <code>@Singleton</code> and <code>@RequestScoped</code></p>
+<p><code>@Dependent</code>, <code>@ApplicationScoped</code>, <code>@Singleton</code>, <code>@RequestScoped</code> and <code>@SessionScoped</code></p>
+</li>
+<li>
+<p>Custom scopes and contexts</p>
 </li>
 </ul>
 </div>
@@ -287,10 +290,7 @@ public class CounterBean {
 <div class="ulist">
 <ul>
 <li>
-<p><code>@SessionScoped</code> and <code>@ConversationScoped</code> are not supported</p>
-</li>
-<li>
-<p>Custom scopes and contexts are not supported</p>
+<p><code>@ConversationScoped</code> is not supported</p>
 </li>
 <li>
 <p>Decorators are not supported</p>
@@ -415,9 +415,23 @@ A bean registration that is a result of an <code>AdditionalBeanBuildItem</code> 
 <div class="sect2">
 <h3 id="synthetic-beans">5.5. Synthetic Beans</h3>
 <div class="paragraph">
-<p>Sometimes it&#8217;s useful to register a synthetic bean, i.e. a bean that doesn&#8217;t need to have a corresponding java class.
+<p>Sometimes it is very useful to register a synthetic bean, i.e. a bean that doesn&#8217;t need to have a corresponding java class.
 In CDI this could be achieved using <code>AfterBeanDiscovery.addBean()</code> methods.
 In Quarkus we produce a <code>BeanRegistrarBuildItem</code> and leverage the <code>io.quarkus.arc.processor.BeanConfigurator</code> API to build a synthetic bean definition.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+BeanRegistrarBuildItem syntheticBean() {
+     return new BeanRegistrarBuildItem(new BeanRegistrar() {
+
+            @Override
+            public void register(RegistrationContext registrationContext) {
+                 registrationContext.configure(String.class).types(String.class).qualifiers(new MyQualifierLiteral()).creator(mc -&gt; mc.returnValue(mc.load("foo"))).done();
+            }
+        }));
+}</code></pre>
+</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -462,7 +476,7 @@ AnnotationsTransformerBuildItem transform() {
 <div class="sect2">
 <h3 id="bean-deployment-validation">5.7. Bean Deployment Validation</h3>
 <div class="paragraph">
-<p>Once the bean deployment is ready an extenion can perform additional validations and inspect the found beans, observers and injection points.
+<p>Once the bean deployment is ready an extension can perform additional validations and inspect the found beans, observers and injection points.
 Register a <code>BeanDeploymentValidatorBuildItem</code>:</p>
 </div>
 <div class="listingblock">
@@ -490,6 +504,24 @@ See also <code>io.quarkus.arc.processor.BuildExtension.Key</code> to discover th
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="custom-contexts">5.8. Custom Contexts</h3>
+<div class="paragraph">
+<p>An extension can register a custom <code>InjectableContext</code> implementation by means of a <code>ContextRegistrarBuildItem</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+ContextRegistrarBuildItem customContext() {
+    return new ContextRegistrarBuildItem(new ContextRegistrar() {
+         public void register(RegistrationContext registrationContext) {
+            registrationContext.configure(CustomScoped.class).normal().contextClass(MyCustomContext.class).done();
+         }
+    });
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -525,7 +557,7 @@ This optimization can be disabled: <code>quarkus.arc.remove-unused-beans=false</
 <p>does not declare any producer which is eligible for injection to any injection point,</p>
 </li>
 <li>
-<p>is not directly eligible for injection into any <code>javax.enterprise.inject.Instance</code> injection point</p>
+<p>is not directly eligible for injection into any <code>javax.enterprise.inject.Instance</code> or <code>javax.inject.Provider</code> injection point</p>
 </li>
 </ul>
 </div>

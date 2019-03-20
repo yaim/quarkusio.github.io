@@ -83,12 +83,17 @@ auth param.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">wget -O jvmci.tgz http://download.oracle.com/otn/utilities_drivers/oracle-labs/labsjdk-8u172-jvmci-0.46-darwin-amd64.tar.gz?AuthParam=[GENERATED AUTH TOKEN HERE]
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">wget -O jvmci.tgz http://download.oracle.com/otn/utilities_drivers/oracle-labs/labsjdk-8u202-jvmci-0.56-darwin-amd64.tar.gz?AuthParam=[GENERATED AUTH TOKEN HERE]
 tar -xzvf jvmci.tgz -C /opt
-# On Mac do labsjdk1.8.0_172-jvmci-0.46/Contents/Home
-export JAVA_HOME=/opt/labsjdk1.8.0_172-jvmci-0.46/
+# On Mac do labsjdk1.8.0_202-jvmci-0.56/Contents/Home
+export JAVA_HOME=/opt/labsjdk1.8.0_202-jvmci-0.46/
 export PATH=$JAVA_HOME/bin:$PATH</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<div class="title">NOTE</div>
+<p>Get the latest version available as graal tends to keep updating
+the minimum requirements.</p>
 </div>
 </div>
 <div class="sect2">
@@ -98,7 +103,7 @@ export PATH=$JAVA_HOME/bin:$PATH</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git clone git@github.com:graalvm/mx.git
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git clone https://github.com/graalvm/mx.git
 export PATH=`pwd`/mx:$PATH</code></pre>
 </div>
 </div>
@@ -113,7 +118,7 @@ export PATH=`pwd`/mx:$PATH</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git clone git clone git@github.com:oracle/graal.git
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git clone https://github.com/oracle/graal.git
 cd graal/substratevm
 mx build</code></pre>
 </div>

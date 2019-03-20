@@ -127,7 +127,7 @@ However, you can skip right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=using-websockets \
     -Dextensions="undertow-websockets"</code></pre>
@@ -234,7 +234,7 @@ Create the <code>src/main/resources/META-INF/resources</code> directory and copy
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code>./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -257,8 +257,8 @@ Create the <code>src/main/resources/META-INF/resources</code> directory and copy
 <p><span class="image"><img src="/guides/images/websocket-guide-screenshot.png" alt="Application"></span></p>
 </div>
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>mvn clean package</code> and executed using the <code>-runner.jar</code> file.
-You can also build the native executable using <code>mvn package -Pnative</code>.</p>
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
+You can also build the native executable using <code>./mvnw package -Pnative</code>.</p>
 </div>
 <div class="paragraph">
 <p>You can also test your web socket applications using the approach detailed <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/using-websockets/src/test/java/org/acme/websocket/ChatTestCase.java">here</a>.</p>

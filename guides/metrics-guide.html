@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using OpenTracing</title>
+  <title>Quarkus - MicroProfile Metrics</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -60,12 +60,21 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using OpenTracing</h1>
+    <h1 class="text-caps">Quarkus - MicroProfile Metrics</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide explains how your Quarkus application can utilize opentracing to provide distributed tracing for
-interactive web applications.</p>
+<p>This guide demonstrates how your Quarkus application can utilize the MicroProfile
+Metrics specification through the SmallRye Metrics extension.</p>
+</div>
+<div class="paragraph">
+<p>MicroProfile Metrics allows applications to gather various metrics and statistics that provide
+insights into what is happening inside the application.</p>
+</div>
+<div class="paragraph">
+<p>The metrics can be read remotely using JSON format or the OpenMetrics format, so that
+they can be processed by additional tools such as Prometheus, and stored for analysis
+and visualisation.</p>
 </div>
 </div>
 </div>
@@ -89,9 +98,6 @@ interactive web applications.</p>
 <li>
 <p>Apache Maven 3.5.3+</p>
 </li>
-<li>
-<p>Docker</p>
-</li>
 </ul>
 </div>
 </div>
@@ -100,7 +106,9 @@ interactive web applications.</p>
 <h2 id="architecture">Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this guide, we create a straightforward REST application to demonstrate distributed tracing.</p>
+<p>In this example, we build a very simple microservice which offers one REST endpoint and that endpoint serves
+for determining whether a number is prime. The implementation class is annotated with some metric annotations
+so that while responding to user&#8217;s requests, some metrics are gathered. The meaning of each metric will be explained later.</p>
 </div>
 </div>
 </div>
@@ -109,18 +117,18 @@ interactive web applications.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We recommend that you follow the instructions in the next sections and create the application step by step.
-However, you can skip right to the completed example.</p>
+However, you can go right to the completed example.</p>
 </div>
 <div class="paragraph">
 <p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
 </div>
 <div class="paragraph">
-<p>The solution is located in the <code>using-opentracing</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/using-opentracing">directory</a>.</p>
+<p>The solution is located in the <code>microprofile-metrics</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/microprofile-metrics">directory</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project">Creating the Maven project</h2>
+<h2 id="creating-the-maven-project">Creating the Maven Project</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>First, we need a new project. Create a new project with the following command:</p>
@@ -129,132 +137,208 @@ However, you can skip right to the completed example.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
-    -DprojectArtifactId=using-opentracing \
-    -DclassName="org.acme.opentracing.TracedResource" \
-    -Dpath="/hello" \
-    -Dextensions="smallrye-opentracing"</code></pre>
+    -DprojectArtifactId=microprofile-metrics \
+    -Dextensions="smallrye-metrics, resteasy"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This command generates the Maven project with a REST endpoint and imports the <code>smallrye-opentracing</code> extension, which
-includes the OpenTracing support and the default <a href="https://www.jaegertracing.io/">Jaeger</a> tracer.</p>
+<p>This command generates a Maven project, importing the <code>smallrye-metrics</code> extension
+which is an implementation of the MicroProfile Metrics specification used in Quarkus.</p>
 </div>
-<div class="sect2">
-<h3 id="examine-the-jax-rs-resource">Examine the JAX-RS resource</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="writing-the-application">Writing the application</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Open the <code>src/main/java/org/acme/opentracing/TracedResource.java</code> file and see the following content:</p>
+<p>The application consists of a single class that implements an algorithm for checking whether a number is prime.
+This algorithm is exposed over a REST interface. Additionally, we need a few annotations to make sure
+that our desired metrics are calculated over time and can be exported for manual analysis or processing by additional tooling.</p>
+</div>
+<div class="paragraph">
+<p>The metrics that we will gather are these:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>performedChecks</code>: A counter which is increased by one each time the user asks about a number.</p>
+</li>
+<li>
+<p><code>highestPrimeNumberSoFar</code>:  This is a gauge that stores the highest number that was asked about by the user and which was determined to be prime.</p>
+</li>
+<li>
+<p><code>checksTimer</code>: This is a timer, therefore a compound metric that benchmarks how much time the primality tests take. We will explain that one in more details later.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The full source code looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.opentracing;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.metrics;
+
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-@Path("/hello")
-public class TracedResource {
+@Path("/")
+public class PrimeNumberChecker {
+
+    private long highestPrimeNumberSoFar = 2;
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "hello";
+    @Path("/{number}")
+    @Produces("text/plain")
+    @Counted(name = "performedChecks", monotonic = true, description = "How many primality checks have been performed.")
+    @Timed(name = "checksTimer", description = "A measure of how long it takes to perform the primality test.", unit = MetricUnits.MILLISECONDS)
+    public String checkIfPrime(@PathParam("number") long number) {
+        if (number &lt; 1) {
+            return "Only natural numbers can be prime numbers.";
+        }
+        if (number == 1) {
+            return "1 is not prime.";
+        }
+        if (number == 2) {
+                    return "2 is prime.";
+        }
+        if (number % 2 == 0) {
+            return number + " is not prime, it is divisible by 2.";
+        }
+        for (int i = 3; i &lt; Math.floor(Math.sqrt(number)) + 1; i = i + 2) {
+            if (number % i == 0) {
+                return number + " is not prime, is divisible by " + i + ".";
+            }
+        }
+        if (number &gt; highestPrimeNumberSoFar) {
+            highestPrimeNumberSoFar = number;
+        }
+        return number + " is prime.";
     }
+
+    @Gauge(name = "highestPrimeNumberSoFar", unit = MetricUnits.NONE, description = "Highest prime number so far.")
+    public Long highestPrimeNumberSoFar() {
+        return highestPrimeNumberSoFar;
+    }
+
 }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Notice that there is no tracing specific code included in the application. By default, requests sent to this
-endpoint will be traced without any code changes being required. It is also possible to enhance the tracing information. For more information on this, please see the <a href="https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc">MicroProfile OpenTracing specification</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="create-the-configuration">Create the configuration</h3>
-<div class="paragraph">
-<p>There are two ways to configure the Jaeger tracer within the application.</p>
-</div>
-<div class="paragraph">
-<p>The first approach is by providing the properties within the <code>src/main/resources/application.properties</code> file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">quarkus.jaeger.service-name=myservice
-quarkus.jaeger.sampler-type=const
-quarkus.jaeger.sampler-param=1
-quarkus.jaeger.endpoint=http://localhost:14268/api/traces</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The second approach is to supply the properties as <a href="https://www.jaegertracing.io/docs/latest/client-features/">environment variables</a>. These can be specified as <code>jvm.args</code> as shown in the following section.</p>
-</div>
-<div class="paragraph">
-<p>If the <code>quarkus.jaeger.service-name</code> property (or <code>JAEGER_SERVICE_NAME</code> environment variable) is not provided then a "no-op" tracer will be configured, resulting in no tracing data being reported to the backend.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Currently the tracer can only be configured to report spans directly to the collector via HTTP, using the <code>quarkus.jaeger.endpoint</code> property (or <code>JAEGER_ENDPOINT</code> environment variable). Support for using the Jaeger agent, via UDP, will be available in a future version.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="run-the-application">Run the application</h2>
+<h2 id="running-and-using-the-application">Running and using the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The first step is to start the tracing system to collect and display the captured traces:</p>
+<p>To run the microservice in dev mode, use <code>./mvnw clean compile quarkus:dev</code></p>
+</div>
+<div class="sect2">
+<h3 id="generate-some-values-for-the-metrics">Generate some values for the metrics</h3>
+<div class="paragraph">
+<p>First, ask the endpoint whether some numbers are prime numbers.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>curl localhost:8080/350</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The application will respond that 350 is not a prime number because it can be divided by 2.</p>
+</div>
+<div class="paragraph">
+<p>Now for some large prime number so that the test takes a bit more time:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>curl localhost:8080/629521085409773</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The application will respond that 629521085409773 is a prime number.
+If you want, try some more calls with numbers of your choice.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="review-the-generated-metrics">Review the generated metrics</h3>
+<div class="paragraph">
+<p>To view the metrics, execute <code>curl -H"Accept: application/json" localhost:8080/metrics/application</code>
+You will receive a response such as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">docker run -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 -p 9411:9411 jaegertracing/all-in-one:latest</code></pre>
+<pre class="highlightjs highlight"><code>{
+  "org.acme.metrics.PrimeNumberChecker.checksTimer" : {
+    "p50": 217.231273,
+    "p75": 217.231273,
+    "p95": 217.231273,
+    "p98": 217.231273,
+    "p99": 217.231273,
+    "p999": 217.231273,
+    "min": 0.58961,
+    "mean": 112.15909190834819,
+    "max": 217.231273,
+    "stddev": 108.2721053982776,
+    "count": 2,
+    "meanRate": 0.04943519091742238,
+    "oneMinRate": 0.2232140583080189,
+    "fiveMinRate": 0.3559527083952095,
+    "fifteenMinRate": 0.38474303050928976
+  },
+  "org.acme.metrics.PrimeNumberChecker.performedChecks" : 2,
+  "org.acme.metrics.PrimeNumberChecker.highestPrimeNumberSoFar" : 629521085409773
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now we are ready to run our application. If using <code>application.properties</code> to configure the tracer:</p>
+<p>Let&#8217;s explain the meaning of each metric:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">./mvnw compile quarkus:dev</code></pre>
+<div class="ulist">
+<ul>
+<li>
+<p><code>performedChecks</code>: A counter which is increased by one each time the user asks about a number.</p>
+</li>
+<li>
+<p><code>highestPrimeNumberSoFar</code>: This is a gauge that stores the highest number that was asked about by the user and which was determined to be prime.</p>
+</li>
+<li>
+<p><code>checksTimer</code>: This is a timer, therefore a compound metric that benchmarks how much time the primality tests take. All durations are measured in milliseconds. It consists of these values:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>min</code>: The shortest duration it took to perform a primality test, probably it was performed for a small number.</p>
+</li>
+<li>
+<p><code>max</code>: The longest duration, probably it was with a large prime number.</p>
+</li>
+<li>
+<p><code>mean</code>: The mean value of the measured durations.</p>
+</li>
+<li>
+<p><code>stddev</code>: The standard deviation.</p>
+</li>
+<li>
+<p><code>count</code>: The number of observations (so it will be the same value as <code>performedChecks</code>).</p>
+</li>
+<li>
+<p><code>p50, p75, p95, p99, p999</code>: Percentiles of the durations. For example the value in <code>p95</code> means that 95 % of the measurements were faster than this duration.</p>
+</li>
+<li>
+<p><code>meanRate, oneMinRate, fiveMinRate, fifteenMinRate</code>: Mean throughput and one-, five-, and fifteen-minute exponentially-weighted moving average throughput.</p>
+</li>
+</ul>
 </div>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>or if configuring the tracer via environment variables:</p>
+<p>If you prefer an OpenMetrics export rather than the JSON format, remove the <code>-H"Accept: application/json"</code> argument from your command line.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">./mvnw compile quarkus:dev -Djvm.args="-DJAEGER_SERVICE_NAME=myservice -DJAEGER_SAMPLER_TYPE=const -DJAEGER_SAMPLER_PARAM=1 -DJAEGER_ENDPOINT=http://localhost:14268/api/traces"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Once both the application and tracing system are started, you can make a request to the provided endpoint:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code>$ curl http://localhost:8080/hello
-hello</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When the first request has been submitted, the Jaeger tracer within the app will be initialized:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code>2019-01-14 17:36:38,580 localhost using-opentracing-dev.jar[14190] INFO  [i.j.Configuration] (XNIO-1 task-1) Initialized tracer=JaegerTracer(version=Java-0.33.1, serviceName=myservice, reporter=RemoteReporter(sender=HttpSender(), closeEnqueueTimeout=1000), sampler=ConstSampler(decision=true, tags={sampler.type=const, sampler.param=true}), tags={hostname=localhost.localdomain, jaeger.version=Java-0.33.1, ip=127.0.0.1}, zipkinSharedRpcSpan=false, expandExceptionLogs=false, useTraceId128Bit=false)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then visit the <a href="http://localhost:16686">Jaeger UI</a> to see the tracing information.</p>
-</div>
-<div class="paragraph">
-<p>Hit <code>CTRL+C</code> to stop the application.</p>
 </div>
 </div>
 </div>

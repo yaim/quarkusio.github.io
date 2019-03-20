@@ -170,7 +170,7 @@ However, you can skip right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=using-jwt-rbac \
     -DclassName="org.acme.jwt.TokenSecuredResource" \
@@ -295,7 +295,7 @@ public class TokenSecuredResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -304,7 +304,7 @@ public class TokenSecuredResource {
 <div class="listingblock">
 <div class="title">quarkus:dev Output</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ mvn compile quarkus:dev
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ ./mvnw compile quarkus:dev
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
@@ -419,7 +419,7 @@ they have either a "Echoer" or "Subscriber" role assigned.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>After you make this addition to your <code>TokenSecuredResource</code>, rerun the <code>mvn compile quarkus:dev</code> command, and then try <code>curl -v <a href="http://127.0.0.1:8080/secured/roles-allowed" class="bare">http://127.0.0.1:8080/secured/roles-allowed</a>; echo</code> to attempt to access the new endpoint. Your output should be:</p>
+<p>After you make this addition to your <code>TokenSecuredResource</code>, rerun the <code>./mvnw compile quarkus:dev</code> command, and then try <code>curl -v <a href="http://127.0.0.1:8080/secured/roles-allowed" class="bare">http://127.0.0.1:8080/secured/roles-allowed</a>; echo</code> to attempt to access the new endpoint. Your output should be:</p>
 </div>
 <div class="listingblock">
 <div class="title">curl command for /secured/roles-allowed</div>
@@ -917,7 +917,7 @@ also include a "Group2MappedRole" due to the <code>roleMappings</code> claim hav
 <div class="title">Tip</div>
 </td>
 <td class="content">
-You may need to run <code>mvn test-compile</code> before this if you are working strictly from the command line and not an IDE that
+You may need to run <code>./mvnw test-compile</code> before this if you are working strictly from the command line and not an IDE that
 automatically compiles code as you write it.
 </td>
 </tr>
@@ -932,7 +932,6 @@ automatically compiles code as you write it.
 [INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
 [INFO] Building using-jwt-rbac 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
-Downloading from jboss: https://repository.jboss.org/nexus/content/groups/public/net/minidev/json-smart/maven-metadata.xml
 [INFO]
 [INFO] --- exec-maven-plugin:1.6.0:java (default-cli) @ using-jwt-rbac ---
 Setting exp: 1551659976 / Sun Mar 03 16:39:36 PST 2019
@@ -977,7 +976,6 @@ the JWT, and should be '/JwtClaims.json' for this quickstart.</p>
 [INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
 [INFO] Building using-jwt-rbac 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
-Downloading from jboss: https://repository.jboss.org/nexus/content/groups/public/net/minidev/json-smart/maven-metadata.xml
 [INFO]
 [INFO] --- exec-maven-plugin:1.6.0:java (default-cli) @ using-jwt-rbac ---
 Setting exp: 1551663155 / Sun Mar 03 17:32:35 PST 2019
@@ -1009,7 +1007,7 @@ eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiO
 <h2 id="finally-secured-access-to-securedroles-allowed">Finally, Secured Access to /secured/roles-allowed</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now let&#8217;s use this to make a secured request to the /secured/roles-allowed endpoint. Make sure you have the Quarkus server running using the <code>mvn compile quarkus:dev</code> command, and then run the following command, making sure to use your version of the generated JWT from the previous step:</p>
+<p>Now let&#8217;s use this to make a secured request to the /secured/roles-allowed endpoint. Make sure you have the Quarkus server running using the <code>./mvnw compile quarkus:dev</code> command, and then run the following command, making sure to use your version of the generated JWT from the previous step:</p>
 </div>
 <div class="listingblock">
 <div class="content">

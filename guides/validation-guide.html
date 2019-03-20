@@ -138,7 +138,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=validation \
     -DclassName="org.acme.validation.BookResource" \
@@ -404,7 +404,7 @@ In the <code>src/main/resources/META-INF/resources</code> directory, replace the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code>./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -424,8 +424,8 @@ In the <code>src/main/resources/META-INF/resources</code> directory, replace the
 <p><span class="image"><img src="/guides/images/validation-guide-screenshot.png" alt="Application"></span></p>
 </div>
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>mvn clean package</code> and executed using the <code>-runner.jar</code> file.
-You can also build the native executable using <code>mvn package -Pnative</code>.</p>
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
+You can also build the native executable using <code>./mvnw package -Pnative</code>.</p>
 </div>
 </div>
 </div>

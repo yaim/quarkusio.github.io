@@ -235,7 +235,7 @@ the test is run.</p>
 <div class="sect2">
 <h3 id="controlling-the-test-port">4.1. Controlling the test port</h3>
 <div class="paragraph">
-<p>While Quarkus will listen on port <code>8080</code> by default when running tests it defaults to <code>8081</code>. This allows you to run
+<p>While Quarkus will listen on port <code>8080</code> by default, when running tests it defaults to <code>8081</code>. This allows you to run
 tests while having the application running in parallel. This can be configured via the <code>quarkus.http.test-port</code>
 config property in <code>application.properties</code>.</p>
 </div>
@@ -371,7 +371,54 @@ public class GreetingServiceTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="native-executable-testing">6. Native Executable Testing</h2>
+<h2 id="mock-support">6. Mock Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus supports the use of mock objects using the CDI <code>@Alternative</code> mechanism. To use this simply override the bean
+you wish to mock with a class in the <code>src/test/java</code> directory, and put the <code>@Alternative</code> and <code>@Priority(1)</code> annotations
+on the bean. For example if I have the following service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+public class ExternalService {
+
+    public String service() {
+        return "external";
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I could mock it with the following class in <code>src/test/java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Alternative()
+@Priority(1)
+@ApplicationScoped
+public class MockExternalService extends ExternalService {
+
+    @Override
+    public String service() {
+        return "mock";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is important that the alternative be present in the <code>src/test/java</code> directory rather than <code>src/main/java</code>, as otherwise
+it will take effect all the time, not just when testing.</p>
+</div>
+<div class="paragraph">
+<p>Note that at present this approach does not work with native image testing, as this would required the test alternatives
+to be baked into the native image.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="native-executable-testing">7. Native Executable Testing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>It is also possible to test native executables using <code>@SubstrateTest</code>. This supports all the features mentioned in this

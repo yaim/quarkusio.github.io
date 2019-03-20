@@ -101,7 +101,7 @@
 <li>
 <p>GraalVM installed from the <a href="http://www.graalvm.org/downloads/">GraalVM web site</a>.
 Using the community edition is enough.
-Version 1.0.0-rc12 is required.</p>
+Version 1.0.0-rc13 is required.</p>
 </li>
 <li>
 <p>The <code>GRAALVM_HOME</code> environment variable configured appropriately</p>
@@ -206,7 +206,7 @@ The executable would have everything to run the application including the "JVM" 
 <p>We use a profile because, you will see very soon, packaging the native executable takes a <em>few</em> seconds.</p>
 </div>
 <div class="paragraph">
-<p>Create a native executable using: <code>mvn package -Pnative</code>.</p>
+<p>Create a native executable using: <code>./mvnw package -Pnative</code>.</p>
 </div>
 <div class="paragraph">
 <p>In addition to the regular files, the build also produces <code>target/quarkus-quickstart-runner</code>.
@@ -278,11 +278,11 @@ The executable is retrieved using the <code>native.image.path</code> system prop
 </ol>
 </div>
 <div class="paragraph">
-<p>To see the <code>NativeGreetingResourceIT</code> run against the native executable, runs <code>mvn verify -Pnative</code>:</p>
+<p>To see the <code>NativeGreetingResourceIT</code> run against the native executable, runs <code>./mvnw verify -Pnative</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn verify -Pnative
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw verify -Pnative
 ...
 [quarkus-quickstart-runner:50955]     universe:     391.96 ms
 [quarkus-quickstart-runner:50955]      (parse):     904.37 ms
@@ -342,13 +342,13 @@ we will instruct the Maven build to produce an executable from inside a Docker c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn package -Pnative -Dnative-image.docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw package -Pnative -Dnative-image.docker-build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The produced executable will be a 64 bit Linux executable, so depending on your operating system it may no longer be runnable.
 However, it&#8217;s not an issue as we are going to copy it to a Docker container.
-The project generation has provided a <code>Dockerfile</code> in the <code>src/main/docker</code> directory with the following content:</p>
+The project generation has provided a <code>Dockerfile.native</code> in the <code>src/main/docker</code> directory with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -365,7 +365,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker build -f src/main/docker/Dockerfile -t quarkus-quickstart/quickstart .</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker build -f src/main/docker/Dockerfile.native -t quarkus-quickstart/quickstart .</code></pre>
 </div>
 </div>
 <div class="paragraph">

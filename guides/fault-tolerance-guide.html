@@ -134,7 +134,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=microprofile-fault-tolerance \
     -DclassName="org.acme.faulttolerance.CoffeeResource" \
@@ -311,8 +311,10 @@ in the <code>CoffeeResource#coffees()</code> endpoint method in about 50 % of re
 <div class="paragraph">
 <p>Why not check that our application works? Run the Quarkus development server with:</p>
 </div>
-<div class="paragraph">
-<p><code>mvn compile quarkus:dev</code></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw compile quarkus:dev</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>and open <code><a href="http://localhost:8080/coffee" class="bare">http://localhost:8080/coffee</a></code> in your browser. Make couple of requests (remember, some of them we expect
@@ -627,23 +629,20 @@ of our business logic.</p>
 <ul>
 <li>
 <p>adding the <code>smallrye-fault-tolerance</code> Quarkus extension to your project using the <code>quarkus-maven-plugin</code>:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>`mvn quarkus:add-extension -Dextensions="smallrye-fault-tolerance"`</pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw quarkus:add-extension -Dextensions="smallrye-fault-tolerance"</code></pre>
 </div>
 </div>
 </li>
 <li>
 <p>or simply adding the following Maven dependency:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>[source,xml]
-----
-  &lt;dependency&gt;
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
     &lt;artifactId&gt;quarkus-smallrye-fault-tolerance&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-----</pre>
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </li>

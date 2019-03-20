@@ -116,7 +116,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=rest-client \
     -DclassName="org.acme.restclient.CountriesResource" \
@@ -260,7 +260,8 @@ public interface CountriesService {
 <div class="ulist">
 <ul>
 <li>
-<p><code>@RegisterRestClient</code> allows Quarkus to know that this interface is meant to be used as a REST Client</p>
+<p><code>@RegisterRestClient</code> allows Quarkus to know that this interface is meant to be available for
+CDI injection as a REST Client</p>
 </li>
 <li>
 <p><code>@Path</code>, <code>@GET</code> and <code>@PathParam</code> are the standard JAX-RS annotations used to define how to access the service</p>
@@ -400,15 +401,27 @@ public class CountriesResourceTest {
 <h2 id="package-and-run-the-application">Package and run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run the application with: <code>mvn compile quarkus:dev</code>.
+<p>Run the application with: <code>./mvnw compile quarkus:dev</code>.
 Open your browser to <a href="http://localhost:8080/country/name/greece" class="bare">http://localhost:8080/country/name/greece</a>.</p>
 </div>
 <div class="paragraph">
 <p>You should see a JSON object containing some basic information about Greece.</p>
 </div>
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>mvn clean package</code> and executed using the <code>-runner.jar</code> file.
-You can also generate the native executable with <code>mvn clean package -Pnative</code>.</p>
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
+You can also generate the native executable with <code>./mvnw clean package -Pnative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="further-reading">Further reading</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://download.eclipse.org/microprofile/microprofile-rest-client-1.2.1/microprofile-rest-client-1.2.1.html">MicroProfile Rest Client specification</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

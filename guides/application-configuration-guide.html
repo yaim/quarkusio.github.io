@@ -116,7 +116,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=application-configuration \
     -DclassName="org.acme.config.GreetingResource" \
@@ -135,7 +135,7 @@ However, you can go right to the completed example.</p>
 <p>a landing page accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code></p>
 </li>
 <li>
-<p>an example of <code>Dockerfile</code></p>
+<p>example <code>Dockerfile</code> files for both <code>native</code> and <code>jvm</code> modes</p>
 </li>
 <li>
 <p>the application configuration file</p>
@@ -155,12 +155,11 @@ However, you can go right to the completed example.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus uses <a href="https://microprofile.io/project/eclipse/microprofile-config">MicroProfile Config</a> to inject the configuration in the application.
-The injection uses 2 annotations: <code>@Inject</code> and <code>@ConfigProperty</code>:</p>
+The injection uses the <code>@ConfigProperty</code> annotation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Inject
-@ConfigProperty(name = "greeting.message")
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ConfigProperty(name = "greeting.message")
 private String message;</code></pre>
 </div>
 </div>
@@ -169,18 +168,28 @@ private String message;</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Inject
-@ConfigProperty(name = "greeting.message")
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ConfigProperty(name = "greeting.message")
 private String message;
 
-@Inject
 @ConfigProperty(name = "greeting.suffix", defaultValue="!")
 private String suffix;
 
-@Inject
 @ConfigProperty(name = "greeting.name")
 private Optional&lt;String&gt; name;</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+When injecting a configured value, you can use <code>@Inject @ConfigProperty(&#8230;&#8203;)</code> or just <code>@ConfigProperty(&#8230;&#8203;)</code>.
+The <code>@Inject</code> annotation is not necessary for members annotated with <code>@ConfigProperty</code>, a behavior which differs from <a href="https://microprofile.io/project/eclipse/microprofile-config">MicroProfile Config</a>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>If you do not provide a value for the first property, it will have a <code>null</code> value.
@@ -277,7 +286,7 @@ public class GreetingResourceTest {
 <h2 id="package-and-run-the-application">Package and run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run the application with: <code>mvn compile quarkus:dev</code>.
+<p>Run the application with: <code>./mvnw compile quarkus:dev</code>.
 Open your browser to <a href="http://localhost:8080/greeting" class="bare">http://localhost:8080/greeting</a>.</p>
 </div>
 <div class="paragraph">
@@ -285,8 +294,8 @@ Open your browser to <a href="http://localhost:8080/greeting" class="bare">http:
 You can add the <code>greeting.suffix</code>, remove the other properties, change the values, etc.</p>
 </div>
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>mvn clean package</code> and executed using the <code>-runner.jar</code> file.
-You can also generate the native executable with <code>mvn clean package -Pnative</code>.</p>
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
+You can also generate the native executable with <code>./mvnw clean package -Pnative</code>.</p>
 </div>
 </div>
 </div>
@@ -300,7 +309,7 @@ To change them, make sure to repackage your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn clean package</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw clean package</code></pre>
 </div>
 </div>
 <div class="paragraph">

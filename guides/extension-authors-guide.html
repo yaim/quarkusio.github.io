@@ -862,11 +862,11 @@ executable. Some of these build items are listed below:</p>
 <p>The class augmentation step of Quarkus generates classes for various purposes. Sometimes you need to view these
 classes/bytecode to debug or understand an issue. Classes that are related to application augmentation are currently held in
 memory in a runtime class loader. To have these classes written out to disk for inspection, specify the
-<code>io.quarkus.DEBUG_GENERATED_CLASSES_DIR</code> system property, for example:</p>
+<code>quarkus.debug.generated-classes-dir</code> system property, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn clean install -Dio.quarkus.DEBUG_GENERATED_CLASSES_DIR=./target/app-generated-classes</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw clean install -Dquarkus.debug.generated-classes-dir=./target/app-generated-classes</code></pre>
 </div>
 </div>
 </div>

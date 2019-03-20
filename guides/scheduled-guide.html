@@ -128,7 +128,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.11.0:create \
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=scheduling-periodic-tasks \
     -DclassName="org.acme.scheduling.CountResource" \
@@ -148,7 +148,7 @@ However, you can go right to the completed example.</p>
 <p>a landing page accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code></p>
 </li>
 <li>
-<p>an example of <code>Dockerfile</code></p>
+<p>example <code>Dockerfile</code> files for both <code>native</code> and <code>jvm</code> modes</p>
 </li>
 <li>
 <p>the application configuration file</p>
@@ -307,13 +307,13 @@ public class CountResourceTest {
 <h2 id="package-and-run-the-application">Package and run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run the application with: <code>mvn compile quarkus:dev</code>.
+<p>Run the application with: <code>./mvnw compile quarkus:dev</code>.
 In another terminal, run <code>curl localhost:8080/count</code> to check the counter value.
 After a few seconds, re-run <code>curl localhost:8080/count</code> to verify the counter has been incremented.</p>
 </div>
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>mvn clean package</code> and executed using the <code>-runner.jar</code> file.
-You can also generate the native executable with <code>mvn clean package -Pnative</code>.</p>
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
+You can also generate the native executable with <code>./mvnw clean package -Pnative</code>.</p>
 </div>
 </div>
 </div>

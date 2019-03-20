@@ -63,34 +63,47 @@
     <h1 class="text-caps">Quarkus - Gradle Plugin Repositories</h1>
     <div class="paragraph">
 <p>Quarkus Gradle plugin is not yet published to the <a href="https://plugins.gradle.org/">Gradle Plugin Portal</a>,
-so you need to add the following to your '~/.gradle/init.gradle' file:</p>
+so you need to add the following at the top of your './settings.gradle' file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">allprojects {
-  buildscript { <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">pluginManagement {
     repositories {
-      mavenCentral()
+        mavenCentral()
+        gradlePluginPortal()
     }
-    dependencies {
-      classpath 'io.quarkus:quarkus-gradle-plugin:0.11.0'
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'io.quarkus.gradle.plugin') {
+                useModule("io.quarkus:quarkus-gradle-plugin:${requested.version}")
+            }
+        }
     }
-  }
-  repositories {
-    mavenCentral()
-  }
 }</code></pre>
 </div>
 </div>
-<div class="colist arabic">
-<ol>
-<li>
-<p>The buildscript block is needed for the Quarkus Gradle plugin.</p>
-</li>
-</ol>
+<div class="paragraph">
+<p>Or, if you use the Gradle Kotlin DSL, you need to add the following at the top of your './settings.gradle.kts' file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "io.quarkus.gradle.plugin") {
+                useModule("io.quarkus:quarkus-gradle-plugin:${requested.version}")
+            }
+        }
+    }
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Alternatively you add the buildscript and repositories blocks in your <code>build.gradle</code> file.</p>
+<p>This won&#8217;t be necessary anymore once the Quarkus Gradle plugin is published in the Gradle plugin portal.</p>
 </div>
   </div>
 </div>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Quarkus - Using Apache Kafka with Reactive Messaging</title>
+  <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quarkus: Supersonic Subatomic Java">
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body class="guides">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="content">
+    <div class="navigation-wrapper">
+  <div class="width-12-12">
+    <div class="header navigation">
+      <div class="logo-wrapper">
+        <a class="styled-logo" href="/">Quarkus</a>
+      </div>
+      <div class="nav-container">
+        <nav>
+          <div class="nav-mobile"><a id="nav-toggle" href="#!"><span></span></a></div>
+          <ul class="nav-list">
+            <li>
+              <a href="/get-started/" class="">Get Started</a>
+            </li>
+            <li>
+              <a href="/guides/" class="active">Guides</a>
+            </li>
+            <li>
+              <a href="/extensions/" class="">Extensions</a>
+            </li>
+            <li>
+              <a href="/community/" class="">Community</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="guides">
+  <div class="width-12-12">
+    <h1 class="text-caps">Quarkus - Using Apache Kafka with Reactive Messaging</h1>
+    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide demonstrates how your Quarkus application can utilize MicroProfile Reactive Messaging to interact with Apache Kafka.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="prerequisites">Prerequisites</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To complete this guide, you need:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>less than 15 minutes</p>
+</li>
+<li>
+<p>an IDE</p>
+</li>
+<li>
+<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
+</li>
+<li>
+<p>Apache Maven 3.5.3+</p>
+</li>
+<li>
+<p>A running Kafka cluster, or Docker Compose to start a development cluster</p>
+</li>
+<li>
+<p>GraalVM installed if you want to run in native mode.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="architecture">Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, we are going to generate (random) prices in one component.
+These prices are written in a Kafka topic (<code>prices</code>).
+A second component reads from the <code>prices</code> Kafka topic and apply some magic conversion to the price.
+The result is sent to an in-memory stream consumed by a JAX-RS resource.
+The data is sent to a browser using server-sent event.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/guides/images/kafka-guide-architecture.png" alt="Architecture">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="solution">Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We recommend that you follow the instructions in the next sections and create the application step by step.
+However, you can go right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+</div>
+<div class="paragraph">
+<p>The solution is located in the <code>kafka-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/kafka-quickstart">directory</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-the-maven-project">Creating the Maven Project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, we need a new project. Create a new project with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=kafka-quickstart \
+    -Dextensions="reactive-kafka,vert.x"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command generates a Maven project, importing the Reactive Messaging and Kafka connector extensions. Eclipse Vert.x is also required as the Kafka connector relies on Vert.x.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="starting-kafka">Starting Kafka</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Then, we need a Kafka cluster.
+You can follow the instructions from the <a href="https://kafka.apache.org/quickstart">Apache Kafka web site</a> or create a <code>docker-compose.yaml</code> file with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: '2'
+
+services:
+
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    expose:
+    - "2181"
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.1.1
+    depends_on:
+    - zookeeper
+    ports:
+    - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once created, run <code>docker-compose up</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This is a development cluster, do not use in production.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-price-generator">The price generator</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create the <code>src/main/java/org/acme/quarkus/sample/PriceGenerator.java</code> file, with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quarkus.sample;
+
+import io.reactivex.Flowable;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
+import javax.enterprise.context.ApplicationScoped;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * A bean producing random prices every 5 seconds.
+ * The prices are written to a Kafka topic (prices). The Kafka configuration is specified in the application configuration.
+ */
+@ApplicationScoped
+public class PriceGenerator {
+
+    private Random random = new Random();
+
+    @Outgoing("generated-price")                        <b class="conum">(1)</b>
+    public Flowable&lt;Integer&gt; generate() {               <b class="conum">(2)</b>
+        return Flowable.interval(5, TimeUnit.SECONDS)
+                .map(tick -&gt; random.nextInt(100));
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Instruct Reactive Messaging to dispatch the items from returned stream to <code>generated-price</code>.</p>
+</li>
+<li>
+<p>The method returns a RX Java 2 <em>stream</em> (<code>Flowable</code>) emitting a random <em>price</em> every 5 seconds.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The method returns a <em>Reactive Streams</em>. The generated items are sent to the stream named <code>generated-price</code>.
+This stream is mapped to Kafka using the <code>application.properties</code> file that we will create soon.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-price-converter">The price converter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The price converter reads the prices from Kafka, and transforms them.
+Creates the <code>src/main/java/org/acme/quarkus/sample/PriceConverter.java</code> file with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quarkus.sample;
+
+import io.smallrye.reactive.messaging.annotations.Broadcast;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
+import javax.enterprise.context.ApplicationScoped;
+
+/**
+ * A bean consuming data from the "prices" Kafka topic and applying some conversion.
+ * The result is pushed to the "my-data-stream" stream which is an in-memory stream.
+ */
+@ApplicationScoped
+public class PriceConverter {
+
+    private static final double CONVERSION_RATE = 0.88;
+
+    @Incoming("prices")                                 <b class="conum">(1)</b>
+    @Outgoing("my-data-stream")                         <b class="conum">(2)</b>
+    @Broadcast                                          <b class="conum">(3)</b>
+    public double process(int priceInUsd) {
+        return priceInUsd * CONVERSION_RATE;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Indicates that the method consumes the items from the <code>prices</code> topic</p>
+</li>
+<li>
+<p>Indicates that the objects returned by the method are sent to the <code>my-data-stream</code> stream</p>
+</li>
+<li>
+<p>Indicates that the item are dispatched to all <em>subscribers</em></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The <code>process</code> method is called for every Kafka <em>record</em> from the <code>prices</code> topic (configured in the application configuration).
+Every result is sent to the <code>my-data-stream</code> in-memory stream.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-price-resource">The price resource</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Finally, let&#8217;s bind our stream to a Jax-RS resource.
+Creates the <code>src/main/java/org/acme/quarkus/sample/PriceResource.java</code> file with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quarkus.sample;
+
+import io.smallrye.reactive.messaging.annotations.Stream;
+import org.reactivestreams.Publisher;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+/**
+ * A simple resource retrieving the in-memory "my-data-stream" and sending the items to a server sent event.
+ */
+@Path("/prices")
+public class PriceResource {
+
+    @Inject
+    @Stream("my-data-stream") Publisher&lt;Double&gt; prices; <b class="conum">(1)</b>
+
+    @GET
+    @Path("/stream")
+    @Produces(MediaType.SERVER_SENT_EVENTS)             <b class="conum">(2)</b>
+    public Publisher&lt;Double&gt; stream() {                 <b class="conum">(3)</b>
+        return prices;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Injects the <code>my-data-stream</code> stream using the <code>@Stream</code> qualifier</p>
+</li>
+<li>
+<p>Indicates that the content is sent using <code>Server Sent Events</code></p>
+</li>
+<li>
+<p>Returns the stream (<em>Reactive Stream</em>)</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-the-kafka-connector">Configuring the Kafka connector</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We need to configure Kafka connector. This is done in the <code>application.properties</code> file.
+The keys are structured as follows:</p>
+</div>
+<div class="paragraph">
+<p><code>smallrye.messaging.[sink|source].{stream-name}.property=value</code></p>
+</div>
+<div class="paragraph">
+<p>The <code>stream-name</code> segment must match the value set in the <code>@Incoming</code> and <code>@Outgoing</code> annotation:
+* <code>generated-price</code> &#8594; sink in which we write the prices
+* <code>prices</code> &#8594; source in which we read the prices</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code># Configure the Kafka sink (we write to it)
+smallrye.messaging.sink.generated-price.type=io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.sink.generated-price.topic=prices
+smallrye.messaging.sink.generated-price.bootstrap.servers=localhost:9092
+smallrye.messaging.sink.generated-price.key.serializer=org.apache.kafka.common.serialization.StringSerializer
+smallrye.messaging.sink.generated-price.value.serializer=org.apache.kafka.common.serialization.IntegerSerializer
+smallrye.messaging.sink.generated-price.acks=1
+
+# Configure the Kafka source (we read from it)
+smallrye.messaging.source.prices.type=io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.source.prices.topic=prices
+smallrye.messaging.source.prices.bootstrap.servers=localhost:9092
+smallrye.messaging.source.prices.key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+smallrye.messaging.source.prices.value.deserializer=org.apache.kafka.common.serialization.IntegerDeserializer
+smallrye.messaging.source.prices.group.id=my-group-id</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>More details about this configuration is available on the <a href="https://kafka.apache.org/documentation/#producerconfigs">Producer configuration</a> and <a href="https://kafka.apache.org/documentation/#consumerconfigs">Consumer configuration</a> section from the Kafka documentation.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+What about <code>my-data-stream</code>? This is an in-memory stream, not connected to a message broker.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-html-page">The HTML page</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Final touch, the HTML page reading the converted prices using SSE.</p>
+</div>
+<div class="paragraph">
+<p>Create the <code>src/main/resources/META-INF/resources/prices.html</code> file, with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Prices&lt;/title&gt;
+
+    &lt;link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css"&gt;
+    &lt;link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="container"&gt;
+
+    &lt;h2&gt;Last price&lt;/h2&gt;
+    &lt;div class="row"&gt;
+    &lt;p class="col-md-12"&gt;The last price is &lt;strong&gt;&lt;span id="content"&gt;N/A&lt;/span&gt;&amp;nbsp;&amp;euro;&lt;/strong&gt;.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;script src="https://code.jquery.com/jquery-3.3.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    var source = new EventSource("/prices/stream");
+    source.onmessage = function (event) {
+        document.getElementById("content").innerHTML = event.data;
+    };
+&lt;/script&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nothing spectacular here. On each received price, it updates the page.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="get-it-running">Get it running</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you followed the instructions, you should have Kafka running.
+Then, you just need to run the application using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn compile quarkus:dev</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Open <code><a href="http://localhost:8080/prices.html" class="bare">http://localhost:8080/prices.html</a></code> in your browser.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If you started the Kafka broker with docker compose, stop it using <code>CTRL+C</code> followed by <code>docker-compose down</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="running-native">Running Native</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can build the native executable with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn package -Pnative</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="going-further">Going further</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide has shown how you can interact with Kafka using Quarkus.
+It utilizes MicroProfile Reactive Messaging to build data streaming applications.</p>
+</div>
+<div class="paragraph">
+<p>If you want to go further check the documentation of <a href="https://smallrye.io/smallrye-reactive-messaging">SmallRye Reactive Messaging</a>, the implementation used in Quarkus.</p>
+</div>
+</div>
+</div>
+  </div>
+</div>
+
+  </div>
+
+  <div class="content project-footer">
+  <div class="footer-section">
+    <div class="logo-wrapper">
+      <a href="/" class="styled-logo">Quarkus</a>
+    </div>
+  </div>
+  <div class="grid-wrapper">
+    <p class="grid__item width-3-12">Quarkus is open. Quarkus and its extensions are available under the <a href='https://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache Software License 2.0</a> or compatible license.<br /><br />This website was built with <a href='https://jekyllrb.com/' target='_blank'>Jekyll</a> is hosted on <a href='https://pages.github.com/' target='_blank'>Github Pages</a> and is completely open source. If you want to make it better, <a href='https://github.com/quarkusio/quarkusio.github.io' target='_blank'>fork the website</a> and show us what you’ve got.</p>
+
+    
+      <div class="width-1-12 project-links">
+        <span>Navigation</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="/">Home</a></li>
+          
+            <li><a href="/guides">Guides</a></li>
+          
+            <li><a href="/get-started">Get Started</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Contribute</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://twitter.com/quarkusio">Follow us</a></li>
+          
+            <li><a href="https://github.com/quarkusio">GitHub</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Get Help</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://quarkusio.zulipchat.com">Chatroom</a></li>
+          
+            <li><a href="https://groups.google.com/forum/#!forum/quarkus-dev">Google&nbsp;Groups</a></li>
+          
+            <li><a href="/faq">FAQ</a></li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="width-6-12 more-links">
+        <span>Quarkus is proudly made of</span>
+        <ul class="footer-links">
+          
+            <li><a href="https://hibernate.org" target="_blank">Hibernate</a></li>
+          
+            <li><a href="https://netty.io" target="_blank">Netty</a></li>
+          
+            <li><a href="https://resteasy.github.io" target="_blank">RESTEasy</a></li>
+          
+            <li><a href="https://microprofile.io" target="_blank">Eclipse Microprofile</a></li>
+          
+            <li><a href="https://vertx.io/" target="_blank">Eclipse Vert.x</a></li>
+          
+            <li><a href="https://camel.apache.org" target="_blank">Apache Camel</a></li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+  <div class="content redhat-footer">
+  <div class="grid-wrapper">
+    <span class="licence">
+      <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i> <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a>
+      | <a href="https://www.redhat.com/en/about/privacy-policy">Red Hat Privacy Policy</a>
+    </span>
+    <span class="redhat">
+      a Red Hat sponsored project   
+    </span>
+    <span class="redhat-logo">
+      <a href="https://www.redhat.com/" target="_blank"><img src="/assets/images/RHLogo_white.svg"></a>
+    </span>
+  </div>
+</div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript" src="/assets/javascript/mobile-nav.js"></script>
+  <script type="text/javascript" src="/assets/javascript/scroll-down.js"></script>
+  <script type="text/javascript">
+    if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+    }
+  </script>
+</body>
+
+</html>
