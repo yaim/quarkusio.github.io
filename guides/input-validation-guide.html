@@ -131,7 +131,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.13.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=input-validation \
     -DclassName="org.acme.validation.BookResource" \
@@ -152,7 +152,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Inject
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
 Validator validator;</code></pre>
 </div>
 </div>
@@ -170,7 +170,7 @@ Create the <code>org.acme.validation.Book</code> class with the following conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.validation;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.validation;
 
 import javax.validation.constraints.*;
 
@@ -226,7 +226,7 @@ Add the following method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Path("/manual-validation")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/manual-validation")
 @POST
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -257,7 +257,7 @@ In case of failures, the messages are concatenated and sent back to the browser.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private class Result {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">private class Result {
 
     Result(String message) {
         this.success = true;
@@ -305,7 +305,7 @@ or with <code>@Valid</code> (which will cascade the validation to the bean).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Path("/end-point-method-validation")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/end-point-method-validation")
 @POST
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -334,7 +334,7 @@ It can be extracted and manipulated to display a proper error message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.validation;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.validation;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
@@ -353,7 +353,7 @@ public class BookService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Inject BookService bookService;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject BookService bookService;
 
 @Path("/service-method-validation")
 @POST
@@ -397,7 +397,7 @@ In the <code>src/main/resources/META-INF/resources</code> directory, replace the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">

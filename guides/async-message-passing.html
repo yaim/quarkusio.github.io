@@ -111,7 +111,7 @@ If you are creating a new project, set the <code>extensions</code> parameter are
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.13.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=vertx-quickstart \
     -Dextensions="vertx"</code></pre>
@@ -123,7 +123,7 @@ the <code>add-extension</code> command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn quarkus:add-extension -Dextensions="vertx"</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn quarkus:add-extension -Dextensions="vertx"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -131,7 +131,7 @@ the <code>add-extension</code> command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
     &lt;artifactId&gt;quarkus-vertx&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
@@ -147,7 +147,7 @@ the <code>add-extension</code> command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.vertx;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
 
 import io.quarkus.vertx.ConsumeEvent;
 
@@ -156,8 +156,8 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class GreetingService {
 
-    @ConsumeEvent                           <b class="conum">(1)</b>
-    public String consume(String name) {    <b class="conum">(2)</b>
+    @ConsumeEvent                           // <b class="conum">(1)</b>
+    public String consume(String name) {    // <b class="conum">(2)</b>
         return name.toUpperCase();
     }
 }</code></pre>
@@ -180,7 +180,18 @@ public class GreetingService {
 <div class="title">Important</div>
 </td>
 <td class="content">
-The code consuming the event must be <em>non-blocking</em>, as it&#8217;s called on the Vert.x event loop.
+<div class="paragraph">
+<p>By default, the code consuming the event must be <em>non-blocking</em>, as it&#8217;s called on the Vert.x event loop.
+If your processing is blocking, use the <code>blocking</code> arttribute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent(value = "blocking-consumer", blocking = true)
+void consumeBlocking(String message) {
+    // Something blocking
+}</code></pre>
+</div>
+</div>
 </td>
 </tr>
 </table>
@@ -192,7 +203,7 @@ The code consuming the event must be <em>non-blocking</em>, as it&#8217;s called
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ConsumeEvent("greeting")               <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")               // <b class="conum">(1)</b>
 public String consume(String name) {
     return name.toUpperCase();
 }</code></pre>
@@ -214,7 +225,7 @@ For instance, in the following snippet, the returned <code>String</code> is the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ConsumeEvent("greeting")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")
 public String consume(String name) {
     return name.toUpperCase();
 }</code></pre>
@@ -225,7 +236,7 @@ public String consume(String name) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ConsumeEvent("greeting")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")
 public CompletionStage&lt;String&gt; consume2(String name) {
     return CompletableFuture.supplyAsync(name::toUpperCase, executor);
 }</code></pre>
@@ -241,7 +252,7 @@ To implement this, your consumer method just returns <code>void</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ConsumeEvent("greeting")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")
 public void consume(String event) {
     // Do something with the event
 }</code></pre>
@@ -255,7 +266,7 @@ public void consume(String event) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ConsumeEvent("greeting")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")
 public void consume(Message&lt;String&gt; msg) {
     System.out.println(msg.address());
     System.out.println(msg.body());
@@ -274,7 +285,7 @@ Sending and publishing messages use the Vert.x event bus:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme;
 
 import io.vertx.axle.core.eventbus.EventBus;
 import io.vertx.axle.core.eventbus.Message;
@@ -289,12 +300,12 @@ import java.util.concurrent.CompletionStage;
 public class EventResource {
 
   @Inject
-  EventBus bus;                                                        <b class="conum">(1)</b>
+  EventBus bus;                                                        // <b class="conum">(1)</b>
 
   @GET
   @Path("/{name}")
   public CompletionStage&lt;String&gt; hello(String name) {
-      return bus.&lt;String&gt;send("greeting", name)                             <b class="conum">(2)</b>
+      return bus.&lt;String&gt;send("greeting", name)                             // <b class="conum">(2)</b>
               .thenApply(Message::body);
   }
 }</code></pre>
@@ -328,7 +339,7 @@ public class EventResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Case 1
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Case 1
 bus.send("address", "hello");
 // Case 2
 bus.publish("address", "hello");
@@ -354,7 +365,7 @@ This message is consumed by another bean and the response is sent using the <em>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.13.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=vertx-quickstart \
     -Dextensions="vertx"</code></pre>
@@ -369,7 +380,7 @@ This message is consumed by another bean and the response is sent using the <em>
 <div class="listingblock">
 <div class="title">src/main/java/org/acme/vertx/EventResource.java</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.vertx;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
 
 import io.vertx.axle.core.eventbus.EventBus;
 import io.vertx.axle.core.eventbus.Message;
@@ -388,8 +399,8 @@ public class EventResource {
     @GET
     @Path("/async/{name}")
     public CompletionStage&lt;String&gt; hello(@PathParam("name") String name) {
-        return bus.&lt;String&gt;send("greeting", name)                           <b class="conum">(1)</b>
-                .thenApply(Message::body);                                  <b class="conum">(2)</b>
+        return bus.&lt;String&gt;send("greeting", name)                           // <b class="conum">(1)</b>
+                .thenApply(Message::body);                                  // <b class="conum">(2)</b>
     }
 }</code></pre>
 </div>
@@ -411,7 +422,7 @@ So, we need a consumer listening on the <code>greeting</code> address. Create a 
 <div class="listingblock">
 <div class="title">src/main/java/org/acme/vertx/GreetingService.java</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.vertx;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
 
 import io.quarkus.vertx.ConsumeEvent;
 
@@ -436,7 +447,7 @@ public class GreetingService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Hello Quarkus</code></pre>
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">Hello Quarkus</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -466,7 +477,7 @@ public class GreetingService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn clean package</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn clean package</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -474,7 +485,7 @@ public class GreetingService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn clean package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn clean package -Pnative</code></pre>
 </div>
 </div>
 </div>

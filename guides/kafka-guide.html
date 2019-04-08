@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using Apache Kafka with Reactive Messaging</title>
+  <title>Kafka Guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using Apache Kafka with Reactive Messaging</h1>
+    <h1 class="text-caps">Kafka Guide</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -141,7 +141,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.13.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=kafka-quickstart \
     -Dextensions="reactive-kafka,vert.x"</code></pre>
@@ -161,7 +161,7 @@ You can follow the instructions from the <a href="https://kafka.apache.org/quick
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: '2'
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">version: '2'
 
 services:
 
@@ -207,7 +207,7 @@ This is a development cluster, do not use in production.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quarkus.sample;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
 
 import io.reactivex.Flowable;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
@@ -225,8 +225,8 @@ public class PriceGenerator {
 
     private Random random = new Random();
 
-    @Outgoing("generated-price")                        <b class="conum">(1)</b>
-    public Flowable&lt;Integer&gt; generate() {               <b class="conum">(2)</b>
+    @Outgoing("generated-price")                        // <b class="conum">(1)</b>
+    public Flowable&lt;Integer&gt; generate() {               // <b class="conum">(2)</b>
         return Flowable.interval(5, TimeUnit.SECONDS)
                 .map(tick -&gt; random.nextInt(100));
     }
@@ -259,7 +259,7 @@ Creates the <code>src/main/java/org/acme/quarkus/sample/PriceConverter.java</cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quarkus.sample;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
 
 import io.smallrye.reactive.messaging.annotations.Broadcast;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -276,9 +276,9 @@ public class PriceConverter {
 
     private static final double CONVERSION_RATE = 0.88;
 
-    @Incoming("prices")                                 <b class="conum">(1)</b>
-    @Outgoing("my-data-stream")                         <b class="conum">(2)</b>
-    @Broadcast                                          <b class="conum">(3)</b>
+    @Incoming("prices")                                 // <b class="conum">(1)</b>
+    @Outgoing("my-data-stream")                         // <b class="conum">(2)</b>
+    @Broadcast                                          // <b class="conum">(3)</b>
     public double process(int priceInUsd) {
         return priceInUsd * CONVERSION_RATE;
     }
@@ -314,7 +314,7 @@ Creates the <code>src/main/java/org/acme/quarkus/sample/PriceResource.java</code
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quarkus.sample;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
 
 import io.smallrye.reactive.messaging.annotations.Stream;
 import org.reactivestreams.Publisher;
@@ -332,12 +332,12 @@ import javax.ws.rs.core.MediaType;
 public class PriceResource {
 
     @Inject
-    @Stream("my-data-stream") Publisher&lt;Double&gt; prices; <b class="conum">(1)</b>
+    @Stream("my-data-stream") Publisher&lt;Double&gt; prices; // <b class="conum">(1)</b>
 
     @GET
     @Path("/stream")
-    @Produces(MediaType.SERVER_SENT_EVENTS)             <b class="conum">(2)</b>
-    public Publisher&lt;Double&gt; stream() {                 <b class="conum">(3)</b>
+    @Produces(MediaType.SERVER_SENT_EVENTS)             // <b class="conum">(2)</b>
+    public Publisher&lt;Double&gt; stream() {                 // <b class="conum">(3)</b>
         return prices;
     }
 }</code></pre>
@@ -375,7 +375,7 @@ The keys are structured as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code># Configure the Kafka sink (we write to it)
+<pre class="highlightjs highlight"><code class="language-none hljs"># Configure the Kafka sink (we write to it)
 smallrye.messaging.sink.generated-price.type=io.smallrye.reactive.messaging.kafka.Kafka
 smallrye.messaging.sink.generated-price.topic=prices
 smallrye.messaging.sink.generated-price.bootstrap.servers=localhost:9092
@@ -420,7 +420,7 @@ What about <code>my-data-stream</code>? This is an in-memory stream, not connect
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;!DOCTYPE html&gt;
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -464,7 +464,7 @@ Then, you just need to run the application using:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -492,7 +492,7 @@ If you started the Kafka broker with docker compose, stop it using <code>CTRL+C<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn package -Pnative</code></pre>
 </div>
 </div>
 </div>

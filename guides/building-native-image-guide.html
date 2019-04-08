@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Building a Native Executable</title>
+  <title>Building Native Image Guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Building a Native Executable</h1>
+    <h1 class="text-caps">Building Native Image Guide</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -75,7 +75,7 @@
 <p>Compiling the application to a native executable</p>
 </li>
 <li>
-<p>The packaging of the application in a Docker container</p>
+<p>The packaging of the application in a container</p>
 </li>
 </ul>
 </div>
@@ -104,7 +104,7 @@
 <li>
 <p>GraalVM installed from the <a href="http://www.graalvm.org/downloads/">GraalVM web site</a>.
 Using the community edition is enough.
-Version 1.0.0-rc13 is required.</p>
+Version 1.0.0-rc14 is required.</p>
 </li>
 <li>
 <p>The <code>GRAALVM_HOME</code> environment variable configured appropriately</p>
@@ -179,7 +179,7 @@ The executable would have everything to run the application including the "JVM" 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;profiles&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
     &lt;profile&gt;
         &lt;id&gt;native&lt;/id&gt;
         &lt;build&gt;
@@ -228,10 +228,10 @@ You can run it using: <code>./target/quarkus-quickstart-runner</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
     &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
-    &lt;version&gt;${surefire.version}&lt;/version&gt;
+    &lt;version&gt;${surefire-plugin.version}&lt;/version&gt;
     &lt;executions&gt;
         &lt;execution&gt;
             &lt;goals&gt;
@@ -256,13 +256,13 @@ You can run it using: <code>./target/quarkus-quickstart-runner</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
 
 
 import io.quarkus.test.junit.SubstrateTest;
 
-@SubstrateTest <b class="conum">(1)</b>
-public class NativeGreetingResourceIT extends GreetingResourceTest { <b class="conum">(2)</b>
+@SubstrateTest // <b class="conum">(1)</b>
+public class NativeGreetingResourceIT extends GreetingResourceTest { // <b class="conum">(2)</b>
 
     // Run the same tests
 
@@ -285,7 +285,7 @@ The executable is retrieved using the <code>native.image.path</code> system prop
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw verify -Pnative
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw verify -Pnative
 ...
 [quarkus-quickstart-runner:50955]     universe:     391.96 ms
 [quarkus-quickstart-runner:50955]      (parse):     904.37 ms
@@ -314,10 +314,22 @@ Executing [.../getting-started/target/quarkus-quickstart-runner, -Dquarkus.http.
 ...</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="excluding-tests-when-running-as-a-native-executable">Excluding tests when running as a native executable</h3>
+<div class="paragraph">
+<p>When running tests this way, the only things that actually run natively are you application endpoints, which
+you can only test via HTTP calls. Your test code does not actually run natively, so if you are testing code
+that does not call your HTTP endpoints, it&#8217;s probably not a good idea to run them as part of native tests.</p>
+</div>
+<div class="paragraph">
+<p>If you share your test class between JVM and native execusions like we advise above, you can mark certain tests
+with the <code>@DisabledOnSubstrate</code> annotation in order to only run them on the JVM.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="producing-a-docker-container">Producing a Docker container</h2>
+<h2 id="producing-a-container">Producing a container</h2>
 <div class="sectionbody">
 <div class="admonitionblock important">
 <table>
@@ -326,36 +338,44 @@ Executing [.../getting-started/target/quarkus-quickstart-runner, -Dquarkus.http.
 <div class="title">Important</div>
 </td>
 <td class="content">
-Before going further, be sure to have a working Docker environment.
+Before going further, be sure to have a working container runtime (Docker, podman) environment.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>You can run the application in a Docker container using the JAR produced by the Quarkus Maven Plugin.
-However, in this guide we focus on creating a Docker image using the produced native executable.</p>
+<p>You can run the application in a container using the JAR produced by the Quarkus Maven Plugin.
+However, in this guide we focus on creating a container image using the produced native executable.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="/guides/images/containerization-process.png" alt="Containerization Process"></span></p>
 </div>
 <div class="paragraph">
 <p>By default, the native executable is tailored for your operating system (Linux, macOS, Windows etc).
-Because the Docker container may not use the same <em>executable</em> format as the one produced by your operating system,
-we will instruct the Maven build to produce an executable from inside a Docker container:</p>
+Because the container may not use the same <em>executable</em> format as the one produced by your operating system,
+we will instruct the Maven build to produce an executable from inside a container:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw package -Pnative -Dnative-image.docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dnative-image.container-runtime=docker</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if you&#8217;d like to use podman:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dnative-image.container-runtime=podman</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The produced executable will be a 64 bit Linux executable, so depending on your operating system it may no longer be runnable.
-However, it&#8217;s not an issue as we are going to copy it to a Docker container.
+However, it&#8217;s not an issue as we are going to copy it to a container.
 The project generation has provided a <code>Dockerfile.native</code> in the <code>src/main/docker</code> directory with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dockerfile hljs" data-lang="dockerfile">FROM registry.fedoraproject.org/fedora-minimal
+<pre class="highlightjs highlight"><code data-lang="dockerfile" class="language-dockerfile hljs">FROM registry.fedoraproject.org/fedora-minimal
 WORKDIR /work/
 COPY target/*-runner /work/application
 RUN chmod 775 /work
@@ -368,7 +388,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker build -f src/main/docker/Dockerfile.native -t quarkus-quickstart/quickstart .</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker build -f src/main/docker/Dockerfile.native -t quarkus-quickstart/quickstart .</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -376,7 +396,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">docker run -i --rm -p 8080:8080 quarkus-quickstart/quickstart</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -i --rm -p 8080:8080 quarkus-quickstart/quickstart</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">

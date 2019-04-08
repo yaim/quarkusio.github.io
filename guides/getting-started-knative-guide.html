@@ -231,7 +231,7 @@ you need to run the following maven command to make them passed to the Knative r
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn -Dgithub.deploy.key=$(cat ~/.ssh/quarkus-quickstarts | base64 -w 0) \
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn -Dgithub.deploy.key=$(cat ~/.ssh/quarkus-quickstarts | base64 -w 0) \
     -Dgithub.keyscan=$(ssh-keyscan github.com | base64 -w 0) \
     -Dcontainer.registry.url='https://quay.io/v2' \
     -Dcontainer.registry.user='demo' \
@@ -258,7 +258,7 @@ and copy them to <code>${project.build.directory}/knative</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">kubectl apply --recursive --filename target/knative</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">kubectl apply --recursive --filename target/knative</code></pre>
 </div>
 </div>
 </div>
@@ -271,8 +271,8 @@ and copy them to <code>${project.build.directory}/knative</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">INGRESSGATEWAY=istio-ingressgateway
-IP_ADDRESS="$(minikube ip):$(kubectl get svc $INGRESSGATEWAY --namespace istio-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')" <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">INGRESSGATEWAY=istio-ingressgateway
+IP_ADDRESS="$(minikube ip):$(kubectl get svc $INGRESSGATEWAY --namespace istio-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')" #<b class="conum">(1)</b>
 
 curl -v -H 'Host: getting-started-knative.example.com' $IP_ADDRESS/hello/greeting/redhat</code></pre>
 </div>

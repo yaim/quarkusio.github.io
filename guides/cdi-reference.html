@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Contexts and Dependency Injection</title>
+  <title>Cdi Reference</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Contexts and Dependency Injection</h1>
+    <h1 class="text-caps">Cdi Reference</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -145,13 +145,13 @@ This involves injection fields, constructors and initializers, observer methods,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
 public class CounterBean {
 
     @Inject
-    CounterService counterService; <b class="conum">(1)</b>
+    CounterService counterService; // <b class="conum">(1)</b>
 
-    void onMessage(@Observes Event msg) { <b class="conum">(2)</b>
+    void onMessage(@Observes Event msg) { // <b class="conum">(2)</b>
     }
 }</code></pre>
 </div>
@@ -171,12 +171,12 @@ public class CounterBean {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
 public class CounterBean {
 
     private final CounterService service;
 
-    CounterBean() { <b class="conum">(1)</b>
+    CounterBean() { // <b class="conum">(1)</b>
     }
 
     @Inject
@@ -249,7 +249,7 @@ public class CounterBean {
 <p>Client proxies</p>
 </li>
 <li>
-<p>Injection point metadata <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+<p>Injection point metadata</p>
 </li>
 </ul>
 </div>
@@ -339,7 +339,7 @@ However, <code>BeanDefiningAnnotationBuildItem</code> can be used to extend the 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 BeanDefiningAnnotationBuildItem additionalBeanDefiningAnnotation() {
     return new BeanDefiningAnnotationBuildItem(DotName.createSimple("javax.ws.rs.Path")));
 }</code></pre>
@@ -377,7 +377,7 @@ An integrator must also provide a corresponding <code>io.quarkus.arc.ResourceRef
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 void setupResourceInjection(BuildProducer&lt;ResourceAnnotationBuildItem&gt; resourceAnnotations, BuildProducer&lt;GeneratedResourceBuildItem&gt; resources) {
     resources.produce(new GeneratedResourceBuildItem("META-INF/services/io.quarkus.arc.ResourceReferenceProvider",
         JPAResourceReferenceProvider.class.getName().getBytes()));
@@ -394,7 +394,7 @@ Additional bean classes are transparently added to the application index process
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 List&lt;AdditionalBeanBuildItem&gt; additionalBeans() {
      return Arrays.asList(
           new AdditionalBeanBuildItem(SmallRyeHealthReporter.class),
@@ -424,7 +424,7 @@ In Quarkus we produce a <code>BeanRegistrarBuildItem</code> and leverage the <co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 BeanRegistrarBuildItem syntheticBean() {
      return new BeanRegistrarBuildItem(new BeanRegistrar() {
 
@@ -458,7 +458,7 @@ Here is how to do it - use the <code>AnnotationsTransformerBuildItem</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 AnnotationsTransformerBuildItem transform() {
     return new AnnotationsTransformerBuildItem(new AnnotationsTransformer() {
 
@@ -484,7 +484,7 @@ Register a <code>BeanDeploymentValidatorBuildItem</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 BeanDeploymentValidatorBuildItem beanDeploymentValidator() {
     return new BeanDeploymentValidatorBuildItem(new BeanDeploymentValidator() {
          public void validate(ValidationContext validationContext) {
@@ -516,7 +516,7 @@ See also <code>io.quarkus.arc.processor.BuildExtension.Key</code> to discover th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BuildStep
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 ContextRegistrarBuildItem customContext() {
     return new ContextRegistrarBuildItem(new ContextRegistrar() {
          public void register(RegistrationContext registrationContext) {
@@ -567,12 +567,6 @@ This optimization can be disabled: <code>quarkus.arc.remove-unused-beans=false</
 <div class="paragraph">
 <p>The extensions can eliminate possible false positives by producing <code>UnremovableBeanBuildItem</code>.</p>
 </div>
-</div>
-</div>
-<div id="footnotes">
-<hr>
-<div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. <code>InjectionPoint.getMember()</code> is currently not supported.
 </div>
 </div>
   </div>

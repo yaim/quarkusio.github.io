@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using JWT RBAC</title>
+  <title>Jwt Guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using JWT RBAC</h1>
+    <h1 class="text-caps">Jwt Guide</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -90,17 +90,17 @@ secured access to the JAX-RS endpoints.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smalllrye-jwt.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smallrye-jwt.enabled</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Determine if the jwt extension is enabled. Enabled by default if you include the smallrye-jwt dependency, so this would be used to disable it.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smalllrye-jwt.realm-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smallrye-jwt.realm-name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Quarkus-JWT</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for security realm.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smalllrye-jwt.auth-mechanism</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smallrye-jwt.auth-mechanism</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>MP-JWT</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for authentication mechanism</p></td>
 </tr>
@@ -173,7 +173,7 @@ However, you can skip right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.13.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=using-jwt-rbac \
     -DclassName="org.acme.jwt.TokenSecuredResource" \
@@ -192,7 +192,7 @@ However, you can skip right to the completed example.</p>
 <div class="listingblock">
 <div class="title">Basic REST Endpoint</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -230,7 +230,7 @@ this quickstart. See <a href="https://github.com/eclipse/microprofile-jwt-auth/r
 <div class="listingblock">
 <div class="title">REST Endpoint V1</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
 import java.security.Principal;
 
@@ -249,27 +249,32 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
  * Version 1 of the TokenSecuredResource
  */
 @Path("/secured")
+@RequestScoped // <b class="conum">(1)</b>
 public class TokenSecuredResource {
 
     @Inject
-    JsonWebToken jwt; <b class="conum">(1)</b>
+    JsonWebToken jwt; // <b class="conum">(2)</b>
 
     @GET()
     @Path("permit-all")
-    @PermitAll <b class="conum">(2)</b>
+    @PermitAll // <b class="conum">(3)</b>
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello(@Context SecurityContext ctx) { <b class="conum">(3)</b>
-        Principal caller =  ctx.getUserPrincipal(); <b class="conum">(4)</b>
+    public String hello(@Context SecurityContext ctx) { // <b class="conum">(4)</b>
+        Principal caller =  ctx.getUserPrincipal(); <b class="conum">(5)</b>
         String name = caller == null ? "anonymous" : caller.getName();
         boolean hasJWT = jwt != null;
         String helloReply = String.format("hello + %s, isSecure: %s, authScheme: %s, hasJWT: %s", name, ctx.isSecure(), ctx.getAuthenticationScheme(), hasJWT);
-        return helloReply; <b class="conum">(5)</b>
+        return helloReply; // <b class="conum">(6)</b>
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <ol>
+<li>
+<p>Add a <code>RequestScoped</code> as Quarkus uses a default scoping of <code>ApplicationScoped</code> and this
+will produce undesirable behavior since JWT claims are naturally request scoped.</p>
+</li>
 <li>
 <p>Here we inject the JsonWebToken interface, and extension of the java.security.Principal interface that provides access to the claims associated with the current authenticated token.</p>
 </li>
@@ -298,7 +303,7 @@ public class TokenSecuredResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -307,7 +312,7 @@ public class TokenSecuredResource {
 <div class="listingblock">
 <div class="title">quarkus:dev Output</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ ./mvnw compile quarkus:dev
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ ./mvnw compile quarkus:dev
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
@@ -327,7 +332,7 @@ Listening for transport dt_socket at address: 5005
 <div class="listingblock">
 <div class="title">curl command for /secured/permit-all</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ curl http://127.0.0.1:8080/secured/permit-all; echo
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl http://127.0.0.1:8080/secured/permit-all; echo
 hello + anonymous, isSecure: false, authScheme: null, hasJWT: false</code></pre>
 </div>
 </div>
@@ -360,7 +365,7 @@ the response is consistent with that:</p>
 <div class="listingblock">
 <div class="title">REST Endpoint V2</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
 import java.security.Principal;
 
@@ -380,6 +385,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
  * Version 2 of the TokenSecuredResource
  */
 @Path("/secured")
+@RequestScoped
 public class TokenSecuredResource {
 
     @Inject
@@ -397,8 +403,8 @@ public class TokenSecuredResource {
     }
 
     @GET()
-    @Path("roles-allowed") <b class="conum">(1)</b>
-    @RolesAllowed({"Echoer", "Subscriber"}) <b class="conum">(2)</b>
+    @Path("roles-allowed") // <b class="conum">(1)</b>
+    @RolesAllowed({"Echoer", "Subscriber"}) // <b class="conum">(2)</b>
     @Produces(MediaType.TEXT_PLAIN)
     public String helloRolesAllowed(@Context SecurityContext ctx) {
         Principal caller =  ctx.getUserPrincipal();
@@ -427,7 +433,7 @@ they have either a "Echoer" or "Subscriber" role assigned.</p>
 <div class="listingblock">
 <div class="title">curl command for /secured/roles-allowed</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ curl -v http://127.0.0.1:8080/secured/roles-allowed; echo
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl -v http://127.0.0.1:8080/secured/roles-allowed; echo
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to 127.0.0.1 (127.0.0.1) port 8080 (#0)
@@ -467,11 +473,11 @@ Not authorized</code></pre>
 <div class="listingblock">
 <div class="title">application.properties for TokenSecuredResource</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">mp.jwt.verify.publickey.location=publicKey.pem <b class="conum">(1)</b>
-mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac <b class="conum">(2)</b>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">mp.jwt.verify.publickey.location=META-INF/resources/publicKey.pem #<b class="conum">(1)</b>
+mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac #<b class="conum">(2)</b>
 
-quarkus.smalllrye-jwt.auth-mechanism=MP-JWT <b class="conum">(3)</b>
-quarkus.smalllrye-jwt.enabled=true <b class="conum">(4)</b></code></pre>
+quarkus.smallrye-jwt.auth-mechanism=MP-JWT # <b class="conum">(3)</b>
+quarkus.smallrye-jwt.enabled=true # <b class="conum">(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -505,7 +511,7 @@ content to a using-jwt-rbac/src/main/resources/META-INF/resources/publicKey.pem 
 <div class="listingblock">
 <div class="title">RSA Public Key PEM Content</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">-----BEGIN PUBLIC KEY-----
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlivFI8qB4D0y2jy0CfEq
 Fyy46R0o7S8TKpsx5xbHKoU1VWg6QkQm+ntyIv1p4kE1sPEQO73+HY8+Bzs75XwR
 TYL1BmR1w8J5hmjVWjc6R2BTBGAYRPFRhor3kpM6ni2SPmNNhurEAHw7TaqszP5e
@@ -538,7 +544,7 @@ JWT libraries for many different programming languages can be found at the JWT.i
 <div class="listingblock">
 <div class="title">JWT utility class</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
 import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
@@ -552,6 +558,7 @@ import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Map;
 
 import org.eclipse.microprofile.jwt.Claims;
@@ -617,19 +624,14 @@ public class TokenUtils {
         JSONObject jwtContent = parser.parse(content, JSONObject.class);
         long currentTimeInSecs = currentTimeInSecs();
         long exp = currentTimeInSecs + 300;
+        // If exp was passed in, use it
+        if (timeClaims.containsKey(Claims.exp.name())) {
+            exp = timeClaims.get(Claims.exp.name());
+        }
+        System.out.printf("Setting exp: %d / %s\n", exp, new Date(1000*exp));
         long iat = currentTimeInSecs;
         long authTime = currentTimeInSecs;
-        boolean expWasInput = false;
-        // Check for an input exp to override the default of now + 300 seconds
-        if (timeClaims != null &amp;&amp; timeClaims.containsKey(Claims.exp.name())) {
-            exp = timeClaims.get(Claims.exp.name());
-            expWasInput = true;
-        }
-        // iat and auth_time should be before any input exp value
-        if (expWasInput) {
-            iat = exp - 5;
-            authTime = exp - 5;
-        }
+        jwtContent.put(Claims.exp.name(), exp);
         jwtContent.put(Claims.iat.name(), iat);
         jwtContent.put(Claims.auth_time.name(), authTime);
         // Return the token time values if requested
@@ -642,6 +644,10 @@ public class TokenUtils {
         // Create RSA-signer with the private key
         JWSSigner signer = new RSASSASigner(pk);
         JWTClaimsSet claimsSet = JWTClaimsSet.parse(jwtContent);
+        for (String claim : claimsSet.getClaims().keySet()) {
+            Object claimValue = claimsSet.getClaim(claim);
+            System.out.printf("\tAdded claim: %s, value: %s\n", claim, claimValue);
+        }
         JWSAlgorithm alg = JWSAlgorithm.RS256;
         JWSHeader jwtHeader = new JWSHeader.Builder(alg)
                 .keyID(kid)
@@ -739,7 +745,7 @@ public class TokenUtils {
 <div class="listingblock">
 <div class="title">GenerateToken main Driver Class</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
 import java.util.HashMap;
 
@@ -779,7 +785,7 @@ public class GenerateToken {
 <div class="listingblock">
 <div class="title">nimbus-jose-jwt library dependency</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;dependency&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
       &lt;groupId&gt;com.nimbusds&lt;/groupId&gt;
       &lt;artifactId&gt;nimbus-jose-jwt&lt;/artifactId&gt;
       &lt;version&gt;6.7&lt;/version&gt;
@@ -793,7 +799,7 @@ public class GenerateToken {
 <div class="listingblock">
 <div class="title">RSA Private Key PEM Content</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">-----BEGIN PRIVATE KEY-----
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">-----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCWK8UjyoHgPTLa
 PLQJ8SoXLLjpHSjtLxMqmzHnFscqhTVVaDpCRCb6e3Ii/WniQTWw8RA7vf4djz4H
 OzvlfBFNgvUGZHXDwnmGaNVaNzpHYFMEYBhE8VGGiveSkzqeLZI+Y02G6sQAfDtN
@@ -831,7 +837,7 @@ using-jwt-rbac/src/test/resources/JwtClaims.json:</p>
 <div class="listingblock">
 <div class="title">JwtClaims.json claims document</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
     "iss": "https://quarkus.io/using-jwt-rbac",
     "jti": "a-123",
     "sub": "jdoe-using-jwt-rbac",
@@ -858,7 +864,7 @@ using-jwt-rbac/src/test/resources/JwtClaims.json:</p>
 <div class="listingblock">
 <div class="title">JwtClaims.json claims document</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
     "iss": "https://quarkus.io/using-jwt-rbac", <b class="conum">(1)</b>
     "jti": "a-123",
     "sub": "jdoe-using-jwt-rbac",
@@ -910,7 +916,7 @@ also include a "Group2MappedRole" due to the <code>roleMappings</code> claim hav
 <div class="listingblock">
 <div class="title">Command to Generate JWT</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -929,7 +935,7 @@ automatically compiles code as you write it.
 <div class="listingblock">
 <div class="title">Sample JWT Generation Output</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
@@ -973,7 +979,7 @@ the JWT, and should be '/JwtClaims.json' for this quickstart.</p>
 <div class="listingblock">
 <div class="title">Example Command to Generate JWT with Lifetime of 3600 Seconds</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test -Dexec.args="/JwtClaims.json 3600"
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test -Dexec.args="/JwtClaims.json 3600"
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ----------------------&lt; org.acme:using-jwt-rbac &gt;-----------------------
@@ -1014,13 +1020,13 @@ eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiO
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjUyMDkxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY1MjM5MSwiaWF0IjoxNTUxNjUyMDkxLCJqdGkiOiJhLTEyMyJ9.aPA4Rlc4kw7n_OZZRRk25xZydJy_J_3BRR8ryYLyHTO1o68_aNWWQCgpnAuOW64svPhPnLYYnQzK-l2vHX34B64JySyBD4y_vRObGmdwH_SEufBAWZV7mkG3Y4mTKT3_4EWNu4VH92IhdnkGI4GJB6yHAEzlQI6EdSOa4Nq8Gp4uPGqHsUZTJrA3uIW0TbNshFBm47-oVM3ZUrBz57JKtr0e9jv0HjPQWyvbzx1HuxZd6eA8ow8xzvooKXFxoSFCMnxotd3wagvYQ9ysBa89bgzL-lhjWtusuMFDUVYwFqADE7oOSOD4Vtclgq8svznBQ-YpfTHfb9QEcofMlpyjNA" http://127.0.0.1:8080/secured/roles-allowed; echo</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjUyMDkxLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY1MjM5MSwiaWF0IjoxNTUxNjUyMDkxLCJqdGkiOiJhLTEyMyJ9.aPA4Rlc4kw7n_OZZRRk25xZydJy_J_3BRR8ryYLyHTO1o68_aNWWQCgpnAuOW64svPhPnLYYnQzK-l2vHX34B64JySyBD4y_vRObGmdwH_SEufBAWZV7mkG3Y4mTKT3_4EWNu4VH92IhdnkGI4GJB6yHAEzlQI6EdSOa4Nq8Gp4uPGqHsUZTJrA3uIW0TbNshFBm47-oVM3ZUrBz57JKtr0e9jv0HjPQWyvbzx1HuxZd6eA8ow8xzvooKXFxoSFCMnxotd3wagvYQ9ysBa89bgzL-lhjWtusuMFDUVYwFqADE7oOSOD4Vtclgq8svznBQ-YpfTHfb9QEcofMlpyjNA" http://127.0.0.1:8080/secured/roles-allowed; echo</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">curl Command for /secured/roles-allowed With JWT</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ curl -H "Authorization: Bearer eyJraWQ..." http://127.0.0.1:8080/secured/roles-allowed; echo
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl -H "Authorization: Bearer eyJraWQ..." http://127.0.0.1:8080/secured/roles-allowed; echo
 hello + jdoe@quarkus.io, isSecure: false, authScheme: MP-JWT, hasJWT: true</code></pre>
 </div>
 </div>
@@ -1063,7 +1069,7 @@ claims that are required by the MicroProfile JWT RBAC specification as well as a
 <div class="listingblock">
 <div class="title">TokenSecuredResource#winners Method Addition</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -1088,7 +1094,8 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
  * Version 3 of the TokenSecuredResource
  */
  @Path("/secured")
- public class TokenSecuredResourceV3 {
+ @RequestScoped
+public class TokenSecuredResourceV3 {
 
      @Inject
      JsonWebToken jwt;
@@ -1104,14 +1111,14 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
         ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
 
         // If the JWT contains a birthdate claim, use the day of the month as a pick
-        if (jwt.containsClaim(Claims.birthdate.name())) { <b class="conum">(1)</b>
-            String bdayString = jwt.getClaim(Claims.birthdate.name()); <b class="conum">(2)</b>
+        if (jwt.containsClaim(Claims.birthdate.name())) { // <b class="conum">(1)</b>
+            String bdayString = jwt.getClaim(Claims.birthdate.name()); // <b class="conum">(2)</b>
             LocalDate bday = LocalDate.parse(bdayString);
-            numbers.add(bday.getDayOfMonth()); <b class="conum">(3)</b>
+            numbers.add(bday.getDayOfMonth()); // <b class="conum">(3)</b>
             remaining --;
         }
         // Fill remaining picks with random numbers
-        while(remaining &gt; 0) { <b class="conum">(4)</b>
+        while(remaining &gt; 0) { // <b class="conum">(4)</b>
             int pick = (int) Math.rint(64 * Math.random() + 1);
             numbers.add(pick);
             remaining --;
@@ -1146,7 +1153,7 @@ a new JWT or a long lived JWT you generated previously:</p>
 <div class="listingblock">
 <div class="title">curl command for /secured/winners</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8080/secured/winners; echo</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8080/secured/winners; echo</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1156,7 +1163,7 @@ the birthdate claim from the <code>JwtClaims.json</code> content.</p>
 <div class="listingblock">
 <div class="title">Example Output for /secured/winners</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjY2MDMzLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY2NjMzMywiaWF0IjoxNTUxNjY2MDMzLCJqdGkiOiJhLTEyMyJ9.LqJ5LlCrVIbCcRAus4aNHv7UfvuUgrcEVOwBxwfPY4c-YCaUxK0owxbtP2WtR5__yTFXpdplR6gVJWwv4Hw8c_sP8MRQi_5bdnTqZt3TeJsepx0cm7AIwJCopmpbuNjIgLVLZ_6VP3ZkZ2VK9SDO-9yBMPWWp2bnLILdwfYsOuJbFB_bWxSQYnTioms7NZjVefVY8eqawwfRq75PhB7W2iw-Ni2puVFjnpTiAZeCUCur-zjQ50QG6zSCZpVqPcI5JZ2-KeJKheiglYCYp0cauTdVgXjdlXCGQbAU0xirLxJXNsxg2GZxgV9luGwy1y3BdezwoM2m4mXviuHJP-lziA" http://localhost:8080/secured/winners; echo
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjY2MDMzLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY2NjMzMywiaWF0IjoxNTUxNjY2MDMzLCJqdGkiOiJhLTEyMyJ9.LqJ5LlCrVIbCcRAus4aNHv7UfvuUgrcEVOwBxwfPY4c-YCaUxK0owxbtP2WtR5__yTFXpdplR6gVJWwv4Hw8c_sP8MRQi_5bdnTqZt3TeJsepx0cm7AIwJCopmpbuNjIgLVLZ_6VP3ZkZ2VK9SDO-9yBMPWWp2bnLILdwfYsOuJbFB_bWxSQYnTioms7NZjVefVY8eqawwfRq75PhB7W2iw-Ni2puVFjnpTiAZeCUCur-zjQ50QG6zSCZpVqPcI5JZ2-KeJKheiglYCYp0cauTdVgXjdlXCGQbAU0xirLxJXNsxg2GZxgV9luGwy1y3BdezwoM2m4mXviuHJP-lziA" http://localhost:8080/secured/winners; echo
 [13, 47, 42, 45, 19, 25]</code></pre>
 </div>
 </div>
@@ -1170,7 +1177,7 @@ version of the <code>winners()</code> method that injects the <code>birthday</co
 <div class="listingblock">
 <div class="title">TokenSecuredResource#winners2 Method Addition</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -1195,13 +1202,14 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
  * Version 4 of the TokenSecuredResource
  */
 @Path("/secured")
+@RequestScoped
 public class TokenSecuredResource {
 
     @Inject
     JsonWebToken jwt;
-    @Inject <b class="conum">(1)</b>
-    @Claim(standard = Claims.birthdate) <b class="conum">(2)</b>
-    Optional&lt;String&gt; birthdate; <b class="conum">(3)</b>
+    @Inject // <b class="conum">(1)</b>
+    @Claim(standard = Claims.birthdate) // <b class="conum">(2)</b>
+    Optional&lt;String&gt; birthdate; // <b class="conum">(3)</b>
 
     ...
 
@@ -1214,7 +1222,7 @@ public class TokenSecuredResource {
         ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
 
         // If the JWT contains a birthdate claim, use the day of the month as a pick
-        if (birthdate.isPresent()) { <b class="conum">(4)</b>
+        if (birthdate.isPresent()) { // <b class="conum">(4)</b>
             String bdayString = birthdate.get(); <b class="conum">(5)</b>
             LocalDate bday = LocalDate.parse(bdayString);
             numbers.add(bday.getDayOfMonth());
@@ -1257,15 +1265,65 @@ public class TokenSecuredResource {
 <div class="listingblock">
 <div class="title">curl command for /secured/winners2</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8080/secured/winners2; echo</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8080/secured/winners2; echo</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Example Output for /secured/winners2</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjY3MzEzLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY3MDkxMywiaWF0IjoxNTUxNjY3MzEzLCJqdGkiOiJhLTEyMyJ9.c2QJAK3a1VOYL6vOt40VSEAy9wXPBEjVbqApTTNG8V8UDkQZ6HiOR9-rKOFX3WmTtQVru3O9zDu2_T2_v8kTmCkT-ThxodqC4VxD_QVx1v6BaSJ9-MX1Q7nrkD0Mk1V6x0Cqd6jmHxtJy0Ep8IgeMw2Y5gL9a1NgWVeldXP6cdHrHcYKYGnZKmYp7VpqZBoONPIS_QmWXm-JerwVpwt0juEtZUQoGCJdp7-GZA31QyEN64gCMKfdhYNnLuWQaom3i0uF_LfXtlMHdRU0kzDnLrnGw99ynTAex7ah7zG10ZbanK-PI-nD6wcTbE9WqriwohHM9BFJoBmF81RRk5uMsw" http://localhost:8080/secured/winners2; echo
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl -H "Authorization: Bearer eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjY3MzEzLCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY3MDkxMywiaWF0IjoxNTUxNjY3MzEzLCJqdGkiOiJhLTEyMyJ9.c2QJAK3a1VOYL6vOt40VSEAy9wXPBEjVbqApTTNG8V8UDkQZ6HiOR9-rKOFX3WmTtQVru3O9zDu2_T2_v8kTmCkT-ThxodqC4VxD_QVx1v6BaSJ9-MX1Q7nrkD0Mk1V6x0Cqd6jmHxtJy0Ep8IgeMw2Y5gL9a1NgWVeldXP6cdHrHcYKYGnZKmYp7VpqZBoONPIS_QmWXm-JerwVpwt0juEtZUQoGCJdp7-GZA31QyEN64gCMKfdhYNnLuWQaom3i0uF_LfXtlMHdRU0kzDnLrnGw99ynTAex7ah7zG10ZbanK-PI-nD6wcTbE9WqriwohHM9BFJoBmF81RRk5uMsw" http://localhost:8080/secured/winners2; echo
 [13, 38, 36, 38, 36, 22]</code></pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="package-and-run-the-application">Package and run the application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file:
+.Runner jar Example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">Scotts-iMacPro:using-jwt-rbac starksm$ ./mvnw clean package
+[INFO] Scanning for projects...
+...
+[INFO] [io.quarkus.creator.phase.runnerjar.RunnerJarPhase] Building jar: /Users/starksm/Dev/JBoss/Protean/starksm64-quarkus-quickstarts/using-jwt-rbac/target/using-jwt-rbac-runner.jar
+
+Scotts-iMacPro:using-jwt-rbac starksm$ java -jar target/using-jwt-rbac-runner.jar
+2019-03-28 14:27:48,839 INFO  [io.quarkus] (main) Quarkus 0.12.0 started in 0.796s. Listening on: http://[::]:8080
+2019-03-28 14:27:48,841 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb, security, smallrye-jwt]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also generate the native executable with <code>./mvnw clean package -Pnative</code>.
+.Native Executable Example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">Scotts-iMacPro:using-jwt-rbac starksm$ ./mvnw clean package -Pnative
+[INFO] Scanning for projects...
+...
+[using-jwt-rbac-runner:25602]     universe:     493.17 ms
+[using-jwt-rbac-runner:25602]      (parse):     660.41 ms
+[using-jwt-rbac-runner:25602]     (inline):   1,431.10 ms
+[using-jwt-rbac-runner:25602]    (compile):   7,301.78 ms
+[using-jwt-rbac-runner:25602]      compile:  10,542.16 ms
+[using-jwt-rbac-runner:25602]        image:   2,797.62 ms
+[using-jwt-rbac-runner:25602]        write:     988.24 ms
+[using-jwt-rbac-runner:25602]      [total]:  43,778.16 ms
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  51.500 s
+[INFO] Finished at: 2019-03-28T14:30:56-07:00
+[INFO] ------------------------------------------------------------------------
+
+Scotts-iMacPro:using-jwt-rbac starksm$ ./target/using-jwt-rbac-runner
+2019-03-28 14:31:37,315 INFO  [io.quarkus] (main) Quarkus 0.12.0 started in 0.006s. Listening on: http://[::]:8080
+2019-03-28 14:31:37,316 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb, security, smallrye-jwt]</code></pre>
 </div>
 </div>
 </div>

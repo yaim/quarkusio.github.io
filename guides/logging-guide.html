@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Configuring Logging</title>
+  <title>Logging Guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Configuring Logging</h1>
+    <h1 class="text-caps">Logging Guide</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -140,7 +140,7 @@
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.enable</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether file logging is enabled.</p></td>
 </tr>
 <tr>
@@ -150,7 +150,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.level</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>INFO</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The minimum log level to write to the log file.</p></td>
 </tr>
 <tr>
@@ -367,16 +367,31 @@ be escaped. An example is shown in <a href="#category-example">File TRACE Loggin
 <div class="listingblock">
 <div class="title">Console DEBUG Logging, No color, Shortened Time, Shortened Category Prefixes</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.log.console.enable=true
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.log.console.enable=true
 quarkus.log.console.format=%d{HH:mm:ss} %-5p [%c{2.}]] (%t) %s%e%n
 quarkus.log.console.level=DEBUG
-quarkus.log.console.color=false</code></pre>
+quarkus.log.console.color=false
+
+quarkus.log.category."io.quarkus".level=DEBUG</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If you are adding these properties via command line make sure <code>"</code> is escaped.
+For example <code>-Dquarkus.log.category.\"io.quarkus\".level=DEBUG</code>.
+</td>
+</tr>
+</table>
 </div>
 <div id="category-example" class="listingblock">
 <div class="title">File TRACE Logging Configuration</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.log.file.enable=true
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.log.file.enable=true
 # Send output to a trace.log file under the /tmp directory
 quarkus.log.file.path=/tmp/trace.log
 quarkus.log.file.level=TRACE

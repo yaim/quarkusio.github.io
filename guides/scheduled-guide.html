@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Scheduling Periodic Tasks</title>
+  <title>Scheduled Guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Scheduling Periodic Tasks</h1>
+    <h1 class="text-caps">Scheduled Guide</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -131,7 +131,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.13.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=scheduling-periodic-tasks \
     -DclassName="org.acme.scheduling.CountResource" \
@@ -177,13 +177,13 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.scheduling;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduling;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import io.quarkus.scheduler.Scheduled;
 
-@ApplicationScoped              <b class="conum">(1)</b>
+@ApplicationScoped              // <b class="conum">(1)</b>
 public class CounterBean {
 
     private AtomicInteger counter = new AtomicInteger();
@@ -192,7 +192,7 @@ public class CounterBean {
         return counter.get();
     }
 
-    @Scheduled(every="10s")     <b class="conum">(2)</b>
+    @Scheduled(every="10s")     // <b class="conum">(2)</b>
     void increment() {
         counter.incrementAndGet();
     }
@@ -236,7 +236,7 @@ Cron-like expressions are also supported. The syntax is currently based on Quart
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.scheduling;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduling;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -248,13 +248,13 @@ import javax.ws.rs.core.MediaType;
 public class CountResource {
 
     @Inject
-    CounterBean counter;            <b class="conum">(1)</b>
+    CounterBean counter;            // <b class="conum">(1)</b>
 
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "count: " + counter.get();  <b class="conum">(2)</b>
+        return "count: " + counter.get();  // <b class="conum">(2)</b>
     }
 }</code></pre>
 </div>
@@ -274,7 +274,7 @@ public class CountResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.scheduling;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduling;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -291,7 +291,7 @@ public class CountResourceTest {
           .when().get("/count")
           .then()
              .statusCode(200)
-             .body(containsString("count")); <b class="conum">(1)</b>
+             .body(containsString("count")); // <b class="conum">(1)</b>
     }
 
 }</code></pre>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Measuring Performance</title>
+  <title>Performance Measure</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Measuring Performance</h1>
+    <h1 class="text-caps">Performance Measure</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -168,7 +168,7 @@ it is very misleading in environments like Kubernetes/OpenShift.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell"> $ ps -o pid,rss,command -p &lt;pid&gt;
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"> $ ps -o pid,rss,command -p &lt;pid&gt;
 
    PID   RSS COMMAND
  11229 12628 ./target/getting-started-1.0-SNAPSHOT-runner</code></pre>
@@ -176,7 +176,7 @@ it is very misleading in environments like Kubernetes/OpenShift.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell"> $ pmap -x &lt;pid&gt;
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"> $ pmap -x &lt;pid&gt;
 
  13150:   /data/quarkus-application -Xmx100m -Xmn70m
  Address           Kbytes     RSS   Dirty Mode  Mapping
@@ -231,7 +231,7 @@ it is very misleading in environments like Kubernetes/OpenShift.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ ps x -o pid,rss,command -p 57160
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ ps x -o pid,rss,command -p 57160
 
   PID    RSS COMMAND
 57160 288548 /Applications/IntelliJ IDEA CE.app/Contents/jdk/Contents/Home/jre/bin/java</code></pre>
@@ -259,7 +259,7 @@ Otherwise, you will miss the time the framework <em>actually</em> takes to initi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Path("/")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/")
 public class GreetingEndpoint {
 
     private static final String template = "Hello, %s!";
@@ -284,7 +284,7 @@ public class GreetingEndpoint {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/api/greeting)" != "200" ]]; do sleep .00001; done</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/api/greeting)" != "200" ]]; do sleep .00001; done</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -292,13 +292,13 @@ public class GreetingEndpoint {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">$ date +"%H:%M:%S.%s" &amp;&amp;  ./target/quarkus-timing-runner
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ date +"%T.%3N" &amp;&amp;  ./target/quarkus-timing-runner
 
-16:17:01.1551889021
-16:17:01.626
-2019-03-06 16:17:01,626 INFO  [io.quarkus] (main) Quarkus 0.11.0 started in 0.035s. Listening on: http://127.0.0.1:8080
-2019-03-06 16:17:01,626 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb]
-16:17:01.637</code></pre>
+10:57:32.508
+10:57:32.512
+2019-04-05 10:57:32,512 INFO  [io.quarkus] (main) Quarkus 0.11.0 started in 0.002s. Listening on: http://127.0.0.1:8080
+2019-04-05 10:57:32,512 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb]
+10:57:32.537</code></pre>
 </div>
 </div>
 <div class="paragraph">

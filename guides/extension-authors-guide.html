@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Writing Your Own Extension</title>
+  <title>Extension Authors Guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,8 +63,63 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Writing Your Own Extension</h1>
-    <div id="preamble">
+    <h1 class="text-caps">Extension Authors Guide</h1>
+    <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#three-phases-of-bootstrap-and-quarkus-philosophy">1. Three Phases of Bootstrap and Quarkus Philosophy</a></li>
+<li><a href="#maven-setup">2. Maven setup</a></li>
+<li><a href="#build-step-processors">3. Build Step Processors</a>
+<ul class="sectlevel2">
+<li><a href="#capabilities">3.1. Capabilities</a></li>
+<li><a href="#application-archives">3.2. Application Archives</a></li>
+</ul>
+</li>
+<li><a href="#configuration">4. Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#configuration-keys">4.1. Configuration Keys</a></li>
+<li><a href="#configuration-value-types">4.2. Configuration Value types</a></li>
+<li><a href="#configuration-groups">4.3. Configuration Groups</a></li>
+<li><a href="#configuration-maps">4.4. Configuration Maps</a></li>
+<li><a href="#configuration-roots">4.5. Configuration Roots</a></li>
+<li><a href="#configuration-example">4.6. Configuration Example</a></li>
+</ul>
+</li>
+<li><a href="#bytecode-recording">5. Bytecode Recording</a>
+<ul class="sectlevel2">
+<li><a href="#recordercontext">5.1. RecorderContext</a></li>
+</ul>
+</li>
+<li><a href="#cdi-extension-points">6. CDI Extension Points</a></li>
+<li><a href="#testing-extensions">7. Testing Extensions</a></li>
+<li><a href="#native-executable-support">8. Native Executable Support</a></li>
+<li><a href="#ide-support-tips">9. IDE support tips</a>
+<ul class="sectlevel2">
+<li><a href="#writing-quarkus-extensions-in-eclipse">9.1. Writing Quarkus extensions in Eclipse</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting-debugging-tips">10. Troubleshooting / Debugging Tips</a>
+<ul class="sectlevel2">
+<li><a href="#saving-application-generated-classes-to-disk">10.1. Saving Application Generated Classes to Disk</a></li>
+</ul>
+</li>
+<li><a href="#sample-test-extension">11. Sample Test Extension</a>
+<ul class="sectlevel2">
+<li><a href="#features-and-capabilities">11.1. Features and Capabilities</a></li>
+<li><a href="#bean-defining-annotations">11.2. Bean Defining Annotations</a></li>
+<li><a href="#parsing-config-to-objects">11.3. Parsing Config to Objects</a></li>
+<li><a href="#scanning-deployments-using-jandex">11.4. Scanning Deployments Using Jandex</a></li>
+<li><a href="#interacting-with-extension-beans">11.5. Interacting With Extension Beans</a></li>
+<li><a href="#manage-non-cdi-service">11.6. Manage Non-CDI Service</a></li>
+<li><a href="#startup-and-shutdown-events">11.7. Startup and Shutdown Events</a></li>
+<li><a href="#register-resources-for-use-in-native-image">11.8. Register Resources for Use in Native Image</a></li>
+<li><a href="#object-substitution">11.9. Object Substitution</a></li>
+<li><a href="#replacing-classes-in-the-native-image">11.10. Replacing Classes in the Native Image</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus extensions add a new developer focused behavior to the core offering, and consist of two distinct parts, buildtime augmentation and runtime container. The augmentation part is responsible for all metadata processing, such as reading annotations, XML descriptors etc. The output of this augmentation phase is recorded bytecode which is responsible for directly instantiating the relevant runtime services.</p>
@@ -152,29 +207,37 @@ that method. If config is read at runtime, Substrate cannot reason about the con
 </ol>
 </div>
 <div class="paragraph">
-<p>Your runtime artifact should depend on quarkus-core-runtime, and possibly the runtime artifacts of other Quarkus
-modules if you want to use functionality provided by them. You will also need to include the <code>maven-dependency-plugin</code>
-to write out the needed runtime dependencies, if you are using the Quarkus parent pom it will automatically
-inherit the correct configuration.</p>
+<p>Your runtime artifact should depend on <code>io.quarkus:quarkus-core</code>, and possibly the runtime artifacts of other Quarkus
+modules if you want to use functionality provided by them. You will also need to include the <code>io.quarkus:quarkus-bootstrap-maven-plugin</code>
+to generate the Quarkus extension descriptor included into the runtime artifact, if you are using the Quarkus parent pom it will automatically inherit the correct configuration.</p>
 </div>
-<div class="paragraph">
-<p>Note that at present by convention the runtime artifact will have the <code>-runtime</code> suffix, and the deployment time artifact
-has no suffix (and is what the end user adds to their project). In the near future this will change, so the <code>-runtime</code>
-artifact will loose its suffix, and the deployment time artifacts will have one added.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+By convention the deployment time artifact has the <code>-deployment</code> suffix, and the runtime artifact
+has no suffix (and is what the end user adds to their project).
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;dependencies&gt;
+<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependencies&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-      &lt;artifactId&gt;quarkus-core-runtime&lt;/artifactId&gt;
+      &lt;artifactId&gt;quarkus-core&lt;/artifactId&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 
 &lt;build&gt;
     &lt;plugins&gt;
         &lt;plugin&gt;
-            &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+            &lt;artifactId&gt;quarkus-bootstrap-maven-plugin&lt;/artifactId&gt;
         &lt;/plugin&gt;
     &lt;/plugins&gt;
 &lt;/build&gt;</code></pre>
@@ -196,28 +259,16 @@ in pulling all the deployment time code into runtime scope, which defeats the pu
 </table>
 </div>
 <div class="paragraph">
-<p>Your deployment time module should depend on <code>quarkus-core</code>, your runtime artifact,
+<p>Your deployment time module should depend on <code>io.quarkus:quarkus-core-deployment</code>, your runtime artifact,
 and possibly the deployment artifacts of other Quarkus modules if you want to use functionality provided by them.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
   &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-  &lt;artifactId&gt;quarkus-core&lt;/artifactId&gt;
+  &lt;artifactId&gt;quarkus-core-deployment&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-For historical reasons the <code>augment</code> step is still called <code>deployment</code>, this will likely remain until we do our big rename.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -509,7 +560,7 @@ this change is complete.</p>
 <h3 id="configuration-example">4.6. Configuration Example</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">import io.quarkus.runtime.annotations.ConfigItem;
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigGroup;
 
 import java.io.File;
@@ -589,7 +640,7 @@ key type.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-properties hljs" data-lang="properties">quarkus.log.file.enable=true
+<pre class="highlightjs highlight nowrap"><code data-lang="properties" class="language-properties hljs">quarkus.log.file.enable=true
 quarkus.log.file.level=DEBUG
 quarkus.log.file.path=/tmp/debug.log</code></pre>
 </div>
@@ -653,7 +704,15 @@ convenience to avoid the need to explicitly load classes in the templates.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="testing-extensions">6. Testing Extensions</h2>
+<h2 id="cdi-extension-points">6. CDI Extension Points</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As a CDI based runtime, Quarkus extensions often make CDI beans available as part of the extension behavior. The <a href="cdi-reference.html">Build Time Extension Points</a> describes the <code>BuildItems</code> you can make use of in your extension build steps to achieve this.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing-extensions">7. Testing Extensions</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Testing of extensions should be done with the <code>io.quarkus.test.QuarkusUnitTest</code> runner. This runner allows
@@ -674,7 +733,7 @@ their deployment modules should also be added as test scoped dependencies.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.quarkus.health.test;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package io.quarkus.health.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -699,25 +758,25 @@ import io.restassured.RestAssured;
 public class FailingUnitTest {
 
 
-    @RegisterExtension                                                                  <b class="conum">(1)</b>
+    @RegisterExtension                                                                  // <b class="conum">(1)</b>
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .setArchiveProducer(() -&gt;
-                    ShrinkWrap.create(JavaArchive.class)                                <b class="conum">(2)</b>
+                    ShrinkWrap.create(JavaArchive.class)                                // <b class="conum">(2)</b>
                             .addClasses(FailingHealthCheck.class)
                             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
             );
-    @Inject                                                                             <b class="conum">(3)</b>
+    @Inject                                                                             // <b class="conum">(3)</b>
     @Health
     Instance&lt;HealthCheck&gt; checks;
 
     @Test
     public void testHealthServlet() {
-        RestAssured.when().get("/health").then().statusCode(503);                       <b class="conum">(4)</b>
+        RestAssured.when().get("/health").then().statusCode(503);                       // <b class="conum">(4)</b>
     }
 
     @Test
     public void testHealthBeans() {
-        List&lt;HealthCheck&gt; check = new ArrayList&lt;&gt;();                                    <b class="conum">(5)</b>
+        List&lt;HealthCheck&gt; check = new ArrayList&lt;&gt;();                                    // <b class="conum">(5)</b>
         for (HealthCheck i : checks) {
             check.add(i);
         }
@@ -751,7 +810,7 @@ public class FailingUnitTest {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.quarkus.hibernate.orm;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package io.quarkus.hibernate.orm;
 
 import io.quarkus.deployment.configuration.ConfigurationError;
 import io.quarkus.test.QuarkusUnitTest;
@@ -791,7 +850,7 @@ public class PersistenceAndQuarkusConfigTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="native-executable-support">7. Native Executable Support</h2>
+<h2 id="native-executable-support">8. Native Executable Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>There Quarkus provides a lot of build items that control aspects of the native executable build. This allows for extensions
@@ -833,10 +892,10 @@ executable. Some of these build items are listed below:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="ide-support-tips">8. IDE support tips</h2>
+<h2 id="ide-support-tips">9. IDE support tips</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="writing-quarkus-extensions-in-eclipse">8.1. Writing Quarkus extensions in Eclipse</h3>
+<h3 id="writing-quarkus-extensions-in-eclipse">9.1. Writing Quarkus extensions in Eclipse</h3>
 <div class="paragraph">
 <p>The only particular aspect of writing Quarkus extensions in Eclipse is that APT (Annotation Processing Tool) is required as part of extension builds, which means you need to:</p>
 </div>
@@ -849,7 +908,10 @@ executable. Some of these build items are listed below:</p>
 <p>Define this property in your <code>pom.xml</code>: <code>&lt;m2e.apt.activation&gt;jdt_apt&lt;/m2e.apt.activation&gt;</code>, although if you rely on <code>io.quarkus:quarkus-build-parent</code> you will get it for free.</p>
 </li>
 <li>
-<p>If you have the <code>io.quarkus:quarkus-extension-processor</code> open at the same time in your IDE (for example, if you have the Quarkus sources checked out and open in your IDE) you will need to close that project. Otherwise, Eclipse will not invoke the APT plugin that it contains.</p>
+<p>If you have the <code>io.quarkus:quarkus-extension-processor</code> project open at the same time in your IDE (for example, if you have the Quarkus sources checked out and open in your IDE) you will need to close that project. Otherwise, Eclipse will not invoke the APT plugin that it contains.</p>
+</li>
+<li>
+<p>If you just closed the extension processor project, be sure to do <code>Maven &gt; Update Project</code> on the other projects in order for Eclipse to pick up the extension processor from the Maven repository.</p>
 </li>
 </ul>
 </div>
@@ -857,10 +919,10 @@ executable. Some of these build items are listed below:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="troubleshooting-debugging-tips">9. Troubleshooting / Debugging Tips</h2>
+<h2 id="troubleshooting-debugging-tips">10. Troubleshooting / Debugging Tips</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="saving-application-generated-classes-to-disk">9.1. Saving Application Generated Classes to Disk</h3>
+<h3 id="saving-application-generated-classes-to-disk">10.1. Saving Application Generated Classes to Disk</h3>
 <div class="paragraph">
 <p>The class augmentation step of Quarkus generates classes for various purposes. Sometimes you need to view these
 classes/bytecode to debug or understand an issue. Classes that are related to application augmentation are currently held in
@@ -869,7 +931,725 @@ memory in a runtime class loader. To have these classes written out to disk for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw clean install -Dquarkus.debug.generated-classes-dir=./target/app-generated-classes</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw clean install -Dquarkus.debug.generated-classes-dir=./target/app-generated-classes</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sample-test-extension">11. Sample Test Extension</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We have an extension that is used to test for regressions in the extension processing. It is located in <a href="https://github.com/quarkusio/quarkus/tree/master/core/test-extension" class="bare">https://github.com/quarkusio/quarkus/tree/master/core/test-extension</a> directory. In this section we touch on some of the tasks an extension
+author will typically need to perform using the test-extension code to illustrate how the task could be done.</p>
+</div>
+<div class="sect2">
+<h3 id="features-and-capabilities">11.1. Features and Capabilities</h3>
+<div class="paragraph">
+<p>When you start a Quarkus instance, you will see a line like the one highlighted in this example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Example Startup Lines</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">2019-03-22 14:02:37,884 INFO  [io.quarkus] (main) Quarkus 999-SNAPSHOT started in 0.061s.
+2019-03-22 14:02:37,884 INFO  [io.quarkus] (main) Installed features: [cdi, test-extension] <b class="conum">(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>A list of features installed in the runtime image</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The features listed reflect the types of extensions that are installed. An extension declares its display name
+ using a <a href="#build-step-processors">Build Step Processors</a> method that produces a <code>FeatureBuildItem</code> like this TestProcessor#featureBuildItem() method example:</p>
+</div>
+<div class="listingblock">
+<div class="title">TestProcessor#featureBuildItem()</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    /**
+     * Register a extension capability and feature
+     *
+     * @return test-extension feature build item
+     */
+    @BuildStep(providesCapabilities = "io.quarkus.test-extension")
+    FeatureBuildItem featureBuildItem() {
+        return new FeatureBuildItem("test-extension");
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The feature name should map to a label in the extension&#8217;s devtools/common/src/main/filtered/extensions.json entry so that
+the feature name displayed by the startup line matches a label that one can used to select the extension when creating a project
+using the Quarkus maven plugin as shown in this example taken from the Writing JSON REST Services guide where the "resteasy-jsonb" feature is referenced:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.13.0:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=rest-json \
+    -DclassName="org.acme.rest.json.FruitResource" \
+    -Dpath="/fruits" \
+    -Dextensions="resteasy-jsonb"</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bean-defining-annotations">11.2. Bean Defining Annotations</h3>
+<div class="paragraph">
+<p>The CDI layer processes CDI beans that are either explicitly registered or that it discovers based on bean defining annotations as defined in <a href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#bean_defining_annotations"&gt;">2.5.1. Bean defining annotations</a>. You can expand this set of annotations to include annotations your extension processes using a <code>BeanDefiningAnnotationBuildItem</code> as shown in this <code>TestProcessor#registerBeanDefinningAnnotations</code> example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Register a Bean Definining Annotation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import javax.enterprise.context.ApplicationScoped;
+import org.jboss.jandex.DotName;
+import io.quarkus.extest.runtime.TestAnnotation;
+
+public final class TestProcessor {
+    static DotName TEST_ANNOTATION = DotName.createSimple(TestAnnotation.class.getName());
+    static DotName TEST_ANNOTATION_SCOPE = DotName.createSimple(ApplicationScoped.class.getName());
+
+...
+
+    @BuildStep
+    BeanDefiningAnnotationBuildItem registerX() {
+        <b class="conum">(1)</b>
+        return new BeanDefiningAnnotationBuildItem(TEST_ANNOTATION, TEST_ANNOTATION_SCOPE);
+    }
+...
+}
+
+/**
+ * Marker annotation for test configuration target beans
+ */
+@Target({ TYPE })
+@Retention(RUNTIME)
+@Documented
+@Inherited
+public @interface TestAnnotation {
+}
+
+/**
+ * A sample bean
+ */
+@TestAnnotation <b class="conum">(2)</b>
+public class ConfiguredBean implements IConfigConsumer {
+
+...</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Register the annotation class and CDI default scope using the Jandex <code>DotName</code> class.</p>
+</li>
+<li>
+<p><code>ConfiguredBean</code> will be processed by the CDI layer the same as a bean annotated with the CDI standard @ApplicationScoped.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="parsing-config-to-objects">11.3. Parsing Config to Objects</h3>
+<div class="paragraph">
+<p>One of the main things an extension is likely to do is completely separate the configuration phase of behavior from the runtime phase. Frameworks often do parsing/load of configuration on startup that can be done during build time to both reduce the runtime dependencies on frameworks like xml parsers as well as reducing the startup time the parsing incurs.</p>
+</div>
+<div class="paragraph">
+<p>An example of parsing a XML config file using JAXB is shown in the <code>TestProcessor#parseServiceXmlConfig</code> method:
+.Parsing an XML Configuration into Runtime XmlConfig Instance</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @BuildStep
+    @Record(STATIC_INIT)
+    RuntimeServiceBuildItem parseServiceXmlConfig(TestTemplate template) throws JAXBException {
+        RuntimeServiceBuildItem serviceBuildItem = null;
+        JAXBContext context = JAXBContext.newInstance(XmlConfig.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        InputStream is = getClass().getResourceAsStream("/config.xml"); <b class="conum">(1)</b>
+        if (is != null) {
+            log.infof("Have XmlConfig, loading");
+            XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is); <b class="conum">(2)</b>
+...
+        }
+        return serviceBuildItem;
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Look for a config.xml classpath resource</p>
+</li>
+<li>
+<p>If found, parse using JAXB context for <code>XmlConfig.class</code></p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If there was no /config.xml resource available in the build environment, then a null <code>RuntimeServiceBuildItem</code> would be returned and no subsequent logic based on a <code>RuntimeServiceBuildItem</code> being produced would execute.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Typically one is loading a configuration to create some runtime component/service as <code>parseServiceXmlConfig</code> is doing. We will come back to the rest of the behavior in <code>parseServiceXmlConfig</code> in the following <a href="#manage-non-cdi-service">Manage Non-CDI Service</a> section.</p>
+</div>
+<div class="paragraph">
+<p>If for some reason you need to parse the config and use it in other build steps in an extension processor, you would need to create an <code>XmlConfigBuildItem</code> to pass the parsed XmlConfig instance around.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you look at the XmlConfig code you will see that it does carry around the JAXB annotations. If you don&#8217;t want these in the runtime image, you could clone the XmlConfig instance into some POJO object graph and then replace XmlConfig with the POJO class. We will do this in <a href="#replacing-classes-in-the-native-image">Replacing Classes in the Native Image</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="scanning-deployments-using-jandex">11.4. Scanning Deployments Using Jandex</h3>
+<div class="paragraph">
+<p>If your extension defines annotations or interfaces that mark beans needing to be processed, you can locate these beans using the Jandex API, a Java annotation indexer and offline reflection library. The following <code>TestProcessor#scanForBeans</code> method shows how to find the beans annotated with our <code>@TestAnnotation</code> that also implement the <code>IConfigConsumer</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="title">Example Jandex Usage</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    static DotName TEST_ANNOTATION = DotName.createSimple(TestAnnotation.class.getName());
+...
+
+    @BuildStep
+    @Record(STATIC_INIT)
+    void scanForBeans(TestTemplate template, BeanArchiveIndexBuildItem beanArchiveIndex, <b class="conum">(1)</b>
+            BuildProducer&lt;TestBeanBuildItem&gt; testBeanProducer) {
+        IndexView indexView = beanArchiveIndex.getIndex(); <b class="conum">(2)</b>
+        Collection&lt;AnnotationInstance&gt; testBeans = indexView.getAnnotations(TEST_ANNOTATION); <b class="conum">(3)</b>
+        for (AnnotationInstance ann : testBeans) {
+            ClassInfo beanClassInfo = ann.target().asClass();
+            try {
+                boolean isConfigConsumer = beanClassInfo.interfaceNames()
+                        .stream()
+                        .anyMatch(dotName -&gt; dotName.equals(DotName.createSimple(IConfigConsumer.class.getName()))); <b class="conum">(4)</b>
+                if (isConfigConsumer) {
+                    Class&lt;IConfigConsumer&gt; beanClass = (Class&lt;IConfigConsumer&gt;) Class.forName(beanClassInfo.name().toString());
+                    testBeanProducer.produce(new TestBeanBuildItem(beanClass)); <b class="conum">(5)</b>
+                    log.infof("Configured bean: %s", beanClass);
+                }
+            } catch (ClassNotFoundException e) {
+                log.warn("Failed to load bean class", e);
+            }
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Depend on a <code>BeanArchiveIndexBuildItem</code> to have the build step be run after the deployment has been indexed.</p>
+</li>
+<li>
+<p>Retrieve the index.</p>
+</li>
+<li>
+<p>Find all beans annotated with <code>@TestAnnotation</code>.</p>
+</li>
+<li>
+<p>Determine which of these beans also has the <code>IConfigConsumer</code> interface.</p>
+</li>
+<li>
+<p>Save the bean class in a <code>TestBeanBuildItem</code> for use in a latter RUNTIME_INIT build step that will interact with the bean instances.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="interacting-with-extension-beans">11.5. Interacting With Extension Beans</h3>
+<div class="paragraph">
+<p>You can use the <code>io.quarkus.arc.runtime.BeanContainer</code> interface to interact with your extension beans. The following <code>configureBeans</code> methods illustrate interacting with the beans scanned for in the previous section:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using CDI BeanContainer Interface</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#configureBeans
+    @BuildStep
+    @Record(RUNTIME_INIT)
+    void configureBeans(TestTemplate template, List&lt;TestBeanBuildItem&gt; testBeans, <b class="conum">(1)</b>
+            BeanContainerBuildItem beanContainer, <b class="conum">(2)</b>
+            TestRunTimeConfig runTimeConfig) {
+
+        for (TestBeanBuildItem testBeanBuildItem : testBeans) {
+            Class&lt;IConfigConsumer&gt; beanClass = testBeanBuildItem.getConfigConsumer();
+            template.configureBeans(beanContainer.getValue(), beanClass, buildAndRunTimeConfig, runTimeConfig); <b class="conum">(3)</b>
+        }
+    }
+
+// TestTemplate#configureBeans
+    public void configureBeans(BeanContainer beanContainer, Class&lt;IConfigConsumer&gt; beanClass,
+            TestBuildAndRunTimeConfig buildTimeConfig,
+            TestRunTimeConfig runTimeConfig) {
+        log.infof("Begin BeanContainerListener callback\n");
+        IConfigConsumer instance = beanContainer.instance(beanClass); <b class="conum">(4)</b>
+        instance.loadConfig(buildTimeConfig, runTimeConfig); <b class="conum">(5)</b>
+        log.infof("configureBeans, instance=%s\n", instance);
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Consume the `TestBeanBuildItem`s produced from the scanning build step.</p>
+</li>
+<li>
+<p>Consume the <code>BeanContainerBuildItem</code> to order this build step to run after the CDI bean container has been created.</p>
+</li>
+<li>
+<p>Call the runtime template to record the bean interactions.</p>
+</li>
+<li>
+<p>Runtime template retrieves the bean using its type.</p>
+</li>
+<li>
+<p>Runtime template invokes the <code>IConfigConsumer#loadConfig(&#8230;&#8203;)</code> method passing in the configuration objects with runtime information.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="manage-non-cdi-service">11.6. Manage Non-CDI Service</h3>
+<div class="paragraph">
+<p>A common purpose for an extension is to integrate a non-CDI aware service into the CDI based Quarkus runtime. Step 1 of this task is to load any configuration needed in a STATIC_INIT build step as we did in <a href="#parsing-config-to-objects">Parsing Config to Objects</a>. Now we need to create an instance of the service using the configuration. Let&#8217;s return to the <code>TestProcessor#parseServiceXmlConfig</code> method to see how this can be done.</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating a Non-CDI Service</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#parseServiceXmlConfig
+    @BuildStep
+    @Record(STATIC_INIT)
+    RuntimeServiceBuildItem parseServiceXmlConfig(TestTemplate template) throws JAXBException {
+        RuntimeServiceBuildItem serviceBuildItem = null;
+        JAXBContext context = JAXBContext.newInstance(XmlConfig.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        InputStream is = getClass().getResourceAsStream("/config.xml");
+        if (is != null) {
+            log.infof("Have XmlConfig, loading");
+            XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is);
+            log.infof("Loaded XmlConfig, creating service");
+            RuntimeValue&lt;RuntimeXmlConfigService&gt; service = template.initRuntimeService(config); //<b class="conum">(1)</b>
+            serviceBuildItem = new RuntimeServiceBuildItem(service); //<b class="conum">(3)</b>
+        }
+        return serviceBuildItem;
+    }
+
+// TestTemplate#initRuntimeService
+    public RuntimeValue&lt;RuntimeXmlConfigService&gt; initRuntimeService(XmlConfig config) {
+        RuntimeXmlConfigService service = new RuntimeXmlConfigService(config); //<b class="conum">(2)</b>
+        return new RuntimeValue&lt;&gt;(service);
+    }
+
+// RuntimeServiceBuildItem
+    final public class RuntimeServiceBuildItem extends SimpleBuildItem {
+    private RuntimeValue&lt;RuntimeXmlConfigService&gt; service;
+
+    public RuntimeServiceBuildItem(RuntimeValue&lt;RuntimeXmlConfigService&gt; service) {
+        this.service = service;
+    }
+
+    public RuntimeValue&lt;RuntimeXmlConfigService&gt; getService() {
+        return service;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Call into the runtime template to record the creation of the service.</p>
+</li>
+<li>
+<p>Using the parsed <code>XmlConfig</code> instance, create an instance of <code>RuntimeXmlConfigService</code> and wrap it in a <code>RuntimeValue</code>. Use a <code>RuntimeValue</code> wrapper for non-interface objects that are non-proxiable.</p>
+</li>
+<li>
+<p>Wrap the return service value in a <code>RuntimeServiceBuildItem</code> for use in a RUNTIME_INIT build step that will start the service.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="starting-a-service">11.6.1. Starting a Service</h4>
+<div class="paragraph">
+<p>Now that you have recorded the creation of a service during the build phase, you need to record how to start the service at runtime during booting. You do this with a RUNTIME_INIT build step as shown in the <code>TestProcessor#startRuntimeService</code> method.</p>
+</div>
+<div class="listingblock">
+<div class="title">Starting/Stopping a Non-CDI Service</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#startRuntimeService
+    @BuildStep
+    @Record(RUNTIME_INIT)
+    ServiceStartBuildItem startRuntimeService(TestTemplate template, ShutdownContextBuildItem shutdownContextBuildItem , // <b class="conum">(1)</b>
+            RuntimeServiceBuildItem serviceBuildItem) throws IOException { // <b class="conum">(2)</b>
+        if (serviceBuildItem != null) {
+            log.info("Registering service start");
+            template.startRuntimeService(shutdownContextBuildItem, serviceBuildItem.getService()); // <b class="conum">(3)</b>
+        } else {
+            log.info("No RuntimeServiceBuildItem seen, check config.xml");
+        }
+        return new ServiceStartBuildItem("RuntimeXmlConfigService"); //<b class="conum">(4)</b>
+    }
+
+// TestTemplate#startRuntimeService
+    public void startRuntimeService(ShutdownContext shutdownContext, RuntimeValue&lt;RuntimeXmlConfigService&gt; runtimeValue)
+            throws IOException {
+        RuntimeXmlConfigService service = runtimeValue.getValue();
+        service.startService(); //<b class="conum">(5)</b>
+        shutdownContext.addShutdownTask(service::stopService); //<b class="conum">(6)</b>
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>We consume a ShutdownContextBuildItem to register the service shutdown.</p>
+</li>
+<li>
+<p>We consume the previously initialized service captured in <code>RuntimeServiceBuildItem</code>.</p>
+</li>
+<li>
+<p>Call the runtime template to record the service start invocation.</p>
+</li>
+<li>
+<p>Produce a <code>ServiceStartBuildItem</code> to indicate the startup of a service. See <a href="#startup-and-shutdown-events">Startup and Shutdown Events</a> for details.</p>
+</li>
+<li>
+<p>Runtime template retrieves the service instance reference and calls its <code>startService</code> method.</p>
+</li>
+<li>
+<p>Runtime template registers an invocation of the service instance <code>stopService</code> method with the Quarkus <code>ShutdownContext</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The code for the <code>RuntimeXmlConfigService</code> can be viewed here:
+{quarkus-blob-url}/core/test-extension/runtime/src/main/java/io/quarkus/extest/runtime/RuntimeXmlConfigService.java[RuntimeXmlConfigService.java]</p>
+</div>
+<div class="paragraph">
+<p>The testcase for validating that the <code>RuntimeXmlConfigService</code> has started can be found in the <code>testRuntimeXmlConfigService</code> test of <code>ConfiguredBeanTest</code> and <code>NativeImageIT</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="startup-and-shutdown-events">11.7. Startup and Shutdown Events</h3>
+<div class="paragraph">
+<p>The Quarkus container supports startup and shutdown lifecycle events to notify components of the container startup
+and shutdown. There are CDI events fired that components can observe are illustrated in this example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Observing Container Startup</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
+
+puclic class SomeBean {
+    /**
+     * Called when the runtime has started
+     * @param event
+     */
+    void onStart(@Observes StartupEvent event) { // <b class="conum">(1)</b>
+        System.out.printf("onStart, event=%s\n", event);
+    }
+
+    /**
+     * Called when the runtime is shutting down
+     * @param event
+    */
+    void onStop(@Observes ShutdownEvent event) { // <b class="conum">(2)</b>
+        System.out.printf("onStop, event=%s\n", event);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Observe a <code>StartupEvent</code> to be notified the runtime has started.</p>
+</li>
+<li>
+<p>Observe a 'ShutdownEvent` to be notified when the runtime is going to shutdown.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>What is the relevance of startup and shutdown events for extension authors? We have already seen the use of a <code>ShutdownContext</code>
+to register a callback to perform shutdown tasks in the <a href="#starting-a-service">Starting a Service</a> section. These shutdown tasks would be called
+after a <code>ShutdownEvent</code> had been sent.</p>
+</div>
+<div class="paragraph">
+<p>A <code>StartupEvent</code> is fired after all <code>io.quarkus.deployment.builditem.ServiceStartBuildItem</code> producers have been consumed.
+The implication of this is that if an extension has services that application components would expect to have been
+started when they observe a <code>StartupEvent</code>, the build steps that invoke the runtime code to start those services needs
+to produce a <code>ServiceStartBuildItem</code> to ensure that the runtime code is run before the <code>StartupEvent</code> is sent. Recall that
+we saw the production of a <code>ServiceStartBuildItem</code> in the previous section, and it is repeated here for clarity:</p>
+</div>
+<div class="listingblock">
+<div class="title">Example of Producing a ServiceStartBuildItem</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#startRuntimeService
+    @BuildStep
+    @Record(RUNTIME_INIT)
+    ServiceStartBuildItem startRuntimeService(TestTemplate template, ShutdownContextBuildItem shutdownContextBuildItem,
+            RuntimeServiceBuildItem serviceBuildItem) throws IOException {
+...
+        return new ServiceStartBuildItem("RuntimeXmlConfigService"); //<b class="conum">(1)</b>
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Produce a <code>ServiceStartBuildItem</code> to indicate that this is a service starting step that needs to run before the <code>StartupEvent</code> is sent.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="register-resources-for-use-in-native-image">11.8. Register Resources for Use in Native Image</h3>
+<div class="paragraph">
+<p>Not all configuration or resources can be consumed at build time. If you have classpath resources that the runtime needs to access, you need to inform the build phase that these resources need to be copied into the native image. This is done by producing one or more <code>SubstrateResourceBuildItem</code> or <code>SubstrateResourceBundleBuildItem</code> in the case of resource bundles. Examples of this are shown in this sample <code>registerNativeImageReources</code> build step:</p>
+</div>
+<div class="listingblock">
+<div class="title">Registering Resources and ResourceBundles</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public final class MyExtProcessor {
+    @Inject
+    BuildProducer&lt;SubstrateResourceBuildItem&gt; resource;
+    @Inject
+    BuildProducer&lt;SubstrateResourceBundleBuildItem&gt; resourceBundle;
+
+    @BuildStep
+    void registerNativeImageReources() {
+        resource.produce(new SubstrateResourceBuildItem("/security/runtime.keys")); //<b class="conum">(1)</b>
+
+        resource.produce(new SubstrateResourceBuildItem(
+                "META-INF/services/" + io.quarkus.SomeService.class.getName())); //<b class="conum">(2)</b>
+
+        resourceBundle.produce(new SubstrateResourceBuildItem("javax.xml.bind.Messages")); //<b class="conum">(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Indicate that the /security/runtime.keys classpath resource should be copied into native image.</p>
+</li>
+<li>
+<p>Indicate that the <code>io.quarkus.SomeService</code> ServiceLoader resource should be copied into native image.</p>
+</li>
+<li>
+<p>Indicate that the "javax.xml.bind.Messages" resource bundle should be copied into native image.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="object-substitution">11.9. Object Substitution</h3>
+<div class="paragraph">
+<p>Objects created during the build phase that are passed into the runtime need to have a default constructor in order for them to be created and configured at startup of the runtime from the build time state. If an object does not have a default constructor you will see an error similar to the following during generation of the augmented artifacts:</p>
+</div>
+<div class="listingblock">
+<div class="title">DSAPublicKey Serialization Error</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">	[error]: Build step io.quarkus.deployment.steps.MainClassBuildStep#build threw an exception: java.lang.RuntimeException: Unable to serialize objects of type class sun.security.provider.DSAPublicKeyImpl to bytecode as it has no default constructor
+	at org.jboss.builder.Execution.run(Execution.java:123)
+	at org.jboss.builder.BuildExecutionBuilder.execute(BuildExecutionBuilder.java:136)
+	at io.quarkus.deployment.QuarkusAugmentor.run(QuarkusAugmentor.java:110)
+	at io.quarkus.runner.RuntimeRunner.run(RuntimeRunner.java:99)
+	... 36 more</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is a <code>io.quarkus.runtime.ObjectSubstitution</code> interface that can be implemented to tell Quarkus how to handle such classes. An example implementation for the <code>DSAPublicKey</code> is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">DSAPublicKeyObjectSubstitution Example</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">package io.quarkus.extest.runtime.subst;
+
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.DSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.logging.Logger;
+
+import io.quarkus.runtime.ObjectSubstitution;
+
+public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSAPublicKey, KeyProxy&gt; {
+    private static final Logger log = Logger.getLogger("DSAPublicKeyObjectSubstitution");
+    @Override
+    public KeyProxy serialize(DSAPublicKey obj) { //<b class="conum">(1)</b>
+        log.info("DSAPublicKeyObjectSubstitution.serialize");
+        byte[] encoded = obj.getEncoded();
+        KeyProxy proxy = new KeyProxy();
+        proxy.setContent(encoded);
+        return proxy;
+    }
+
+    @Override
+    public DSAPublicKey deserialize(KeyProxy obj) { //<b class="conum">(2)</b>
+        log.info("DSAPublicKeyObjectSubstitution.deserialize");
+        byte[] encoded = obj.getContent();
+        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encoded);
+        DSAPublicKey dsaPublicKey = null;
+        try {
+            KeyFactory kf = KeyFactory.getInstance("DSA");
+            dsaPublicKey = (DSAPublicKey) kf.generatePublic(publicKeySpec);
+
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+        return dsaPublicKey;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>The serialize method takes the object without a default constructor and creates a <code>KeyProxy</code> that contains the information necessary to recreate the <code>DSAPublicKey</code>.</p>
+</li>
+<li>
+<p>The deserialize method uses the <code>KeyProxy</code> to recreate the <code>DSAPublicKey</code> from its encoded form using the key factory.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>An extension registers this substitution by producing an <code>ObjectSubstitutionBuildItem</code> as shown in this <code>TestProcessor#loadDSAPublicKey</code> fragment:</p>
+</div>
+<div class="listingblock">
+<div class="title">Registering an Object Subtitution</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @BuildStep
+    @Record(STATIC_INIT)
+    PublicKeyBuildItem loadDSAPublicKey(TestTemplate template,
+            BuildProducer&lt;ObjectSubstitutionBuildItem&gt; substitutions) throws IOException, GeneralSecurityException {
+...
+        // Register how to serialize DSAPublicKey
+        ObjectSubstitutionBuildItem.Holder&lt;DSAPublicKey, KeyProxy&gt; holder = new ObjectSubstitutionBuildItem.Holder(
+                DSAPublicKey.class, KeyProxy.class, DSAPublicKeyObjectSubstitution.class);
+        ObjectSubstitutionBuildItem keysub = new ObjectSubstitutionBuildItem(holder);
+        substitutions.produce(keysub);
+
+        log.infof("loadDSAPublicKey run");
+        return new PublicKeyBuildItem(publicKey);
+    }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="replacing-classes-in-the-native-image">11.10. Replacing Classes in the Native Image</h3>
+<div class="paragraph">
+<p>The Graal SDK supports substitutions of classes in the native image. An example of how one could replace the <code>XmlConfig/XmlData</code> classes with versions that have no JAXB annotation dependencies is shown in these example classes:</p>
+</div>
+<div class="listingblock">
+<div class="title">Substitution of XmlConfig/XmlData Classes Example</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">package io.quarkus.extest.runtime.graal;
+
+import java.util.Date;
+
+import com.oracle.svm.core.annotate.Substitute;
+import com.oracle.svm.core.annotate.TargetClass;
+
+import io.quarkus.extest.runtime.config.XmlData;
+@TargetClass(XmlConfig.class)
+@Substitute
+final public class Target_XmlConfig {
+    @Substitute
+    private String address;
+    @Substitute
+    private int port;
+    @Substitute
+    private ArrayList&lt;XData&gt; dataList;
+
+    @Substitute
+    public String getAddress() {
+        return address;
+    }
+
+    @Substitute
+    public int getPort() {
+        return port;
+    }
+
+    @Substitute
+    public ArrayList&lt;XData&gt; getDataList() {
+        return dataList;
+    }
+
+    @Substitute
+    @Override
+    public String toString() {
+        return "Target_XmlConfig{" +
+                "address='" + address + '\'' +
+                ", port=" + port +
+                ", dataList=" + dataList +
+                '}';
+    }
+}
+
+@TargetClass(XmlData.class)
+@Substitute
+final public class Target_XmlData {
+    @Substitute
+    private String name;
+    @Substitute
+    private String model;
+    @Substitute
+    private Date date;
+
+    @Substitute
+    public String getName() {
+        return name;
+    }
+
+    @Substitute
+    public String getModel() {
+        return model;
+    }
+
+    @Substitute
+    public Date getDate() {
+        return date;
+    }
+
+    @Substitute
+    @Override
+    public String toString() {
+        return "Target_XmlData{" +
+                "name='" + name + '\'' +
+                ", model='" + model + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
+}</code></pre>
 </div>
 </div>
 </div>

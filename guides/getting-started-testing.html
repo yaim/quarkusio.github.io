@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Testing Your Application</title>
+  <title>Getting Started Testing</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -63,7 +63,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Testing Your Application</h1>
+    <h1 class="text-caps">Getting Started Testing</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -151,7 +151,7 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
     &lt;artifactId&gt;quarkus-junit5&lt;/artifactId&gt;
     &lt;version&gt;${quarkus.version}&lt;/version&gt;
@@ -176,9 +176,9 @@ must be set, as the default version does not support Junit 5:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
     &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
-    &lt;version&gt;${surefire.version}&lt;/version&gt;
+    &lt;version&gt;${surefire-plugin.version}&lt;/version&gt;
     &lt;configuration&gt;
        &lt;systemProperties&gt;
           &lt;java.util.logging.manager&gt;org.jboss.logmanager.LogManager&lt;/java.util.logging.manager&gt;
@@ -195,7 +195,7 @@ must be set, as the default version does not support Junit 5:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -239,8 +239,27 @@ the test is run.</p>
 <h3 id="controlling-the-test-port">4.1. Controlling the test port</h3>
 <div class="paragraph">
 <p>While Quarkus will listen on port <code>8080</code> by default, when running tests it defaults to <code>8081</code>. This allows you to run
-tests while having the application running in parallel. This can be configured via the <code>quarkus.http.test-port</code>
-config property in <code>application.properties</code>.</p>
+tests while having the application running in parallel.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Changing the test port</div>
+<div class="paragraph">
+<p>You can configure the port used by tests by configuring <code>quarkus.http.test-port</code> in your <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.http.test-port=8083</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Quarkus also provides Restassured integration that updates the default port used by Restassured before the tests are run,
@@ -259,7 +278,7 @@ done via the <code>@TestHTTPResource</code> annotation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;html&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;html&gt;
     &lt;head&gt;
         &lt;title&gt;Testing Guide&lt;/title&gt;
     &lt;/head&gt;
@@ -274,7 +293,7 @@ done via the <code>@TestHTTPResource</code> annotation.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -341,7 +360,7 @@ simple test that tests the greeting service directly without using HTTP:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
 
 import javax.inject.Inject;
 
@@ -383,7 +402,7 @@ on the bean. For example if I have the following service:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
 public class ExternalService {
 
     public String service() {
@@ -398,7 +417,7 @@ public class ExternalService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Alternative()
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Alternative()
 @Priority(1)
 @ApplicationScoped
 public class MockExternalService extends ExternalService {
