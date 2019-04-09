@@ -365,6 +365,16 @@ Environment variables names are following the conversion rules of <a href="https
 </tr>
 </table>
 </div>
+<div class="sect2">
+<h3 id="custom-configuration-sources">Custom configuration sources</h3>
+<div class="paragraph">
+<p>You can also introduce custom configuration sources in the standard MicroProfile Config manner.  To
+do this, you must provide a class which implements either <code>org.eclipse.microprofile.config.spi.ConfigSource</code>
+or <code>org.eclipse.microprofile.config.spi.ConfigSourceProvider</code>.  Create a
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html">service file</a> for the
+class and it will be detected and installed at application startup.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

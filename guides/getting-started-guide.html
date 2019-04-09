@@ -267,7 +267,7 @@ public class GreetingResource {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="title">Differences with vanilla Jax-RS</div>
@@ -477,12 +477,12 @@ import static org.hamcrest.CoreMatchers.is;
 @QuarkusTest
 public class GreetingResourceTest {
 
-    @Test    // <b class="conum">(1)</b>
+    @Test    <i class="conum" data-value="1"></i><b>(1)</b>
     public void testHelloEndpoint() {
         given()
           .when().get("/hello")
           .then()
-             .statusCode(200)    // <b class="conum">(2)</b>
+             .statusCode(200)    <i class="conum" data-value="2"></i><b>(2)</b>
              .body(is("hello"));
     }
 
@@ -501,14 +501,16 @@ public class GreetingResourceTest {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>By using the <code>QuarkusTest</code> runner, you instruct JUnit to start the application before the tests.</p>
-</li>
-<li>
-<p>Check the HTTP response status code and content</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>By using the <code>QuarkusTest</code> runner, you instruct JUnit to start the application before the tests.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Check the HTTP response status code and content</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>These tests use <a href="http://rest-assured.io/">RestAssured</a>, but feel free to use your favorite library.</p>
@@ -561,7 +563,7 @@ the dependencies are copied into the <code>target/lib</code> directory.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The <code>Class-Path</code> entry of the <code>MANIFEST.MF</code> from the <em>runner jar</em> explicitly lists the jars from the <code>lib</code> directory.
@@ -574,7 +576,7 @@ So if you want to deploy your application somewhere, you need to copy the <em>ru
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Before running the application, don&#8217;t forget to stop the hot reload mode (hit <code>CTRL+C</code>), or you will have a port conflict.
