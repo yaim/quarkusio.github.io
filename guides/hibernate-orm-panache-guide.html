@@ -177,13 +177,13 @@ the <code>list()</code> method might be surprising at first. It takes fragments 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># configure your datasource
-quarkus.datasource.url: jdbc:postgresql://localhost:5432/mydatabase
-quarkus.datasource.driver: org.postgresql.Driver
-quarkus.datasource.username: sarah
-quarkus.datasource.password: connor
+quarkus.datasource.url = jdbc:postgresql://localhost:5432/mydatabase
+quarkus.datasource.driver = org.postgresql.Driver
+quarkus.datasource.username = sarah
+quarkus.datasource.password = connor
 
 # drop and create the database at startup (use `update` to only update the schema)
-quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
+quarkus.hibernate-orm.database.generation = drop-and-create</code></pre>
 </div>
 </div>
 </div>
@@ -289,7 +289,8 @@ Person.deleteAll();</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">List&lt;String&gt; namesButEmmanuels = Person.streamAll()
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Stream&lt;Person&gt; persons = Person.streamAll();
+List&lt;String&gt; namesButEmmanuels = persons
     .map(p -&gt; p.name.toLowerCase() )
     .filter( n -&gt; ! "emmanuel".equals(n) )
     .collect(Collectors.toList());</code></pre>

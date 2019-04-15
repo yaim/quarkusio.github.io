@@ -113,6 +113,9 @@ Version 1.0.0-rc14 is required.</p>
 <p>Apache Maven 3.5.3+</p>
 </li>
 <li>
+<p>A working C developer environment (see the note below for details)</p>
+</li>
+<li>
 <p>A running Docker</p>
 </li>
 <li>
@@ -138,6 +141,30 @@ Version 1.0.0-rc14 is required.</p>
 </div>
 <div class="paragraph">
 <p><code>export GRAALVM_HOME=$HOME/Development/graalvm/Contents/Home/</code></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>What does having a working C developer environment mean?</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>On Linux, you will need GCC, the glibc and zlib headers (on common distributions: <code>sudo dnf install gcc glibc-devel zlib-devel</code> or <code>sudo apt-get install build-essential libz-dev</code>).</p>
+</li>
+<li>
+<p>On macOS, execute <code>xcode-select --install</code>.</p>
+</li>
+</ul>
 </div>
 </td>
 </tr>
@@ -212,8 +239,8 @@ The executable would have everything to run the application including the "JVM" 
 <p>Create a native executable using: <code>./mvnw package -Pnative</code>.</p>
 </div>
 <div class="paragraph">
-<p>In addition to the regular files, the build also produces <code>target/quarkus-quickstart-runner</code>.
-You can run it using: <code>./target/quarkus-quickstart-runner</code>.</p>
+<p>In addition to the regular files, the build also produces <code>target/getting-started-1.0-SNAPSHOT-runner</code>.
+You can run it using: <code>./target/getting-started-1.0-SNAPSHOT-runner</code>.</p>
 </div>
 </div>
 </div>
@@ -287,30 +314,25 @@ The executable is retrieved using the <code>native.image.path</code> system prop
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw verify -Pnative
 ...
-[quarkus-quickstart-runner:50955]     universe:     391.96 ms
-[quarkus-quickstart-runner:50955]      (parse):     904.37 ms
-[quarkus-quickstart-runner:50955]     (inline):   1,143.32 ms
-[quarkus-quickstart-runner:50955]    (compile):   6,228.44 ms
-[quarkus-quickstart-runner:50955]      compile:   9,130.58 ms
-[quarkus-quickstart-runner:50955]        image:   2,101.42 ms
-[quarkus-quickstart-runner:50955]        write:     803.18 ms
-[quarkus-quickstart-runner:50955]      [total]:  33,520.15 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]     universe:     587.26 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]      (parse):   2,247.59 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]     (inline):   1,985.70 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]    (compile):  14,922.77 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]      compile:  20,361.28 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]        image:   2,228.30 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]        write:     364.35 ms
+[getting-started-1.0-SNAPSHOT-runner:18820]      [total]:  52,777.76 ms
 [INFO]
-[INFO] --- maven-failsafe-plugin:2.22.0:integration-test (default) @ quarkus-quickstart-native ---
+[INFO] --- maven-failsafe-plugin:2.22.1:integration-test (default) @ getting-started ---
 [INFO]
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-[INFO] Running org.acme.quickstart.GreetingResourceIT
-Executing [.../getting-started/target/quarkus-quickstart-runner, -Dquarkus.http.port=8081, -Dtest.url=http://localhost:8081, -Dquarkus.log.file.path=target/quarkus.log]
-2019-02-28 16:52:42,020 INFO  [io.quarkus] (main) Quarkus started in 0.007s. Listening on: http://localhost:8080
-2019-02-28 16:52:42,021 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.081 s - in org.acme.quickstart.GreetingResourceIT
-[INFO]
-[INFO] Results:
-[INFO]
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
-
+[INFO] Running org.acme.quickstart.NativeGreetingResourceIT
+Executing [/data/home/gsmet/git/quarkus-quickstarts/getting-started/target/getting-started-1.0-SNAPSHOT-runner, -Dquarkus.http.port=8081, -Dtest.url=http://localhost:8081, -Dquarkus.log.file.path=build/quarkus.log]
+2019-04-15 11:33:20,348 INFO  [io.quarkus] (main) Quarkus 999-SNAPSHOT started in 0.002s. Listening on: http://[::]:8081
+2019-04-15 11:33:20,348 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.387 s - in org.acme.quickstart.NativeGreetingResourceIT
 ...</code></pre>
 </div>
 </div>
@@ -357,16 +379,30 @@ we will instruct the Maven build to produce an executable from inside a containe
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dnative-image.container-runtime=docker</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dnative-image.docker-build=true</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Or if you&#8217;d like to use podman:</p>
+<p>You can also select the container runtime to use with:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dnative-image.container-runtime=podman</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># Docker
+./mvnw package -Pnative -Dnative-image.container-runtime=docker
+# Podman
+./mvnw package -Pnative -Dnative-image.container-runtime=podman</code></pre>
 </div>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The produced executable will be a 64 bit Linux executable, so depending on your operating system it may no longer be runnable.
@@ -388,7 +424,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker build -f src/main/docker/Dockerfile.native -t quarkus-quickstart/quickstart .</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker build -f src/main/docker/Dockerfile.native -t quarkus-quickstart/getting-started .</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -396,11 +432,8 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -i --rm -p 8080:8080 quarkus-quickstart/quickstart</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -i --rm -p 8080:8080 quarkus-quickstart/getting-started</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Try visiting your newly deployed application by typing <a href="http://0.0.0.0:8080" class="bare">http://0.0.0.0:8080</a> into a web browser on the same machine and see what results you get!</p>
 </div>
 <div class="admonitionblock note">
 <table>
