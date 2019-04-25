@@ -77,6 +77,9 @@
 <li>
 <p>how we measure startup time</p>
 </li>
+<li>
+<p>which additional flags will Quarkus apply to native-image by default</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -303,6 +306,76 @@ public class GreetingEndpoint {
 </div>
 <div class="paragraph">
 <p>The difference between the final timestamp and the first timestamp is the total startup time for the application to serve the first request.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="additional-flags-applied-by-quarkus">Additional flags applied by Quarkus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When Quarkus invokes GraalVM <code>native-image</code> it will apply some additional flags by default.</p>
+</div>
+<div class="paragraph">
+<p>You might want to know about the following ones in case you&#8217;re comparing performance properties with other builds.</p>
+</div>
+<div class="sect2">
+<h3 id="disable-fallback-images">Disable fallback images</h3>
+<div class="paragraph">
+<p>Fallback native images are a feature of GraalVM to "fall back" to run your application in the normal JVM, should the compilation
+to native code fail for some reason.</p>
+</div>
+<div class="paragraph">
+<p>Quarkus disables this feature by setting <code>-H:FallbackThreshold=0</code>: this will ensure you get a compilation failure rather
+risking to not notice that the application is unable to really run in native mode.</p>
+</div>
+<div class="paragraph">
+<p>If you instead want to just run in Java mode, that&#8217;s totally possible: just skip the native-image build and run it as a jar.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="disable-isolates">Disable Isolates</h3>
+<div class="paragraph">
+<p>Isolates are a neat feature of GraalVM, but Quarkus isn&#8217;t using them at this stage.</p>
+</div>
+<div class="paragraph">
+<p>Disable via <code>-H:-SpawnIsolates</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="disable-auto-registration-of-all-service-loader-implementations">Disable auto-registration of all Service Loader implementations</h3>
+<div class="paragraph">
+<p>Quarkus extensions can automatically pick the right services they need, while GraalVM&#8217;s native-image defaults to include
+all services it&#8217;s able to find on the classpath.</p>
+</div>
+<div class="paragraph">
+<p>We prefer listing services explicitly as it produces better optimised binaries. Disable it as well by setting <code>-H:-UseServiceLoaderFeature</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="better-default-for-garbage-collection-implementation">Better default for Garbage Collection implementation</h3>
+<div class="paragraph">
+<p>The default in GraalVM seems meant to optimise for short lived processes.</p>
+</div>
+<div class="paragraph">
+<p>Quarkus defaults to server applications, so we switch to a better default by setting
+ <code>-H:InitialCollectionPolicy=com.oracle.svm.core.genscavenge.CollectionPolicy$BySpaceAndTime</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="others">Others &#8230;&#8203;</h3>
+<div class="paragraph">
+<p>This section is provided as high level guidance, but can&#8217;t presume to be comprehensive as some flags are controlled
+ dynamically by the extensions, the platform you&#8217;re building on, configuration details, your code and possibly
+ a combination of any of these.</p>
+</div>
+<div class="paragraph">
+<p>Generally speaking the ones listed here are those most likely to affect performance metrics, but in the right
+circumstances one could observe non negligible impact from the other flags too.</p>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re to investigate some differences in detail make sure to check what Quarkus is invoking exactly: when the build
+plugin is producing a native image, the full command lines are logged.</p>
+</div>
 </div>
 </div>
 </div>

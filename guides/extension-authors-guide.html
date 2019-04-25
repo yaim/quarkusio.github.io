@@ -208,8 +208,9 @@ that method. If config is read at runtime, Substrate cannot reason about the con
 </div>
 <div class="paragraph">
 <p>Your runtime artifact should depend on <code>io.quarkus:quarkus-core</code>, and possibly the runtime artifacts of other Quarkus
-modules if you want to use functionality provided by them. You will also need to include the <code>io.quarkus:quarkus-bootstrap-maven-plugin</code>
-to generate the Quarkus extension descriptor included into the runtime artifact, if you are using the Quarkus parent pom it will automatically inherit the correct configuration.</p>
+modules if you want to use functionality provided by them.
+You will also need to include the <code>io.quarkus:quarkus-bootstrap-maven-plugin</code> to generate the Quarkus extension descriptor included into the runtime artifact, if you are using the Quarkus parent pom it will automatically inherit the correct configuration.
+Futhermore, you&#8217;ll need to configure the <code>maven-compiler-plugin</code> to detect the <code>quarkus-extension-processor</code> annotation processor.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -238,10 +239,45 @@ has no suffix (and is what the end user adds to their project).
         &lt;plugin&gt;
             &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
             &lt;artifactId&gt;quarkus-bootstrap-maven-plugin&lt;/artifactId&gt;
+            &lt;!-- Executions configuration can be inherited from quarkus-build-parent --&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;extension-descriptor&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                         &lt;deployment&gt;${project.groupId}:${project.artifactId}-deployment:${project.version}&lt;/deployment&gt;
+                   &lt;/configuration&gt;
+               &lt;/execution&gt;
+           &lt;/executions&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+            &lt;configuration&gt;
+                &lt;annotationProcessorPaths&gt;
+                    &lt;path&gt;
+                        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+                        &lt;artifactId&gt;quarkus-extension-processor&lt;/artifactId&gt;
+                    &lt;/path&gt;
+                &lt;/annotationProcessorPaths&gt;
+            &lt;/configuration&gt;
         &lt;/plugin&gt;
     &lt;/plugins&gt;
 &lt;/build&gt;</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The above <code>maven-compiler-plugin</code> configuration requires version 3.5+.
+</td>
+</tr>
+</table>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -260,14 +296,34 @@ in pulling all the deployment time code into runtime scope, which defeats the pu
 </div>
 <div class="paragraph">
 <p>Your deployment time module should depend on <code>io.quarkus:quarkus-core-deployment</code>, your runtime artifact,
-and possibly the deployment artifacts of other Quarkus modules if you want to use functionality provided by them.</p>
+and possibly the deployment artifacts of other Quarkus modules if you want to use functionality provided by them.
+You will also need to configure the <code>maven-compiler-plugin</code> to detect the <code>quarkus-extension-processor</code> annotation processor.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
-  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-  &lt;artifactId&gt;quarkus-core-deployment&lt;/artifactId&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-core-deployment&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+            &lt;configuration&gt;
+                &lt;annotationProcessorPaths&gt;
+                    &lt;path&gt;
+                        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+                        &lt;artifactId&gt;quarkus-extension-processor&lt;/artifactId&gt;
+                    &lt;/path&gt;
+                &lt;/annotationProcessorPaths&gt;
+            &lt;/configuration&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -276,7 +332,7 @@ and possibly the deployment artifacts of other Quarkus modules if you want to us
 <h2 id="build-step-processors">3. Build Step Processors</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Work is done at deployment time by producing and consuming instances of <code>org.jboss.builder.item.BuildItem</code>. This is done
+<p>Work is done at deployment time by producing and consuming instances of <code>io.quarkus.builder.item.BuildItem</code>. This is done
 by creating a class that has method(s) annotated with <code>io.quarkus.deployment.annotations.BuildStep</code>. These classes can
 consume items by injection, and produce items by either returning them from the method or by injecting an
 instance of <code>io.quarkus.deployment.annotations.BuildProducer</code> for the produced type. These processors can also record
@@ -1371,7 +1427,7 @@ puclic class SomeBean {
      * @param event
      */
     void onStart(@Observes StartupEvent event) { // <b class="conum">(1)</b>
-        System.out.printf("onStart, event=%s\n", event);
+        System.out.printf("onStart, event=%s%n", event);
     }
 
     /**
@@ -1379,7 +1435,7 @@ puclic class SomeBean {
      * @param event
     */
     void onStop(@Observes ShutdownEvent event) { // <b class="conum">(2)</b>
-        System.out.printf("onStop, event=%s\n", event);
+        System.out.printf("onStop, event=%s%n", event);
     }
 }</code></pre>
 </div>
@@ -1476,8 +1532,8 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 <div class="title">DSAPublicKey Serialization Error</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">	[error]: Build step io.quarkus.deployment.steps.MainClassBuildStep#build threw an exception: java.lang.RuntimeException: Unable to serialize objects of type class sun.security.provider.DSAPublicKeyImpl to bytecode as it has no default constructor
-	at org.jboss.builder.Execution.run(Execution.java:123)
-	at org.jboss.builder.BuildExecutionBuilder.execute(BuildExecutionBuilder.java:136)
+	at io.quarkus.builder.Execution.run(Execution.java:123)
+	at io.quarkus.builder.BuildExecutionBuilder.execute(BuildExecutionBuilder.java:136)
 	at io.quarkus.deployment.QuarkusAugmentor.run(QuarkusAugmentor.java:110)
 	at io.quarkus.runner.RuntimeRunner.run(RuntimeRunner.java:99)
 	... 36 more</code></pre>

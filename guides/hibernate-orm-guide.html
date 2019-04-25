@@ -483,7 +483,7 @@ public class Country {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme;
 
 @Entity
 @Cacheable
@@ -539,10 +539,10 @@ public class Fruit {
 <p>Caches store the data in separate regions to isolate different portions of data; such regions are assigned a name, which is useful for configuring each region independently, or to monitor their statistics.</p>
 </div>
 <div class="paragraph">
-<p>By default entities are cached in regions named after their fully qualified name, e.g. <code>com.acme.Country</code>.</p>
+<p>By default entities are cached in regions named after their fully qualified name, e.g. <code>org.acme.Country</code>.</p>
 </div>
 <div class="paragraph">
-<p>Collections are cached in regions named after the fully qualified name of their owner entity and collection field name, separated by <code>#</code> character, e.g. <code>com.acme.Country#cities</code>.</p>
+<p>Collections are cached in regions named after the fully qualified name of their owner entity and collection field name, separated by <code>#</code> character, e.g. <code>org.acme.Country#cities</code>.</p>
 </div>
 <div class="paragraph">
 <p>All cached queries are by default kept in a single region dedicated to them called <code>default-query-results-region</code>.</p>
@@ -568,7 +568,7 @@ public class Fruit {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.hibernate-orm.cache."com.acme.MyEntity".memory.object-count=1000</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.hibernate-orm.cache."org.acme.MyEntity".memory.object-count=1000</code></pre>
 </div>
 </div>
 </td>

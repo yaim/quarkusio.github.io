@@ -255,7 +255,7 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "hello";
+        return "hello\n";
     }
 }</code></pre>
 </div>
@@ -270,7 +270,7 @@ public class GreetingResource {
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<div class="title">Differences with vanilla Jax-RS</div>
+<div class="title">Differences with vanilla JAX-RS</div>
 <div class="paragraph">
 <p>With Quarkus, there is no need to create an <code>Application</code> class. It&#8217;s supported, but not required. In addition, only one instance
 of the resource is created and not one per request. You can configure this using the different <code>*Scoped</code> annotations (<code>ApplicationScoped</code>, <code>RequestScoped</code>, etc).</p>
@@ -349,7 +349,7 @@ import javax.enterprise.context.ApplicationScoped;
 public class GreetingService {
 
     public String greeting(String name) {
-        return "hello " + name;
+        return "hello " + name + "\n";
     }
 
 }</code></pre>
@@ -385,7 +385,7 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "hello";
+        return "hello\n";
     }
 }</code></pre>
 </div>
@@ -483,7 +483,7 @@ public class GreetingResourceTest {
           .when().get("/hello")
           .then()
              .statusCode(200)    <i class="conum" data-value="2"></i><b>(2)</b>
-             .body(is("hello"));
+             .body(is("hello\n"));
     }
 
     @Test
@@ -494,7 +494,7 @@ public class GreetingResourceTest {
           .when().get("/hello/greeting/{name}")
           .then()
             .statusCode(200)
-            .body(is("hello " + uuid));
+            .body(is("hello " + uuid + "\n"));
     }
 
 }</code></pre>
@@ -598,7 +598,7 @@ Before running the application, don&#8217;t forget to stop the hot reload mode (
 @Produces(MediaType.TEXT_PLAIN)
 public CompletionStage&lt;String&gt; hello() {
     return CompletableFuture.supplyAsync(() -&gt; {
-        return "hello";
+        return "hello\n";
     });
 }</code></pre>
 </div>

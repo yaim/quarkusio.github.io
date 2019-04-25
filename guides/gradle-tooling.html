@@ -352,6 +352,30 @@ However, it&#8217;s not an issue as we are going to copy it to a Docker containe
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="building-uber-jars">Building Uber-Jars</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus Gradle plugin supports the generation of Uber-Jars by specifying an <code>--uber-jar</code> argument as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew quarkusBuild --uber-jar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When building an Uber-Jar you can specify entries that you want to exclude from the generated jar by using the <code>--ignored-entry</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew quarkusBuild --uber-jar --ignored-entry=META-INF/file1.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The entries are relative to the root of the generated Uber-Jar. You can specify multiple entries by adding extra <code>--ignored-entry</code> arguments.</p>
+</div>
+</div>
+</div>
   </div>
 </div>
 
