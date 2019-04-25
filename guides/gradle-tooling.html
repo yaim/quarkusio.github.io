@@ -78,7 +78,7 @@ luckily setting up a Quarkus project with Gradle is very simple. You only need t
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
-    id 'io.quarkus' version '0.13.3'
+    id 'io.quarkus' version '0.14.0'
 }</code></pre>
 </div>
 </div>
@@ -89,7 +89,7 @@ luckily setting up a Quarkus project with Gradle is very simple. You only need t
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">plugins {
     java
-    id("io.quarkus") version "0.13.3"
+    id("io.quarkus") version "0.14.0"
 }</code></pre>
 </div>
 </div>
@@ -106,7 +106,7 @@ Here is a complete sample file for a simple REST project:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
-    id 'io.quarkus.' version '0.13.3' <b class="conum">(1)</b>
+    id 'io.quarkus.' version '0.14.0' <b class="conum">(1)</b>
 }
 
 repositories {
@@ -114,7 +114,7 @@ repositories {
 }
 
 dependencies { <b class="conum">(2)</b>
-    implementation 'io.quarkus:quarkus-resteasy:0.13.3'
+    implementation 'io.quarkus:quarkus-resteasy:0.14.0'
 }</code></pre>
 </div>
 </div>
@@ -136,7 +136,7 @@ Quarkus also need this dependency for running tests, to provide this we use the 
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">plugins {
     java
-    id("io.quarkus") version "0.13.3"
+    id("io.quarkus") version "0.14.0"
 }
 
 repositories {
@@ -144,7 +144,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.quarkus:quarkus-resteasy:0.13.3")
+    implementation("io.quarkus:quarkus-resteasy:0.14.0")
 }</code></pre>
 </div>
 </div>
@@ -168,7 +168,7 @@ dependencies {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">testCompile group: 'io.quarkus', name: 'quarkus-junit5', version: '0.13.3'
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">testCompile group: 'io.quarkus', name: 'quarkus-junit5', version: '0.14.0'
 testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'</code></pre>
 </div>
 </div>
@@ -327,7 +327,7 @@ The next screen list the found modules; select the generated project and click o
 <p>Native executables make Quarkus applications ideal for containers and serverless workloads.</p>
 </div>
 <div class="paragraph">
-<p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 1.0.0-rc14.</p>
+<p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 1.0.0-rc15.</p>
 </div>
 <div class="paragraph">
 <p>Create a native executable using: <code>./gradlew buildNative</code>.
