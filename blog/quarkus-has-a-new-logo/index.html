@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Application Lifecycle Events Guide</title>
+  <title>Quarkus has a new logo</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -22,7 +22,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
-<body class="guides">
+<body class="post">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -43,7 +43,7 @@
               <a href="/get-started/" class="">Get Started</a>
             </li>
             <li>
-              <a href="/guides/" class="active">Guides</a>
+              <a href="/guides/" class="">Guides</a>
             </li>
             <li>
               <a href="/extensions/" class="">Extensions</a>
@@ -52,7 +52,7 @@
               <a href="/community/" class="">Community</a>
             </li>
             <li>
-              <a href="/blog/" class="">Blog</a>
+              <a href="/blog/" class="active">Blog</a>
             </li>
           </ul>
         </nav>
@@ -61,193 +61,73 @@
   </div>
 </div>
 
-    <div class="guides">
-  <div class="width-12-12">
-    <h1 class="text-caps">Application Lifecycle Events Guide</h1>
-    <div id="preamble">
+    <div class="post-page grid-wrapper">
+  <div class="grid__item width-10-12 doc-content"><div class="sect1">
+<h2 id="quarkus-has-a-logo">Quarkus has a logo</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You often need to execute custom actions when the application starts and clean up everything when the application stops.
-This guide explains how to:</p>
+<p>The Quarkus project team leadership worked with the Middleware Engineering Services (MWES) Design team to create the visual identity of the Quarkus brand. To design the brand the MWES team looked to the project name and took into consideration the project&#8217;s unique features; its small size, its ultra-fast scaling speed, and its Kubernetes roots. The logo also had to live up to the project tagline: "Supersonic Subatomic Java."</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>be notified when the application starts</p>
-</li>
-<li>
-<p>be notified when the application stops</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To complete this guide, you need:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>less than 10 minutes</p>
-</li>
-<li>
-<p>an IDE</p>
-</li>
-<li>
-<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
-</li>
-<li>
-<p>Apache Maven 3.5.3+</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="solution">Solution</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We recommend that you follow the instructions in the next sections and create the application step by step.
-However, you can go right to the completed example.</p>
-</div>
-<div class="paragraph">
-<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
-</div>
-<div class="paragraph">
-<p>The solution is located in the <code>application-lifecycle-events</code> directory.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="creating-the-maven-project">Creating the Maven project</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>First, we need a new project. Create a new project with the following command:</p>
-</div>
-<div class="listingblock">
+<div class="sect2">
+<h3 id="the-quarkus-logo">The Quarkus Logo</h3>
+<div class="imageblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.14.0:create \
-    -DprojectGroupId=org.acme \
-    -DprojectArtifactId=application-lifecycle-events \
-    -DclassName="org.acme.events.GreetingResource" \
-    -Dpath="/hello"</code></pre>
+<img src="https://design.jboss.org/quarkus/logo/images/quarkus_blogpost_formallogo.png" alt="The Full Quarkus Logo">
 </div>
 </div>
-<div class="paragraph">
-<p>It generates:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>the Maven structure</p>
-</li>
-<li>
-<p>a landing page accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code></p>
-</li>
-<li>
-<p>example <code>Dockerfile</code> files for both <code>native</code> and <code>jvm</code> modes</p>
-</li>
-<li>
-<p>the application configuration file</p>
-</li>
-<li>
-<p>an <code>org.acme.events.GreetingResource</code> resource</p>
-</li>
-<li>
-<p>an associated test</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="listening-for-startup-and-shutdown-events">Listening for startup and shutdown events</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Create a new class named <code>AppLifecycleBean</code> (or pick another name) in the <code>org.acme.events</code> package, and copy the
-following content:</p>
-</div>
-<div class="listingblock">
+<div class="imageblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.events;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-
-import io.quarkus.runtime.ShutdownEvent;
-import io.quarkus.runtime.StartupEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-@ApplicationScoped
-public class AppLifecycleBean {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger("ListenerBean");
-
-    void onStart(@Observes StartupEvent ev) {               // <b class="conum">(1)</b>
-        LOGGER.info("The application is starting...");
-    }
-
-    void onStop(@Observes ShutdownEvent ev) {               // <b class="conum">(2)</b>
-        LOGGER.info("The application is stopping...");
-    }
-
-}</code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Method called when the application is starting</p>
-</li>
-<li>
-<p>Method called when the application is terminating</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Tip</div>
-</td>
-<td class="content">
-The events are also called in <em>dev mode</em> between each redeployment.
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-The methods can access injected beans. Check the <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/application-lifecycle-events/src/main/java/org/acme/events/AppLifecycleBean.java">AppLifecycleBean.java</a> class for details.
-</td>
-</tr>
-</table>
+<img src="https://design.jboss.org/quarkus/logo/images/quarkus_blogpost_icon.png" alt="The Quarkus LogoMark Icon">
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="package-and-run-the-application">Package and run the application</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="breaking-down-the-logos-elements">Breaking down the logo&#8217;s elements</h3>
 <div class="paragraph">
-<p>Run the application with: <code>./mvnw compile quarkus:dev</code>, the logged message is printed.
-When the application is stopped, the second log message is printed.</p>
+<p>Just as atoms are comprised of three elements (protons, neutrons, and electrons), the logomark is comprised of three elements: the Subatomic Quark, the Cube, and the Q Tracer Path. Each of these elements serves as visual metaphors for the core drivers of the Quarkus brand.</p>
+</div>
+<div class="sect3">
+<h4 id="the-subatomic-quark-element">The Subatomic Quark Element</h4>
+<div class="imageblock">
+<div class="content">
+<img src="https://design.jboss.org/quarkus/logo/images/quarkus_blogpost_icon_star.png" alt="The Quark">
+</div>
 </div>
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
-You can also generate the native executable using <code>./mvnw clean package -Pnative</code>.</p>
+<p>Protons, neutrons, and electrons are the building blocks of the atoms in the subatomic world much like in the software development world, Quarkus provides the building blocks and the OpenSource energy to build ultra-fast, ultra-small applications. The quark visual element is the visual representation of this interplay.</p>
+</div>
+<div class="paragraph">
+<p>The quark itself is formed by two overlapping triangles (again alluding to the three elements of an atom). The transparent overlay of the two triangles (One red and one blue) creates a hexagon in the at the center of the quark.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="the-internal-cube-element">The Internal Cube Element</h4>
+<div class="imageblock">
+<div class="content">
+<img src="https://design.jboss.org/quarkus/logo/images/quarkus_blogpost_icon_cube.png" alt="The Internal Cube">
+</div>
+</div>
+<div class="paragraph">
+<p>The internal hexagon is separated into three distinct sections to further define the three-dimensional cube element. The Cube is the heart of Quarkus&#8230;&#8203; cloud-native Java. At its very core, Quarkus allows developers to run higher density workloads on existing infrastructures.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="the-q-tracer-path-element">The "Q Tracer Path" Element</h4>
+<div class="imageblock">
+<div class="content">
+<img src="https://design.jboss.org/quarkus/logo/images/quarkus_blogpost_icon_trace.png" alt="The Q Tracer Path">
+</div>
+</div>
+<div class="paragraph">
+<p>Atoms aren&#8217;t static; their internal elements are in constant motion. As such, our Quarkus star is in continuous motion too. This motion represents the speed and quickness of Quarkus&#8217;s boot time and scaling capabilities. This element also traces the path of the star (counterclockwise). The path itself forms the shape of a "Q."</p>
+</div>
+<div class="paragraph">
+<p>Learn more about Quarkus at <a href="https://quarkus.io">Quarkus.io</a>. Keep up to date on twitter <a href="https://twitter.com/quarkusio">@quarkusio</a> and get the bits on <a href="https://github.com/quarkusio/quarkus">GitHub</a>.</p>
 </div>
 </div>
 </div>
-  </div>
+</div>
+</div></div>
 </div>
 
   </div>
