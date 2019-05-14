@@ -67,54 +67,28 @@
     <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#three-phases-of-bootstrap-and-quarkus-philosophy">1. Three Phases of Bootstrap and Quarkus Philosophy</a></li>
-<li><a href="#maven-setup">2. Maven setup</a></li>
-<li><a href="#build-step-processors">3. Build Step Processors</a>
+<li><a href="#extension-philosophy">1. Extension philosophy</a>
 <ul class="sectlevel2">
-<li><a href="#capabilities">3.1. Capabilities</a></li>
-<li><a href="#application-archives">3.2. Application Archives</a></li>
+<li><a href="#why-an-extension-framework">1.1. Why an extension framework</a></li>
+<li><a href="#favor-build-time-work-over-runtime-work">1.2. Favor build time work over runtime work</a></li>
+<li><a href="#how-to-expose-configuration">1.3. How to expose configuration</a></li>
+<li><a href="#expose-your-components-via-cdi">1.4. Expose your components via CDI</a></li>
+<li><a href="#some-types-of-extensions">1.5. Some types of extensions</a></li>
 </ul>
 </li>
-<li><a href="#configuration">4. Configuration</a>
+<li><a href="#technical-aspect">2. Technical aspect</a>
 <ul class="sectlevel2">
-<li><a href="#configuration-keys">4.1. Configuration Keys</a></li>
-<li><a href="#configuration-value-types">4.2. Configuration Value types</a></li>
-<li><a href="#configuration-groups">4.3. Configuration Groups</a></li>
-<li><a href="#configuration-maps">4.4. Configuration Maps</a></li>
-<li><a href="#configuration-roots">4.5. Configuration Roots</a></li>
-<li><a href="#configuration-example">4.6. Configuration Example</a></li>
-</ul>
-</li>
-<li><a href="#bytecode-recording">5. Bytecode Recording</a>
-<ul class="sectlevel2">
-<li><a href="#recordercontext">5.1. RecorderContext</a></li>
-</ul>
-</li>
-<li><a href="#cdi-extension-points">6. CDI Extension Points</a></li>
-<li><a href="#testing-extensions">7. Testing Extensions</a></li>
-<li><a href="#native-executable-support">8. Native Executable Support</a></li>
-<li><a href="#ide-support-tips">9. IDE support tips</a>
-<ul class="sectlevel2">
-<li><a href="#writing-quarkus-extensions-in-eclipse">9.1. Writing Quarkus extensions in Eclipse</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting-debugging-tips">10. Troubleshooting / Debugging Tips</a>
-<ul class="sectlevel2">
-<li><a href="#saving-application-generated-classes-to-disk">10.1. Saving Application Generated Classes to Disk</a></li>
-</ul>
-</li>
-<li><a href="#sample-test-extension">11. Sample Test Extension</a>
-<ul class="sectlevel2">
-<li><a href="#features-and-capabilities">11.1. Features and Capabilities</a></li>
-<li><a href="#bean-defining-annotations">11.2. Bean Defining Annotations</a></li>
-<li><a href="#parsing-config-to-objects">11.3. Parsing Config to Objects</a></li>
-<li><a href="#scanning-deployments-using-jandex">11.4. Scanning Deployments Using Jandex</a></li>
-<li><a href="#interacting-with-extension-beans">11.5. Interacting With Extension Beans</a></li>
-<li><a href="#manage-non-cdi-service">11.6. Manage Non-CDI Service</a></li>
-<li><a href="#startup-and-shutdown-events">11.7. Startup and Shutdown Events</a></li>
-<li><a href="#register-resources-for-use-in-native-image">11.8. Register Resources for Use in Native Image</a></li>
-<li><a href="#object-substitution">11.9. Object Substitution</a></li>
-<li><a href="#replacing-classes-in-the-native-image">11.10. Replacing Classes in the Native Image</a></li>
+<li><a href="#three-phases-of-bootstrap-and-quarkus-philosophy">2.1. Three Phases of Bootstrap and Quarkus Philosophy</a></li>
+<li><a href="#maven-setup">2.2. Maven setup</a></li>
+<li><a href="#build-step-processors">2.3. Build Step Processors</a></li>
+<li><a href="#configuration">2.4. Configuration</a></li>
+<li><a href="#bytecode-recording">2.5. Bytecode Recording</a></li>
+<li><a href="#contexts-and-dependency-injection">2.6. Contexts and Dependency Injection</a></li>
+<li><a href="#testing-extensions">2.7. Testing Extensions</a></li>
+<li><a href="#native-executable-support">2.8. Native Executable Support</a></li>
+<li><a href="#ide-support-tips">2.9. IDE support tips</a></li>
+<li><a href="#troubleshooting-debugging-tips">2.10. Troubleshooting / Debugging Tips</a></li>
+<li><a href="#sample-test-extension">2.11. Sample Test Extension</a></li>
 </ul>
 </li>
 </ul>
@@ -131,8 +105,228 @@ usage as the classes etc that are used for processing are not loaded (or even pr
 </div>
 </div>
 <div class="sect1">
-<h2 id="three-phases-of-bootstrap-and-quarkus-philosophy">1. Three Phases of Bootstrap and Quarkus Philosophy</h2>
+<h2 id="extension-philosophy">1. Extension philosophy</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>This section is a work in progress and gathers the philosophy under which extensions should be designed and written.</p>
+</div>
+<div class="sect2">
+<h3 id="why-an-extension-framework">1.1. Why an extension framework</h3>
+<div class="paragraph">
+<p>Quarkus’s mission is to transform your entire application including the libraries it uses, into an artifact optimized for GraalVM.
+To do this you need to analyze and understand the full "closed world" of the application.
+Without the full and complete context, the best that can be achieved is partial and limited generic support.
+By using the Quarkus extension approach, we can bring Java applications in line with memory footprint constrained environments like Kubernetes or cloud platforms.</p>
+</div>
+<div class="paragraph">
+<p>The Quarkus extension framework results in significantly improved resource utilization even when GraalVM is not used (e.g. in HotSpot).
+Let’s list the actions an extension performs:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gather build time metadata and generate code</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This part has nothing to do with GraalVM, it is how Quarkus starts frameworks “at build time”</p>
+</li>
+<li>
+<p>The extension framework facilitates reading metadata, scanning classes as well as generating classes as needed</p>
+</li>
+<li>
+<p>A small part of the extension work is executed at runtime via the generated classes, while the bulk of the work is done at build time (called deployment time)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Enforce opinionated and sensible defaults based on the close world view of the application (e.g. an application with no <code>@Entity</code> does not need to start Hibernate ORM)</p>
+</li>
+<li>
+<p>An extension hosts Substrate VM code substitution so that libraries can run on GraalVM</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Most changes are pushed upstream to help the underlying library run on GraalVM</p>
+</li>
+<li>
+<p>Not all changes can be pushed upstream, extensions host Substrate VM substitutions - which is a form of code patching - so that libraries can run</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Host Substrate VM code substitution to help dead code elimination based on the application needs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This is application dependant and cannot really be shared in the library itself</p>
+</li>
+<li>
+<p>For example, Quarkus optimizes the Hibernate code because it knows it only needs a specific connection pool and cache provider</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Send metadata to GraalVM for example classes in need of reflection</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This information is not static per library (e.g. Hibernate) but the framework has the semantic knowledge and knows which classes need to have reflection (for example @Entity classes)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="favor-build-time-work-over-runtime-work">1.2. Favor build time work over runtime work</h3>
+<div class="paragraph">
+<p>As much as possible favor doing work at build time (deployment part of the extension) as opposed to let the framework do work at startup time (runtime).
+The more is done there, the smaller Quarkus applications using that extension will be and the faster they will load.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="how-to-expose-configuration">1.3. How to expose configuration</h3>
+<div class="paragraph">
+<p>Quarkus simplifies the most common usages.
+This means that its defaults might be different than the library it integrates.</p>
+</div>
+<div class="paragraph">
+<p>To make the simple experience easiest, unify the configuration in <code>application.properties</code> via MicroProfile Config.
+Avoid library specific configuration files, or at least make them optional: e.g. <code>persistence.xml</code> for Hibernate ORM is optional.</p>
+</div>
+<div class="paragraph">
+<p>Extensions should see the configuration holistically as a Quarkus application instead of focusing on the library experience.
+For example <code>quarkus.database.url</code> and friends are shared between extensions as defining a database access is a shared task (instead of a <code>hibernate.</code> property for example).
+The most useful configuration options should be exposed as <code>quarkus.[extension].</code> instead of the natural namespace of the library.
+Less common properties can live in the library namespace.</p>
+</div>
+<div class="paragraph">
+<p>To fully enable the close world assumptions that Quarkus can optimize best, it is better to consider configuration options as build time settled vs overridable at runtime.
+Of course properties like host, port, password should be overridable at runtime.
+But many properties like enable caching or setting the JDBC driver can safely require a rebuild of the application.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="expose-your-components-via-cdi">1.4. Expose your components via CDI</h3>
+<div class="paragraph">
+<p>Since CDI is the central programming model when it comes to component composition, frameworks should expose producers that are easily consumable by user applications.<br>
+For example, Hibernate ORM exposes <code>EntityManagerFactory</code> and <code>EntityManager</code> beans, the connection pool exposes <code>DataSource</code> beans etc.
+An extension must generate these bean definitions at build time.</p>
+</div>
+<div class="sect3">
+<h4 id="how-to-override-a-bean-defined-by-a-libraryquarkus-extension">1.4.1. How to Override a Bean Defined by a Library/Quarkus Extension</h4>
+<div class="paragraph">
+<p>The recommended approach is to mark your bean as a CDI <code>@Alternative</code> that is enabled using the <code>@Priority</code> annotation.
+Let&#8217;s show a simple example.
+Suppose we work on an imaginary "quarkus-parser" extension and we have a default bean implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Dependent
+class Parser {
+
+  String[] parse(String expression) {
+    return expression.split("::");
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And our extension also consumes this parser:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+class ParserService {
+
+  @Inject
+  Parser parser;
+
+  //...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, if a user or even some other extension needs to override the default implementation of the <code>Parser</code> the simplest solution is to use CDI <code>@Alternative</code> + <code>@Priority</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Alternative <b class="conum">(1)</b>
+@Priority(1) <b class="conum">(2)</b>
+@Singleton
+class MyParser extends Parser {
+
+  String[] parse(String expression) {
+    // my super impl...
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><code>MyParser</code> is an alternative bean.</p>
+</li>
+<li>
+<p>Enables the alternative. The priority could be any number to override the default bean but if there are multiple alternatives the highest priority wins.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+CDI alternatives are only considered during injection and type-safe resolution. For example the default implementation would still receive observer notifications.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="some-types-of-extensions">1.5. Some types of extensions</h3>
+<div class="paragraph">
+<p>There exist multiple stereotypes of extension, let&#8217;s list a few.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Bare library running</dt>
+<dd>
+<p>This is the less sophisticated extension.
+It consists of a set of patches to make sure a library runs on GraalVM.
+If possible, contribute these patches upstream, not in extensions.
+Second best is to write Substrate VM substitutions, which are patches applied during native image compilation.</p>
+</dd>
+<dt class="hdlist1">Get a framework running</dt>
+<dd>
+<p>A framework at runtime typically reads configuration, scan the classpath and classes for metadata (annotations, getters etc), build a metamodel on top of which it runs, find options via the service loader pattern, prepare invocation calls (reflection), proxy interfaces, etc.<br>
+These operations should be done at build time and the metamodel be passed to the template DSL that will generate classes are runtime and boot the framework.</p>
+</dd>
+<dt class="hdlist1">Get a CDI portable extension running</dt>
+<dd>
+<p>The CDI portable extension model is very flexible.
+Too flexible to benefit from the build time boot promoted by Quarkus.
+Most extension we have seen do not make use of these extreme flexibilities capabilities.
+The way to port a CDI extension to Quarkus is to rewrite it as a Quarkus extension which will define the various beans at build time (deployment time in extension parley).</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="technical-aspect">2. Technical aspect</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="three-phases-of-bootstrap-and-quarkus-philosophy">2.1. Three Phases of Bootstrap and Quarkus Philosophy</h3>
 <div class="paragraph">
 <p>There are three distinct bootstrap phases of a Quarkus app:</p>
 </div>
@@ -189,10 +383,8 @@ that method. If config is read at runtime, Substrate cannot reason about the con
 </ol>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="maven-setup">2. Maven setup</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="maven-setup">2.2. Maven setup</h3>
 <div class="paragraph">
 <p>Your extension project should be setup as a multi-module project with two submodules:</p>
 </div>
@@ -327,10 +519,8 @@ You will also need to configure the <code>maven-compiler-plugin</code> to detect
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="build-step-processors">3. Build Step Processors</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="build-step-processors">2.3. Build Step Processors</h3>
 <div class="paragraph">
 <p>Work is done at deployment time by producing and consuming instances of <code>io.quarkus.builder.item.BuildItem</code>. This is done
 by creating a class that has method(s) annotated with <code>io.quarkus.deployment.annotations.BuildStep</code>. These classes can
@@ -383,8 +573,8 @@ and the resulting code does not have permission to inject private fields or invo
 <p><code>BuildItem</code> instances should be immutable, as the producer/consumer model does not allow for mutation to be correctly
 ordered. This is not enforced but failure to adhere to this can result in race conditions.</p>
 </div>
-<div class="sect2">
-<h3 id="capabilities">3.1. Capabilities</h3>
+<div class="sect3">
+<h4 id="capabilities">2.3.1. Capabilities</h4>
 <div class="paragraph">
 <p>The <code>@BuildStep</code> annotation has a <code>providesCapabilities</code> property that can be used to provide capability information
 to other extensions about what is present in the current application. Capabilities are simply strings that are used to
@@ -399,8 +589,8 @@ extension will provide <code>io.quarkus.transactions</code>.</p>
 <p>Capabilities should be used when checking for the presence of an extension rather than class path based checks.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="application-archives">3.2. Application Archives</h3>
+<div class="sect3">
+<h4 id="application-archives">2.3.2. Application Archives</h4>
 <div class="paragraph">
 <p>The <code>@BuildStep</code> annotation can also register marker files that determine which archives on the class path are considered
 to be 'Application Archives', and will therefore get indexed. This is done via the <code>applicationArchiveMarkers</code>. For
@@ -409,10 +599,8 @@ file will be indexed.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="configuration">4. Configuration</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="configuration">2.4. Configuration</h3>
 <div class="paragraph">
 <p>Configuration in Quarkus is based on SmallRye Config, an implementation of the MicroProfile Config specification.
 All of the standard features of MP-Config are supported; in addition, there are several extensions which are made available
@@ -424,8 +612,8 @@ by the SmallRye Config project as well as by Quarkus itself.</p>
 <div class="paragraph">
 <p>Configuration of Quarkus extensions is injection-based, using annotations.</p>
 </div>
-<div class="sect2">
-<h3 id="configuration-keys">4.1. Configuration Keys</h3>
+<div class="sect3">
+<h4 id="configuration-keys">2.4.1. Configuration Keys</h4>
 <div class="paragraph">
 <p>Leaf configuration keys are mapped to non-<code>private</code> fields via the <code>@io.quarkus.runtime.annotations.ConfigItem</code> annotation.</p>
 </div>
@@ -476,8 +664,8 @@ normally this should only be done in cases where (for example) the configuration
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="configuration-value-types">4.2. Configuration Value types</h3>
+<div class="sect3">
+<h4 id="configuration-value-types">2.4.2. Configuration Value types</h4>
 <div class="paragraph">
 <p>The type of the field with the <code>@ConfigItem</code> annotation determines the conversion that is applied to it.  Quarkus
 extensions may use the full range of configuration types made available by SmallRye Config, which includes:</p>
@@ -515,23 +703,23 @@ class.</p>
 <p>Though these implicit converters use reflection, Quarkus will automatically ensure that they are loaded at the appropriate time.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="configuration-groups">4.3. Configuration Groups</h3>
+<div class="sect3">
+<h4 id="configuration-groups">2.4.3. Configuration Groups</h4>
 <div class="paragraph">
 <p>Configuration values are always collected into grouping classes which are marked with the <code>@io.quarkus.runtime.annotations.ConfigGroup</code>
 annotation.  These classes contain a field for each key within its group.  In addition, configuration groups can be nested.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="configuration-maps">4.4. Configuration Maps</h3>
+<div class="sect3">
+<h4 id="configuration-maps">2.4.4. Configuration Maps</h4>
 <div class="paragraph">
 <p>A <code>Map</code> can be used for configuration at any position where a configuration group would be allowed.  The key type of such a
 map <strong>must</strong> be <code>String</code>, and its value may be either a configuration group class or a valid leaf type.  The configuration
 key segment following the map&#8217;s key segment will be used as the key for map values.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="configuration-roots">4.5. Configuration Roots</h3>
+<div class="sect3">
+<h4 id="configuration-roots">2.4.5. Configuration Roots</h4>
 <div class="paragraph">
 <p>Configuration roots are configuration groups that appear in the root of the configuration tree.  A configuration property&#8217;s full
 name is determined by joining the string <code>quarkus.</code> with the hyphenated name of the fields that form the path from the root to the
@@ -548,8 +736,8 @@ lowercased, and re-joined using hyphens (<code>-</code>).</p>
 is recommended that the injection site (field or parameter) have the same name as the configuration root class until
 this change is complete.</p>
 </div>
-<div class="sect3">
-<h4 id="configuration-root-phases">4.5.1. Configuration Root Phases</h4>
+<div class="sect4">
+<h5 id="configuration-root-phases">2.4.5.1. Configuration Root Phases</h5>
 <div class="paragraph">
 <p>A configuration root dictates when its contained keys are read from configuration, and when they are available to applications.  The phases defined by <code>io.quarkus.runtime.annotations.ConfigPhase</code> are as follows:</p>
 </div>
@@ -612,8 +800,8 @@ this change is complete.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="configuration-example">4.6. Configuration Example</h3>
+<div class="sect3">
+<h4 id="configuration-example">2.4.6. Configuration Example</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">import io.quarkus.runtime.annotations.ConfigItem;
@@ -662,7 +850,7 @@ public class LogConfiguration {
     /**
      * Configuration properties for the logging file handler.
      */
-    File file;
+    FileConfig file;
 }
 
 public class LoggingProcessor {
@@ -703,10 +891,8 @@ quarkus.log.file.path=/tmp/debug.log</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="bytecode-recording">5. Bytecode Recording</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="bytecode-recording">2.5. Bytecode Recording</h3>
 <div class="paragraph">
 <p>One of the main outputs of the build process is recorded bytecode. This bytecode actually sets up the runtime environment. For example, in order to start Undertow, the resulting application will have some bytecode that directly registers all
 Servlet instances and then starts Undertow.</p>
@@ -740,8 +926,8 @@ in another module, and Undertow will consume it and pass it into the template me
 control the order that generated bytecode is run. In the example above we know that the bytecode that produces a
 <code>ServletExtensionBuildItem</code> will be run before the bytecode that consumes it.</p>
 </div>
-<div class="sect2">
-<h3 id="recordercontext">5.1. RecorderContext</h3>
+<div class="sect3">
+<h4 id="recordercontext">2.5.1. RecorderContext</h4>
 <div class="paragraph">
 <p><code>io.quarkus.deployment.recording.RecorderContext</code> provides some convenience methods to enhance bytecode recording,
 this includes the ability to register creation functions for classes without no-arg constructors, to register an object
@@ -758,18 +944,19 @@ convenience to avoid the need to explicitly load classes in the templates.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="cdi-extension-points">6. CDI Extension Points</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="contexts-and-dependency-injection">2.6. Contexts and Dependency Injection</h3>
+<div class="sect3">
+<h4 id="extension-points">2.6.1. Extension Points</h4>
 <div class="paragraph">
-<p>As a CDI based runtime, Quarkus extensions often make CDI beans available as part of the extension behavior. The <a href="cdi-reference.html">Build Time Extension Points</a> describes the <code>BuildItems</code> you can make use of in your extension build steps to achieve this.</p>
+<p>As a CDI based runtime, Quarkus extensions often make CDI beans available as part of the extension behavior.
+However, Quarkus DI solution does not support CDI Portable Extensions.
+Instead, Quarkus extensions can make use of various <a href="cdi-reference.html">Build Time Extension Points</a>.</p>
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="testing-extensions">7. Testing Extensions</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="testing-extensions">2.7. Testing Extensions</h3>
 <div class="paragraph">
 <p>Testing of extensions should be done with the <code>io.quarkus.test.QuarkusUnitTest</code> runner. This runner allows
 for Arquillian-style tests that test specific functionalities. It is not intended for testing user applications, as this
@@ -904,10 +1091,8 @@ public class PersistenceAndQuarkusConfigTest {
 </ol>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="native-executable-support">8. Native Executable Support</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="native-executable-support">2.8. Native Executable Support</h3>
 <div class="paragraph">
 <p>There Quarkus provides a lot of build items that control aspects of the native executable build. This allows for extensions
 to programmatically perform tasks such as registering classes for reflection or adding static resources to the native
@@ -946,12 +1131,10 @@ executable. Some of these build items are listed below:</p>
 </dl>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="ide-support-tips">9. IDE support tips</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="writing-quarkus-extensions-in-eclipse">9.1. Writing Quarkus extensions in Eclipse</h3>
+<h3 id="ide-support-tips">2.9. IDE support tips</h3>
+<div class="sect3">
+<h4 id="writing-quarkus-extensions-in-eclipse">2.9.1. Writing Quarkus extensions in Eclipse</h4>
 <div class="paragraph">
 <p>The only particular aspect of writing Quarkus extensions in Eclipse is that APT (Annotation Processing Tool) is required as part of extension builds, which means you need to:</p>
 </div>
@@ -973,12 +1156,10 @@ executable. Some of these build items are listed below:</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="troubleshooting-debugging-tips">10. Troubleshooting / Debugging Tips</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="saving-application-generated-classes-to-disk">10.1. Saving Application Generated Classes to Disk</h3>
+<h3 id="troubleshooting-debugging-tips">2.10. Troubleshooting / Debugging Tips</h3>
+<div class="sect3">
+<h4 id="saving-application-generated-classes-to-disk">2.10.1. Saving Application Generated Classes to Disk</h4>
 <div class="paragraph">
 <p>The class augmentation step of Quarkus generates classes for various purposes. Sometimes you need to view these
 classes/bytecode to debug or understand an issue. Classes that are related to application augmentation are currently held in
@@ -992,16 +1173,14 @@ memory in a runtime class loader. To have these classes written out to disk for 
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="sample-test-extension">11. Sample Test Extension</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="sample-test-extension">2.11. Sample Test Extension</h3>
 <div class="paragraph">
 <p>We have an extension that is used to test for regressions in the extension processing. It is located in <a href="https://github.com/quarkusio/quarkus/tree/master/core/test-extension" class="bare">https://github.com/quarkusio/quarkus/tree/master/core/test-extension</a> directory. In this section we touch on some of the tasks an extension
 author will typically need to perform using the test-extension code to illustrate how the task could be done.</p>
 </div>
-<div class="sect2">
-<h3 id="features-and-capabilities">11.1. Features and Capabilities</h3>
+<div class="sect3">
+<h4 id="features-and-capabilities">2.11.1. Features and Capabilities</h4>
 <div class="paragraph">
 <p>When you start a Quarkus instance, you will see a line like the one highlighted in this example:</p>
 </div>
@@ -1053,8 +1232,8 @@ using the Quarkus maven plugin as shown in this example taken from the Writing J
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="bean-defining-annotations">11.2. Bean Defining Annotations</h3>
+<div class="sect3">
+<h4 id="bean-defining-annotations">2.11.2. Bean Defining Annotations</h4>
 <div class="paragraph">
 <p>The CDI layer processes CDI beans that are either explicitly registered or that it discovers based on bean defining annotations as defined in <a href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#bean_defining_annotations"&gt;">2.5.1. Bean defining annotations</a>. You can expand this set of annotations to include annotations your extension processes using a <code>BeanDefiningAnnotationBuildItem</code> as shown in this <code>TestProcessor#registerBeanDefinningAnnotations</code> example:</p>
 </div>
@@ -1109,8 +1288,8 @@ public class ConfiguredBean implements IConfigConsumer {
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="parsing-config-to-objects">11.3. Parsing Config to Objects</h3>
+<div class="sect3">
+<h4 id="parsing-config-to-objects">2.11.3. Parsing Config to Objects</h4>
 <div class="paragraph">
 <p>One of the main things an extension is likely to do is completely separate the configuration phase of behavior from the runtime phase. Frameworks often do parsing/load of configuration on startup that can be done during build time to both reduce the runtime dependencies on frameworks like xml parsers as well as reducing the startup time the parsing incurs.</p>
 </div>
@@ -1181,8 +1360,8 @@ public class ConfiguredBean implements IConfigConsumer {
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="scanning-deployments-using-jandex">11.4. Scanning Deployments Using Jandex</h3>
+<div class="sect3">
+<h4 id="scanning-deployments-using-jandex">2.11.4. Scanning Deployments Using Jandex</h4>
 <div class="paragraph">
 <p>If your extension defines annotations or interfaces that mark beans needing to be processed, you can locate these beans using the Jandex API, a Java annotation indexer and offline reflection library. The following <code>TestProcessor#scanForBeans</code> method shows how to find the beans annotated with our <code>@TestAnnotation</code> that also implement the <code>IConfigConsumer</code> interface:</p>
 </div>
@@ -1236,8 +1415,8 @@ public class ConfiguredBean implements IConfigConsumer {
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="interacting-with-extension-beans">11.5. Interacting With Extension Beans</h3>
+<div class="sect3">
+<h4 id="interacting-with-extension-beans">2.11.5. Interacting With Extension Beans</h4>
 <div class="paragraph">
 <p>You can use the <code>io.quarkus.arc.runtime.BeanContainer</code> interface to interact with your extension beans. The following <code>configureBeans</code> methods illustrate interacting with the beans scanned for in the previous section:</p>
 </div>
@@ -1288,8 +1467,8 @@ public class ConfiguredBean implements IConfigConsumer {
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="manage-non-cdi-service">11.6. Manage Non-CDI Service</h3>
+<div class="sect3">
+<h4 id="manage-non-cdi-service">2.11.6. Manage Non-CDI Service</h4>
 <div class="paragraph">
 <p>A common purpose for an extension is to integrate a non-CDI aware service into the CDI based Quarkus runtime. Step 1 of this task is to load any configuration needed in a STATIC_INIT build step as we did in <a href="#parsing-config-to-objects">Parsing Config to Objects</a>. Now we need to create an instance of the service using the configuration. Let&#8217;s return to the <code>TestProcessor#parseServiceXmlConfig</code> method to see how this can be done.</p>
 </div>
@@ -1347,8 +1526,8 @@ public class ConfiguredBean implements IConfigConsumer {
 </li>
 </ol>
 </div>
-<div class="sect3">
-<h4 id="starting-a-service">11.6.1. Starting a Service</h4>
+<div class="sect4">
+<h5 id="starting-a-service">2.11.6.1. Starting a Service</h5>
 <div class="paragraph">
 <p>Now that you have recorded the creation of a service during the build phase, you need to record how to start the service at runtime during booting. You do this with a RUNTIME_INIT build step as shown in the <code>TestProcessor#startRuntimeService</code> method.</p>
 </div>
@@ -1409,8 +1588,8 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="startup-and-shutdown-events">11.7. Startup and Shutdown Events</h3>
+<div class="sect3">
+<h4 id="startup-and-shutdown-events">2.11.7. Startup and Shutdown Events</h4>
 <div class="paragraph">
 <p>The Quarkus container supports startup and shutdown lifecycle events to notify components of the container startup
 and shutdown. There are CDI events fired that components can observe are illustrated in this example:</p>
@@ -1483,8 +1662,8 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="register-resources-for-use-in-native-image">11.8. Register Resources for Use in Native Image</h3>
+<div class="sect3">
+<h4 id="register-resources-for-use-in-native-image">2.11.8. Register Resources for Use in Native Image</h4>
 <div class="paragraph">
 <p>Not all configuration or resources can be consumed at build time. If you have classpath resources that the runtime needs to access, you need to inform the build phase that these resources need to be copied into the native image. This is done by producing one or more <code>SubstrateResourceBuildItem</code> or <code>SubstrateResourceBundleBuildItem</code> in the case of resource bundles. Examples of this are shown in this sample <code>registerNativeImageReources</code> build step:</p>
 </div>
@@ -1523,8 +1702,8 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="object-substitution">11.9. Object Substitution</h3>
+<div class="sect3">
+<h4 id="object-substitution">2.11.9. Object Substitution</h4>
 <div class="paragraph">
 <p>Objects created during the build phase that are passed into the runtime need to have a default constructor in order for them to be created and configured at startup of the runtime from the build time state. If an object does not have a default constructor you will see an error similar to the following during generation of the augmented artifacts:</p>
 </div>
@@ -1618,8 +1797,8 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="replacing-classes-in-the-native-image">11.10. Replacing Classes in the Native Image</h3>
+<div class="sect3">
+<h4 id="replacing-classes-in-the-native-image">2.11.10. Replacing Classes in the Native Image</h4>
 <div class="paragraph">
 <p>The Graal SDK supports substitutions of classes in the native image. An example of how one could replace the <code>XmlConfig/XmlData</code> classes with versions that have no JAXB annotation dependencies is shown in these example classes:</p>
 </div>
@@ -1706,6 +1885,7 @@ final public class Target_XmlData {
     }
 
 }</code></pre>
+</div>
 </div>
 </div>
 </div>

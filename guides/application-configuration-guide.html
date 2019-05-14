@@ -163,22 +163,7 @@ The injection uses the <code>@ConfigProperty</code> annotation.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConfigProperty(name = "greeting.message")
-private String message;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Edit the <code>org.acme.config.GreetingResource</code>, and introduce the 3 following configuration properties:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConfigProperty(name = "greeting.message")
-private String message;
-
-@ConfigProperty(name = "greeting.suffix", defaultValue="!")
-private String suffix;
-
-@ConfigProperty(name = "greeting.name")
-private Optional&lt;String&gt; name;</code></pre>
+String message;</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -188,16 +173,39 @@ private Optional&lt;String&gt; name;</code></pre>
 <div class="title">Note</div>
 </td>
 <td class="content">
-When injecting a configured value, you can use <code>@Inject @ConfigProperty(&#8230;&#8203;)</code> or just <code>@ConfigProperty(&#8230;&#8203;)</code>.
+When injecting a configured value, you can use <code>@Inject @ConfigProperty</code> or just <code>@ConfigProperty</code>.
 The <code>@Inject</code> annotation is not necessary for members annotated with <code>@ConfigProperty</code>, a behavior which differs from <a href="https://microprofile.io/project/eclipse/microprofile-config">MicroProfile Config</a>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>If you do not provide a value for the first property, it will have a <code>null</code> value.
-The second property injects the given default value if the configuration file does not provide a value.
-The third property is optional. The injected <code>Optional</code> is empty as the configuration file does not provide a value.</p>
+<p>Edit the <code>org.acme.config.GreetingResource</code>, and introduce the following configuration properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConfigProperty(name = "greeting.message") <b class="conum">(1)</b>
+String message;
+
+@ConfigProperty(name = "greeting.suffix", defaultValue="!") <b class="conum">(2)</b>
+String suffix;
+
+@ConfigProperty(name = "greeting.name")
+Optional&lt;String&gt; name; <b class="conum">(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>If you do not provide a value for this property, the application startup fails with <code>javax.enterprise.inject.spi.DeploymentException: No config value of type [class java.lang.String] exists for: greeting.message</code>.</p>
+</li>
+<li>
+<p>The default value is injected if the configuration does not provide a value for <code>greeting.suffix</code>.</p>
+</li>
+<li>
+<p>This property is optional - an empty <code>Optional</code> is injected if the configuration does not provide a value for <code>greeting.name</code>.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>Now, modify the <code>hello</code> method to use the injected properties:</p>

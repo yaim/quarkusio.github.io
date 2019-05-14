@@ -93,6 +93,30 @@ luckily setting up a Quarkus project with Gradle is very simple. You only need t
 }</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="gradle-configuration-for-a-local-snapshot-version-of-quarkus">Gradle configuration for a local SNAPSHOT version of Quarkus</h3>
+<div class="paragraph">
+<p>This paragraph is relevant for those who want to use a locally built version of Quarkus, instead of an official release. It appears the configuration described above will not work in this case due to an issue in Gradle. There is a workaround though that looks a bit more verbose but nevertheless works for both locally built and offically released versions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath "io.quarkus:quarkus-gradle-plugin:$0.14.0"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'io.quarkus'</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -106,15 +130,16 @@ Here is a complete sample file for a simple REST project:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
-    id 'io.quarkus.' version '0.14.0' <b class="conum">(1)</b>
+    id 'io.quarkus' version '0.14.0' // <b class="conum">(1)</b>
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies { <b class="conum">(2)</b>
-    implementation 'io.quarkus:quarkus-resteasy:0.14.0'
+dependencies { // <b class="conum">(2)</b>
+    implementation enforcedPlatform('io.quarkus:quarkus-bom:0.14.0')
+    implementation 'io.quarkus:quarkus-resteasy'
 }</code></pre>
 </div>
 </div>
@@ -124,7 +149,7 @@ dependencies { <b class="conum">(2)</b>
 <p>The Quarkus plugin needs to be applied.</p>
 </li>
 <li>
-<p>This dependency is needed for a REST application similar to the getting started example.
+<p>We include the Quarkus BOM using Gradle&#8217;s <a href="https://docs.gradle.org/5.4.1/userguide/managing_transitive_dependencies.html#sec:bom_import">relevant syntax</a> and add RESTEasy dependency since we are developing a REST application similar to the getting started example.
 Quarkus also need this dependency for running tests, to provide this we use the <code>implementation</code> configuration.</p>
 </li>
 </ol>
@@ -144,7 +169,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.quarkus:quarkus-resteasy:0.14.0")
+    implementation(enforcedPlatform("io.quarkus:quarkus-bom:0.14.0"))
+    implementation("io.quarkus:quarkus-resteasy")
 }</code></pre>
 </div>
 </div>

@@ -177,6 +177,26 @@ Instructions to build the image and run the container are written in those Docke
 <div class="paragraph">
 <p>Extensions are passed using a comma-separated list.</p>
 </div>
+<div class="paragraph">
+<p>The extension name is the GAV name of the extension: e.g. <code>io.quarkus:quarkus-agroal</code>.
+But you can pass a partial name and Quarkus will do its best to find the right extension.
+For example, <code>agroal</code>, <code>Agroal</code> or <code>agro</code>  will expand to <code>io.quarkus:quarkus-agroal</code>.
+If no extension is found or if more than one extensions match, you will see a red check mark  ❌ in the command result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn quarkus:add-extensions -Dextensions=jdbc,agroal,non-exist-ent
+[...]
+❌ Multiple extensions matching 'jdbc'
+     * io.quarkus:quarkus-jdbc-h2
+     * io.quarkus:quarkus-jdbc-mariadb
+     * io.quarkus:quarkus-jdbc-postgresql
+     Be more specific e.g using the exact name or the full gav.
+✅ Adding extension io.quarkus:quarkus-agroal
+❌ Cannot find a dependency matching 'non-exist-ent', maybe a typo?
+[...]</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

@@ -216,8 +216,26 @@ This is useful to have a data set ready for your tests or demos.</p>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.dialect</code></dt>
 <dd>
 <p>(e.g. <code>org.hibernate.dialect.PostgreSQL95Dialect</code>).
-Class name of the Hibernate ORM dialect.</p>
+Class name of the Hibernate ORM dialect. The complete list of bundled dialects is available in the <a href="https://docs.jboss.org/hibernate/stable/orm/javadocs/org/hibernate/dialect/package-summary.html">Hibernate ORM JavaDoc</a>.</p>
 </dd>
+</dl>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Not all the dialects are supported in GraalVM native executables: we currently provide driver extensions for PostgreSQL, MariaDB, Microsoft SQL Server and H2.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.dialect.storage-engine</code></dt>
 <dd>
 <p>(e.g. <code>MyISAM</code> or <code>InnoDB</code>).

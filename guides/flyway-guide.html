@@ -70,54 +70,24 @@
 <p><a href="https://flywaydb.org/">Flyway</a> is a popular database migration tool that is commonly used in JVM environments.</p>
 </div>
 <div class="paragraph">
-<p>Quarkus provides first class support for using Flyway in native mode as will be explained in this guide.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>You only need to add this extension if you are doing native compilation with Quarkus.
-Otherwise, you can use Flyway by just adding it as a dependency in the <code>pom.xml</code> and run the Quarkus app in JVM mode.</p>
-</div>
-</td>
-</tr>
-</table>
+<p>Quarkus provides first class support for using Flyway as will be explained in this guide.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="setting-up-native-compilation-support-for-flyway">Setting up native compilation support for Flyway</h2>
+<h2 id="setting-up-support-for-flyway">Setting up support for Flyway</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To get native compilation working in Quarkus with Flyway, you just need to:</p>
+<p>To start using Flyway with your project, you just need to:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
 <p>add your migrations to the <code>src/main/resources/db/migration</code> folder as you usually do with Flyway</p>
 </li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-The migrations location is not configurable in native mode. The Flyway extension will always look for migrations in the default path.
-</td>
-</tr>
-</table>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>create your <code>Flyway</code> object and run your migration as you normally do</p>
+<p>activate the <code>migrate-at-start</code> option to migrate the schema automatically or inject the <code>Flyway</code> object and run
+your migration as you normally do</p>
 </li>
 </ul>
 </div>
@@ -152,18 +122,86 @@ The migrations location is not configurable in native mode. The Flyway extension
 </div>
 </div>
 <div class="paragraph">
-<p>You can use MP-config to get any relevant configuration properties you may need by adding them to the <code>application.properties</code> file.</p>
+<p>Flyway support relies on the Quarkus default datasource config, you must add the default datasource properties
+to the <code>application.properties</code> file in order to allow Flyway to manage the schema.
+Also, you can customize the Flyway behaviour by using the following properties:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.flyway.migrate-at-start</code></dt>
+<dd>
+<p><strong>true</strong> to execute Flyway automatically when the application starts, <strong>false</strong> otherwise.<br>
+<strong>default:</strong> false</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.locations</code></dt>
+<dd>
+<p>Comma-separated list of locations to scan recursively for migrations. The location type is determined by its prefix.
+Unprefixed locations or locations starting with classpath: point to a package on the classpath and may contain both SQL
+and Java-based migrations.
+Locations starting with filesystem: point to a directory on the filesystem, may only contain SQL migrations and are only
+scanned recursively down non-hidden directories.<br>
+<strong>default:</strong> classpath:db/migration</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.connect-retries</code></dt>
+<dd>
+<p>The maximum number of retries when attempting to connect to the database. After each failed attempt, Flyway will wait 1
+second before attempting to connect again, up to the maximum number of times specified by connect-retries.<br>
+<strong>default:</strong> 0</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.schemas</code></dt>
+<dd>
+<p>Comma-separated case-sensitive list of schemas managed by Flyway.
+The first schema in the list will be automatically set as the default one during the migration.
+It will also be the one containing the schema history table.<br>
+<strong>default:</strong> &lt;none&gt;</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.table</code></dt>
+<dd>
+<p>The name of Flyway&#8217;s schema history table.
+By default (single-schema mode) the schema history table is placed in the default schema for the connection provided by
+the datasource.
+When the quarkus.flyway.schemas property is set (multi-schema mode), the schema history table is placed in the first schema of
+the list.<br>
+<strong>default:</strong> flyway_schema_history</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.sql-migration-prefix</code></dt>
+<dd>
+<p>The file name prefix for versioned SQL migrations.
+Versioned SQL migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix , which using
+the defaults translates to V1.1__My_description.sql<br>
+<strong>default:</strong> V</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.repeatable-sql-migration-prefix</code></dt>
+<dd>
+<p>The file name prefix for repeatable SQL migrations.
+Repeatable SQL migrations have the following file name structure: prefixSeparatorDESCRIPTIONsuffix , which using the
+defaults translates to R__My_description.sql<br>
+<strong>default:</strong> R</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The following is an example for the <code>application.properties</code> file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># configure your datasource
-datasource.url: jdbc:postgresql://localhost:5432/mydatabase
-datasource.username: sarah
-datasource.password: connor</code></pre>
+quarkus.datasource.url: jdbc:postgresql://localhost:5432/mydatabase
+quarkus.datasource.driver: org.postgresql.Driver
+quarkus.datasource.username: sarah
+quarkus.datasource.password: connor
+
+# Flyway minimal config properties
+quarkus.flyway.migrate-at-start=true
+
+# Flyway optional config properties
+# quarkus.flyway.connect-retries=10
+# quarkus.flyway.schemas=TEST_SCHEMA
+# quarkus.flyway.table=flyway_quarkus_history
+# quarkus.flyway.locations=db/location1,db/location2
+# quarkus.flyway.sql-migration-prefix=X
+# quarkus.flyway.repeatable-sql-migration-prefix=K</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Note that you can use any name for these configuration properties.</p>
 </div>
 <div class="paragraph">
 <p>Add a SQL migration to the default folder following the Flyway naming conventions: <code>src/main/resources/db/migration/V1.0.0__Quarkus.sql</code></p>
@@ -180,25 +218,19 @@ VALUES (1, 'QUARKED');</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now you can create your <code>Flyway</code> object as you usually do:</p>
+<p>Now you can start your application and Quarkus will run the Flyway&#8217;s migrate method according to your config:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
 public class MigrationService {
+    // You can Inject the object if you want to use it manually
+    @Inject
+    Flyway flyway; <b class="conum">(1)</b>
 
-    @ConfigProperty(name = "datasource.url") <b class="conum">(1)</b>
-    String dbURL;
-    @ConfigProperty(name = "datasource.username")
-    String dbUser;
-    @ConfigProperty(name = "datasource.password")
-    String dbPassword;
-
-    public void migrate() {
-        Flyway flyway = Flyway.configure()
-                        .dataSource(dbURL, dbUser, dbPassword)
-                        .load(); <b class="conum">(2)</b>
-        flyway.migrate();
+    public void checkMigration() {
+        // This will print 1.0.0
+        System.out.println(flyway.info().current().getVersion().toString());
     }
 }</code></pre>
 </div>
@@ -206,10 +238,56 @@ public class MigrationService {
 <div class="colist arabic">
 <ol>
 <li>
-<p>Inject your config properties as needed</p>
+<p>Inject the Flyway object if you want to use it directly</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-the-flyway-object">Using the Flyway object</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In case you are interested in using the <code>Flyway</code> object directly, you can inject it as follows:</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If you enabled the <code>quarkus.flyway.migrate-at-start</code> property, by the time you use the Flyway instance,
+Quarkus will already have run the migrate operation
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class MigrationService {
+    // You can Inject the object if you want to use it manually
+    @Inject
+    Flyway flyway; <b class="conum">(1)</b>
+
+    public void checkMigration() {
+        // Use the flyway instance manually
+        flyway.clean(); <b class="conum">(2)</b>
+        flyway.migrate();
+        // This will print 1.0.0
+        System.out.println(flyway.info().current().getVersion().toString());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Inject the Flyway object if you want to use it directly</p>
 </li>
 <li>
-<p>Create the <code>Flyway</code> object and enjoy</p>
+<p>Use the Flyway instance directly</p>
 </li>
 </ol>
 </div>

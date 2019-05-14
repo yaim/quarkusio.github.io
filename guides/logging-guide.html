@@ -122,7 +122,7 @@
 <div class="sect2">
 <h3 id="file-configuration">File configuration</h3>
 <div class="paragraph">
-<p>Logging to a file is also supported and enabled by default.  To configure or disable this behavior, use the following configuration properties:</p>
+<p>Logging to a file is also supported but not enabled by default.  To configure or enable this behavior, use the following configuration properties:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -157,6 +157,26 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.path</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The path of the log file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.rotation.max-file-size</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum file size of the log file after which a rotation is executed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.rotation.max-backup-index</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of backups to keep.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.rotation.file-suffix</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rotating log file suffix. The format of suffix value has to be understood by <code>java.text.SimpleDateFormat</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.rotation.rotate-on-boot</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether to rotate log files on server initialization.</p></td>
 </tr>
 </tbody>
 </table>
@@ -356,6 +376,21 @@ be escaped. An example is shown in <a href="#category-example">File TRACE Loggin
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>%z{&lt;zone name&gt;}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Time zone</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set the time zone of the output to <code>&lt;zone name&gt;</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%X{&lt;MDC property name&gt;}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapped Diagnostics Context Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders the value from Mapped Diagnostics Context</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%X</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapped Diagnostics Context Values</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders all the values from Mapped Diagnostics Context in format {property.key=property.value}</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nested Diagnostics context values</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders all the values from Nested Diagnostics Context in format {value1.value2}</p></td>
 </tr>
 </tbody>
 </table>
