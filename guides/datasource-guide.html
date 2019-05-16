@@ -247,7 +247,11 @@ Extensions are mostly useful to support GraalVM native images.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">Unresolved directive in datasource-guide.adoc - include::../../../../extensions/agroal/deployment/src/test/resources/application-default-datasource.properties[tag=basic]</code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:h2:tcp://localhost/mem:default
+quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.username=username-default
+quarkus.datasource.min-size=3
+quarkus.datasource.max-size=13</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -263,7 +267,8 @@ Extensions are mostly useful to support GraalVM native images.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Unresolved directive in datasource-guide.adoc - include::../../../../extensions/agroal/deployment/src/test/java/io/quarkus/agroal/test/DefaultDataSourceConfigTest.java[tag=injection]</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+AgroalDataSource defaultDataSource;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -281,7 +286,23 @@ It works exactly the same way as a single datasource, with one important change:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">Unresolved directive in datasource-guide.adoc - include::../../../../extensions/agroal/deployment/src/test/resources/application-multiple-datasources.properties[]</code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.url=jdbc:h2:tcp://localhost/mem:default
+quarkus.datasource.username=username-default
+quarkus.datasource.min-size=3
+quarkus.datasource.max-size=13
+
+quarkus.datasource.users.driver=org.h2.Driver
+quarkus.datasource.users.url=jdbc:h2:tcp://localhost/mem:users
+quarkus.datasource.users.username=username1
+quarkus.datasource.users.min-size=1
+quarkus.datasource.users.max-size=11
+
+quarkus.datasource.inventory.driver=org.h2.Driver
+quarkus.datasource.inventory.url=jdbc:h2:tcp://localhost/mem:inventory
+quarkus.datasource.inventory.username=username2
+quarkus.datasource.inventory.min-size=2
+quarkus.datasource.inventory.max-size=12</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -296,7 +317,16 @@ Using the above properties to configure three different datasources, you can als
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Unresolved directive in datasource-guide.adoc - include::../../../../extensions/agroal/deployment/src/test/java/io/quarkus/agroal/test/MultipleDataSourcesConfigTest.java[tag=injection]</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+AgroalDataSource defaultDataSource;
+
+@Inject
+@DataSource("users")
+AgroalDataSource dataSource1;
+
+@Inject
+@DataSource("inventory")
+AgroalDataSource dataSource2;</code></pre>
 </div>
 </div>
 </div>
