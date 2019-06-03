@@ -78,6 +78,7 @@
     <li><a href="/guides/getting-started-testing">Testing Your Application</a></li>
     <li><a href="/guides/logging-guide">Configuring Logging</a></li>
     <li><a href="/guides/native-and-ssl-guide">Using SSL With Native Images</a></li>
+    <li><a href="/guides/context-propagation-guide">Context Propagation</a></li>
   </ul>
 
   <h3 id="web">Web</h3>
@@ -89,6 +90,7 @@
     <li><a href="/guides/jwt-guide">Using JWT RBAC</a></li>
     <li><a href="/guides/websocket-guide">Using WebSockets</a></li>
     <li><a href="/guides/openapi-swaggerui-guide">Using OpenAPI and Swagger UI</a></li>
+    <li><a href="/guides/undertow-reference">Undertow Reference Documentation</a></li>
   </ul>
 
   <h3 id="data">Data</h3>
@@ -97,10 +99,12 @@
     <li><a href="/guides/datasource-guide">Configuring your datasources</a></li>
     <li><a href="/guides/hibernate-orm-guide">Using Hibernate ORM and JPA</a></li>
     <li><a href="/guides/hibernate-orm-panache-guide">Simplified Hibernate ORM with Panache</a></li>
+    <li><a href="/guides/hibernate-search-guide">Hibernate Search + Elasticsearch</a></li>
     <li><a href="/guides/infinispan-client-guide">Using Infinispan Client</a></li>
     <li><a href="/guides/transaction-guide">Using Transactions</a></li>
     <li><a href="/guides/validation-guide">Validation with Hibernate Validator</a></li>
     <li><a href="/guides/flyway-guide">Schema Migration with Flyway</a></li>
+    <li><a href="/guides/reactive-postgres-client">Reactive Postgres Client</a></li>
   </ul>
 
   <h3 id="messaging">Messaging</h3>
@@ -170,9 +174,10 @@
   <h3 id="miscellaneous">Miscellaneous</h3>
 
   <ul>
-    <li><a href="/guides/performance-measure">Measuring Performance</a></li>
     <li><a href="/guides/scheduled-guide">Scheduling Periodic Tasks</a></li>
+    <li><a href="/guides/sending-emails">Sending Emails</a></li>
     <li><a href="/guides/using-vertx">Using Vert.x</a></li>
+    <li><a href="/guides/performance-measure">Measuring Performance</a></li>
   </ul>
 </div>
 <div class="grid__item width-8-12 width-12-12-m guides-content">
@@ -229,6 +234,13 @@ as native images don’t support it out of the box.</p>
 
     <p><a href="/guides/native-and-ssl-guide" class="button-cta secondary">READ THE GUIDE</a></p>
   </div>
+<div class="guide-item">
+    <h2 id="context-propagation">Context Propagation</h2>
+
+    <p>Learn more about how you can pass contextual information with our implementation of MicroProfile Context Propagation.</p>
+
+    <p><a href="/guides/context-propagation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+  </div>
 </div>
 <div class="grid__item width-12-12"><hr /></div>
 <div class="grid__item width-4-12 width-12-12-m toc">
@@ -279,6 +291,13 @@ secured access to the JAX-RS endpoints.</p>
 
     <p><a href="/guides/openapi-swaggerui-guide" class="button-cta secondary">READ THE GUIDE</a></p>
   </div>
+<div class="guide-item">
+    <h2 id="undertow-reference-documentation">Undertow Reference Documentation</h2>
+
+    <p>Undertow is the webserver used by Quarkus. Learn more about configuring it.</p>
+
+    <p><a href="/guides/undertow-reference" class="button-cta secondary">READ THE GUIDE</a></p>
+  </div>
 </div>
 <div class="grid__item width-12-12"><hr /></div>
 <div class="grid__item width-4-12 width-12-12-m toc">
@@ -307,6 +326,14 @@ It makes complex mappings possible, but it does not make simple and common mappi
 Panache focuses on making your entities trivial and fun to write.</p>
 
     <p><a href="/guides/hibernate-orm-panache-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+  </div>
+<div class="guide-item">
+    <h2 id="hibernate-search--elasticsearch">Hibernate Search + Elasticsearch</h2>
+
+    <p>Hibernate Search allows you to index your entities in an Elasticsearch cluster and easily offer full text
+search in all your Hibernate ORM-based applications.</p>
+
+    <p><a href="/guides/hibernate-search-guide" class="button-cta secondary">READ THE GUIDE</a></p>
   </div>
 <div class="guide-item">
     <h2 id="using-infinispan-client">Using Infinispan Client</h2>
@@ -338,6 +365,13 @@ This guide will walk you through all that.</p>
     <p>This guide covers how to use the Flyway extension to manage your schema migrations.</p>
 
     <p><a href="/guides/flyway-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+  </div>
+<div class="guide-item">
+    <h2 id="reactive-postgres-client">Reactive Postgres Client</h2>
+
+    <p>This guide covers how to use the Reactive Postgres Client in Quarkus.</p>
+
+    <p><a href="/guides/reactive-postgres-client" class="button-cta secondary">READ THE GUIDE</a></p>
   </div>
 </div>
 <div class="grid__item width-12-12"><hr /></div>
@@ -560,13 +594,6 @@ authorization, where these tokens are issued by a Keycloak Server.</p>
 </div>
 <div class="grid__item width-8-12 width-12-12-m guides-content">
 <div class="guide-item">
-    <h2 id="measuring-performance">Measuring Performance</h2>
-
-    <p>When measuring the footprint of a Quarkus application, we measure Resident Set Size (RSS) and not the JVM heap size which is only a small part of the overall problem. The JVM not only allocates native memory for heap (-Xms, -Xmx) but also structures required by the jvm to run your application.</p>
-
-    <p><a href="/guides/performance-measure" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
     <h2 id="scheduling-periodic-tasks">Scheduling Periodic Tasks</h2>
 
     <p>Modern applications often need to run specific tasks periodically. In this guide, you learn how to schedule periodic tasks.</p>
@@ -574,11 +601,25 @@ authorization, where these tokens are issued by a Keycloak Server.</p>
     <p><a href="/guides/scheduled-guide" class="button-cta secondary">READ THE GUIDE</a></p>
   </div>
 <div class="guide-item">
+    <h2 id="sending-emails">Sending emails</h2>
+
+    <p>Learn more about how you can send email from a Quarkus application with our reactive email client.</p>
+
+    <p><a href="/guides/sending-emails" class="button-cta secondary">READ THE GUIDE</a></p>
+  </div>
+<div class="guide-item">
     <h2 id="using-vertx">Using Vert.x</h2>
 
     <p>This guide explains how to use Vert.x in Quarkus to build reactive applications.</p>
 
     <p><a href="/guides/using-vertx" class="button-cta secondary">READ THE GUIDE</a></p>
+  </div>
+<div class="guide-item">
+    <h2 id="measuring-performance">Measuring Performance</h2>
+
+    <p>When measuring the footprint of a Quarkus application, we measure Resident Set Size (RSS) and not the JVM heap size which is only a small part of the overall problem. The JVM not only allocates native memory for heap (-Xms, -Xmx) but also structures required by the jvm to run your application.</p>
+
+    <p><a href="/guides/performance-measure" class="button-cta secondary">READ THE GUIDE</a></p>
   </div>
 </div>
 
