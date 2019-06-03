@@ -112,12 +112,13 @@
     -DprojectArtifactId=rest-kotlin \
     -DclassName="org.acme.rest.GreetingResource" \
     -Dpath="/greeting" \
-    -Dextensions="kotlin"</code></pre>
+    -Dextensions="kotlin,resteasy-jsonb"</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>When adding <code>kotlin</code> to the extensions list, the Maven plugin will generate a project that is properly
-configured to work with Kotlin. Furthermore  the <code>org.acme.rest.GreetingResource</code> class is implemented as Kotlin source code (as is the case with the generated tests).</p>
+configured to work with Kotlin. Furthermore  the <code>org.acme.rest.GreetingResource</code> class is implemented as Kotlin source code (as is the case with the generated tests).
+The addition of <code>resteasy-jsonb</code> in the extension list results in importing the RESTEasy/JAX-RS and JSON-B extensions.</p>
 </div>
 <div class="paragraph">
 <p><code>GreetingResource.kt</code> looks like this:</p>
@@ -140,10 +141,65 @@ class GreetingResource {
 }</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="update-code">Update code</h3>
+<div class="paragraph">
+<p>In order to show a more practical example of Kotlin usage we will add a simple <a href="https://kotlinlang.org/docs/reference/data-classes.html">data class</a> called <code>Greeting.kt</code> like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">package org.acme.rest
+
+data class Greeting(val message: String = "")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We also update the <code>GreetingResource.kt</code> like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">import javax.ws.rs.GET
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
+import javax.ws.rs.core.MediaType
+
+@Path("/greeting")
+class GreetingResource {
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    fun hello() = Greeting("hello")
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With these changes in place the <code>/greeting</code> endpoint will reply with a JSON object instead of a simple String.</p>
+</div>
+<div class="paragraph">
+<p>To make the test pass, we also need to update <code>GreetingResourceTest.kt</code> like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">@QuarkusTest
+open class GreetingResourceTest {
+
+    @Test
+    fun testHelloEndpoint() {
+        given()
+          .`when`().get("/greeting")
+          .then()
+             .statusCode(200)
+             .body("message", equalTo("hello"))
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="important-configuration-points">Important configuration points</h2>
+<h2 id="important-maven-configuration-points">Important Maven configuration points</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The generated <code>pom.xml</code> contains the following modifications compared to its counterpart when Kotlin is not selected:</p>
@@ -236,18 +292,18 @@ code and immediately see their changes reflected.</p>
 <p>To see this feature in action, first execute: <code>./mvnw compile quarkus:dev</code></p>
 </div>
 <div class="paragraph">
-<p>When executing an HTTP GET request against <code><a href="http://localhost:8080/greeting" class="bare">http://localhost:8080/greeting</a></code>, you should get <code>hello</code> as a response.</p>
+<p>When executing an HTTP GET request against <code><a href="http://localhost:8080/greeting" class="bare">http://localhost:8080/greeting</a></code>, you see a JSON message with the value <code>hello</code> as its <code>message</code> field.</p>
 </div>
 <div class="paragraph">
 <p>Now using your favorite editor or IDE, update <code>GreetingResource.kt</code> and change the <code>hello</code> method to the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">fun hello() = "hi"</code></pre>
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">fun hello() = Greeting("hi")</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>When you now execute an HTTP GET request against <code><a href="http://localhost:8080/greeting" class="bare">http://localhost:8080/greeting</a></code>, you should see <code>hi</code> as a response.</p>
+<p>When you now execute an HTTP GET request against <code><a href="http://localhost:8080/greeting" class="bare">http://localhost:8080/greeting</a></code>, you should see a JSON message with the value <code>hi</code> as its <code>message</code> field.</p>
 </div>
 <div class="paragraph">
 <p>One thing to note is that the live reload feature is not available when making changes to both Java and Kotlin source that have dependencies on each other. We hope to alleviate this limitation in the future.</p>

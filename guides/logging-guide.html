@@ -109,13 +109,28 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.console.level</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>INFO</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The minimum log level to display to the console.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.console.color</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allow color rendering to be used on the console, if it is supported by the terminal.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.console.async</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether to log asynchronously.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.console.async.queue-length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>512</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The queue length to use before flushing writing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.console.async.overflow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BLOCK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether to block the publisher (rather than drop the message) when the queue is full.</p></td>
 </tr>
 </tbody>
 </table>
@@ -162,7 +177,7 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.rotation.max-file-size</code></p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum file size of the log file after which a rotation is executed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum file size of the log file after which a rotation is executed. This configuration option would recognize strings in this format (shown as a regular expression): <code>[0-9]+[KkMmGgTtPpEeZzYy]?</code>. If no suffix is given, assume bytes.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.rotation.max-backup-index</code></p></td>
@@ -178,6 +193,21 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.rotation.rotate-on-boot</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether to rotate log files on server initialization.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.async</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether to log asynchronously.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.async.queue-length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>512</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The queue length to use before flushing writing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.async.overflow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BLOCK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether to block the publisher (rather than drop the message) when the queue is full.</p></td>
 </tr>
 </tbody>
 </table>

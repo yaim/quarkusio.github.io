@@ -557,7 +557,7 @@ ContextRegistrarBuildItem customContext() {
 <div class="sectionbody">
 <div class="paragraph">
 <p>The container attempts to remove all unused beans during build by default.
-This optimization can be disabled: <code>quarkus.arc.remove-unused-beans=false</code>.</p>
+This optimization can be disabled by setting <code>quarkus.arc.remove-unused-beans</code> to <code>none</code> or <code>false</code>.</p>
 </div>
 <div class="paragraph">
 <p>An unused bean:</p>
@@ -588,7 +588,14 @@ This optimization can be disabled: <code>quarkus.arc.remove-unused-beans=false</
 </ul>
 </div>
 <div class="paragraph">
-<p>The extensions can eliminate possible false positives by producing <code>UnremovableBeanBuildItem</code>.</p>
+<p>Users can instruct the container to not remove any of their specific beans (even if they satisfy all the rules specified above) by annotating them with <code>io.quarkus.arc.Unremovable</code>.</p>
+</div>
+<div class="paragraph">
+<p>Furthermore, extensions can eliminate possible false positives by producing <code>UnremovableBeanBuildItem</code>.</p>
+</div>
+<div class="paragraph">
+<p>Finally, Quarkus provides a middle ground for the bean removal optimization where application beans are never removed whether or not they are unused,
+while the optimization proceeds normally for non application classes. To use this mode, set <code>quarkus.arc.remove-unused-beans</code> to <code>fwk</code> or <code>framework</code>.</p>
 </div>
 </div>
 </div>

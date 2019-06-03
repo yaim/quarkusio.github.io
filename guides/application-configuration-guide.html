@@ -375,6 +375,62 @@ Environment variables names are following the conversion rules of <a href="https
 </table>
 </div>
 <div class="sect2">
+<h3 id="configuration-profiles">Configuration Profiles</h3>
+<div class="paragraph">
+<p>Quarkus supports the notion of configuration profiles. These allow you to have multiple configuration in the same file and
+select between then via a profile name.</p>
+</div>
+<div class="paragraph">
+<p>The syntax for this is <code>%{profile}.config.key=value</code>. For example if I have the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.port=9090
+%dev.quarkus.http.port=8181</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Quarkus HTTP port will be 9090, unless the 'dev' profile is active, in which case it will be 8181.</p>
+</div>
+<div class="paragraph">
+<p>By default Quarkus has three profiles, although it is possible to use as many as you like. The default profiles are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>dev</strong> - Activated when in development mode (i.e. <code>quarkus:dev</code>)</p>
+</li>
+<li>
+<p><strong>test</strong> - Activated when running tests</p>
+</li>
+<li>
+<p><strong>prod</strong> - The default profile when not running in development or test mode</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There are two ways to set a custom profile, either via the <code>quarkus-profile</code> system property or the <code>QUARKUS_PROFILE</code>
+environment variable. If both are set the environment variable takes precedence. Note that it is not necessary to
+define the names of these profiles anywhere, all that is necessary is to create a config property with the profile
+name, and then set the current profile to that name. For example if I want a 'staging' profile with a different HTTP port
+I can add the following to <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.port=9090
+%staging.quarkus.http.port=9999</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then set the <code>QUARKUS_PROFILE</code> environment variable to 'staging' to activate my profile.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="custom-configuration">Custom Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
 <h3 id="custom-configuration-sources">Custom configuration sources</h3>
 <div class="paragraph">
 <p>You can also introduce custom configuration sources in the standard MicroProfile Config manner.  To
@@ -382,6 +438,137 @@ do this, you must provide a class which implements either <code>org.eclipse.micr
 or <code>org.eclipse.microprofile.config.spi.ConfigSourceProvider</code>.  Create a
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html">service file</a> for the
 class and it will be detected and installed at application startup.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="custom-configuration-converters">Custom configuration converters</h3>
+<div class="paragraph">
+<p>You can also use your custom types as a configuration values. This can be done by implementing <code>org.eclipse.microprofile.config.spi.Converter&lt;T&gt;</code>
+and adding its fully qualified class name in file <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.</p>
+</div>
+<div class="paragraph">
+<p>Let us assume you have a custom type like this one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.config;
+
+public class MicroProfileCustomValue {
+
+    private final int number;
+
+    public MicroProfileCustomValue(int number) {
+        this.number = number;
+    };
+
+    public int getNumber() {
+        return number;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The corresponding converter will look like the one below. Please note that your custom converter class must be <code>public</code> and must have
+a <code>public</code> no-argument constructor. It also must not be <code>abstract</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.config;
+
+import org.eclipse.microprofile.config.spi.Converter;
+
+public class MicroProfileCustomValueConverter implements Converter&lt;MicroProfileCustomValue&gt; {
+
+    @Override
+    public MicroProfileCustomValue convert(String value) {
+        return new MicroProfileCustomValue(Integer.valueOf(value));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you need to include fully qualified class name of converter in a service file <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.
+If you have more converters simply add their class names in this file as well. Single fully qualified class name per line, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">org.acme.config.MicroProfileCustomValueConverter
+org.acme.config.SomeOtherConverter
+org.acme.config.YetAnotherConverter</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please note that <code>SomeOtherConverter</code> and <code>YetAnotherConverter</code> was added just for a demonstration. If you include in this file classes
+which are not available in runtime, the converters loading will fail.</p>
+</div>
+<div class="paragraph">
+<p>After this is done you can use your custom type as a configuration value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConfigProperty(name = "configuration.value.name")
+MicroProfileCustomValue value;</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="converter-priority">Converter priority</h4>
+<div class="paragraph">
+<p>In some cases you may want to use a custom converter to convert a type which is already converted
+by a different converter. In such cases, you can use the <code>javax.annotation.Priority</code> annotation to
+change converters precedence and make your custom converter of higher priority than the other
+on the list.</p>
+</div>
+<div class="paragraph">
+<p>By default, if no <code>@Priority</code> can be found on a converter, it&#8217;s registered with a priority of 100
+and all Quarkus core converters are registered with a priority of 200, so depending on which
+converter you would like to replace, you need to set a higher value.</p>
+</div>
+<div class="paragraph">
+<p>To demonstrate the idea let us implement a custom converter which will take precedence over
+<code>MicroProfileCustomValueConverter</code> implemented in the previous example.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.config;
+
+import javax.annotation.Priority;
+import org.eclipse.microprofile.config.spi.Converter;
+
+@Priority(150)
+public class MyCustomConverter implements Converter&lt;MicroProfileCustomValue&gt; {
+
+    @Override
+    public MicroProfileCustomValue convert(String value) {
+
+        final int secretNumber;
+        if (value.startsFrom("OBF:")) {
+            secretNumber = Integer.valueOf(SecretDecoder.decode(value));
+        } else {
+            secretNumber = Integer.valueOf(value);
+        }
+
+        return new MicroProfileCustomValue(secretNumber);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since it converts the same value type (namely <code>MicroProfileCustomValue</code>) and has a priority
+of 150, it will be used instead of a <code>MicroProfileCustomValueConverter</code> which has a default
+priority of 100.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This new converter also needs to be listed in a service file, i.e. <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>

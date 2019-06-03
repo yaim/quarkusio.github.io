@@ -258,6 +258,112 @@ quarkus.datasource.max-size=13</code></pre>
 <div class="paragraph">
 <p>There are other configuration options, detailed below.</p>
 </div>
+<div class="sect2">
+<h3 id="jdbc-url-configurations">JDBC URL configurations</h3>
+<div class="paragraph">
+<p>Each of the supported databases contains different JDBC URL configuration options.
+Going into each of those options is beyond the scope of this document, but it gives an overview of each database URL and link to the official documentation.</p>
+</div>
+<div class="sect3">
+<h4 id="h2">H2</h4>
+<div class="paragraph">
+<p><code>jdbc:h2:{ {.|mem:}[name] | [file:]fileName | {tcp|ssl}:[//]server[:port][,server2[:port]]/name }[;key=value&#8230;&#8203;]</code></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Example</dt>
+<dd>
+<p><code>jdbc:h2:tcp://localhost/~/test</code>, <code>jdbc:h2:mem:myDB</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>H2 is an embedded database.
+It can run as a server, based on a file, or live completely in memory.
+All of these options are available as listed above.
+You can find more information at the <a href="https://h2database.com/html/features.html?highlight=url&amp;search=url#database_url">official documentation</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="postgresql">PostgreSQL</h4>
+<div class="paragraph">
+<p>PostgreSQL only runs as a server, as do the rest of the databases below.
+As such, you must specify connection details, or use the defaults.</p>
+</div>
+<div class="paragraph">
+<p><code>jdbc:postgresql:[//][host][:port][/database][?key=value&#8230;&#8203;]</code></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Example</dt>
+<dd>
+<p><code>jdbc:postgresql://localhost/test</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Defaults for the different parts are as follows:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>host</code></dt>
+<dd>
+<p>localhost</p>
+</dd>
+<dt class="hdlist1"><code>port</code></dt>
+<dd>
+<p>5432</p>
+</dd>
+<dt class="hdlist1"><code>database</code></dt>
+<dd>
+<p>same name as the username</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The <a href="https://jdbc.postgresql.org/documentation/head/connect.html">official documentation</a> go into more detail and list optional parameters as well.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="mariadbmysql">MariaDB/MySQL</h4>
+<div class="paragraph">
+<p><code>jdbc:(mysql|mariadb):[replication:|failover:|sequential:|aurora:]//&lt;hostDescription&gt;[,&lt;hostDescription&gt;&#8230;&#8203;]/[database][?&lt;key1&gt;=&lt;value1&gt;[&amp;&lt;key2&gt;=&lt;value2&gt;]]</code>
+ hostDescription:: <code>&lt;host&gt;[:&lt;portnumber&gt;]  or address=(host=&lt;host&gt;)[(port=&lt;portnumber&gt;)][(type=(master|slave))]</code></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Example</dt>
+<dd>
+<p><code>jdbc:mysql://localhost:3306/test</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>You can find more information about this feature and others detailed in the <a href="https://mariadb.com/kb/en/library/about-mariadb-connector-j/">official documentation</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="microsoft-sql-server">Microsoft SQL Server</h4>
+<div class="paragraph">
+<p>Microsoft SQL Server takes a connection URL in the following form:</p>
+</div>
+<div class="paragraph">
+<p><code>jdbc:sqlserver://[serverName[\instanceName][:portNumber]][;property=value[;property=value]]</code></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Example</dt>
+<dd>
+<p><code>jdbc:sqlserver://localhost:1433;databaseName=AdventureWorks</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The Microsoft SQL Server JDBC driver works essentially the same as the others.
+More details can be found in the <a href="https://docs.microsoft.com/en-us/sql/connect/jdbc/connecting-to-sql-server-with-the-jdbc-driver?view=sql-server-2017">official documentation</a>.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -425,10 +531,13 @@ AgroalDataSource dataSource2;</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The format for durations uses the standard <code>java.time</code> format.</p>
+<p>The format for durations uses the standard <code>java.time.Duration</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
 </div>
 <div class="paragraph">
-<p>You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
+<p>You can also provide duration values starting with a number.
+In this case, if the value consists only of a number, the converter treats the value as seconds.
+Otherwise, <code>PT</code> is implicitly appended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
 </div>
 </td>
 </tr>

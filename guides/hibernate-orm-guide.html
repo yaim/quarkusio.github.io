@@ -573,7 +573,7 @@ public class Fruit {
 <p>The size of each region can be customized via the <code>quarkus.hibernate-orm.cache."&lt;region_name&gt;".memory.object-count</code> property (Replace <em>&lt;region_name&gt;</em> with the actual region name).</p>
 </div>
 <div class="paragraph">
-<p>To set the maximum idle time, provide the number of seconds via the <code>quarkus.hibernate-orm.cache."&lt;region_name&gt;".expiration.max-idle</code> property (Replace <em>&lt;region_name&gt;</em> with the actual region name).</p>
+<p>To set the maximum idle time, provide the duration (see note on duration&#8217;s format below) via the <code>quarkus.hibernate-orm.cache."&lt;region_name&gt;".expiration.max-idle</code> property (Replace <em>&lt;region_name&gt;</em> with the actual region name).</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -589,6 +589,11 @@ public class Fruit {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">quarkus.hibernate-orm.cache."org.acme.MyEntity".memory.object-count=1000</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The format for durations uses the standard <code>java.time</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.
+You can also provide duration values starting with a number. In this case, if the value consists only of a <code>number</code>, the converter treats the value as seconds. Otherwise, <code>PT</code> is implicit appended to the value to obtain a standard <code>java.time</code> format.</p>
 </div>
 </td>
 </tr>

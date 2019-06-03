@@ -315,7 +315,7 @@ specification in order to generate your API <a href="https://github.com/OAI/Open
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>./mvnw quarkus:add-extension -Dextensions="smallrye-openapi"</pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw quarkus:add-extension -Dextensions="smallrye-openapi"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -323,7 +323,7 @@ specification in order to generate your API <a href="https://github.com/OAI/Open
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>./mvnw compile quarkus:dev</pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -331,7 +331,7 @@ specification in order to generate your API <a href="https://github.com/OAI/Open
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ curl http://localhost:8080/openapi
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl http://localhost:8080/openapi
 openapi: 3.0.1
 info:
   title: Generated API
@@ -373,7 +373,7 @@ components:
         description:
           type: string
         name:
-          type: string</pre>
+          type: string</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -399,7 +399,17 @@ The UI is automatically generated from your OpenAPI specification.</p>
 <div class="title">Note</div>
 </td>
 <td class="content">
-Swagger UI is only available when Quarkus is started in dev or test mode.
+<div class="paragraph">
+<p>By default, Swagger UI is only available when Quarkus is started in dev or test mode.</p>
+</div>
+<div class="paragraph">
+<p>If you want to make it available in production too, you can include the following configuration in your <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.swagger-ui.always-include=true</code></pre>
+</div>
+</div>
 </td>
 </tr>
 </table>
@@ -412,7 +422,7 @@ Swagger UI is only available when Quarkus is started in dev or test mode.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>quarkus.swagger-ui.path=/my-custom-path</pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.swagger-ui.path=/my-custom-path</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -420,7 +430,7 @@ Swagger UI is only available when Quarkus is started in dev or test mode.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>./mvnw compile quarkus:dev</pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -428,7 +438,7 @@ Swagger UI is only available when Quarkus is started in dev or test mode.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>00:00:00,000 INFO  [io.qua.swa.run.SwaggerUiServletExtension] Swagger UI available at /swagger-ui</pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">00:00:00,000 INFO  [io.qua.swa.run.SwaggerUiServletExtension] Swagger UI available at /swagger-ui</code></pre>
 </div>
 </div>
 <div class="paragraph">

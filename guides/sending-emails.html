@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sending Emails</title>
+  <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quarkus: Supersonic Subatomic Java">
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml"  href="https://quarkus.io//feed.xml" title="Quarkus">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-NJWS5L');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Syntax highlighting -->
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body class="guides">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="content">
+    <div class="navigation-wrapper">
+  <div class="width-12-12">
+    <div class="header navigation">
+      <div class="logo-wrapper">
+        <a href="/"><img src="/assets/images/quarkus_logo_horizontal_rgb_reverse.svg" class="project-logo" title="Quarkus"></a>
+      </div>
+      <div class="nav-container">
+        <nav>
+          <div class="nav-mobile"><a id="nav-toggle" href="#!"><span></span></a></div>
+          <ul class="nav-list">
+            <li>
+              <a href="/get-started/" class="">Get Started</a>
+            </li>
+            <li>
+              <a href="/guides/" class="active">Guides</a>
+            </li>
+            <li>
+              <a href="/extensions/" class="">Extensions</a>
+            </li>
+            <li>
+              <a href="/community/" class="">Community</a>
+            </li>
+            <li>
+              <a href="/blog/" class="">Blog</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="guides">
+  <div class="width-12-12">
+    <h1 class="text-caps">Sending Emails</h1>
+    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide demonstrates how your Quarkus application can send emails using an SMTP server.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="prerequisites">Prerequisites</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To complete this guide, you need:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>less than 15 minutes</p>
+</li>
+<li>
+<p>The SMTP hostname, port and credentials, and an email address</p>
+</li>
+<li>
+<p>an IDE</p>
+</li>
+<li>
+<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
+</li>
+<li>
+<p>Apache Maven 3.5.3+</p>
+</li>
+<li>
+<p>GraalVM installed if you want to run in native mode.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="architecture">Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this guide, we are going to see how you can send emails from a Quarkus application.
+It covers simple emails, attachments, inlined attachments, the reactive and imperative APIs&#8230;&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-the-maven-project">Creating the Maven Project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new project with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=sending-email-quickstart \
+    -Dextensions="mailer"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you already have an existing project, add the <code>mailer</code> extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn quarkus:add-extensions -Dextensions="mailer"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-the-mailer">Configuring the mailer</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Quarkus mailer is using SMTP. In the <code>src/main/resources/application.properties</code> file, you need to configure the host, port, username, password as well as the other configuration aspect.
+Note that the password can also be configured using system properties and environment variables.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example using <em>sendgrid</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.mailer.from=test@quarkus.io
+quarkus.mailer.host=smtp.sendgrid.net
+quarkus.mailer.port=465
+quarkus.mailer.ssl=true
+quarkus.mailer.username=....
+quarkus.mailer.password=....</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following table lists the properties that can be configured:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Comment</th>
+<th class="tableblock halign-left valign-top">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">from</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the default <em>from</em> address, without, all emails will need an explicit value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mock</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">if set to <code>true</code>, the emails are not sent, just printed on the console.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bounce-address</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the default bounce address</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the SMTP server host name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>mandatory</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the SMTP server port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>25</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the username</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ssl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables or disables SSL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">trust-all</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set whether to trust all certificates</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max-pool-size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Configures the maximum number of open connections to the mail server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">own-host-name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The hostname to be used for <code>HELO/EHLO</code> and the <code>Message-ID</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">keep-alive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if connection pool is enabled.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">disable-esmtp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ESMTP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">start-tls</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NONE</code>, <code>OPTIONAL</code>, <code>REQUIRED</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the TLS security mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OPTIONAL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">login</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DISABLED</code>, <code>OPTIONAL</code>, <code>REQUIRED</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the login mode for the connection</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NONE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">auth-methods</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">space-separated list</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the allowed auth methods, accept all methods if not set</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">key-store</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path of the key store</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">key-store-password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key store password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sending-simple-emails">Sending simple emails</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In a JAX-RS resource, or in a bean, you can inject the mailer as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+Mailer mailer;
+
+@Inject
+ReactiveMailer reactiveMailer;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are 2 APIs:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>io.quarkus.mailer.Mailer</code> provides the imperative (blocking and synchronous) API;</p>
+</li>
+<li>
+<p><code>io.quarkus.mailer.ReactiveMailer</code> provides the reactive (non-blocking and asynchronous) API</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The two APIs are equivalent feature-wise. Actually the <code>Mailer</code> implementation is built on top of the <code>ReactiveMailer</code> implementation.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To send a simple email, proceed as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Imperative API:
+mailer.send(Mail.withText("to@acme.org", "A simple email from quarkus", "This is my body."));
+// Reactive API:
+CompletionStage&lt;Void&gt; stage = reactiveMailer.send(Mail.withText("to@acme.org", "A reactive email from quarkus", "This is my body."));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example, you can use the <code>Mailer</code> in a JAX-RS endpoint as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@GET
+@Path("/simple")
+public Response sendASimpleEmail() {
+    mailer.send(Mail.withText("to@acme.org", "A simple email from quarkus", "This is my body"));
+    return Response.accepted().build();
+}
+
+@GET
+@Path("/async")
+public CompletionStage&lt;Response&gt; sendASimpleEmailAsync() {
+    return reactiveMailer.send(
+            Mail.withText("to@acme.org", "A reactive email from quarkus", "This is my body"))
+            .thenApply(x -&gt; Response.accepted().build());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With such a JAX-RS resource, you can check that everything is working with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">curl http://localhost:8080/simple
+curl http://localhost:8080/async</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create new <code>io.quarkus.mailer.Mail</code> instances from the constructor or from the <code>Mail.withText</code> and
+<code>Mail.withHtml</code> helper methods. The <code>Mail</code> instance lets you add recipients (to, cc, or bcc), set the subject,
+headers, sender (from) address&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>You can also send several <code>Mail</code> objects in one call:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">mailer.send(mail1, mail2, mail3);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sending-attachments">Sending attachments</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To send attachment, just use the <code>addAttachment</code> methods on the <code>io.quarkus.mailer.Mail</code> instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@GET
+@Path("/attachment")
+public Response sendEmailWithAttachment() {
+    mailer.send(Mail.withText("to@acme.org", "An email from quarkus with attachment",
+            "This is my body")
+            .addAttachment("my-file.txt",
+                "content of my file".getBytes(), "text/plain"));
+    return Response.accepted().build();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Attachments can be created from raw bytes (as shown in the snippet) or files.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sending-html-emails-with-inlined-attachments">Sending HTML emails with inlined attachments</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When sending HTML email, you can add inlined attachments.
+For example, you can send an image with your email, and this image will be displayed in the mail content.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@GET
+@Path("/html")
+public Response sendingHTML() {
+    String body = "&lt;strong&gt;Hello!&lt;/strong&gt;" + "\n" +
+        "&lt;p&gt;Here is an image for you: &lt;img src=\"cid:my-image@quarkus.io\"/&gt;&lt;/p&gt;" +
+        "&lt;p&gt;Regards&lt;/p&gt;";
+    mailer.send(Mail.withHtml("to@acme.org", "An email in HTML", body)
+        .addInlineAttachment("quarkus-logo.png",
+            new File("quarkus-logo.png"),
+            "image/png", "&lt;my-image@quarkus.io&gt;"));
+    return Response.accepted().build();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the <em>content-id</em> format and reference.
+By spec, when you create the inline attachment, the content-id must be structured as follows: <code>&lt;id@domain&gt;</code>.
+If you don&#8217;t wrap your content-id between <code>&lt;&gt;</code>, it is automatically wrapped for you.
+When you want to reference your attachment, for instance in the <code>src</code> attribute, use <code>cid:id@domain</code> (without the <code>&lt;</code> and <code>&gt;</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-the-underlying-vert-x-mail-client">Using the underlying Vert.x Mail Client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Quarkus Mailer is implemented on top of the <a href="https://vertx.io/docs/vertx-mail-client/java/">Vert.x Mail Client</a>, providing an asynchronous and non-blocking way to send emails.
+If you need fine control on how the mail is sent, for instance if you need to retrieve the message ids, you can inject the underlying client, and use it directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject MailClient client;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Three API flavors are exposed:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the Axle client (<code>io.vertx.axle.ext.mail.MailClient</code>), using <code>CompletionStage</code> and Reactive Streams <code>Publisher</code></p>
+</li>
+<li>
+<p>the RX Java 2 client (<code>io.vertx.reactivex.ext.mail.MailClient</code>)</p>
+</li>
+<li>
+<p>the bare client (<code>io.vertx.ext.mail.MailClient</code>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Check the <a href="using-vertx.html">Using Vert.x guide</a> for further details about these different APIs and how to select the most suitable for you.</p>
+</div>
+<div class="paragraph">
+<p>The retrieved <code>MailClient</code> is configured using the configuration key presented above.
+You can also create your own instance, and pass your own configuration.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This guide has shown how you can send emails from a Quarkus application.
+The <em>mailer</em> extension works in JVM and native mode.</p>
+</div>
+</div>
+</div>
+  </div>
+</div>
+
+  </div>
+
+  <div class="content project-footer">
+  <div class="footer-section">
+    <div class="logo-wrapper">
+      <a href="/"><img src="/assets/images/quarkus_logo_horizontal_rgb_reverse.svg" class="project-logo" title="Quarkus"></a>
+    </div>
+  </div>
+  <div class="grid-wrapper">
+    <p class="grid__item width-3-12">Quarkus is open. Quarkus and its extensions are available under the <a href='https://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache Software License 2.0</a> or compatible license.<br /><br />This website was built with <a href='https://jekyllrb.com/' target='_blank'>Jekyll</a> is hosted on <a href='https://pages.github.com/' target='_blank'>Github Pages</a> and is completely open source. If you want to make it better, <a href='https://github.com/quarkusio/quarkusio.github.io' target='_blank'>fork the website</a> and show us what you’ve got.</p>
+
+    
+      <div class="width-1-12 project-links">
+        <span>Navigation</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="/">Home</a></li>
+          
+            <li><a href="/guides">Guides</a></li>
+          
+            <li><a href="/get-started">Get Started</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Contribute</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://twitter.com/quarkusio">Follow us</a></li>
+          
+            <li><a href="https://github.com/quarkusio">GitHub</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Get Help</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://quarkusio.zulipchat.com">Chatroom</a></li>
+          
+            <li><a href="https://groups.google.com/forum/#!forum/quarkus-dev">Google&nbsp;Groups</a></li>
+          
+            <li><a href="/faq">FAQ</a></li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="width-6-12 more-links">
+        <span>Quarkus is proudly made of</span>
+        <ul class="footer-links">
+          
+            <li><a href="https://hibernate.org" target="_blank">Hibernate</a></li>
+          
+            <li><a href="https://netty.io" target="_blank">Netty</a></li>
+          
+            <li><a href="https://resteasy.github.io" target="_blank">RESTEasy</a></li>
+          
+            <li><a href="https://microprofile.io" target="_blank">Eclipse MicroProfile</a></li>
+          
+            <li><a href="https://vertx.io/" target="_blank">Eclipse Vert.x</a></li>
+          
+            <li><a href="https://camel.apache.org" target="_blank">Apache Camel</a></li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+  <div class="content redhat-footer">
+  <div class="grid-wrapper">
+    <span class="licence">
+      <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i> <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a>
+      | <a href="https://www.redhat.com/en/about/privacy-policy">Red Hat Privacy Policy</a>
+    </span>
+    <span class="redhat">
+      a Red Hat sponsored project   
+    </span>
+    <span class="redhat-logo">
+      <a href="https://www.redhat.com/" target="_blank"><img src="/assets/images/redhat_reversed.svg"></a>
+    </span>
+  </div>
+</div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript" src="/assets/javascript/mobile-nav.js"></script>
+  <script type="text/javascript" src="/assets/javascript/scroll-down.js"></script>
+  <script type="text/javascript">
+    if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+    }
+  </script>
+</body>
+
+</html>

@@ -384,6 +384,44 @@ The next screen list the found modules; select the generated project and click o
 </div>
 </div>
 <div class="sect1">
+<h2 id="logging-quarkus-application-build-classpath-tree">Logging Quarkus application build classpath tree</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Usually, dependencies of an application (which is a Maven project) could be displayed using <code>mvn dependency:tree</code> command. In case of a Quarkus application, however, this command will list only the runtime dependencies of the application.
+Given that the Quarkus build process adds deployment dependencies of the extensions used in the application to the original application classpath, it could be useful to know which dependencies and which versions end up on the build classpath.
+Luckily, the <code>quarkus-bootstrap</code> Maven plugin includes the <code>build-tree</code> goal which displays the build dependency tree for the application.</p>
+</div>
+<div class="paragraph">
+<p>To be able to use it, the following plugin configuration has to be added to the <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">            &lt;plugin&gt;
+                &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+                &lt;artifactId&gt;quarkus-bootstrap-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;${quarkus.version}&lt;/version&gt;
+            &lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you should be able to execute <code>mvn quarkus-bootstrap:build-tree</code> on your project and see something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">[INFO] --- quarkus-bootstrap-maven-plugin:0.15.0:build-tree (default-cli) @ getting-started ---
+[INFO] org.acme:getting-started:jar:1.0-SNAPSHOT
+[INFO] └─ io.quarkus:quarkus-resteasy-deployment:jar:0.15.0 (compile)
+[INFO]    ├─ io.quarkus:quarkus-resteasy-server-common-deployment:jar:0.15.0 (compile)
+[INFO]    │  ├─ io.quarkus:quarkus-core-deployment:jar:0.15.0 (compile)
+[INFO]    │  │  ├─ commons-beanutils:commons-beanutils:jar:1.9.3 (compile)
+[INFO]    │  │  │  ├─ commons-logging:commons-logging:jar:1.2 (compile)
+[INFO]    │  │  │  └─ commons-collections:commons-collections:jar:3.2.2 (compile)
+...</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="building-a-native-executable">Building a native executable</h2>
 <div class="sectionbody">
 <div class="paragraph">

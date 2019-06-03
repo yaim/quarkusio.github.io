@@ -697,8 +697,8 @@ extensions may use the full range of configuration types made available by Small
 </ul>
 </div>
 <div class="paragraph">
-<p>In addition, custom converters may be registered by build extensions using the <code>io.quarkus.deployment.builditem.ConfigurationCustomConverterBuildItem</code>
-class.</p>
+<p>In addition, custom converters may be registered by adding their fully qualified class name in file
+<code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.</p>
 </div>
 <div class="paragraph">
 <p>Though these implicit converters use reflection, Quarkus will automatically ensure that they are loaded at the appropriate time.</p>
