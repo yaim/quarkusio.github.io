@@ -92,8 +92,7 @@
 </div>
 </div>
     </div>
-    <div class="sect1">
-<h2 id="quarkus-and-web-ui-development">Quarkus and Web UI Development</h2>
+    <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>In this blog post we will take advantage of the respective development modes of both Quarkus and Angular CLI and see how we can develop a zero turnaround web application backed by a RESTful API on Quarkus. While I am using Angular, <strong>the concepts are the same for other modern web application frameworks.</strong></p>
@@ -143,8 +142,11 @@
 <div class="paragraph">
 <p>This is great!!! We can now be super-productive and make changes in both our front-end and our back-end, and see the changes immediately without needing to rebuild, repackage and restart our application!</p>
 </div>
-<div class="sect3">
-<h4 id="adjustments-summary">Adjustments Summary</h4>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adjustments-summary">Adjustments Summary</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>The example project has already been set up with the needed adjustments to work properly both as a bundled application and in development mode. These are the main tweaks:</p>
 </div>
@@ -168,9 +170,8 @@
 <div class="paragraph">
 <p>We will focus on the changes needed to make this work well, and not go into the details of how the application is set up.</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="handle-angular-routes">Handle Angular Routes</h4>
+<div class="sect2">
+<h3 id="handle-angular-routes">Handle Angular Routes</h3>
 <div class="paragraph">
 <p>Add a filter, <a href="https://github.com/kabir/blog-quarkus-ui-development/blob/master/src/main/java/org/kabir/quarkus/ui/AngularRouteFilter.java">AngularRouteFilter</a>. The essence of its <code>doFilter()</code> method is:</p>
 </div>
@@ -223,8 +224,8 @@ if (response.getStatus() == 404) {
 <p>if it is something that should be handled by Angular.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="set-up-the-angular-proxy">Set up the Angular proxy</h4>
+<div class="sect2">
+<h3 id="set-up-the-angular-proxy">Set up the Angular proxy</h3>
 <div class="paragraph">
 <p>The proxy is configured in <a href="https://github.com/kabir/blog-quarkus-ui-development/blob/master/webapp/proxy.conf.json">proxy.conf.json</a>. All REST calls to anything under <code>/api</code> will be passed to the back-end running on port 8080. To run the Angular development server with this configuration, we have added a <code>proxy</code> configuration to the <code>scripts</code> section of <a href="https://github.com/kabir/blog-quarkus-ui-development/blob/master/webapp/package.json"><code>package.json</code></a>.</p>
 </div>
@@ -235,8 +236,11 @@ if (response.getStatus() == 404) {
 <p>Finally, <code>DefaultComponent</code> in <a href="https://github.com/kabir/blog-quarkus-ui-development/blob/master/webapp/src/app/app.component.ts"><code>app.component.ts</code></a> has a direct link to our servlet running in the back-end. It has a check to see if the web application is running in the proxy (i.e. its port is 4200), and if this is the case it adjusts the url from <code>/servlet/make-external-call</code> to point to the Quarkus back-end running on port 8080.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="last-words">Last words</h4>
+</div>
+</div>
+<div class="sect1">
+<h2 id="last-words">Last words</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>We have seen how with a minimum amount of configuration we can have both the back-end and front-end of our application running in Quarkus&#8217;s and Angular&#8217;s respective development modes. During development this removes the need to rebuild the application when we change something. You can just code away, and see the changes when you refresh your browser. This is done by starting Quarkus with:</p>
 </div>
@@ -253,8 +257,8 @@ if (response.getStatus() == 404) {
 <pre>$yarn proxy</pre>
 </div>
 </div>
-<div class="sect5">
-<h6 id="packaging-for-development">Packaging for development</h6>
+<div class="sect2">
+<h3 id="packaging-for-development">Packaging for development</h3>
 <div class="paragraph">
 <p>If you want to do a rebuild now and again to package the application and run it all in Quarkus run</p>
 </div>
@@ -267,8 +271,8 @@ if (response.getStatus() == 404) {
 <p>By not passing in -Dui.proxy we disable the checks for whether the front-end runs in a proxy. <code>-Dui.dev</code> builds the web application so it is part of the Quarkus application.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="packaging-for-production">Packaging for production</h6>
+<div class="sect2">
+<h3 id="packaging-for-production">Packaging for production</h3>
 <div class="paragraph">
 <p>To package the application for production, use</p>
 </div>
@@ -281,8 +285,8 @@ if (response.getStatus() == 404) {
 <p><code>-Dui</code> builds the web application just like <code>-Dui.dev</code>, but it does more optimisations for production. Those optimisations take some time.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="packaging-for-cloud-native">Packaging for cloud native</h6>
+<div class="sect2">
+<h3 id="packaging-for-cloud-native">Packaging for cloud native</h3>
 <div class="paragraph">
 <p>Finally to build a native image, make sure you have set up GraalVM as outlined <a href="https://quarkus.io/guides/building-native-image-guide">here</a>. Then build the application to generate the native executable.</p>
 </div>
@@ -299,7 +303,6 @@ if (response.getStatus() == 404) {
 <pre>$./target/blog-quarkus-ui-development-0.1.0-runner
 2019-06-06 10:57:02,254 INFO  [io.quarkus] (main) Quarkus 0.15.0 started in 0.005s. Listening on: http://[::]:8080
 2019-06-06 10:57:02,464 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb]</pre>
-</div>
 </div>
 </div>
 </div>

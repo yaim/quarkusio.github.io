@@ -67,564 +67,750 @@
     <h1 class="text-caps">Quarkus - Guides</h1>
   </div>
   <div class="grid__item width-4-12 hide-mobile toc">
-  <h2 id="table-of-contents">Table of Contents</h2>
-
-  <h3 id="core">Core</h3>
-
-  <ul>
-    <li><a href="/guides/application-configuration-guide">Configuring Your Application</a></li>
-    <li><a href="/guides/application-lifecycle-events-guide">Application Initialization and Termination</a></li>
-    <li><a href="/guides/cdi-reference">Contexts and Dependency Injection</a></li>
-    <li><a href="/guides/getting-started-testing">Testing Your Application</a></li>
-    <li><a href="/guides/logging-guide">Configuring Logging</a></li>
-    <li><a href="/guides/native-and-ssl-guide">Using SSL With Native Images</a></li>
-    <li><a href="/guides/context-propagation-guide">Context Propagation</a></li>
-  </ul>
-
-  <h3 id="web">Web</h3>
-
-  <ul>
-    <li><a href="/guides/rest-json-guide">Writing REST JSON Services</a></li>
-    <li><a href="/guides/validation-guide">Validation with Hibernate Validator</a></li>
-    <li><a href="/guides/rest-client-guide">Using the REST Client</a></li>
-    <li><a href="/guides/jwt-guide">Using JWT RBAC</a></li>
-    <li><a href="/guides/websocket-guide">Using WebSockets</a></li>
-    <li><a href="/guides/openapi-swaggerui-guide">Using OpenAPI and Swagger UI</a></li>
-    <li><a href="/guides/undertow-reference">Undertow Reference Documentation</a></li>
-  </ul>
-
-  <h3 id="data">Data</h3>
-
-  <ul>
-    <li><a href="/guides/datasource-guide">Configuring your datasources</a></li>
-    <li><a href="/guides/hibernate-orm-guide">Using Hibernate ORM and JPA</a></li>
-    <li><a href="/guides/hibernate-orm-panache-guide">Simplified Hibernate ORM with Panache</a></li>
-    <li><a href="/guides/hibernate-search-guide">Hibernate Search + Elasticsearch</a></li>
-    <li><a href="/guides/infinispan-client-guide">Using Infinispan Client</a></li>
-    <li><a href="/guides/transaction-guide">Using Transactions</a></li>
-    <li><a href="/guides/validation-guide">Validation with Hibernate Validator</a></li>
-    <li><a href="/guides/flyway-guide">Schema Migration with Flyway</a></li>
-    <li><a href="/guides/reactive-postgres-client">Reactive Postgres Client</a></li>
-  </ul>
-
-  <h3 id="messaging">Messaging</h3>
-
-  <ul>
-    <li><a href="/guides/kafka-guide">Using Kafka</a></li>
-    <li><a href="/guides/async-message-passing">Asynchronous Message Passing</a></li>
-  </ul>
-
-  <h3 id="security">Security</h3>
-
-  <ul>
-    <li><a href="/guides/security-guide">Using Security</a></li>
-    <li><a href="/guides/jwt-guide">Using JWT RBAC</a></li>
-    <li><a href="/guides/keycloak-guide">Using Keycloak to Protect JAX-RS Applications</a></li>
-  </ul>
-
-  <h3 id="cloud">Cloud</h3>
-
-  <ul>
-    <li><a href="/guides/kubernetes-guide">Deploying Native Applications on Kubernetes or OpenShift</a></li>
-    <li><a href="/guides/getting-started-knative-guide">Deploying Native Applications on Knative Kubernetes or OpenShift</a></li>
-    <li><a href="/guides/ap4k">Generating Kubernetes resources</a></li>
-    <li><a href="/guides/openshift-s2i-guide">Deploying to OpenShift using S2I</a></li>
-  </ul>
-
-  <h3 id="observability">Observability</h3>
-
-  <ul>
-    <li><a href="/guides/health-guide">Using Health Check</a></li>
-    <li><a href="/guides/opentracing-guide">Using OpenTracing</a></li>
-    <li><a href="/guides/metrics-guide">Collecting Metrics</a></li>
-  </ul>
-
-  <h3 id="serialization">Serialization</h3>
-
-  <ul>
-    <li><a href="/guides/rest-json-guide">Writing REST JSON Services</a></li>
-  </ul>
-
-  <h3 id="tooling">Tooling</h3>
-
-  <ul>
-    <li><a href="/guides/maven-tooling">Building Applications with Maven</a></li>
-    <li><a href="/guides/gradle-tooling">Building Applications with Gradle</a></li>
-  </ul>
-
-  <h3 id="migration">Migration</h3>
-
-  <ul>
-    <li><a href="/guides/spring-di-guide">Using our Spring DI compatibility layer</a></li>
-  </ul>
-
-  <h3 id="writing-extensions">Writing Extensions</h3>
-
-  <ul>
-    <li><a href="/guides/extension-authors-guide">Writing Your Own Extension</a></li>
-    <li><a href="/guides/writing-native-applications-tips">Writing Native Applications</a></li>
-  </ul>
-
-  <h3 id="alternative-languages">Alternative Languages</h3>
-
-  <ul>
-    <li><a href="/guides/kotlin">Using Kotlin</a></li>
-  </ul>
-
-  <h3 id="miscellaneous">Miscellaneous</h3>
-
-  <ul>
-    <li><a href="/guides/scheduled-guide">Scheduling Periodic Tasks</a></li>
-    <li><a href="/guides/sending-emails">Sending Emails</a></li>
-    <li><a href="/guides/using-vertx">Using Vert.x</a></li>
-    <li><a href="/guides/performance-measure">Measuring Performance</a></li>
-  </ul>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div>
-    <p>You have gone through the <a href="/get-started">Getting Started</a> guides.
-You are now ready to dive into specific topic guides.</p>
+    <h2 id="table-of-contents">Table of Contents</h2>
+    
+      <h3 id="#core">Core</h3>
+      <ul>
+      
+        <li><a href="/guides/application-configuration-guide">Configuring Your Application</a></li>
+      
+        <li><a href="/guides/application-lifecycle-events-guide">Application Initialization and Termination</a></li>
+      
+        <li><a href="/guides/cdi-reference">Contexts and Dependency Injection</a></li>
+      
+        <li><a href="/guides/getting-started-testing">Testing Your Application</a></li>
+      
+        <li><a href="/guides/logging-guide">Configuring Logging</a></li>
+      
+        <li><a href="/guides/native-and-ssl-guide">Using SSL With Native Images</a></li>
+      
+        <li><a href="/guides/context-propagation-guide">Context Propagation</a></li>
+      
+      </ul>
+    
+      <h3 id="#web">Web</h3>
+      <ul>
+      
+        <li><a href="/guides/rest-json-guide">Writing REST JSON Services</a></li>
+      
+        <li><a href="/guides/validation-guide">Validation with Hibernate Validator</a></li>
+      
+        <li><a href="/guides/rest-client-guide">Using the REST Client</a></li>
+      
+        <li><a href="/guides/jwt-guide">Using JWT RBAC</a></li>
+      
+        <li><a href="/guides/websocket-guide">Using WebSockets</a></li>
+      
+        <li><a href="/guides/openapi-swaggerui-guide">Using OpenAPI and Swagger UI</a></li>
+      
+        <li><a href="/guides/undertow-reference">Undertow Reference Documentation</a></li>
+      
+      </ul>
+    
+      <h3 id="#data">Data</h3>
+      <ul>
+      
+        <li><a href="/guides/datasource-guide">Configuring your datasources</a></li>
+      
+        <li><a href="/guides/hibernate-orm-guide">Using Hibernate ORM and JPA</a></li>
+      
+        <li><a href="/guides/hibernate-orm-panache-guide">Simplified Hibernate ORM with Panache</a></li>
+      
+        <li><a href="/guides/hibernate-search-guide">Hibernate Search + Elasticsearch</a></li>
+      
+        <li><a href="/guides/infinispan-client-guide">Using Infinispan Client</a></li>
+      
+        <li><a href="/guides/transaction-guide">Using Transactions</a></li>
+      
+        <li><a href="/guides/validation-guide">Validation with Hibernate Validator</a></li>
+      
+        <li><a href="/guides/flyway-guide">Schema Migration with Flyway</a></li>
+      
+        <li><a href="/guides/reactive-postgres-client">Reactive Postgres Client</a></li>
+      
+      </ul>
+    
+      <h3 id="#messaging">Messaging</h3>
+      <ul>
+      
+        <li><a href="/guides/kafka-guide">Using Kafka</a></li>
+      
+        <li><a href="/guides/async-message-passing">Asynchronous Message Passing</a></li>
+      
+      </ul>
+    
+      <h3 id="#security">Security</h3>
+      <ul>
+      
+        <li><a href="/guides/security-guide">Using Security</a></li>
+      
+        <li><a href="/guides/jwt-guide">Using JWT RBAC</a></li>
+      
+        <li><a href="/guides/keycloak-guide">Using Keycloak to Protect JAX-RS Applications</a></li>
+      
+      </ul>
+    
+      <h3 id="#cloud">Cloud</h3>
+      <ul>
+      
+        <li><a href="/guides/kubernetes-guide">Deploying Native Applications on Kubernetes or OpenShift</a></li>
+      
+        <li><a href="/guides/getting-started-knative-guide">Deploying Native Applications on Knative Kubernetes or OpenShift</a></li>
+      
+        <li><a href="/guides/ap4k">Generating Kubernetes resources</a></li>
+      
+        <li><a href="/guides/openshift-s2i-guide">Deploying to OpenShift using S2I</a></li>
+      
+      </ul>
+    
+      <h3 id="#observability">Observability</h3>
+      <ul>
+      
+        <li><a href="/guides/health-guide">Using Health Check</a></li>
+      
+        <li><a href="/guides/opentracing-guide">Using OpenTracing</a></li>
+      
+        <li><a href="/guides/metrics-guide">Collecting Metrics</a></li>
+      
+      </ul>
+    
+      <h3 id="#serialization">Serialization</h3>
+      <ul>
+      
+        <li><a href="/guides/rest-json-guide">Writing REST JSON Services</a></li>
+      
+      </ul>
+    
+      <h3 id="#tooling">Tooling</h3>
+      <ul>
+      
+        <li><a href="/guides/maven-tooling">Building Applications with Maven</a></li>
+      
+        <li><a href="/guides/gradle-tooling">Building Applications with Gradle</a></li>
+      
+      </ul>
+    
+      <h3 id="#migration">Migration</h3>
+      <ul>
+      
+        <li><a href="/guides/spring-di-guide">Using our Spring DI compatibility layer</a></li>
+      
+      </ul>
+    
+      <h3 id="#writing-extensions">Writing Extensions</h3>
+      <ul>
+      
+        <li><a href="/guides/extension-authors-guide">Writing Your Own Extension</a></li>
+      
+        <li><a href="/guides/writing-native-applications-tips">Writing Native Applications</a></li>
+      
+      </ul>
+    
+      <h3 id="#alternative-languages">Alternative Languages</h3>
+      <ul>
+      
+        <li><a href="/guides/kotlin">Using Kotlin</a></li>
+      
+      </ul>
+    
+      <h3 id="#miscellaneous">Miscellaneous</h3>
+      <ul>
+      
+        <li><a href="/guides/scheduled-guide">Scheduling Periodic Tasks</a></li>
+      
+        <li><a href="/guides/sending-emails">Sending Emails</a></li>
+      
+        <li><a href="/guides/using-vertx">Using Vert.x</a></li>
+      
+        <li><a href="/guides/performance-measure">Measuring Performance</a></li>
+      
+      </ul>
+    
   </div>
-<div class="guide-item">
-    <h2 id="configuring-your-application">Configuring Your Application</h2>
+  
+    
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        <div markdown="1">
+          <p>You have gone through the <a href="/get-started">Getting Started</a> guides.
+          You are now ready to dive into specific topic guides.</p>
+        </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Configuring Your Application</h2>
 
-    <p>Hardcoded values in your code is a no go (even if we all did it at some point ;-)). In this guide, we learn how to configure your application.</p>
+            <p>Hardcoded values in your code is a no go (even if we all did it at some point ;-)). In this guide, we learn how to configure your application.</p>
 
-    <p><a href="/guides/application-configuration-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="application-initialization-and-termination">Application Initialization and Termination</h2>
 
-    <p>You often need to execute custom actions when the application starts and clean up everything when the application stops. This guide explains how to be notified when an application stops or starts.</p>
+            <p><a href="/guides/application-configuration-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Application Initialization and Termination</h2>
 
-    <p><a href="/guides/application-lifecycle-events-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="contexts-and-dependency-injection">Contexts and Dependency Injection</h2>
+            <p>You often need to execute custom actions when the application starts and clean up everything when the application stops. This guide explains how to be notified when an application stops or starts.</p>
 
-    <p>Quarkus DI solution is based on the <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec">Contexts and Dependency Injection for Java 2.0</a> specification. However, it is not a full CDI implementation verified by the TCK. Only a subset of the CDI features is implemented - see also the list of supported features and the list of limitations.</p>
 
-    <p><a href="/guides/cdi-reference" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="testing-your-application">Testing Your Application</h2>
+            <p><a href="/guides/application-lifecycle-events-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Contexts and Dependency Injection</h2>
 
-    <p>This guide covers:</p>
+            <p>Quarkus DI solution is based on the <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec">Contexts and Dependency Injection for Java 2.0</a> specification. However, it is not a full CDI implementation verified by the TCK. Only a subset of the CDI features is implemented - see also the list of supported features and the list of limitations.</p>
 
-    <ul>
-      <li>Testing in JVM mode</li>
-      <li>Testing in native mode</li>
-      <li>Injection of resources into tests</li>
-    </ul>
 
-    <p><a href="/guides/getting-started-testing" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="configuring-logging">Configuring Logging</h2>
+            <p><a href="/guides/cdi-reference" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Testing Your Application</h2>
 
-    <p>This guide explains logging and how to configure it.</p>
+            <p>This guide covers:</p>
 
-    <p><a href="/guides/logging-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-ssl-with-native-images">Using SSL With Native Images</h2>
+<ul>
+  <li>Testing in JVM mode</li>
+  <li>Testing in native mode</li>
+  <li>Injection of resources into tests</li>
+</ul>
 
-    <p>In this guide, we will discuss how you can get your native images to support SSL,
-as native images don’t support it out of the box.</p>
 
-    <p><a href="/guides/native-and-ssl-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="context-propagation">Context Propagation</h2>
+            <p><a href="/guides/getting-started-testing" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Configuring Logging</h2>
 
-    <p>Learn more about how you can pass contextual information with our implementation of MicroProfile Context Propagation.</p>
+            <p>This guide explains logging and how to configure it.</p>
 
-    <p><a href="/guides/context-propagation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="web-1">Web</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="writing-json-rest-services">Writing JSON REST Services</h2>
 
-    <p>JSON is now the lingua franca between microservices. In this guide, we see how you can get your REST services to consume and produce JSON payloads.</p>
+            <p><a href="/guides/logging-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using SSL With Native Images</h2>
 
-    <p><a href="/guides/rest-json-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="validation-with-hibernate-validator">Validation with Hibernate Validator</h2>
+            <p>In this guide, we will discuss how you can get your native images to support SSL, as native images don’t support it out of the box.</p>
 
-    <p>This guide covers how to use Hibernate Validator/Bean Validation in your REST services.</p>
 
-    <p><a href="/guides/validation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-the-rest-client">Using the REST Client</h2>
+            <p><a href="/guides/native-and-ssl-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Context Propagation</h2>
 
-    <p>This guide explains how to use the MicroProfile REST Client in order to interact with REST APIs
-with very little effort.</p>
+            <p>Learn more about how you can pass contextual information with our implementation of MicroProfile Context Propagation.</p>
 
-    <p><a href="/guides/rest-client-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-jwt-rbac">Using JWT RBAC</h2>
 
-    <p>This guide explains how your application can utilize {mp-jwt} to provide
-secured access to the JAX-RS endpoints.</p>
+            <p><a href="/guides/context-propagation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Web</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Writing REST JSON Services</h2>
 
-    <p><a href="/guides/jwt-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-websockets">Using WebSockets</h2>
+            <p>JSON is now the lingua franca between microservices. In this guide, we see how you can get your REST services to consume and produce JSON payloads.</p>
 
-    <p>This guide explains how your Quarkus application can utilize web sockets to create interactive web applications. Because it’s the canonical web socket application, we are going to create a simple chat application.</p>
 
-    <p><a href="/guides/websocket-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-openapi-and-swagger-ui">Using OpenAPI and Swagger UI</h2>
+            <p><a href="/guides/rest-json-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Validation with Hibernate Validator</h2>
 
-    <p>This guide explains how to use the OpenAPI extension to generate an OpenAPI descriptor and get a Swagger UI frontend to test your REST endpoints.</p>
+            <p>This guide covers how to use Hibernate Validator/Bean Validation in your REST services.</p>
 
-    <p><a href="/guides/openapi-swaggerui-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="undertow-reference-documentation">Undertow Reference Documentation</h2>
 
-    <p>Undertow is the webserver used by Quarkus. Learn more about configuring it.</p>
+            <p><a href="/guides/validation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using the REST Client</h2>
 
-    <p><a href="/guides/undertow-reference" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="data-1">Data</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="configuring-your-datasources">Configuring your datasources</h2>
+            <p>This guide explains how to use the MicroProfile REST Client in order to interact with REST APIs with very little effort.</p>
 
-    <p>With Quarkus, you can easily configure a datasource, or several if need be.</p>
 
-    <p><a href="/guides/datasource-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-hibernate-orm-and-jpa">Using Hibernate ORM and JPA</h2>
+            <p><a href="/guides/rest-client-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using JWT RBAC</h2>
 
-    <p>Hibernate ORM is the de facto JPA implementation and offers you the full breath of an Object Relational Mapper. It works beautifully in Quarkus.</p>
+            <p>This guide explains how your application can utilize MicroProfile JWT RBAC to provide secured access to the JAX-RS endpoints.</p>
 
-    <p><a href="/guides/hibernate-orm-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="hibernate-orm-and-jpa-with-panache">Hibernate ORM and JPA with Panache</h2>
 
-    <p>Hibernate ORM is the de facto JPA implementation and offers you the full breadth of an Object Relational Mapper.
-It makes complex mappings possible, but it does not make simple and common mappings trivial.
-Panache focuses on making your entities trivial and fun to write.</p>
+            <p><a href="/guides/jwt-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using WebSockets</h2>
 
-    <p><a href="/guides/hibernate-orm-panache-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="hibernate-search--elasticsearch">Hibernate Search + Elasticsearch</h2>
+            <p>This guide explains how your Quarkus application can utilize web sockets to create interactive web applications. Because it’s the canonical web socket application, we are going to create a simple chat application.</p>
 
-    <p>Hibernate Search allows you to index your entities in an Elasticsearch cluster and easily offer full text
-search in all your Hibernate ORM-based applications.</p>
 
-    <p><a href="/guides/hibernate-search-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-infinispan-client">Using Infinispan Client</h2>
+            <p><a href="/guides/websocket-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using OpenAPI and Swagger UI</h2>
 
-    <p>Infinispan is an in memory data grid that allows running in a server outside of application processes. This extension provides functionality to allow the client that can connect to said server when running in Quarkus.</p>
+            <p>This guide explains how to use the OpenAPI extension to generate an OpenAPI descriptor and get a Swagger UI frontend to test your REST endpoints.</p>
 
-    <p><a href="/guides/infinispan-client-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-transactions">Using Transactions</h2>
 
-    <p>Quarkus comes with a Transaction Manager and uses it to coordinate and expose transactions to your applications.
+            <p><a href="/guides/openapi-swaggerui-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Undertow Reference Documentation</h2>
+
+            <p>Undertow is the webserver used by Quarkus. Learn more about configuring it.</p>
+
+
+            <p><a href="/guides/undertow-reference" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Data</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Configuring your datasources</h2>
+
+            <p>With Quarkus, you can easily configure a datasource, or several if need be.</p>
+
+
+            <p><a href="/guides/datasource-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Hibernate ORM and JPA</h2>
+
+            <p>Hibernate ORM is the de facto JPA implementation and offers you the full breath of an Object Relational Mapper. It works beautifully in Quarkus.</p>
+
+
+            <p><a href="/guides/hibernate-orm-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Simplified Hibernate ORM with Panache</h2>
+
+            <p>Hibernate ORM is the de facto JPA implementation and offers you the full breadth of an Object Relational Mapper.</p>
+
+<p>It makes complex mappings possible, but it does not make simple and common mappings trivial.</p>
+
+<p>Panache focuses on making your entities trivial and fun to write.</p>
+
+
+            <p><a href="/guides/hibernate-orm-panache-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Hibernate Search + Elasticsearch</h2>
+
+            <p>Hibernate Search allows you to index your entities in an Elasticsearch cluster and easily offer full text search in all your Hibernate ORM-based applications.</p>
+
+
+            <p><a href="/guides/hibernate-search-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Infinispan Client</h2>
+
+            <p>Infinispan is an in memory data grid that allows running in a server outside of application processes. This extension provides functionality to allow the client that can connect to said server when running in Quarkus.</p>
+
+
+            <p><a href="/guides/infinispan-client-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Transactions</h2>
+
+            <p>Quarkus comes with a Transaction Manager and uses it to coordinate and expose transactions to your applications.
 Each extension dealing with persistence will integrate with it for you.
 And you will explicitly interact with transactions via CDI.
 This guide will walk you through all that.</p>
 
-    <p><a href="/guides/transaction-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="validation-with-hibernate-validator-1">Validation with Hibernate Validator</h2>
 
-    <p>This guide covers how to use Hibernate Validator/Bean Validation in your REST services.</p>
+            <p><a href="/guides/transaction-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Validation with Hibernate Validator</h2>
 
-    <p><a href="/guides/validation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="schema-migration-with-flyway">Schema Migration with Flyway</h2>
+            <p>This guide covers how to use Hibernate Validator/Bean Validation in your REST services.</p>
 
-    <p>This guide covers how to use the Flyway extension to manage your schema migrations.</p>
 
-    <p><a href="/guides/flyway-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="reactive-postgres-client">Reactive Postgres Client</h2>
+            <p><a href="/guides/validation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Schema Migration with Flyway</h2>
 
-    <p>This guide covers how to use the Reactive Postgres Client in Quarkus.</p>
+            <p>This guide covers how to use the Flyway extension to manage your schema migrations.</p>
 
-    <p><a href="/guides/reactive-postgres-client" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
+
+            <p><a href="/guides/flyway-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Reactive Postgres Client</h2>
+
+            <p>This guide covers how to use the Reactive Postgres Client in Quarkus.</p>
+
+
+            <p><a href="/guides/reactive-postgres-client" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Messaging</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Kafka</h2>
+
+            <p>This guide demonstrates how your Quarkus application can utilize MicroProfile Reactive Messaging to interact with Apache Kafka.</p>
+
+
+            <p><a href="/guides/kafka-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Asynchronous Message Passing</h2>
+
+            <p>This guide explains how different beans can interact using asynchronous messages.</p>
+
+
+            <p><a href="/guides/async-message-passing" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Security</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Security</h2>
+
+            <p>This quide demonstrates integration with the Elytron security subsystem to allow for RBAC based on the common security annotations <code class="highlighter-rouge">@RolesAllowed</code>, <code class="highlighter-rouge">@DenyAll</code>, <code class="highlighter-rouge">@PermitAll</code> on REST endpoints.</p>
+
+
+            <p><a href="/guides/security-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using JWT RBAC</h2>
+
+            <p>This guide explains how your application can utilize MicroProfile JWT RBAC to provide secured access to the JAX-RS endpoints.</p>
+
+
+            <p><a href="/guides/jwt-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Keycloak to Protect JAX-RS Applications</h2>
+
+            <p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token authorization, where these tokens are issued by a Keycloak server.</p>
+
+
+            <p><a href="/guides/keycloak-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Cloud</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Deploying Native Applications on Kubernetes or OpenShift</h2>
+
+            <p>This guide covers how to deploy a native application on Kubernetes or OpenShift.</p>
+
+
+            <p><a href="/guides/kubernetes-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Deploying Native Applications on Knative Kubernetes or OpenShift</h2>
+
+            <p>This guide demonstrates how to deploy an application on Knative Kubernetes or OpenShift.</p>
+
+
+            <p><a href="/guides/getting-started-knative-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Generating Kubernetes resources</h2>
+
+            <p>This guide demonstrates how generate Kubernetes resources using Quarkus Kubernetes extension.</p>
+
+
+            <p><a href="/guides/ap4k" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Deploying to OpenShift using S2I</h2>
+
+            <p>This guide explains how to deploy a Quarkus application to OpenShift using S2I.</p>
+
+
+            <p><a href="/guides/openshift-s2i-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Observability</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Health Check</h2>
+
+            <p>This guide demonstrates how your Quarkus application can utilize the MicroProfile Health specification through the SmallRye Health extension.</p>
+
+
+            <p><a href="/guides/health-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using OpenTracing</h2>
+
+            <p>This guide explains how your Quarkus application can utilize OpenTracing to provide distributed tracing for interactive web applications.</p>
+
+
+            <p><a href="/guides/opentracing-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Collecting Metrics</h2>
+
+            <p>This guide demonstrates how your Quarkus application can utilize the MicroProfile Metrics specification through the SmallRye Metrics extension.</p>
+
+
+            <p><a href="/guides/metrics-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Serialization</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Writing REST JSON Services</h2>
+
+            <p>JSON is now the lingua franca between microservices. In this guide, we see how you can get your REST services to consume and produce JSON payloads.</p>
+
+
+            <p><a href="/guides/rest-json-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Tooling</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Building Applications with Maven</h2>
+
+            <p>This guide covers:</p>
+
+<ul>
+  <li>Maven configuration</li>
+  <li>Creating a new project</li>
+  <li>Dealing with extensions</li>
+  <li>Development mode</li>
+  <li>Debugging</li>
+  <li>Import in your IDE</li>
+  <li>Building a native image</li>
+  <li>Build a container friendly executable</li>
+</ul>
+
+
+            <p><a href="/guides/maven-tooling" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Building Applications with Gradle</h2>
+
+            <p>This guide covers:</p>
+
+<ul>
+  <li>Gradle configuration</li>
+  <li>Creating a new project</li>
+  <li>Dealing with extensions</li>
+  <li>Development mode</li>
+  <li>Debugging</li>
+  <li>Import in your IDE</li>
+  <li>Building a native image</li>
+  <li>Build a container friendly executable</li>
+</ul>
+
+
+            <p><a href="/guides/gradle-tooling" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Migration</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using our Spring DI compatibility layer</h2>
+
+            <p>While you are encouraged to use CDI annotations for injection, Quarkus provides a compatibility layer for Spring dependency injection in the form of the spring-di extension.</p>
+
+
+            <p><a href="/guides/spring-di-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Writing Extensions</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Writing Your Own Extension</h2>
+
+            <p>Quarkus extensions add a new developer focused behavior to the core offering, and consist of two distinct parts, buildtime augmentation and runtime container. The augmentation part is responsible for all metadata processing, such as reading annotations, XML descriptors etc. The output of this augmentation phase is recorded bytecode which is responsible for directly instantiating the relevant runtime services.</p>
+
+<p>This means that metadata is only processed once at build time, which both saves on startup time, and also on memory usage as the classes etc that are used for processing are not loaded (or even present) in the runtime JVM.</p>
+
+
+            <p><a href="/guides/extension-authors-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Writing Native Applications</h2>
+
+            <p>This guide is a collection of tips to help you solve the problems you encounter when compiling applications to native executable.</p>
+
+
+            <p><a href="/guides/writing-native-applications-tips" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Alternative Languages</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Kotlin</h2>
+
+            <p>This guide explains how to use Kotlin.</p>
+
+
+            <p><a href="/guides/kotlin" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Miscellaneous</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Scheduling Periodic Tasks</h2>
+
+            <p>Modern applications often need to run specific tasks periodically. In this guide, you learn how to schedule periodic tasks.</p>
+
+
+            <p><a href="/guides/scheduled-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Sending Emails</h2>
+
+            <p>Learn more about how you can send email from a Quarkus application with our reactive email client.</p>
+
+
+            <p><a href="/guides/sending-emails" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Vert.x</h2>
+
+            <p>This guide explains how to use Vert.x in Quarkus to build reactive applications.</p>
+
+
+            <p><a href="/guides/using-vertx" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Measuring Performance</h2>
+
+            <p>When measuring the footprint of a Quarkus application, we measure Resident Set Size (RSS) and not the JVM heap size which is only a small part of the overall problem. The JVM not only allocates native memory for heap (<code class="highlighter-rouge">-Xms</code>, <code class="highlighter-rouge">-Xmx</code>) but also structures required by the jvm to run your application.</p>
+
+
+            <p><a href="/guides/performance-measure" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
 </div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="messaging-1">Messaging</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="using-kafka">Using Kafka</h2>
 
-    <p>This guide demonstrates how your Quarkus application can utilize MicroProfile Reactive Messaging to interact with Apache Kafka.</p>
-
-    <p><a href="/guides/kafka-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="asynchronous-message-passing">Asynchronous Message Passing</h2>
-
-    <p>This guide explains how different beans can interact using asynchronous messages.</p>
-
-    <p><a href="/guides/async-message-passing" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="security-1">Security</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="using-security">Using Security</h2>
-
-    <p>This quide demonstrates integration with the Elytron security subsystem to allow for RBAC based on the
-common security annotations <code class="highlighter-rouge">@RolesAllowed</code>, <code class="highlighter-rouge">@DenyAll</code>, <code class="highlighter-rouge">@PermitAll</code> on REST endpoints.</p>
-
-    <p><a href="/guides/security-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-jwt-rbac-1">Using JWT RBAC</h2>
-
-    <p>This guide explains how your application can utilize MicroProfile JWT RBAC to provide
-secured access to the JAX-RS endpoints.</p>
-
-    <p><a href="/guides/jwt-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-keycloak-to-protect-jax-rs-applications">Using Keycloak to Protect JAX-RS Applications</h2>
-
-    <p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token
-authorization, where these tokens are issued by a Keycloak Server.</p>
-
-    <p><a href="/guides/keycloak-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="cloud-1">Cloud</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="deploying-native-applications-on-kubernetes-or-openshift">Deploying Native Applications on Kubernetes or OpenShift</h2>
-
-    <p>This guide covers how to deploy a native application on Kubernetes or OpenShift.</p>
-
-    <p><a href="/guides/kubernetes-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="deploying-native-applications-on-knative-kubernetes-or-openshift">Deploying Native Applications on Knative Kubernetes or OpenShift</h2>
-
-    <p>This guide demonstrates how to deploy an application on Knative Kubernetes or OpenShift.</p>
-
-    <p><a href="/guides/getting-started-knative-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="generating-kubernetes-resources">Generating Kubernetes resources</h2>
-
-    <p>This guide demonstrates how generate Kubernetes resources using Quarkus Kubernetes extension.</p>
-
-    <p><a href="/guides/ap4k" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="deploying-to-openshift-using-s2i">Deploying to OpenShift using S2I</h2>
-
-    <p>This guide explains how to deploy a Quarkus application to OpenShift using S2I.</p>
-
-    <p><a href="/guides/openshift-s2i-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="observability-1">Observability</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="using-health-check">Using Health Check</h2>
-
-    <p>This guide demonstrates how your Quarkus application can utilize the MicroProfile Health specification through the SmallRye Health extension.</p>
-
-    <p><a href="/guides/health-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-opentracing">Using OpenTracing</h2>
-
-    <p>This guide explains how your Quarkus application can utilize OpenTracing to provide distributed tracing for interactive web applications.</p>
-
-    <p><a href="/guides/opentracing-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="collecting-metrics">Collecting Metrics</h2>
-
-    <p>This guide demonstrates how your Quarkus application can utilize the MicroProfile Metrics specification through the SmallRye Metrics extension.</p>
-
-    <p><a href="/guides/metrics-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="serialization-1">Serialization</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="writing-json-rest-services-1">Writing JSON REST Services</h2>
-
-    <p>JSON is now the lingua franca between microservices. In this guide, we see how you can get your REST services to consume and produce JSON payloads.</p>
-
-    <p><a href="/guides/rest-json-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="tooling-1">Tooling</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="building-applications-with-maven">Building Applications with Maven</h2>
-
-    <p>This guide covers:</p>
-
-    <ul>
-      <li>Maven configuration</li>
-      <li>Creating a new project</li>
-      <li>Dealing with extensions</li>
-      <li>Development mode</li>
-      <li>Debugging</li>
-      <li>Import in your IDE</li>
-      <li>Building a native image</li>
-      <li>Build a container friendly executable</li>
-    </ul>
-
-    <p><a href="/guides/maven-tooling" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="building-applications-with-gradle">Building Applications with Gradle</h2>
-
-    <p>This guide covers:</p>
-
-    <ul>
-      <li>Maven configuration</li>
-      <li>Creating a new project</li>
-      <li>Dealing with extensions</li>
-      <li>Development mode</li>
-      <li>Debugging</li>
-      <li>Import in your IDE</li>
-      <li>Building a native image</li>
-      <li>Build a container friendly executable</li>
-    </ul>
-
-    <p><a href="/guides/gradle-tooling" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="migration-1">Migration</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="using-our-spring-dependency-injection-compatibility-layer">Using our Spring Dependency Injection compatibility layer</h2>
-
-    <p>While you are encouraged to use CDI annotations for injection, Quarkus provides a compatibility layer for Spring dependency injection in the form of the spring-di extension.</p>
-
-    <p><a href="/guides/spring-di-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="writing-extensions-1">Writing Extensions</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="write-your-own-extension">Write Your Own Extension</h2>
-
-    <p>Quarkus extensions add a new developer focused behavior to the core offering, and consist of two distinct parts, buildtime augmentation and runtime container. The augmentation part is responsible for all metadata processing, such as reading annotations, XML descriptors etc. The output of this augmentation phase is recorded bytecode which is responsible for directly instantiating the relevant runtime services.</p>
-
-    <p>This means that metadata is only processed once at build time, which both saves on startup time, and also on memory usage as the classes etc that are used for processing are not loaded (or even present) in the runtime JVM.</p>
-
-    <p><a href="/guides/extension-authors-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="writing-native-applications">Writing Native Applications</h2>
-
-    <p>This guide is a collection of tips to help you solve the problems you encounter when compiling applications to native executable.</p>
-
-    <p><a href="/guides/writing-native-applications-tips" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="alternative-languages-1">Alternative Languages</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="using-kotlin">Using Kotlin</h2>
-
-    <p>This guide explains how to use Kotlin.</p>
-
-    <p><a href="/guides/kotlin" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-<div class="grid__item width-12-12"><hr /></div>
-<div class="grid__item width-4-12 width-12-12-m toc">
-  <h2 id="miscellaneous-1">Miscellaneous</h2>
-</div>
-<div class="grid__item width-8-12 width-12-12-m guides-content">
-<div class="guide-item">
-    <h2 id="scheduling-periodic-tasks">Scheduling Periodic Tasks</h2>
-
-    <p>Modern applications often need to run specific tasks periodically. In this guide, you learn how to schedule periodic tasks.</p>
-
-    <p><a href="/guides/scheduled-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="sending-emails">Sending emails</h2>
-
-    <p>Learn more about how you can send email from a Quarkus application with our reactive email client.</p>
-
-    <p><a href="/guides/sending-emails" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="using-vertx">Using Vert.x</h2>
-
-    <p>This guide explains how to use Vert.x in Quarkus to build reactive applications.</p>
-
-    <p><a href="/guides/using-vertx" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-<div class="guide-item">
-    <h2 id="measuring-performance">Measuring Performance</h2>
-
-    <p>When measuring the footprint of a Quarkus application, we measure Resident Set Size (RSS) and not the JVM heap size which is only a small part of the overall problem. The JVM not only allocates native memory for heap (-Xms, -Xmx) but also structures required by the jvm to run your application.</p>
-
-    <p><a href="/guides/performance-measure" class="button-cta secondary">READ THE GUIDE</a></p>
-  </div>
-</div>
-
-
-</div>
 
   </div>
 
