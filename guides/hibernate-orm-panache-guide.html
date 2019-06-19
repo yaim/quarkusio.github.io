@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Hibernate Orm Panache Guide</title>
+  <title>Quarkus - Simplified Hibernate ORM with Panache</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -64,7 +64,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Hibernate Orm Panache Guide</h1>
+    <h1 class="text-caps">Quarkus - Simplified Hibernate ORM with Panache</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -423,6 +423,24 @@ at the end.</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You can also write your queries in plain
+<a href="https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#hql">HQL</a>:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Order.find("select distinct o from Order o left join fetch o.lineItems");</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -517,6 +535,54 @@ public long count(){
 <p>So if Repositories are your thing, you can keep doing them. Even with repositories, you can keep your entities as
 subclasses of <code>PanacheEntity</code> in order to get the ID and public fields working, but you can even skip that and
 go back to specifying your ID and using getters and setters if that&#8217;s your thing. We&#8217;re not judging.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transactions">Transactions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Make sure to wrap methods modifying your database (e.g. <code>entity.persist()</code>) within a transaction. Marking a
+CDI bean method <code>@Transactional</code> will do that for you and make that method a transaction boundary. We recommend doing
+so at your application entry point boundaries like your REST endpoint controllers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="lock-management">Lock management</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Panache does not provide direct support for database locking, but you can do it by injecting the <code>EntityManager</code> in your entity (or <code>PanacheRepository</code>) and creating a specific method that will use the entity manager to lock the entity after retrieval. The entity manager can also be retrieved via <code>Panache.getEntityManager()</code>.</p>
+</div>
+<div class="paragraph">
+<p>The following example contains a <code>findByIdForUpdate</code> method that finds the entity by primary key then locks it. The lock will generate a <code>SELECT &#8230;&#8203; FOR UPDATE</code> query (the same principle can be used for other kinds of <code>find*</code> methods):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
+public class Person extends PanacheEntity {
+    public String name;
+    public LocalDate birth;
+    public Status status;
+
+    // inject the EntityManager inside the entity
+    @Inject
+    EntityManager entityManager;
+
+    public static Person findByIfForUpdate(Long id){
+      Person person = findById(id);
+      //lock with the PESSIMISTIC_WRITE mode type : this will generate a SELECT ... FOR UPDATE query
+      entityManager.lock(person, LockModeType.PESSIMISTIC_WRITE);
+      return person;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will generate two select queries: one to retrieve the entity and the second to lock it. Be careful that locks are released when the transaction ends, so the method that invokes the lock query must be annotated with the <code>@Transactional</code> annotation.</p>
+</div>
+<div class="paragraph">
+<p>We are currently evaluating adding support for lock management inside Panache. If you are interested, please visit our github issue <a href="https://github.com/quarkusio/quarkus/issues/2744">#2744</a> and contribute to the discussion.</p>
 </div>
 </div>
 </div>
@@ -628,6 +694,17 @@ your entity <code>Person</code> by typing <code>Person.</code> and getting compl
 </div>
 <div class="paragraph">
 <p>That&#8217;s all there is to it: with Panache, Hibernate ORM has never looked so trim and neat.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="defining-entities-in-external-projects-or-jars">Defining entities in external projects or jars</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hibernate ORM in Quarkus relies on compile-time bytecode enhancements to your entities. If you define your entities in the
+same project where you build your Quarkus application, everything will work fine. If the entities come from external projects
+or jars, you can make sure that your jar is treated like a Quarkus application library by adding an empty <code>META-INF/beans.xml</code> file.
+This will allow Quarkus to index and enhance your entities as if they were inside the current project.</p>
 </div>
 </div>
 </div>

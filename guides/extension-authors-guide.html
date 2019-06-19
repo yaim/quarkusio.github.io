@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Extension Authors Guide</title>
+  <title>{project-name} - Writing Your Own Extension</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -64,37 +64,8 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Extension Authors Guide</h1>
-    <div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#extension-philosophy">1. Extension philosophy</a>
-<ul class="sectlevel2">
-<li><a href="#why-an-extension-framework">1.1. Why an extension framework</a></li>
-<li><a href="#favor-build-time-work-over-runtime-work">1.2. Favor build time work over runtime work</a></li>
-<li><a href="#how-to-expose-configuration">1.3. How to expose configuration</a></li>
-<li><a href="#expose-your-components-via-cdi">1.4. Expose your components via CDI</a></li>
-<li><a href="#some-types-of-extensions">1.5. Some types of extensions</a></li>
-</ul>
-</li>
-<li><a href="#technical-aspect">2. Technical aspect</a>
-<ul class="sectlevel2">
-<li><a href="#three-phases-of-bootstrap-and-quarkus-philosophy">2.1. Three Phases of Bootstrap and Quarkus Philosophy</a></li>
-<li><a href="#maven-setup">2.2. Maven setup</a></li>
-<li><a href="#build-step-processors">2.3. Build Step Processors</a></li>
-<li><a href="#configuration">2.4. Configuration</a></li>
-<li><a href="#bytecode-recording">2.5. Bytecode Recording</a></li>
-<li><a href="#contexts-and-dependency-injection">2.6. Contexts and Dependency Injection</a></li>
-<li><a href="#testing-extensions">2.7. Testing Extensions</a></li>
-<li><a href="#native-executable-support">2.8. Native Executable Support</a></li>
-<li><a href="#ide-support-tips">2.9. IDE support tips</a></li>
-<li><a href="#troubleshooting-debugging-tips">2.10. Troubleshooting / Debugging Tips</a></li>
-<li><a href="#sample-test-extension">2.11. Sample Test Extension</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div id="preamble">
+    <h1 class="text-caps">{project-name} - Writing Your Own Extension</h1>
+    <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus extensions add a new developer focused behavior to the core offering, and consist of two distinct parts, buildtime augmentation and runtime container. The augmentation part is responsible for all metadata processing, such as reading annotations, XML descriptors etc. The output of this augmentation phase is recorded bytecode which is responsible for directly instantiating the relevant runtime services.</p>
@@ -815,7 +786,7 @@ import java.util.logging.Level;
 public class FileConfig {
 
     /**
-     * Enable file logging.
+     * Enable logging to a file.
      */
     @ConfigItem(defaultValue = "true")
     boolean enable;
@@ -827,15 +798,15 @@ public class FileConfig {
     String format;
 
     /**
-     * The file log level.
+     * The level of logs to be written into the file.
      */
     @ConfigItem(defaultValue = "ALL")
     Level level;
 
     /**
-     * The file logging log level.
+     * The name of the file in which logs will be written.
      */
-    @ConfigItem(defaultValue = "quarkus.log")
+    @ConfigItem(defaultValue = "application.log")
     File path;
 
 }
@@ -865,6 +836,26 @@ public class LoggingProcessor {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>A configuration property name can be split into segments. For example, a property name like
+<code>quarkus.log.file.enable</code> can be split into the following segments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>quarkus</code> - a namespace claimed by Quarkus which is a prefix for all <code>@ConfigRoot</code> classes,</p>
+</li>
+<li>
+<p><code>log</code> - a name segment which corresponds to the <code>LogConfiguration</code> class annotated with <code>@ConfigRoot</code>,</p>
+</li>
+<li>
+<p><code>file</code> - a name segment which corresponds to the <code>file</code> field in this class,</p>
+</li>
+<li>
+<p><code>enabled</code> - a name segment which corresponds to <code>enable</code> field in <code>FileConfig</code> class annotated with <code>@ConfigGroup</code>.</p>
+</li>
+</ul>
+</div>
 <div class="colist arabic">
 <ol>
 <li>
@@ -873,15 +864,20 @@ configuration object containing a collection of configurable properties, rather 
 key type.</p>
 </li>
 <li>
-<p>The <code>@ConfigRoot</code> annotation indicates that this object is a configuration root group, whose property names will have a parent only of <code>quarkus.</code>.  In this case the properties within the group will begin with <code>quarkus.log.*</code>.</p>
+<p>The <code>@ConfigRoot</code> annotation indicates that this object is a configuration root group, in this case one which
+corresponds to a <code>log</code> segment. A class name is used to link configuration root group with the segment from a
+property name. The <code>Configuration</code> part is stripped off from a <code>LogConfiguration</code> class name and the remaining <code>Log</code>
+is lowercased to become a <code>log</code>. Since all <code>@ConfigRoot</code> annotated classes uses <code>quarkus</code> as a prefix, this finally
+becomes <code>quarkus.log</code> and represents the properties which names begin with <code>quarkus.log.*</code>.</p>
 </li>
 <li>
-<p>Here the <code>LoggingProcessor</code> injects a <code>LogConfiguration</code> instance automatically by detecting the <code>@ConfigRoot</code> annotation.</p>
+<p>Here the <code>LoggingProcessor</code> injects a <code>LogConfiguration</code> instance automatically by detecting the <code>@ConfigRoot</code>
+annotation.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>A corresponding <code>application.properties</code> file for the <code>File</code> values could be:</p>
+<p>A corresponding <code>application.properties</code> for the above example could be:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -889,6 +885,9 @@ key type.</p>
 quarkus.log.file.level=DEBUG
 quarkus.log.file.path=/tmp/debug.log</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Since <code>format</code> is not defined in these properties, the default value from <code>@ConfigItem</code> will be used instead.</p>
 </div>
 </div>
 </div>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Hibernate Search Guide</title>
+  <title>Quarkus - Hibernate Search guide</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -64,7 +64,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Hibernate Search Guide</h1>
+    <h1 class="text-caps">Quarkus - Hibernate Search guide</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -967,6 +967,45 @@ We also inject some data and execute the mass indexer.</p>
 </div>
 <div class="paragraph">
 <p>It is still very much a work in progress but it can guide you in your exploration.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="faq">FAQ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="why-hibernate-search-6-and-not-a-fully-supported-version">Why Hibernate Search 6 (and not a fully supported version)?</h3>
+<div class="paragraph">
+<p>To optimize the Hibernate Search bootstrap for Quarkus, the Hibernate team had to reorganize things a bit (collect the metadata offline, start the Elasticsearch client later&#8230;&#8203;).</p>
+</div>
+<div class="paragraph">
+<p>This couldn&#8217;t be done in the 5.x code base so we decided to go with the in progress Hibernate Search 6.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="can-i-really-use-it">Can I really use it?</h3>
+<div class="paragraph">
+<p>While Hibernate Search 6 is still at Alpha stage, the code is of production quality and can be relied on.</p>
+</div>
+<div class="paragraph">
+<p>What we don&#8217;t guarantee is that there might be API changes along the way to the final release of Hibernate Search 6 and you might have to adapt your code.</p>
+</div>
+<div class="paragraph">
+<p>If it is not a major issue for you, then sure you can use it.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="why-elasticsearch-only">Why Elasticsearch only?</h3>
+<div class="paragraph">
+<p>Hibernate Search supports both a Lucene backend and an Elasticsearch backend.</p>
+</div>
+<div class="paragraph">
+<p>In the context of Quarkus and to build microservices, we thought the latter would make more sense.
+Thus we focused our efforts on it.</p>
+</div>
+<div class="paragraph">
+<p>We don&#8217;t have plans to support the Lucene backend in Quarkus for now.</p>
+</div>
 </div>
 </div>
 </div>

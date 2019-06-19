@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Building Native Image Guide</title>
+  <title>Quarkus - Building a Native Executable</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -64,7 +64,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Building Native Image Guide</h1>
+    <h1 class="text-caps">Quarkus - Building a Native Executable</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -427,13 +427,27 @@ The project generation has provided a <code>Dockerfile.native</code> in the <cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="dockerfile" class="language-dockerfile hljs">FROM registry.fedoraproject.org/fedora-minimal
+<pre class="highlightjs highlight"><code data-lang="dockerfile" class="language-dockerfile hljs">FROM registry.access.redhat.com/ubi8/ubi-minimal
 WORKDIR /work/
 COPY target/*-runner /work/application
 RUN chmod 775 /work
 EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If your application requires libcrypt.so.2 you may consider <code>registry.fedoraproject.org/fedora-minimal:30</code> (or later) as a base image.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Then, if you didn&#8217;t delete the generated native executable, you can build the docker image with:</p>

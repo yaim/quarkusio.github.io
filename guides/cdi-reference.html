@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Cdi Reference</title>
+  <title>Quarkus - Contexts and Dependency Injection</title>
   <script id="adobe_dtm" src="//www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <meta charset="utf-8">
@@ -64,30 +64,8 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">Cdi Reference</h1>
-    <div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#bean_discovery">1. Bean Discovery</a></li>
-<li><a href="#private-members">2. Private Members</a></li>
-<li><a href="#supported_features">3. Supported Features</a></li>
-<li><a href="#limitations">4. Limitations</a></li>
-<li><a href="#build-time-extension-points">5. Build Time Extension Points</a>
-<ul class="sectlevel2">
-<li><a href="#portable_extensions">5.1. Portable Extensions</a></li>
-<li><a href="#additional-bean-defining-annotations">5.2. Additional Bean Defining Annotations</a></li>
-<li><a href="#resource-annotations">5.3. Resource Annotations</a></li>
-<li><a href="#additional-beans">5.4. Additional Beans</a></li>
-<li><a href="#synthetic-beans">5.5. Synthetic Beans</a></li>
-<li><a href="#annotation-transformations">5.6. Annotation Transformations</a></li>
-<li><a href="#bean-deployment-validation">5.7. Bean Deployment Validation</a></li>
-<li><a href="#custom-contexts">5.8. Custom Contexts</a></li>
-</ul>
-</li>
-<li><a href="#remove_unused_beans">6. Removing Unused Beans</a></li>
-</ul>
-</div>
-<div id="preamble">
+    <h1 class="text-caps">Quarkus - Contexts and Dependency Injection</h1>
+    <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus DI solution is based on the <a href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html" target="_blank" rel="noopener">Contexts and Dependency Injection for Java 2.0</a> specification.
@@ -172,20 +150,20 @@ This involves injection fields, constructors and initializers, observer methods,
 public class CounterBean {
 
     @Inject
-    CounterService counterService; // <b class="conum">(1)</b>
+    CounterService counterService; <b class="conum">(1)</b>
 
-    void onMessage(@Observes Event msg) { // <b class="conum">(2)</b>
+    void onMessage(@Observes Event msg) { <b class="conum">(2)</b>
     }
 }</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="colist arabic">
+<ol>
 <li>
-<p>A package-private injection field</p>
+<p>A package-private injection field.</p>
 </li>
 <li>
-<p>A package-private observer method</p>
+<p>A package-private observer method.</p>
 </li>
 </ol>
 </div>
@@ -197,25 +175,18 @@ public class CounterBean {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
 public class CounterBean {
 
-    private final CounterService service;
+    private CounterService service;
 
-    CounterBean() { // <b class="conum">(1)</b>
-    }
-
-    @Inject
-    CounterBean(CounterService service) { // <b class="conum">(2)</b>
+    CounterBean(CounterService service) { <b class="conum">(1)</b>
       this.service = service;
     }
 }</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="colist arabic">
+<ol>
 <li>
-<p>Dummy constructor needed for CDI beans with a normal scope</p>
-</li>
-<li>
-<p>A package-private constructor injection</p>
+<p>A package-private constructor injection.</p>
 </li>
 </ol>
 </div>
@@ -325,7 +296,7 @@ public class CounterBean {
 <p>Portable Extensions are not supported</p>
 </li>
 <li>
-<p><code>BeanManager</code> - only the following methods are implemented: <code>getBeans()</code>, <code>createCreationalContext()</code>, <code>getReference()</code>, <code>resolve()</code>, <code>getContext()</code>, <code>getEvent()</code> and <code>createInstance()</code></p>
+<p><code>BeanManager</code> - only the following methods are implemented: <code>getBeans()</code>, <code>createCreationalContext()</code>, <code>getReference()</code>, <code>getInjectableReference()</code> , <code>resolve()</code>, <code>getContext()</code>, <code>fireEvent()</code>, <code>getEvent()</code> and <code>createInstance()</code></p>
 </li>
 <li>
 <p>Specialization is not supported</p>
@@ -337,7 +308,7 @@ public class CounterBean {
 <p>Passivation and passivating scopes are not supported</p>
 </li>
 <li>
-<p>Transitive interceptor bindings and interceptor methods on superclasses are not implemented yet</p>
+<p>Interceptor methods on superclasses are not implemented yet</p>
 </li>
 </ul>
 </div>
@@ -500,7 +471,37 @@ AnnotationsTransformerBuildItem transform() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="bean-deployment-validation">5.7. Bean Deployment Validation</h3>
+<h3 id="injection-point-transformation">5.7. Injection Point Transformation</h3>
+<div class="paragraph">
+<p>Every now and then it is handy to be able to change qualifiers of an injection point programmatically.
+You can do just that with <code>InjectionPointTransformerBuildItem</code>.
+The following sample shows how to apply transformation to injection points with type <code>Foo</code> that contain qualifier <code>MyQualifier</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
+InjectionPointTransformerBuildItem transform() {
+    return new InjectionPointTransformerBuildItem(new InjectionPointsTransformer() {
+
+        public boolean appliesTo(Type requiredType) {
+            return requiredType.equals(Type.create(DotName.createSimple(Foo.class.getName()), Type.Kind.CLASS));
+        }
+
+        public void transform(TransformationContext transformationContext) {
+            if (transformationContext.getQualifiers().stream()
+                    .anyMatch(a -&gt; a.name().equals(DotName.createSimple(MyQualifier.class.getName())))) {
+                transformationContext.transform().removeAll()
+                        .add(DotName.createSimple(MyOtherQualifier.class.getName()))
+                        .done();
+            }
+        }
+    });
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bean-deployment-validation">5.8. Bean Deployment Validation</h3>
 <div class="paragraph">
 <p>Once the bean deployment is ready an extension can perform additional validations and inspect the found beans, observers and injection points.
 Register a <code>BeanDeploymentValidatorBuildItem</code>:</p>
@@ -533,7 +534,7 @@ See also <code>io.quarkus.arc.processor.BuildExtension.Key</code> to discover th
 </div>
 </div>
 <div class="sect2">
-<h3 id="custom-contexts">5.8. Custom Contexts</h3>
+<h3 id="custom-contexts">5.9. Custom Contexts</h3>
 <div class="paragraph">
 <p>An extension can register a custom <code>InjectableContext</code> implementation by means of a <code>ContextRegistrarBuildItem</code>:</p>
 </div>
@@ -548,6 +549,157 @@ ContextRegistrarBuildItem customContext() {
     });
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="build_metadata">5.10. Available Build Time Metadata</h3>
+<div class="paragraph">
+<p>Any of the above extensions that operates with <code>BuildExtension.BuildContext</code> can leverage certain build time metadata that are generated during build.
+The built-in keys located in <code>io.quarkus.arc.processor.BuildExtension.Key</code> are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ANNOTATION_STORE</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Contains an <code>AnnotationStore</code> that keeps information about all <code>AnnotationTarget</code> annotations after application of annotation transformers</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>INJECTION_POINTS</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>List&lt;InjectionPointInfo&gt;</code> containing all injection points</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>BEANS</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>List&lt;BeanInfo&gt;</code> containing all beans</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>OBSERVERS</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>List&lt;ObserverInfo&gt;</code> containing all observers</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>SCOPES</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>List&lt;ScopeInfo&gt;</code> containing all scopes, including custom ones</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>QUALIFIERS</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Map&lt;DotName, ClassInfo&gt;</code> containing all qualifiers</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>INTERCEPTOR_BINDINGS</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Map&lt;DotName, ClassInfo&gt;</code> containing all interceptor bindings</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>STEREOTYPES</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Map&lt;DotName, ClassInfo&gt;</code> containing all stereotypes</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To get hold of these, simply query the extension context object for given key.
+Note that these metadata are made available as build proceeds which means that extensions can only leverage metadata that were build before they are invoked.
+If your extension attempts to retrieve metadata that wasn&#8217;t yet produced, <code>null</code> will be returned.
+Here is a summary of which extensions can access which metadata:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>AnnotationsTransformer</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Shouldn&#8217;t rely on any metadata as this is one of the first CDI extensions invoked</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>ContextRegistrar</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Has access to <code>ANNOTATION_STORE</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>InjectionPointsTransformer</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Has access to <code>ANNOTATION_STORE</code>, <code>QUALIFIERS</code>, <code>INTERCEPTOR_BINDINGS</code>, <code>STEREOTYPES</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>BeanRegistrar</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Has access to all build metadata</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>BeanDeploymentValidator</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Has access to all build metadata</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 </div>
 </div>
