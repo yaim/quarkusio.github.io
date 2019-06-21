@@ -87,7 +87,7 @@ This guide covers:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisites">1. Prerequisites</h2>
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>1. Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To complete this guide, you need:</p>
@@ -114,7 +114,7 @@ This guide covers:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="architecture">2. Architecture</h2>
+<h2 id="architecture"><a class="anchor" href="#architecture"></a>2. Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In this guide, we expand on the initial test that was created as part of the Getting Started Guide.
@@ -123,7 +123,7 @@ We cover injection into tests and also how to test native executables.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="solution">3. Solution</h2>
+<h2 id="solution"><a class="anchor" href="#solution"></a>3. Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We recommend that you follow the instructions in the next sections and create the application step by step.
@@ -141,7 +141,7 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="recap-of-http-based-testing-in-jvm-mode">4. Recap of HTTP based Testing in JVM mode</h2>
+<h2 id="recap-of-http-based-testing-in-jvm-mode"><a class="anchor" href="#recap-of-http-based-testing-in-jvm-mode"></a>4. Recap of HTTP based Testing in JVM mode</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you have started from the Getting Started example you should already have a completed test, including the correct
@@ -237,7 +237,7 @@ public class GreetingResourceTest {
 the test is run.</p>
 </div>
 <div class="sect2">
-<h3 id="controlling-the-test-port">4.1. Controlling the test port</h3>
+<h3 id="controlling-the-test-port"><a class="anchor" href="#controlling-the-test-port"></a>4.1. Controlling the test port</h3>
 <div class="paragraph">
 <p>While Quarkus will listen on port <code>8080</code> by default, when running tests it defaults to <code>8081</code>. This allows you to run
 tests while having the application running in parallel.</p>
@@ -268,7 +268,7 @@ so no additional configuration should be required.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="injecting-a-uri">4.2. Injecting a URI</h3>
+<h3 id="injecting-a-uri"><a class="anchor" href="#injecting-a-uri"></a>4.2. Injecting a URI</h3>
 <div class="paragraph">
 <p>It is also possible to directly inject the URL into the test which can make is easy to use a different client. This is
 done via the <code>@TestHTTPResource</code> annotation.</p>
@@ -349,7 +349,7 @@ public class StaticContentTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="injection-into-tests">5. Injection into tests</h2>
+<h2 id="injection-into-tests"><a class="anchor" href="#injection-into-tests"></a>5. Injection into tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>So far we have only covered integration style tests that test the app via HTTP endpoints, but what if we want to do unit
@@ -395,7 +395,7 @@ public class GreetingServiceTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="applying-interceptors-to-tests">6. Applying Interceptors to Tests</h2>
+<h2 id="applying-interceptors-to-tests"><a class="anchor" href="#applying-interceptors-to-tests"></a>6. Applying Interceptors to Tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>As mentioned above Quarkus tests are actually full CDI beans, and as such you can apply CDI interceptors as you would
@@ -440,7 +440,7 @@ public class TestStereotypeTestCase {
 </div>
 </div>
 <div class="sect1">
-<h2 id="mock-support">7. Mock Support</h2>
+<h2 id="mock-support"><a class="anchor" href="#mock-support"></a>7. Mock Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus supports the use of mock objects using the CDI <code>@Alternative</code> mechanism.
@@ -496,7 +496,7 @@ to be baked into the native image.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="test-bootstrap-configuration-options">8. Test Bootstrap Configuration Options</h2>
+<h2 id="test-bootstrap-configuration-options"><a class="anchor" href="#test-bootstrap-configuration-options"></a>8. Test Bootstrap Configuration Options</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>There are a few system properties that can be used to tune the bootstrap of the test, specifically its classpath.</p>
@@ -517,7 +517,7 @@ to be baked into the native image.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="native-executable-testing">9. Native Executable Testing</h2>
+<h2 id="native-executable-testing"><a class="anchor" href="#native-executable-testing"></a>9. Native Executable Testing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>It is also possible to test native executables using <code>@SubstrateTest</code>. This supports all the features mentioned in this

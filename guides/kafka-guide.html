@@ -73,7 +73,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To complete this guide, you need:</p>
@@ -103,7 +103,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="architecture">Architecture</h2>
+<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In this guide, we are going to generate (random) prices in one component.
@@ -120,7 +120,7 @@ The data is sent to a browser using server-sent events.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="solution">Solution</h2>
+<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We recommend that you follow the instructions in the next sections and create the application step by step.
@@ -135,7 +135,7 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project">Creating the Maven Project</h2>
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven Project</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>First, we need a new project. Create a new project with the following command:</p>
@@ -154,7 +154,7 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="starting-kafka">Starting Kafka</h2>
+<h2 id="starting-kafka"><a class="anchor" href="#starting-kafka"></a>Starting Kafka</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Then, we need a Kafka cluster.
@@ -212,7 +212,7 @@ This is a development cluster, do not use in production.
 </div>
 </div>
 <div class="sect1">
-<h2 id="the-price-generator">The price generator</h2>
+<h2 id="the-price-generator"><a class="anchor" href="#the-price-generator"></a>The price generator</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Create the <code>src/main/java/org/acme/quarkus/sample/PriceGenerator.java</code> file, with the following content:</p>
@@ -263,7 +263,7 @@ This stream is mapped to Kafka using the <code>application.properties</code> fil
 </div>
 </div>
 <div class="sect1">
-<h2 id="the-price-converter">The price converter</h2>
+<h2 id="the-price-converter"><a class="anchor" href="#the-price-converter"></a>The price converter</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The price converter reads the prices from Kafka, and transforms them.
@@ -318,7 +318,7 @@ Every result is sent to the <code>my-data-stream</code> in-memory stream.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="the-price-resource">The price resource</h2>
+<h2 id="the-price-resource"><a class="anchor" href="#the-price-resource"></a>The price resource</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Finally, let&#8217;s bind our stream to a JAX-RS resource.
@@ -377,7 +377,7 @@ public class PriceResource {
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-the-kafka-connector">Configuring the Kafka connector</h2>
+<h2 id="configuring-the-kafka-connector"><a class="anchor" href="#configuring-the-kafka-connector"></a>Configuring the Kafka connector</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We need to configure the Kafka connector. This is done in the <code>application.properties</code> file.
@@ -421,7 +421,7 @@ What about <code>my-data-stream</code>? This is an in-memory stream, not connect
 </div>
 </div>
 <div class="sect1">
-<h2 id="the-html-page">The HTML page</h2>
+<h2 id="the-html-page"><a class="anchor" href="#the-html-page"></a>The HTML page</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Final touch, the HTML page reading the converted prices using SSE.</p>
@@ -467,7 +467,7 @@ What about <code>my-data-stream</code>? This is an in-memory stream, not connect
 </div>
 </div>
 <div class="sect1">
-<h2 id="get-it-running">Get it running</h2>
+<h2 id="get-it-running"><a class="anchor" href="#get-it-running"></a>Get it running</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you followed the instructions, you should have Kafka running.
@@ -496,7 +496,7 @@ If you started the Kafka broker with docker compose, stop it using <code>CTRL+C<
 </div>
 </div>
 <div class="sect1">
-<h2 id="running-native">Running Native</h2>
+<h2 id="running-native"><a class="anchor" href="#running-native"></a>Running Native</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can build the native executable with:</p>
@@ -509,7 +509,7 @@ If you started the Kafka broker with docker compose, stop it using <code>CTRL+C<
 </div>
 </div>
 <div class="sect1">
-<h2 id="going-further">Going further</h2>
+<h2 id="going-further"><a class="anchor" href="#going-further"></a>Going further</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide has shown how you can interact with Kafka using Quarkus.

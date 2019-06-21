@@ -138,7 +138,7 @@ public class SubjectExposingResource {
 </div>
 </div>
 <div class="sect1">
-<h2 id="setting-it-up">Setting it up</h2>
+<h2 id="setting-it-up"><a class="anchor" href="#setting-it-up"></a>Setting it up</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You need to add the elytron-security extension dependency explicitly if you want to enable security behaviors.
@@ -158,14 +158,14 @@ Add the following to your <code>pom.xml</code>:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration">Configuration</h2>
+<h2 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The elytron-security extension currently supports two different realms for the storage of authentication
 and authorization information. Both support storage of this information in properties type files. The next two sections detail the specific configuration properties.</p>
 </div>
 <div class="sect2">
-<h3 id="property-files-realm-configuration">Property Files Realm Configuration</h3>
+<h3 id="property-files-realm-configuration"><a class="anchor" href="#property-files-realm-configuration"></a>Property Files Realm Configuration</h3>
 <div class="paragraph">
 <p>The property files realm supports mapping of users to password and users to roles with a combination of properties files. To enable and configure it, the following configuration properties are used:</p>
 </div>
@@ -219,7 +219,7 @@ quarkus.security.file.realm-name=MyRealm</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="users-properties">Users.properties</h4>
+<h4 id="users-properties"><a class="anchor" href="#users-properties"></a>Users.properties</h4>
 <div class="paragraph">
 <p>The <code>quarkus.security.users</code> configuration property specifies a classpath resource which is a properties file with a user to password mapping, one per line. The following <a href="#example test-users.properties file">[example test-users.properties file]</a> illustrates the format:</p>
 </div>
@@ -244,7 +244,7 @@ noadmin=n0Adm1n</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="roles-properties">Roles.properties</h4>
+<h4 id="roles-properties"><a class="anchor" href="#roles-properties"></a>Roles.properties</h4>
 <div class="listingblock">
 <div class="title">example test-roles.properties file</div>
 <div class="content">
@@ -273,7 +273,7 @@ noadmin=user</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="embedded-realm-configuration">Embedded Realm Configuration</h3>
+<h3 id="embedded-realm-configuration"><a class="anchor" href="#embedded-realm-configuration"></a>Embedded Realm Configuration</h3>
 <div class="paragraph">
 <p>The embedded realm also supports mapping of users to password and users to roles. It uses the main application.properties Quarkus configuration file to embed this information. To enable and configure it, the following configuration properties are used:</p>
 </div>
@@ -335,7 +335,7 @@ quarkus.security.embedded.auth-mechanism=CUSTOM</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="embedded-users">Embedded Users</h4>
+<h4 id="embedded-users"><a class="anchor" href="#embedded-users"></a>Embedded Users</h4>
 <div class="paragraph">
 <p>The user to password mappings are specified in the <code>application.properties</code> file by property names of the form <code>quarkus.security.embedded.users.&lt;user&gt;=&lt;password&gt;</code>. The following <a href="#Example Passwords">[Example Passwords]</a> illustrates the syntax with the 4 user to password mappings shown in lines 2-5:</p>
 </div>
@@ -365,7 +365,7 @@ quarkus.security.embedded.roles.noadmin=user</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="embedded-roles">Embedded Roles</h4>
+<h4 id="embedded-roles"><a class="anchor" href="#embedded-roles"></a>Embedded Roles</h4>
 <div class="paragraph">
 <p>The user to role mappings are specified in the <code>application.properties</code> file by property names of the form <code>quarkus.security.embedded.roles.&lt;user&gt;=role1[,role2[,role3[,&#8230;&#8203;]]]</code>. The following <a href="#Example Roles">[Example Roles]</a> illustrates the syntax with the 4 user to role mappings shown in lines 6-9:</p>
 </div>
@@ -395,7 +395,7 @@ quarkus.security.embedded.roles.noadmin=user</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="registering-security-providers">Registering Security Providers</h4>
+<h4 id="registering-security-providers"><a class="anchor" href="#registering-security-providers"></a>Registering Security Providers</h4>
 <div class="paragraph">
 <p>When running in native mode the default behavior for Graal native image generation is to only include the main "SUN" provider
 unless you have enabled SSL, in which case all security providers are registered. If you are not using SSL, then you can selectively
@@ -414,7 +414,7 @@ configuration to register the "SunRsaSign" and "SunJCE" security providers:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="augmenting-the-elytron-security-extension-advanced-topic">Augmenting the Elytron Security Extension <em>Advanced Topic</em></h2>
+<h2 id="augmenting-the-elytron-security-extension-advanced-topic"><a class="anchor" href="#augmenting-the-elytron-security-extension-advanced-topic"></a>Augmenting the Elytron Security Extension <em>Advanced Topic</em></h2>
 <div class="sectionbody">
 <div class="admonitionblock tip">
 <table>
@@ -434,7 +434,7 @@ configuration to register the "SunRsaSign" and "SunJCE" security providers:</p>
 <p>The elytron-security extension has support for overriding its Elytron <code>org.wildfly.security.auth.server.SecurityRealm</code> and the Undertow <code>io.undertow.security.idm.IdentityManager</code> used for authentication and authorization decisions. If  your application needs to integrate with alternative identity stores and/or authentication mechanisms, then you can use this advanced feature to do so. In order to do this, one would write an Quarkus extension as described in <a href="extension-authors-guide.html">Extension Authors Guide</a> to produce <code>SecurityRealmBuildItem</code> and/or <code>IdentityManagerBuildItem</code> items as detailed in the following sections. The JWT RBAC extension described in the <a href="jwt-guide.html">JWT RBAC Security</a> is an example of an extension that makes use of these extension points.</p>
 </div>
 <div class="sect2">
-<h3 id="adding-a-new-security-realm">Adding a new Security Realm</h3>
+<h3 id="adding-a-new-security-realm"><a class="anchor" href="#adding-a-new-security-realm"></a>Adding a new Security Realm</h3>
 <div class="paragraph">
 <p>If one has an alternative store of identity and role information, it can be integrated by creating a <code>org.wildfly.security.auth.server.SecurityRealm</code> and producing a <code>io.quarkus.security.SecurityRealmBuildItem</code> from within the deployment module of a new extension. The deployment module would be responsible for exposing the necessary configuration information to allow users to enable and configure the security realm identity mappings.</p>
 </div>
@@ -506,7 +506,7 @@ class SmallRyeJwtProcessor {
 </div>
 </div>
 <div class="sect2">
-<h3 id="overriding-the-undertow-identitymanager-implementation">Overriding the Undertow IdentityManager Implementation</h3>
+<h3 id="overriding-the-undertow-identitymanager-implementation"><a class="anchor" href="#overriding-the-undertow-identitymanager-implementation"></a>Overriding the Undertow IdentityManager Implementation</h3>
 <div class="paragraph">
 <p>The default <code>io.undertow.security.idm.IdentityManager</code> installed by the elytron-security extension is based on password authentication. It passes a <code>org.wildfly.security.evidence.PasswordGuessEvidence</code> representation of the caller authentication credentials to the security realm to validate a user. If you extend the elytron-security extension with a security realm that supports this form of evidence,  you can use the default <code>IdentityManager</code> provided by the elytron-security extension. Your extension would need to produce a <code>io.quarkus.security.PasswordRealmBuildItem</code> to indicate that your extension security realm supports <code>PasswordGuessEvidence</code>.</p>
 </div>
@@ -555,7 +555,7 @@ class SmallRyeJwtProcessor {
 </div>
 </div>
 <div class="sect1">
-<h2 id="future-work">Future Work</h2>
+<h2 id="future-work"><a class="anchor" href="#future-work"></a>Future Work</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Support for additional realms that allow for encrypted/hashed information as well as integration with Keycloak for OAUTH and JWT generation support is in the works. We will also be moving to more use of the Elytron APIs over the Undertow APIs to allow for more flexibility in handling various authentication and authorization approaches.</p>

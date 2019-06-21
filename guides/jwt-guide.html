@@ -74,7 +74,7 @@ secured access to the JAX-RS endpoints.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration">Configuration</h2>
+<h2 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -124,7 +124,7 @@ secured access to the JAX-RS endpoints.</p>
 </tbody>
 </table>
 <div class="sect2">
-<h3 id="supported-public-key-formats">Supported Public Key Formats</h3>
+<h3 id="supported-public-key-formats"><a class="anchor" href="#supported-public-key-formats"></a>Supported Public Key Formats</h3>
 <div class="paragraph">
 <p>Public Keys may be formatted in any of the following formats, specified in order of
 precedence:</p>
@@ -152,7 +152,7 @@ precedence:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="solution">Solution</h2>
+<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We recommend that you follow the instructions in the next sections and create the application step by step.
@@ -167,7 +167,7 @@ However, you can skip right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project">Creating the Maven project</h2>
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>First, we need a new project. Create a new project with the following command:</p>
@@ -186,7 +186,7 @@ However, you can skip right to the completed example.</p>
 <p>This command generates the Maven project with a REST endpoint and imports the <code>smallrye-jwt</code> extension, which includes the MicroProfile JWT RBAC support.</p>
 </div>
 <div class="sect2">
-<h3 id="examine-the-jax-rs-resource">Examine the JAX-RS resource</h3>
+<h3 id="examine-the-jax-rs-resource"><a class="anchor" href="#examine-the-jax-rs-resource"></a>Examine the JAX-RS resource</h3>
 <div class="paragraph">
 <p>Open the <code>src/main/java/org/acme/jwt/TokenSecuredResource.java</code> file and see the following content:</p>
 </div>
@@ -297,7 +297,7 @@ will produce undesirable behavior since JWT claims are naturally request scoped.
 </div>
 </div>
 <div class="sect1">
-<h2 id="run-the-application">Run the application</h2>
+<h2 id="run-the-application"><a class="anchor" href="#run-the-application"></a>Run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Now we are ready to run our application. Use:</p>
@@ -459,13 +459,13 @@ Not authorized</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-the-smallrye-jwt-extension-security-information">Configuring the Smallrye JWT Extension Security Information</h2>
+<h2 id="configuring-the-smallrye-jwt-extension-security-information"><a class="anchor" href="#configuring-the-smallrye-jwt-extension-security-information"></a>Configuring the Smallrye JWT Extension Security Information</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In the <a href="#configuration">Configuration</a> section we introduce the <code>application.properties</code> file that affect the Smallrye JWT extension.</p>
 </div>
 <div class="sect2">
-<h3 id="setting-up-application-properties">Setting up application.properties</h3>
+<h3 id="setting-up-application-properties"><a class="anchor" href="#setting-up-application-properties"></a>Setting up application.properties</h3>
 <div class="literalblock">
 <div class="content">
 <pre>For part A of step 1, create a using-jwt-rbac/src/main/resources/application.properties with the following content:</pre>
@@ -500,7 +500,7 @@ but we are making it explicit.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="adding-a-public-key">Adding a Public Key</h3>
+<h3 id="adding-a-public-key"><a class="anchor" href="#adding-a-public-key"></a>Adding a Public Key</h3>
 <div class="paragraph">
 <p>The <a href="https://tools.ietf.org/html/rfc7519">JWT specification</a> defines various levels of security of JWTs that one can use.
 The MicroProfile JWT RBAC specification requires that JWTs that are signed with the RSA-256 signature algorithm. This in
@@ -525,7 +525,7 @@ nQIDAQAB
 </div>
 </div>
 <div class="sect2">
-<h3 id="generating-a-jwt">Generating a JWT</h3>
+<h3 id="generating-a-jwt"><a class="anchor" href="#generating-a-jwt"></a>Generating a JWT</h3>
 <div class="paragraph">
 <p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the
 <a href="https://bitbucket.org/connect2id/nimbus-jose-jwt/wiki/Home">Nimbus JOSE+JWT</a> library and the TokenUtils class shown in the following listing. Take this source and place it into using-jwt-rbac/src/test/java/org/acme/jwt/TokenUtils.java.</p>
@@ -1014,7 +1014,7 @@ eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiO
 </div>
 </div>
 <div class="sect1">
-<h2 id="finally-secured-access-to-securedroles-allowed">Finally, Secured Access to /secured/roles-allowed</h2>
+<h2 id="finally-secured-access-to-securedroles-allowed"><a class="anchor" href="#finally-secured-access-to-securedroles-allowed"></a>Finally, Secured Access to /secured/roles-allowed</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Now let&#8217;s use this to make a secured request to the /secured/roles-allowed endpoint. Make sure you have the Quarkus server running using the <code>./mvnw compile quarkus:dev</code> command, and then run the following command, making sure to use your version of the generated JWT from the previous step:</p>
@@ -1050,7 +1050,7 @@ hello + jdoe@quarkus.io, isSecure: false, authScheme: MP-JWT, hasJWT: true</code
 </div>
 </div>
 <div class="sect1">
-<h2 id="using-the-jsonwebtoken-and-claim-injection">Using the JsonWebToken and Claim Injection</h2>
+<h2 id="using-the-jsonwebtoken-and-claim-injection"><a class="anchor" href="#using-the-jsonwebtoken-and-claim-injection"></a>Using the JsonWebToken and Claim Injection</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Now that we can generate a JWT to access our secured REST endpoints, let&#8217;s see what more we can do with the <code>JsonWebToken</code>
@@ -1169,7 +1169,7 @@ the birthdate claim from the <code>JwtClaims.json</code> content.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="claims-injection">Claims Injection</h3>
+<h3 id="claims-injection"><a class="anchor" href="#claims-injection"></a>Claims Injection</h3>
 <div class="paragraph">
 <p>In the previous <code>winners()</code> method we accessed the <code>birthday</code> claim through the <code>JsonWebToken</code> interface. MicroProfile JWT RBAC also supports
 the direct injection of claim values from the JWT using CDI injection and the MicroProfile JWT RBAC <code>@Claim</code> qualifier. Here is an alternative
@@ -1280,7 +1280,7 @@ public class TokenSecuredResource {
 </div>
 </div>
 <div class="sect1">
-<h2 id="package-and-run-the-application">Package and run the application</h2>
+<h2 id="package-and-run-the-application"><a class="anchor" href="#package-and-run-the-application"></a>Package and run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file:
@@ -1330,7 +1330,7 @@ Scotts-iMacPro:using-jwt-rbac starksm$ ./target/using-jwt-rbac-runner
 </div>
 </div>
 <div class="sect1">
-<h2 id="explore-the-solution">Explore the Solution</h2>
+<h2 id="explore-the-solution"><a class="anchor" href="#explore-the-solution"></a>Explore the Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The solution repository located in the <code>using-jwt-rbac</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">directory</a> contains all of the versions we have

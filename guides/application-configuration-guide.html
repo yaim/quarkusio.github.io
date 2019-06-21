@@ -74,7 +74,7 @@ In this guide, we learn how to configure your application.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To complete this guide, you need:</p>
@@ -98,7 +98,7 @@ In this guide, we learn how to configure your application.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="solution">Solution</h2>
+<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We recommend that you follow the instructions in the next sections and create the application step by step.
@@ -113,7 +113,7 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project">Creating the Maven project</h2>
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>First, we need a new project. Create a new project with the following command:</p>
@@ -155,7 +155,7 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="injecting-configuration-value">Injecting configuration value</h2>
+<h2 id="injecting-configuration-value"><a class="anchor" href="#injecting-configuration-value"></a>Injecting configuration value</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus uses <a href="https://microprofile.io/project/eclipse/microprofile-config">MicroProfile Config</a> to inject the configuration in the application.
@@ -223,7 +223,7 @@ public String hello() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="create-the-configuration">Create the configuration</h2>
+<h2 id="create-the-configuration"><a class="anchor" href="#create-the-configuration"></a>Create the configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>By default, Quarkus reads <code>application.properties</code>.
@@ -261,7 +261,7 @@ So you can quickly know when your configuration is complete.
 </div>
 </div>
 <div class="sect1">
-<h2 id="update-the-test">Update the test</h2>
+<h2 id="update-the-test"><a class="anchor" href="#update-the-test"></a>Update the test</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We also need to update the functional test to reflect the changes made to endpoint.
@@ -295,7 +295,7 @@ public class GreetingResourceTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="package-and-run-the-application">Package and run the application</h2>
+<h2 id="package-and-run-the-application"><a class="anchor" href="#package-and-run-the-application"></a>Package and run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Run the application with: <code>./mvnw compile quarkus:dev</code>.
@@ -312,7 +312,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-quarkus">Configuring Quarkus</h2>
+<h2 id="configuring-quarkus"><a class="anchor" href="#configuring-quarkus"></a>Configuring Quarkus</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus itself is configured via the same mechanism as your application. Quarkus reserves the <code>quarkus.</code> namespace
@@ -357,7 +357,7 @@ adding an additional extension to see what additional options have been added.</
 </div>
 </div>
 <div class="sect1">
-<h2 id="overriding-properties-at-runtime">Overriding properties at runtime</h2>
+<h2 id="overriding-properties-at-runtime"><a class="anchor" href="#overriding-properties-at-runtime"></a>Overriding properties at runtime</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus does much of its configuration and bootstrap at build time.
@@ -420,7 +420,7 @@ Environment variables names are following the conversion rules of <a href="https
 </table>
 </div>
 <div class="sect2">
-<h3 id="configuration-profiles">Configuration Profiles</h3>
+<h3 id="configuration-profiles"><a class="anchor" href="#configuration-profiles"></a>Configuration Profiles</h3>
 <div class="paragraph">
 <p>Quarkus supports the notion of configuration profiles. These allow you to have multiple configuration in the same file and
 select between then via a profile name.</p>
@@ -473,10 +473,10 @@ I can add the following to <code>application.properties</code>:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="custom-configuration">Custom Configuration</h2>
+<h2 id="custom-configuration"><a class="anchor" href="#custom-configuration"></a>Custom Configuration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="custom-configuration-sources">Custom configuration sources</h3>
+<h3 id="custom-configuration-sources"><a class="anchor" href="#custom-configuration-sources"></a>Custom configuration sources</h3>
 <div class="paragraph">
 <p>You can also introduce custom configuration sources in the standard MicroProfile Config manner.  To
 do this, you must provide a class which implements either <code>org.eclipse.microprofile.config.spi.ConfigSource</code>
@@ -486,7 +486,7 @@ class and it will be detected and installed at application startup.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="custom-configuration-converters">Custom configuration converters</h3>
+<h3 id="custom-configuration-converters"><a class="anchor" href="#custom-configuration-converters"></a>Custom configuration converters</h3>
 <div class="paragraph">
 <p>You can also use your custom types as a configuration values. This can be done by implementing <code>org.eclipse.microprofile.config.spi.Converter&lt;T&gt;</code>
 and adding its fully qualified class name in file <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.</p>
@@ -556,7 +556,7 @@ MicroProfileCustomValue value;</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="converter-priority">Converter priority</h4>
+<h4 id="converter-priority"><a class="anchor" href="#converter-priority"></a>Converter priority</h4>
 <div class="paragraph">
 <p>In some cases you may want to use a custom converter to convert a type which is already converted
 by a different converter. In such cases, you can use the <code>javax.annotation.Priority</code> annotation to
@@ -619,7 +619,7 @@ This new converter also needs to be listed in a service file, i.e. <code>META-IN
 </div>
 </div>
 <div class="sect1">
-<h2 id="more-info-on-how-to-configure">More info on how to configure</h2>
+<h2 id="more-info-on-how-to-configure"><a class="anchor" href="#more-info-on-how-to-configure"></a>More info on how to configure</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus relies on Eclipse MicroProfile and inherit its features.</p>

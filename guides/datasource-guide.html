@@ -90,7 +90,7 @@ The main way of obtaining connections to a database is to use a datasource.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To complete this guide, you need:</p>
@@ -114,7 +114,7 @@ The main way of obtaining connections to a database is to use a datasource.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project">Creating the Maven project</h2>
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>First, we need a new project. Create a new project with the following command:</p>
@@ -156,7 +156,7 @@ The main way of obtaining connections to a database is to use a datasource.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="adding-maven-dependencies">Adding maven dependencies</h2>
+<h2 id="adding-maven-dependencies"><a class="anchor" href="#adding-maven-dependencies"></a>Adding maven dependencies</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Next, you will need to add the <code>quarkus-agroal</code> dependency to your project.</p>
@@ -235,7 +235,7 @@ Extensions are mostly useful to support GraalVM native images.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-the-datasource">Configuring the datasource</h2>
+<h2 id="configuring-the-datasource"><a class="anchor" href="#configuring-the-datasource"></a>Configuring the datasource</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Once the dependencies are added to your pom.xml file, you&#8217;ll need to configure Agroal.</p>
@@ -259,13 +259,13 @@ quarkus.datasource.max-size=13</code></pre>
 <p>There are other configuration options, detailed below.</p>
 </div>
 <div class="sect2">
-<h3 id="jdbc-url-configurations">JDBC URL configurations</h3>
+<h3 id="jdbc-url-configurations"><a class="anchor" href="#jdbc-url-configurations"></a>JDBC URL configurations</h3>
 <div class="paragraph">
 <p>Each of the supported databases contains different JDBC URL configuration options.
 Going into each of those options is beyond the scope of this document, but it gives an overview of each database URL and link to the official documentation.</p>
 </div>
 <div class="sect3">
-<h4 id="h2">H2</h4>
+<h4 id="h2"><a class="anchor" href="#h2"></a>H2</h4>
 <div class="paragraph">
 <p><code>jdbc:h2:{ {.|mem:}[name] | [file:]fileName | {tcp|ssl}:[//]server[:port][,server2[:port]]/name }[;key=value&#8230;&#8203;]</code></p>
 </div>
@@ -285,7 +285,7 @@ You can find more information at the <a href="https://h2database.com/html/featur
 </div>
 </div>
 <div class="sect3">
-<h4 id="postgresql">PostgreSQL</h4>
+<h4 id="postgresql"><a class="anchor" href="#postgresql"></a>PostgreSQL</h4>
 <div class="paragraph">
 <p>PostgreSQL only runs as a server, as do the rest of the databases below.
 As such, you must specify connection details, or use the defaults.</p>
@@ -325,7 +325,7 @@ As such, you must specify connection details, or use the defaults.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mariadbmysql">MariaDB/MySQL</h4>
+<h4 id="mariadbmysql"><a class="anchor" href="#mariadbmysql"></a>MariaDB/MySQL</h4>
 <div class="paragraph">
 <p><code>jdbc:(mysql|mariadb):[replication:|failover:|sequential:|aurora:]//&lt;hostDescription&gt;[,&lt;hostDescription&gt;&#8230;&#8203;]/[database][?&lt;key1&gt;=&lt;value1&gt;[&amp;&lt;key2&gt;=&lt;value2&gt;]]</code>
  hostDescription:: <code>&lt;host&gt;[:&lt;portnumber&gt;]  or address=(host=&lt;host&gt;)[(port=&lt;portnumber&gt;)][(type=(master|slave))]</code></p>
@@ -343,7 +343,7 @@ As such, you must specify connection details, or use the defaults.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="microsoft-sql-server">Microsoft SQL Server</h4>
+<h4 id="microsoft-sql-server"><a class="anchor" href="#microsoft-sql-server"></a>Microsoft SQL Server</h4>
 <div class="paragraph">
 <p>Microsoft SQL Server takes a connection URL in the following form:</p>
 </div>
@@ -367,7 +367,7 @@ More details can be found in the <a href="https://docs.microsoft.com/en-us/sql/c
 </div>
 </div>
 <div class="sect1">
-<h2 id="injecting-a-datasource">Injecting a Datasource</h2>
+<h2 id="injecting-a-datasource"><a class="anchor" href="#injecting-a-datasource"></a>Injecting a Datasource</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Because Quarkus uses CDI, injecting a datasource is very simple:</p>
@@ -385,7 +385,7 @@ Because of this, you can also use <code>javax.sql.DataSource</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="multiple-datasources">Multiple Datasources</h2>
+<h2 id="multiple-datasources"><a class="anchor" href="#multiple-datasources"></a>Multiple Datasources</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Agroal allows you to configure multiple datasources.
@@ -417,7 +417,7 @@ quarkus.datasource.inventory.max-size=12</code></pre>
 The syntax is as follows: <code>quarkus.datasource.[optional name.][datasource property]</code>.</p>
 </div>
 <div class="sect2">
-<h3 id="named-datasource-injection">Named Datasource Injection</h3>
+<h3 id="named-datasource-injection"><a class="anchor" href="#named-datasource-injection"></a>Named Datasource Injection</h3>
 <div class="paragraph">
 <p>When using multiple datasources, each <code>DataSource</code> also has the <code>io.quarkus.agroal.DataSource</code> qualifier with the name of the datasource in the property as the value.
 Using the above properties to configure three different datasources, you can also inject each one as follows:</p>
@@ -440,7 +440,7 @@ AgroalDataSource dataSource2;</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="agroal-configuration-reference">Agroal Configuration Reference</h2>
+<h2 id="agroal-configuration-reference"><a class="anchor" href="#agroal-configuration-reference"></a>Agroal Configuration Reference</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>

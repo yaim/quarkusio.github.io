@@ -87,7 +87,7 @@ Most of the existing CDI code should work just fine but there are some small dif
 </div>
 </div>
 <div class="sect1">
-<h2 id="bean_discovery">1. Bean Discovery</h2>
+<h2 id="bean_discovery"><a class="anchor" href="#bean_discovery"></a>1. Bean Discovery</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Bean discovery in CDI is a complex process which involves legacy deployment structures and accessibility requirements of the underlying module architecture.
@@ -131,7 +131,7 @@ Quarkus extension may declare additional discovery rules. For example <code>@Sch
 </div>
 </div>
 <div class="sect1">
-<h2 id="private-members">2. Private Members</h2>
+<h2 id="private-members"><a class="anchor" href="#private-members"></a>2. Private Members</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus is designed with Substrate VM in mind.
@@ -193,7 +193,7 @@ public class CounterBean {
 </div>
 </div>
 <div class="sect1">
-<h2 id="supported_features">3. Supported Features</h2>
+<h2 id="supported_features"><a class="anchor" href="#supported_features"></a>3. Supported Features</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -282,7 +282,7 @@ public class CounterBean {
 </div>
 </div>
 <div class="sect1">
-<h2 id="limitations">4. Limitations</h2>
+<h2 id="limitations"><a class="anchor" href="#limitations"></a>4. Limitations</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -315,10 +315,10 @@ public class CounterBean {
 </div>
 </div>
 <div class="sect1">
-<h2 id="build-time-extension-points">5. Build Time Extension Points</h2>
+<h2 id="build-time-extension-points"><a class="anchor" href="#build-time-extension-points"></a>5. Build Time Extension Points</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="portable_extensions">5.1. Portable Extensions</h3>
+<h3 id="portable_extensions"><a class="anchor" href="#portable_extensions"></a>5.1. Portable Extensions</h3>
 <div class="paragraph">
 <p>Quarkus incorporates build-time optimizations in order to provide instant startup and low memory footprint.
 The downside of this approach is that CDI Portable Extensions cannot be supported.
@@ -326,7 +326,7 @@ Nevertheless, most of the functionality can be achieved using Quarkus <a href="e
 </div>
 </div>
 <div class="sect2">
-<h3 id="additional-bean-defining-annotations">5.2. Additional Bean Defining Annotations</h3>
+<h3 id="additional-bean-defining-annotations"><a class="anchor" href="#additional-bean-defining-annotations"></a>5.2. Additional Bean Defining Annotations</h3>
 <div class="paragraph">
 <p>As described in <a href="#bean_discovery">Bean Discovery</a> bean classes that don’t have a bean defining annotation are not discovered.
 However, <code>BeanDefiningAnnotationBuildItem</code> can be used to extend the set of default bean defining annotations (<code>@Dependent</code>, <code>@Singleton</code>, <code>@ApplicationScoped</code>, <code>@RequestScoped</code> and <code>@Stereotype</code> annotations):</p>
@@ -353,7 +353,7 @@ Bean registrations that are result of a <code>BeanDefiningAnnotationBuildItem</c
 </div>
 </div>
 <div class="sect2">
-<h3 id="resource-annotations">5.3. Resource Annotations</h3>
+<h3 id="resource-annotations"><a class="anchor" href="#resource-annotations"></a>5.3. Resource Annotations</h3>
 <div class="paragraph">
 <p><code>ResourceAnnotationBuildItem</code> is used to specify resource annotations  that make it possible to resolve non-CDI injection points, such as Java EE resources.</p>
 </div>
@@ -381,7 +381,7 @@ void setupResourceInjection(BuildProducer&lt;ResourceAnnotationBuildItem&gt; res
 </div>
 </div>
 <div class="sect2">
-<h3 id="additional-beans">5.4. Additional Beans</h3>
+<h3 id="additional-beans"><a class="anchor" href="#additional-beans"></a>5.4. Additional Beans</h3>
 <div class="paragraph">
 <p><code>AdditionalBeanBuildItem</code> is used to specify additional bean classes to be analyzed during discovery.
 Additional bean classes are transparently added to the application index processed by the container.</p>
@@ -410,7 +410,7 @@ A bean registration that is a result of an <code>AdditionalBeanBuildItem</code> 
 </div>
 </div>
 <div class="sect2">
-<h3 id="synthetic-beans">5.5. Synthetic Beans</h3>
+<h3 id="synthetic-beans"><a class="anchor" href="#synthetic-beans"></a>5.5. Synthetic Beans</h3>
 <div class="paragraph">
 <p>Sometimes it is very useful to register a synthetic bean, i.e. a bean that doesn&#8217;t need to have a corresponding java class.
 In CDI this could be achieved using <code>AfterBeanDiscovery.addBean()</code> methods.
@@ -444,7 +444,7 @@ The output of a <code>BeanConfigurator</code> is recorded as bytecode. Therefore
 </div>
 </div>
 <div class="sect2">
-<h3 id="annotation-transformations">5.6. Annotation Transformations</h3>
+<h3 id="annotation-transformations"><a class="anchor" href="#annotation-transformations"></a>5.6. Annotation Transformations</h3>
 <div class="paragraph">
 <p>A very common task is to override the annotations found on the bean classes.
 For example you might want to add an interceptor binding to a specific bean class.
@@ -471,7 +471,7 @@ AnnotationsTransformerBuildItem transform() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="injection-point-transformation">5.7. Injection Point Transformation</h3>
+<h3 id="injection-point-transformation"><a class="anchor" href="#injection-point-transformation"></a>5.7. Injection Point Transformation</h3>
 <div class="paragraph">
 <p>Every now and then it is handy to be able to change qualifiers of an injection point programmatically.
 You can do just that with <code>InjectionPointTransformerBuildItem</code>.
@@ -501,7 +501,7 @@ InjectionPointTransformerBuildItem transform() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="bean-deployment-validation">5.8. Bean Deployment Validation</h3>
+<h3 id="bean-deployment-validation"><a class="anchor" href="#bean-deployment-validation"></a>5.8. Bean Deployment Validation</h3>
 <div class="paragraph">
 <p>Once the bean deployment is ready an extension can perform additional validations and inspect the found beans, observers and injection points.
 Register a <code>BeanDeploymentValidatorBuildItem</code>:</p>
@@ -534,7 +534,7 @@ See also <code>io.quarkus.arc.processor.BuildExtension.Key</code> to discover th
 </div>
 </div>
 <div class="sect2">
-<h3 id="custom-contexts">5.9. Custom Contexts</h3>
+<h3 id="custom-contexts"><a class="anchor" href="#custom-contexts"></a>5.9. Custom Contexts</h3>
 <div class="paragraph">
 <p>An extension can register a custom <code>InjectableContext</code> implementation by means of a <code>ContextRegistrarBuildItem</code>:</p>
 </div>
@@ -552,7 +552,7 @@ ContextRegistrarBuildItem customContext() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="build_metadata">5.10. Available Build Time Metadata</h3>
+<h3 id="build_metadata"><a class="anchor" href="#build_metadata"></a>5.10. Available Build Time Metadata</h3>
 <div class="paragraph">
 <p>Any of the above extensions that operates with <code>BuildExtension.BuildContext</code> can leverage certain build time metadata that are generated during build.
 The built-in keys located in <code>io.quarkus.arc.processor.BuildExtension.Key</code> are:</p>
@@ -705,7 +705,7 @@ Here is a summary of which extensions can access which metadata:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="remove_unused_beans">6. Removing Unused Beans</h2>
+<h2 id="remove_unused_beans"><a class="anchor" href="#remove_unused_beans"></a>6. Removing Unused Beans</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The container attempts to remove all unused beans during build by default.

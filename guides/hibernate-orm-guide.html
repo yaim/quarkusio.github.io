@@ -74,7 +74,7 @@ It works beautifully in Quarkus.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="setting-up-and-configuring-hibernate-orm-without-persistence-xml-recommended">Setting up and configuring Hibernate ORM without <code>persistence.xml</code> (recommended)</h2>
+<h2 id="setting-up-and-configuring-hibernate-orm-without-persistence-xml-recommended"><a class="anchor" href="#setting-up-and-configuring-hibernate-orm-without-persistence-xml-recommended"></a>Setting up and configuring Hibernate ORM without <code>persistence.xml</code> (recommended)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>More often than not, you need one <em>persistence unit</em> with few configuration options.
@@ -220,12 +220,12 @@ so at your application entry point boundaries like your REST endpoint controller
 </table>
 </div>
 <div class="sect2">
-<h3 id="properties-to-refine-your-hibernate-orm-configuration">Properties to refine your Hibernate ORM configuration</h3>
+<h3 id="properties-to-refine-your-hibernate-orm-configuration"><a class="anchor" href="#properties-to-refine-your-hibernate-orm-configuration"></a>Properties to refine your Hibernate ORM configuration</h3>
 <div class="paragraph">
 <p>There are optional properties useful to refine your <code>EntityManagerFactory</code> or guide guesses of Quarkus.</p>
 </div>
 <div class="sect3">
-<h4 id="dialect">Dialect</h4>
+<h4 id="dialect"><a class="anchor" href="#dialect"></a>Dialect</h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.dialect</code></dt>
@@ -260,7 +260,7 @@ The storage engine to use when the dialect supports multiple storage engines.</p
 </div>
 </div>
 <div class="sect3">
-<h4 id="miscellaneous">Miscellaneous</h4>
+<h4 id="miscellaneous"><a class="anchor" href="#miscellaneous"></a>Miscellaneous</h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.sql-load-script</code></dt>
@@ -277,7 +277,7 @@ The size of the batches used when loading entities and collections.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="query">Query</h4>
+<h4 id="query"><a class="anchor" href="#query"></a>Query</h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.query.query-plan-cache-max-size</code></dt>
@@ -294,7 +294,7 @@ Options are <code>none</code>, <code>first</code>, <code>last</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="database">Database</h4>
+<h4 id="database"><a class="anchor" href="#database"></a>Database</h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.database.generation</code></dt>
@@ -323,7 +323,7 @@ Whether we should stop on the first error when applying the schema.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="jdbc">JDBC</h4>
+<h4 id="jdbc"><a class="anchor" href="#jdbc"></a>JDBC</h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.jdbc.timezone</code></dt>
@@ -342,7 +342,7 @@ Whether we should stop on the first error when applying the schema.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="logging">Logging</h4>
+<h4 id="logging"><a class="anchor" href="#logging"></a>Logging</h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.log.sql</code></dt>
@@ -359,7 +359,7 @@ Whether JDBC warnings should be collected and logged.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="statistics">Statistics</h4>
+<h4 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.statistics</code></dt>
@@ -409,7 +409,7 @@ Make up your mind on which approach you want to use.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="setting-up-and-configuring-hibernate-orm-with-a-persistence-xml">Setting up and configuring Hibernate ORM with a <code>persistence.xml</code></h2>
+<h2 id="setting-up-and-configuring-hibernate-orm-with-a-persistence-xml"><a class="anchor" href="#setting-up-and-configuring-hibernate-orm-with-a-persistence-xml"></a>Setting up and configuring Hibernate ORM with a <code>persistence.xml</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Alternatively, you can set a <code>META-INF/persistence.xml</code> to setup Hibernate ORM.
@@ -482,7 +482,7 @@ difference is that you would specify your Hibernate ORM configuration in <code>M
 </div>
 </div>
 <div class="sect1">
-<h2 id="defining-entities-in-external-projects-or-jars">Defining entities in external projects or jars</h2>
+<h2 id="defining-entities-in-external-projects-or-jars"><a class="anchor" href="#defining-entities-in-external-projects-or-jars"></a>Defining entities in external projects or jars</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Hibernate ORM in Quarkus relies on compile-time bytecode enhancements to your entities. If you define your entities in the
@@ -493,13 +493,13 @@ This will allow Quarkus to index and enhance your entities as if they were insid
 </div>
 </div>
 <div class="sect1">
-<h2 id="caching">Caching</h2>
+<h2 id="caching"><a class="anchor" href="#caching"></a>Caching</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Applications that frequently read the same entities can see their performance improved when the Hibernate ORM second-level cache is enabled.</p>
 </div>
 <div class="sect2">
-<h3 id="caching-of-entities">Caching of entities</h3>
+<h3 id="caching-of-entities"><a class="anchor" href="#caching-of-entities"></a>Caching of entities</h3>
 <div class="paragraph">
 <p>To enable second-level cache, mark the entities that you want cached with <code>@javax.persistence.Cacheable</code>:</p>
 </div>
@@ -521,7 +521,7 @@ public class Country {
 </div>
 </div>
 <div class="sect2">
-<h3 id="caching-of-collections-and-relations">Caching of collections and relations</h3>
+<h3 id="caching-of-collections-and-relations"><a class="anchor" href="#caching-of-collections-and-relations"></a>Caching of collections and relations</h3>
 <div class="paragraph">
 <p>Collections and relations need to be individually annotated to be cached; in this case the Hibernate specific <code>@org.hibernate.annotations.Cache</code> should be used, which requires also to specify the <code>CacheConcurrencyStrategy</code>:</p>
 </div>
@@ -544,7 +544,7 @@ public class Country {
 </div>
 </div>
 <div class="sect2">
-<h3 id="caching-of-queries">Caching of queries</h3>
+<h3 id="caching-of-queries"><a class="anchor" href="#caching-of-queries"></a>Caching of queries</h3>
 <div class="paragraph">
 <p>Queries can also benefit from second-level caching. Cached query results can be returned immediately to the caller, avoiding to run the query on the database.</p>
 </div>
@@ -578,7 +578,7 @@ public class Fruit {
 </div>
 </div>
 <div class="sect2">
-<h3 id="tuning-of-cache-regions">Tuning of Cache Regions</h3>
+<h3 id="tuning-of-cache-regions"><a class="anchor" href="#tuning-of-cache-regions"></a>Tuning of Cache Regions</h3>
 <div class="paragraph">
 <p>Caches store the data in separate regions to isolate different portions of data; such regions are assigned a name, which is useful for configuring each region independently, or to monitor their statistics.</p>
 </div>
@@ -626,7 +626,7 @@ You can also provide duration values starting with a number. In this case, if th
 </div>
 </div>
 <div class="sect2">
-<h3 id="limitations-of-caching">Limitations of Caching</h3>
+<h3 id="limitations-of-caching"><a class="anchor" href="#limitations-of-caching"></a>Limitations of Caching</h3>
 <div class="paragraph">
 <p>The caching technology provided within Quarkus is currently quite rudimentary and limited.</p>
 </div>

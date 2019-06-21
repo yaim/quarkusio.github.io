@@ -80,7 +80,7 @@ in a domain specific way.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To complete this guide, you need:</p>
@@ -105,7 +105,7 @@ in a domain specific way.</p>
 </ul>
 </div>
 <div class="sect2">
-<h3 id="install-eclipse-with-modelling-plugins">Install Eclipse with modelling plugins</h3>
+<h3 id="install-eclipse-with-modelling-plugins"><a class="anchor" href="#install-eclipse-with-modelling-plugins"></a>Install Eclipse with modelling plugins</h3>
 <div class="paragraph">
 <p>To be able to make use of visual modelling of your processes, download Eclipse IDE and
 install from Market place Eclipse BPMN2 Modeller plugin (with jBPM Runtime Extension)</p>
@@ -114,7 +114,7 @@ install from Market place Eclipse BPMN2 Modeller plugin (with jBPM Runtime Exten
 </div>
 </div>
 <div class="sect1">
-<h2 id="architecture">Architecture</h2>
+<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In this example, we build a very simple microservice which offers one REST endpoint:</p>
@@ -131,7 +131,7 @@ install from Market place Eclipse BPMN2 Modeller plugin (with jBPM Runtime Exten
 make use of business rules to make certain decisions based on the data being processed.</p>
 </div>
 <div class="sect2">
-<h3 id="business-process">Business process</h3>
+<h3 id="business-process"><a class="anchor" href="#business-process"></a>Business process</h3>
 <div class="paragraph">
 <p>The business process will be responsible for encapsulating business logic of our microservice.
 It should provide complete set of steps to achieve a business goal.
@@ -139,7 +139,7 @@ At the same time this is the entry point to the service that can be consumed by 
 </div>
 </div>
 <div class="sect2">
-<h3 id="business-rule">Business rule</h3>
+<h3 id="business-rule"><a class="anchor" href="#business-rule"></a>Business rule</h3>
 <div class="paragraph">
 <p>A business rule allows to externalise decision logic into reusable pieces that can be easily
 used in declarative way. There are multiple ways of writing rules like decision tables,
@@ -150,7 +150,7 @@ decision trees, rules, etc. For this example we focus on the rule format backed 
 </div>
 </div>
 <div class="sect1">
-<h2 id="solution">Solution</h2>
+<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We recommend that you follow the instructions in the next sections and create the application step by step.
@@ -165,7 +165,7 @@ However, you can go right to the complete example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project">Creating the Maven Project</h2>
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven Project</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>First, we need a new project. Create a new project with the following command:</p>
@@ -186,7 +186,7 @@ with business automation.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="writing-the-application">Writing the application</h2>
+<h2 id="writing-the-application"><a class="anchor" href="#writing-the-application"></a>Writing the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Let&#8217;s start by implementing the simple data object <code>Person</code>. As you can see from the source code below it is just a POJO:</p>
@@ -383,16 +383,16 @@ create <code>persons.bpmn</code> inside <code>src/main/resources/org/acme/kogito
 </div>
 </div>
 <div class="sect1">
-<h2 id="running-and-using-the-application">Running and Using the Application</h2>
+<h2 id="running-and-using-the-application"><a class="anchor" href="#running-and-using-the-application"></a>Running and Using the Application</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="running-in-developer-mode">Running in Developer Mode</h3>
+<h3 id="running-in-developer-mode"><a class="anchor" href="#running-in-developer-mode"></a>Running in Developer Mode</h3>
 <div class="paragraph">
 <p>To run the microservice in dev mode, use <code>./mvnw clean compile quarkus:dev</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="running-in-jvm-mode">Running in JVM Mode</h3>
+<h3 id="running-in-jvm-mode"><a class="anchor" href="#running-in-jvm-mode"></a>Running in JVM Mode</h3>
 <div class="paragraph">
 <p>When you&#8217;re done playing with "dev-mode" you can run it as a standard Java application.</p>
 </div>
@@ -414,7 +414,7 @@ create <code>persons.bpmn</code> inside <code>src/main/resources/org/acme/kogito
 </div>
 </div>
 <div class="sect2">
-<h3 id="running-in-native-mode">Running in Native Mode</h3>
+<h3 id="running-in-native-mode"><a class="anchor" href="#running-in-native-mode"></a>Running in Native Mode</h3>
 <div class="paragraph">
 <p>This same demo can be compiled into native code: no modifications required.</p>
 </div>
@@ -444,7 +444,7 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="testing-the-application">Testing the Application</h2>
+<h2 id="testing-the-application"><a class="anchor" href="#testing-the-application"></a>Testing the Application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To test your application, just send request to the service with giving the person as JSON
