@@ -188,12 +188,33 @@ dependencies {
 </div>
 </div>
 <div class="paragraph">
+<p>Using the Kotlin DSL, add:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks {
+    "test"(Test::class) {
+        useJUnitPlatform()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>To follow up our Rest example from above, we would also need to add two test dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">testCompile group: 'io.quarkus', name: 'quarkus-junit5', version: '0.17.0'
 testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the Kotlin DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">testCompile("io.quarkus:quarkus-junit5:0.17.0")
+testCompile("io.rest-assured:rest-assured:3.3.0")</code></pre>
 </div>
 </div>
 <div class="paragraph">

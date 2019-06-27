@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>{project-name} - Writing Your Own Extension</title>
+  <title>Quarkus - Writing Your Own Extension</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -61,7 +61,7 @@
 
     <div class="guides">
   <div class="width-12-12">
-    <h1 class="text-caps">{project-name} - Writing Your Own Extension</h1>
+    <h1 class="text-caps">Quarkus - Writing Your Own Extension</h1>
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -701,6 +701,12 @@ then the configuration key will be the class name, minus any <code>Config</code>
 lowercased, and re-joined using hyphens (<code>-</code>).</p>
 </div>
 <div class="paragraph">
+<p>A configuration root&#8217;s class name can contain an extra suffix segment for the case where there are configuration
+roots for multiple <a href="#configuration-root-phases">Configuration Root Phases</a>.  Classes which correspond to the <code>BUILD_TIME</code> and <code>BUILD_AND_RUN_TIME_FIXED</code>
+may end with <code>BuildTimeConfig</code> or <code>BuildTimeConfiguration</code>, and classes which correspond to the <code>RUN_TIME</code> phase
+may end with <code>RunTimeConfig</code> or <code>RunTimeConfiguration</code>.</p>
+</div>
+<div class="paragraph">
 <p>Note: The current implementation is still using injection site to determine the root set, so to avoid migration problems, it
 is recommended that the injection site (field or parameter) have the same name as the configuration root class until
 this change is complete.</p>
@@ -745,14 +751,6 @@ this change is complete.</p>
 <td class="tableblock halign-center valign-top"><p class="tableblock">✗</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock">✗</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Appropriate for things which affect build and must be visible for run time code.  Not read from config at run time.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RUN_TIME_STATIC</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">✗</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">✓</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">✓</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">✗</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Not available at build, read on start in JVM mode, fixed in native executable mode.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>RUN_TIME</code></p></td>

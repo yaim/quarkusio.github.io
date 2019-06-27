@@ -347,15 +347,14 @@ To retrieve all the data, we will use the <code>query</code> method again:</p>
 </div>
 <div class="paragraph">
 <p>When the operation completes, we will get a <code>PgRowSet</code> that has all the rows buffered in memory.
-It can be traversed with an <code>Iterator</code>:</p>
+As an <code>java.lang.Iterable&lt;Row&gt;</code>, it can be traversed with a <em>for-each</em> loop:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">CompletionStage&lt;List&lt;Fruit&gt;&gt; fruits = rowSet.thenApply(pgRowSet -&gt; {
     List&lt;Fruit&gt; list = new ArrayList&lt;&gt;(pgRowSet.size());
-    PgIterator pgIterator = pgRowSet.iterator();
-    while (pgIterator.hasNext()) {
-        list.add(from(pgIterator.next()));
+    for (Row row : pgRowSet) {
+        list.add(from(row));
     }
     return list;
 });</code></pre>
@@ -382,9 +381,8 @@ It is extracted as a convenience for the implementation of the other data manage
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    public static CompletionStage&lt;List&lt;Fruit&gt;&gt; findAll(PgPool client) {
         return client.query("SELECT id, name FROM fruits ORDER BY name ASC").thenApply(pgRowSet -&gt; {
             List&lt;Fruit&gt; list = new ArrayList&lt;&gt;(pgRowSet.size());
-            PgIterator pgIterator = pgRowSet.iterator();
-            while (pgIterator.hasNext()) {
-                list.add(from(pgIterator.next()));
+            for (Row row : pgRowSet) {
+                list.add(from(row));
             }
             return list;
         });

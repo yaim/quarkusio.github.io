@@ -108,6 +108,10 @@ Version 1.0.0-rc16 is required.</p>
 <p>The <code>GRAALVM_HOME</code> environment variable configured appropriately</p>
 </li>
 <li>
+<p>The <code>native-image</code> tool must be installed; this can be done by running <code>gu install native-image</code> from your GraalVM
+directory</p>
+</li>
+<li>
 <p>Apache Maven 3.5.3+</p>
 </li>
 <li>
@@ -163,6 +167,36 @@ Version 1.0.0-rc16 is required.</p>
 <p>On macOS, execute <code>xcode-select --install</code>.</p>
 </li>
 </ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Some previous releases of GraalVM included the <code>native-image</code> tool by default.  This is no longer the
+case; it now has to be installed as a second step after GraalVM itself is installed.  Use <code>gu install native-image</code>
+to do so.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you cannot install GraalVM, you can use a multi-stage Docker build to run Maven inside a Docker container that embeds GraalVM. There is an explanation of how to do this at the end of this guide.</p>
 </div>
 </td>
 </tr>
@@ -357,14 +391,14 @@ you can only test via HTTP calls. Your test code does not actually run natively,
 that does not call your HTTP endpoints, it&#8217;s probably not a good idea to run them as part of native tests.</p>
 </div>
 <div class="paragraph">
-<p>If you share your test class between JVM and native execusions like we advise above, you can mark certain tests
+<p>If you share your test class between JVM and native executions like we advise above, you can mark certain tests
 with the <code>@DisabledOnSubstrate</code> annotation in order to only run them on the JVM.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="producing-a-container"><a class="anchor" href="#producing-a-container"></a>Producing a container</h2>
+<h2 id="creating-a-container"><a class="anchor" href="#creating-a-container"></a>Creating a container</h2>
 <div class="sectionbody">
 <div class="admonitionblock important">
 <table>
@@ -432,20 +466,6 @@ EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If your application requires libcrypt.so.2 you may consider <code>registry.fedoraproject.org/fedora-minimal:30</code> (or later) as a base image.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>Then, if you didn&#8217;t delete the generated native executable, you can build the docker image with:</p>
 </div>
@@ -473,6 +493,67 @@ Interested by tiny Docker images, check the <a href="https://github.com/quarkusi
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-a-container-with-a-multi-stage-docker-build"><a class="anchor" href="#creating-a-container-with-a-multi-stage-docker-build"></a>Creating a container with a multi-stage Docker build</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The previous section showed you how to build a native executable using Maven, but implicitly required that the proper GraalVM version be installed on the building machine (be it your local machine or your CI/CD infrastructure).</p>
+</div>
+<div class="paragraph">
+<p>In cases where the GraalVM requirement cannot be met, you can use Docker to perform the Maven build by using a multi-stage Docker build. A multi-stage Docker build is like two Dockerfile files combined in one, the first is used to build the artifact used by the second.</p>
+</div>
+<div class="paragraph">
+<p>In this guide we will use the first stage to generate the native executable using Maven and the second stage to create our runtime image.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="dockerfile" class="language-dockerfile hljs">## Stage 1 : build with maven builder image with native capabilities
+FROM quay.io/quarkus/centos-quarkus-maven:graalvm-{graalvm-version} AS build
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+RUN mvn -f /usr/src/app/pom.xml -Pnative clean package
+
+## Stage 2 : create the docker final image
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+WORKDIR /work/
+COPY --from=build /usr/src/app/target/*-runner /work/application
+RUN chmod 775 /work
+EXPOSE 8080
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save this file in <code>src/main/docker/Dockerfile.multistage</code> as it is not included in the getting started quickstart.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Before launching our Docker build, we need to update the default <code>.dockerignore</code> file as it filters everything except the <code>target</code> directory and as we plan to build inside a container we need to be able to copy the <code>src</code> directory. So edit your <code>.dockerignore</code> and remove or comment its content.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And finally, run it with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -i --rm -p 8080:8080 quarkus-quickstart/getting-started</code></pre>
+</div>
 </div>
 </div>
 </div>
