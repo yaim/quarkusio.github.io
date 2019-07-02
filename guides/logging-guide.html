@@ -59,10 +59,26 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Configuring Logging</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#run-time-configuration">Run Time Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#console-configuration">Console configuration</a></li>
+<li><a href="#file-configuration">File configuration</a></li>
+<li><a href="#logging-categories">Logging categories</a></li>
+<li><a href="#root-logger-configuration">Root logger configuration</a></li>
+</ul>
+</li>
+<li><a href="#format_string">Format String</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#supported-logging-apis">Supported Logging APIs</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide explains logging and how to configure it.</p>
@@ -241,7 +257,7 @@ unless there is a more specific matching sub-category configuration.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The quotes shown in the property name are required as categories normally contain '.' which must
@@ -442,7 +458,7 @@ quarkus.log.category."io.quarkus".level=DEBUG</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 If you are adding these properties via command line make sure <code>"</code> is escaped.
@@ -499,6 +515,7 @@ quarkus.log.category."io.undertow.request.security".level=TRACE</code></pre>
 <a href="#_footnoteref_2">2</a>. Format sequences which examine caller information may affect performance
 </div>
 </div>
+    </div>
   </div>
 </div>
 

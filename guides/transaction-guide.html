@@ -59,10 +59,24 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Using Transactions in Quarkus</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#setting-it-up">Setting it up</a></li>
+<li><a href="#starting-and-stopping-transactions-defining-your-boundaries">Starting and stopping transactions: defining your boundaries</a>
+<ul class="sectlevel2">
+<li><a href="#declarative-approach">Declarative approach</a></li>
+<li><a href="#reactive-extensions">Reactive extensions</a></li>
+<li><a href="#api-approach">API approach</a></li>
+</ul>
+</li>
+<li><a href="#why-always-having-a-transaction-manager">Why always having a transaction manager?</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus comes with a Transaction Manager and uses it to coordinate and expose transactions to your applications.
@@ -115,12 +129,12 @@ public class SantaClausService {
     @Inject ChildDAO childDAO;
     @Inject SantaClausDAO santaDAO;
 
-    @Transactional <b class="conum">(1)</b>
+    @Transactional <i class="conum" data-value="1"></i><b>(1)</b>
     public void getAGiftFromSanta(Child child, String giftDescription) {
         // some transaction work
         Gift gift = childDAO.addToGiftList(child, giftDescription);
         if (gift == null) {
-            throw new OMGGiftNotRecognizedException(); <b class="conum">(2)</b>
+            throw new OMGGiftNotRecognizedException(); <i class="conum" data-value="2"></i><b>(2)</b>
         }
         else {
             santaDAO.addToSantaTodoList(gift);
@@ -130,14 +144,16 @@ public class SantaClausService {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>This annotation defines your transaction boundaries and will wrap this call within a transaction.</p>
-</li>
-<li>
-<p>A <code>RuntimeException</code> crossing the transaction boundaries will rollback the transaction.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This annotation defines your transaction boundaries and will wrap this call within a transaction.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A <code>RuntimeException</code> crossing the transaction boundaries will rollback the transaction.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p><code>@Transactional</code> can be used to control transaction boundaries on any CDI bean at the method level or at the class level to ensure every method is transactional.
@@ -187,7 +203,7 @@ Inject a <code>TransactionManager</code> for this.</p>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
 public class SantaClausService {
 
-    @Inject TransactionManager tm; <b class="conum">(1)</b>
+    @Inject TransactionManager tm; <i class="conum" data-value="1"></i><b>(1)</b>
     @Inject ChildDAO childDAO;
     @Inject SantaClausDAO santaDAO;
 
@@ -196,7 +212,7 @@ public class SantaClausService {
         // some transaction work
         Gift gift = childDAO.addToGiftList(child, giftDescription);
         if (gift == null) {
-            tm.setRollbackOnly(); <b class="conum">(2)</b>
+            tm.setRollbackOnly(); <i class="conum" data-value="2"></i><b>(2)</b>
         }
         else {
             santaDAO.addToSantaTodoList(gift);
@@ -206,14 +222,16 @@ public class SantaClausService {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Inject the <code>TransactionManager</code> to be able to activate <code>setRollbackOnly</code> semantic.</p>
-</li>
-<li>
-<p>Programmatically decide to set the transaction for rollback.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Inject the <code>TransactionManager</code> to be able to activate <code>setRollbackOnly</code> semantic.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Programmatically decide to set the transaction for rollback.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -283,7 +301,7 @@ public class SantaClausService {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -343,6 +361,7 @@ The end result is that the difficulties of running Hibernate ORM + CDI + a trans
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

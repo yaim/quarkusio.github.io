@@ -88,8 +88,8 @@
   </a>
 </div>
 </div>
-    </div>
-    <div class="paragraph">
+      <div class="grid__item width-12-12">
+        <div class="paragraph">
 <p>In the 0.15.0 version of Quarkus, we introduced the Hibernate Search + Elasticsearch extension and, with 0.16.0, we added <a href="/guides/hibernate-search-guide">a guide</a> and <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/hibernate-search-elasticsearch">a quickstart</a> explaining how to use it.</p>
 </div>
 <div class="paragraph">
@@ -154,23 +154,25 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
-@Indexed // <b class="conum">(1)</b>
+@Indexed <i class="conum" data-value="1"></i><b>(1)</b>
 public class Book extends PanacheEntity {
 
-    @FullTextField(analyzer = "standard") // <b class="conum">(2)</b>
+    @FullTextField(analyzer = "standard") <i class="conum" data-value="2"></i><b>(2)</b>
     public String title;
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Declare your entity as part of the full text index</p>
-</li>
-<li>
-<p>Add a full text field using the <code>standard</code> analyzer provided by Elasticsearch</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Declare your entity as part of the full text index</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Add a full text field using the <code>standard</code> analyzer provided by Elasticsearch</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Then add some additional configuration to your <code>src/main/resources/application.properties</code>:</p>
@@ -222,6 +224,8 @@ You should just know that this is a good configuration for testing, but definite
 </div>
 </div>
 </div>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -59,10 +59,35 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Building Quarkus apps with Maven</h1>
-    <div class="sect1">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#project-creation">Creating a new project</a></li>
+<li><a href="#dealing-with-extensions">Dealing with extensions</a></li>
+<li><a href="#development-mode">Development mode</a>
+<ul class="sectlevel2">
+<li><a href="#remote-development-mode">Remote Development Mode</a></li>
+</ul>
+</li>
+<li><a href="#debugging">Debugging</a></li>
+<li><a href="#import-in-your-ide">Import in your IDE</a></li>
+<li><a href="#logging-quarkus-application-build-classpath-tree">Logging Quarkus application build classpath tree</a></li>
+<li><a href="#building-a-native-executable">Building a native executable</a>
+<ul class="sectlevel2">
+<li><a href="#build-a-container-friendly-executable">Build a container friendly executable</a></li>
+</ul>
+</li>
+<li><a href="#build-tool-maven">Maven configuration</a>
+<ul class="sectlevel2">
+<li><a href="#uber-jar-maven">Uber-Jar Creation</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+    <div>
+      <div class="sect1">
 <h2 id="project-creation"><a class="anchor" href="#project-creation"></a>Creating a new project</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -81,7 +106,7 @@
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 If you just launch <code>mvn io.quarkus:quarkus-maven-plugin:0.18.0:create</code> the Maven plugin asks
@@ -239,7 +264,7 @@ and have changes made to your local files become immediately visible.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Warning</div>
+<i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
 Do not use this in production. This should only be used in a development environment. You should not run production application in dev mode.
@@ -498,7 +523,7 @@ Note that in this case the build itself runs in a Docker container too, so you d
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependencyManagement&gt;
     &lt;dependencies&gt;
-        &lt;dependency&gt; <b class="conum">(1)</b>
+        &lt;dependency&gt; <i class="conum" data-value="1"></i><b>(1)</b>
             &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
             &lt;artifactId&gt;quarkus-bom&lt;/artifactId&gt;
             &lt;version&gt;${quarkus.version}&lt;/version&gt;
@@ -510,7 +535,7 @@ Note that in this case the build itself runs in a Docker container too, so you d
 
 &lt;build&gt;
     &lt;plugins&gt;
-        &lt;plugin&gt; <b class="conum">(2)</b>
+        &lt;plugin&gt; <i class="conum" data-value="2"></i><b>(2)</b>
             &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
             &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
             &lt;version&gt;${quarkus.version}&lt;/version&gt;
@@ -526,11 +551,11 @@ Note that in this case the build itself runs in a Docker container too, so you d
 &lt;/build&gt;
 
 &lt;profiles&gt;
-    &lt;profile&gt; <b class="conum">(3)</b>
+    &lt;profile&gt; <i class="conum" data-value="3"></i><b>(3)</b>
         &lt;id&gt;native&lt;/id&gt;
         &lt;build&gt;
             &lt;plugins&gt;
-                &lt;plugin&gt; <b class="conum">(3)</b>
+                &lt;plugin&gt; <i class="conum" data-value="3"></i><b>(3)</b>
                     &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
                     &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
                     &lt;version&gt;${quarkus.version}&lt;/version&gt;
@@ -545,7 +570,7 @@ Note that in this case the build itself runs in a Docker container too, so you d
                         &lt;/execution&gt;
                     &lt;/executions&gt;
                 &lt;/plugin&gt;
-                &lt;plugin&gt; <b class="conum">(4)</b>
+                &lt;plugin&gt; <i class="conum" data-value="4"></i><b>(4)</b>
                     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
                     &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
                     &lt;version&gt;${surefire-plugin.version}&lt;/version&gt;
@@ -570,20 +595,24 @@ Note that in this case the build itself runs in a Docker container too, so you d
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Optionally use a BOM file to omit the version of the different Quarkus dependencies.</p>
-</li>
-<li>
-<p>Use the Quarkus Maven plugin that will hook into the build process</p>
-</li>
-<li>
-<p>Use a native profile and plugin to activate GraalVM compilation</p>
-</li>
-<li>
-<p>If you want to test your native executable with Integration Tests, add the following plugin configuration. Test names <code>*IT</code> and annotated <code>@SubstrateTest</code> will be run against the native executable. See the <a href="building-native-image-guide.html">Native executable guide</a> for more info.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Optionally use a BOM file to omit the version of the different Quarkus dependencies.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Use the Quarkus Maven plugin that will hook into the build process</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Use a native profile and plugin to activate GraalVM compilation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>If you want to test your native executable with Integration Tests, add the following plugin configuration. Test names <code>*IT</code> and annotated <code>@SubstrateTest</code> will be run against the native executable. See the <a href="building-native-image-guide.html">Native executable guide</a> for more info.</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="uber-jar-maven"><a class="anchor" href="#uber-jar-maven"></a>Uber-Jar Creation</h3>
@@ -599,7 +628,7 @@ Note that in this case the build itself runs in a Docker container too, so you d
             &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
             &lt;version&gt;${quarkus.version}&lt;/version&gt;
             &lt;configuration&gt;
-                &lt;uberJar&gt;true&lt;/uberJar&gt; <b class="conum">(1)</b>
+                &lt;uberJar&gt;true&lt;/uberJar&gt; <i class="conum" data-value="1"></i><b>(1)</b>
             &lt;/configuration&gt;
             &lt;executions&gt;
                 &lt;execution&gt;
@@ -614,11 +643,12 @@ Note that in this case the build itself runs in a Docker container too, so you d
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Specifies that we want to build an Uber-Jar instead of a regular one. The regular jar will still be present in the <code>target</code> directory but it will be renamed to contain the <code>.original</code> suffix.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Specifies that we want to build an Uber-Jar instead of a regular one. The regular jar will still be present in the <code>target</code> directory but it will be renamed to contain the <code>.original</code> suffix.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>When building an Uber-Jar you can specify entries that you want to exclude from the generated jar by using the <code>&lt;ignoredEntries&gt;</code> configuration option.</p>
@@ -634,7 +664,7 @@ Note that in this case the build itself runs in a Docker container too, so you d
             &lt;configuration&gt;
                 &lt;uberJar&gt;true&lt;/uberJar&gt;
                 &lt;ignoredEntries&gt;
-                    &lt;ignoredEntry&gt;META-INF/DEPENDENCIES.txt&lt;/ignoredEntry&gt; <b class="conum">(1)</b>
+                    &lt;ignoredEntry&gt;META-INF/DEPENDENCIES.txt&lt;/ignoredEntry&gt; <i class="conum" data-value="1"></i><b>(1)</b>
                 &lt;/ignoredEntries&gt;
             &lt;/configuration&gt;
             &lt;executions&gt;
@@ -650,15 +680,17 @@ Note that in this case the build itself runs in a Docker container too, so you d
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The entries are relative to the root of the generated Uber-Jar. You can specify multiple entries by adding extra <code>&lt;ignoredEntry&gt;</code> elements.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The entries are relative to the root of the generated Uber-Jar. You can specify multiple entries by adding extra <code>&lt;ignoredEntry&gt;</code> elements.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

@@ -59,10 +59,44 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Hibernate Search guide</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#creating-the-bare-entities">Creating the bare entities</a></li>
+<li><a href="#initializing-the-rest-service">Initializing the REST service</a></li>
+<li><a href="#using-hibernate-search-annotations">Using Hibernate Search annotations</a></li>
+<li><a href="#analyzers-and-normalizers">Analyzers and normalizers</a>
+<ul class="sectlevel2">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#defining-the-analyzers-used">Defining the analyzers used</a></li>
+<li><a href="#setting-up-the-analyzers">Setting up the analyzers</a></li>
+</ul>
+</li>
+<li><a href="#adding-full-text-capabilities-to-our-rest-service">Adding full text capabilities to our REST service</a></li>
+<li><a href="#configuring-the-application">Configuring the application</a></li>
+<li><a href="#creating-a-frontend">Creating a frontend</a></li>
+<li><a href="#automatic-import-script">Automatic import script</a></li>
+<li><a href="#preparing-the-infrastructure">Preparing the infrastructure</a></li>
+<li><a href="#time-to-play-with-your-application">Time to play with your application</a></li>
+<li><a href="#building-a-native-executable">Building a native executable</a></li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#faq">FAQ</a>
+<ul class="sectlevel2">
+<li><a href="#why-hibernate-search-6-and-not-a-fully-supported-version">Why Hibernate Search 6 (and not a fully supported version)?</a></li>
+<li><a href="#can-i-really-use-it">Can I really use it?</a></li>
+<li><a href="#why-elasticsearch-only">Why Elasticsearch only?</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>You have a Hibernate ORM-based application? You want to provide a full-featured full-text search to your users? You&#8217;re at the right place.</p>
@@ -75,7 +109,7 @@ We will also explore how you can can query your Elasticsearch cluster using the 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Warning</div>
+<i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -148,7 +182,7 @@ However, you can go right to the completed example.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -187,7 +221,7 @@ However, you can go right to the completed example.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -222,13 +256,13 @@ import javax.persistence.OneToMany;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
-public class Author extends PanacheEntity { // <b class="conum">(1)</b>
+public class Author extends PanacheEntity { <i class="conum" data-value="1"></i><b>(1)</b>
 
     public String firstName;
 
     public String lastName;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) // <b class="conum">(2)</b>
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) <i class="conum" data-value="2"></i><b>(2)</b>
     public List&lt;Book&gt; books;
 
     @Override
@@ -253,15 +287,17 @@ public class Author extends PanacheEntity { // <b class="conum">(1)</b>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>We are using Hibernate ORM with Panache, it is not mandatory.</p>
-</li>
-<li>
-<p>We are loading these elements eagerly so that they are present in the JSON output.
-In a real world application, you should probably use a DTO approach.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We are using Hibernate ORM with Panache, it is not mandatory.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We are loading these elements eagerly so that they are present in the JSON output.
+In a real world application, you should probably use a DTO approach.</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -281,7 +317,7 @@ public class Book extends PanacheEntity {
     public String title;
 
     @ManyToOne
-    @JsonbTransient // <b class="conum">(1)</b>
+    @JsonbTransient <i class="conum" data-value="1"></i><b>(1)</b>
     public Author author;
 
     @Override
@@ -306,11 +342,12 @@ public class Book extends PanacheEntity {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>We mark this property with <code>@JsonbTransient</code> to avoid infinite loops when serializing with JSON-B.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We mark this property with <code>@JsonbTransient</code> to avoid infinite loops when serializing with JSON-B.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -451,10 +488,10 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
-@Indexed // <b class="conum">(1)</b>
+@Indexed <i class="conum" data-value="1"></i><b>(1)</b>
 public class Book extends PanacheEntity {
 
-    @FullTextField(analyzer = "english") // <b class="conum">(2)</b>
+    @FullTextField(analyzer = "english") <i class="conum" data-value="2"></i><b>(2)</b>
     public String title;
 
     @ManyToOne
@@ -466,15 +503,17 @@ public class Book extends PanacheEntity {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>First, let&#8217;s use the <code>@Indexed</code> annotation to register our <code>Book</code> entity as part of the full text index.</p>
-</li>
-<li>
-<p>The <code>@FullTextField</code> annotation declares a field in the index specifically tailored for full text search.
-In particular, we have to define an analyzer to split and analyze the tokens (~ words) - more on this later.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>First, let&#8217;s use the <code>@Indexed</code> annotation to register our <code>Book</code> entity as part of the full text index.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>@FullTextField</code> annotation declares a field in the index specifically tailored for full text search.
+In particular, we have to define an analyzer to split and analyze the tokens (~ words) - more on this later.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Now that our books are indexed, we can do the same for the authors.</p>
@@ -512,8 +551,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 @Indexed
 public class Author extends PanacheEntity {
 
-    @FullTextField(analyzer = "name") // <b class="conum">(1)</b>
-    @KeywordField(name = "firstName_sort", sortable = Sortable.YES, normalizer = "sort") // <b class="conum">(2)</b>
+    @FullTextField(analyzer = "name") <i class="conum" data-value="1"></i><b>(1)</b>
+    @KeywordField(name = "firstName_sort", sortable = Sortable.YES, normalizer = "sort") <i class="conum" data-value="2"></i><b>(2)</b>
     public String firstName;
 
     @FullTextField(analyzer = "name")
@@ -521,7 +560,7 @@ public class Author extends PanacheEntity {
     public String lastName;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @IndexedEmbedded // <b class="conum">(3)</b>
+    @IndexedEmbedded <i class="conum" data-value="3"></i><b>(3)</b>
     public List&lt;Book&gt; books;
 
     // Preexisting equals()/hashCode() methods
@@ -529,24 +568,27 @@ public class Author extends PanacheEntity {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>We use a <code>@FullTextField</code> similar to what we did for <code>Book</code> but you&#8217;ll notice that the analyzer is different - more on this later.</p>
-</li>
-<li>
-<p>As you can see, we can define several fields for the same property.
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We use a <code>@FullTextField</code> similar to what we did for <code>Book</code> but you&#8217;ll notice that the analyzer is different - more on this later.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>As you can see, we can define several fields for the same property.
 Here, we define a <code>@KeywordField</code> with a specific name.
 The main difference is that a keyword field is not tokenized (the string is kept as one single token) but can be normalized (i.e. filtered) - more on this later.
-This field is marked as sortable as our intention is to use it for sorting our authors.</p>
-</li>
-<li>
-<p>The purpose of <code>@IndexedEmbedded</code> is to include the <code>Book</code> fields into the <code>Author</code> index.
+This field is marked as sortable as our intention is to use it for sorting our authors.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The purpose of <code>@IndexedEmbedded</code> is to include the <code>Book</code> fields into the <code>Author</code> index.
 In this case, we just use the default configuration: all the fields of the associated <code>Book</code> entities are included in the index (i.e. the <code>title</code> field).
 The nice thing with <code>@IndexedEmbedded</code> is that it is able to automatically reindex an <code>Author</code> if one of its <code>Book</code>s has been updated thanks to the bidirectional relation.
 <code>@IndexedEmbedded</code> also supports nested documents (using the <code>storage = NESTED</code> attribute) but we don&#8217;t need it here.
-You can also specify the fields you want to include in your parent index using the <code>includePaths</code> attribute if you don&#8217;t want them all.</p>
-</li>
-</ol>
+You can also specify the fields you want to include in your parent index using the <code>includePaths</code> attribute if you don&#8217;t want them all.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -636,34 +678,37 @@ public class AnalysisConfigurer implements ElasticsearchAnalysisConfigurer {
 
     @Override
     public void configure(ElasticsearchAnalysisDefinitionContainerContext context) {
-        context.analyzer("name").custom() // <b class="conum">(1)</b>
+        context.analyzer("name").custom() <i class="conum" data-value="1"></i><b>(1)</b>
                 .withTokenizer("standard")
                 .withTokenFilters("asciifolding", "lowercase");
 
-        context.analyzer("english").custom() // <b class="conum">(2)</b>
+        context.analyzer("english").custom() <i class="conum" data-value="2"></i><b>(2)</b>
                 .withTokenizer("standard")
                 .withTokenFilters("asciifolding", "lowercase", "porter_stem");
 
-        context.normalizer("sort").custom() // <b class="conum">(3)</b>
+        context.normalizer("sort").custom() <i class="conum" data-value="3"></i><b>(3)</b>
                 .withTokenFilters("asciifolding", "lowercase");
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>This is a simple analyzer separating the words on spaces, removing any non-ASCII characters by its ASCII counterpart (and thus removing accents) and putting everything in lowercase.
-It is used in our examples for the author&#8217;s names.</p>
-</li>
-<li>
-<p>We are a bit more aggressive with this one and we include some stemming: we will be able to search for <code>mystery</code> and get a result even if the indexed input contains <code>mysteries</code>.
-It is definitely too aggressive for person names but it is perfect for the book titles.</p>
-</li>
-<li>
-<p>Here is the normalizer used for sorting. Very similar to our first analyzer, except we don&#8217;t tokenize the words as we want one and only one token.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is a simple analyzer separating the words on spaces, removing any non-ASCII characters by its ASCII counterpart (and thus removing accents) and putting everything in lowercase.
+It is used in our examples for the author&#8217;s names.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We are a bit more aggressive with this one and we include some stemming: we will be able to search for <code>mystery</code> and get a result even if the indexed input contains <code>mysteries</code>.
+It is definitely too aggressive for person names but it is perfect for the book titles.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Here is the normalizer used for sorting. Very similar to our first analyzer, except we don&#8217;t tokenize the words as we want one and only one token.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -676,8 +721,8 @@ It is definitely too aggressive for person names but it is perfect for the book 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @Transactional // <b class="conum">(1)</b>
-    void onStart(@Observes StartupEvent ev) throws InterruptedException { // <b class="conum">(2)</b>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @Transactional <i class="conum" data-value="1"></i><b>(1)</b>
+    void onStart(@Observes StartupEvent ev) throws InterruptedException { <i class="conum" data-value="2"></i><b>(2)</b>
         // only reindex if we imported some content
         if (Book.count() &gt; 0) {
             Search.getSearchSession(em)
@@ -689,60 +734,69 @@ It is definitely too aggressive for person names but it is perfect for the book 
     @GET
     @Path("author/search")
     @Transactional
-    public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern) { // <b class="conum">(3)</b>
-        return Search.getSearchSession(em) // <b class="conum">(4)</b>
-                .search(Author.class) // <b class="conum">(5)</b>
+    public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern) { <i class="conum" data-value="3"></i><b>(3)</b>
+        return Search.getSearchSession(em) <i class="conum" data-value="4"></i><b>(4)</b>
+                .search(Author.class) <i class="conum" data-value="5"></i><b>(5)</b>
                 .predicate(f -&gt;
                     pattern == null || pattern.trim().isEmpty() ?
-                            f.matchAll() : // <b class="conum">(6)</b>
+                            f.matchAll() : <i class="conum" data-value="6"></i><b>(6)</b>
                             f.simpleQueryString()
-                                .onFields("firstName", "lastName", "books.title").matching(pattern) // <b class="conum">(7)</b>
+                                .onFields("firstName", "lastName", "books.title").matching(pattern) <i class="conum" data-value="7"></i><b>(7)</b>
                 )
-                .sort(f -&gt; f.byField("lastName_sort").then().byField("firstName_sort")) // <b class="conum">(8)</b>
-                .fetchHits(); // <b class="conum">(9)</b>
+                .sort(f -&gt; f.byField("lastName_sort").then().byField("firstName_sort")) <i class="conum" data-value="8"></i><b>(8)</b>
+                .fetchHits(); <i class="conum" data-value="9"></i><b>(9)</b>
     }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Important point: we need a transactional context for these methods.</p>
-</li>
-<li>
-<p>As we will import data into the PostgreSQL database using an SQL script, we need to reindex the data at startup.
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Important point: we need a transactional context for these methods.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>As we will import data into the PostgreSQL database using an SQL script, we need to reindex the data at startup.
 For this, we use Hibernate Search&#8217;s mass indexer, which allows to index a lot of data efficiently (you can fine tune it for better performances).
 All the upcoming updates coming through Hibernate ORM operations will be synchronized automatically to the full text index.
 If you don&#8217;t import data manually in the database, you don&#8217;t need that:
-the mass indexer should then only be used when you change your indexing configuration (adding a new field, changing an analyzer&#8217;s configuration&#8230;&#8203;) and you want the new configuration to be applied to your existing entities.</p>
-</li>
-<li>
-<p>This is where the magic begins: just adding the annotations to our entities makes them available for full text search: we can now query the index using the Hibernate Search DSL.</p>
-</li>
-<li>
-<p>First, we get an Hibernate Search session from the injected entity manager.</p>
-</li>
-<li>
-<p>We indicate that we are searching for <code>Author</code>s.</p>
-</li>
-<li>
-<p>We create a predicate: if the pattern is empty, we use a <code>matchAll()</code> predicate.</p>
-</li>
-<li>
-<p>If we have a valid pattern, we create a <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html"><code>simpleQueryString()</code></a> predicate on the <code>firstName</code>, <code>lastName</code> and <code>books.title</code> fields matching our pattern.</p>
-</li>
-<li>
-<p>We define the sort order of our results. Here we sort by last name, then by first name. Note that we use the specific fields we created for sorting.</p>
-</li>
-<li>
-<p>This is self explanatory. Obviously, paging is also supported.</p>
-</li>
-</ol>
+the mass indexer should then only be used when you change your indexing configuration (adding a new field, changing an analyzer&#8217;s configuration&#8230;&#8203;) and you want the new configuration to be applied to your existing entities.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This is where the magic begins: just adding the annotations to our entities makes them available for full text search: we can now query the index using the Hibernate Search DSL.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>First, we get an Hibernate Search session from the injected entity manager.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>We indicate that we are searching for <code>Author</code>s.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>We create a predicate: if the pattern is empty, we use a <code>matchAll()</code> predicate.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>If we have a valid pattern, we create a <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html"><code>simpleQueryString()</code></a> predicate on the <code>firstName</code>, <code>lastName</code> and <code>books.title</code> fields matching our pattern.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>We define the sort order of our results. Here we sort by last name, then by first name. Note that we use the specific fields we created for sorting.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>This is self explanatory. Obviously, paging is also supported.</td>
+</tr>
+</table>
 </div>
 <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -766,54 +820,62 @@ Feel free to explore the DSL by using autocompletion.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.ssl.native=false <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.ssl.native=false <i class="conum" data-value="1"></i><b>(1)</b>
 
-quarkus.datasource.url=jdbc:postgresql:quarkus_test <b class="conum">(2)</b>
+quarkus.datasource.url=jdbc:postgresql:quarkus_test <i class="conum" data-value="2"></i><b>(2)</b>
 quarkus.datasource.driver=org.postgresql.Driver
 quarkus.datasource.username=quarkus_test
 quarkus.datasource.password=quarkus_test
 
-quarkus.hibernate-orm.database.generation=drop-and-create <b class="conum">(3)</b>
+quarkus.hibernate-orm.database.generation=drop-and-create <i class="conum" data-value="3"></i><b>(3)</b>
 
-quarkus.hibernate-search.elasticsearch.version=7 <b class="conum">(4)</b>
-quarkus.hibernate-search.elasticsearch.analysis-configurer=org.acme.hibernate.search.elasticsearch.config.AnalysisConfigurer <b class="conum">(5)</b>
-quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy=searchable <b class="conum">(6)</b>
-quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy=drop-and-create <b class="conum">(7)</b>
-quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status=yellow <b class="conum">(8)</b></code></pre>
+quarkus.hibernate-search.elasticsearch.version=7 <i class="conum" data-value="4"></i><b>(4)</b>
+quarkus.hibernate-search.elasticsearch.analysis-configurer=org.acme.hibernate.search.elasticsearch.config.AnalysisConfigurer <i class="conum" data-value="5"></i><b>(5)</b>
+quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy=searchable <i class="conum" data-value="6"></i><b>(6)</b>
+quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy=drop-and-create <i class="conum" data-value="7"></i><b>(7)</b>
+quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status=yellow <i class="conum" data-value="8"></i><b>(8)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>We won&#8217;t use SSL so we disable it to have a more compact native executable.</p>
-</li>
-<li>
-<p>Let&#8217;s create a PostgreSQL datasource.</p>
-</li>
-<li>
-<p>We will drop and recreate the schema every time we start the application.</p>
-</li>
-<li>
-<p>We need to tell Hibernate Search about the version of Elasticsearch we will use.
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We won&#8217;t use SSL so we disable it to have a more compact native executable.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Let&#8217;s create a PostgreSQL datasource.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We will drop and recreate the schema every time we start the application.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We need to tell Hibernate Search about the version of Elasticsearch we will use.
 It is important because there are significant differences between Elasticsearch mapping syntax depending on the version.
-Since the mapping is created at build time to reduce startup time, Hibernate Search cannot connect to the cluster to automatically detect the version.</p>
-</li>
-<li>
-<p>We point to the custom <code>AnalysisConfigurer</code> which defines the configuration of our analyzers and normalizers.</p>
-</li>
-<li>
-<p>This means that we wait for the entities to be searchable before considering a write complete.
-While, on a production setup, the <code>committed</code> default might be a suitable value, using <code>searchable</code> is especially important when testing as you need the entities to be searchable immediately.</p>
-</li>
-<li>
-<p>Obviously, this is not for production: we drop and recreate the index every time we start the application.</p>
-</li>
-<li>
-<p>We consider the <code>yellow</code> status is sufficient to connect to the Elasticsearch cluster.
+Since the mapping is created at build time to reduce startup time, Hibernate Search cannot connect to the cluster to automatically detect the version.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>We point to the custom <code>AnalysisConfigurer</code> which defines the configuration of our analyzers and normalizers.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>This means that we wait for the entities to be searchable before considering a write complete.
+While, on a production setup, the <code>committed</code> default might be a suitable value, using <code>searchable</code> is especially important when testing as you need the entities to be searchable immediately.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Obviously, this is not for production: we drop and recreate the index every time we start the application.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>We consider the <code>yellow</code> status is sufficient to connect to the Elasticsearch cluster.
 This is for testing purposes with the Elasticsearch Docker container.
-It should not be used in production.</p>
-</li>
-</ol>
+It should not be used in production.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -917,7 +979,7 @@ INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), '4
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -940,7 +1002,7 @@ INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), '4
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -1006,6 +1068,7 @@ Thus we focused our efforts on it.</p>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

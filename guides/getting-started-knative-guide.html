@@ -59,10 +59,20 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Deploying Knative Application to Kubernetes or OpenShift</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#deploying-the-application-in-knative">Deploying the application in Knative</a></li>
+<li><a href="#accessing-your-application">Accessing your application</a></li>
+<li><a href="#going-further">Going further</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide covers:</p>
@@ -147,7 +157,7 @@ The Kubernetes Service Account that will have access to Container Registry secre
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -235,17 +245,18 @@ you need to run the following maven command to make them passed to the Knative r
     -Dcontainer.registry.user='demo' \
     -Dcontainer.registry.password='password' \
     -Dgit.source.revision='master' \
-    -Dgit.source.repo.url='https://github.com/quarkusio/quarkus-quickstarts.git' \ #<b class="conum">(1)</b>
+    -Dgit.source.repo.url='https://github.com/quarkusio/quarkus-quickstarts.git' \ <i class="conum" data-value="1"></i><b>(1)</b>
     -Dapp.container.image='docker.io/demo/getting-started-knative' \
     clean process-resources</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>If your are using a private repo then you might need to use git ssh url</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If your are using a private repo then you might need to use git ssh url</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The above command will apply the property values to the Knative resources found in <code>${project.basedir}/src/main/knative</code>
@@ -270,17 +281,18 @@ and copy them to <code>${project.build.directory}/knative</code></p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">INGRESSGATEWAY=istio-ingressgateway
-IP_ADDRESS="$(minikube ip):$(kubectl get svc $INGRESSGATEWAY --namespace istio-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')" #<b class="conum">(1)</b>
+IP_ADDRESS="$(minikube ip):$(kubectl get svc $INGRESSGATEWAY --namespace istio-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')" <i class="conum" data-value="1"></i><b>(1)</b>
 
 curl -v -H 'Host: getting-started-knative.example.com' $IP_ADDRESS/hello/greeting/redhat</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>you can replace <code>minikube ip</code> with <code>minishift ip</code> if you are using OpenShift</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>you can replace <code>minikube ip</code> with <code>minishift ip</code> if you are using OpenShift</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -294,6 +306,7 @@ For instance, the health extension can be used for health check; the configurati
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

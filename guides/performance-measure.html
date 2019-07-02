@@ -59,10 +59,32 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Measuring Performance</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#how-do-we-measure-memory-usage">How do we measure memory usage</a>
+<ul class="sectlevel2">
+<li><a href="#native-memory-tracking">Native Memory Tracking</a></li>
+<li><a href="#cloud-native-memory-limits">Cloud Native Memory Limits</a></li>
+<li><a href="#platform-specific-memory-reporting">Platform Specific Memory Reporting</a></li>
+</ul>
+</li>
+<li><a href="#how-do-we-measure-startup-time">How do we measure startup time</a></li>
+<li><a href="#additional-flags-applied-by-quarkus">Additional flags applied by Quarkus</a>
+<ul class="sectlevel2">
+<li><a href="#disable-fallback-images">Disable fallback images</a></li>
+<li><a href="#disable-isolates">Disable Isolates</a></li>
+<li><a href="#disable-auto-registration-of-all-service-loader-implementations">Disable auto-registration of all Service Loader implementations</a></li>
+<li><a href="#better-default-for-garbage-collection-implementation">Better default for Garbage Collection implementation</a></li>
+<li><a href="#others">Others &#8230;&#8203;</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide covers:</p>
@@ -123,15 +145,16 @@ The JVM not only allocates native memory for heap (<code>-Xms</code>, <code>-Xmx
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>-XX:NativeMemoryTracking=[off | summary | detail] <b class="conum">(1)</b></pre>
+<pre>-XX:NativeMemoryTracking=[off | summary | detail] <i class="conum" data-value="1"></i><b>(1)</b></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>NOTE: this feature will add cause an approximately 5-10% performance overhead</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>NOTE: this feature will add cause an approximately 5-10% performance overhead</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>It is then possible to use jcmd to dump a report of the native memory usage of the Hotspot JVM running your application;</p>
@@ -377,6 +400,7 @@ plugin is producing a native image, the full command lines are logged.</p>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

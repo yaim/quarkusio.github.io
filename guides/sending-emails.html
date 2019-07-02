@@ -59,10 +59,25 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Sending emails</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven Project</a></li>
+<li><a href="#configuring-the-mailer">Configuring the mailer</a></li>
+<li><a href="#sending-simple-emails">Sending simple emails</a></li>
+<li><a href="#sending-attachments">Sending attachments</a></li>
+<li><a href="#sending-html-emails-with-inlined-attachments">Sending HTML emails with inlined attachments</a></li>
+<li><a href="#testing-email-sending">Testing email sending</a></li>
+<li><a href="#using-the-underlying-vert-x-mail-client">Using the underlying Vert.x Mail Client</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide demonstrates how your Quarkus application can send emails using an SMTP server.</p>
@@ -315,7 +330,7 @@ ReactiveMailer reactiveMailer;</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The two APIs are equivalent feature-wise. Actually the <code>Mailer</code> implementation is built on top of the <code>ReactiveMailer</code> implementation.
@@ -529,6 +544,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

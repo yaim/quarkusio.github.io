@@ -59,10 +59,30 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Datasources</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#adding-maven-dependencies">Adding maven dependencies</a></li>
+<li><a href="#configuring-the-datasource">Configuring the datasource</a>
+<ul class="sectlevel2">
+<li><a href="#jdbc-url-configurations">JDBC URL configurations</a></li>
+</ul>
+</li>
+<li><a href="#injecting-a-datasource">Injecting a Datasource</a></li>
+<li><a href="#multiple-datasources">Multiple Datasources</a>
+<ul class="sectlevel2">
+<li><a href="#named-datasource-injection">Named Datasource Injection</a></li>
+</ul>
+</li>
+<li><a href="#agroal-configuration-reference">Agroal Configuration Reference</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Many projects that use data require connections to a database.
@@ -170,7 +190,7 @@ The main way of obtaining connections to a database is to use a datasource.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -207,7 +227,7 @@ you don&#8217;t need to add the Agroal extension dependency explicitly.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -529,7 +549,7 @@ AgroalDataSource dataSource2;</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -547,6 +567,7 @@ Otherwise, <code>PT</code> is implicitly appended to the value to obtain a stand
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

@@ -59,10 +59,20 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Application Initialization and Termination</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#listening-for-startup-and-shutdown-events">Listening for startup and shutdown events</a></li>
+<li><a href="#package-and-run-the-application">Package and run the application</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>You often need to execute custom actions when the application starts and clean up everything when the application stops.
@@ -185,11 +195,11 @@ public class AppLifecycleBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("ListenerBean");
 
-    void onStart(@Observes StartupEvent ev) {               // <b class="conum">(1)</b>
+    void onStart(@Observes StartupEvent ev) {               <i class="conum" data-value="1"></i><b>(1)</b>
         LOGGER.info("The application is starting...");
     }
 
-    void onStop(@Observes ShutdownEvent ev) {               // <b class="conum">(2)</b>
+    void onStop(@Observes ShutdownEvent ev) {               <i class="conum" data-value="2"></i><b>(2)</b>
         LOGGER.info("The application is stopping...");
     }
 
@@ -210,7 +220,7 @@ public class AppLifecycleBean {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 The events are also called in <em>dev mode</em> between each redeployment.
@@ -222,7 +232,7 @@ The events are also called in <em>dev mode</em> between each redeployment.
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The methods can access injected beans. Check the <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/application-lifecycle-events/src/main/java/org/acme/events/AppLifecycleBean.java">AppLifecycleBean.java</a> class for details.
@@ -245,6 +255,7 @@ You can also generate the native executable using <code>./mvnw clean package -Pn
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

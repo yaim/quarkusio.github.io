@@ -59,10 +59,34 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Using Apache Kafka Streams</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-producer-maven-project">Creating the Producer Maven Project</a>
+<ul class="sectlevel2">
+<li><a href="#the-temperature-value-producer">The Temperature Value Producer</a></li>
+<li><a href="#topic-configuration">Topic Configuration</a></li>
+</ul>
+</li>
+<li><a href="#creating-the-aggregator-maven-project">Creating the Aggregator Maven Project</a>
+<ul class="sectlevel2">
+<li><a href="#the-pipeline-implementation">The Pipeline Implementation</a></li>
+</ul>
+</li>
+<li><a href="#building-and-running-the-applications">Building and Running the Applications</a></li>
+<li><a href="#interactive-queries">Interactive Queries</a></li>
+<li><a href="#scaling-out">Scaling Out</a></li>
+<li><a href="#running-native">Running Native</a></li>
+<li><a href="#going-further">Going Further</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide demonstrates how your Quarkus application can utilize the Apache Kafka Streams API to implement stream processing applications based on Apache Kafka.</p>
@@ -232,10 +256,10 @@ public class ValuesGenerator {
             ));
 
 
-    @Outgoing("temperature-values")                             // <b class="conum">(1)</b>
+    @Outgoing("temperature-values")                             <i class="conum" data-value="1"></i><b>(1)</b>
     public Flowable&lt;KafkaMessage&lt;Integer, String&gt;&gt; generate() {
 
-        return Flowable.interval(500, TimeUnit.MILLISECONDS)    // <b class="conum">(2)</b>
+        return Flowable.interval(500, TimeUnit.MILLISECONDS)    <i class="conum" data-value="2"></i><b>(2)</b>
                 .onBackpressureDrop()
                 .map(tick -&gt; {
                     WeatherStation station = stations.get(random.nextInt(stations.size()));
@@ -250,7 +274,7 @@ public class ValuesGenerator {
                 });
     }
 
-    @Outgoing("weather-stations")                               // <b class="conum">(3)</b>
+    @Outgoing("weather-stations")                               <i class="conum" data-value="3"></i><b>(3)</b>
     public Flowable&lt;KafkaMessage&lt;Integer, String&gt;&gt; weatherStations() {
         List&lt;KafkaMessage&lt;Integer, String&gt;&gt; stationsAsJson = stations.stream()
             .map(s -&gt; KafkaMessage.of(
@@ -278,17 +302,20 @@ public class ValuesGenerator {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Instruct Reactive Messaging to dispatch the items from the returned <code>Flowable</code> to <code>temperature-values</code>.</p>
-</li>
-<li>
-<p>The method returns a RX Java 2 <em>stream</em> (<code>Flowable</code>) emitting a random temperature value every 0.5 seconds.</p>
-</li>
-<li>
-<p>Instruct Reactive Messaging to dispatch the items from the returned <code>Flowable</code> (static list of weather stations) to <code>weather-stations</code>.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Instruct Reactive Messaging to dispatch the items from the returned <code>Flowable</code> to <code>temperature-values</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The method returns a RX Java 2 <em>stream</em> (<code>Flowable</code>) emitting a random temperature value every 0.5 seconds.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Instruct Reactive Messaging to dispatch the items from the returned <code>Flowable</code> (static list of weather stations) to <code>weather-stations</code>.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The two methods each return a <em>reactive stream</em> whose items are sent to the streams named <code>temperature-values</code> and <code>weather-stations</code>, respectively.</p>
@@ -358,7 +385,7 @@ representing a weather station, with the following content:</p>
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
-@RegisterForReflection // <b class="conum">(1)</b>
+@RegisterForReflection <i class="conum" data-value="1"></i><b>(1)</b>
 public class WeatherStation {
 
     public int id;
@@ -367,11 +394,12 @@ public class WeatherStation {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>By adding the <code>@RegisterForReflection</code> annotation, it is ensured that this type can be instantiated reflectively when running the application in native mode.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>By adding the <code>@RegisterForReflection</code> annotation, it is ensured that this type can be instantiated reflectively when running the application in native mode.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Then the file <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/model/TemperatureMeasurement.java</code>,
@@ -507,10 +535,10 @@ public class KafkaStreamsPipeline {
     )
     String bootstrapServers;
 
-    @ConfigProperty(name="HOSTNAME")                            // <b class="conum">(1)</b>
+    @ConfigProperty(name="HOSTNAME")                            <i class="conum" data-value="1"></i><b>(1)</b>
     String host;
 
-    @ConfigProperty(name = "quarkus.http.port")                 // <b class="conum">(1)</b>
+    @ConfigProperty(name = "quarkus.http.port")                 <i class="conum" data-value="1"></i><b>(1)</b>
     int port;
 
     private KafkaStreams streams;
@@ -520,7 +548,7 @@ public class KafkaStreamsPipeline {
     void onStart(@Observes StartupEvent ev) {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "temperature-aggregator");
-        props.put(StreamsConfig.APPLICATION_SERVER_CONFIG, host + ":" + port); // <b class="conum">(1)</b>
+        props.put(StreamsConfig.APPLICATION_SERVER_CONFIG, host + ":" + port); <i class="conum" data-value="1"></i><b>(1)</b>
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 10 * 1024);
         props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);
@@ -535,15 +563,15 @@ public class KafkaStreamsPipeline {
         KeyValueBytesStoreSupplier storeSupplier = Stores.inMemoryKeyValueStore(
                 WEATHER_STATIONS_STORE);
 
-        GlobalKTable&lt;Integer, WeatherStation&gt; stations = builder.globalTable( // <b class="conum">(2)</b>
+        GlobalKTable&lt;Integer, WeatherStation&gt; stations = builder.globalTable( <i class="conum" data-value="2"></i><b>(2)</b>
                 WEATHER_STATIONS_TOPIC,
                 Consumed.with(Serdes.Integer(), weatherStationSerde));
 
-        builder.stream(                                                       // <b class="conum">(3)</b>
+        builder.stream(                                                       <i class="conum" data-value="3"></i><b>(3)</b>
                         TEMPERATURE_VALUES_TOPIC,
                         Consumed.with(Serdes.Integer(), Serdes.String())
                 )
-                .join(                                                        // <b class="conum">(4)</b>
+                .join(                                                        <i class="conum" data-value="4"></i><b>(4)</b>
                         stations,
                         (stationId, timestampAndValue) -&gt; stationId,
                         (timestampAndValue, station) -&gt; {
@@ -552,8 +580,8 @@ public class KafkaStreamsPipeline {
                                     Instant.parse(parts[0]), Double.valueOf(parts[1]));
                         }
                 )
-                .groupByKey()                                                 // <b class="conum">(5)</b>
-                .aggregate(                                                   // <b class="conum">(6)</b>
+                .groupByKey()                                                 <i class="conum" data-value="5"></i><b>(5)</b>
+                .aggregate(                                                   <i class="conum" data-value="6"></i><b>(6)</b>
                         Aggregation::new,
                         (stationId, value, aggregation) -&gt; aggregation.updateFrom(value),
                         Materialized.&lt;Integer, Aggregation&gt; as(storeSupplier)
@@ -561,7 +589,7 @@ public class KafkaStreamsPipeline {
                             .withValueSerde(aggregationSerde)
                 )
                 .toStream()
-                .to(                                                          // <b class="conum">(7)</b>
+                .to(                                                          <i class="conum" data-value="7"></i><b>(7)</b>
                         TEMPERATURES_AGGREGATED_TOPIC,
                         Produced.with(Serdes.Integer(), aggregationSerde)
                 );
@@ -570,7 +598,7 @@ public class KafkaStreamsPipeline {
 
         executor = Executors.newSingleThreadExecutor();
         executor.execute(() -&gt; {
-            waitForTopicsToBeCreated(bootstrapServers);                       // <b class="conum">(8)</b>
+            waitForTopicsToBeCreated(bootstrapServers);                       <i class="conum" data-value="8"></i><b>(8)</b>
             streams.start();
         });
     }
@@ -609,32 +637,40 @@ public class KafkaStreamsPipeline {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Host and port of the application are injected and passed to the Kafka Streams configuration as this application node&#8217;s identity; this will be used later on when running the interactive query in a distributed way</p>
-</li>
-<li>
-<p>The <code>weather-stations</code> table is read into a <code>GlobalKTable</code>, representing the current state of each weather station</p>
-</li>
-<li>
-<p>The <code>temperature-values</code> topic is read into a <code>KStream</code>; whenever a new message arrives to this topic, the pipeline will be processed for this measurement</p>
-</li>
-<li>
-<p>The message from the <code>temperature-values</code> topic is joined with the corresponding weather station, using the topic&#8217;s key (weather station id); the join result contains the data from the measurement and associated weather station message</p>
-</li>
-<li>
-<p>The values are grouped by message key (the weather station id)</p>
-</li>
-<li>
-<p>Within each group, all the measurements of that station are aggregated, by keeping track of minimum and maxium values and calculating the average value of all measurements of that station (see the <code>Aggregation</code> type)</p>
-</li>
-<li>
-<p>The results of the pipeline are written out to the <code>temperatures-aggregated</code> topic</p>
-</li>
-<li>
-<p>The Quarkus <code>StartupEvent</code> and <code>ShutdownEvent</code> lifecycle events are used for starting and stopping the pipeline; as it may only be started once the topics exist, the Kafka admin client is used to check for their existence continuously, until they have been set up</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Host and port of the application are injected and passed to the Kafka Streams configuration as this application node&#8217;s identity; this will be used later on when running the interactive query in a distributed way</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>weather-stations</code> table is read into a <code>GlobalKTable</code>, representing the current state of each weather station</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>temperature-values</code> topic is read into a <code>KStream</code>; whenever a new message arrives to this topic, the pipeline will be processed for this measurement</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The message from the <code>temperature-values</code> topic is joined with the corresponding weather station, using the topic&#8217;s key (weather station id); the join result contains the data from the measurement and associated weather station message</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The values are grouped by message key (the weather station id)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Within each group, all the measurements of that station are aggregated, by keeping track of minimum and maxium values and calculating the average value of all measurements of that station (see the <code>Aggregation</code> type)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The results of the pipeline are written out to the <code>temperatures-aggregated</code> topic</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The Quarkus <code>StartupEvent</code> and <code>ShutdownEvent</code> lifecycle events are used for starting and stopping the pipeline; as it may only be started once the topics exist, the Kafka admin client is used to check for their existence continuously, until they have been set up</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -787,10 +823,10 @@ the latest aggregation result can be retrieved without having to subscribe to an
     Aggregation result = getWeatherStationStore().get(id);
 
     if (result != null) {
-        return GetWeatherStationDataResult.found(WeatherStationData.from(result)); // <b class="conum">(1)</b>
+        return GetWeatherStationDataResult.found(WeatherStationData.from(result)); <i class="conum" data-value="1"></i><b>(1)</b>
     }
     else {
-        return GetWeatherStationDataResult.notFound();                             // <b class="conum">(2)</b>
+        return GetWeatherStationDataResult.notFound();                             <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }
 
@@ -807,14 +843,16 @@ private ReadOnlyKeyValueStore&lt;Integer, Aggregation&gt; getWeatherStationStore
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>A value for the given station id was found, so that value will be returned</p>
-</li>
-<li>
-<p>No value was found, either because a non-existing station was queried or no measurement exists yet for the given station</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A value for the given station id was found, so that value will be returned</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>No value was found, either because a non-existing station was queried or no measurement exists yet for the given station</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Also create the method&#8217;s return type in the file <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/streams/GetWeatherStationDataResult.java</code>:</p>
@@ -932,7 +970,7 @@ public class WeatherStationEndpoint {
     public Response getWeatherStationData(@PathParam("id") int id) {
         GetWeatherStationDataResult result = pipeline.getWeatherStationData(id);
 
-        if (result.getResult().isPresent()) {  // <b class="conum">(1)</b>
+        if (result.getResult().isPresent()) {  <i class="conum" data-value="1"></i><b>(1)</b>
             return Response.ok(result.getResult().get()).build();
         }
         else {
@@ -944,11 +982,12 @@ public class WeatherStationEndpoint {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Depending on whether a value was obtained, either return that value or a 404 response</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Depending on whether a value was obtained, either return that value or a 404 response</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>With this code in place, it&#8217;s time to rebuild the application and the <code>aggregator</code> service in Docker Compose:</p>
@@ -1011,7 +1050,7 @@ The application can then either fetch the data directly from the other instance,
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public GetWeatherStationDataResult getWeatherStationData(int id) {
-    StreamsMetadata metadata = streams.metadataForKey(                  // <b class="conum">(1)</b>
+    StreamsMetadata metadata = streams.metadataForKey(                  <i class="conum" data-value="1"></i><b>(1)</b>
             WEATHER_STATIONS_STORE,
             id,
             Serdes.Integer().serializer()
@@ -1021,7 +1060,7 @@ The application can then either fetch the data directly from the other instance,
         LOG.warn("Found no metadata for key {}", id);
         return GetWeatherStationDataResult.notFound();
     }
-    else if (metadata.host().equals(host)) {                            // <b class="conum">(2)</b>
+    else if (metadata.host().equals(host)) {                            <i class="conum" data-value="2"></i><b>(2)</b>
         LOG.info("Found data for key {} locally", id);
         Aggregation result = getWeatherStationStore().get(id);
 
@@ -1032,7 +1071,7 @@ The application can then either fetch the data directly from the other instance,
             return GetWeatherStationDataResult.notFound();
         }
     }
-    else {                                                              // <b class="conum">(3)</b>
+    else {                                                              <i class="conum" data-value="3"></i><b>(3)</b>
         LOG.info(
             "Found data for key {} on remote host {}:{}",
             id,
@@ -1043,7 +1082,7 @@ The application can then either fetch the data directly from the other instance,
     }
 }
 
-public List&lt;PipelineMetadata&gt; getMetaData() {                           // <b class="conum">(4)</b>
+public List&lt;PipelineMetadata&gt; getMetaData() {                           <i class="conum" data-value="4"></i><b>(4)</b>
     return streams.allMetadataForStore(WEATHER_STATIONS_STORE)
             .stream()
             .map(m -&gt; new PipelineMetadata(
@@ -1058,20 +1097,24 @@ public List&lt;PipelineMetadata&gt; getMetaData() {                           //
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The streams metadata for the given weather station id is obtained</p>
-</li>
-<li>
-<p>The given key (weather station id) is maintained by the local application node, i.e. it can answer the query itself</p>
-</li>
-<li>
-<p>The given key is maintained by another application node; in this case the information about that node (host and port) will be returned</p>
-</li>
-<li>
-<p>The <code>getMetaData()</code> method is added to provide callers with a list of all the nodes in the application cluster.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The streams metadata for the given weather station id is obtained</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The given key (weather station id) is maintained by the local application node, i.e. it can answer the query itself</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The given key is maintained by another application node; in this case the information about that node (host and port) will be returned</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>getMetaData()</code> method is added to provide callers with a list of all the nodes in the application cluster.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The <code>GetWeatherStationDataResult</code> type must be adjusted accordingly:</p>
@@ -1189,15 +1232,15 @@ public class WeatherStationEndpoint {
     public Response getWeatherStationData(@PathParam("id") int id) {
         GetWeatherStationDataResult result = pipeline.getWeatherStationData(id);
 
-        if (result.getResult().isPresent()) {                     // <b class="conum">(1)</b>
+        if (result.getResult().isPresent()) {                     <i class="conum" data-value="1"></i><b>(1)</b>
             return Response.ok(result.getResult().get()).build();
         }
-        else if (result.getHost().isPresent()) {                  // <b class="conum">(2)</b>
+        else if (result.getHost().isPresent()) {                  <i class="conum" data-value="2"></i><b>(2)</b>
             URI otherUri = getOtherUri(result.getHost().get(), result.getPort().getAsInt(),
                     id);
             return Response.seeOther(otherUri).build();
         }
-        else {                                                    // <b class="conum">(3)</b>
+        else {                                                    <i class="conum" data-value="3"></i><b>(3)</b>
             return Response.status(Status.NOT_FOUND.getStatusCode(),
                     "No data found for weather station " + id).build();
         }
@@ -1206,7 +1249,7 @@ public class WeatherStationEndpoint {
     @GET
     @Path("/meta-data")
     @Produces(MediaType.APPLICATION_JSON)
-    public List&lt;PipelineMetadata&gt; getMetaData() {                 // <b class="conum">(4)</b>
+    public List&lt;PipelineMetadata&gt; getMetaData() {                 <i class="conum" data-value="4"></i><b>(4)</b>
         return pipeline.getMetaData();
     }
 
@@ -1222,20 +1265,24 @@ public class WeatherStationEndpoint {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The data was found locally, so return it</p>
-</li>
-<li>
-<p>The data is maintained by another node, so reply with a redirect (HTTP status code 303) if the data for the given key is stored on one of the other nodes.</p>
-</li>
-<li>
-<p>No data was found for the given weather station id</p>
-</li>
-<li>
-<p>Exposes information about all the hosts forming the application cluster</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The data was found locally, so return it</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The data is maintained by another node, so reply with a redirect (HTTP status code 303) if the data for the given key is stored on one of the other nodes.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>No data was found for the given weather station id</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Exposes information about all the hosts forming the application cluster</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Now stop the <code>aggregator</code> service again and rebuild it.
@@ -1417,6 +1464,7 @@ Refer to the Quarkus guides on <a href="/guides/metrics-guide">metrics</a> and <
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

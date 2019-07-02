@@ -59,10 +59,22 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Using WebSockets</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#handling-web-sockets">Handling web sockets</a></li>
+<li><a href="#a-slick-web-frontend">A slick web frontend</a></li>
+<li><a href="#run-the-application">Run the application</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide explains how your Quarkus application can utilize web sockets to create interactive web applications.
@@ -163,11 +175,11 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.Session;
 
-@ServerEndpoint("/chat/{username}")         // <b class="conum">(1)</b>
+@ServerEndpoint("/chat/{username}")         <i class="conum" data-value="1"></i><b>(1)</b>
 @ApplicationScoped
 public class ChatSocket {
 
-    Map&lt;String, Session&gt; sessions = new ConcurrentHashMap&lt;&gt;(); // <b class="conum">(2)</b>
+    Map&lt;String, Session&gt; sessions = new ConcurrentHashMap&lt;&gt;(); <i class="conum" data-value="2"></i><b>(2)</b>
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
@@ -266,6 +278,7 @@ You can also build the native executable using <code>./mvnw package -Pnative</co
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

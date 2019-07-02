@@ -59,10 +59,26 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Building a Native Executable</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#producing-a-native-executable">Producing a native executable</a></li>
+<li><a href="#testing-the-native-executable">Testing the native executable</a>
+<ul class="sectlevel2">
+<li><a href="#excluding-tests-when-running-as-a-native-executable">Excluding tests when running as a native executable</a></li>
+</ul>
+</li>
+<li><a href="#creating-a-container">Creating a container</a></li>
+<li><a href="#creating-a-container-with-a-multi-stage-docker-build">Creating a container with a multi-stage Docker build</a></li>
+<li><a href="#whats-next">What&#8217;s next?</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide covers:</p>
@@ -129,7 +145,7 @@ directory</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -152,7 +168,7 @@ directory</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -176,7 +192,7 @@ directory</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -192,7 +208,7 @@ to do so.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -268,7 +284,7 @@ The executable would have everything to run the application including the "JVM" 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -335,8 +351,8 @@ You can run it using: <code>./target/getting-started-1.0-SNAPSHOT-runner</code>.
 
 import io.quarkus.test.junit.SubstrateTest;
 
-@SubstrateTest // <b class="conum">(1)</b>
-public class NativeGreetingResourceIT extends GreetingResourceTest { // <b class="conum">(2)</b>
+@SubstrateTest <i class="conum" data-value="1"></i><b>(1)</b>
+public class NativeGreetingResourceIT extends GreetingResourceTest { <i class="conum" data-value="2"></i><b>(2)</b>
 
     // Run the same tests
 
@@ -344,15 +360,17 @@ public class NativeGreetingResourceIT extends GreetingResourceTest { // <b class
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Use another test runner that starts the application from the native file before the tests.
-The executable is retrieved using the <code>native.image.path</code> system property configured in the <em>Failsafe Maven Plugin</em>.</p>
-</li>
-<li>
-<p>We extend our previous tests, but you can also implement your tests</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use another test runner that starts the application from the native file before the tests.
+The executable is retrieved using the <code>native.image.path</code> system property configured in the <em>Failsafe Maven Plugin</em>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We extend our previous tests, but you can also implement your tests</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>To see the <code>NativeGreetingResourceIT</code> run against the native executable, use <code>./mvnw verify -Pnative</code>:</p>
@@ -404,7 +422,7 @@ with the <code>@DisabledOnSubstrate</code> annotation in order to only run them 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 Before going further, be sure to have a working container runtime (Docker, podman) environment.
@@ -433,7 +451,7 @@ we will instruct the Maven build to produce an executable from inside a containe
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -486,7 +504,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Interested by tiny Docker images, check the <a href="https://github.com/quarkusio/quarkus-images/tree/graalvm-19.0.2/distroless">distroless</a> version.
@@ -532,7 +550,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Warning</div>
+<i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -568,6 +586,7 @@ We recommend continuing the journey with the <a href="kubernetes-guide.html">dep
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

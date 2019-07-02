@@ -59,10 +59,39 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Writing Your Own Extension</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#extension-philosophy">1. Extension philosophy</a>
+<ul class="sectlevel2">
+<li><a href="#why-an-extension-framework">1.1. Why an extension framework</a></li>
+<li><a href="#favor-build-time-work-over-runtime-work">1.2. Favor build time work over runtime work</a></li>
+<li><a href="#how-to-expose-configuration">1.3. How to expose configuration</a></li>
+<li><a href="#expose-your-components-via-cdi">1.4. Expose your components via CDI</a></li>
+<li><a href="#some-types-of-extensions">1.5. Some types of extensions</a></li>
+</ul>
+</li>
+<li><a href="#technical-aspect">2. Technical aspect</a>
+<ul class="sectlevel2">
+<li><a href="#three-phases-of-bootstrap-and-quarkus-philosophy">2.1. Three Phases of Bootstrap and Quarkus Philosophy</a></li>
+<li><a href="#maven-setup">2.2. Maven setup</a></li>
+<li><a href="#build-step-processors">2.3. Build Step Processors</a></li>
+<li><a href="#configuration">2.4. Configuration</a></li>
+<li><a href="#bytecode-recording">2.5. Bytecode Recording</a></li>
+<li><a href="#contexts-and-dependency-injection">2.6. Contexts and Dependency Injection</a></li>
+<li><a href="#testing-extensions">2.7. Testing Extensions</a></li>
+<li><a href="#native-executable-support">2.8. Native Executable Support</a></li>
+<li><a href="#ide-support-tips">2.9. IDE support tips</a></li>
+<li><a href="#troubleshooting-debugging-tips">2.10. Troubleshooting / Debugging Tips</a></li>
+<li><a href="#sample-test-extension">2.11. Sample Test Extension</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus extensions add a new developer focused behavior to the core offering, and consist of two distinct parts, buildtime augmentation and runtime container. The augmentation part is responsible for all metadata processing, such as reading annotations, XML descriptors etc. The output of this augmentation phase is recorded bytecode which is responsible for directly instantiating the relevant runtime services.</p>
@@ -225,8 +254,8 @@ class ParserService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Alternative <b class="conum">(1)</b>
-@Priority(1) <b class="conum">(2)</b>
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Alternative <i class="conum" data-value="1"></i><b>(1)</b>
+@Priority(1) <i class="conum" data-value="2"></i><b>(2)</b>
 @Singleton
 class MyParser extends Parser {
 
@@ -237,20 +266,22 @@ class MyParser extends Parser {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p><code>MyParser</code> is an alternative bean.</p>
-</li>
-<li>
-<p>Enables the alternative. The priority could be any number to override the default bean but if there are multiple alternatives the highest priority wins.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>MyParser</code> is an alternative bean.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Enables the alternative. The priority could be any number to override the default bean but if there are multiple alternatives the highest priority wins.</td>
+</tr>
+</table>
 </div>
 <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 CDI alternatives are only considered during injection and type-safe resolution. For example the default implementation would still receive observer notifications.
@@ -377,7 +408,7 @@ Futhermore, you&#8217;ll need to configure the <code>maven-compiler-plugin</code
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 By convention the deployment time artifact has the <code>-deployment</code> suffix, and the runtime artifact
@@ -432,7 +463,7 @@ has no suffix (and is what the end user adds to their project).
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The above <code>maven-compiler-plugin</code> configuration requires version 3.5+.
@@ -444,7 +475,7 @@ The above <code>maven-compiler-plugin</code> configuration requires version 3.5+
 <table>
 <tr>
 <td class="icon">
-<div class="title">Warning</div>
+<i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -590,7 +621,7 @@ by the SmallRye Config project as well as by Quarkus itself.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Though the SmallRye Config project is used for implementation, the standard <code>@ConfigProperty</code> annotation does not have the
@@ -623,7 +654,7 @@ joining the segments with hyphens (<code>-</code>).  Some examples:</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Though it is possible to override the configuration key name using the <code>name</code> attribute of <code>@ConfigItem</code>,
@@ -777,7 +808,7 @@ import io.quarkus.runtime.annotations.ConfigGroup;
 import java.io.File;
 import java.util.logging.Level;
 
-@ConfigGroup <b class="conum">(1)</b>
+@ConfigGroup <i class="conum" data-value="1"></i><b>(1)</b>
 public class FileConfig {
 
     /**
@@ -809,7 +840,7 @@ public class FileConfig {
 /**
  * Logging configuration.
  */
-@ConfigRoot(phase = ConfigPhase.RUN_TIME) <b class="conum">(2)</b>
+@ConfigRoot(phase = ConfigPhase.RUN_TIME) <i class="conum" data-value="2"></i><b>(2)</b>
 public class LogConfiguration {
 
     // ...
@@ -826,7 +857,7 @@ public class LoggingProcessor {
     /**
      * Logging configuration.
      */
-    <b class="conum">(3)</b>
+    <i class="conum" data-value="3"></i><b>(3)</b>
     LogConfiguration config;
 }</code></pre>
 </div>
@@ -852,24 +883,27 @@ public class LoggingProcessor {
 </ul>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The <code>FileConfig</code> class is annotated with <code>@ConfigGroup</code> to indicate that this is an aggregate
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>FileConfig</code> class is annotated with <code>@ConfigGroup</code> to indicate that this is an aggregate
 configuration object containing a collection of configurable properties, rather than being a simple configuration
-key type.</p>
-</li>
-<li>
-<p>The <code>@ConfigRoot</code> annotation indicates that this object is a configuration root group, in this case one which
+key type.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>@ConfigRoot</code> annotation indicates that this object is a configuration root group, in this case one which
 corresponds to a <code>log</code> segment. A class name is used to link configuration root group with the segment from a
 property name. The <code>Configuration</code> part is stripped off from a <code>LogConfiguration</code> class name and the remaining <code>Log</code>
 is lowercased to become a <code>log</code>. Since all <code>@ConfigRoot</code> annotated classes uses <code>quarkus</code> as a prefix, this finally
-becomes <code>quarkus.log</code> and represents the properties which names begin with <code>quarkus.log.*</code>.</p>
-</li>
-<li>
-<p>Here the <code>LoggingProcessor</code> injects a <code>LogConfiguration</code> instance automatically by detecting the <code>@ConfigRoot</code>
-annotation.</p>
-</li>
-</ol>
+becomes <code>quarkus.log</code> and represents the properties which names begin with <code>quarkus.log.*</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Here the <code>LoggingProcessor</code> injects a <code>LogConfiguration</code> instance automatically by detecting the <code>@ConfigRoot</code>
+annotation.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>A corresponding <code>application.properties</code> for the above example could be:</p>
@@ -996,25 +1030,25 @@ import io.restassured.RestAssured;
 public class FailingUnitTest {
 
 
-    @RegisterExtension                                                                  // <b class="conum">(1)</b>
+    @RegisterExtension                                                                  <i class="conum" data-value="1"></i><b>(1)</b>
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .setArchiveProducer(() -&gt;
-                    ShrinkWrap.create(JavaArchive.class)                                // <b class="conum">(2)</b>
+                    ShrinkWrap.create(JavaArchive.class)                                <i class="conum" data-value="2"></i><b>(2)</b>
                             .addClasses(FailingHealthCheck.class)
                             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
             );
-    @Inject                                                                             // <b class="conum">(3)</b>
+    @Inject                                                                             <i class="conum" data-value="3"></i><b>(3)</b>
     @Health
     Instance&lt;HealthCheck&gt; checks;
 
     @Test
     public void testHealthServlet() {
-        RestAssured.when().get("/health").then().statusCode(503);                       // <b class="conum">(4)</b>
+        RestAssured.when().get("/health").then().statusCode(503);                       <i class="conum" data-value="4"></i><b>(4)</b>
     }
 
     @Test
     public void testHealthBeans() {
-        List&lt;HealthCheck&gt; check = new ArrayList&lt;&gt;();                                    // <b class="conum">(5)</b>
+        List&lt;HealthCheck&gt; check = new ArrayList&lt;&gt;();                                    <i class="conum" data-value="5"></i><b>(5)</b>
         for (HealthCheck i : checks) {
             check.add(i);
         }
@@ -1025,23 +1059,28 @@ public class FailingUnitTest {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>This tells JUnit to use the Quarkus unit test runner</p>
-</li>
-<li>
-<p>This producer is used to build the application to be tested. It uses Shrinkwrap to create a JavaArchive to test</p>
-</li>
-<li>
-<p>It is possible to inject beans from our test deployment directly into the test case</p>
-</li>
-<li>
-<p>This method directly invokes the health check Servlet and verifies the response</p>
-</li>
-<li>
-<p>This method uses the injected health check bean to verify it is returning the expected result</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This tells JUnit to use the Quarkus unit test runner</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This producer is used to build the application to be tested. It uses Shrinkwrap to create a JavaArchive to test</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>It is possible to inject beans from our test deployment directly into the test case</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>This method directly invokes the health check Servlet and verifies the response</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>This method uses the injected health check bean to verify it is returning the expected result</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>If you want to test that an extension properly fails at build time, use the <code>setExpectedException</code> method:</p>
@@ -1062,7 +1101,7 @@ public class PersistenceAndQuarkusConfigTest {
 
     @RegisterExtension
     static QuarkusUnitTest runner = new QuarkusUnitTest()
-            .setExpectedException(ConfigurationError.class)                     <b class="conum">(1)</b>
+            .setExpectedException(ConfigurationError.class)                     <i class="conum" data-value="1"></i><b>(1)</b>
             .setArchiveProducer(() -&gt; ShrinkWrap.create(JavaArchive.class)
                     .addAsManifestResource("META-INF/some-persistence.xml", "persistence.xml")
                     .addAsResource("application.properties"));
@@ -1079,11 +1118,12 @@ public class PersistenceAndQuarkusConfigTest {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>This tells JUnit that the Quarkus deployment should fail with a specific exception</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This tells JUnit that the Quarkus deployment should fail with a specific exception</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1183,15 +1223,16 @@ author will typically need to perform using the test-extension code to illustrat
 <div class="title">Example Startup Lines</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">2019-03-22 14:02:37,884 INFO  [io.quarkus] (main) Quarkus 999-SNAPSHOT started in 0.061s.
-2019-03-22 14:02:37,884 INFO  [io.quarkus] (main) Installed features: [cdi, test-extension] <b class="conum">(1)</b></code></pre>
+2019-03-22 14:02:37,884 INFO  [io.quarkus] (main) Installed features: [cdi, test-extension] <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>A list of features installed in the runtime image</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A list of features installed in the runtime image</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The features listed reflect the types of extensions that are installed. An extension declares its display name
@@ -1247,7 +1288,7 @@ public final class TestProcessor {
 
     @BuildStep
     BeanDefiningAnnotationBuildItem registerX() {
-        <b class="conum">(1)</b>
+        <i class="conum" data-value="1"></i><b>(1)</b>
         return new BeanDefiningAnnotationBuildItem(TEST_ANNOTATION, TEST_ANNOTATION_SCOPE);
     }
 ...
@@ -1266,21 +1307,23 @@ public @interface TestAnnotation {
 /**
  * A sample bean
  */
-@TestAnnotation <b class="conum">(2)</b>
+@TestAnnotation <i class="conum" data-value="2"></i><b>(2)</b>
 public class ConfiguredBean implements IConfigConsumer {
 
 ...</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Register the annotation class and CDI default scope using the Jandex <code>DotName</code> class.</p>
-</li>
-<li>
-<p><code>ConfiguredBean</code> will be processed by the CDI layer the same as a bean annotated with the CDI standard @ApplicationScoped.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Register the annotation class and CDI default scope using the Jandex <code>DotName</code> class.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>ConfiguredBean</code> will be processed by the CDI layer the same as a bean annotated with the CDI standard @ApplicationScoped.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1300,10 +1343,10 @@ public class ConfiguredBean implements IConfigConsumer {
         RuntimeServiceBuildItem serviceBuildItem = null;
         JAXBContext context = JAXBContext.newInstance(XmlConfig.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        InputStream is = getClass().getResourceAsStream("/config.xml"); <b class="conum">(1)</b>
+        InputStream is = getClass().getResourceAsStream("/config.xml"); <i class="conum" data-value="1"></i><b>(1)</b>
         if (is != null) {
             log.infof("Have XmlConfig, loading");
-            XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is); <b class="conum">(2)</b>
+            XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is); <i class="conum" data-value="2"></i><b>(2)</b>
 ...
         }
         return serviceBuildItem;
@@ -1311,20 +1354,22 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Look for a config.xml classpath resource</p>
-</li>
-<li>
-<p>If found, parse using JAXB context for <code>XmlConfig.class</code></p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Look for a config.xml classpath resource</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If found, parse using JAXB context for <code>XmlConfig.class</code></td>
+</tr>
+</table>
 </div>
 <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -1344,7 +1389,7 @@ public class ConfiguredBean implements IConfigConsumer {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -1368,19 +1413,19 @@ public class ConfiguredBean implements IConfigConsumer {
 
     @BuildStep
     @Record(STATIC_INIT)
-    void scanForBeans(TestTemplate template, BeanArchiveIndexBuildItem beanArchiveIndex, <b class="conum">(1)</b>
+    void scanForBeans(TestTemplate template, BeanArchiveIndexBuildItem beanArchiveIndex, <i class="conum" data-value="1"></i><b>(1)</b>
             BuildProducer&lt;TestBeanBuildItem&gt; testBeanProducer) {
-        IndexView indexView = beanArchiveIndex.getIndex(); <b class="conum">(2)</b>
-        Collection&lt;AnnotationInstance&gt; testBeans = indexView.getAnnotations(TEST_ANNOTATION); <b class="conum">(3)</b>
+        IndexView indexView = beanArchiveIndex.getIndex(); <i class="conum" data-value="2"></i><b>(2)</b>
+        Collection&lt;AnnotationInstance&gt; testBeans = indexView.getAnnotations(TEST_ANNOTATION); <i class="conum" data-value="3"></i><b>(3)</b>
         for (AnnotationInstance ann : testBeans) {
             ClassInfo beanClassInfo = ann.target().asClass();
             try {
                 boolean isConfigConsumer = beanClassInfo.interfaceNames()
                         .stream()
-                        .anyMatch(dotName -&gt; dotName.equals(DotName.createSimple(IConfigConsumer.class.getName()))); <b class="conum">(4)</b>
+                        .anyMatch(dotName -&gt; dotName.equals(DotName.createSimple(IConfigConsumer.class.getName()))); <i class="conum" data-value="4"></i><b>(4)</b>
                 if (isConfigConsumer) {
                     Class&lt;IConfigConsumer&gt; beanClass = (Class&lt;IConfigConsumer&gt;) Class.forName(beanClassInfo.name().toString());
-                    testBeanProducer.produce(new TestBeanBuildItem(beanClass)); <b class="conum">(5)</b>
+                    testBeanProducer.produce(new TestBeanBuildItem(beanClass)); <i class="conum" data-value="5"></i><b>(5)</b>
                     log.infof("Configured bean: %s", beanClass);
                 }
             } catch (ClassNotFoundException e) {
@@ -1391,23 +1436,28 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Depend on a <code>BeanArchiveIndexBuildItem</code> to have the build step be run after the deployment has been indexed.</p>
-</li>
-<li>
-<p>Retrieve the index.</p>
-</li>
-<li>
-<p>Find all beans annotated with <code>@TestAnnotation</code>.</p>
-</li>
-<li>
-<p>Determine which of these beans also has the <code>IConfigConsumer</code> interface.</p>
-</li>
-<li>
-<p>Save the bean class in a <code>TestBeanBuildItem</code> for use in a latter RUNTIME_INIT build step that will interact with the bean instances.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Depend on a <code>BeanArchiveIndexBuildItem</code> to have the build step be run after the deployment has been indexed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Retrieve the index.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Find all beans annotated with <code>@TestAnnotation</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Determine which of these beans also has the <code>IConfigConsumer</code> interface.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Save the bean class in a <code>TestBeanBuildItem</code> for use in a latter RUNTIME_INIT build step that will interact with the bean instances.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1421,13 +1471,13 @@ public class ConfiguredBean implements IConfigConsumer {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#configureBeans
     @BuildStep
     @Record(RUNTIME_INIT)
-    void configureBeans(TestTemplate template, List&lt;TestBeanBuildItem&gt; testBeans, <b class="conum">(1)</b>
-            BeanContainerBuildItem beanContainer, <b class="conum">(2)</b>
+    void configureBeans(TestTemplate template, List&lt;TestBeanBuildItem&gt; testBeans, <i class="conum" data-value="1"></i><b>(1)</b>
+            BeanContainerBuildItem beanContainer, <i class="conum" data-value="2"></i><b>(2)</b>
             TestRunTimeConfig runTimeConfig) {
 
         for (TestBeanBuildItem testBeanBuildItem : testBeans) {
             Class&lt;IConfigConsumer&gt; beanClass = testBeanBuildItem.getConfigConsumer();
-            template.configureBeans(beanContainer.getValue(), beanClass, buildAndRunTimeConfig, runTimeConfig); <b class="conum">(3)</b>
+            template.configureBeans(beanContainer.getValue(), beanClass, buildAndRunTimeConfig, runTimeConfig); <i class="conum" data-value="3"></i><b>(3)</b>
         }
     }
 
@@ -1436,30 +1486,35 @@ public class ConfiguredBean implements IConfigConsumer {
             TestBuildAndRunTimeConfig buildTimeConfig,
             TestRunTimeConfig runTimeConfig) {
         log.infof("Begin BeanContainerListener callback\n");
-        IConfigConsumer instance = beanContainer.instance(beanClass); <b class="conum">(4)</b>
-        instance.loadConfig(buildTimeConfig, runTimeConfig); <b class="conum">(5)</b>
+        IConfigConsumer instance = beanContainer.instance(beanClass); <i class="conum" data-value="4"></i><b>(4)</b>
+        instance.loadConfig(buildTimeConfig, runTimeConfig); <i class="conum" data-value="5"></i><b>(5)</b>
         log.infof("configureBeans, instance=%s\n", instance);
     }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Consume the `TestBeanBuildItem`s produced from the scanning build step.</p>
-</li>
-<li>
-<p>Consume the <code>BeanContainerBuildItem</code> to order this build step to run after the CDI bean container has been created.</p>
-</li>
-<li>
-<p>Call the runtime template to record the bean interactions.</p>
-</li>
-<li>
-<p>Runtime template retrieves the bean using its type.</p>
-</li>
-<li>
-<p>Runtime template invokes the <code>IConfigConsumer#loadConfig(&#8230;&#8203;)</code> method passing in the configuration objects with runtime information.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Consume the `TestBeanBuildItem`s produced from the scanning build step.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Consume the <code>BeanContainerBuildItem</code> to order this build step to run after the CDI bean container has been created.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Call the runtime template to record the bean interactions.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Runtime template retrieves the bean using its type.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Runtime template invokes the <code>IConfigConsumer#loadConfig(&#8230;&#8203;)</code> method passing in the configuration objects with runtime information.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1482,15 +1537,15 @@ public class ConfiguredBean implements IConfigConsumer {
             log.infof("Have XmlConfig, loading");
             XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is);
             log.infof("Loaded XmlConfig, creating service");
-            RuntimeValue&lt;RuntimeXmlConfigService&gt; service = template.initRuntimeService(config); //<b class="conum">(1)</b>
-            serviceBuildItem = new RuntimeServiceBuildItem(service); //<b class="conum">(3)</b>
+            RuntimeValue&lt;RuntimeXmlConfigService&gt; service = template.initRuntimeService(config); <i class="conum" data-value="1"></i><b>(1)</b>
+            serviceBuildItem = new RuntimeServiceBuildItem(service); <i class="conum" data-value="3"></i><b>(3)</b>
         }
         return serviceBuildItem;
     }
 
 // TestTemplate#initRuntimeService
     public RuntimeValue&lt;RuntimeXmlConfigService&gt; initRuntimeService(XmlConfig config) {
-        RuntimeXmlConfigService service = new RuntimeXmlConfigService(config); //<b class="conum">(2)</b>
+        RuntimeXmlConfigService service = new RuntimeXmlConfigService(config); <i class="conum" data-value="2"></i><b>(2)</b>
         return new RuntimeValue&lt;&gt;(service);
     }
 
@@ -1509,17 +1564,20 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Call into the runtime template to record the creation of the service.</p>
-</li>
-<li>
-<p>Using the parsed <code>XmlConfig</code> instance, create an instance of <code>RuntimeXmlConfigService</code> and wrap it in a <code>RuntimeValue</code>. Use a <code>RuntimeValue</code> wrapper for non-interface objects that are non-proxiable.</p>
-</li>
-<li>
-<p>Wrap the return service value in a <code>RuntimeServiceBuildItem</code> for use in a RUNTIME_INIT build step that will start the service.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Call into the runtime template to record the creation of the service.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Using the parsed <code>XmlConfig</code> instance, create an instance of <code>RuntimeXmlConfigService</code> and wrap it in a <code>RuntimeValue</code>. Use a <code>RuntimeValue</code> wrapper for non-interface objects that are non-proxiable.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Wrap the return service value in a <code>RuntimeServiceBuildItem</code> for use in a RUNTIME_INIT build step that will start the service.</td>
+</tr>
+</table>
 </div>
 <div class="sect4">
 <h5 id="starting-a-service"><a class="anchor" href="#starting-a-service"></a>2.11.6.1. Starting a Service</h5>
@@ -1532,47 +1590,53 @@ public class ConfiguredBean implements IConfigConsumer {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#startRuntimeService
     @BuildStep
     @Record(RUNTIME_INIT)
-    ServiceStartBuildItem startRuntimeService(TestTemplate template, ShutdownContextBuildItem shutdownContextBuildItem , // <b class="conum">(1)</b>
-            RuntimeServiceBuildItem serviceBuildItem) throws IOException { // <b class="conum">(2)</b>
+    ServiceStartBuildItem startRuntimeService(TestTemplate template, ShutdownContextBuildItem shutdownContextBuildItem , <i class="conum" data-value="1"></i><b>(1)</b>
+            RuntimeServiceBuildItem serviceBuildItem) throws IOException { <i class="conum" data-value="2"></i><b>(2)</b>
         if (serviceBuildItem != null) {
             log.info("Registering service start");
-            template.startRuntimeService(shutdownContextBuildItem, serviceBuildItem.getService()); // <b class="conum">(3)</b>
+            template.startRuntimeService(shutdownContextBuildItem, serviceBuildItem.getService()); <i class="conum" data-value="3"></i><b>(3)</b>
         } else {
             log.info("No RuntimeServiceBuildItem seen, check config.xml");
         }
-        return new ServiceStartBuildItem("RuntimeXmlConfigService"); //<b class="conum">(4)</b>
+        return new ServiceStartBuildItem("RuntimeXmlConfigService"); <i class="conum" data-value="4"></i><b>(4)</b>
     }
 
 // TestTemplate#startRuntimeService
     public void startRuntimeService(ShutdownContext shutdownContext, RuntimeValue&lt;RuntimeXmlConfigService&gt; runtimeValue)
             throws IOException {
         RuntimeXmlConfigService service = runtimeValue.getValue();
-        service.startService(); //<b class="conum">(5)</b>
-        shutdownContext.addShutdownTask(service::stopService); //<b class="conum">(6)</b>
+        service.startService(); <i class="conum" data-value="5"></i><b>(5)</b>
+        shutdownContext.addShutdownTask(service::stopService); <i class="conum" data-value="6"></i><b>(6)</b>
     }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>We consume a ShutdownContextBuildItem to register the service shutdown.</p>
-</li>
-<li>
-<p>We consume the previously initialized service captured in <code>RuntimeServiceBuildItem</code>.</p>
-</li>
-<li>
-<p>Call the runtime template to record the service start invocation.</p>
-</li>
-<li>
-<p>Produce a <code>ServiceStartBuildItem</code> to indicate the startup of a service. See <a href="#startup-and-shutdown-events">Startup and Shutdown Events</a> for details.</p>
-</li>
-<li>
-<p>Runtime template retrieves the service instance reference and calls its <code>startService</code> method.</p>
-</li>
-<li>
-<p>Runtime template registers an invocation of the service instance <code>stopService</code> method with the Quarkus <code>ShutdownContext</code>.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We consume a ShutdownContextBuildItem to register the service shutdown.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We consume the previously initialized service captured in <code>RuntimeServiceBuildItem</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Call the runtime template to record the service start invocation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Produce a <code>ServiceStartBuildItem</code> to indicate the startup of a service. See <a href="#startup-and-shutdown-events">Startup and Shutdown Events</a> for details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Runtime template retrieves the service instance reference and calls its <code>startService</code> method.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Runtime template registers an invocation of the service instance <code>stopService</code> method with the Quarkus <code>ShutdownContext</code>.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The code for the <code>RuntimeXmlConfigService</code> can be viewed here:
@@ -1600,7 +1664,7 @@ puclic class SomeBean {
      * Called when the runtime has started
      * @param event
      */
-    void onStart(@Observes StartupEvent event) { // <b class="conum">(1)</b>
+    void onStart(@Observes StartupEvent event) { <i class="conum" data-value="1"></i><b>(1)</b>
         System.out.printf("onStart, event=%s%n", event);
     }
 
@@ -1608,21 +1672,23 @@ puclic class SomeBean {
      * Called when the runtime is shutting down
      * @param event
     */
-    void onStop(@Observes ShutdownEvent event) { // <b class="conum">(2)</b>
+    void onStop(@Observes ShutdownEvent event) { <i class="conum" data-value="2"></i><b>(2)</b>
         System.out.printf("onStop, event=%s%n", event);
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Observe a <code>StartupEvent</code> to be notified the runtime has started.</p>
-</li>
-<li>
-<p>Observe a 'ShutdownEvent` to be notified when the runtime is going to shutdown.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Observe a <code>StartupEvent</code> to be notified the runtime has started.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Observe a 'ShutdownEvent` to be notified when the runtime is going to shutdown.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>What is the relevance of startup and shutdown events for extension authors? We have already seen the use of a <code>ShutdownContext</code>
@@ -1645,16 +1711,17 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
     ServiceStartBuildItem startRuntimeService(TestTemplate template, ShutdownContextBuildItem shutdownContextBuildItem,
             RuntimeServiceBuildItem serviceBuildItem) throws IOException {
 ...
-        return new ServiceStartBuildItem("RuntimeXmlConfigService"); //<b class="conum">(1)</b>
+        return new ServiceStartBuildItem("RuntimeXmlConfigService"); <i class="conum" data-value="1"></i><b>(1)</b>
     }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Produce a <code>ServiceStartBuildItem</code> to indicate that this is a service starting step that needs to run before the <code>StartupEvent</code> is sent.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Produce a <code>ServiceStartBuildItem</code> to indicate that this is a service starting step that needs to run before the <code>StartupEvent</code> is sent.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1673,28 +1740,31 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 
     @BuildStep
     void registerNativeImageReources() {
-        resource.produce(new SubstrateResourceBuildItem("/security/runtime.keys")); //<b class="conum">(1)</b>
+        resource.produce(new SubstrateResourceBuildItem("/security/runtime.keys")); <i class="conum" data-value="1"></i><b>(1)</b>
 
         resource.produce(new SubstrateResourceBuildItem(
-                "META-INF/services/" + io.quarkus.SomeService.class.getName())); //<b class="conum">(2)</b>
+                "META-INF/services/" + io.quarkus.SomeService.class.getName())); <i class="conum" data-value="2"></i><b>(2)</b>
 
-        resourceBundle.produce(new SubstrateResourceBuildItem("javax.xml.bind.Messages")); //<b class="conum">(3)</b>
+        resourceBundle.produce(new SubstrateResourceBuildItem("javax.xml.bind.Messages")); <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Indicate that the /security/runtime.keys classpath resource should be copied into native image.</p>
-</li>
-<li>
-<p>Indicate that the <code>io.quarkus.SomeService</code> ServiceLoader resource should be copied into native image.</p>
-</li>
-<li>
-<p>Indicate that the "javax.xml.bind.Messages" resource bundle should be copied into native image.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Indicate that the /security/runtime.keys classpath resource should be copied into native image.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Indicate that the <code>io.quarkus.SomeService</code> ServiceLoader resource should be copied into native image.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Indicate that the "javax.xml.bind.Messages" resource bundle should be copied into native image.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1733,7 +1803,7 @@ import io.quarkus.runtime.ObjectSubstitution;
 public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSAPublicKey, KeyProxy&gt; {
     private static final Logger log = Logger.getLogger("DSAPublicKeyObjectSubstitution");
     @Override
-    public KeyProxy serialize(DSAPublicKey obj) { //<b class="conum">(1)</b>
+    public KeyProxy serialize(DSAPublicKey obj) { <i class="conum" data-value="1"></i><b>(1)</b>
         log.info("DSAPublicKeyObjectSubstitution.serialize");
         byte[] encoded = obj.getEncoded();
         KeyProxy proxy = new KeyProxy();
@@ -1742,7 +1812,7 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
     }
 
     @Override
-    public DSAPublicKey deserialize(KeyProxy obj) { //<b class="conum">(2)</b>
+    public DSAPublicKey deserialize(KeyProxy obj) { <i class="conum" data-value="2"></i><b>(2)</b>
         log.info("DSAPublicKeyObjectSubstitution.deserialize");
         byte[] encoded = obj.getContent();
         X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encoded);
@@ -1760,14 +1830,16 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The serialize method takes the object without a default constructor and creates a <code>KeyProxy</code> that contains the information necessary to recreate the <code>DSAPublicKey</code>.</p>
-</li>
-<li>
-<p>The deserialize method uses the <code>KeyProxy</code> to recreate the <code>DSAPublicKey</code> from its encoded form using the key factory.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The serialize method takes the object without a default constructor and creates a <code>KeyProxy</code> that contains the information necessary to recreate the <code>DSAPublicKey</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The deserialize method uses the <code>KeyProxy</code> to recreate the <code>DSAPublicKey</code> from its encoded form using the key factory.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>An extension registers this substitution by producing an <code>ObjectSubstitutionBuildItem</code> as shown in this <code>TestProcessor#loadDSAPublicKey</code> fragment:</p>
@@ -1886,6 +1958,7 @@ final public class Target_XmlData {
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

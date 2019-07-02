@@ -59,10 +59,28 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Using AMQP with Reactive Messaging</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven Project</a></li>
+<li><a href="#starting-an-amqp-broker">Starting an AMQP broker</a></li>
+<li><a href="#the-price-generator">The price generator</a></li>
+<li><a href="#the-price-converter">The price converter</a></li>
+<li><a href="#the-price-resource">The price resource</a></li>
+<li><a href="#configuring-the-amqp-connector">Configuring the AMQP connector</a></li>
+<li><a href="#the-html-page">The HTML page</a></li>
+<li><a href="#get-it-running">Get it running</a></li>
+<li><a href="#running-native">Running Native</a></li>
+<li><a href="#going-further">Going further</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide demonstrates how your Quarkus application can utilize MicroProfile Reactive Messaging to interact with AMQP.</p>
@@ -183,7 +201,7 @@ services:
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 This is a development cluster, do not use in production.
@@ -220,8 +238,8 @@ public class PriceGenerator {
 
     private Random random = new Random();
 
-    @Outgoing("generated-price")                        // <b class="conum">(1)</b>
-    public Flowable&lt;Integer&gt; generate() {               // <b class="conum">(2)</b>
+    @Outgoing("generated-price")                        <i class="conum" data-value="1"></i><b>(1)</b>
+    public Flowable&lt;Integer&gt; generate() {               <i class="conum" data-value="2"></i><b>(2)</b>
         return Flowable.interval(5, TimeUnit.SECONDS)
                 .map(tick -&gt; random.nextInt(100));
     }
@@ -230,14 +248,16 @@ public class PriceGenerator {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Instruct Reactive Messaging to dispatch the items from returned stream to <code>generated-price</code>.</p>
-</li>
-<li>
-<p>The method returns a RX Java 2 <em>stream</em> (<code>Flowable</code>) emitting a random <em>price</em> every 5 seconds.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Instruct Reactive Messaging to dispatch the items from returned stream to <code>generated-price</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The method returns a RX Java 2 <em>stream</em> (<code>Flowable</code>) emitting a random <em>price</em> every 5 seconds.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The method returns a <em>Reactive Stream</em>. The generated items are sent to the stream named <code>generated-price</code>.
@@ -271,9 +291,9 @@ public class PriceConverter {
 
     private static final double CONVERSION_RATE = 0.88;
 
-    @Incoming("prices")                                  // <b class="conum">(1)</b>
-    @Outgoing("my-data-stream")                          // <b class="conum">(2)</b>
-    @Broadcast                                           // <b class="conum">(3)</b>
+    @Incoming("prices")                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    @Outgoing("my-data-stream")                          <i class="conum" data-value="2"></i><b>(2)</b>
+    @Broadcast                                           <i class="conum" data-value="3"></i><b>(3)</b>
     public double process(int priceInUsd) {
         return priceInUsd * CONVERSION_RATE;
     }
@@ -282,17 +302,20 @@ public class PriceConverter {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Indicates that the method consumes the items from the <code>prices</code> channel</p>
-</li>
-<li>
-<p>Indicates that the objects returned by the method are sent to the <code>my-data-stream</code> channel</p>
-</li>
-<li>
-<p>Indicates that the item are dispatched to all <em>subscribers</em></p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Indicates that the method consumes the items from the <code>prices</code> channel</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Indicates that the objects returned by the method are sent to the <code>my-data-stream</code> channel</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Indicates that the item are dispatched to all <em>subscribers</em></td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The <code>process</code> method is called for every AMQP messages from the <code>prices</code> queue (configured in the application configuration).
@@ -327,7 +350,7 @@ import javax.ws.rs.core.MediaType;
 public class PriceResource {
 
     @Inject
-    @Stream("my-data-stream") Publisher&lt;Double&gt; prices;         // <b class="conum">(1)</b>
+    @Stream("my-data-stream") Publisher&lt;Double&gt; prices;         <i class="conum" data-value="1"></i><b>(1)</b>
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -338,25 +361,28 @@ public class PriceResource {
 
     @GET
     @Path("/stream")
-    @Produces(MediaType.SERVER_SENT_EVENTS)                     // <b class="conum">(2)</b>
-    public Publisher&lt;Double&gt; stream() {                         // <b class="conum">(3)</b>
+    @Produces(MediaType.SERVER_SENT_EVENTS)                     <i class="conum" data-value="2"></i><b>(2)</b>
+    public Publisher&lt;Double&gt; stream() {                         <i class="conum" data-value="3"></i><b>(3)</b>
         return prices;
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Injects the <code>my-data-stream</code> stream using the <code>@Stream</code> qualifier</p>
-</li>
-<li>
-<p>Indicates that the content is sent using <code>Server Sent Events</code></p>
-</li>
-<li>
-<p>Returns the stream (<em>Reactive Stream</em>)</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Injects the <code>my-data-stream</code> stream using the <code>@Stream</code> qualifier</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Indicates that the content is sent using <code>Server Sent Events</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Returns the stream (<em>Reactive Stream</em>)</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -398,7 +424,7 @@ mp.messaging.incoming.prices.durable=true</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 What about <code>my-data-stream</code>? This is an in-memory stream, not connected to a message broker.
@@ -473,7 +499,7 @@ Then, you just need to run the application using:</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 If you started the AMQP broker with docker compose, stop it using <code>CTRL+C</code> followed by <code>docker-compose down</code>.
@@ -512,6 +538,7 @@ The only difference is the connector configuration.</p>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

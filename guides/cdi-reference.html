@@ -59,10 +59,34 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Contexts and Dependency Injection</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#bean_discovery">1. Bean Discovery</a></li>
+<li><a href="#private-members">2. Private Members</a></li>
+<li><a href="#supported_features">3. Supported Features</a></li>
+<li><a href="#limitations">4. Limitations</a></li>
+<li><a href="#build-time-extension-points">5. Build Time Extension Points</a>
+<ul class="sectlevel2">
+<li><a href="#portable_extensions">5.1. Portable Extensions</a></li>
+<li><a href="#additional-bean-defining-annotations">5.2. Additional Bean Defining Annotations</a></li>
+<li><a href="#resource-annotations">5.3. Resource Annotations</a></li>
+<li><a href="#additional-beans">5.4. Additional Beans</a></li>
+<li><a href="#synthetic-beans">5.5. Synthetic Beans</a></li>
+<li><a href="#annotation-transformations">5.6. Annotation Transformations</a></li>
+<li><a href="#injection-point-transformation">5.7. Injection Point Transformation</a></li>
+<li><a href="#bean-deployment-validation">5.8. Bean Deployment Validation</a></li>
+<li><a href="#custom-contexts">5.9. Custom Contexts</a></li>
+<li><a href="#build_metadata">5.10. Available Build Time Metadata</a></li>
+</ul>
+</li>
+<li><a href="#remove_unused_beans">6. Removing Unused Beans</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus DI solution is based on the <a href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html" target="_blank" rel="noopener">Contexts and Dependency Injection for Java 2.0</a> specification.
@@ -73,7 +97,7 @@ Only a subset of the CDI features is implemented - see also <a href="#supported_
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Most of the existing CDI code should work just fine but there are some small differences which follow from the Quarkus architecture and goals.
@@ -117,7 +141,7 @@ In fact, the declaring bean classes are considered annotated with <code>@Depende
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Quarkus extension may declare additional discovery rules. For example <code>@Scheduled</code> business methods are registered even if the declaring class is not annotated with a bean defining annotation.
@@ -147,22 +171,24 @@ This involves injection fields, constructors and initializers, observer methods,
 public class CounterBean {
 
     @Inject
-    CounterService counterService; <b class="conum">(1)</b>
+    CounterService counterService; <i class="conum" data-value="1"></i><b>(1)</b>
 
-    void onMessage(@Observes Event msg) { <b class="conum">(2)</b>
+    void onMessage(@Observes Event msg) { <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>A package-private injection field.</p>
-</li>
-<li>
-<p>A package-private observer method.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A package-private injection field.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A package-private observer method.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Or constructor injection:</p>
@@ -174,18 +200,19 @@ public class CounterBean {
 
     private CounterService service;
 
-    CounterBean(CounterService service) { <b class="conum">(1)</b>
+    CounterBean(CounterService service) { <i class="conum" data-value="1"></i><b>(1)</b>
       this.service = service;
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>A package-private constructor injection.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A package-private constructor injection.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -340,7 +367,7 @@ BeanDefiningAnnotationBuildItem additionalBeanDefiningAnnotation() {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Bean registrations that are result of a <code>BeanDefiningAnnotationBuildItem</code> are unremovable by default. See also <a href="#remove_unused_beans">Removing Unused Beans</a>.
@@ -358,7 +385,7 @@ Bean registrations that are result of a <code>BeanDefiningAnnotationBuildItem</c
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 An integrator must also provide a corresponding <code>io.quarkus.arc.ResourceReferenceProvider</code> implementation.
@@ -397,7 +424,7 @@ List&lt;AdditionalBeanBuildItem&gt; additionalBeans() {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 A bean registration that is a result of an <code>AdditionalBeanBuildItem</code> is removable by default. See also <a href="#remove_unused_beans">Removing Unused Beans</a>.
@@ -431,7 +458,7 @@ BeanRegistrarBuildItem syntheticBean() {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The output of a <code>BeanConfigurator</code> is recorded as bytecode. Therefore there are some limitations in how a synthetic bean instance is created. See also <code>BeanConfigurator.creator()</code> methods.
@@ -521,7 +548,7 @@ BeanDeploymentValidatorBuildItem beanDeploymentValidator() {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 See also <code>io.quarkus.arc.processor.BuildExtension.Key</code> to discover the available metadata.
@@ -748,6 +775,7 @@ while the optimization proceeds normally for non application classes. To use thi
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

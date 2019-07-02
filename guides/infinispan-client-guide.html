@@ -59,10 +59,28 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Infinispan Client</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#serialization-key-value-types-support">Serialization (Key Value types support)</a>
+<ul class="sectlevel2">
+<li><a href="#providing-your-own-marshaller">Providing your own Marshaller</a></li>
+</ul>
+</li>
+<li><a href="#dependency-injection">Dependency Injection</a></li>
+<li><a href="#querying">Querying</a></li>
+<li><a href="#counters">Counters</a></li>
+<li><a href="#near-caching">Near Caching</a></li>
+<li><a href="#encryption">Encryption</a></li>
+<li><a href="#authentication">Authentication</a></li>
+<li><a href="#additional-features">Additional Features</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Infinispan is an in memory data grid that allows running in a server outside of application processes. This extension
@@ -189,7 +207,7 @@ buf schema and a marshaller for each user type(s).</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Annotation based proto stream marshalling is not yet supported in
@@ -203,7 +221,7 @@ skipping the following steps.
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 This version has an issue currently requiring the Query DSL module as a dependency when running in
@@ -286,7 +304,7 @@ fashion to the code based proto schema definition above.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The type name must match the <code>&lt;protobuf package&gt;.&lt;protobuf message&gt;</code> exactly!
@@ -381,7 +399,7 @@ The type name must match the <code>&lt;protobuf package&gt;.&lt;protobuf message
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Annotation based proto stream marshalling is not yet supported in
@@ -453,7 +471,7 @@ annotation is not required and if it is not supplied, the default cache will be 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Other types may be supported for injection, please see other sections for more information
@@ -645,6 +663,7 @@ know if you need these added!</p>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

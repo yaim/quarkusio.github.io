@@ -59,10 +59,25 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Fault Tolerance</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#the-scenario">The Scenario</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven Project</a></li>
+<li><a href="#preparing-an-application-rest-endpoint-and-cdi-bean">Preparing an Application: REST Endpoint and CDI Bean</a></li>
+<li><a href="#adding-resiliency-retries">Adding Resiliency: Retries</a></li>
+<li><a href="#adding-resiliency-timeouts">Adding Resiliency: Timeouts</a></li>
+<li><a href="#adding-resiliency-fallbacks">Adding Resiliency: Fallbacks</a></li>
+<li><a href="#adding-resiliency-circuit-breaker">Adding Resiliency: Circuit Breaker</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>One of the challenges brought by the distributed nature of microservices is that communication with external systems is
@@ -491,7 +506,7 @@ two recommendations returned by the original method.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The fallback method is required to have the same parameters as the original method.
@@ -651,6 +666,7 @@ of our business logic.</p>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

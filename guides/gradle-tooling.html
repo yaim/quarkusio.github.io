@@ -59,10 +59,32 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Building Quarkus apps with Gradle</h1>
-    <div class="sect1">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#gradle-configuration">Gradle configuration</a>
+<ul class="sectlevel2">
+<li><a href="#gradle-configuration-for-a-local-snapshot-version-of-quarkus">Gradle configuration for a local SNAPSHOT version of Quarkus</a></li>
+</ul>
+</li>
+<li><a href="#project-creation">Creating a new project</a></li>
+<li><a href="#enable-tests">Enable Tests</a></li>
+<li><a href="#dealing-with-extensions">Dealing with extensions</a></li>
+<li><a href="#development-mode">Development mode</a></li>
+<li><a href="#debugging">Debugging</a></li>
+<li><a href="#import-in-your-ide">Import in your IDE</a></li>
+<li><a href="#building-a-native-executable">Building a native executable</a>
+<ul class="sectlevel2">
+<li><a href="#build-a-container-friendly-executable">Build a container friendly executable</a></li>
+</ul>
+</li>
+<li><a href="#building-uber-jars">Building Uber-Jars</a></li>
+</ul>
+    </div>
+    <div>
+      <div class="sect1">
 <h2 id="gradle-configuration"><a class="anchor" href="#gradle-configuration"></a>Gradle configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -128,29 +150,31 @@ Here is a complete sample file for a simple REST project:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
-    id 'io.quarkus' version '0.18.0' // <b class="conum">(1)</b>
+    id 'io.quarkus' version '0.18.0' <i class="conum" data-value="1"></i><b>(1)</b>
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies { // <b class="conum">(2)</b>
+dependencies { <i class="conum" data-value="2"></i><b>(2)</b>
     implementation enforcedPlatform('io.quarkus:quarkus-bom:0.18.0')
     implementation 'io.quarkus:quarkus-resteasy'
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The Quarkus plugin needs to be applied.</p>
-</li>
-<li>
-<p>We include the Quarkus BOM using Gradle&#8217;s <a href="https://docs.gradle.org/5.4.1/userguide/managing_transitive_dependencies.html#sec:bom_import">relevant syntax</a> and add RESTEasy dependency since we are developing a REST application similar to the getting started example.
-Quarkus also need this dependency for running tests, to provide this we use the <code>implementation</code> configuration.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The Quarkus plugin needs to be applied.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We include the Quarkus BOM using Gradle&#8217;s <a href="https://docs.gradle.org/5.4.1/userguide/managing_transitive_dependencies.html#sec:bom_import">relevant syntax</a> and add RESTEasy dependency since we are developing a REST application similar to the getting started example.
+Quarkus also need this dependency for running tests, to provide this we use the <code>implementation</code> configuration.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s the same build script, using the Gradle Kotlin DSL:</p>
@@ -421,6 +445,7 @@ However, it&#8217;s not an issue as we are going to copy it to a Docker containe
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

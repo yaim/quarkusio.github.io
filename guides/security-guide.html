@@ -59,10 +59,29 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Using Security</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#setting-it-up">Setting it up</a></li>
+<li><a href="#configuration">Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#property-files-realm-configuration">Property Files Realm Configuration</a></li>
+<li><a href="#embedded-realm-configuration">Embedded Realm Configuration</a></li>
+</ul>
+</li>
+<li><a href="#augmenting-the-elytron-security-extension-advanced-topic">Augmenting the Elytron Security Extension <em>Advanced Topic</em></a>
+<ul class="sectlevel2">
+<li><a href="#adding-a-new-security-realm">Adding a new Security Realm</a></li>
+<li><a href="#overriding-the-undertow-identitymanager-implementation">Overriding the Undertow IdentityManager Implementation</a></li>
+</ul>
+</li>
+<li><a href="#future-work">Future Work</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus comes with integration with the Elytron security subsystem to allow for RBAC based on the
@@ -86,25 +105,25 @@ public class SubjectExposingResource {
 
     @GET
     @Path("secured")
-    @RolesAllowed("Tester") <b class="conum">(1)</b>
+    @RolesAllowed("Tester") <i class="conum" data-value="1"></i><b>(1)</b>
     public String getSubjectSecured(@Context SecurityContext sec) {
-        Principal user = sec.getUserPrincipal(); <b class="conum">(2)</b>
+        Principal user = sec.getUserPrincipal(); <i class="conum" data-value="2"></i><b>(2)</b>
         String name = user != null ? user.getName() : "anonymous";
         return name;
     }
 
     @GET
     @Path("unsecured")
-    @PermitAll<b class="conum">(3)</b>
+    @PermitAll<i class="conum" data-value="3"></i><b>(3)</b>
     public String getSubjectUnsecured(@Context SecurityContext sec) {
-        Principal user = sec.getUserPrincipal(); <b class="conum">(4)</b>
+        Principal user = sec.getUserPrincipal(); <i class="conum" data-value="4"></i><b>(4)</b>
         String name = user != null ? user.getName() : "anonymous";
         return name;
     }
 
     @GET
     @Path("denied")
-    @DenyAll<b class="conum">(5)</b>
+    @DenyAll<i class="conum" data-value="5"></i><b>(5)</b>
     public String getSubjectDenied(@Context SecurityContext sec) {
         Principal user = sec.getUserPrincipal();
         String name = user != null ? user.getName() : "anonymous";
@@ -114,23 +133,28 @@ public class SubjectExposingResource {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>This <code>/subject/secured</code> endpoint requires an authenticated user that has been granted the role "Tester" through the use of the <code>@RolesAllowed("Tester")</code> annotation.</p>
-</li>
-<li>
-<p>The endpoint obtains the user principal from the JAX-RS SecurityContext. This will be non-null for a secured endpoint.</p>
-</li>
-<li>
-<p>The <code>/subject/unsecured</code> endpoint allows for unauthenticated access by specifying the <code>@PermitAll</code> annotation.</p>
-</li>
-<li>
-<p>This call to obtain the user principal will return null if the caller is unauthenticated, non-null if the caller is authenticated.</p>
-</li>
-<li>
-<p>The <code>/subject/denied</code> endpoint disallows any access regardless of whether the call is authenticated by specifying the <code>@DenyAll</code> annotation.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This <code>/subject/secured</code> endpoint requires an authenticated user that has been granted the role "Tester" through the use of the <code>@RolesAllowed("Tester")</code> annotation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The endpoint obtains the user principal from the JAX-RS SecurityContext. This will be non-null for a secured endpoint.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>/subject/unsecured</code> endpoint allows for unauthenticated access by specifying the <code>@PermitAll</code> annotation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>This call to obtain the user principal will return null if the caller is unauthenticated, non-null if the caller is authenticated.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The <code>/subject/denied</code> endpoint disallows any access regardless of whether the call is authenticated by specifying the <code>@DenyAll</code> annotation.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -223,21 +247,23 @@ quarkus.security.file.realm-name=MyRealm</code></pre>
 <div id="test-users-example" class="listingblock">
 <div class="title">example test-users.properties file</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">scott=jb0ss <b class="conum">(1)</b>
-jdoe=p4ssw0rd <b class="conum">(2)</b>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">scott=jb0ss <i class="conum" data-value="1"></i><b>(1)</b>
+jdoe=p4ssw0rd <i class="conum" data-value="2"></i><b>(2)</b>
 stuart=test
 noadmin=n0Adm1n</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>User <code>scott</code> has password defined as <code>jb0ss</code></p>
-</li>
-<li>
-<p>User <code>jdoe</code> has password defined as <code>p4ssw0rd</code></p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>User <code>scott</code> has password defined as <code>jb0ss</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>User <code>jdoe</code> has password defined as <code>p4ssw0rd</code></td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -245,24 +271,27 @@ noadmin=n0Adm1n</code></pre>
 <div class="listingblock">
 <div class="title">example test-roles.properties file</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">scott=Admin,admin,Tester,user <b class="conum">(1)</b>
-jdoe=NoRolesUser <b class="conum">(2)</b>
-stuart=admin,user <b class="conum">(3)</b>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">scott=Admin,admin,Tester,user <i class="conum" data-value="1"></i><b>(1)</b>
+jdoe=NoRolesUser <i class="conum" data-value="2"></i><b>(2)</b>
+stuart=admin,user <i class="conum" data-value="3"></i><b>(3)</b>
 noadmin=user</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>User <code>scott</code> has been assigned the roles <code>Admin</code>, <code>admin</code>, <code>Tester</code> and <code>user</code></p>
-</li>
-<li>
-<p>User <code>jdoe</code> has been assigned the role <code>NoRolesUser</code></p>
-</li>
-<li>
-<p>User <code>stuart</code> has been assigned the roles <code>admin</code> and <code>user</code>.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>User <code>scott</code> has been assigned the roles <code>Admin</code>, <code>admin</code>, <code>Tester</code> and <code>user</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>User <code>jdoe</code> has been assigned the role <code>NoRolesUser</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>User <code>stuart</code> has been assigned the roles <code>admin</code> and <code>user</code>.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Given these role mappings, only user <code>scott</code> would be allowed to access the <code>/subject/secured</code> endpoint from the <a href="#subject-example">SubjectExposingResource Example</a>.</p>
@@ -340,8 +369,8 @@ quarkus.security.embedded.auth-mechanism=CUSTOM</code></pre>
 <div class="title">Example Passwords</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.security.embedded.enabled=true
-quarkus.security.embedded.users.scott=jb0ss # <b class="conum">(1)</b>
-quarkus.security.embedded.users.stuart=test # <b class="conum">(2)</b>
+quarkus.security.embedded.users.scott=jb0ss <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.security.embedded.users.stuart=test <i class="conum" data-value="2"></i><b>(2)</b>
 quarkus.security.embedded.users.jdoe=p4ssw0rd
 quarkus.security.embedded.users.noadmin=n0Adm1n
 quarkus.security.embedded.roles.scott=Admin,admin,Tester,user
@@ -351,14 +380,16 @@ quarkus.security.embedded.roles.noadmin=user</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>User <code>scott</code> has password <code>jb0ss</code></p>
-</li>
-<li>
-<p>User <code>stuart</code> has password <code>test</code></p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>User <code>scott</code> has password <code>jb0ss</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>User <code>stuart</code> has password <code>test</code></td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -374,21 +405,23 @@ quarkus.security.embedded.users.scott=jb0ss
 quarkus.security.embedded.users.stuart=test
 quarkus.security.embedded.users.jdoe=p4ssw0rd
 quarkus.security.embedded.users.noadmin=n0Adm1n
-quarkus.security.embedded.roles.scott=Admin,admin,Tester,user # <b class="conum">(1)</b>
-quarkus.security.embedded.roles.stuart=admin,user # <b class="conum">(2)</b>
+quarkus.security.embedded.roles.scott=Admin,admin,Tester,user <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.security.embedded.roles.stuart=admin,user <i class="conum" data-value="2"></i><b>(2)</b>
 quarkus.security.embedded.roles.jdoe=NoRolesUser
 quarkus.security.embedded.roles.noadmin=user</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>User <code>scott</code> has roles <code>Admin</code>, <code>admin</code>, <code>Tester</code>, and <code>user</code></p>
-</li>
-<li>
-<p>User <code>stuart</code> has roles <code>admin</code> and <code>user</code></p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>User <code>scott</code> has roles <code>Admin</code>, <code>admin</code>, <code>Tester</code>, and <code>user</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>User <code>stuart</code> has roles <code>admin</code> and <code>user</code></td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -417,7 +450,7 @@ configuration to register the "SunRsaSign" and "SunJCE" security providers:</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -447,7 +480,7 @@ configuration to register the "SunRsaSign" and "SunJCE" security providers:</p>
 class SmallRyeJwtProcessor {
 
     /** */
-    JWTAuthContextInfoGroup config; // <b class="conum">(1)</b>
+    JWTAuthContextInfoGroup config; <i class="conum" data-value="1"></i><b>(1)</b>
 ...
     /**
      * Configure a TokenSecurityRealm if enabled
@@ -473,7 +506,7 @@ class SmallRyeJwtProcessor {
                     PublicKeyProxy.class, PublicKeySubstitution.class);
             ObjectSubstitutionBuildItem pkSub = new ObjectSubstitutionBuildItem(pkHolder);
             objectSubstitution.produce(pkSub);
-            // <b class="conum">(2)</b>
+            <i class="conum" data-value="2"></i><b>(2)</b>
             // Have the runtime template create the TokenSecurityRealm and create the build item
             RuntimeValue&lt;SecurityRealm&gt; realm = template.createTokenRealm(container.getValue());
             AuthConfig authConfig = new AuthConfig();
@@ -492,14 +525,16 @@ class SmallRyeJwtProcessor {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The JWTAuthContextInfoGroup contains the configuration information needed to create the JWT based security realm.</p>
-</li>
-<li>
-<p>The deployment module creates a <code>TokenSecurityRealm</code> using the configured authentication mechanism name and security realm name. <code>TokenSecurityRealm</code> is a security realm implementation that obtains the caller identity and roles from a MicroProfile JWT auth token.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The JWTAuthContextInfoGroup contains the configuration information needed to create the JWT based security realm.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The deployment module creates a <code>TokenSecurityRealm</code> using the configured authentication mechanism name and security realm name. <code>TokenSecurityRealm</code> is a security realm implementation that obtains the caller identity and roles from a MicroProfile JWT auth token.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -531,22 +566,24 @@ class SmallRyeJwtProcessor {
     @Record(ExecutionTime.STATIC_INIT)
     void configureIdentityManager(SmallRyeJwtTemplate template, SecurityDomainBuildItem securityDomain,
             BuildProducer&lt;IdentityManagerBuildItem&gt; identityManagerProducer) {
-        // <b class="conum">(1)</b>
+        <i class="conum" data-value="1"></i><b>(1)</b>
         IdentityManager identityManager = template.createIdentityManager(securityDomain.getSecurityDomain());
-        // <b class="conum">(2)</b>
+        <i class="conum" data-value="2"></i><b>(2)</b>
         identityManagerProducer.produce(new IdentityManagerBuildItem(identityManager));
     }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Have the runtime module create the runtime IdentityManager instance, which is an io.quarkus.smallrye.jwt.runtime.auth.JwtIdentityManager.</p>
-</li>
-<li>
-<p>Produce an <code>IdentityManagerBuildItem</code> with the <code>JwtIdentityManager</code> so that the elytron-security extension installs that as the application identity manager.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Have the runtime module create the runtime IdentityManager instance, which is an io.quarkus.smallrye.jwt.runtime.auth.JwtIdentityManager.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Produce an <code>IdentityManagerBuildItem</code> with the <code>JwtIdentityManager</code> so that the elytron-security extension installs that as the application identity manager.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -559,6 +596,7 @@ class SmallRyeJwtProcessor {
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

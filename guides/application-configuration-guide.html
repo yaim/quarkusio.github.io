@@ -59,10 +59,35 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Configuring Your Application</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#injecting-configuration-value">Injecting configuration value</a></li>
+<li><a href="#create-the-configuration">Create the configuration</a></li>
+<li><a href="#update-the-test">Update the test</a></li>
+<li><a href="#package-and-run-the-application">Package and run the application</a></li>
+<li><a href="#configuring-quarkus">Configuring Quarkus</a></li>
+<li><a href="#overriding-properties-at-runtime">Overriding properties at runtime</a>
+<ul class="sectlevel2">
+<li><a href="#configuration-profiles">Configuration Profiles</a></li>
+</ul>
+</li>
+<li><a href="#custom-configuration">Custom Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#custom-configuration-sources">Custom configuration sources</a></li>
+<li><a href="#custom-configuration-converters">Custom configuration converters</a></li>
+</ul>
+</li>
+<li><a href="#more-info-on-how-to-configure">More info on how to configure</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Hardcoded values in your code is a <em>no go</em> (even if we all did it at some point ;-)).
@@ -168,7 +193,7 @@ String message;</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 When injecting a configured value, you can use <code>@Inject @ConfigProperty</code> or just <code>@ConfigProperty</code>.
@@ -182,28 +207,31 @@ The <code>@Inject</code> annotation is not necessary for members annotated with 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConfigProperty(name = "greeting.message") <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConfigProperty(name = "greeting.message") <i class="conum" data-value="1"></i><b>(1)</b>
 String message;
 
-@ConfigProperty(name = "greeting.suffix", defaultValue="!") <b class="conum">(2)</b>
+@ConfigProperty(name = "greeting.suffix", defaultValue="!") <i class="conum" data-value="2"></i><b>(2)</b>
 String suffix;
 
 @ConfigProperty(name = "greeting.name")
-Optional&lt;String&gt; name; <b class="conum">(3)</b></code></pre>
+Optional&lt;String&gt; name; <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>If you do not provide a value for this property, the application startup fails with <code>javax.enterprise.inject.spi.DeploymentException: No config value of type [class java.lang.String] exists for: greeting.message</code>.</p>
-</li>
-<li>
-<p>The default value is injected if the configuration does not provide a value for <code>greeting.suffix</code>.</p>
-</li>
-<li>
-<p>This property is optional - an empty <code>Optional</code> is injected if the configuration does not provide a value for <code>greeting.name</code>.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If you do not provide a value for this property, the application startup fails with <code>javax.enterprise.inject.spi.DeploymentException: No config value of type [class java.lang.String] exists for: greeting.message</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The default value is injected if the configuration does not provide a value for <code>greeting.suffix</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This property is optional - an empty <code>Optional</code> is injected if the configuration does not provide a value for <code>greeting.name</code>.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Now, modify the <code>hello</code> method to use the injected properties:</p>
@@ -246,7 +274,7 @@ hello quarkus!</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 If the application requires configuration values and these values are not set, an error is thrown.
@@ -408,7 +436,7 @@ This is a tradeoff as the more runtime properties are available, the less build 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Environment variables names are following the conversion rules of <a href="https://github.com/eclipse/microprofile-config/blob/master/spec/src/main/asciidoc/configsources.asciidoc#default-configsources">Eclipse MicroProfile</a>
@@ -603,7 +631,7 @@ priority of 100.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 This new converter also needs to be listed in a service file, i.e. <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.
@@ -626,6 +654,7 @@ This new converter also needs to be listed in a service file, i.e. <code>META-IN
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

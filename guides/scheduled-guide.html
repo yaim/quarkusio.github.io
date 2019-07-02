@@ -59,10 +59,22 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Scheduling Periodic Tasks</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#creating-a-scheduled-job">Creating a scheduled job</a></li>
+<li><a href="#updating-the-resource-and-the-test">Updating the resource and the test</a></li>
+<li><a href="#package-and-run-the-application">Package and run the application</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Modern applications often need to run specific tasks periodically.
@@ -181,7 +193,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import io.quarkus.scheduler.Scheduled;
 
-@ApplicationScoped              // <b class="conum">(1)</b>
+@ApplicationScoped              <i class="conum" data-value="1"></i><b>(1)</b>
 public class CounterBean {
 
     private AtomicInteger counter = new AtomicInteger();
@@ -190,7 +202,7 @@ public class CounterBean {
         return counter.get();
     }
 
-    @Scheduled(every="10s")     // <b class="conum">(2)</b>
+    @Scheduled(every="10s")     <i class="conum" data-value="2"></i><b>(2)</b>
     void increment() {
         counter.incrementAndGet();
     }
@@ -216,7 +228,7 @@ The <code>get()</code> method allows retrieving the current value.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Cron-like expressions are also supported. The syntax is currently based on Quartz Cron Trigger. For example a method annotated with <code>@Scheduled(cron="0 15 10 * * ?")</code> is executed at 10:15am every day.
@@ -246,13 +258,13 @@ import javax.ws.rs.core.MediaType;
 public class CountResource {
 
     @Inject
-    CounterBean counter;            // <b class="conum">(1)</b>
+    CounterBean counter;            <i class="conum" data-value="1"></i><b>(1)</b>
 
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "count: " + counter.get();  // <b class="conum">(2)</b>
+        return "count: " + counter.get();  <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>
@@ -289,7 +301,7 @@ public class CountResourceTest {
           .when().get("/count")
           .then()
              .statusCode(200)
-             .body(containsString("count")); // <b class="conum">(1)</b>
+             .body(containsString("count")); <i class="conum" data-value="1"></i><b>(1)</b>
     }
 
 }</code></pre>
@@ -318,6 +330,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

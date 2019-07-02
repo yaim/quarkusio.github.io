@@ -59,10 +59,25 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Using OpenTracing</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a>
+<ul class="sectlevel2">
+<li><a href="#examine-the-jax-rs-resource">Examine the JAX-RS resource</a></li>
+<li><a href="#create-the-configuration">Create the configuration</a></li>
+</ul>
+</li>
+<li><a href="#run-the-application">Run the application</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide explains how your Quarkus application can utilize opentracing to provide distributed tracing for
@@ -196,7 +211,7 @@ quarkus.jaeger.endpoint=http://localhost:14268/api/traces</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Currently the tracer can only be configured to report spans directly to the collector via HTTP, using the <code>quarkus.jaeger.endpoint</code> property (or <code>JAEGER_ENDPOINT</code> environment variable). Support for using the Jaeger agent, via UDP, will be available in a future version.
@@ -259,6 +274,7 @@ hello</code></pre>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

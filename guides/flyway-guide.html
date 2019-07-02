@@ -59,10 +59,17 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Using Flyway</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#setting-up-support-for-flyway">Setting up support for Flyway</a></li>
+<li><a href="#using-the-flyway-object">Using the Flyway object</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://flywaydb.org/">Flyway</a> is a popular database migration tool that is commonly used in JVM environments.</p>
@@ -224,7 +231,7 @@ VALUES (1, 'QUARKED');</code></pre>
 public class MigrationService {
     // You can Inject the object if you want to use it manually
     @Inject
-    Flyway flyway; <b class="conum">(1)</b>
+    Flyway flyway; <i class="conum" data-value="1"></i><b>(1)</b>
 
     public void checkMigration() {
         // This will print 1.0.0
@@ -234,11 +241,12 @@ public class MigrationService {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Inject the Flyway object if you want to use it directly</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Inject the Flyway object if you want to use it directly</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -252,7 +260,7 @@ public class MigrationService {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 If you enabled the <code>quarkus.flyway.migrate-at-start</code> property, by the time you use the Flyway instance,
@@ -267,11 +275,11 @@ Quarkus will already have run the migrate operation
 public class MigrationService {
     // You can Inject the object if you want to use it manually
     @Inject
-    Flyway flyway; <b class="conum">(1)</b>
+    Flyway flyway; <i class="conum" data-value="1"></i><b>(1)</b>
 
     public void checkMigration() {
         // Use the flyway instance manually
-        flyway.clean(); <b class="conum">(2)</b>
+        flyway.clean(); <i class="conum" data-value="2"></i><b>(2)</b>
         flyway.migrate();
         // This will print 1.0.0
         System.out.println(flyway.info().current().getVersion().toString());
@@ -280,17 +288,20 @@ public class MigrationService {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Inject the Flyway object if you want to use it directly</p>
-</li>
-<li>
-<p>Use the Flyway instance directly</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Inject the Flyway object if you want to use it directly</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Use the Flyway instance directly</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

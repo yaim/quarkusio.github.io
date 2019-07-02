@@ -59,10 +59,26 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Asynchronous messages between beans</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#installing">Installing</a></li>
+<li><a href="#consuming-events">Consuming events</a>
+<ul class="sectlevel2">
+<li><a href="#configuring-the-address">Configuring the address</a></li>
+<li><a href="#replying">Replying</a></li>
+<li><a href="#implementing-fire-and-forget-interactions">Implementing fire and forget interactions</a></li>
+<li><a href="#dealing-with-messages">Dealing with messages</a></li>
+</ul>
+</li>
+<li><a href="#sending-messages">Sending messages</a></li>
+<li><a href="#putting-things-together-bridging-http-and-messages">Putting things together - bridging HTTP and messages</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus allows different beans to interact using asynchronous messages, enforcing loose-coupling.
@@ -89,7 +105,7 @@ It offers 3 types of delivery mechanism:</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The asynchronous message passing feature allows replying to messages which is not supported by Reactive Messaging.
@@ -154,28 +170,30 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class GreetingService {
 
-    @ConsumeEvent                           // <b class="conum">(1)</b>
-    public String consume(String name) {    // <b class="conum">(2)</b>
+    @ConsumeEvent                           <i class="conum" data-value="1"></i><b>(1)</b>
+    public String consume(String name) {    <i class="conum" data-value="2"></i><b>(2)</b>
         return name.toUpperCase();
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>If not set, the address is the fully qualified name of the bean, for instance, in this snippet it&#8217;s <code>org.acme.vertx.GreetingService</code>.</p>
-</li>
-<li>
-<p>The method parameter is the message body. If the method returns <em>something</em> it&#8217;s the message response.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If not set, the address is the fully qualified name of the bean, for instance, in this snippet it&#8217;s <code>org.acme.vertx.GreetingService</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The method parameter is the message body. If the method returns <em>something</em> it&#8217;s the message response.</td>
+</tr>
+</table>
 </div>
 <div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -201,18 +219,19 @@ void consumeBlocking(String message) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")               // <b class="conum">(1)</b>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")               <i class="conum" data-value="1"></i><b>(1)</b>
 public String consume(String name) {
     return name.toUpperCase();
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Receive the messages sent to the <code>greeting</code> address</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Receive the messages sent to the <code>greeting</code> address</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -298,26 +317,28 @@ import java.util.concurrent.CompletionStage;
 public class EventResource {
 
   @Inject
-  EventBus bus;                                                        // <b class="conum">(1)</b>
+  EventBus bus;                                                        <i class="conum" data-value="1"></i><b>(1)</b>
 
   @GET
   @Path("/{name}")
   public CompletionStage&lt;String&gt; hello(String name) {
-      return bus.&lt;String&gt;send("greeting", name)                             // <b class="conum">(2)</b>
+      return bus.&lt;String&gt;send("greeting", name)                             <i class="conum" data-value="2"></i><b>(2)</b>
               .thenApply(Message::body);
   }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Inject the Event bus</p>
-</li>
-<li>
-<p>Send a message to the address <code>greeting</code>. Message payload is <code>name</code></p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Inject the Event bus</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Send a message to the address <code>greeting</code>. Message payload is <code>name</code></td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The <code>EventBus</code> object provides methods to:</p>
@@ -397,21 +418,23 @@ public class EventResource {
     @GET
     @Path("/async/{name}")
     public CompletionStage&lt;String&gt; hello(@PathParam("name") String name) {
-        return bus.&lt;String&gt;send("greeting", name)                           // <b class="conum">(1)</b>
-                .thenApply(Message::body);                                  // <b class="conum">(2)</b>
+        return bus.&lt;String&gt;send("greeting", name)                           <i class="conum" data-value="1"></i><b>(1)</b>
+                .thenApply(Message::body);                                  <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>send the <code>name</code> to the <code>greeting</code> address</p>
-</li>
-<li>
-<p>when we get the reply, extract the body and send this as response to the user</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>send the <code>name</code> to the <code>greeting</code> address</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>when we get the reply, extract the body and send this as response to the user</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>If you call this endpoint, you will wait and get a timeout. Indeed, no one is listening.
@@ -488,6 +511,7 @@ public class GreetingService {
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

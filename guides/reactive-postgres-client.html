@@ -59,10 +59,30 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Reactive Postgres Client</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#installing">Installing</a>
+<ul class="sectlevel2">
+<li><a href="#reactive-postgres-client-extension">Reactive Postgres Client extension</a></li>
+<li><a href="#json-binding">JSON Binding</a></li>
+</ul>
+</li>
+<li><a href="#configuring">Configuring</a></li>
+<li><a href="#database-schema-and-seed-data">Database schema and seed data</a></li>
+<li><a href="#using">Using</a>
+<ul class="sectlevel2">
+<li><a href="#query-results-traversal">Query results traversal</a></li>
+<li><a href="#prepared-queries">Prepared queries</a></li>
+<li><a href="#result-metadata">Result metadata</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>The Reactive Postgres Client is a client for Postgres with a straightforward API focusing on scalability and low-overhead.</p>
@@ -74,7 +94,7 @@
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 If you are not familiar with the Quarkus Vert.x extension, consider reading the <a href="using-vertx.html">Using Eclipse Vert.x</a> guide first.
@@ -111,7 +131,7 @@ If you are not familiar with the Quarkus Vert.x extension, consider reading the 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -168,7 +188,7 @@ If you are creating a new project, set the <code>extensions</code> parameter as 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 In this guide, we will use the Axle API of the Reactive Postgres Client.
@@ -224,7 +244,7 @@ quarkus.datasource.password=quarkus_test</code></pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 The eagle eyes among you might have noticed the <code>url</code> prefix is different from usual JDBC urls.
@@ -266,7 +286,7 @@ But for development we can simply drop and create the tables on startup, and the
 <div class="title">src/main/java/org/acme/vertx/FruitResource.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @Inject
-    @ConfigProperty(name = "myapp.schema.create", defaultValue = "true") // <b class="conum">(1)</b>
+    @ConfigProperty(name = "myapp.schema.create", defaultValue = "true") <i class="conum" data-value="1"></i><b>(1)</b>
     boolean schemaCreate;
 
     @PostConstruct
@@ -286,7 +306,7 @@ But for development we can simply drop and create the tables on startup, and the
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 You may override the default value of the <code>myapp.schema.create</code> property in the <code>application.properties</code> file.
@@ -314,7 +334,7 @@ It returns a <code>CompletionStage</code> and thus can be composed to execute qu
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Wondering why we need to convert the result to <code>CompletableFuture</code> and block until the latest query is completed?
@@ -434,7 +454,7 @@ public CompletionStage&lt;Response&gt; get() {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 The SQL string can refer to parameters by position, using $1, $2, &#8230;&#8203;etc.
@@ -450,24 +470,27 @@ Equipped with this tooling, we are able to safely use an <code>id</code> provide
 <div class="title">src/main/java/org/acme/vertx/Fruit.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public static CompletionStage&lt;Fruit&gt; findById(PgPool client, Long id) {
-    return client.preparedQuery("SELECT id, name FROM fruits WHERE id = $1", Tuple.of(id)) // <b class="conum">(1)</b>
-            .thenApply(PgRowSet::iterator) // <b class="conum">(2)</b>
-            .thenApply(iterator -&gt; iterator.hasNext() ? from(iterator.next()) : null); // <b class="conum">(3)</b>
+    return client.preparedQuery("SELECT id, name FROM fruits WHERE id = $1", Tuple.of(id)) <i class="conum" data-value="1"></i><b>(1)</b>
+            .thenApply(PgRowSet::iterator) <i class="conum" data-value="2"></i><b>(2)</b>
+            .thenApply(iterator -&gt; iterator.hasNext() ? from(iterator.next()) : null); <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Create a <code>Tuple</code> to hold the prepared query parameters.</p>
-</li>
-<li>
-<p>Get an <code>Iterator</code> for the <code>PgRowSet</code> result.</p>
-</li>
-<li>
-<p>Create a <code>Fruit</code> instance from the <code>Row</code> if an entity was found.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Create a <code>Tuple</code> to hold the prepared query parameters.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Get an <code>Iterator</code> for the <code>PgRowSet</code> result.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Create a <code>Fruit</code> instance from the <code>Row</code> if an entity was found.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>And in the JAX-RS resource:</p>
@@ -479,20 +502,22 @@ Equipped with this tooling, we are able to safely use an <code>id</code> provide
 @Path("{id}")
 public CompletionStage&lt;Response&gt; getSingle(@PathParam Long id) {
     return Fruit.findById(client, id)
-            .thenApply(fruit -&gt; fruit != null ? Response.ok(fruit) : Response.status(Status.NOT_FOUND)) // <b class="conum">(1)</b>
-            .thenApply(ResponseBuilder::build); // <b class="conum">(2)</b>
+            .thenApply(fruit -&gt; fruit != null ? Response.ok(fruit) : Response.status(Status.NOT_FOUND)) <i class="conum" data-value="1"></i><b>(1)</b>
+            .thenApply(ResponseBuilder::build); <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Prepare a JAX-RS response with  either the <code>Fruit</code> instance if found or the <code>404</code> status code.</p>
-</li>
-<li>
-<p>Build and send the response.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Prepare a JAX-RS response with  either the <code>Fruit</code> instance if found or the <code>404</code> status code.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Build and send the response.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The same logic applies when saving a <code>Fruit</code>:</p>
@@ -544,16 +569,17 @@ public CompletionStage&lt;Response&gt; create(Fruit fruit) {
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public static CompletionStage&lt;Boolean&gt; delete(PgPool client, Long id) {
     return client.preparedQuery("DELETE FROM fruits WHERE id = $1", Tuple.of(id))
-            .thenApply(pgRowSet -&gt; pgRowSet.rowCount() == 1); // <b class="conum">(1)</b>
+            .thenApply(pgRowSet -&gt; pgRowSet.rowCount() == 1); <i class="conum" data-value="1"></i><b>(1)</b>
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Inspect metadata to determine if a fruit has been actually deleted.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Inspect metadata to determine if a fruit has been actually deleted.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>And to handle the HTTP <code>DELETE</code> method in the web resource:</p>
@@ -622,7 +648,7 @@ We will use <a href="https://jquery.com/">jQuery</a> to simplify interactions wi
 <pre class="highlightjs highlight"><code data-lang="javascript" class="language-javascript hljs">function refresh() {
     $.get('/fruits', function (fruits) {
         var list = '';
-        (fruits || []).forEach(function (fruit) { // <b class="conum">(1)</b>
+        (fruits || []).forEach(function (fruit) { <i class="conum" data-value="1"></i><b>(1)</b>
             list = list
                 + '&lt;tr&gt;'
                 + '&lt;td&gt;' + fruit.id + '&lt;/td&gt;'
@@ -662,11 +688,12 @@ $(document).ready(function () {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The <code>fruits</code> parameter is not defined when the database is empty.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>fruits</code> parameter is not defined when the database is empty.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>All done!
@@ -675,6 +702,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 

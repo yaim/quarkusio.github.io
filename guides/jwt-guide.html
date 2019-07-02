@@ -59,10 +59,42 @@
   </div>
 </div>
 
-    <div class="guides">
+    <div class="guide">
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Using JWT RBAC</h1>
-    <div id="preamble">
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#configuration">Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#supported-public-key-formats">Supported Public Key Formats</a></li>
+</ul>
+</li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a>
+<ul class="sectlevel2">
+<li><a href="#examine-the-jax-rs-resource">Examine the JAX-RS resource</a></li>
+</ul>
+</li>
+<li><a href="#run-the-application">Run the application</a></li>
+<li><a href="#configuring-the-smallrye-jwt-extension-security-information">Configuring the Smallrye JWT Extension Security Information</a>
+<ul class="sectlevel2">
+<li><a href="#setting-up-application-properties">Setting up application.properties</a></li>
+<li><a href="#adding-a-public-key">Adding a Public Key</a></li>
+<li><a href="#generating-a-jwt">Generating a JWT</a></li>
+</ul>
+</li>
+<li><a href="#finally-secured-access-to-securedroles-allowed">Finally, Secured Access to /secured/roles-allowed</a></li>
+<li><a href="#using-the-jsonwebtoken-and-claim-injection">Using the JsonWebToken and Claim Injection</a>
+<ul class="sectlevel2">
+<li><a href="#claims-injection">Claims Injection</a></li>
+</ul>
+</li>
+<li><a href="#package-and-run-the-application">Package and run the application</a></li>
+<li><a href="#explore-the-solution">Explore the Solution</a></li>
+</ul>
+    </div>
+    <div>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide explains how your Quarkus application can utilize MicroProfile JWT RBAC to provide
@@ -215,7 +247,7 @@ public class TokenSecuredResource {
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The MicroProfile JWT RBAC 1.1.1 specification details the annotations and behaviors we will make use of in
@@ -247,48 +279,54 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
  * Version 1 of the TokenSecuredResource
  */
 @Path("/secured")
-@RequestScoped // <b class="conum">(1)</b>
+@RequestScoped <i class="conum" data-value="1"></i><b>(1)</b>
 public class TokenSecuredResource {
 
     @Inject
-    JsonWebToken jwt; // <b class="conum">(2)</b>
+    JsonWebToken jwt; <i class="conum" data-value="2"></i><b>(2)</b>
 
     @GET()
     @Path("permit-all")
-    @PermitAll // <b class="conum">(3)</b>
+    @PermitAll <i class="conum" data-value="3"></i><b>(3)</b>
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello(@Context SecurityContext ctx) { // <b class="conum">(4)</b>
-        Principal caller =  ctx.getUserPrincipal(); <b class="conum">(5)</b>
+    public String hello(@Context SecurityContext ctx) { <i class="conum" data-value="4"></i><b>(4)</b>
+        Principal caller =  ctx.getUserPrincipal(); <i class="conum" data-value="5"></i><b>(5)</b>
         String name = caller == null ? "anonymous" : caller.getName();
         boolean hasJWT = jwt != null;
         String helloReply = String.format("hello + %s, isSecure: %s, authScheme: %s, hasJWT: %s", name, ctx.isSecure(), ctx.getAuthenticationScheme(), hasJWT);
-        return helloReply; // <b class="conum">(6)</b>
+        return helloReply; <i class="conum" data-value="6"></i><b>(6)</b>
     }
 }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Add a <code>RequestScoped</code> as Quarkus uses a default scoping of <code>ApplicationScoped</code> and this
-will produce undesirable behavior since JWT claims are naturally request scoped.</p>
-</li>
-<li>
-<p>Here we inject the JsonWebToken interface, and extension of the java.security.Principal interface that provides access to the claims associated with the current authenticated token.</p>
-</li>
-<li>
-<p>@PermitAll is a JSR 250 common security annotation that indicates that the given endpoint is accessible by any caller, authenticated or not.</p>
-</li>
-<li>
-<p>Here we inject the JAX-RS SecurityContext to inspect the security state of the call.</p>
-</li>
-<li>
-<p>Here we obtain the current request user/caller <code>Principal</code>. For an unsecured call this will be null, so we build the user name by checking <code>caller</code> against null.</p>
-</li>
-<li>
-<p>The reply we build up makes use of the caller name, the <code>isSecure()</code> and <code>getAuthenticationScheme()</code> states of the request <code>SecurityContext</code>, and whether a non-null <code>JsonWebToken</code> was injected.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Add a <code>RequestScoped</code> as Quarkus uses a default scoping of <code>ApplicationScoped</code> and this
+will produce undesirable behavior since JWT claims are naturally request scoped.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Here we inject the JsonWebToken interface, and extension of the java.security.Principal interface that provides access to the claims associated with the current authenticated token.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>@PermitAll is a JSR 250 common security annotation that indicates that the given endpoint is accessible by any caller, authenticated or not.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Here we inject the JAX-RS SecurityContext to inspect the security state of the call.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Here we obtain the current request user/caller <code>Principal</code>. For an unsecured call this will be null, so we build the user name by checking <code>caller</code> against null.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The reply we build up makes use of the caller name, the <code>isSecure()</code> and <code>getAuthenticationScheme()</code> states of the request <code>SecurityContext</code>, and whether a non-null <code>JsonWebToken</code> was injected.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -401,8 +439,8 @@ public class TokenSecuredResource {
     }
 
     @GET()
-    @Path("roles-allowed") // <b class="conum">(1)</b>
-    @RolesAllowed({"Echoer", "Subscriber"}) // <b class="conum">(2)</b>
+    @Path("roles-allowed") <i class="conum" data-value="1"></i><b>(1)</b>
+    @RolesAllowed({"Echoer", "Subscriber"}) <i class="conum" data-value="2"></i><b>(2)</b>
     @Produces(MediaType.TEXT_PLAIN)
     public String helloRolesAllowed(@Context SecurityContext ctx) {
         Principal caller =  ctx.getUserPrincipal();
@@ -415,15 +453,17 @@ public class TokenSecuredResource {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>This new endpoint will be located at /secured/roles-allowed</p>
-</li>
-<li>
-<p>@RolesAllowed is a JSR 250 common security annotation that indicates that the given endpoint is accessible by a caller if
-they have either a "Echoer" or "Subscriber" role assigned.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This new endpoint will be located at /secured/roles-allowed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>@RolesAllowed is a JSR 250 common security annotation that indicates that the given endpoint is accessible by a caller if
+they have either a "Echoer" or "Subscriber" role assigned.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>After you make this addition to your <code>TokenSecuredResource</code>, rerun the <code>./mvnw compile quarkus:dev</code> command, and then try <code>curl -v <a href="http://127.0.0.1:8080/secured/roles-allowed" class="bare">http://127.0.0.1:8080/secured/roles-allowed</a>; echo</code> to attempt to access the new endpoint. Your output should be:</p>
@@ -471,29 +511,33 @@ Not authorized</code></pre>
 <div class="listingblock">
 <div class="title">application.properties for TokenSecuredResource</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">mp.jwt.verify.publickey.location=META-INF/resources/publicKey.pem #<b class="conum">(1)</b>
-mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac #<b class="conum">(2)</b>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">mp.jwt.verify.publickey.location=META-INF/resources/publicKey.pem <i class="conum" data-value="1"></i><b>(1)</b>
+mp.jwt.verify.issuer=https://quarkus.io/using-jwt-rbac <i class="conum" data-value="2"></i><b>(2)</b>
 
-quarkus.smallrye-jwt.auth-mechanism=MP-JWT # <b class="conum">(3)</b>
-quarkus.smallrye-jwt.enabled=true # <b class="conum">(4)</b></code></pre>
+quarkus.smallrye-jwt.auth-mechanism=MP-JWT <i class="conum" data-value="3"></i><b>(3)</b>
+quarkus.smallrye-jwt.enabled=true <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>We are setting public key location to point to a classpath publicKey.pem resource location. We will add this key in part B, <a href="#adding-a-public-key">Adding a Public Key</a>.</p>
-</li>
-<li>
-<p>We are setting the issuer to the URL string <code><a href="https://quarkus.io/using-jwt-rbac" class="bare">https://quarkus.io/using-jwt-rbac</a></code>.</p>
-</li>
-<li>
-<p>We are setting the authentication mechanism name to MP-JWT. This is not strictly required to allow our quickstart to work, but it is the MicroProfile JWT RBAC specification standard name for the token based authentication mechanism.</p>
-</li>
-<li>
-<p>We are enabling the Smallrye JWT. Also not required since this is the default,
-but we are making it explicit.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We are setting public key location to point to a classpath publicKey.pem resource location. We will add this key in part B, <a href="#adding-a-public-key">Adding a Public Key</a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We are setting the issuer to the URL string <code><a href="https://quarkus.io/using-jwt-rbac" class="bare">https://quarkus.io/using-jwt-rbac</a></code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We are setting the authentication mechanism name to MP-JWT. This is not strictly required to allow our quickstart to work, but it is the MicroProfile JWT RBAC specification standard name for the token based authentication mechanism.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>We are enabling the Smallrye JWT. Also not required since this is the default,
+but we are making it explicit.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -531,7 +575,7 @@ nQIDAQAB
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 JWT libraries for many different programming languages can be found at the JWT.io website <a href="https://jwt.io/#libraries">JWT Libraries</a>.
@@ -863,18 +907,18 @@ using-jwt-rbac/src/test/resources/JwtClaims.json:</p>
 <div class="title">JwtClaims.json claims document</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
-    "iss": "https://quarkus.io/using-jwt-rbac", <b class="conum">(1)</b>
+    "iss": "https://quarkus.io/using-jwt-rbac", <i class="conum" data-value="1"></i><b>(1)</b>
     "jti": "a-123",
     "sub": "jdoe-using-jwt-rbac",
-    "upn": "jdoe@quarkus.io", <b class="conum">(2)</b>
+    "upn": "jdoe@quarkus.io", <i class="conum" data-value="2"></i><b>(2)</b>
     "preferred_username": "jdoe",
     "aud": "using-jwt-rbac",
     "birthdate": "2001-07-13",
-    "roleMappings": { <b class="conum">(3)</b>
+    "roleMappings": { <i class="conum" data-value="3"></i><b>(3)</b>
         "group1": "Group1MappedRole",
         "group2": "Group2MappedRole"
     },
-    "groups": [ <b class="conum">(4)</b>
+    "groups": [ <i class="conum" data-value="4"></i><b>(4)</b>
         "Echoer",
         "Tester",
         "Subscriber",
@@ -884,29 +928,33 @@ using-jwt-rbac/src/test/resources/JwtClaims.json:</p>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>The <code>iss</code> claim is the issuer of the JWT. This needs to match the server side <code>mp.jwt.verify.issuer</code>
-in order for the token to be accepted as valid.</p>
-</li>
-<li>
-<p>The <code>upn</code> claim is defined by the MicroProfile JWT RBAC spec as preferred claim to use for the
-<code>Principal</code> seen via the container security APIs.</p>
-</li>
-<li>
-<p>The <code>roleMappings</code> claim can be used to map from a role defined in the <code>groups</code> claim
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>iss</code> claim is the issuer of the JWT. This needs to match the server side <code>mp.jwt.verify.issuer</code>
+in order for the token to be accepted as valid.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>upn</code> claim is defined by the MicroProfile JWT RBAC spec as preferred claim to use for the
+<code>Principal</code> seen via the container security APIs.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>roleMappings</code> claim can be used to map from a role defined in the <code>groups</code> claim
 to an application level role defined in a <code>@RolesAllowed</code> annotation. We won&#8217;t use this
 feature in this quickstart, but it can be useful when the IDM providing the token has
-roles that do not directly align with those defined by the application.</p>
-</li>
-<li>
-<p>The <code>group</code> claim provides the groups and top-level roles associated with the JWT bearer.
+roles that do not directly align with those defined by the application.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>group</code> claim provides the groups and top-level roles associated with the JWT bearer.
 In this quickstart we are only using the top-level role mapping which means the JWT will
 be seen to have the roles "Echoer", "Tester", "Subscriber" and "group2". The full set of roles would
 also include a "Group2MappedRole" due to the <code>roleMappings</code> claim having a mapping from
-"group2" to "Group2MappedRole".</p>
-</li>
-</ol>
+"group2" to "Group2MappedRole".</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Now we can generate a JWT to use with <code>TokenSecuredResource</code> endpoint. To do this, run the following command:</p>
@@ -921,7 +969,7 @@ also include a "Group2MappedRole" due to the <code>roleMappings</code> claim hav
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 You may need to run <code>./mvnw test-compile</code> before this if you are working strictly from the command line and not an IDE that
@@ -1109,14 +1157,14 @@ public class TokenSecuredResourceV3 {
         ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
 
         // If the JWT contains a birthdate claim, use the day of the month as a pick
-        if (jwt.containsClaim(Claims.birthdate.name())) { // <b class="conum">(1)</b>
-            String bdayString = jwt.getClaim(Claims.birthdate.name()); // <b class="conum">(2)</b>
+        if (jwt.containsClaim(Claims.birthdate.name())) { <i class="conum" data-value="1"></i><b>(1)</b>
+            String bdayString = jwt.getClaim(Claims.birthdate.name()); <i class="conum" data-value="2"></i><b>(2)</b>
             LocalDate bday = LocalDate.parse(bdayString);
-            numbers.add(bday.getDayOfMonth()); // <b class="conum">(3)</b>
+            numbers.add(bday.getDayOfMonth()); <i class="conum" data-value="3"></i><b>(3)</b>
             remaining --;
         }
         // Fill remaining picks with random numbers
-        while(remaining &gt; 0) { // <b class="conum">(4)</b>
+        while(remaining &gt; 0) { <i class="conum" data-value="4"></i><b>(4)</b>
             int pick = (int) Math.rint(64 * Math.random() + 1);
             numbers.add(pick);
             remaining --;
@@ -1127,20 +1175,24 @@ public class TokenSecuredResourceV3 {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Here we use the injected <code>JsonWebToken</code> to check for a <code>birthday</code> claim.</p>
-</li>
-<li>
-<p>If it exists, we obtain the claim value as a <code>String</code>, and then convert it to a <code>LocalDate</code>.</p>
-</li>
-<li>
-<p>The day of month value of the <code>birthday</code> claim is inserted as the first winning number pick.</p>
-</li>
-<li>
-<p>The remainder of the winning number picks are random numbers.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Here we use the injected <code>JsonWebToken</code> to check for a <code>birthday</code> claim.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If it exists, we obtain the claim value as a <code>String</code>, and then convert it to a <code>LocalDate</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The day of month value of the <code>birthday</code> claim is inserted as the first winning number pick.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The remainder of the winning number picks are random numbers.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>This illustrates how you can use the JWT to not only provide identity and role based authorization, but as a stateless container
@@ -1205,9 +1257,9 @@ public class TokenSecuredResource {
 
     @Inject
     JsonWebToken jwt;
-    @Inject // <b class="conum">(1)</b>
-    @Claim(standard = Claims.birthdate) // <b class="conum">(2)</b>
-    Optional&lt;String&gt; birthdate; // <b class="conum">(3)</b>
+    @Inject <i class="conum" data-value="1"></i><b>(1)</b>
+    @Claim(standard = Claims.birthdate) <i class="conum" data-value="2"></i><b>(2)</b>
+    Optional&lt;String&gt; birthdate; <i class="conum" data-value="3"></i><b>(3)</b>
 
     ...
 
@@ -1220,8 +1272,8 @@ public class TokenSecuredResource {
         ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
 
         // If the JWT contains a birthdate claim, use the day of the month as a pick
-        if (birthdate.isPresent()) { // <b class="conum">(4)</b>
-            String bdayString = birthdate.get(); <b class="conum">(5)</b>
+        if (birthdate.isPresent()) { <i class="conum" data-value="4"></i><b>(4)</b>
+            String bdayString = birthdate.get(); <i class="conum" data-value="5"></i><b>(5)</b>
             LocalDate bday = LocalDate.parse(bdayString);
             numbers.add(bday.getDayOfMonth());
             remaining --;
@@ -1238,23 +1290,28 @@ public class TokenSecuredResource {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>We use CDI <code>@Inject</code> along with&#8230;&#8203;</p>
-</li>
-<li>
-<p>an MicroProfile JWT RBAC <code>@Claim(standard = Claims.birthdate)</code> qualifier to inject the <code>birthdate</code> claim directly as</p>
-</li>
-<li>
-<p>an <code>Optional&lt;String&gt;</code> value.</p>
-</li>
-<li>
-<p>Now we check whether the injected <code>birthdate</code> field is present</p>
-</li>
-<li>
-<p>and if it is, get its value.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We use CDI <code>@Inject</code> along with&#8230;&#8203;</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>an MicroProfile JWT RBAC <code>@Claim(standard = Claims.birthdate)</code> qualifier to inject the <code>birthdate</code> claim directly as</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>an <code>Optional&lt;String&gt;</code> value.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Now we check whether the injected <code>birthdate</code> field is present</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>and if it is, get its value.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The remainder of the code is the same as before. Update your <code>TokenSecuredResource</code> to either add or replace the current
@@ -1337,6 +1394,7 @@ explore the <code>using-jwt-rbac</code> directory to learn more about the Smallr
 </div>
 </div>
 </div>
+    </div>
   </div>
 </div>
 
