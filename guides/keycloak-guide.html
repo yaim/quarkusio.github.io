@@ -84,6 +84,7 @@
 </ul>
 </li>
 <li><a href="#testing-the-application">Testing the Application</a></li>
+<li><a href="#multi-tenant-deployments">Multi-Tenant Deployments</a></li>
 <li><a href="#references">References</a></li>
 </ul>
     </div>
@@ -522,6 +523,54 @@ which basically returns a JSON payload with details about the user.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="multi-tenant-deployments"><a class="anchor" href="#multi-tenant-deployments"></a>Multi-Tenant Deployments</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Keycloak Quarkus Extension also supports multitenancy. This capability is specially useful if your service is serving different
+tenants each one referencing a specific Keycloak Realm and configuration.</p>
+</div>
+<div class="paragraph">
+<p>Multitenancy is all about dynamically choosing the proper configuration depending on the characteristics of incoming requests. This is accomplished
+by implementing the <code>KeycloakConfigResolver</code> interface as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.keycloak;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import org.keycloak.adapters.KeycloakConfigResolver;
+import org.keycloak.adapters.KeycloakDeployment;
+import org.keycloak.adapters.spi.HttpFacade;
+
+@ApplicationScoped
+public class TenantConfigResolver implements KeycloakConfigResolver {
+    @Override
+    public KeycloakDeployment resolve(HttpFacade.Request facade) {
+        String tenant = facade.getHeader("tenant");
+
+        switch (tenant) {
+            case "tenant-1":
+                // create a deployment config for tenant-1
+            case "tenant-2":
+                // create a deployment config for tenant-1
+            case "tenant-3":
+                // create a deployment config for tenant-1
+        }
+
+        // if not resolved, returning null means using the default configuration from keycloak.json
+        return null;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <code>KeycloakConfigResolver</code> is responsible to produce a <code>KeycloakDeployment</code> defining the configuration that should be used to process
+incoming requests, so that you can dynamically change the realm or any other configuration on a per-request basis.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="references"><a class="anchor" href="#references"></a>References</h2>
 <div class="sectionbody">
 <div class="ulist">
@@ -534,6 +583,9 @@ which basically returns a JSON payload with details about the user.</p>
 </li>
 <li>
 <p><a href="https://www.keycloak.org/docs/latest/authorization_services/index.html#_enforcer_overview">Keycloak Policy Enforcer</a></p>
+</li>
+<li>
+<p><a href="https://www.keycloak.org/docs/latest/securing_apps/index.html#_multi_tenancy" class="bare">https://www.keycloak.org/docs/latest/securing_apps/index.html#_multi_tenancy</a></p>
 </li>
 </ul>
 </div>

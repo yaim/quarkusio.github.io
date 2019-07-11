@@ -300,15 +300,43 @@ redeployed application. If there are any issues with compilation or deployment a
 <h2 id="debugging"><a class="anchor" href="#debugging"></a>Debugging</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can run a Quarkus application in debug mode using:</p>
+<p>In development mode, Quarkus starts by default with debug mode enabled, listening to port <code>5005</code> without suspending the JVM.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew quarkusDev --debug=true</code></pre>
+<div class="paragraph">
+<p>This behavior can be changed by giving the <code>debug</code> system property one of the following values:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>false</code> - the JVM will start with debug mode disabled</p>
+</li>
+<li>
+<p><code>true</code> - the JVM will start in debug mode and be suspended until a debugger is attached to port <code>5005</code></p>
+</li>
+<li>
+<p><code>client</code> - the JVM will start in client mode and attempt to connect to <code>localhost:5005</code></p>
+</li>
+<li>
+<p><code>{port}</code> - the JVM will start in debug mode and be suspended until a debugger is attached to <code>{port}</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can also run a Quarkus application in debug mode with a suspended JVM using <code>./gradlew quarkusDev -Ddebug</code> which is a shorthand for <code>./gradlew quarkusDev -Ddebug=true</code>.</p>
 </div>
 <div class="paragraph">
 <p>Then, attach your debugger to <code>localhost:5005</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

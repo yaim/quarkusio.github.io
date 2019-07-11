@@ -725,8 +725,8 @@ It is definitely too aggressive for person names but it is perfect for the book 
     void onStart(@Observes StartupEvent ev) throws InterruptedException { <i class="conum" data-value="2"></i><b>(2)</b>
         // only reindex if we imported some content
         if (Book.count() &gt; 0) {
-            Search.getSearchSession(em)
-                    .createIndexer()
+            Search.session(em)
+                    .massIndexer()
                     .startAndWait();
         }
     }
@@ -735,7 +735,7 @@ It is definitely too aggressive for person names but it is perfect for the book 
     @Path("author/search")
     @Transactional
     public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern) { <i class="conum" data-value="3"></i><b>(3)</b>
-        return Search.getSearchSession(em) <i class="conum" data-value="4"></i><b>(4)</b>
+        return Search.session(em) <i class="conum" data-value="4"></i><b>(4)</b>
                 .search(Author.class) <i class="conum" data-value="5"></i><b>(5)</b>
                 .predicate(f -&gt;
                     pattern == null || pattern.trim().isEmpty() ?

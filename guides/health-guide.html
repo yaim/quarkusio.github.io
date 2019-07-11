@@ -70,8 +70,9 @@
 <li><a href="#creating-the-maven-project">Creating the Maven Project</a></li>
 <li><a href="#running-the-health-check">Running the health check</a></li>
 <li><a href="#creating-your-first-health-check">Creating your first health check</a></li>
-<li><a href="#adding-user-specific-data-to-the-health-check-response">Adding user specific data to the health check response</a></li>
-<li><a href="#negative-health-check-procedure">Negative health check procedure</a></li>
+<li><a href="#adding-a-readiness-health-check-procedure">Adding a readiness health check procedure</a></li>
+<li><a href="#negative-health-check-procedures">Negative health check procedures</a></li>
+<li><a href="#adding-user-specific-data-to-the-health-check-response">Adding user-specific data to the health check response</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
     </div>
@@ -118,9 +119,9 @@ or restarted.</p>
 <h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this guide, we build a simple REST application that exposes MicroProfile Health functionalities at
-the <code>/health</code> endpoint according to the specification. It will also provide several other REST
-endpoints to allow us to dynamically change the healthness of our Quarkus application.</p>
+<p>In this guide, we build a simple REST application that exposes MicroProfile Health
+functionalities at the <code>/health/live</code> and <code>/health/ready</code> endpoints according to the
+specification.</p>
 </div>
 </div>
 </div>
@@ -128,14 +129,16 @@ endpoints to allow us to dynamically change the healthness of our Quarkus applic
 <h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We recommend that you follow the instructions in the next sections and create the application step by step.
-However, you can go right to the completed example.</p>
+<p>We recommend that you follow the instructions in the next sections and create the
+application step by step. However, you can go right to the completed example.</p>
 </div>
 <div class="paragraph">
-<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an
+<a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
 </div>
 <div class="paragraph">
-<p>The solution is located in the <code>microprofile-health</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/microprofile-health">directory</a>.</p>
+<p>The solution is located in the <code>microprofile-health</code>
+<a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/microprofile-health">directory</a>.</p>
 </div>
 </div>
 </div>
@@ -163,8 +166,23 @@ which is an implementation of the MicroProfile Health specification used in Quar
 <h2 id="running-the-health-check"><a class="anchor" href="#running-the-health-check"></a>Running the health check</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Importing the <code>smallrye-health</code> extension directly exposes a single REST endpoint at
-the <code>/health</code> endpoint that can be used to run the health check procedures:</p>
+<p>Importing the <code>smallrye-health</code> extension directly exposes three REST endpoints:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/health/live</code> - The application is up and running.</p>
+</li>
+<li>
+<p><code>/health/ready</code> - The application is ready to serve requests.</p>
+</li>
+<li>
+<p><code>/health</code> - Accumulating all health check procedures in the application.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To check that the <code>smallrye-health</code> extension is working as expected:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -172,18 +190,18 @@ the <code>/health</code> endpoint that can be used to run the health check proce
 <p>start your Quarkus application with <code>mvn compile quarkus:dev</code></p>
 </li>
 <li>
-<p>access the <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> endpoint using your browser or
-<code>curl <a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code></p>
+<p>access the <code><a href="http://localhost:8080/health/live" class="bare">http://localhost:8080/health/live</a></code> endpoint using your browser or
+<code>curl <a href="http://localhost:8080/health/live" class="bare">http://localhost:8080/health/live</a></code></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The health REST enpoint returns a simple JSON object with two fields:</p>
+<p>All of the health REST endpoints return a simple JSON object with two fields:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>outcome</code>&#8201;&#8212;&#8201;the overall result of all the health check procedures</p>
+<p><code>status</code>&#8201;&#8212;&#8201;the overall result of all the health check procedures</p>
 </li>
 <li>
 <p><code>checks</code>&#8201;&#8212;&#8201;an array of individual checks</p>
@@ -191,9 +209,9 @@ the <code>/health</code> endpoint that can be used to run the health check proce
 </ul>
 </div>
 <div class="paragraph">
-<p>The general <code>outcome</code> of the health check is computed as a logical AND of all the declared
-health check procedures. The <code>checks</code> array is empty as we have not specified any health
-check procedure yet so let&#8217;s define some.</p>
+<p>The general <code>status</code> of the health check is computed as a logical AND of all the
+declared health check procedures. The <code>checks</code> array is empty as we have not specified
+any health check procedure yet so let&#8217;s define some.</p>
 </div>
 </div>
 </div>
@@ -201,7 +219,7 @@ check procedure yet so let&#8217;s define some.</p>
 <h2 id="creating-your-first-health-check"><a class="anchor" href="#creating-your-first-health-check"></a>Creating your first health check</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this section we create our first simple health check procedure.</p>
+<p>In this section, we create our first simple health check procedure.</p>
 </div>
 <div class="paragraph">
 <p>Create the <code>org.acme.health.SimpleHealthCheck</code> class:</p>
@@ -210,13 +228,13 @@ check procedure yet so let&#8217;s define some.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
 
-import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
 
 import javax.enterprise.context.ApplicationScoped;
 
-@Health
+@Liveness
 @ApplicationScoped
 public class SimpleHealthCheck implements HealthCheck {
 
@@ -228,15 +246,31 @@ public class SimpleHealthCheck implements HealthCheck {
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see health check procedures are defined as implementations of the <code>HealthCheck</code>
-interface which are defined as CDI beans with the <code>@Health</code> qualifier. <code>HealthCheck</code> is
-a functional interface whose single method <code>call</code> returns a <code>HealthCheckResponse</code> object
-which can be easily constructed by the fluent builder API shown in the example.</p>
+<p>As you can see health check procedures are defined as implementations of the
+<code>HealthCheck</code> interface which are defined as CDI beans with the one of the
+following CDI qualifiers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@Liveness</code> - the liveness check accessible at <code>/health/live</code></p>
+</li>
+<li>
+<p><code>@Readiness</code> - the readiness check accessible at <code>/health/ready</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>HealthCheck</code> is a functional interface whose single method <code>call</code> returns a
+<code>HealthCheckResponse</code> object which can be easily constructed by the fluent builder
+API shown in the example.</p>
 </div>
 <div class="paragraph">
 <p>As we have started our Quarkus application in dev mode simply repeat the request
-to <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> by refreshing your browser window or by using <code>curl <a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code>.
-The new health check procedure is now present in the <code>checks</code> array.</p>
+to <code><a href="http://localhost:8080/health/live" class="bare">http://localhost:8080/health/live</a></code> by refreshing your browser window or by
+using <code>curl <a href="http://localhost:8080/health/live" class="bare">http://localhost:8080/health/live</a></code>. Because we defined our health check
+to be a liveness procedure (with <code>@Liveness</code> qualifier) the new health check procedure
+is now present in the <code>checks</code> array.</p>
 </div>
 <div class="paragraph">
 <p>Congratulations! You&#8217;ve created your first Quarkus health check procedure. Let&#8217;s
@@ -245,58 +279,18 @@ continue by exploring what else can be done with the MicroProfile Health specifi
 </div>
 </div>
 <div class="sect1">
-<h2 id="adding-user-specific-data-to-the-health-check-response"><a class="anchor" href="#adding-user-specific-data-to-the-health-check-response"></a>Adding user specific data to the health check response</h2>
+<h2 id="adding-a-readiness-health-check-procedure"><a class="anchor" href="#adding-a-readiness-health-check-procedure"></a>Adding a readiness health check procedure</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In previous section we saw how to create a simple health check with only the minimal
-attributes, namely, the health check name and its state (UP or DOWN). However, the
-MicroProfile specification also provides a way for the applications to supply
-arbitrary data in the form of key value pairs sent to the consuming end. This can be done by using the
-<code>withData(key, value)</code> method of the health check response builder API.</p>
+<p>In the previous section, we created a simple liveness health check procedure which states
+whether our application is running or not. In this section, we will create a readiness
+health check which will be able to state whether our application is able to process
+requests.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create our second health check procedure <code>org.acme.health.DataHealthCheck</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
-
-import org.eclipse.microprofile.health.Health;
-import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
-
-import javax.enterprise.context.ApplicationScoped;
-
-@Health
-@ApplicationScoped
-public class DataHealthCheck implements HealthCheck {
-
-    @Override
-    public HealthCheckResponse call() {
-        return HealthCheckResponse.named("Health check with data")
-                .up()
-                .withData("foo", "fooValue")
-                .withData("bar", "barValue")
-                .build();
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you rerun the health check procedure again by accessing the <code>/health</code> endpoint you can
-see that the new health check <code>Health check with data</code> is present in the <code>checks</code> array.
-This check contains a new attribute called <code>data</code> which is a JSON object consisting of
-the properties we have defined in our health check procedure.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="negative-health-check-procedure"><a class="anchor" href="#negative-health-check-procedure"></a>Negative health check procedure</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In this section we create another health check procedure which simulates a connection to
-an external service provider such as a database. For simplicity reasons, we only determine
-whether the database is accessible or not by a configuration property.</p>
+<p>We will create another health check procedure that simulates a connection to
+an external service provider such as a database. For starters, we will always return
+the response indicating the application is ready.</p>
 </div>
 <div class="paragraph">
 <p>Create <code>org.acme.health.DatabaseConnectionHealthCheck</code> class:</p>
@@ -305,16 +299,77 @@ whether the database is accessible or not by a configuration property.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
 
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Readiness;
+
+import javax.enterprise.context.ApplicationScoped;
+
+@Readiness
+@ApplicationScoped
+public class DatabaseConnectionHealthCheck implements HealthCheck {
+
+    @Override
+    public HealthCheckResponse call() {
+        return HealthCheckResponse.named("Database connection health check").up().build();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you now rerun the health check at <code><a href="http://localhost:8080/health/live" class="bare">http://localhost:8080/health/live</a></code> the <code>checks</code>
+array will contain only the previously defined <code>SimpleHealthCheck</code> as it is the only
+check defined with the <code>@Liveness</code> qualifier. However, if you access
+<code><a href="http://localhost:8080/health/ready" class="bare">http://localhost:8080/health/ready</a></code> (in the browser or with
+<code>curl <a href="http://localhost:8080/health/ready" class="bare">http://localhost:8080/health/ready</a></code>) you will see only the
+<code>Database connection health check</code> as it is the only health check defined with the
+<code>@Readiness</code> qualifier as the readiness health check procedure.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you access <code><a href="http://localhost:8080/health" class="bare">http://localhost:8080/health</a></code> you will get back both checks.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>More information about which health check procedures should be used in which situation
+is detailed in the MicroProfile Health specification. Generally, the liveness
+procedures determine whether the application should be restarted while readiness
+procedures determine whether it makes sense to contact the application with requests.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="negative-health-check-procedures"><a class="anchor" href="#negative-health-check-procedures"></a>Negative health check procedures</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this section, we extend our <code>Database connection health check</code> with the option of
+stating that our application is not ready to process requests as the underlying
+database connection cannot be established. For simplicity reasons, we only determine
+whether the database is accessible or not by a configuration property.</p>
+</div>
+<div class="paragraph">
+<p>Update the <code>org.acme.health.DatabaseConnectionHealthCheck</code> class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Readiness;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
-@Health
+@Readiness
 @ApplicationScoped
 public class DatabaseConnectionHealthCheck implements HealthCheck {
 
@@ -331,8 +386,7 @@ public class DatabaseConnectionHealthCheck implements HealthCheck {
             responseBuilder.up();
         } catch (IllegalStateException e) {
             // cannot access the database
-            responseBuilder.down()
-                    .withData("error", e.getMessage());
+            responseBuilder.down();
         }
 
         return responseBuilder.build();
@@ -347,14 +401,78 @@ public class DatabaseConnectionHealthCheck implements HealthCheck {
 </div>
 </div>
 <div class="paragraph">
-<p>If you now rerun the health check the overall <code>outcome</code> should be DOWN and you should
-see in the <code>checks</code> array the newly added <code>Database connection health check</code> which is
-down and the error message explaining why it failed.</p>
+<p>If you now rerun the readiness health check (at <code><a href="http://localhost:8080/health/ready" class="bare">http://localhost:8080/health/ready</a></code>)
+the overall <code>status</code> should be DOWN. You can also check the liveness check at
+<code><a href="http://localhost:8080/health/live" class="bare">http://localhost:8080/health/live</a></code> which will return the overall <code>status</code> UP because
+it isn&#8217;t influenced by the readiness checks.</p>
 </div>
 <div class="paragraph">
-<p>As we shouldn&#8217;t leave this application with a health check in DOWN state and because we
-are running Quarkus dev mode you can add <code>database.up=true</code> in
-<code>src/main/resources/application.properties</code> and rerun the health check again&#8201;&#8212;&#8201;it should be up again.</p>
+<p>As we shouldn&#8217;t leave this application with a readiness check in a DOWN state and
+because we are running Quarkus in dev mode you can add <code>database.up=true</code> in
+<code>src/main/resources/application.properties</code> and rerun the readiness health check again&#8201;&#8212;&#8201;it should be up again.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adding-user-specific-data-to-the-health-check-response"><a class="anchor" href="#adding-user-specific-data-to-the-health-check-response"></a>Adding user-specific data to the health check response</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In previous sections, we saw how to create simple health checks with only the minimal
+attributes, namely, the health check name and its status (UP or DOWN). However, the
+MicroProfile specification also provides a way for the applications to supply
+arbitrary data in the form of key-value pairs sent to the consuming end. This can be
+done by using the <code>withData(key, value)</code> method of the health check response
+builder API.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s create a new health check procedure <code>org.acme.health.DataHealthCheck</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
+
+import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+
+import javax.enterprise.context.ApplicationScoped;
+
+@Liveness
+@ApplicationScoped
+public class DataHealthCheck implements HealthCheck {
+
+    @Override
+    public HealthCheckResponse call() {
+        return HealthCheckResponse.named("Health check with data")
+                .up()
+                .withData("foo", "fooValue")
+                .withData("bar", "barValue")
+                .build();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you rerun the liveness health check procedure by accessing the <code>/health/live</code>
+endpoint you can see that the new health check <code>Health check with data</code> is present
+in the <code>checks</code> array. This check contains a new attribute called <code>data</code> which is a
+JSON object consisting of the properties we have defined in our health check procedure.</p>
+</div>
+<div class="paragraph">
+<p>This functionality is specifically useful in failure scenarios where you can pass the
+error along with the health check response.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">        try {
+            simulateDatabaseConnectionVerification();
+            responseBuilder.up();
+        } catch (IllegalStateException e) {
+            // cannot access the database
+            responseBuilder.down()
+                    .withData("error", e.getMessage()); // pass the exception message
+        }</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -363,7 +481,9 @@ are running Quarkus dev mode you can add <code>database.up=true</code> in
 <div class="sectionbody">
 <div class="paragraph">
 <p>MicroProfile Health provides a way for your application to distribute information
-about its healthness state to state whether or not it is able to function properly.</p>
+about its healthiness state to state whether or not it is able to function properly.
+Liveness checks are utilized to tell whether the application should be restarted and
+readiness checks are used to tell whether the application is able to process requests.</p>
 </div>
 <div class="paragraph">
 <p>All that is needed to enable the MicroProfile Health features in Quarkus is:</p>
@@ -371,7 +491,8 @@ about its healthness state to state whether or not it is able to function proper
 <div class="ulist">
 <ul>
 <li>
-<p>adding the <code>smallrye-health</code> Quarkus extension to your project using the <code>quarkus-maven-plugin</code>:</p>
+<p>adding the <code>smallrye-health</code> Quarkus extension to your project using the
+<code>quarkus-maven-plugin</code>:</p>
 <div class="literalblock">
 <div class="content">
 <pre>mvn quarkus:add-extension -Dextensions="health"</pre>

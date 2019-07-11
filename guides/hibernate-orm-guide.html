@@ -71,6 +71,7 @@
 </li>
 <li><a href="#setting-up-and-configuring-hibernate-orm-with-a-persistence-xml">Setting up and configuring Hibernate ORM with a <code>persistence.xml</code></a></li>
 <li><a href="#defining-entities-in-external-projects-or-jars">Defining entities in external projects or jars</a></li>
+<li><a href="#hibernate-orm-in-development-mode">Hibernate ORM in development mode</a></li>
 <li><a href="#caching">Caching</a>
 <ul class="sectlevel2">
 <li><a href="#caching-of-entities">Caching of entities</a></li>
@@ -286,8 +287,21 @@ The storage engine to use when the dialect supports multiple storage engines.</p
 <dt class="hdlist1"><code>quarkus.hibernate-orm.sql-load-script</code></dt>
 <dd>
 <p>(defaults to <code>/import.sql</code>) Name of the file containing the SQL statements to execute when Hibernate ORM starts.
-By default, simply add <code>import.sql</code> in the root of your resources directory and it will be picked up without having to set this property.</p>
+By default, simply add <code>import.sql</code> in the root of your resources directory and it will be picked up without having to set this property.
+If you need different SQL statements between dev mode, test (<code>@QuarkusTest</code>) and in production, use Quarkus <a href="https://quarkus.io/guides/application-configuration-guide#configuration-profiles">configuration profiles facility</a>.</p>
 </dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="title">application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="property" class="language-property hljs">%dev.quarkus.hibernate-orm.sql-load-script = import-dev.sql
+%test.quarkus.hibernate-orm.sql-load-script = import-test.sql
+%prod.quarkus.hibernate-orm.sql-load-script = import-prod.sql</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
 <dt class="hdlist1"><code>quarkus.hibernate-orm.batch-fetch-size</code></dt>
 <dd>
 <p>(defaults to <code>-1</code> i.e. batch fetching is disabled).
@@ -513,6 +527,70 @@ This will allow Quarkus to index and enhance your entities as if they were insid
 </div>
 </div>
 <div class="sect1">
+<h2 id="hibernate-orm-in-development-mode"><a class="anchor" href="#hibernate-orm-in-development-mode"></a>Hibernate ORM in development mode</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus development mode is really useful for applications that mix front end or services and database access.
+There are a few common approaches.</p>
+</div>
+<div class="paragraph">
+<p>The first choice is to use <code>quarkus.hibernate-orm.database.generation=drop-and-create</code> in conjunction with <code>import.sql</code>.
+That way for every change to your app and in particular to your entities, the database schema will be properly recreated
+and your data fixture (stored in <code>import.sql</code>) will be used to repopulate it from scratch.
+This is best to perfectly control your environment.</p>
+</div>
+<div class="paragraph">
+<p>The second approach is to use <code>quarkus.hibernate-orm.database.generation=update</code>.
+This approach is best when you do many entity changes but
+still need to work on a copy of the production data
+or if you want to reproduce a bug that is based on a specific database entries.
+<code>update</code> is a best effort from Hibernate ORM and will fail in specific situations
+including altering your database structure which could lead to data loss.
+For example if you change structures related to the foreign key, Hibernate ORM might have to bail out.</p>
+</div>
+<div class="paragraph">
+<p>The third approach is to use <code>quarkus.hibernate-orm.database.generation=none</code>.
+This approach is best when you are working on a copy of the production data but want to fully control the schema evolution.
+Or if you use a database schema migration tool like <a href="https://quarkus.io/guides/flyway-guide">Flyway</a>.
+When you make a change to an entity, make sure to manually adapt the database schema accordingly.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Do not use <code>quarkus.hibernate-orm.database.generation</code> <code>drop-and-create</code> and <code>update</code> in your production environment.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Don&#8217;t forget that you can define different <a href="https://quarkus.io/guides/application-configuration-guide#configuration-profiles">configuration profiles</a>
+to select different behaviors depending on your environment.</p>
+</div>
+<div class="listingblock">
+<div class="title">application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">%dev.quarkus.hibernate-orm.database.generation = drop-and-create
+%dev.quarkus.hibernate-orm.sql-load-script = import-dev.sql
+
+%dev-with-data.quarkus.hibernate-orm.database.generation = update
+%dev-with-data.quarkus.hibernate-orm.sql-load-script =
+
+%prod.quarkus.hibernate-orm.database.generation = none
+%prod.quarkus.hibernate-orm.sql-load-script =</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn compile quarkus:dev -Dquarkus-profile=dev-with-data</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="caching"><a class="anchor" href="#caching"></a>Caching</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -555,7 +633,7 @@ public class Country {
     // ...
 
     @OneToMany
-    @Cache(CacheConcurrencyStrategy.READ_ONLY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     List&lt;City&gt; cities;
 
     // ...
@@ -635,10 +713,25 @@ public class Fruit {
 <pre class="highlightjs highlight"><code class="language-none hljs">quarkus.hibernate-orm.cache."org.acme.MyEntity".memory.object-count=1000</code></pre>
 </div>
 </div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>The format for durations uses the standard <code>java.time</code> format.
-You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.
-You can also provide duration values starting with a number. In this case, if the value consists only of a <code>number</code>, the converter treats the value as seconds. Otherwise, <code>PT</code> is implicit appended to the value to obtain a standard <code>java.time</code> format.</p>
+<p>The format for durations uses the standard <code>java.time.Duration</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can also provide duration values starting with a number.
+In this case, if the value consists only of a number, the converter treats the value as seconds.
+Otherwise, <code>PT</code> is implicitly appended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
 </div>
 </td>
 </tr>

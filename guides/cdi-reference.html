@@ -83,6 +83,7 @@
 </ul>
 </li>
 <li><a href="#remove_unused_beans">6. Removing Unused Beans</a></li>
+<li><a href="#default_beans">7. Default Beans</a></li>
 </ul>
     </div>
     <div>
@@ -772,6 +773,63 @@ This optimization can be disabled by setting <code>quarkus.arc.remove-unused-bea
 <div class="paragraph">
 <p>Finally, Quarkus provides a middle ground for the bean removal optimization where application beans are never removed whether or not they are unused,
 while the optimization proceeds normally for non application classes. To use this mode, set <code>quarkus.arc.remove-unused-beans</code> to <code>fwk</code> or <code>framework</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="default_beans"><a class="anchor" href="#default_beans"></a>7. Default Beans</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus adds a capability that CDI currently does not support which is to conditionally declare a bean if no such bean has been declared in the typical ways Quarkus supports.
+This is done using the <code>@io.quarkus.arc.DefaultBean</code> annotation and is best explained with an example.</p>
+</div>
+<div class="paragraph">
+<p>Say there is a Quarkus extension that among other things declares a few CDI beans like the following code does:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Dependent
+public class TracerConfiguration {
+
+    @Produces
+    public Tracer tracer(Reporter reporter, Configuration configuration) {
+        return new Tracer(reporter, configuration);
+    }
+
+    @Produces
+    @DefaultBean
+    public Configuration configuration() {
+        // create a Configuration
+    }
+
+    @Produces
+    @DefaultBean
+    public Reporter reporter(){
+        // create a Reporter
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The idea is that the extension auto-configures things for user, eliminating a lot of boilerplate - we can just <code>@Inject</code> a <code>Tracer</code> wherever it is needed.
+Now imagine that in our application we would like to utilize the configured <code>Tracer</code>, but we need to customize it a little, for example by providing a custom <code>Reporter</code>.
+The only thing that would be needed in our application would be something like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Dependent
+public class CustomTracerConfiguration {
+
+    @Produces
+    public Reporter reporter(){
+        // create a custom Reporter
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>@DefaultBean</code> allows extensions (or any other code for that matter) to provide defaults while backing off if beans of that type are supplied in any
+way Quarkus supports.</p>
 </div>
 </div>
 </div>

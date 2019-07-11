@@ -183,6 +183,28 @@ Repeatable SQL migrations have the following file name structure: prefixSeparato
 defaults translates to R__My_description.sql<br>
 <strong>default:</strong> R</p>
 </dd>
+<dt class="hdlist1"><code>quarkus.flyway.baseline-on-migrate</code></dt>
+<dd>
+<p>Whether to automatically call baseline when migrate is executed against a non-empty schema with no metadata table.
+This schema will then be baselined with the <strong>baseline-version</strong> before executing the migrations.
+Only migrations above <strong>baseline-version</strong> will then be applied.
+This is useful for initial Flyway production deployments on projects with an existing DB.<br></p>
+<div class="paragraph">
+<p>Be careful when enabling this as it removes the safety net that ensures Flyway does not
+migrate the wrong database in case of a configuration mistake!<br>
+<strong>default:</strong> false</p>
+</div>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.baseline-version</code></dt>
+<dd>
+<p>The version to tag an existing schema with when executing baseline<br>
+<strong>default:</strong> 1</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.baseline-description</code></dt>
+<dd>
+<p>The description to tag an existing schema with when executing baseline<br>
+<strong>default:</strong> '&lt;&lt; Flyway Baseline &gt;&gt;'</p>
+</dd>
 </dl>
 </div>
 <div class="paragraph">
@@ -200,6 +222,9 @@ quarkus.datasource.password: connor
 quarkus.flyway.migrate-at-start=true
 
 # Flyway optional config properties
+# quarkus.flyway.baseline-on-migrate=true
+# quarkus.flyway.baseline-version=1.0.0
+# quarkus.flyway.baseline-description=Initial version
 # quarkus.flyway.connect-retries=10
 # quarkus.flyway.schemas=TEST_SCHEMA
 # quarkus.flyway.table=flyway_quarkus_history

@@ -316,15 +316,43 @@ app.</p>
 <h2 id="debugging"><a class="anchor" href="#debugging"></a>Debugging</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can run a Quarkus application in debug mode using:</p>
+<p>In development mode, Quarkus starts by default with debug mode enabled, listening to port <code>5005</code> without suspending the JVM.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev -Ddebug=true</code></pre>
+<div class="paragraph">
+<p>This behavior can be changed by giving the <code>debug</code> system property one of the following values:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>false</code> - the JVM will start with debug mode disabled</p>
+</li>
+<li>
+<p><code>true</code> - the JVM will start in debug mode and be suspended until a debugger is attached to port <code>5005</code></p>
+</li>
+<li>
+<p><code>client</code> - the JVM will start in client mode and attempt to connect to <code>localhost:5005</code></p>
+</li>
+<li>
+<p><code>{port}</code> - the JVM will start in debug mode and be suspended until a debugger is attached to <code>{port}</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can also run a Quarkus application in debug mode with a suspended JVM using <code>./mvnw compile quarkus:dev -Ddebug</code> which is a shorthand for <code>./mvnw compile quarkus:dev -Ddebug=true</code>.</p>
 </div>
 <div class="paragraph">
 <p>Then, attach your debugger to <code>localhost:5005</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -684,6 +712,41 @@ Note that in this case the build itself runs in a Docker container too, so you d
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>The entries are relative to the root of the generated Uber-Jar. You can specify multiple entries by adding extra <code>&lt;ignoredEntry&gt;</code> elements.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Uber-Jar&#8217;s final name is configurable via a Maven&#8217;s build settings <code>finalName</code> option or via a <code>finalName</code> configuration option as shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+            &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;${quarkus.version}&lt;/version&gt;
+            &lt;configuration&gt;
+                &lt;uberJar&gt;true&lt;/uberJar&gt;
+                &lt;finalName&gt;uber-jar-name&lt;/finalName&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+            &lt;/configuration&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;build&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This configuration will output a file <code>uber-jar-name-runner.jar</code> inside the <code>target</code> directory. When <code>finalName</code> option is not set, project&#8217;s build final name is used.</td>
 </tr>
 </table>
 </div>

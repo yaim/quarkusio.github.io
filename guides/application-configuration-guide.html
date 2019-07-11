@@ -360,7 +360,7 @@ when applicable. For example this HTTP port config entry will appear as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">#
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">#
 # The HTTP port
 #
 #quarkus.http.port=8080</code></pre>
@@ -372,7 +372,7 @@ parameter:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw quarkus:generate-config -Dfile=application.properties</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw quarkus:generate-config -Dfile=application.properties</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -455,8 +455,8 @@ select between then via a profile name.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>quarkus.http.port=9090
-%dev.quarkus.http.port=8181</pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%dev.quarkus.http.port=8181</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -487,8 +487,8 @@ I can add the following to <code>application.properties</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>quarkus.http.port=9090
-%staging.quarkus.http.port=9999</pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%staging.quarkus.http.port=9999</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -562,7 +562,7 @@ If you have more converters simply add their class names in this file as well. S
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">org.acme.config.MicroProfileCustomValueConverter
+<pre class="highlightjs highlight"><code class="language-none hljs">org.acme.config.MicroProfileCustomValueConverter
 org.acme.config.SomeOtherConverter
 org.acme.config.YetAnotherConverter</code></pre>
 </div>

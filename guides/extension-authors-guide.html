@@ -216,10 +216,59 @@ But many properties like enable caching or setting the JDBC driver can safely re
 For example, Hibernate ORM exposes <code>EntityManagerFactory</code> and <code>EntityManager</code> beans, the connection pool exposes <code>DataSource</code> beans etc.
 An extension must generate these bean definitions at build time.</p>
 </div>
-<div class="sect3">
-<h4 id="how-to-override-a-bean-defined-by-a-libraryquarkus-extension"><a class="anchor" href="#how-to-override-a-bean-defined-by-a-libraryquarkus-extension"></a>1.4.1. How to Override a Bean Defined by a Library/Quarkus Extension</h4>
 <div class="paragraph">
-<p>The recommended approach is to mark your bean as a CDI <code>@Alternative</code> that is enabled using the <code>@Priority</code> annotation.
+<p>A very useful pattern of creating such beans but also giving application code the ability to easily override some of the beans with custom implementations, is to use
+the <code>@DefaultBean</code> that Quarkus provides. This is best explained with an example.</p>
+</div>
+<div class="sect3">
+<h4 id="example-cdi-configuration-using-defaultbean"><a class="anchor" href="#example-cdi-configuration-using-defaultbean"></a>1.4.1. Example CDI configuration using @DefaultBean</h4>
+<div class="paragraph">
+<p>Let us assume that the Quarkus extension needs to provide a <code>Tracer</code> bean which application code is meant to inject into its own beans.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Dependent
+public class TracerConfiguration {
+
+    @Produces
+    public Tracer tracer(Reporter reporter, Configuration configuration) {
+        return new Tracer(reporter, configuration);
+    }
+
+    @Produces
+    @DefaultBean
+    public Configuration configuration() {
+        // create a Configuration
+    }
+
+    @Produces
+    @DefaultBean
+    public Reporter reporter(){
+        // create a Reporter
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If for example application code wants to use <code>Tracer</code>, but also needs to use a custom <code>Reporter</code> bean, such a requirement could easily be done using something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Dependent
+public class CustomTracerConfiguration {
+
+    @Produces
+    public Reporter reporter(){
+        // create a custom Reporter
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="how-to-override-a-bean-defined-by-a-libraryquarkus-extension-that-doesnt-use-defaultbean"><a class="anchor" href="#how-to-override-a-bean-defined-by-a-libraryquarkus-extension-that-doesnt-use-defaultbean"></a>1.4.2. How to Override a Bean Defined by a Library/Quarkus Extension that doesn&#8217;t use @DefaultBean</h4>
+<div class="paragraph">
+<p>Although <code>@DefaultBean</code> is the recommended approach, it is also possible for application code to override beans provided by an extension by marking beans as a CDI <code>@Alternative</code> and including <code>@Priority</code> annotation.
 Let&#8217;s show a simple example.
 Suppose we work on an imaginary "quarkus-parser" extension and we have a default bean implementation:</p>
 </div>
@@ -308,7 +357,7 @@ Second best is to write Substrate VM substitutions, which are patches applied du
 <dt class="hdlist1">Get a framework running</dt>
 <dd>
 <p>A framework at runtime typically reads configuration, scan the classpath and classes for metadata (annotations, getters etc), build a metamodel on top of which it runs, find options via the service loader pattern, prepare invocation calls (reflection), proxy interfaces, etc.<br>
-These operations should be done at build time and the metamodel be passed to the template DSL that will generate classes are runtime and boot the framework.</p>
+These operations should be done at build time and the metamodel be passed to the recorder DSL that will generate classes are runtime and boot the framework.</p>
 </dd>
 <dt class="hdlist1">Get a CDI portable extension running</dt>
 <dd>
@@ -927,28 +976,54 @@ quarkus.log.file.path=/tmp/debug.log</code></pre>
 Servlet instances and then starts Undertow.</p>
 </div>
 <div class="paragraph">
-<p>As writing bytecode directly is incredibly complex, this is instead done via bytecode recorders. At deployment time, invocations
-are made on proxy instances of template objects that contain the actual runtime logic, and these invocations are recorded,
-including the value of method parameters. Bytecode is then created to do these same invocations on the actual template
-object at runtime.</p>
+<p>As writing bytecode directly is complex, this is instead done via bytecode recorders. At deployment time,
+invocations are made on recorder objects that contain the actual runtime logic, but instead of these invocations
+proceeding as normal they are intercepted and recorded (hence the name). This recording is then used to generate bytecode
+that performs the same sequence of invocations at runtime. This is essentially a form of deferred execution where invocations
+made at deployment time get deferred until runtime.</p>
 </div>
 <div class="paragraph">
-<p>In more detail, a processor class from the extensions deployment module gathers the configuration
-information within a <code>@BuildStep</code> method that is also annotated with a <code>@Record(STATIC_INIT)</code> or  <code>@Record(RUNTIME_INIT)</code> annotation along with injection of a <code>@Template</code> annotated class
-from the runtime module. A class annotated with <code>@Template</code> is known as a template because it
-provides a template of methods to configure a runtime service. The value of template that is
-injected into the deployment class is a proxy of the template, and any method invocations that are made will be recorded, and output as bytecode that will be run at application startup.</p>
+<p>Let&#8217;s look at the classic 'Hello World' type example. To do this the Quarkus way we would create a recorder as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Recorder
+class HelloRecorder {
+
+  public void sayHello(String name) {
+    System.out.println("Hello" + name);
+  }
+
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Methods on a template can return a value, which must be proxiable (if you want to return a non-proxiable item wrap it
+<p>And then create a build step that uses this recorder:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Record(RUNTIME_INIT)
+@BuildStep
+public void helloBuildStep(HelloRecorder recorder) {
+    recorder.sayHello("World");
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When this build step is run nothing is printed to the console. This is because the <code>HelloRecorder</code> that is injected is
+actually a proxy that records all invocations. Instead if we run the resulting Quarkus program we will see 'Hello World'
+printed to the console.</p>
+</div>
+<div class="paragraph">
+<p>Methods on a recorder can return a value, which must be proxiable (if you want to return a non-proxiable item wrap it
 in <code>io.quarkus.runtime.RuntimeValue</code>). These proxies may not be invoked directly, however they can be passed
-into other template methods. This can be any template method, including from other <code>@Record</code> methods, so a common pattern
-is to produce <code>BuildItem</code> instances that wrap the results of these template invocations.</p>
+into other recorder methods. This can be any recorder method, including from other <code>@BuildStep</code> methods, so a common pattern
+is to produce <code>BuildItem</code> instances that wrap the results of these recorder invocations.</p>
 </div>
 <div class="paragraph">
 <p>For instance, in order to make arbitrary changes to a Servlet deployment Undertow has a <code>ServletExtensionBuildItem</code>,
-which is a <code>MultiBuildItem</code> that wraps a <code>ServletExtension</code> instance. I can return a <code>ServletExtension</code> from a template
-in another module, and Undertow will consume it and pass it into the template method that starts Undertow.</p>
+which is a <code>MultiBuildItem</code> that wraps a <code>ServletExtension</code> instance. I can return a <code>ServletExtension</code> from a recorder
+in another module, and Undertow will consume it and pass it into the recorder method that starts Undertow.</p>
 </div>
 <div class="paragraph">
 <p>At runtime the bytecode will be invoked in the order it is generated. This means that build step dependencies implicitly
@@ -964,9 +1039,9 @@ substitution (basically a transformer from a non-serializable object to a serial
 a class proxy. This interface can be directly injected as a method parameter into any <code>@Record</code> method.</p>
 </div>
 <div class="paragraph">
-<p>Calling <code>classProxy</code> with a given class name will create a <code>Class</code> that can be passed into template
+<p>Calling <code>classProxy</code> with a given class name will create a <code>Class</code> that can be passed into recorder
 methods, and at runtime will be substituted with the class whose name was passed in to <code>classProxy</code>. This is basically a
-convenience to avoid the need to explicitly load classes in the templates.</p>
+convenience to avoid the need to explicitly load classes in the recorders.</p>
 </div>
 <div class="paragraph">
 <p>TODO: config integration</p>
@@ -1339,7 +1414,7 @@ public class ConfiguredBean implements IConfigConsumer {
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @BuildStep
     @Record(STATIC_INIT)
-    RuntimeServiceBuildItem parseServiceXmlConfig(TestTemplate template) throws JAXBException {
+    RuntimeServiceBuildItem parseServiceXmlConfig(TestRecorder recorder) throws JAXBException {
         RuntimeServiceBuildItem serviceBuildItem = null;
         JAXBContext context = JAXBContext.newInstance(XmlConfig.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -1413,7 +1488,7 @@ public class ConfiguredBean implements IConfigConsumer {
 
     @BuildStep
     @Record(STATIC_INIT)
-    void scanForBeans(TestTemplate template, BeanArchiveIndexBuildItem beanArchiveIndex, <i class="conum" data-value="1"></i><b>(1)</b>
+    void scanForBeans(TestRecorder recorder, BeanArchiveIndexBuildItem beanArchiveIndex, <i class="conum" data-value="1"></i><b>(1)</b>
             BuildProducer&lt;TestBeanBuildItem&gt; testBeanProducer) {
         IndexView indexView = beanArchiveIndex.getIndex(); <i class="conum" data-value="2"></i><b>(2)</b>
         Collection&lt;AnnotationInstance&gt; testBeans = indexView.getAnnotations(TEST_ANNOTATION); <i class="conum" data-value="3"></i><b>(3)</b>
@@ -1471,17 +1546,17 @@ public class ConfiguredBean implements IConfigConsumer {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#configureBeans
     @BuildStep
     @Record(RUNTIME_INIT)
-    void configureBeans(TestTemplate template, List&lt;TestBeanBuildItem&gt; testBeans, <i class="conum" data-value="1"></i><b>(1)</b>
+    void configureBeans(TestRecorder recorder, List&lt;TestBeanBuildItem&gt; testBeans, <i class="conum" data-value="1"></i><b>(1)</b>
             BeanContainerBuildItem beanContainer, <i class="conum" data-value="2"></i><b>(2)</b>
             TestRunTimeConfig runTimeConfig) {
 
         for (TestBeanBuildItem testBeanBuildItem : testBeans) {
             Class&lt;IConfigConsumer&gt; beanClass = testBeanBuildItem.getConfigConsumer();
-            template.configureBeans(beanContainer.getValue(), beanClass, buildAndRunTimeConfig, runTimeConfig); <i class="conum" data-value="3"></i><b>(3)</b>
+            recorder.configureBeans(beanContainer.getValue(), beanClass, buildAndRunTimeConfig, runTimeConfig); <i class="conum" data-value="3"></i><b>(3)</b>
         }
     }
 
-// TestTemplate#configureBeans
+// TestRecorder#configureBeans
     public void configureBeans(BeanContainer beanContainer, Class&lt;IConfigConsumer&gt; beanClass,
             TestBuildAndRunTimeConfig buildTimeConfig,
             TestRunTimeConfig runTimeConfig) {
@@ -1504,15 +1579,15 @@ public class ConfiguredBean implements IConfigConsumer {
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Call the runtime template to record the bean interactions.</td>
+<td>Call the runtime recorder to record the bean interactions.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Runtime template retrieves the bean using its type.</td>
+<td>Runtime recorder retrieves the bean using its type.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Runtime template invokes the <code>IConfigConsumer#loadConfig(&#8230;&#8203;)</code> method passing in the configuration objects with runtime information.</td>
+<td>Runtime recorder invokes the <code>IConfigConsumer#loadConfig(&#8230;&#8203;)</code> method passing in the configuration objects with runtime information.</td>
 </tr>
 </table>
 </div>
@@ -1528,7 +1603,7 @@ public class ConfiguredBean implements IConfigConsumer {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#parseServiceXmlConfig
     @BuildStep
     @Record(STATIC_INIT)
-    RuntimeServiceBuildItem parseServiceXmlConfig(TestTemplate template) throws JAXBException {
+    RuntimeServiceBuildItem parseServiceXmlConfig(TestRecorder recorder) throws JAXBException {
         RuntimeServiceBuildItem serviceBuildItem = null;
         JAXBContext context = JAXBContext.newInstance(XmlConfig.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -1537,13 +1612,13 @@ public class ConfiguredBean implements IConfigConsumer {
             log.infof("Have XmlConfig, loading");
             XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is);
             log.infof("Loaded XmlConfig, creating service");
-            RuntimeValue&lt;RuntimeXmlConfigService&gt; service = template.initRuntimeService(config); <i class="conum" data-value="1"></i><b>(1)</b>
+            RuntimeValue&lt;RuntimeXmlConfigService&gt; service = recorder.initRuntimeService(config); <i class="conum" data-value="1"></i><b>(1)</b>
             serviceBuildItem = new RuntimeServiceBuildItem(service); <i class="conum" data-value="3"></i><b>(3)</b>
         }
         return serviceBuildItem;
     }
 
-// TestTemplate#initRuntimeService
+// TestRecorder#initRuntimeService
     public RuntimeValue&lt;RuntimeXmlConfigService&gt; initRuntimeService(XmlConfig config) {
         RuntimeXmlConfigService service = new RuntimeXmlConfigService(config); <i class="conum" data-value="2"></i><b>(2)</b>
         return new RuntimeValue&lt;&gt;(service);
@@ -1567,7 +1642,7 @@ public class ConfiguredBean implements IConfigConsumer {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Call into the runtime template to record the creation of the service.</td>
+<td>Call into the runtime recorder to record the creation of the service.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1590,18 +1665,18 @@ public class ConfiguredBean implements IConfigConsumer {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#startRuntimeService
     @BuildStep
     @Record(RUNTIME_INIT)
-    ServiceStartBuildItem startRuntimeService(TestTemplate template, ShutdownContextBuildItem shutdownContextBuildItem , <i class="conum" data-value="1"></i><b>(1)</b>
+    ServiceStartBuildItem startRuntimeService(TestRecorder recorder, ShutdownContextBuildItem shutdownContextBuildItem , <i class="conum" data-value="1"></i><b>(1)</b>
             RuntimeServiceBuildItem serviceBuildItem) throws IOException { <i class="conum" data-value="2"></i><b>(2)</b>
         if (serviceBuildItem != null) {
             log.info("Registering service start");
-            template.startRuntimeService(shutdownContextBuildItem, serviceBuildItem.getService()); <i class="conum" data-value="3"></i><b>(3)</b>
+            recorder.startRuntimeService(shutdownContextBuildItem, serviceBuildItem.getService()); <i class="conum" data-value="3"></i><b>(3)</b>
         } else {
             log.info("No RuntimeServiceBuildItem seen, check config.xml");
         }
         return new ServiceStartBuildItem("RuntimeXmlConfigService"); <i class="conum" data-value="4"></i><b>(4)</b>
     }
 
-// TestTemplate#startRuntimeService
+// TestRecorder#startRuntimeService
     public void startRuntimeService(ShutdownContext shutdownContext, RuntimeValue&lt;RuntimeXmlConfigService&gt; runtimeValue)
             throws IOException {
         RuntimeXmlConfigService service = runtimeValue.getValue();
@@ -1622,7 +1697,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Call the runtime template to record the service start invocation.</td>
+<td>Call the runtime recorder to record the service start invocation.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -1630,11 +1705,11 @@ public class ConfiguredBean implements IConfigConsumer {
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Runtime template retrieves the service instance reference and calls its <code>startService</code> method.</td>
+<td>Runtime recorder retrieves the service instance reference and calls its <code>startService</code> method.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Runtime template registers an invocation of the service instance <code>stopService</code> method with the Quarkus <code>ShutdownContext</code>.</td>
+<td>Runtime recorder registers an invocation of the service instance <code>stopService</code> method with the Quarkus <code>ShutdownContext</code>.</td>
 </tr>
 </table>
 </div>
@@ -1708,7 +1783,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// TestProcessor#startRuntimeService
     @BuildStep
     @Record(RUNTIME_INIT)
-    ServiceStartBuildItem startRuntimeService(TestTemplate template, ShutdownContextBuildItem shutdownContextBuildItem,
+    ServiceStartBuildItem startRuntimeService(TestRecorder recorder, ShutdownContextBuildItem shutdownContextBuildItem,
             RuntimeServiceBuildItem serviceBuildItem) throws IOException {
 ...
         return new ServiceStartBuildItem("RuntimeXmlConfigService"); <i class="conum" data-value="1"></i><b>(1)</b>
@@ -1849,7 +1924,7 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @BuildStep
     @Record(STATIC_INIT)
-    PublicKeyBuildItem loadDSAPublicKey(TestTemplate template,
+    PublicKeyBuildItem loadDSAPublicKey(TestRecorder recorder,
             BuildProducer&lt;ObjectSubstitutionBuildItem&gt; substitutions) throws IOException, GeneralSecurityException {
 ...
         // Register how to serialize DSAPublicKey

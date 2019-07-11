@@ -317,17 +317,26 @@ The name of the property needs to follow a certain convention which is best disp
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># Your configuration properties
-org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest</code></pre>
+org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest # <i class="conum" data-value="1"></i><b>(1)</b>
+org.acme.restclient.CountriesService/mp-rest/scope=java.inject.Singleton # <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Having this configuration means that all requests performed using <code>org.acme.restclient.CountriesService</code> will use <code><a href="https://restcountries.eu/rest" class="bare">https://restcountries.eu/rest</a></code> as the base URL.</p>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Having this configuration means that all requests performed using <code>org.acme.restclient.CountriesService</code> will use <code><a href="https://restcountries.eu/rest" class="bare">https://restcountries.eu/rest</a></code> as the base URL.
+Using the configuration above, calling the <code>getByName</code> method of <code>CountriesService</code> with a value of <code>France</code> would result in an HTTP GET request being made to <code><a href="https://restcountries.eu/rest/v2/name/France" class="bare">https://restcountries.eu/rest/v2/name/France</a></code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Having this configuration means that the default scope of <code>org.acme.restclient.CountriesService</code> will be <code>@Singleton</code>. Supported scope values are <code>@Singleton</code>, <code>@Dependent</code>, <code>@ApplicationScoped</code> and <code>@RequestScoped</code>. The default scope is <code>@Dependent</code>.
+The default scope can also be defined on the interface.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Note that <code>org.acme.restclient.CountriesService</code> <em>must</em> match the fully qualified name of the <code>CountriesService</code> interface we created in the previous section.</p>
-</div>
-<div class="paragraph">
-<p>Using the configuration above, calling the <code>getByName</code> method of <code>CountriesService</code> with a value of <code>France</code> would result in an HTTP GET request being made to <code><a href="https://restcountries.eu/rest/v2/name/France" class="bare">https://restcountries.eu/rest/v2/name/France</a></code>.</p>
 </div>
 </div>
 </div>
