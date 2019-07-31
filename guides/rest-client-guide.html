@@ -72,6 +72,7 @@
 <li><a href="#create-the-configuration">Create the configuration</a></li>
 <li><a href="#update-the-jax-rs-resource">Update the JAX-RS resource</a></li>
 <li><a href="#update-the-test">Update the test</a></li>
+<li><a href="#async-support">Async Support</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul>
@@ -141,7 +142,7 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This command generates the Maven project with a REST endpoint and imports the <code>smallrye-rest-client</code> and <code>resteasy-jsonb</code> extensions.</p>
+<p>This command generates the Maven project with a REST endpoint and imports the <code>rest-client</code> and <code>resteasy-jsonb</code> extensions.</p>
 </div>
 </div>
 </div>
@@ -419,6 +420,105 @@ public class CountriesResourceTest {
 </div>
 <div class="paragraph">
 <p>The code above uses <a href="http://rest-assured.io/">REST Assured</a>'s <a href="https://github.com/rest-assured/rest-assured/wiki/GettingStarted#jsonpath">json-path</a> capabilities.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="async-support"><a class="anchor" href="#async-support"></a>Async Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The rest client supports asynchronous rest calls. Let&#8217;s see it in action by adding a <code>getByNameAsync</code> method in our <code>CountriesService</code> REST interface. The code should look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import java.util.concurrent.CompletionStage;
+import java.util.Set;
+
+@Path("/v2")
+@RegisterRestClient
+public interface CountriesService {
+
+    @GET
+    @Path("/name/{name}")
+    @Produces("application/json")
+    Set&lt;Country&gt; getByName(@PathParam("name") String name);
+
+    @GET
+    @Path("/name/{name}")
+    @Produces("application/json")
+    CompletionStage&lt;Set&lt;Country&gt;&gt; getByNameAsync(@PathParam("name") String name);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Open the <code>src/main/java/org/acme/restclient/CountriesResource.java</code> file and update it with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.concurrent.CompletionStage;
+import java.util.Set;
+
+@Path("/country")
+public class CountriesResource {
+
+    @Inject
+    @RestClient
+    CountriesService countriesService;
+
+
+    @GET
+    @Path("/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set&lt;Country&gt; name(@PathParam("name") String name) {
+        return countriesService.getByName(name);
+    }
+
+    @GET
+    @Path("/name-async/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public CompletionStage&lt;Set&lt;Country&gt;&gt; nameAsync(@PathParam("name") String name) {
+        return countriesService.getByNameAsync(name);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To test asynchronous methods, add the test method below in <code>CountriesResourceTest</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Test
+public void testCountryNameAsyncEndpoint() {
+    given()
+    .when().get("/country/name-async/greece")
+    .then()
+        .statusCode(200)
+        .body("$.size()", is(1),
+             "[0].alpha2Code", is("GR"),
+             "[0].capital", is("Athens"),
+             "[0].currencies.size()", is(1),
+             "[0].currencies[0].name", is("Euro")
+        );
+    }</code></pre>
+</div>
 </div>
 </div>
 </div>

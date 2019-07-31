@@ -68,12 +68,17 @@
 <li><a href="#architecture">Architecture</a></li>
 <li><a href="#solution">Solution</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
-<li><a href="#creating-your-first-json-rest-service">Creating your first JSON REST service</a></li>
+<li><a href="#creating-your-first-json-rest-service">Creating your first JSON REST service</a>
+<ul class="sectlevel2">
+<li><a href="#more-on-our-jackson-support">More on our Jackson support</a></li>
+</ul>
+</li>
 <li><a href="#creating-a-frontend">Creating a frontend</a></li>
 <li><a href="#building-a-native-executable">Building a native executable</a></li>
 <li><a href="#about-serialization">About serialization</a></li>
 <li><a href="#using-response">Using Response</a></li>
 <li><a href="#http-filters-and-interceptors">HTTP filters and interceptors</a></li>
+<li><a href="#cors-filter">CORS filter</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
     </div>
@@ -155,7 +160,20 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This command generates a Maven structure importing the RESTEasy/JAX-RS and JSON-B extensions.</p>
+<p>This command generates a Maven structure importing the RESTEasy/JAX-RS and <a href="http://json-b.net/">JSON-B</a> extensions.</p>
+</div>
+<div class="paragraph">
+<p>Quarkus also supports <a href="https://github.com/FasterXML/jackson">Jackson</a> so, if you prefer Jackson over JSON-B, you can create a project relying on the RESTEasy Jackson extension instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.19.1:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=rest-json \
+    -DclassName="org.acme.rest.json.FruitResource" \
+    -Dpath="/fruits" \
+    -Dextensions="resteasy-jackson"</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -279,7 +297,8 @@ public class FruitResource {
 <p>The implementation is pretty straightforward and you just need to define your endpoints using the JAX-RS annotations.</p>
 </div>
 <div class="paragraph">
-<p>The <code>Fruit</code> objects will be automatically serialized/deserialized by <a href="http://json-b.net/">JSON-B</a>.</p>
+<p>The <code>Fruit</code> objects will be automatically serialized/deserialized by <a href="http://json-b.net/">JSON-B</a> or <a href="https://github.com/FasterXML/jackson">Jackson</a>,
+depending on the extension you chose when initializing the project.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -296,6 +315,33 @@ It allows to reduce the size of the native executable.</p>
 </td>
 </tr>
 </table>
+</div>
+<div class="sect2">
+<h3 id="more-on-our-jackson-support"><a class="anchor" href="#more-on-our-jackson-support"></a>More on our Jackson support</h3>
+<div class="paragraph">
+<p>As stated above, Quarkus provides the option of using <a href="https://github.com/FasterXML/jackson">Jackson</a> instead of JSON-B via the use of the <code>quarkus-resteasy-jackson</code> extension.</p>
+</div>
+<div class="paragraph">
+<p>When using Jackson, Quarkus allows users to customize the <code>ObjectMapper</code> very easily - all that needs to be done is to configure a CDI producer bean like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class CustomObjectMapperConfig {
+
+    @Singleton
+    @Produces
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        // perform configuration
+        return objectMapper;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If no such bean is provided, a default <code>ObjectMapper</code> is used.</p>
+</div>
 </div>
 </div>
 </div>
@@ -343,11 +389,10 @@ In the <code>src/main/resources/META-INF/resources</code> directory, add a <code
 <h2 id="about-serialization"><a class="anchor" href="#about-serialization"></a>About serialization</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The library we use to serialize Java objects to JSON documents is <a href="http://json-b.net/">JSON-B</a>.
-It uses Java reflection to get the properties of an object and serialize them.</p>
+<p>JSON serialization libraries use Java reflection to get the properties of an object and serialize them.</p>
 </div>
 <div class="paragraph">
-<p>Using native executables with GraalVM, all classes that will be used with reflection need to be registered.
+<p>When using native executables with GraalVM, all classes that will be used with reflection need to be registered.
 The good news is that Quarkus does that work for you most of the time.
 So far, we haven&#8217;t registered any class, not even <code>Fruit</code>, for reflection usage and everything is working fine.</p>
 </div>
@@ -531,7 +576,7 @@ In the <code>src/main/resources/META-INF/resources</code> directory, add a <code
 </div>
 <div class="paragraph">
 <p>As mentioned above, the issue is that Quarkus was not able to determine the <code>Legume</code> class will require some reflection by analyzing the REST endpoints.
-JSON-B tries to get the list of fields of <code>Legume</code> and gets an empty list so it does not serialize the fields' data.</p>
+The JSON serialization library tries to get the list of fields of <code>Legume</code> and gets an empty list so it does not serialize the fields' data.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -541,7 +586,7 @@ JSON-B tries to get the list of fields of <code>Legume</code> and gets an empty 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>At the moment, when JSON-B tries to get the list of fields of a class, if the class is not registered for reflection, no exception will be thrown.
+<p>At the moment, when JSON-B or Jackson tries to get the list of fields of a class, if the class is not registered for reflection, no exception will be thrown.
 GraalVM will simply return an empty list of fields.</p>
 </div>
 <div class="paragraph">
@@ -616,7 +661,7 @@ import org.jboss.logging.Logger;
 @Provider
 public class LoggingFilter implements ContainerRequestFilter {
 
-    private static final Logger LOG = Logger.getLogger(LoggingInterceptor.class);
+    private static final Logger LOG = Logger.getLogger(LoggingFilter.class);
 
     @Context
     UriInfo info;
@@ -646,6 +691,35 @@ public class LoggingFilter implements ContainerRequestFilter {
 2019-06-05 12:50:44,019 INFO  [org.acm.res.jso.LoggingFilter] (executor-thread-1) Request POST /fruits from IP 0:0:0:0:0:0:0:1
 2019-06-05 12:51:04,485 INFO  [org.acm.res.jso.LoggingFilter] (executor-thread-1) Request GET /fruits from IP 127.0.0.1</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cors-filter"><a class="anchor" href="#cors-filter"></a>CORS filter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> (CORS) is a mechanism that
+allows restricted resources on a web page to be requested from another domain outside the domain from which the first resource
+was served.</p>
+</div>
+<div class="paragraph">
+<p>Quarkus comes with a CORS filter. Read the <a href="undertow-reference.html#cors-filter">Undertow Reference Documentation</a> to learn
+how to use it.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you want to use the <code>keycloak</code> Quarkus extension in your project, you should configure CORS using the <code>keycloak</code> extension
+configuration. See <a href="keycloak-guide#configuring-cors">the Keycloak guide</a> for more details.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

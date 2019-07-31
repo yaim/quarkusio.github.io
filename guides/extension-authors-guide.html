@@ -79,13 +79,14 @@
 <li><a href="#maven-setup">2.2. Maven setup</a></li>
 <li><a href="#build-step-processors">2.3. Build Step Processors</a></li>
 <li><a href="#configuration">2.4. Configuration</a></li>
-<li><a href="#bytecode-recording">2.5. Bytecode Recording</a></li>
-<li><a href="#contexts-and-dependency-injection">2.6. Contexts and Dependency Injection</a></li>
-<li><a href="#testing-extensions">2.7. Testing Extensions</a></li>
-<li><a href="#native-executable-support">2.8. Native Executable Support</a></li>
-<li><a href="#ide-support-tips">2.9. IDE support tips</a></li>
-<li><a href="#troubleshooting-debugging-tips">2.10. Troubleshooting / Debugging Tips</a></li>
-<li><a href="#sample-test-extension">2.11. Sample Test Extension</a></li>
+<li><a href="#conditional-step-inclusion">2.5. Conditional Step Inclusion</a></li>
+<li><a href="#bytecode-recording">2.6. Bytecode Recording</a></li>
+<li><a href="#contexts-and-dependency-injection">2.7. Contexts and Dependency Injection</a></li>
+<li><a href="#testing-extensions">2.8. Testing Extensions</a></li>
+<li><a href="#native-executable-support">2.9. Native Executable Support</a></li>
+<li><a href="#ide-support-tips">2.10. IDE support tips</a></li>
+<li><a href="#troubleshooting-debugging-tips">2.11. Troubleshooting / Debugging Tips</a></li>
+<li><a href="#sample-test-extension">2.12. Sample Test Extension</a></li>
 </ul>
 </li>
 </ul>
@@ -853,6 +854,7 @@ this change is complete.</p>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigGroup;
+import io.quarkus.runtime.annotations.DefaultConverter
 
 import java.io.File;
 import java.util.logging.Level;
@@ -875,6 +877,7 @@ public class FileConfig {
     /**
      * The level of logs to be written into the file.
      */
+    @DefaultConverter
     @ConfigItem(defaultValue = "ALL")
     Level level;
 
@@ -970,7 +973,178 @@ quarkus.log.file.path=/tmp/debug.log</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bytecode-recording"><a class="anchor" href="#bytecode-recording"></a>2.5. Bytecode Recording</h3>
+<h3 id="conditional-step-inclusion"><a class="anchor" href="#conditional-step-inclusion"></a>2.5. Conditional Step Inclusion</h3>
+<div class="paragraph">
+<p>It is possible to only include a given <code>@BuildStep</code> under certain conditions.  The <code>@BuildStep</code> annotation
+has two optional parameters: <code>onlyIf</code> and <code>onlyIfNot</code>.  These parameters can be set to one or more classes
+which implement <code>BooleanSupplier</code>.  The build step will only be included when the method returns
+<code>true</code> (for <code>onlyIf</code>) or <code>false</code> (for <code>onlyIfNot</code>).</p>
+</div>
+<div class="paragraph">
+<p>The condition class can inject <a href="#configuration-roots">configuration roots</a> as long as they belong to
+a build-time phase.  Run time configuration is not available for condition classes.</p>
+</div>
+<div class="paragraph">
+<p>The condition class may also inject a value of type <code>io.quarkus.runtime.LaunchMode</code>.
+Constructor parameter and field injection is supported.</p>
+</div>
+<div class="listingblock">
+<div class="title">An example of a conditional build step</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep(onlyIf = IsDevMode.class)
+LogCategoryBuildItem enableDebugLogging() {
+    return new LogCategoryBuildItem("org.your.quarkus.extension", Level.DEBUG);
+}
+
+static class IsDevMode implements BooleanSupplier {
+    LaunchMode launchMode;
+
+    public boolean getAsBoolean() {
+        return launchMode == LaunchMode.DEVELOPMENT;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="enhanced-conversion"><a class="anchor" href="#enhanced-conversion"></a>2.5.1. Enhanced conversion</h4>
+<div class="paragraph">
+<p>You can use enhanced conversion of a config item by using the <code>@ConvertWith</code> annotation which accepts a <code>Converter</code> class object.
+If the annotation is present on a config item, the implicit or custom built in converter in use will be overridden by the value provided.
+To do, see the example below which converts <code>YES</code> or <code>NO</code> values to <code>boolean</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@ConfigRoot
+public class SomeConfig {
+    /**
+     * Config item with enhanced converter
+     */
+    @ConvertWith(YesNoConverter.class) <i class="conum" data-value="1"></i><b>(1)</b>
+    @ConfigItem(defaultValue = "NO")
+    Boolean answer;
+
+
+    public static class YesNoConverter implements Converter&lt;Boolean&gt; {
+
+        public YesNoConverter() {}
+
+        @Override
+        public Boolean convert(String s) {
+            if (s == null || s.isEmpty()) {
+                return false;
+            }
+
+            switch (s) {
+                case "YES":
+                    return true;
+                case "NO":
+                    return false;
+            }
+
+            throw new IllegalArgumentException("Unsupported value " + s + " given");
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Override the default <code>Boolean</code> converter and use the provided converter which accepts a <code>YES</code> or <code>NO</code> config values.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The corresponding <code>application.properties</code> will look like.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="properties" class="language-properties hljs">quarkus.some.answer=YES</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Enum values (config items) are translated to skewed-case (hyphenated) by default. The table below illustrates an enum name and their canonical equivalence:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Java enum</th>
+<th class="tableblock halign-left valign-top">Canonical equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DISCARD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">discard</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">READ_UNCOMMITTED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">read-uncommitted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SIGUSR1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sigusr1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JavaEnum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java-enum</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MAKING_LifeDifficult</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">making-life-difficult</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">YeOldeJBoss</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ye-olde-jboss</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">camelCaseEnum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">camel-case-enum</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To use the default behaviour which is based on implicit converter or a custom defined one add <code>@DefaultConverter</code> annotation to the configuration item</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@ConfigRoot
+public class SomeLogConfig {
+    /**
+     * The level of logs to be written into the file.
+     */
+    @DefaultConverter <i class="conum" data-value="1"></i><b>(1)</b>
+    @ConfigItem(defaultValue = "ALL")
+    Level level;
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Use the default converter (built in or a custom converter) to convert <code>Level.class</code> enum.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bytecode-recording"><a class="anchor" href="#bytecode-recording"></a>2.6. Bytecode Recording</h3>
 <div class="paragraph">
 <p>One of the main outputs of the build process is recorded bytecode. This bytecode actually sets up the runtime environment. For example, in order to start Undertow, the resulting application will have some bytecode that directly registers all
 Servlet instances and then starts Undertow.</p>
@@ -1031,7 +1205,7 @@ control the order that generated bytecode is run. In the example above we know t
 <code>ServletExtensionBuildItem</code> will be run before the bytecode that consumes it.</p>
 </div>
 <div class="sect3">
-<h4 id="recordercontext"><a class="anchor" href="#recordercontext"></a>2.5.1. RecorderContext</h4>
+<h4 id="recordercontext"><a class="anchor" href="#recordercontext"></a>2.6.1. RecorderContext</h4>
 <div class="paragraph">
 <p><code>io.quarkus.deployment.recording.RecorderContext</code> provides some convenience methods to enhance bytecode recording,
 this includes the ability to register creation functions for classes without no-arg constructors, to register an object
@@ -1049,9 +1223,9 @@ convenience to avoid the need to explicitly load classes in the recorders.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="contexts-and-dependency-injection"><a class="anchor" href="#contexts-and-dependency-injection"></a>2.6. Contexts and Dependency Injection</h3>
+<h3 id="contexts-and-dependency-injection"><a class="anchor" href="#contexts-and-dependency-injection"></a>2.7. Contexts and Dependency Injection</h3>
 <div class="sect3">
-<h4 id="extension-points"><a class="anchor" href="#extension-points"></a>2.6.1. Extension Points</h4>
+<h4 id="extension-points"><a class="anchor" href="#extension-points"></a>2.7.1. Extension Points</h4>
 <div class="paragraph">
 <p>As a CDI based runtime, Quarkus extensions often make CDI beans available as part of the extension behavior.
 However, Quarkus DI solution does not support CDI Portable Extensions.
@@ -1060,7 +1234,7 @@ Instead, Quarkus extensions can make use of various <a href="cdi-reference.html"
 </div>
 </div>
 <div class="sect2">
-<h3 id="testing-extensions"><a class="anchor" href="#testing-extensions"></a>2.7. Testing Extensions</h3>
+<h3 id="testing-extensions"><a class="anchor" href="#testing-extensions"></a>2.8. Testing Extensions</h3>
 <div class="paragraph">
 <p>Testing of extensions should be done with the <code>io.quarkus.test.QuarkusUnitTest</code> runner. This runner allows
 for Arquillian-style tests that test specific functionalities. It is not intended for testing user applications, as this
@@ -1202,7 +1376,7 @@ public class PersistenceAndQuarkusConfigTest {
 </div>
 </div>
 <div class="sect2">
-<h3 id="native-executable-support"><a class="anchor" href="#native-executable-support"></a>2.8. Native Executable Support</h3>
+<h3 id="native-executable-support"><a class="anchor" href="#native-executable-support"></a>2.9. Native Executable Support</h3>
 <div class="paragraph">
 <p>There Quarkus provides a lot of build items that control aspects of the native executable build. This allows for extensions
 to programmatically perform tasks such as registering classes for reflection or adding static resources to the native
@@ -1242,9 +1416,9 @@ executable. Some of these build items are listed below:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="ide-support-tips"><a class="anchor" href="#ide-support-tips"></a>2.9. IDE support tips</h3>
+<h3 id="ide-support-tips"><a class="anchor" href="#ide-support-tips"></a>2.10. IDE support tips</h3>
 <div class="sect3">
-<h4 id="writing-quarkus-extensions-in-eclipse"><a class="anchor" href="#writing-quarkus-extensions-in-eclipse"></a>2.9.1. Writing Quarkus extensions in Eclipse</h4>
+<h4 id="writing-quarkus-extensions-in-eclipse"><a class="anchor" href="#writing-quarkus-extensions-in-eclipse"></a>2.10.1. Writing Quarkus extensions in Eclipse</h4>
 <div class="paragraph">
 <p>The only particular aspect of writing Quarkus extensions in Eclipse is that APT (Annotation Processing Tool) is required as part of extension builds, which means you need to:</p>
 </div>
@@ -1267,9 +1441,9 @@ executable. Some of these build items are listed below:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="troubleshooting-debugging-tips"><a class="anchor" href="#troubleshooting-debugging-tips"></a>2.10. Troubleshooting / Debugging Tips</h3>
+<h3 id="troubleshooting-debugging-tips"><a class="anchor" href="#troubleshooting-debugging-tips"></a>2.11. Troubleshooting / Debugging Tips</h3>
 <div class="sect3">
-<h4 id="saving-application-generated-classes-to-disk"><a class="anchor" href="#saving-application-generated-classes-to-disk"></a>2.10.1. Saving Application Generated Classes to Disk</h4>
+<h4 id="saving-application-generated-classes-to-disk"><a class="anchor" href="#saving-application-generated-classes-to-disk"></a>2.11.1. Saving Application Generated Classes to Disk</h4>
 <div class="paragraph">
 <p>The class augmentation step of Quarkus generates classes for various purposes. Sometimes you need to view these
 classes/bytecode to debug or understand an issue. Classes that are related to application augmentation are currently held in
@@ -1284,13 +1458,13 @@ memory in a runtime class loader. To have these classes written out to disk for 
 </div>
 </div>
 <div class="sect2">
-<h3 id="sample-test-extension"><a class="anchor" href="#sample-test-extension"></a>2.11. Sample Test Extension</h3>
+<h3 id="sample-test-extension"><a class="anchor" href="#sample-test-extension"></a>2.12. Sample Test Extension</h3>
 <div class="paragraph">
 <p>We have an extension that is used to test for regressions in the extension processing. It is located in <a href="https://github.com/quarkusio/quarkus/tree/master/core/test-extension" class="bare">https://github.com/quarkusio/quarkus/tree/master/core/test-extension</a> directory. In this section we touch on some of the tasks an extension
 author will typically need to perform using the test-extension code to illustrate how the task could be done.</p>
 </div>
 <div class="sect3">
-<h4 id="features-and-capabilities"><a class="anchor" href="#features-and-capabilities"></a>2.11.1. Features and Capabilities</h4>
+<h4 id="features-and-capabilities"><a class="anchor" href="#features-and-capabilities"></a>2.12.1. Features and Capabilities</h4>
 <div class="paragraph">
 <p>When you start a Quarkus instance, you will see a line like the one highlighted in this example:</p>
 </div>
@@ -1344,7 +1518,7 @@ using the Quarkus maven plugin as shown in this example taken from the Writing J
 </div>
 </div>
 <div class="sect3">
-<h4 id="bean-defining-annotations"><a class="anchor" href="#bean-defining-annotations"></a>2.11.2. Bean Defining Annotations</h4>
+<h4 id="bean-defining-annotations"><a class="anchor" href="#bean-defining-annotations"></a>2.12.2. Bean Defining Annotations</h4>
 <div class="paragraph">
 <p>The CDI layer processes CDI beans that are either explicitly registered or that it discovers based on bean defining annotations as defined in <a href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#bean_defining_annotations"&gt;">2.5.1. Bean defining annotations</a>. You can expand this set of annotations to include annotations your extension processes using a <code>BeanDefiningAnnotationBuildItem</code> as shown in this <code>TestProcessor#registerBeanDefinningAnnotations</code> example:</p>
 </div>
@@ -1402,7 +1576,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="parsing-config-to-objects"><a class="anchor" href="#parsing-config-to-objects"></a>2.11.3. Parsing Config to Objects</h4>
+<h4 id="parsing-config-to-objects"><a class="anchor" href="#parsing-config-to-objects"></a>2.12.3. Parsing Config to Objects</h4>
 <div class="paragraph">
 <p>One of the main things an extension is likely to do is completely separate the configuration phase of behavior from the runtime phase. Frameworks often do parsing/load of configuration on startup that can be done during build time to both reduce the runtime dependencies on frameworks like xml parsers as well as reducing the startup time the parsing incurs.</p>
 </div>
@@ -1476,7 +1650,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="scanning-deployments-using-jandex"><a class="anchor" href="#scanning-deployments-using-jandex"></a>2.11.4. Scanning Deployments Using Jandex</h4>
+<h4 id="scanning-deployments-using-jandex"><a class="anchor" href="#scanning-deployments-using-jandex"></a>2.12.4. Scanning Deployments Using Jandex</h4>
 <div class="paragraph">
 <p>If your extension defines annotations or interfaces that mark beans needing to be processed, you can locate these beans using the Jandex API, a Java annotation indexer and offline reflection library. The following <code>TestProcessor#scanForBeans</code> method shows how to find the beans annotated with our <code>@TestAnnotation</code> that also implement the <code>IConfigConsumer</code> interface:</p>
 </div>
@@ -1536,7 +1710,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="interacting-with-extension-beans"><a class="anchor" href="#interacting-with-extension-beans"></a>2.11.5. Interacting With Extension Beans</h4>
+<h4 id="interacting-with-extension-beans"><a class="anchor" href="#interacting-with-extension-beans"></a>2.12.5. Interacting With Extension Beans</h4>
 <div class="paragraph">
 <p>You can use the <code>io.quarkus.arc.runtime.BeanContainer</code> interface to interact with your extension beans. The following <code>configureBeans</code> methods illustrate interacting with the beans scanned for in the previous section:</p>
 </div>
@@ -1593,7 +1767,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="manage-non-cdi-service"><a class="anchor" href="#manage-non-cdi-service"></a>2.11.6. Manage Non-CDI Service</h4>
+<h4 id="manage-non-cdi-service"><a class="anchor" href="#manage-non-cdi-service"></a>2.12.6. Manage Non-CDI Service</h4>
 <div class="paragraph">
 <p>A common purpose for an extension is to integrate a non-CDI aware service into the CDI based Quarkus runtime. Step 1 of this task is to load any configuration needed in a STATIC_INIT build step as we did in <a href="#parsing-config-to-objects">Parsing Config to Objects</a>. Now we need to create an instance of the service using the configuration. Let&#8217;s return to the <code>TestProcessor#parseServiceXmlConfig</code> method to see how this can be done.</p>
 </div>
@@ -1655,7 +1829,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </table>
 </div>
 <div class="sect4">
-<h5 id="starting-a-service"><a class="anchor" href="#starting-a-service"></a>2.11.6.1. Starting a Service</h5>
+<h5 id="starting-a-service"><a class="anchor" href="#starting-a-service"></a>2.12.6.1. Starting a Service</h5>
 <div class="paragraph">
 <p>Now that you have recorded the creation of a service during the build phase, you need to record how to start the service at runtime during booting. You do this with a RUNTIME_INIT build step as shown in the <code>TestProcessor#startRuntimeService</code> method.</p>
 </div>
@@ -1723,7 +1897,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="startup-and-shutdown-events"><a class="anchor" href="#startup-and-shutdown-events"></a>2.11.7. Startup and Shutdown Events</h4>
+<h4 id="startup-and-shutdown-events"><a class="anchor" href="#startup-and-shutdown-events"></a>2.12.7. Startup and Shutdown Events</h4>
 <div class="paragraph">
 <p>The Quarkus container supports startup and shutdown lifecycle events to notify components of the container startup
 and shutdown. There are CDI events fired that components can observe are illustrated in this example:</p>
@@ -1800,7 +1974,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </div>
 </div>
 <div class="sect3">
-<h4 id="register-resources-for-use-in-native-image"><a class="anchor" href="#register-resources-for-use-in-native-image"></a>2.11.8. Register Resources for Use in Native Image</h4>
+<h4 id="register-resources-for-use-in-native-image"><a class="anchor" href="#register-resources-for-use-in-native-image"></a>2.12.8. Register Resources for Use in Native Image</h4>
 <div class="paragraph">
 <p>Not all configuration or resources can be consumed at build time. If you have classpath resources that the runtime needs to access, you need to inform the build phase that these resources need to be copied into the native image. This is done by producing one or more <code>SubstrateResourceBuildItem</code> or <code>SubstrateResourceBundleBuildItem</code> in the case of resource bundles. Examples of this are shown in this sample <code>registerNativeImageReources</code> build step:</p>
 </div>
@@ -1843,7 +2017,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </div>
 </div>
 <div class="sect3">
-<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.11.9. Object Substitution</h4>
+<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.12.9. Object Substitution</h4>
 <div class="paragraph">
 <p>Objects created during the build phase that are passed into the runtime need to have a default constructor in order for them to be created and configured at startup of the runtime from the build time state. If an object does not have a default constructor you will see an error similar to the following during generation of the augmented artifacts:</p>
 </div>
@@ -1940,7 +2114,7 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
 </div>
 </div>
 <div class="sect3">
-<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.11.10. Replacing Classes in the Native Image</h4>
+<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.12.10. Replacing Classes in the Native Image</h4>
 <div class="paragraph">
 <p>The Graal SDK supports substitutions of classes in the native image. An example of how one could replace the <code>XmlConfig/XmlData</code> classes with versions that have no JAXB annotation dependencies is shown in these example classes:</p>
 </div>

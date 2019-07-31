@@ -82,6 +82,7 @@
 <li><a href="#build-tool-maven">Maven configuration</a>
 <ul class="sectlevel2">
 <li><a href="#uber-jar-maven">Uber-Jar Creation</a></li>
+<li><a href="#custom-test-configuration-profile">Custom test configuration profile</a></li>
 </ul>
 </li>
 </ul>
@@ -208,7 +209,7 @@ If no extension is found or if more than one extensions match, you will see a re
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn quarkus:add-extensions -Dextensions=jdbc,agroal,non-exist-ent
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ ./mvnw quarkus:add-extensions -Dextensions=jdbc,agroal,non-exist-ent
 [...]
 ❌ Multiple extensions matching 'jdbc'
      * io.quarkus:quarkus-jdbc-h2
@@ -454,7 +455,7 @@ Luckily, the <code>quarkus-bootstrap</code> Maven plugin includes the <code>buil
 </div>
 </div>
 <div class="paragraph">
-<p>Now you should be able to execute <code>mvn quarkus-bootstrap:build-tree</code> on your project and see something like:</p>
+<p>Now you should be able to execute <code>./mvnw quarkus-bootstrap:build-tree</code> on your project and see something like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -747,6 +748,63 @@ Note that in this case the build itself runs in a Docker container too, so you d
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>This configuration will output a file <code>uber-jar-name-runner.jar</code> inside the <code>target</code> directory. When <code>finalName</code> option is not set, project&#8217;s build final name is used.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="custom-test-configuration-profile"><a class="anchor" href="#custom-test-configuration-profile"></a>Custom test configuration profile</h3>
+<div class="paragraph">
+<p>By default, Quarkus tests are run using the <code>test</code> configuration profile. If you are not familiar with Quarkus configuration
+profiles, everything you need to know is explained in the
+<a href="application-configuration-guide.html#configuration-profiles">Configuration Profiles Documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>It is however possible to use a custom configuration profile for your tests with the Maven Surefire and Maven Failsafe
+configurations shown below. This can be useful if you need for example to run some tests using a specific database which is not
+your default testing database.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;project&gt;
+  [...]
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+        &lt;version&gt;${surefire-plugin.version}&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;systemPropertyVariables&gt;
+            &lt;quarkus.test.profile&gt;foo&lt;/quarkus.test.profile&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+            &lt;buildDirectory&gt;${project.build.directory}&lt;/buildDirectory&gt;
+            [...]
+          &lt;/systemPropertyVariables&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-failsafe-plugin&lt;/artifactId&gt;
+        &lt;version&gt;${failsafe-plugin.version}&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;systemPropertyVariables&gt;
+            &lt;quarkus.test.profile&gt;foo&lt;/quarkus.test.profile&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+            &lt;buildDirectory&gt;${project.build.directory}&lt;/buildDirectory&gt;
+            [...]
+          &lt;/systemPropertyVariables&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+  [...]
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>foo</code> configuration profile will be used to run the tests.</td>
 </tr>
 </table>
 </div>

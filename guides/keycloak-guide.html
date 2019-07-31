@@ -73,6 +73,7 @@
 <ul class="sectlevel2">
 <li><a href="#configuring-using-the-application-properties-file">Configuring using the application.properties file</a></li>
 <li><a href="#configuring-using-the-keycloak-json-file">Configuring using the keycloak.json file</a></li>
+<li><a href="#configuring-cors">Configuring CORS</a></li>
 </ul>
 </li>
 <li><a href="#starting-and-configuring-the-keycloak-server">Starting and Configuring the Keycloak Server</a></li>
@@ -360,6 +361,47 @@ quarkus.keycloak.policy-enforcer.enforcement-mode=PERMISSIVE</code></pre>
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="configuring-cors"><a class="anchor" href="#configuring-cors"></a>Configuring CORS</h3>
+<div class="paragraph">
+<p>If you plan to consume this application from a Web Application running on a different domain, you will need to configure CORS (Cross-origin resource sharing). The Keycloak extension have an option for that :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.keycloak.enable-cors=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if you are using the <code>keycloak.json</code> format :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  ...
+  "enable-cors" : true
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For most use case that will be enough but if you need a more fined-grained CORS configuration you can set these different options :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.keycloak.cors-max-age=1000
+quarkus.keycloak.cors-allowed-methods=POST, PUT, DELETE, GET
+quarkus.keycloak.cors-exposed-headers=WWW-Authenticate, My-custom-exposed-Header</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "cors-max-age" : 1000,
+  "cors-allowed-methods" : "POST, PUT, DELETE, GET",
+  "cors-exposed-headers" : "WWW-Authenticate, My-custom-exposed-Header"
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>For more details about this file and all the supported options, please take a look at <a href="https://www.keycloak.org/docs/latest/securing_apps/index.html#_java_adapter_config">Keycloak Adapter Config</a>.</p>
 </div>
@@ -407,7 +449,7 @@ quarkus.keycloak.policy-enforcer.enforcement-mode=PERMISSIVE</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn package</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw package</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -435,7 +477,7 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn package -Dnative</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw package -Pnative</code></pre>
 </div>
 </div>
 <div class="paragraph">

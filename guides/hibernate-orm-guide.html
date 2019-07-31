@@ -223,7 +223,7 @@ public class Gift {
 </div>
 <div class="paragraph">
 <p>To load some SQL statements when Hibernate ORM starts, add a <code>import.sql</code> in the root of your resources directory.
-It contains SQL DML statements (one by line).
+It contains SQL DML statements terminated by a semicolon.
 This is useful to have a data set ready for your tests or demos.</p>
 </div>
 <div class="admonitionblock warning">
@@ -288,6 +288,7 @@ The storage engine to use when the dialect supports multiple storage engines.</p
 <dd>
 <p>(defaults to <code>/import.sql</code>) Name of the file containing the SQL statements to execute when Hibernate ORM starts.
 By default, simply add <code>import.sql</code> in the root of your resources directory and it will be picked up without having to set this property.
+Pass <code>no-file</code> to force Hibernate ORM to ignore the SQL import file.
 If you need different SQL statements between dev mode, test (<code>@QuarkusTest</code>) and in production, use Quarkus <a href="https://quarkus.io/guides/application-configuration-guide#configuration-profiles">configuration profiles facility</a>.</p>
 </dd>
 </dl>
@@ -297,8 +298,23 @@ If you need different SQL statements between dev mode, test (<code>@QuarkusTest<
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="property" class="language-property hljs">%dev.quarkus.hibernate-orm.sql-load-script = import-dev.sql
 %test.quarkus.hibernate-orm.sql-load-script = import-test.sql
-%prod.quarkus.hibernate-orm.sql-load-script = import-prod.sql</code></pre>
+%prod.quarkus.hibernate-orm.sql-load-script = no-file</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Quarkus supports <code>.sql</code> file with SQL statements or comments spread over multiple lines.
+Each SQL statement must be terminated by a semicolon.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="dlist">
 <dl>
@@ -577,15 +593,15 @@ to select different behaviors depending on your environment.</p>
 %dev.quarkus.hibernate-orm.sql-load-script = import-dev.sql
 
 %dev-with-data.quarkus.hibernate-orm.database.generation = update
-%dev-with-data.quarkus.hibernate-orm.sql-load-script =
+%dev-with-data.quarkus.hibernate-orm.sql-load-script = no-file
 
 %prod.quarkus.hibernate-orm.database.generation = none
-%prod.quarkus.hibernate-orm.sql-load-script =</code></pre>
+%prod.quarkus.hibernate-orm.sql-load-script = no-file</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn compile quarkus:dev -Dquarkus-profile=dev-with-data</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw compile quarkus:dev -Dquarkus.profile=dev-with-data</code></pre>
 </div>
 </div>
 </div>

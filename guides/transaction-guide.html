@@ -68,6 +68,7 @@
 <li><a href="#starting-and-stopping-transactions-defining-your-boundaries">Starting and stopping transactions: defining your boundaries</a>
 <ul class="sectlevel2">
 <li><a href="#declarative-approach">Declarative approach</a></li>
+<li><a href="#transaction-configuration">Transaction Configuration</a></li>
 <li><a href="#reactive-extensions">Reactive extensions</a></li>
 <li><a href="#api-approach">API approach</a></li>
 </ul>
@@ -233,6 +234,23 @@ public class SantaClausService {
 <td>Programmatically decide to set the transaction for rollback.</td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transaction-configuration"><a class="anchor" href="#transaction-configuration"></a>Transaction Configuration</h3>
+<div class="paragraph">
+<p>Extended configuration of the transaction is possible with the use of the <code>@TransactionConfiguration</code> annotation that is set in addition to the standard <code>@Transactional</code> annotation on your entry method or at the class level.</p>
+</div>
+<div class="paragraph">
+<p>The <code>@TransactionConfiguration</code> annotation allows to set a timeout property, in seconds, that applies to transactions created within the annotated method.</p>
+</div>
+<div class="paragraph">
+<p>This annotation may only be placed on the top level method delineating the transaction.
+Annotated nested methods once a transaction has started will throw an exception.</p>
+</div>
+<div class="paragraph">
+<p>If defined on a class, it is equivalent to defining it on all the methods of the class marked with <code>@Transactional</code>.
+The configuration defined on a method takes precedence over the configuration defined on a class.</p>
 </div>
 </div>
 <div class="sect2">

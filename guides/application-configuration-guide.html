@@ -479,8 +479,8 @@ select between then via a profile name.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>There are two ways to set a custom profile, either via the <code>quarkus-profile</code> system property or the <code>QUARKUS_PROFILE</code>
-environment variable. If both are set the environment variable takes precedence. Note that it is not necessary to
+<p>There are two ways to set a custom profile, either via the <code>quarkus.profile</code> system property or the <code>QUARKUS_PROFILE</code>
+environment variable. If both are set the system property takes precedence. Note that it is not necessary to
 define the names of these profiles anywhere, all that is necessary is to create a config property with the profile
 name, and then set the current profile to that name. For example if I want a 'staging' profile with a different HTTP port
 I can add the following to <code>application.properties</code>:</p>
@@ -493,6 +493,27 @@ I can add the following to <code>application.properties</code>:</p>
 </div>
 <div class="paragraph">
 <p>And then set the <code>QUARKUS_PROFILE</code> environment variable to 'staging' to activate my profile.</p>
+</div>
+<div class="sect3">
+<h4 id="miscellaneous"><a class="anchor" href="#miscellaneous"></a>Miscellaneous</h4>
+<div class="paragraph">
+<p>The default Quarkus application runtime profile is set to the profile used to build the application.
+For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dquarkus.profile=prod-aws`
+./target/my-app-1.0-runner <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The command will run with the <code>prod-aws</code> profile. This can be overridden using the <code>quarkus.profile</code> system property.</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>

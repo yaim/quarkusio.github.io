@@ -90,6 +90,7 @@
 <li><a href="#going-reactive">Going reactive</a></li>
 </ul>
 </li>
+<li><a href="#configuration-reference">Configuration Reference</a></li>
 </ul>
     </div>
     <div>
@@ -369,7 +370,7 @@ quarkus.neo4j.authentication.password = secret</code></pre>
 <p>You&#8217;ll recognize the authentication here that you passed on to the docker command above.</p>
 </div>
 <div class="paragraph">
-<p>Having done that, the driver is ready to use.</p>
+<p>Having done that, the driver is ready to use, there are however other configuration options, detailed below.</p>
 </div>
 </div>
 </div>
@@ -742,6 +743,109 @@ public class ReactiveFruitResource {
 It exposes its API based on <a href="http://www.reactive-streams.org">Reactive Streams</a>, most prominently, as <code>org.reactivestreams.Publisher</code>.
 Those can be used directly, but we found it easier and more expressive to wrap them in reactive types from <a href="https://projectreactor.io">Project Reactor</a>.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Configuration key</th>
+<th class="tableblock halign-left valign-top">Java type</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.uri</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bolt://localhost:7687</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The uri this driver should connect to. The driver supports <code>bolt</code>, <code>bolt+routing</code> or <code>neo4j</code> as schemes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.authentication.username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>neo4j</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The login of the user connecting to the database.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.authentication.password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>neo4j</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password of the user connecting to the database.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.authentication.disabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set this to <code>true</code> to disable authentication.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.pool.metrics-enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flag, if metrics are enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.pool.log-leaked-sessions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flag, if leaked sessions logging is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.pool.max-connection-pool-size;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum amount of connections in the connection pool towards a single database.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.pool.max-connection-lifetime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1H</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pooled connections older than this threshold will be closed and removed from the pool.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.pool.connection-acquisition-timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1M</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acquisition of new connections will be attempted for at most configured timeout.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.neo4j.pool.idle-time-before-connection-test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A negative value.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pooled connections that have been idle in the pool for longer than this timeout will be tested before they are used again. The value 0 means connections will always be tested for validity and negative values mean connections will never be tested.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The format for durations uses the standard <code>java.time.Duration</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can also provide duration values starting with a number.
+In this case, if the value consists only of a number, the converter treats the value as seconds.
+Otherwise, <code>PT</code> is implicitly appended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

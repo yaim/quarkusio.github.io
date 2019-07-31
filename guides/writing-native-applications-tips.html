@@ -64,71 +64,143 @@
     <h1 class="text-caps">Quarkus - Tips for writing native applications</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
-<li><a href="#register-reflection">Register reflection</a>
+<li><a href="#supporting-native-in-your-application">Supporting native in your application</a>
 <ul class="sectlevel2">
-<li><a href="#alternative-with-registerforreflection">Alternative with @RegisterForReflection</a></li>
+<li><a href="#including-resources">Including resources</a></li>
+<li><a href="#registering-for-reflection">Registering for reflection</a></li>
+<li><a href="#delaying-class-initialization">Delaying class initialization</a></li>
+<li><a href="#managing-proxy-classes">Managing Proxy Classes</a></li>
 </ul>
 </li>
-<li><a href="#including-resources">Including resources</a></li>
-<li><a href="#delay-class-initialization">Delay class initialization</a></li>
-<li><a href="#proxy-classes-management">Proxy Classes management</a></li>
+<li><a href="#native-in-extension">Supporting native in a Quarkus extension</a>
+<ul class="sectlevel2">
+<li><a href="#register-reflection">Register reflection</a></li>
+<li><a href="#alternative-with-registerforreflection">Alternative with @RegisterForReflection</a></li>
+<li><a href="#including-resources-2">Including resources</a></li>
+</ul>
+</li>
+<li><a href="#delay-class-initialization">Delay class initialization</a>
+<ul class="sectlevel2">
+<li><a href="#managing-proxy-classes-2">Managing Proxy Classes</a></li>
+</ul>
+</li>
 </ul>
     </div>
     <div>
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide contains various tips and tricks for getting around problems that might arise when attempting to run java applications as native executables.</p>
+<p>This guide contains various tips and tricks for getting around problems that might arise when attempting to run Java applications as native executables.</p>
+</div>
+<div class="paragraph">
+<p>Note that we differentiate two contexts where the solution applied might be different:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>in the context of an application, you will rely on configuring the <code>native-image</code> configuration by tweaking your <code>pom.xml</code>;</p>
+</li>
+<li>
+<p>in the context of an extension, Quarkus offers a lot of infrastructure to simplify all of this.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Please refer to the appropriate section depending on your context.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="register-reflection"><a class="anchor" href="#register-reflection"></a>Register reflection</h2>
+<h2 id="supporting-native-in-your-application"><a class="anchor" href="#supporting-native-in-your-application"></a>Supporting native in your application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Due to the fact that when building a native executable GraalVM operates with a closed world assumption (which enables it to remove all unused code, which in turns yields multiple benefits), reflection targets need to be explicitly declared.</p>
+<p>GraalVM imposes a number of constraints and making your application a native executable might require a few tweaks.</p>
+</div>
+<div class="sect2">
+<h3 id="including-resources"><a class="anchor" href="#including-resources"></a>Including resources</h3>
+<div class="paragraph">
+<p>By default, when building a native executable, GraalVM will not include any of the resources that are on the classpath into the native executable it creates.
+Such resources that are meant to be part of the native executable need to be specified explicitly.</p>
 </div>
 <div class="paragraph">
-<p>An example of failing to explicitly specify reflection is the following:</p>
+<p>Quarkus automatically includes the resources present in <code>META-INF/resources</code> (the web resources) but, outside of this directory, you are on your own.</p>
+</div>
+<div class="paragraph">
+<p>To include more resources in the native executable, create a <code>resources-config.json</code> JSON file at the root of your project defining which resources should be included:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">Caused by: org.xml.sax.SAXException: SAX2 driver class com.sun.org.apache.xerces.internal.parsers.SAXParser not found
-java.lang.ClassNotFoundException: com.sun.org.apache.xerces.internal.parsers.SAXParser
-at org.xml.sax.helpers.XMLReaderFactory.loadClass(XMLReaderFactory.java:230)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If one were to execute the native executable generation process manually, the <code>-H:ReflectionConfigurationFiles=</code> flag would be used to point to a JSON configuration file that specifies the program elements that would be accessed reflectively.</p>
-</div>
-<div class="paragraph">
-<p>Quarkus however makes registration of reflection a breeze by using the <code>ReflectiveClassBuildItem</code>, thus eliminating the need for such a JSON configuration file.</p>
-</div>
-<div class="paragraph">
-<p>To solve the problem shown in the example above one would need to create a Quarkus processor class and add a build step that registers reflection.
-A simple example could like the following:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class SaxParserProcessor {
-
-    @BuildStep
-    ReflectiveClassBuildItem reflection() {
-        // since we only need reflection to the constructor of the class, we can specify `false` for both the methods and the fields arguments.
-        return new ReflectiveClassBuildItem(false, false, "com.sun.org.apache.xerces.internal.parsers.SAXParser");
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
+  "resources": [
+    {
+      "pattern": ".*\\.xml$"
+    },
+    {
+      "pattern": ".*\\.json$"
     }
-
+  ]
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>More information about reflection in GraalVM can be found <a href="https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md">here</a>.</p>
+<p>The patterns are valid Java regexps.
+Here we include all the XML files and JSON files into the native executable.</p>
+</div>
+<div class="paragraph">
+<p>Now, let&#8217;s tell the <code>native-image</code> executable about this configuration file by tweaking the <code>native-image</code> execution in your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${version.quarkus}&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;native-image&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
+                &lt;additionalBuildArgs&gt;
+                    &lt;additionalBuildArg&gt;-H:ResourceConfigurationFiles=${project.basedir}/resources-config.json&lt;/additionalBuildArg&gt;
+                &lt;/additionalBuildArgs&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your resources will now be included in your native executable.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can find more information about this topic in <a href="https://github.com/oracle/graal/blob/master/substratevm/RESOURCES.md">the GraalVM documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="alternative-with-registerforreflection"><a class="anchor" href="#alternative-with-registerforreflection"></a>Alternative with @RegisterForReflection</h3>
+<h3 id="registering-for-reflection"><a class="anchor" href="#registering-for-reflection"></a>Registering for reflection</h3>
 <div class="paragraph">
-<p>In application code it is often needed to pass classes to libraries that use reflection to figure out the methods/fields of those classes.
-One such example is using <a href="http://json-b.net/">JSON-B</a> like so:</p>
+<p>When building a native executable, GraalVM operates with a closed world assumption.
+It analyzes the call tree and removes all the classes/methods/fields that are not used directly.</p>
+</div>
+<div class="paragraph">
+<p>The elements used via reflection are not part of the call tree so they are dead code eliminated (if not called directly in other cases).
+To include these elements in your native executable, you need to register them for reflection explicitly.</p>
+</div>
+<div class="paragraph">
+<p>This is a very common case as JSON libraries typically use reflection to serialize the objects to JSON:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -183,25 +255,215 @@ One such example is using <a href="http://json-b.net/">JSON-B</a> like so:</p>
 <p>An even nastier possible outcome could be for no exception to be thrown, but instead the JSON result would be completely empty.</p>
 </div>
 <div class="paragraph">
-<p>To get around such problems, simply annotate <code>Person</code> with <code>@RegisterForReflection</code> so Quarkus will register the class as using reflection.</p>
+<p>There are two different ways to fix this type of issues.</p>
+</div>
+<div class="sect3">
+<h4 id="using-the-registerforreflection-annotation"><a class="anchor" href="#using-the-registerforreflection-annotation"></a>Using the @RegisterForReflection annotation</h4>
+<div class="paragraph">
+<p>The easiest way to register a class for reflection is to use the <code>@RegisterForReflection</code> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RegisterForReflection
+public class MyClass {
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-a-configuration-file"><a class="anchor" href="#using-a-configuration-file"></a>Using a configuration file</h4>
+<div class="paragraph">
+<p>Obviously, adding <code>@RegisterForReflection</code> is not possible if the class is in a third-party jar.</p>
+</div>
+<div class="paragraph">
+<p>In this case, you can use a configuration file to register classes for reflection.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s create the <code>reflection-config.json</code> file at the root of the project:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">[
+  {
+    "name" : "com.acme.MyClass",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
+  }
+]</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For more details on the format of this file, please refer to <a href="https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md">the GraalVM documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now, let&#8217;s tell the <code>native-image</code> executable about this configuration file by tweaking the <code>native-image</code> execution in the <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${version.quarkus}&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;native-image&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
+                &lt;additionalBuildArgs&gt;
+                    &lt;additionalBuildArg&gt;-H:ReflectionConfigurationFiles=${project.basedir}/reflection-config.json&lt;/additionalBuildArg&gt;
+                &lt;/additionalBuildArgs&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>com.acme.MyClass</code> will now be registered for reflection and included in the native executable.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="delaying-class-initialization"><a class="anchor" href="#delaying-class-initialization"></a>Delaying class initialization</h3>
+<div class="paragraph">
+<p>By default, Quarkus initializes all classes at build time.</p>
+</div>
+<div class="paragraph">
+<p>There are cases where the initialization of certain classes is done in a static block needs to be postponed to runtime.
+Typically omitting such configuration would result in a runtime exception like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Error: No instances are allowed in the image heap for a class that is initialized or reinitialized at image runtime: sun.security.provider.NativePRNG
+Trace: object java.security.SecureRandom
+method com.amazonaws.services.s3.model.CryptoConfiguration.&lt;init&gt;(CryptoMode)
+Call path from entry point to com.amazonaws.services.s3.model.CryptoConfiguration.&lt;init&gt;(CryptoMode):</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you need to delay the initialization of a class, you can use the <code>--initialize-at-run-time=&lt;package or class&gt;</code> configuration knob.</p>
+</div>
+<div class="paragraph">
+<p>It should be added to the <code>native-image</code> configuration using an <code>&lt;additionalBuildArg&gt;</code> as shown in the examples above.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can find more information about all this in <a href="https://github.com/oracle/graal/blob/master/substratevm/CLASS-INITIALIZATION.md">the GraalVM documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="managing-proxy-classes"><a class="anchor" href="#managing-proxy-classes"></a>Managing Proxy Classes</h3>
+<div class="paragraph">
+<p>While writing native application you&#8217;ll need to define proxy classes at image build time by specifying the list of interfaces that they implement.</p>
+</div>
+<div class="paragraph">
+<p>In such a situation, the error you might encounter is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.oracle.svm.core.jdk.UnsupportedFeatureError: Proxy class defined by interfaces [interface org.apache.http.conn.HttpClientConnectionManager, interface org.apache.http.pool.ConnPoolControl, interface com.amazonaws.http.conn.Wrapped] not found. Generating proxy classes at runtime is not supported. Proxy classes need to be defined at image build time by specifying the list of interfaces that they implement. To define proxy classes use -H:DynamicProxyConfigurationFiles=&lt;comma-separated-config-files&gt; and -H:DynamicProxyConfigurationResources=&lt;comma-separated-config-resources&gt; options.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Solving this issue requires adding the <code>-H:DynamicProxyConfigurationResources=&lt;comma-separated-config-resources&gt;</code> option and to provide a dynamic proxy configuration file.
+You can find all the information about the format of this file in <a href="https://github.com/oracle/graal/blob/master/substratevm/DYNAMIC_PROXY.md#manual-configuration">the GraalVM documentation</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="including-resources"><a class="anchor" href="#including-resources"></a>Including resources</h2>
+<h2 id="native-in-extension"><a class="anchor" href="#native-in-extension"></a>Supporting native in a Quarkus extension</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default when building a native executable, GraalVM will not include any of the resources which are on the classpath into the native executable it creates. Such resources that are meant to be part of the native executable need to be specified explicitly.</p>
+<p>Supporting native in a Quarkus extension is even easier as Quarkus provides a lot of tools to simplify all this.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Everything described here will only work in the context of Quarkus extensions, it won&#8217;t work in an application.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="register-reflection"><a class="anchor" href="#register-reflection"></a>Register reflection</h3>
+<div class="paragraph">
+<p>Quarkus makes registration of reflection in an extension a breeze by using <code>ReflectiveClassBuildItem</code>, thus eliminating the need for a JSON configuration file.</p>
 </div>
 <div class="paragraph">
-<p>If one were to execute the native executable generation process manually, the <code>-H:IncludeResources=</code> flag would be used to point to a JSON configuration file that specifies which resources are to be included.</p>
+<p>To register a class for reflection, one would need to create a Quarkus processor class and add a build step that registers reflection:</p>
 </div>
-<div class="paragraph">
-<p>Quarkus eliminates the need for such a JSON configuration file by allowing extension authors to specify a <code>SubstrateResourceBuildItem</code>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class SaxParserProcessor {
+
+    @BuildStep
+    ReflectiveClassBuildItem reflection() {
+        // since we only need reflection to the constructor of the class, we can specify `false` for both the methods and the fields arguments.
+        return new ReflectiveClassBuildItem(false, false, "com.sun.org.apache.xerces.internal.parsers.SAXParser");
+    }
+
+}</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>An example use could look like the following:</p>
+<p>More information about reflection in GraalVM can be found <a href="https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md">here</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="alternative-with-registerforreflection"><a class="anchor" href="#alternative-with-registerforreflection"></a>Alternative with @RegisterForReflection</h3>
+<div class="paragraph">
+<p>As for applications, you can also use the <code>@RegisterForReflection</code> annotation if the class is in your extension and not in a third-party jar.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="including-resources-2"><a class="anchor" href="#including-resources-2"></a>Including resources</h3>
+<div class="paragraph">
+<p>In the context of an extension, Quarkus eliminates the need for a JSON configuration file by allowing extension authors to specify a <code>SubstrateResourceBuildItem</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -215,29 +477,26 @@ One such example is using <a href="http://json-b.net/">JSON-B</a> like so:</p>
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>For more information about GraalVM&#8217;s resource handling in native executables please see <a href="https://github.com/oracle/graal/blob/master/substratevm/RESOURCES.md">this</a>.</p>
+<p>For more information about GraalVM resource handling in native executables please refer to <a href="https://github.com/oracle/graal/blob/master/substratevm/RESOURCES.md">the GraalVM documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="delay-class-initialization"><a class="anchor" href="#delay-class-initialization"></a>Delay class initialization</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>There are cases where the initialization of certain classes is done in a static block (which means by default that GraalVM performs the initialization at image build time) needs to be postponed to runtime.
-Typically omitting such configuration would result in a runtime exception like the following:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">Error: No instances are allowed in the image heap for a class that is initialized or reinitialized at image runtime: sun.security.provider.NativePRNG
-Trace: object java.security.SecureRandom
-method com.amazonaws.services.s3.model.CryptoConfiguration.&lt;init&gt;(CryptoMode)
-Call path from entry point to com.amazonaws.services.s3.model.CryptoConfiguration.&lt;init&gt;(CryptoMode):</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If one were to execute the native executable generation process manually, the <code>--delay-class-initialization-to-runtime=com.amazonaws.services.s3.model.CryptoConfiguration</code> flag would need to be passed to <code>native-image</code> to configure runtime initialization for <code>CryptoConfiguration</code>.</p>
-</div>
 <div class="paragraph">
 <p>Quarkus simplifies things by allowing extensions authors to simply register a <code>RuntimeInitializedClassBuildItem</code>. A simple example of doing so could be:</p>
 </div>
@@ -254,29 +513,26 @@ Call path from entry point to com.amazonaws.services.s3.model.CryptoConfiguratio
 </div>
 </div>
 <div class="paragraph">
-<p>Using such a construct means that a <code>--delay-class-initialization-to-runtime</code> option will automatically be added to the <code>native-image</code> command line</p>
+<p>Using such a construct means that a <code>--initialize-at-run-time</code> option will automatically be added to the <code>native-image</code> command line.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>For more information about <code>--delay-class-initialization-to-runtime</code>, please read <a href="https://medium.com/graalvm/understanding-class-initialization-in-graalvm-native-image-generation-d765b7e4d6ed">this blog post</a>.</p>
+<p>For more information about <code>--initialize-at-run-time</code>, please read <a href="https://github.com/oracle/graal/blob/master/substratevm/CLASS-INITIALIZATION.md">the GraalVM documentation</a>.</p>
 </div>
+</td>
+</tr>
+</table>
 </div>
-</div>
-<div class="sect1">
-<h2 id="proxy-classes-management"><a class="anchor" href="#proxy-classes-management"></a>Proxy Classes management</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="managing-proxy-classes-2"><a class="anchor" href="#managing-proxy-classes-2"></a>Managing Proxy Classes</h3>
 <div class="paragraph">
-<p>While writing native application you&#8217;ll need to define proxy classes at image build time by specifying the list of interfaces that they implement.</p>
-</div>
-<div class="paragraph">
-<p>In such a situation the error you might encounter is:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">com.oracle.svm.core.jdk.UnsupportedFeatureError: Proxy class defined by interfaces [interface org.apache.http.conn.HttpClientConnectionManager, interface org.apache.http.pool.ConnPoolControl, interface com.amazonaws.http.conn.Wrapped] not found. Generating proxy classes at runtime is not supported. Proxy classes need to be defined at image build time by specifying the list of interfaces that they implement. To define proxy classes use -H:DynamicProxyConfigurationFiles=&lt;comma-separated-config-files&gt; and -H:DynamicProxyConfigurationResources=&lt;comma-separated-config-resources&gt; options.</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Quarkus allows extensions authors to register a <code>SubstrateProxyDefinitionBuildItem</code>. An example of doing so is:</p>
+<p>Very similarly, Quarkus allows extensions authors to register a <code>SubstrateProxyDefinitionBuildItem</code>. An example of doing so is:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -292,10 +548,22 @@ Call path from entry point to com.amazonaws.services.s3.model.CryptoConfiguratio
 </div>
 </div>
 <div class="paragraph">
-<p>Using such a construct means that a <code>-H:DynamicProxyConfigurationResources=&lt;comma-separated-config-resources&gt;</code> option will automatically be added to the <code>native-image</code> command line.</p>
+<p>Using such a construct means that a <code>-H:DynamicProxyConfigurationResources</code> option will automatically be added to the <code>native-image</code> command line.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>For more information about Proxy Classes you can read the following <a href="https://github.com/oracle/graal/blob/master/substratevm/DYNAMIC_PROXY.md">documentation</a></p>
+<p>For more information about Proxy Classes you can read <a href="https://github.com/oracle/graal/blob/master/substratevm/DYNAMIC_PROXY.md">the GraalVM documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>

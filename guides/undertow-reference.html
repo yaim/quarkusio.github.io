@@ -65,7 +65,16 @@
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
 <li><a href="#serving-static-resources">1. Serving Static Resources</a></li>
-<li><a href="#undertow-handlers-conf">2. undertow-handlers.conf</a></li>
+<li><a href="#configuring-the-context-path">2. Configuring the Context path</a></li>
+<li><a href="#undertow-handlers-conf">3. undertow-handlers.conf</a></li>
+<li><a href="#supporting-secure-connections-with-ssl">4. Supporting secure connections with SSL</a>
+<ul class="sectlevel2">
+<li><a href="#providing-a-certificate-and-key-file">4.1. Providing a certificate and key file</a></li>
+<li><a href="#providing-a-keystore">4.2. Providing a keystore</a></li>
+<li><a href="#setting-the-password">4.3. Setting the password</a></li>
+</ul>
+</li>
+<li><a href="#cors-filter">5. CORS filter</a></li>
 </ul>
     </div>
     <div>
@@ -87,12 +96,199 @@ jar files as defined by the Servlet spec.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="undertow-handlers-conf"><a class="anchor" href="#undertow-handlers-conf"></a>2. undertow-handlers.conf</h2>
+<h2 id="configuring-the-context-path"><a class="anchor" href="#configuring-the-context-path"></a>2. Configuring the Context path</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default Undertow will serve content from under the root context. If you want to change this you can use the
+<code>quarkus.servlet.context-path</code> config key to set the context path.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="undertow-handlers-conf"><a class="anchor" href="#undertow-handlers-conf"></a>3. undertow-handlers.conf</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can make use of the Undertow predicate language using an <code>undertow-handlers.conf</code> file. This file should be placed
 in the <code>META-INF</code> directory of your application jar. This file contains handlers defined using the
 <a href="http://undertow.io/undertow-docs/undertow-docs-2.0.0/index.html#predicates-attributes-and-handlers">Undertow predicate language</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="supporting-secure-connections-with-ssl"><a class="anchor" href="#supporting-secure-connections-with-ssl"></a>4. Supporting secure connections with SSL</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to have Undertow support secure connections, you must either provide a certificate and associated key file, or supply a keystore.</p>
+</div>
+<div class="paragraph">
+<p>In both cases, a password must be provided. See the designated paragraph for a detailed description of how to provide it.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>To enable SSL support with native executables, please refer to our <a href="native-and-ssl-guide">Using SSL With Native Executables guide</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="providing-a-certificate-and-key-file"><a class="anchor" href="#providing-a-certificate-and-key-file"></a>4.1. Providing a certificate and key file</h3>
+<div class="paragraph">
+<p>If the certificate has not been loaded into a keystore, it can be provided directly using the properties listed below.
+Quarkus will first try to load the given files as resources, and uses the filesystem as a fallback.
+The certificate / key pair will be loaded into a newly created keystore on startup.</p>
+</div>
+<div class="paragraph">
+<p>Your <code>application.properties</code> would then look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.ssl.certificate.file=/path/to/certificate
+quarkus.http.ssl.certificate.key-file=/path/to/key</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="providing-a-keystore"><a class="anchor" href="#providing-a-keystore"></a>4.2. Providing a keystore</h3>
+<div class="paragraph">
+<p>An alternate solution is to directly provide a keystore which already contains a default entry with a certificate
+ You will need to at least provide the file and a password.</p>
+</div>
+<div class="paragraph">
+<p>As with the certificate/key file combination, Quarkus will first try to resolve the given path as a resource, before attempting to read it from the filesystem.</p>
+</div>
+<div class="paragraph">
+<p>Add the following property to your <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">quarkus.http.ssl.certificate.key-store-file=/path/to/keystore</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As an optional hint, the type of keystore can be provided as one of the options listed.
+If the type is not provided, Quarkus will try to deduce it from the file extensions, defaulting to type JKS.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.ssl.certificate.key-store-file-type=[one of JKS, JCEKS, P12, PKCS12, PFX]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="setting-the-password"><a class="anchor" href="#setting-the-password"></a>4.3. Setting the password</h3>
+<div class="paragraph">
+<p>In both aforementioned scenarios, a password needs to be provided to create/load the keystore with.
+The password can be set in your <code>application.properties</code> (in plain-text) using the following property:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.ssl.certificate.key-store-password=your-password</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, instead of providing the password as plain-text in the configuration file (which is considered bad practice), it can instead be supplied (using <a href="https://microprofile.io/project/eclipse/microprofile-config">MicroProfile config</a>)
+as the environment variable <code>QUARKUS_HTTP_SSL_CERTIFICATE_KEY_STORE_PASSWORD</code>.
+This will also work in tandem with <a href="https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables">Kubernetes secrets</a>.</p>
+</div>
+<div class="paragraph">
+<p><em>Note: in order to remain compatible with earlier versions of Quarkus (before 0.16) the default password is set to "password". It is therefore not a mandatory parameter!</em></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cors-filter"><a class="anchor" href="#cors-filter"></a>5. CORS filter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> (CORS) is a mechanism that
+allows restricted resources on a web page to be requested from another domain outside the domain from which the first resource
+was served.</p>
+</div>
+<div class="paragraph">
+<p>Quarkus comes with a CORS filter which implements the <code>javax.servlet.Filter</code> interface and intercepts all incoming HTTP
+requests. It can be enabled in the Quarkus configuration file, <code>src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.cors=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the filter is enabled and an HTTP request is identified as cross-origin, the CORS policy and headers defined using the
+following properties will be applied before passing the request on to its actual target (servlet, JAX-RS resource, etc.):</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.cors.origins</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The comma-separated list of origins allowed for CORS. The filter allows any origin if this is not
+set.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.cors.methods</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The comma-separated list of HTTP methods allowed for CORS. The filter allows any method if this is
+not set.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.cors.headers</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The comma-separated list of HTTP headers allowed for CORS. The filter allows any header if this is
+not set.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.cors.exposed-headers</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The comma-separated list of HTTP headers exposed in CORS.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Here&#8217;s what a full CORS filter configuration could look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.cors=true
+quarkus.http.cors.origins=http://foo.com,http://www.bar.io
+quarkus.http.cors.methods=GET,PUT,POST
+quarkus.http.cors.headers=X-Custom
+quarkus.http.cors.exposed-headers=Content-Disposition</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you want to use the <code>keycloak</code> Quarkus extension in your project, you should configure CORS using the <code>keycloak</code> extension
+configuration. See <a href="keycloak-guide#configuring-cors">the Keycloak guide</a> for more details.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

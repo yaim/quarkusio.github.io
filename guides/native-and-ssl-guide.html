@@ -68,7 +68,11 @@
 <li><a href="#looks-like-it-works-out-of-the-box">Looks like it works out of the box?!?</a></li>
 <li><a href="#lets-disable-ssl-and-see-how-it-goes">Let&#8217;s disable SSL and see how it goes</a></li>
 <li><a href="#lets-start-again-with-a-clean-slate">Let&#8217;s start again with a clean slate</a></li>
-<li><a href="#the-sunec-library-and-friends">The SunEC library and friends</a></li>
+<li><a href="#the-sunec-library-and-friends">The SunEC library and friends</a>
+<ul class="sectlevel2">
+<li><a href="#working-with-containers">Working with containers</a></li>
+</ul>
+</li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
     </div>
@@ -189,13 +193,34 @@ If you don&#8217;t plan on using native executables, you can pass your way as in
 <div class="ulist">
 <ul>
 <li>
-<p>the SmallRye REST client extension,</p>
+<p>the Agroal connection pooling extension (<code>quarkus-agroal</code>),</p>
 </li>
 <li>
-<p>the Agroal connection pooling extension,</p>
+<p>the Amazon DynamoDB extension (<code>quarkus-amazon-dynamodb</code>),</p>
 </li>
 <li>
-<p>the Jaeger extension.</p>
+<p>the Hibernate Search Elasticsearch extension (<code>quarkus-hibernate-search-elasticsearch</code>),</p>
+</li>
+<li>
+<p>the Jaeger extension (<code>quarkus-jaeger</code>),</p>
+</li>
+<li>
+<p>the Keycloak extension (<code>quarkus-keycloak</code>),</p>
+</li>
+<li>
+<p>the Kubernetes client extension (<code>quarkus-kubernetes-client</code>),</p>
+</li>
+<li>
+<p>the Mailer extension (<code>quarkus-mailer</code>),</p>
+</li>
+<li>
+<p>the MongoDB extension (<code>quarkus-mongodb-client</code>),</p>
+</li>
+<li>
+<p>the Neo4j extension (<code>quarkus-neo4j</code>),</p>
+</li>
+<li>
+<p>the REST client extension (<code>quarkus-rest-client</code>).</p>
 </li>
 </ul>
 </div>
@@ -388,9 +413,6 @@ and an exception too: <code>java.security.InvalidAlgorithmParameterException: th
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>When working with containers, the idea is to bundle both the SunEC library and the certificates in the container and to point your binary to them using the system properties mentioned above.</p>
-</div>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -419,6 +441,31 @@ If you have issues with some certificates, your best bet is to include the <code
 </td>
 </tr>
 </table>
+</div>
+<div class="sect2">
+<h3 id="working-with-containers"><a class="anchor" href="#working-with-containers"></a>Working with containers</h3>
+<div class="paragraph">
+<p>When working with containers, the idea is to bundle both the SunEC library and the certificates in the container and to point your binary to them using the system properties mentioned above.</p>
+</div>
+<div class="paragraph">
+<p>You can for example modify your <code>Dockerfile.native</code> as follows to copy the required files to your final image:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">FROM quay.io/quarkus/ubi-quarkus-native-image:19.0.2 as nativebuilder
+RUN mkdir -p /tmp/ssl-libs/lib \
+  &amp;&amp; cp /opt/graalvm/jre/lib/security/cacerts /tmp/ssl-libs \
+  &amp;&amp; cp /opt/graalvm/jre/lib/amd64/libsunec.so /tmp/ssl-libs/lib/
+
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+WORKDIR /work/
+COPY target/*-runner /work/application
+COPY --from=nativebuilder /tmp/ssl-libs/ /work/
+RUN chmod 775 /work
+EXPOSE 8080
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Djava.library.path=/work/lib", "-Djavax.net.ssl.trustStore=/work/cacerts"]</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

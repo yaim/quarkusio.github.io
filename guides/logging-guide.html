@@ -68,6 +68,7 @@
 <ul class="sectlevel2">
 <li><a href="#console-configuration">Console configuration</a></li>
 <li><a href="#file-configuration">File configuration</a></li>
+<li><a href="#syslog-configuration">Syslog configuration</a></li>
 <li><a href="#logging-categories">Logging categories</a></li>
 <li><a href="#root-logger-configuration">Root logger configuration</a></li>
 </ul>
@@ -142,7 +143,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.console.async.overflow</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BLOCK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>block</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether to block the publisher (rather than drop the message) when the queue is full.</p></td>
 </tr>
 </tbody>
@@ -219,7 +220,104 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.file.async.overflow</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BLOCK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>block</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether to block the publisher (rather than drop the message) when the queue is full.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="syslog-configuration"><a class="anchor" href="#syslog-configuration"></a>Syslog configuration</h3>
+<div class="paragraph">
+<p>Logging to a syslog is also supported but not enabled by default.  To configure or enable this behavior, use the following configuration properties:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.enable</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether syslog logging is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %h %N[%i] %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The format pattern to use for logging to syslog; see <a href="#format_string">Format String</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.level</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ALL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The minimum log level to write to syslog.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.endpoint</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>localhost:514</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The IP address and port of the syslog server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.app-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>The current process name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The app name used when formatting the message in RFC5424 format.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.hostname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>The current hostname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the host the messages are being sent from.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.facility</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER_LEVEL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The facility used when calculating the priority of the message as defined by RFC-5424 and RFC-3164.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.syslog-type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RFC5424</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The syslog type which handler should use to format the message sent.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.protocol</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The protocol used to connect to the syslog server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.use-counting-framing</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether the message being sent should be prefixed with the size of the message.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.truncate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether the message should be truncated.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.block-on-reconnect</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether to block when attempting to reconnect on TCP or SSL TCP protocols</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.async</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether to log asynchronously.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.async.queue-length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>512</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The queue length to use before flushing writing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.log.syslog.async.overflow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>block</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Determine whether to block the publisher (rather than drop the message) when the queue is full.</p></td>
 </tr>
 </tbody>

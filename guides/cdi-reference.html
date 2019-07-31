@@ -76,10 +76,11 @@
 <li><a href="#additional-beans">5.4. Additional Beans</a></li>
 <li><a href="#synthetic-beans">5.5. Synthetic Beans</a></li>
 <li><a href="#annotation-transformations">5.6. Annotation Transformations</a></li>
-<li><a href="#injection-point-transformation">5.7. Injection Point Transformation</a></li>
-<li><a href="#bean-deployment-validation">5.8. Bean Deployment Validation</a></li>
-<li><a href="#custom-contexts">5.9. Custom Contexts</a></li>
-<li><a href="#build_metadata">5.10. Available Build Time Metadata</a></li>
+<li><a href="#additional-interceptor-bindings">5.7. Additional Interceptor Bindings</a></li>
+<li><a href="#injection-point-transformation">5.8. Injection Point Transformation</a></li>
+<li><a href="#bean-deployment-validation">5.9. Bean Deployment Validation</a></li>
+<li><a href="#custom-contexts">5.10. Custom Contexts</a></li>
+<li><a href="#build_metadata">5.11. Available Build Time Metadata</a></li>
 </ul>
 </li>
 <li><a href="#remove_unused_beans">6. Removing Unused Beans</a></li>
@@ -335,6 +336,9 @@ public class CounterBean {
 <li>
 <p>Interceptor methods on superclasses are not implemented yet</p>
 </li>
+<li>
+<p><code>BEFORE_COMPLETION</code>, <code>AFTER_COMPLETION</code>, <code>AFTER_FAILURE</code> and <code>AFTER_SUCCESS</code> transactional observers are not implemented yet</p>
+</li>
 </ul>
 </div>
 </div>
@@ -467,6 +471,33 @@ The output of a <code>BeanConfigurator</code> is recorded as bytecode. Therefore
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>If an extension needs to produce other build items during the "bean registration" phase it should use the <code>BeanRegistrationPhaseBuildItem</code> instead.
+The reason is that injected objects are only valid during a <code>@BuildStep</code> method invocation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
+void syntheticBean(BeanRegistrationPhaseBuildItem beanRegistrationPhase,
+            BuildProducer&lt;MyBuildItem&gt; myBuildItem,
+            BuildProducer&lt;BeanConfiguratorBuildItem&gt; beanConfigurators) {
+   beanConfigurators.produce(new BeanConfiguratorBuildItem(beanRegistrationPhase.getContext().configure(String.class).types(String.class).qualifiers(new MyQualifierLiteral()).creator(mc -&gt; mc.returnValue(mc.load("foo")))));
+   myBuildItem.produce(new MyBuildItem());
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+See <code>BeanRegistrationPhaseBuildItem</code> javadoc for more information.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="annotation-transformations"><a class="anchor" href="#annotation-transformations"></a>5.6. Annotation Transformations</h3>
@@ -496,7 +527,33 @@ AnnotationsTransformerBuildItem transform() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="injection-point-transformation"><a class="anchor" href="#injection-point-transformation"></a>5.7. Injection Point Transformation</h3>
+<h3 id="additional-interceptor-bindings"><a class="anchor" href="#additional-interceptor-bindings"></a>5.7. Additional Interceptor Bindings</h3>
+<div class="paragraph">
+<p>In rare cases it might be handy to programmatically register an existing annotation as interceptor binding.
+This is similar to what pure CDI achieves through <code>BeforeBeanDiscovery#addInterceptorBinding()</code>.
+Though here we are going to use <code>InterceptorBindingRegistrarBuildItem</code> to get it done.
+Note that you can register multiple annotations in one go:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
+InterceptorBindingRegistrarBuildItem addInterceptorBindings() {
+    InterceptorBindingRegistrarBuildItem additionalBindingsRegistrar = new InterceptorBindingRegistrarBuildItem(new InterceptorBindingRegistrar() {
+        @Override
+        public Collection&lt;DotName&gt; registerAdditionalBindings() {
+            Collection&lt;DotName&gt; result = new HashSet&lt;&gt;();
+            result.add(DotName.createSimple(MyAnnotation.class.getName()));
+            result.add(DotName.createSimple(MyOtherAnnotation.class.getName()));
+            return result;
+        }
+    });
+    return additionalBindingsRegistrar;
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="injection-point-transformation"><a class="anchor" href="#injection-point-transformation"></a>5.8. Injection Point Transformation</h3>
 <div class="paragraph">
 <p>Every now and then it is handy to be able to change qualifiers of an injection point programmatically.
 You can do just that with <code>InjectionPointTransformerBuildItem</code>.
@@ -526,7 +583,7 @@ InjectionPointTransformerBuildItem transform() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="bean-deployment-validation"><a class="anchor" href="#bean-deployment-validation"></a>5.8. Bean Deployment Validation</h3>
+<h3 id="bean-deployment-validation"><a class="anchor" href="#bean-deployment-validation"></a>5.9. Bean Deployment Validation</h3>
 <div class="paragraph">
 <p>Once the bean deployment is ready an extension can perform additional validations and inspect the found beans, observers and injection points.
 Register a <code>BeanDeploymentValidatorBuildItem</code>:</p>
@@ -557,9 +614,38 @@ See also <code>io.quarkus.arc.processor.BuildExtension.Key</code> to discover th
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>If an extension needs to produce other build items during the "validation" phase it should use the <code>ValidationPhaseBuildItem</code> instead.
+The reason is that injected objects are only valid during a <code>@BuildStep</code> method invocation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
+void validate(ValidationPhaseBuildItem validationPhase,
+            BuildProducer&lt;MyBuildItem&gt; myBuildItem,
+            BuildProducer&lt;ValidationErrorBuildItem&gt; errors) {
+   if (someCondition) {
+     errors.produce(new ValidationErrorBuildItem(new IllegalStateException()));
+     myBuildItem.produce(new MyBuildItem());
+   }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+See <code>ValidationPhaseBuildItem</code> javadoc for more information.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="custom-contexts"><a class="anchor" href="#custom-contexts"></a>5.9. Custom Contexts</h3>
+<h3 id="custom-contexts"><a class="anchor" href="#custom-contexts"></a>5.10. Custom Contexts</h3>
 <div class="paragraph">
 <p>An extension can register a custom <code>InjectableContext</code> implementation by means of a <code>ContextRegistrarBuildItem</code>:</p>
 </div>
@@ -575,9 +661,36 @@ ContextRegistrarBuildItem customContext() {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>If an extension needs to produce other build items during the "context registration" phase it should use the <code>ContextRegistrationPhaseBuildItem</code> instead.
+The reason is that injected objects are only valid during a <code>@BuildStep</code> method invocation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
+void addContext(ContextRegistrationPhaseBuildItem contextRegistrationPhase,
+            BuildProducer&lt;MyBuildItem&gt; myBuildItem,
+            BuildProducer&lt;ContextConfiguratorBuildItem&gt; contexts) {
+   contexts.produce(new ContextConfiguratorBuildItem(contextRegistrationPhase.getContext().configure(CustomScoped.class).normal().contextClass(MyCustomContext.class)));
+   myBuildItem.produce(new MyBuildItem());
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+See <code>ContextRegistrationPhaseBuildItem</code> javadoc for more information.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="build_metadata"><a class="anchor" href="#build_metadata"></a>5.10. Available Build Time Metadata</h3>
+<h3 id="build_metadata"><a class="anchor" href="#build_metadata"></a>5.11. Available Build Time Metadata</h3>
 <div class="paragraph">
 <p>Any of the above extensions that operates with <code>BuildExtension.BuildContext</code> can leverage certain build time metadata that are generated during build.
 The built-in keys located in <code>io.quarkus.arc.processor.BuildExtension.Key</code> are:</p>

@@ -72,6 +72,8 @@
 <li><a href="#sending-attachments">Sending attachments</a></li>
 <li><a href="#sending-html-emails-with-inlined-attachments">Sending HTML emails with inlined attachments</a></li>
 <li><a href="#testing-email-sending">Testing email sending</a></li>
+<li><a href="#gmail-specific-configuration">Gmail specific configuration</a></li>
+<li><a href="#using-ssl-with-native-executables">Using SSL with native executables</a></li>
 <li><a href="#using-the-underlying-vert-x-mail-client">Using the underlying Vert.x Mail Client</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
@@ -142,7 +144,7 @@ It covers simple emails, attachments, inlined attachments, the reactive and impe
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn quarkus:add-extensions -Dextensions="mailer"</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw quarkus:add-extensions -Dextensions="mailer"</code></pre>
 </div>
 </div>
 </div>
@@ -495,6 +497,52 @@ This is the default if you are running Quarkus in <code>DEV</code> or <code>TEST
     }
 }</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gmail-specific-configuration"><a class="anchor" href="#gmail-specific-configuration"></a>Gmail specific configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to use the Gmail SMTP server, first create a dedicated password in <code>Google Account &gt; Security &gt; App passwords</code> or go to <a href="https://myaccount.google.com/apppasswords" class="bare">https://myaccount.google.com/apppasswords</a>.</p>
+</div>
+<div class="paragraph">
+<p>When done, you can configure your Quarkus application by adding the following properties to your <code>application.properties</code>:</p>
+</div>
+<div class="paragraph">
+<p>With TLS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.mailer.from=YOUREMAIL@gmail.com
+quarkus.mailer.host=smtp.gmail.com
+quarkus.mailer.port=587
+quarkus.mailer.start-tls=REQUIRED
+quarkus.mailer.username=YOUREMAIL@gmail.com
+quarkus.mailer.password=YOURGENERATEDAPPLICATIONPASSWORD</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or with SSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.mailer.from=YOUREMAIL@gmail.com
+quarkus.mailer.host=smtp.gmail.com
+quarkus.mailer.port=465
+quarkus.mailer.ssl=true
+quarkus.mailer.username=YOUREMAIL@gmail.com
+quarkus.mailer.password=YOURGENERATEDAPPLICATIONPASSWORD</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-ssl-with-native-executables"><a class="anchor" href="#using-ssl-with-native-executables"></a>Using SSL with native executables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Note that if you enable SSL for the mailer and you want to build a native executable, you will need to enable the SSL support.
+Please refer to the native-and-ssl-guide.html[Using SSL With Native Executables] guide for more information.</p>
 </div>
 </div>
 </div>

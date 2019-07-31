@@ -75,6 +75,11 @@
 <li><a href="#service-method-validation">Service method validation</a></li>
 <li><a href="#a-frontend">A frontend</a></li>
 <li><a href="#run-the-application">Run the application</a></li>
+<li><a href="#going-further">Going further</a>
+<ul class="sectlevel2">
+<li><a href="#hibernate-validator-extension-and-cdi">Hibernate Validator extension and CDI</a></li>
+</ul>
+</li>
 </ul>
     </div>
     <div>
@@ -421,7 +426,7 @@ In the <code>src/main/resources/META-INF/resources</code> directory, replace the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -443,6 +448,124 @@ In the <code>src/main/resources/META-INF/resources</code> directory, replace the
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
 You can also build the native executable using <code>./mvnw package -Pnative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="going-further"><a class="anchor" href="#going-further"></a>Going further</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="hibernate-validator-extension-and-cdi"><a class="anchor" href="#hibernate-validator-extension-and-cdi"></a>Hibernate Validator extension and CDI</h3>
+<div class="paragraph">
+<p>The Hibernate Validator extension is tightly integrated with CDI.</p>
+</div>
+<div class="sect3">
+<h4 id="configuring-the-validatorfactory"><a class="anchor" href="#configuring-the-validatorfactory"></a>Configuring the ValidatorFactory</h4>
+<div class="paragraph">
+<p>Sometimes, you might need to configure the behavior of the <code>ValidatorFactory</code>, for instance to use a specific <code>ParameterNameProvider</code>.</p>
+</div>
+<div class="paragraph">
+<p>While the <code>ValidatorFactory</code> is instantiated by Quarkus itself,
+you can very easily tweak it by declaring replacement beans that will be injected in the configuration.</p>
+</div>
+<div class="paragraph">
+<p>If you create a bean of the following types in your application, it will automatically be injected into the <code>ValidatorFactory</code> configuration:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>javax.validation.ClockProvider</code></p>
+</li>
+<li>
+<p><code>javax.validation.ConstraintValidator</code></p>
+</li>
+<li>
+<p><code>javax.validation.ConstraintValidatorFactory</code></p>
+</li>
+<li>
+<p><code>javax.validation.MessageInterpolator</code></p>
+</li>
+<li>
+<p><code>javax.validation.ParameterNameProvider</code></p>
+</li>
+<li>
+<p><code>javax.validation.TraversableResolver</code></p>
+</li>
+<li>
+<p><code>org.hibernate.validator.spi.properties.GetterPropertySelectionStrategy</code></p>
+</li>
+<li>
+<p><code>org.hibernate.validator.spi.scripting.ScriptEvaluatorFactory</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You don&#8217;t have to wire anything.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Obviously, for each listed type, you can declare only one bean.</p>
+</div>
+<div class="paragraph">
+<p>These beans should be declared as <code>@ApplicationScoped</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="constraint-validators-as-beans"><a class="anchor" href="#constraint-validators-as-beans"></a>Constraint validators as beans</h4>
+<div class="paragraph">
+<p>You can declare your constraint validators as CDI beans:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class MyConstraintValidator implements ConstraintValidator&lt;MyConstraint, String&gt; {
+
+    @Inject
+    MyService service;
+
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
+
+        return service.validate(value);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When initializing a constraint validator of a given type,
+Quarkus will check if a bean of this type is available and, if so, it will use it instead of instantiating one.</p>
+</div>
+<div class="paragraph">
+<p>Thus, as demonstrated in our example, you can fully use injection in your constraint validator beans.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Except in very specific situations, it is recommended to make the said beans <code>@ApplicationScoped</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>

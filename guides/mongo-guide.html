@@ -69,8 +69,8 @@
 <li><a href="#solution">Solution</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
 <li><a href="#creating-your-first-json-rest-service">Creating your first JSON REST service</a></li>
-<li><a href="#configuring-the-mongo-database">Configuring the mongo database</a></li>
-<li><a href="#running-a-mongo-database">Running a Mongo Database</a></li>
+<li><a href="#configuring-the-mongodb-database">Configuring the MongoDB database</a></li>
+<li><a href="#running-a-mongodb-database">Running a MongoDB Database</a></li>
 <li><a href="#creating-a-frontend">Creating a frontend</a></li>
 <li><a href="#reactive-mongodb-client">Reactive MongoDB Client</a></li>
 <li><a href="#simplifying-mongodb-client-usage-using-bson-codec">Simplifying MongoDB Client usage using BSON codec</a></li>
@@ -322,7 +322,7 @@ public class FruitResource {
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-the-mongo-database"><a class="anchor" href="#configuring-the-mongo-database"></a>Configuring the mongo database</h2>
+<h2 id="configuring-the-mongodb-database"><a class="anchor" href="#configuring-the-mongodb-database"></a>Configuring the MongoDB database</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The main property to configure is the URL to access to MongoDB, almost all configuration can be included in the connection URI so we advise you to do so, you can find more information in the MongoDB documentation: <a href="https://docs.mongodb.com/manual/reference/connection-string/" class="bare">https://docs.mongodb.com/manual/reference/connection-string/</a></p>
@@ -351,13 +351,13 @@ quarkus.mongodb.connection-string = mongodb://localhost:27017</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="running-a-mongo-database"><a class="anchor" href="#running-a-mongo-database"></a>Running a Mongo Database</h2>
+<h2 id="running-a-mongodb-database"><a class="anchor" href="#running-a-mongodb-database"></a>Running a MongoDB Database</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As by default, <code>MongoClient</code> is configure to access a local Mongo database on port 27017 (the default MongoDB port), if you have a local running database on this port, there is nothing more to do before being able to test it!</p>
+<p>As by default, <code>MongoClient</code> is configure to access a local MongoDB database on port 27017 (the default MongoDB port), if you have a local running database on this port, there is nothing more to do before being able to test it!</p>
 </div>
 <div class="paragraph">
-<p>If you want to use Docker to run a Mongo database, you can use the following command to launch one:</p>
+<p>If you want to use Docker to run a MongoDB database, you can use the following command to launch one:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -641,8 +641,8 @@ public class CodecFruitService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>quarkus.mongodb.tls=true
-quarkus.mongodb.tls-insecure=true #only if TLS certificat cannot be validated</pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.mongodb.tls=true
+quarkus.mongodb.tls-insecure=true # only if TLS certificate cannot be validated</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -674,7 +674,7 @@ quarkus.mongodb.tls-insecure=true #only if TLS certificat cannot be validated</p
 <h2 id="conclusion"><a class="anchor" href="#conclusion"></a>Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Accessing a Mongo database from a MongoDB Client is easy with Quarkus as it provides configuration and native support for it.</p>
+<p>Accessing a MongoDB database from a MongoDB Client is easy with Quarkus as it provides configuration and native support for it.</p>
 </div>
 </div>
 </div>
