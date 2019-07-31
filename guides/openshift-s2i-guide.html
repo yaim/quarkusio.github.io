@@ -132,7 +132,7 @@ We are going to create an OpenShift <code>build</code> executing it:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># To build the image on OpenShift
-oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.0.2~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started --name=quarkus-quickstart-native
+oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.1.1~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started --name=quarkus-quickstart-native
 oc logs -f bc/quarkus-quickstart-native
 
 # To create the route
@@ -224,7 +224,7 @@ oc expose svc minimal-quarkus-quickstart-native</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:19.0.2~https://github.com/quarkusio/quarkus-quickstarts.git \
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:19.1.1~https://github.com/quarkusio/quarkus-quickstarts.git \
     --context-dir=getting-started --name=quarkus-quickstart-native</code></pre>
 </div>
 </div>
