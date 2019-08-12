@@ -239,7 +239,7 @@ public class MyCoolService {
   }
 
   @Inject // constructor injection
-  MyCoolService(SimpleProcessor proessor) {
+  MyCoolService(SimpleProcessor processor) {
     this.processor = processor;
   }
 }</code></pre>
@@ -256,7 +256,7 @@ public class MyCoolService {
 
   private SimpleProcessor processor;
 
-  MyCoolService(SimpleProcessor proessor) {
+  MyCoolService(SimpleProcessor processor) {
     this.processor = processor;
   }
 }</code></pre>
@@ -301,7 +301,7 @@ The bean would have to be marked as a CDI <code>@Alternative</code> that is enab
 Is there a simpler approach?
 Yes, there is.
 You can use a non-standard feature called "default beans".
-In this case, a bean that can be overriden should be annotated with <code>@io.quarkus.arc.DefaultBean</code>.
+In this case, a bean that can be overridden should be annotated with <code>@io.quarkus.arc.DefaultBean</code>.
 And that&#8217;s it.</p>
 </div>
 <div class="listingblock">
