@@ -129,7 +129,7 @@
 <p>The application built in this guide is quite simple: the user can add elements in a list using a form and the list is updated.</p>
 </div>
 <div class="paragraph">
-<p>All the information between the browser and the server are formatted as JSON.</p>
+<p>All the information between the browser and the server is formatted as JSON.</p>
 </div>
 <div class="paragraph">
 <p>The elements are stored in MongoDB.</p>
@@ -354,7 +354,7 @@ quarkus.mongodb.connection-string = mongodb://localhost:27017</code></pre>
 <h2 id="running-a-mongodb-database"><a class="anchor" href="#running-a-mongodb-database"></a>Running a MongoDB Database</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As by default, <code>MongoClient</code> is configure to access a local MongoDB database on port 27017 (the default MongoDB port), if you have a local running database on this port, there is nothing more to do before being able to test it!</p>
+<p>As by default, <code>MongoClient</code> is configured to access a local MongoDB database on port 27017 (the default MongoDB port), if you have a local running database on this port, there is nothing more to do before being able to test it!</p>
 </div>
 <div class="paragraph">
 <p>If you want to use Docker to run a MongoDB database, you can use the following command to launch one:</p>
@@ -714,15 +714,15 @@ MongoDB connection string, this is a URI where a lot of options can be passed : 
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.wait-queue-timeout</code></dt>
 <dd>
-<p>The maximum wait time that a thread may wait for a connection to become available.</p>
+<p>Maximum wait time that a thread may wait for a connection to become available.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.maintenance-frequency</code></dt>
 <dd>
-<p>Configures the time period between runs of the maintenance job. Default is 0.</p>
+<p>Delay between runs of the maintenance job. Defaults to <code>0</code>.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.maintenance-initial-delay</code></dt>
 <dd>
-<p>Configures period of time to wait before running the first maintenance job on the connection pool.</p>
+<p>Delay before running the first maintenance job on the connection pool.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.wait-queue-multiple</code></dt>
 <dd>
@@ -738,11 +738,11 @@ MongoDB connection string, this is a URI where a lot of options can be passed : 
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.tls-insecure</code></dt>
 <dd>
-<p>If connecting with TLS, this option enables insecure TLS connections. Default to false.</p>
+<p>If connecting with TLS, this option enables insecure TLS connections. Defaults to <code>false</code>.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.tls</code></dt>
 <dd>
-<p>Whether to connect using TLS. Default to false.</p>
+<p>Whether to connect using TLS. Defaults to <code>false</code>.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.replica-set-name</code></dt>
 <dd>
@@ -758,15 +758,15 @@ MongoDB connection string, this is a URI where a lot of options can be passed : 
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.heartbeat-frequency</code></dt>
 <dd>
-<p>The frequency that the driver will attempt to determine the current state of each server in the cluster.</p>
+<p>Frequency that the driver will attempt to determine the current state of each server in the cluster.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.read-preference</code></dt>
 <dd>
-<p>Configures the read preferences. Supported values are: <code>primary|primaryPreferred|secondary|secondaryPreferred|nearest</code></p>
+<p>Read preference. Supported values are: <code>primary|primaryPreferred|secondary|secondaryPreferred|nearest</code></p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.max-wait-queue-size</code></dt>
 <dd>
-<p>Configures the maximum number of concurrent operations allowed to wait for a server to become available. All further operations will get an exception immediately.</p>
+<p>Maximum number of concurrent operations allowed to wait for a server to become available. All further operations will get an exception immediately.</p>
 </dd>
 </dl>
 </div>
@@ -793,7 +793,7 @@ The value is typically a number, but can also be the <code>majority</code> strin
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.write-concern.retry-writes</code></dt>
 <dd>
-<p>If set to <code>true</code>, the driver will retry supported write operations if they fail due to a network error. The default is <code>false</code>.</p>
+<p>If set to <code>true</code>, the driver will retry supported write operations if they fail due to a network error. Defaults to <code>false</code>.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.write-concern.w-timeout</code></dt>
 <dd>
@@ -808,22 +808,22 @@ The value is typically a number, but can also be the <code>majority</code> strin
 <dl>
 <dt class="hdlist1"><code>quarkus.mongodb.credentials.username</code></dt>
 <dd>
-<p>Configures the username.</p>
+<p>Username.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.credentials.password</code></dt>
 <dd>
-<p>Configures the password.</p>
+<p>Password.</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.credentials.auth-mechanism</code></dt>
 <dd>
-<p>Configures the authentication mechanism to use if a credential was supplied.
+<p>Authentication mechanism to use if a credential was supplied.
 The default is unspecified, in which case the client will pick the most secure mechanism available based on the
 sever version. For the GSSAPI and MONGODB-X509 mechanisms, no password is accepted, only the username.
 Supported values: <code>MONGO-CR|GSSAPI|PLAIN|MONGODB-X509</code></p>
 </dd>
 <dt class="hdlist1"><code>quarkus.mongodb.credentials.auth-source</code></dt>
 <dd>
-<p>Configures the source of the authentication credentials.
+<p>Source of the authentication credentials.
 This is typically the database that the credentials have been created. The value defaults to the database
 specified in the path portion of the connection string.
 If the database is specified in neither place, the default value is <code>admin</code>. This option is only

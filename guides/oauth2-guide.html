@@ -136,6 +136,11 @@ It can be used to implement an application authentication mechanism based on tok
 <td class="tableblock halign-left valign-top"><p class="tableblock">The OAuth2 introspection endpoint URL used to validate the token and gather the authentication claims.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.ca-cert-file</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The OAuth2 server certificate file. <strong>Warning</strong>: this is not supported in native mode where the certificate must be included in the truststore used during the native image generation, see <a href="native-and-ssl-guide.html">Using SSL With Native Executables</a>.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.role-claim</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>scope</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The claim that is used in the introspection endpoint response to load the roles</p></td>

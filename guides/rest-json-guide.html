@@ -79,6 +79,7 @@
 <li><a href="#using-response">Using Response</a></li>
 <li><a href="#http-filters-and-interceptors">HTTP filters and interceptors</a></li>
 <li><a href="#cors-filter">CORS filter</a></li>
+<li><a href="#gzip-support">GZip Support</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
     </div>
@@ -718,6 +719,33 @@ how to use it.</p>
 configuration. See <a href="keycloak-guide#configuring-cors">the Keycloak guide</a> for more details.</p>
 </div>
 </td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gzip-support"><a class="anchor" href="#gzip-support"></a>GZip Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus comes with GZip support (even though it is not enabled by default). The following configuration knobs allow to configure GZip support.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.resteasy.gzip.enabled=true <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.resteasy.gzip.max-input=10M <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable Gzip support.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Configure the upper limit on deflated request body. This is useful to mitigate potential attacks by limiting their reach. The default value is <code>10M</code>.
+This configuration option would recognize strings in this format (shown as a regular expression): <code>[0-9]+[KkMmGgTtPpEeZzYy]?</code>. If no suffix is given, assume bytes.</td>
 </tr>
 </table>
 </div>

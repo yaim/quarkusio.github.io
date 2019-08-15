@@ -547,28 +547,45 @@ This will allow Quarkus to index and enhance your entities as if they were insid
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus development mode is really useful for applications that mix front end or services and database access.
-There are a few common approaches.</p>
+There are a few common approaches to make the best of it.</p>
 </div>
 <div class="paragraph">
 <p>The first choice is to use <code>quarkus.hibernate-orm.database.generation=drop-and-create</code> in conjunction with <code>import.sql</code>.
 That way for every change to your app and in particular to your entities, the database schema will be properly recreated
 and your data fixture (stored in <code>import.sql</code>) will be used to repopulate it from scratch.
-This is best to perfectly control your environment.</p>
+This is best to perfectly control your environment and works magic with Quarkus live reload mode:
+your entity changes or any change to your <code>import.sql</code> is immediately picked up and the schema updated without restarting the application!</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>By default, Hibernate ORM, upon boot, will read and execute the SQL statements in the <code>/import.sql</code> file (if present).
+You can change the file name by changing the property <code>quarkus.hibernate-orm.sql-load-script</code> in <code>application.properties</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The second approach is to use <code>quarkus.hibernate-orm.database.generation=update</code>.
 This approach is best when you do many entity changes but
 still need to work on a copy of the production data
-or if you want to reproduce a bug that is based on a specific database entries.
+or if you want to reproduce a bug that is based on specific database entries.
 <code>update</code> is a best effort from Hibernate ORM and will fail in specific situations
 including altering your database structure which could lead to data loss.
-For example if you change structures related to the foreign key, Hibernate ORM might have to bail out.</p>
+For example if you change structures related to the foreign key, Hibernate ORM might have to bail out.
+But for development, these limitations are acceptable.</p>
 </div>
 <div class="paragraph">
 <p>The third approach is to use <code>quarkus.hibernate-orm.database.generation=none</code>.
 This approach is best when you are working on a copy of the production data but want to fully control the schema evolution.
 Or if you use a database schema migration tool like <a href="https://quarkus.io/guides/flyway-guide">Flyway</a>.
-When you make a change to an entity, make sure to manually adapt the database schema accordingly.</p>
+When you make a change to an entity, make sure to adapt the database schema accordingly.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -577,14 +594,16 @@ When you make a change to an entity, make sure to manually adapt the database sc
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Do not use <code>quarkus.hibernate-orm.database.generation</code> <code>drop-and-create</code> and <code>update</code> in your production environment.
+Do not use <code>quarkus.hibernate-orm.database.generation</code> <code>drop-and-create</code> and <code>update</code> in your production environment. You have been warned :)
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Don&#8217;t forget that you can define different <a href="https://quarkus.io/guides/application-configuration-guide#configuration-profiles">configuration profiles</a>
-to select different behaviors depending on your environment.</p>
+<p>It becomes really powerful when combined with Quarkus configuration profiles.
+You can define different <a href="https://quarkus.io/guides/application-configuration-guide#configuration-profiles">configuration profiles</a>
+to select different behaviors depending on your environment.
+This is great because you can define different combinations of Hibernate ORM properties matching the development style you currently need.</p>
 </div>
 <div class="listingblock">
 <div class="title">application.properties</div>
