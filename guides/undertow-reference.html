@@ -67,14 +67,15 @@
 <li><a href="#serving-static-resources">1. Serving Static Resources</a></li>
 <li><a href="#configuring-the-context-path">2. Configuring the Context path</a></li>
 <li><a href="#undertow-handlers-conf">3. undertow-handlers.conf</a></li>
-<li><a href="#supporting-secure-connections-with-ssl">4. Supporting secure connections with SSL</a>
+<li><a href="#web-xml">4. web.xml</a></li>
+<li><a href="#supporting-secure-connections-with-ssl">5. Supporting secure connections with SSL</a>
 <ul class="sectlevel2">
-<li><a href="#providing-a-certificate-and-key-file">4.1. Providing a certificate and key file</a></li>
-<li><a href="#providing-a-keystore">4.2. Providing a keystore</a></li>
-<li><a href="#setting-the-password">4.3. Setting the password</a></li>
+<li><a href="#providing-a-certificate-and-key-file">5.1. Providing a certificate and key file</a></li>
+<li><a href="#providing-a-keystore">5.2. Providing a keystore</a></li>
+<li><a href="#setting-the-password">5.3. Setting the password</a></li>
 </ul>
 </li>
-<li><a href="#cors-filter">5. CORS filter</a></li>
+<li><a href="#cors-filter">6. CORS filter</a></li>
 </ul>
     </div>
     <div>
@@ -115,7 +116,15 @@ in the <code>META-INF</code> directory of your application jar. This file contai
 </div>
 </div>
 <div class="sect1">
-<h2 id="supporting-secure-connections-with-ssl"><a class="anchor" href="#supporting-secure-connections-with-ssl"></a>4. Supporting secure connections with SSL</h2>
+<h2 id="web-xml"><a class="anchor" href="#web-xml"></a>4. web.xml</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using a <code>web.xml</code> file as your configuration file, you can place it in the <code>src/main/resources/META-INF</code> directory.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="supporting-secure-connections-with-ssl"><a class="anchor" href="#supporting-secure-connections-with-ssl"></a>5. Supporting secure connections with SSL</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In order to have Undertow support secure connections, you must either provide a certificate and associated key file, or supply a keystore.</p>
@@ -138,7 +147,7 @@ in the <code>META-INF</code> directory of your application jar. This file contai
 </table>
 </div>
 <div class="sect2">
-<h3 id="providing-a-certificate-and-key-file"><a class="anchor" href="#providing-a-certificate-and-key-file"></a>4.1. Providing a certificate and key file</h3>
+<h3 id="providing-a-certificate-and-key-file"><a class="anchor" href="#providing-a-certificate-and-key-file"></a>5.1. Providing a certificate and key file</h3>
 <div class="paragraph">
 <p>If the certificate has not been loaded into a keystore, it can be provided directly using the properties listed below.
 Quarkus will first try to load the given files as resources, and uses the filesystem as a fallback.
@@ -155,7 +164,7 @@ quarkus.http.ssl.certificate.key-file=/path/to/key</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="providing-a-keystore"><a class="anchor" href="#providing-a-keystore"></a>4.2. Providing a keystore</h3>
+<h3 id="providing-a-keystore"><a class="anchor" href="#providing-a-keystore"></a>5.2. Providing a keystore</h3>
 <div class="paragraph">
 <p>An alternate solution is to directly provide a keystore which already contains a default entry with a certificate
  You will need to at least provide the file and a password.</p>
@@ -182,7 +191,7 @@ If the type is not provided, Quarkus will try to deduce it from the file extensi
 </div>
 </div>
 <div class="sect2">
-<h3 id="setting-the-password"><a class="anchor" href="#setting-the-password"></a>4.3. Setting the password</h3>
+<h3 id="setting-the-password"><a class="anchor" href="#setting-the-password"></a>5.3. Setting the password</h3>
 <div class="paragraph">
 <p>In both aforementioned scenarios, a password needs to be provided to create/load the keystore with.
 The password can be set in your <code>application.properties</code> (in plain-text) using the following property:</p>
@@ -204,7 +213,7 @@ This will also work in tandem with <a href="https://kubernetes.io/docs/concepts/
 </div>
 </div>
 <div class="sect1">
-<h2 id="cors-filter"><a class="anchor" href="#cors-filter"></a>5. CORS filter</h2>
+<h2 id="cors-filter"><a class="anchor" href="#cors-filter"></a>6. CORS filter</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> (CORS) is a mechanism that

@@ -64,7 +64,11 @@
     <h1 class="text-caps">Quarkus - Contexts and Dependency Injection</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
-<li><a href="#bean_discovery">1. Bean Discovery</a></li>
+<li><a href="#bean_discovery">1. Bean Discovery</a>
+<ul class="sectlevel2">
+<li><a href="#how-to-generate-a-jandex-index">1.1. How to Generate a Jandex Index</a></li>
+</ul>
+</li>
 <li><a href="#private-members">2. Private Members</a></li>
 <li><a href="#supported_features">3. Supported Features</a></li>
 <li><a href="#limitations">4. Limitations</a></li>
@@ -114,8 +118,8 @@ Most of the existing CDI code should work just fine but there are some small dif
 <div class="sectionbody">
 <div class="paragraph">
 <p>Bean discovery in CDI is a complex process which involves legacy deployment structures and accessibility requirements of the underlying module architecture.
-Quarkus is using a simplified bean discovery.
-There is only one bean archive with <code>annotated</code> bean discovery mode and no visibility boundaries.</p>
+However, Quarkus is using a <strong>simplified bean discovery</strong>.
+There is only single bean archive with the <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#default_bean_discovery" target="_blank" rel="noopener">bean discovery mode <code>annotated</code></a> and no visibility boundaries.</p>
 </div>
 <div class="paragraph">
 <p>The bean archive is synthesized from:</p>
@@ -123,10 +127,16 @@ There is only one bean archive with <code>annotated</code> bean discovery mode a
 <div class="ulist">
 <ul>
 <li>
-<p>the application,</p>
+<p>the application classes,</p>
 </li>
 <li>
-<p>application dependencies that contain a <code>beans.xml</code> descriptor or a generated Jandex index (<code>META-INF/jandex.idx</code>),</p>
+<p>dependencies that contain a <code>beans.xml</code> descriptor (content is ignored),</p>
+</li>
+<li>
+<p>dependencies that contain a Jandex index - <code>META-INF/jandex.idx</code>,</p>
+</li>
+<li>
+<p>dependencies referenced by <code>quarkus.index-dependency</code> in <code>application.properties</code>,</p>
 </li>
 <li>
 <p>and Quarkus integration code.</p>
@@ -146,10 +156,69 @@ In fact, the declaring bean classes are considered annotated with <code>@Depende
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Quarkus extension may declare additional discovery rules. For example <code>@Scheduled</code> business methods are registered even if the declaring class is not annotated with a bean defining annotation.
+Quarkus extensions may declare additional discovery rules. For example, <code>@Scheduled</code> business methods are registered even if the declaring class is not annotated with a bean defining annotation.
 </td>
 </tr>
 </table>
+</div>
+<div class="sect2">
+<h3 id="how-to-generate-a-jandex-index"><a class="anchor" href="#how-to-generate-a-jandex-index"></a>1.1. How to Generate a Jandex Index</h3>
+<div class="paragraph">
+<p>A dependency with a Jandex index is automatically scanned for beans.
+To generate the index just add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.jboss.jandex&lt;/groupId&gt;
+      &lt;artifactId&gt;jandex-maven-plugin&lt;/artifactId&gt;
+      &lt;version&gt;1.0.6&lt;/version&gt;
+      &lt;executions&gt;
+        &lt;execution&gt;
+          &lt;id&gt;make-index&lt;/id&gt;
+          &lt;goals&gt;
+            &lt;goal&gt;jandex&lt;/goal&gt;
+          &lt;/goals&gt;
+        &lt;/execution&gt;
+      &lt;/executions&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you can&#8217;t modify the dependency, you can still index it by adding <code>quarkus.index-dependency</code> entries to your <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.index-dependency.&lt;name&gt;.group-id=
+quarkus.index-dependency.&lt;name&gt;.artifact-id=
+quarkus.index-dependency.&lt;name&gt;.classifier=(this one is optional)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example, the following entries ensure that the <code>org.acme:acme-api</code> dependency is indexed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.index-dependency.acme.group-id=org.acme <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.index-dependency.acme.artifact-id=acme-api <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Value is a group id for a dependency identified by name <code>acme</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Value is an artifact id for a dependency identified by name <code>acme</code>.</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>

@@ -116,7 +116,7 @@ usage as the classes etc that are used for processing are not loaded (or even pr
 <p>Quarkus’s mission is to transform your entire application including the libraries it uses, into an artifact optimized for GraalVM.
 To do this you need to analyze and understand the full "closed world" of the application.
 Without the full and complete context, the best that can be achieved is partial and limited generic support.
-By using the Quarkus extension approach, we can bring Java applications in line with memory footprint constrained environments or cloud platforms like Kubernetes.</p>
+By using the Quarkus extension approach, we can bring Java applications in line with memory footprint constrained environments like Kubernetes or cloud platforms.</p>
 </div>
 <div class="paragraph">
 <p>The Quarkus extension framework results in significantly improved resource utilization even when GraalVM is not used (e.g. in HotSpot).
@@ -214,10 +214,8 @@ But many properties like enable caching or setting the JDBC driver can safely re
 <div class="sect2">
 <h3 id="expose-your-components-via-cdi"><a class="anchor" href="#expose-your-components-via-cdi"></a>1.4. Expose your components via CDI</h3>
 <div class="paragraph">
-<p>Since CDI is the central programming model when it comes to component composition, frameworks should expose producers that are easily consumable by user applications.</p>
-</div>
-<div class="paragraph">
-<p>For example, Hibernate ORM exposes <code>EntityManagerFactory</code> and <code>EntityManager</code> beans, the connection pool exposes <code>DataSource</code> beans etc.
+<p>Since CDI is the central programming model when it comes to component composition, frameworks should expose producers that are easily consumable by user applications.<br>
+For example, Hibernate ORM exposes <code>EntityManagerFactory</code> and <code>EntityManager</code> beans, the connection pool exposes <code>DataSource</code> beans etc.
 An extension must generate these bean definitions at build time.</p>
 </div>
 <div class="paragraph">
@@ -254,7 +252,7 @@ public class TracerConfiguration {
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s assume the application code wants to use the <code>Tracer</code>, but also needs to use a custom <code>Reporter</code> bean. Such a requirement could easily be done using something like:</p>
+<p>If for example application code wants to use <code>Tracer</code>, but also needs to use a custom <code>Reporter</code> bean, such a requirement could easily be done using something like:</p>
 </div>
 <div class="listingblock">
 <div class="content">

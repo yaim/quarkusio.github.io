@@ -126,7 +126,7 @@ Such resources that are meant to be part of the native executable need to be spe
 <p>Quarkus automatically includes the resources present in <code>META-INF/resources</code> (the web resources) but, outside of this directory, you are on your own.</p>
 </div>
 <div class="paragraph">
-<p>To include more resources in the native executable, create a <code>resources-config.json</code> JSON file at the root of your project defining which resources should be included:</p>
+<p>To include more resources in the native executable, create a <code>resources-config.json</code> JSON file defining which resources should be included:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -141,6 +141,10 @@ Such resources that are meant to be part of the native executable need to be spe
   ]
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>When using Maven, you can put this file at the root of your project.
+If Gradle is used, we need to put this file in a folder that will be deployed in the build folder (for example <code>src/main/resources</code>) because the build folder is used as the project folder when creating the native image.</p>
 </div>
 <div class="paragraph">
 <p>The patterns are valid Java regexps.
@@ -169,6 +173,18 @@ Here we include all the XML files and JSON files into the native executable.</p>
         &lt;/execution&gt;
     &lt;/executions&gt;
 &lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using Gradle, we need to configure the additional build arguments in the plugin configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildNative {
+    additionalBuildArgs = [
+            '-H:DynamicProxyConfigurationFiles=resources/main/resources-config.json'
+    ]
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -248,7 +264,7 @@ To include these elements in your native executable, you need to register them f
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs"> Exception handling request to /person: org.jboss.resteasy.spi.UnhandledException: javax.json.bind.JsonbException: Can't create instance of a class: class org.acme.jsonb.Person, No default constructor found</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">Exception handling request to /person: org.jboss.resteasy.spi.UnhandledException: javax.json.bind.JsonbException: Can't create instance of a class: class org.acme.jsonb.Person, No default constructor found</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -279,7 +295,7 @@ public class MyClass {
 <p>In this case, you can use a configuration file to register classes for reflection.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create the <code>reflection-config.json</code> file at the root of the project:</p>
+<p>Let&#8217;s create the <code>reflection-config.json</code> file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -295,6 +311,10 @@ public class MyClass {
   }
 ]</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>When using Maven, you can put this file at the root of your project.
+If Gradle is used, we need to put this file in a folder that will be deployed in the build folder (for example <code>src/main/resources</code>) because the build folder is used as the project folder when creating the native image.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -333,6 +353,18 @@ public class MyClass {
         &lt;/execution&gt;
     &lt;/executions&gt;
 &lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using Gradle, we need to configure the additional build arguments in the plugin configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildNative {
+    additionalBuildArgs = [
+            '-H:ReflectionConfigurationFiles=resources/main/reflection-config.json'
+    ]
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
