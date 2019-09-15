@@ -464,7 +464,8 @@ This is the default if you are running Quarkus in <code>DEV</code> or <code>TEST
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">class MailTest {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+class MailTest {
 
     private static final String TO = "foo@quarkus.io";
 
@@ -483,7 +484,7 @@ This is the default if you are running Quarkus in <code>DEV</code> or <code>TEST
         .when()
         .get("/send-email")
         .then()
-           .statusCode(200)
+           .statusCode(202)
            .body(is("OK"));
 
         // verify that it was sent

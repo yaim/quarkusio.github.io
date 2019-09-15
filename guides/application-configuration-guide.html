@@ -90,7 +90,7 @@
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Hardcoded values in your code is a <em>no go</em> (even if we all did it at some point ;-)).
+<p>Hardcoded values in your code are a <em>no go</em> (even if we all did it at some point ;-)).
 In this guide, we learn how to configure your application.</p>
 </div>
 </div>
@@ -289,7 +289,7 @@ So you can quickly know when your configuration is complete.
 <h2 id="update-the-test"><a class="anchor" href="#update-the-test"></a>Update the test</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We also need to update the functional test to reflect the changes made to endpoint.
+<p>We also need to update the functional test to reflect the changes made to the endpoint.
 Edit the <code>src/test/java/org/acme/config/GreetingResourceTest.java</code> file and change the content of the <code>testHelloEndpoint</code> method to:</p>
 </div>
 <div class="listingblock">
@@ -346,7 +346,7 @@ for its own configuration. For example to configure the HTTP server port you can
 </div>
 <div class="paragraph">
 <p>It is also possible to generate an example <code>application.properties</code> with all known configuration properties, to make
-it easy to see what Quarkus configuration options are available. To do this run</p>
+it easy to see what Quarkus configuration options are available. To do this, run:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -367,7 +367,7 @@ when applicable. For example this HTTP port config entry will appear as:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Rather than generating an example config file you can also add these to you actual config file by setting the <code>-Dfile</code>
+<p>Rather than generating an example config file, you can also add these to you actual config file by setting the <code>-Dfile</code>
 parameter:</p>
 </div>
 <div class="listingblock">
@@ -376,7 +376,7 @@ parameter:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If a config option is already present (commented or uncommented) it will not be added, so it is safe to run this after
+<p>If a config option is already present (commented or not) it will not be added, so it is safe to run this after
 adding an additional extension to see what additional options have been added.</p>
 </div>
 </div>
@@ -448,7 +448,7 @@ Environment variables names are following the conversion rules of <a href="https
 <h3 id="configuration-profiles"><a class="anchor" href="#configuration-profiles"></a>Configuration Profiles</h3>
 <div class="paragraph">
 <p>Quarkus supports the notion of configuration profiles. These allow you to have multiple configuration in the same file and
-select between then via a profile name.</p>
+select between them via a profile name.</p>
 </div>
 <div class="paragraph">
 <p>The syntax for this is <code>%{profile}.config.key=value</code>. For example if I have the following:</p>
@@ -460,7 +460,7 @@ select between then via a profile name.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The Quarkus HTTP port will be 9090, unless the 'dev' profile is active, in which case it will be 8181.</p>
+<p>The Quarkus HTTP port will be 9090, unless the <code>dev</code> profile is active, in which case it will be 8181.</p>
 </div>
 <div class="paragraph">
 <p>By default Quarkus has three profiles, although it is possible to use as many as you like. The default profiles are:</p>
@@ -482,7 +482,7 @@ select between then via a profile name.</p>
 <p>There are two ways to set a custom profile, either via the <code>quarkus.profile</code> system property or the <code>QUARKUS_PROFILE</code>
 environment variable. If both are set the system property takes precedence. Note that it is not necessary to
 define the names of these profiles anywhere, all that is necessary is to create a config property with the profile
-name, and then set the current profile to that name. For example if I want a 'staging' profile with a different HTTP port
+name, and then set the current profile to that name. For example if I want a <code>staging</code> profile with a different HTTP port
 I can add the following to <code>application.properties</code>:</p>
 </div>
 <div class="listingblock">
@@ -492,7 +492,7 @@ I can add the following to <code>application.properties</code>:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>And then set the <code>QUARKUS_PROFILE</code> environment variable to 'staging' to activate my profile.</p>
+<p>And then set the <code>QUARKUS_PROFILE</code> environment variable to <code>staging</code> to activate my profile.</p>
 </div>
 <div class="sect3">
 <h4 id="miscellaneous"><a class="anchor" href="#miscellaneous"></a>Miscellaneous</h4>
@@ -535,7 +535,7 @@ class and it will be detected and installed at application startup.</p>
 <h3 id="custom-configuration-converters"><a class="anchor" href="#custom-configuration-converters"></a>Custom configuration converters</h3>
 <div class="paragraph">
 <p>You can also use your custom types as a configuration values. This can be done by implementing <code>org.eclipse.microprofile.config.spi.Converter&lt;T&gt;</code>
-and adding its fully qualified class name in file <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.</p>
+and adding its fully qualified class name in the <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code> file.</p>
 </div>
 <div class="paragraph">
 <p>Let us assume you have a custom type like this one:</p>
@@ -578,8 +578,8 @@ public class MicroProfileCustomValueConverter implements Converter&lt;MicroProfi
 </div>
 </div>
 <div class="paragraph">
-<p>Then you need to include fully qualified class name of converter in a service file <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.
-If you have more converters simply add their class names in this file as well. Single fully qualified class name per line, for example:</p>
+<p>Then you need to include the fully qualified class name of the converter in a service file <code>META-INF/services/org.eclipse.microprofile.config.spi.Converter</code>.
+If you have more converters, simply add their class names in this file as well. Single fully qualified class name per line, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -589,8 +589,8 @@ org.acme.config.YetAnotherConverter</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Please note that <code>SomeOtherConverter</code> and <code>YetAnotherConverter</code> was added just for a demonstration. If you include in this file classes
-which are not available in runtime, the converters loading will fail.</p>
+<p>Please note that <code>SomeOtherConverter</code> and <code>YetAnotherConverter</code> were added just for a demonstration. If you include in this file classes
+which are not available at runtime, the converters loading will fail.</p>
 </div>
 <div class="paragraph">
 <p>After this is done you can use your custom type as a configuration value:</p>
@@ -604,7 +604,7 @@ MicroProfileCustomValue value;</code></pre>
 <div class="sect3">
 <h4 id="converter-priority"><a class="anchor" href="#converter-priority"></a>Converter priority</h4>
 <div class="paragraph">
-<p>In some cases you may want to use a custom converter to convert a type which is already converted
+<p>In some cases, you may want to use a custom converter to convert a type which is already converted
 by a different converter. In such cases, you can use the <code>javax.annotation.Priority</code> annotation to
 change converters precedence and make your custom converter of higher priority than the other
 on the list.</p>
@@ -668,7 +668,7 @@ This new converter also needs to be listed in a service file, i.e. <code>META-IN
 <h2 id="more-info-on-how-to-configure"><a class="anchor" href="#more-info-on-how-to-configure"></a>More info on how to configure</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus relies on Eclipse MicroProfile and inherit its features.</p>
+<p>Quarkus relies on Eclipse MicroProfile and inherits its features.</p>
 </div>
 <div class="paragraph">
 <p>There are converters that convert your property file content from <code>String</code> to typed Java types. See the list <a href="https://github.com/eclipse/microprofile-config/blob/master/spec/src/main/asciidoc/converters.asciidoc">in the specification</a>.</p>

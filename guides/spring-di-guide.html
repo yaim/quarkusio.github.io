@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using our Spring Dependency Injection compatibility layer</title>
+  <title>Quarkus - Quarkus Extension for Spring DI API</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -61,7 +61,7 @@
 
     <div class="guide">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using our Spring Dependency Injection compatibility layer</h1>
+    <h1 class="text-caps">Quarkus - Quarkus Extension for Spring DI API</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
@@ -76,16 +76,17 @@
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
 <li><a href="#run-the-application-as-a-native">Run the application as a native</a></li>
 <li><a href="#important-technical-note">Important Technical Note</a></li>
+<li><a href="#more-spring-guides">More Spring guides</a></li>
 </ul>
     </div>
     <div>
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While you are encouraged to use CDI annotations for injection, Quarkus provides a compatibility layer for Spring dependency injection in the form of the <code>spring-di</code> extension.</p>
+<p>While users are encouraged to use CDI annotations for injection, Quarkus provides a compatibility layer for Spring dependency injection in the form of the <code>spring-di</code> extension.</p>
 </div>
 <div class="paragraph">
-<p>This guide explains how your Quarkus application can leverage the well known Dependency Injection annotations included in the Spring Framework.</p>
+<p>This guide explains how a Quarkus application can leverage the well known Dependency Injection annotations included in the Spring Framework.</p>
 </div>
 </div>
 </div>
@@ -380,8 +381,26 @@ Open your browser to <a href="http://localhost:8080/greeting" class="bare">http:
 <div class="paragraph">
 <p>Please note that the Spring support in Quarkus does not start a Spring Application Context nor are any Spring infrastructure classes run.
 Spring classes and annotations are only used for reading metadata and / or are used as user code method return types or parameter types.
-What that means for end users, is that adding arbitrary Spring to the classpath will not be used at all. Moreover Spring infrastructure
-things like <code>org.springframework.beans.factory.config.BeanPostProcessor</code> will not be run.</p>
+What that means for end users, is that adding arbitrary Spring libraries will not have any effect. Moreover Spring infrastructure
+classes (like <code>org.springframework.beans.factory.config.BeanPostProcessor</code> for example) will not be executed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more-spring-guides"><a class="anchor" href="#more-spring-guides"></a>More Spring guides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus supports additional Spring compatibility features. See the following guides for more details:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="spring-web-guide.adoc">Quarkus - Extension for Spring Web</a></p>
+</li>
+<li>
+<p><a href="spring-data-jpa-guide.adoc">Quarkus - Extension for Spring Data JPA</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

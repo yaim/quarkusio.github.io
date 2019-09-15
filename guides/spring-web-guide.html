@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using our Spring Web compatibility layer</title>
+  <title>Quarkus - Quarkus Extension for Spring Web API</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -61,14 +61,14 @@
 
     <div class="guide">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using our Spring Web compatibility layer</h1>
+    <h1 class="text-caps">Quarkus - Quarkus Extension for Spring Web API</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#solution">Solution</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
-<li><a href="#writing-the-greetingcontroller">Writing the GreetingController</a></li>
-<li><a href="#update-the-test">Update the test</a></li>
+<li><a href="#greetingcontroller">GreetingController</a></li>
+<li><a href="#greetingcontrollertest">GreetingControllerTest</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
 <li><a href="#run-the-application-as-a-native-executable">Run the application as a native executable</a></li>
 <li><a href="#supported-spring-web-functionalities">Supported Spring Web functionalities</a>
@@ -79,16 +79,17 @@
 </ul>
 </li>
 <li><a href="#important-technical-note">Important Technical Note</a></li>
+<li><a href="#more-spring-guides">More Spring guides</a></li>
 </ul>
     </div>
     <div>
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While you are encouraged to use JAX-RS annotation for defining REST endpoints, Quarkus provides a compatibility layer for Spring Web in the form of the <code>spring-web</code> extension.</p>
+<p>While users are encouraged to use JAX-RS annotation for defining REST endpoints, Quarkus provides a compatibility layer for Spring Web in the form of the <code>spring-web</code> extension.</p>
 </div>
 <div class="paragraph">
-<p>This guide explains how your Quarkus application can leverage the well known Spring Web annotations to define RESTful services.</p>
+<p>This guide explains how a Quarkus application can leverage the well known Spring Web annotations to define RESTful services.</p>
 </div>
 </div>
 </div>
@@ -153,49 +154,11 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="writing-the-greetingcontroller"><a class="anchor" href="#writing-the-greetingcontroller"></a>Writing the GreetingController</h2>
+<h2 id="greetingcontroller"><a class="anchor" href="#greetingcontroller"></a>GreetingController</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before writing the <code>GreetingController</code>, let&#8217;s first create a <code>Greeting</code> class that will be used as a response from the controller.
-Furthermore let&#8217;s create a Spring bean called <code>GreetingBean</code> that will be used by the controller.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.spring.web;
-
-public class Greeting {
-
-    private final String message;
-
-    public Greeting(String message) {
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.spring.web;
-
-import org.springframework.stereotype.Service;
-
-@Service
-public class GreetingBean {
-
-    public String greet(String input) {
-        return "HELLO " + input.toUpperCase() + "!";
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The Quarkus Maven plugin automatically generated a <code>src/main/java/org/acme/spring/web/GreetingController.java</code> file.
-However since we are going to be using Spring Web annotations to define our REST endpoint (instead of the JAX-RS ones used by default), we need to change
-the <code>GreetingController</code> to have the following content:</p>
+<p>The Quarkus maven plugin automatically generated a controller with the Spring Web annotations to define our REST endpoint (instead of the JAX-RS ones used by default)
+The <code>src/main/java/org/acme/spring/web/GreetingController.java</code> file looks as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -210,15 +173,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/greeting")
 public class GreetingController {
 
-    private final GreetingBean greetingBean;
-
-    public GreetingController(GreetingBean greetingBean) {
-        this.greetingBean = greetingBean;
-    }
-
-    @GetMapping("/{name}")
-    public Greeting hello(@PathVariable(name = "name") String name) {
-        return new Greeting(greetingBean.greet(name));
+    @GetMapping
+    public String hello() {
+        return "hello";
     }
 }</code></pre>
 </div>
@@ -226,10 +183,10 @@ public class GreetingController {
 </div>
 </div>
 <div class="sect1">
-<h2 id="update-the-test"><a class="anchor" href="#update-the-test"></a>Update the test</h2>
+<h2 id="greetingcontrollertest"><a class="anchor" href="#greetingcontrollertest"></a>GreetingControllerTest</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We also need to update the functional test to reflect the changes made to the endpoint. Change its content to:</p>
+<p>Note that a test for the controller has been created as well:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -245,12 +202,12 @@ import static org.hamcrest.CoreMatchers.is;
 public class GreetingControllerTest {
 
     @Test
-    public void testGreeting() {
+    public void testHelloEndpoint() {
         given()
-            .when().get("/greeting/world")
-            .then()
-                .statusCode(200)
-                .body("message", is("HELLO WORLD!"));
+          .when().get("/greeting")
+          .then()
+             .statusCode(200)
+             .body(is("hello"));
     }
 
 }</code></pre>
@@ -263,10 +220,10 @@ public class GreetingControllerTest {
 <div class="sectionbody">
 <div class="paragraph">
 <p>Run the application with: <code>./mvnw compile quarkus:dev</code>.
-Open your browser to <a href="http://localhost:8080/greeting/world" class="bare">http://localhost:8080/greeting/world</a>.</p>
+Open your browser to <a href="http://localhost:8080/greeting" class="bare">http://localhost:8080/greeting</a>.</p>
 </div>
 <div class="paragraph">
-<p>The result should be: <code>{"message": "HELLO WORLD!"}</code>.</p>
+<p>The result should be: <code>{"message": "hello"}</code>.</p>
 </div>
 </div>
 </div>
@@ -407,8 +364,26 @@ Open your browser to <a href="http://localhost:8080/greeting/world" class="bare"
 <div class="paragraph">
 <p>Please note that the Spring support in Quarkus does not start a Spring Application Context nor are any Spring infrastructure classes run.
 Spring classes and annotations are only used for reading metadata and / or are used as user code method return types or parameter types.
-What that means for end users, is that adding arbitrary Spring libraries to the classpath will not be taken into account. Moreover Spring infrastructure
-things like <code>org.springframework.beans.factory.config.BeanPostProcessor</code> will not be executed.</p>
+What that means for end users, is that adding arbitrary Spring libraries will not have any effect. Moreover Spring infrastructure
+classes (like <code>org.springframework.beans.factory.config.BeanPostProcessor</code> for example) will not be executed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more-spring-guides"><a class="anchor" href="#more-spring-guides"></a>More Spring guides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus support has more Spring compatibility features. See the following guides for more details:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="spring-di-guide.adoc">Quarkus - Extension for Spring DI</a></p>
+</li>
+<li>
+<p><a href="spring-data-jpa-guide.adoc">Quarkus - Extension for Spring Data JPA</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
