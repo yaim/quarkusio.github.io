@@ -74,6 +74,11 @@
 </ul>
 </li>
 <li><a href="#run-the-application">Run the application</a></li>
+<li><a href="#additional-tracers">Additional tracers</a>
+<ul class="sectlevel2">
+<li><a href="#jdbc-tracer">JDBC Tracer</a></li>
+</ul>
+</li>
 </ul>
     </div>
     <div>
@@ -271,6 +276,44 @@ hello</code></pre>
 </div>
 <div class="paragraph">
 <p>Hit <code>CTRL+C</code> to stop the application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="additional-tracers"><a class="anchor" href="#additional-tracers"></a>Additional tracers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://github.com/opentracing-contrib">OpenTracing API Contributions project</a> offers additional tracers that can be used to add tracing to a large variety of technologies/components.</p>
+</div>
+<div class="paragraph">
+<p>The tracers documented in the following section has been tested with Quarkus and works in both standard and native mode.</p>
+</div>
+<div class="sect2">
+<h3 id="jdbc-tracer"><a class="anchor" href="#jdbc-tracer"></a>JDBC Tracer</h3>
+<div class="paragraph">
+<p>The <a href="https://github.com/opentracing-contrib/java-jdbc">JDBC tracer</a> will add a span for each JDBC queries done by your application, to enable it, add the following dependency to your pom.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.opentracing.contrib&lt;/groupId&gt;
+    &lt;artifactId&gt;opentracing-jdbc&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As it uses a dedicated JDBC driver, you must configure your datasource and Hibernate to use it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># add ':tracing' to your database URL
+quarkus.datasource.url=jdbc:tracing:postgresql://localhost:5432/mydatabase
+# use the 'TracingDriver' instead of the one for your database
+quarkus.datasource.driver=io.opentracing.contrib.jdbc.TracingDriver
+# configure Hibernate dialect
+quarkus.hibernate-orm.dialect=org.hibernate.dialect.PostgreSQLDialect</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

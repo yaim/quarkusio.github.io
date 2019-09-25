@@ -75,7 +75,7 @@
 </li>
 <li><a href="#technical-aspect">2. Technical aspect</a>
 <ul class="sectlevel2">
-<li><a href="#three-phases-of-bootstrap-and-quarkus-philosophy">2.1. Three Phases of Bootstrap and Quarkus Philosophy</a></li>
+<li><a href="#bootstrap-three-phases">2.1. Three Phases of Bootstrap and Quarkus Philosophy</a></li>
 <li><a href="#maven-setup">2.2. Maven setup</a></li>
 <li><a href="#build-step-processors">2.3. Build Step Processors</a></li>
 <li><a href="#configuration">2.4. Configuration</a></li>
@@ -88,6 +88,13 @@
 <li><a href="#ide-support-tips">2.11. IDE support tips</a></li>
 <li><a href="#troubleshooting-debugging-tips">2.12. Troubleshooting / Debugging Tips</a></li>
 <li><a href="#sample-test-extension">2.13. Sample Test Extension</a></li>
+</ul>
+</li>
+<li><a href="#configuration-reference-documentation">3. Configuration reference documentation</a>
+<ul class="sectlevel2">
+<li><a href="#writing-the-documentation">3.1. Writing the documentation</a></li>
+<li><a href="#generating-the-documentation">3.2. Generating the documentation</a></li>
+<li><a href="#including-the-documentation-in-the-extension-guide">3.3. Including the documentation in the extension guide</a></li>
 </ul>
 </li>
 </ul>
@@ -377,7 +384,7 @@ The way to port a CDI extension to Quarkus is to rewrite it as a Quarkus extensi
 <h2 id="technical-aspect"><a class="anchor" href="#technical-aspect"></a>2. Technical aspect</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="three-phases-of-bootstrap-and-quarkus-philosophy"><a class="anchor" href="#three-phases-of-bootstrap-and-quarkus-philosophy"></a>2.1. Three Phases of Bootstrap and Quarkus Philosophy</h3>
+<h3 id="bootstrap-three-phases"><a class="anchor" href="#bootstrap-three-phases"></a>2.1. Three Phases of Bootstrap and Quarkus Philosophy</h3>
 <div class="paragraph">
 <p>There are three distinct bootstrap phases of a Quarkus app:</p>
 </div>
@@ -617,17 +624,20 @@ mvn io.quarkus:quarkus-maven-plugin:0.22.0:create-extension -N \
 <div class="ulist">
 <ul>
 <li>
-<p>Creates three new Maven modules:</p>
+<p>Creates four new Maven modules:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>quarkus-my-ext-parent</code> in the <code>my-ext</code> directory</p>
+<p><code>quarkus-my-ext-parent</code> in the <code>extensions/my-ext</code> directory</p>
 </li>
 <li>
-<p><code>quarkus-my-ext</code> in the <code>my-ext/runtime</code> directory</p>
+<p><code>quarkus-my-ext</code> in the <code>extensions/my-ext/runtime</code> directory</p>
 </li>
 <li>
-<p><code>quarkus-my-ext-deployment</code> in the <code>my-ext/deployment</code> directory; a basic <code>MyExtProcessor</code> class is generated in this module.</p>
+<p><code>quarkus-my-ext-deployment</code> in the <code>extensions/my-ext/deployment</code> directory; a basic <code>MyExtProcessor</code> class is generated in this module.</p>
+</li>
+<li>
+<p><code>quarkus-my-ext-integration-test</code> in the <code>integration-tests/my-ext/deployment</code> directory; an empty JAX-RS Resource class and two test classes (for JVM mode and native mode) are generated in this module.</p>
 </li>
 </ul>
 </div>
@@ -645,13 +655,16 @@ mvn io.quarkus:quarkus-maven-plugin:0.22.0:create-extension -N \
 <li>
 <p><code>quarkus-my-ext-deployment</code> is added to the <code>&lt;dependencyManagement&gt;</code> of the deployment BOM (Bill of Materials) <code>bom/deployment/pom.xml</code></p>
 </li>
+<li>
+<p><code>quarkus-my-ext-integration-test</code> is added to the <code>&lt;modules&gt;</code> of <code>quarkus-integration-tests-parent</code></p>
+</li>
 </ul>
 </div>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>A Maven build performed immediately after generating the modules should pass flawlessly.</p>
+<p>A Maven build performed immediately after generating the modules should fail due to a <code>fail()</code> assertion in one of the test classes.</p>
 </div>
 <div class="paragraph">
 <p>There is one step (specific to the Quarkus source tree) that you should do manually when creating a new extension:
@@ -675,6 +688,7 @@ Add the extension coordinates to <code>devtools/common/src/main/filtered/extensi
         &lt;namePrefix xml:space="preserve"&gt;Quarkus - &lt;/namePrefix&gt;
         &lt;runtimeBomPath&gt;../bom/runtime/pom.xml&lt;/runtimeBomPath&gt;
         &lt;deploymentBomPath&gt;../bom/deployment/pom.xml&lt;/deploymentBomPath&gt;
+        &lt;itestParentPath&gt;../integration-tests/pom.xml&lt;/itestParentPath&gt;
     &lt;/configuration&gt;
 &lt;/plugin&gt;</code></pre>
 </div>
@@ -2463,6 +2477,224 @@ public final class Target_XmlData {
 }</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration-reference-documentation"><a class="anchor" href="#configuration-reference-documentation"></a>3. Configuration reference documentation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The configuration is an important part of each extension and therefore needs to be properly documented.
+Each configuration property should have a proper Javadoc comment.</p>
+</div>
+<div class="paragraph">
+<p>While it is handy to have the documentation available when coding, this configuration documentation must also be available in the extension guides.
+The Quarkus build automatically generates the configuration documentation for you based on the Javadoc comments but you need to explicitly include it in your guide.</p>
+</div>
+<div class="paragraph">
+<p>In this section, we will explain everything you need to know about the configuration reference documentation.</p>
+</div>
+<div class="sect2">
+<h3 id="writing-the-documentation"><a class="anchor" href="#writing-the-documentation"></a>3.1. Writing the documentation</h3>
+<div class="paragraph">
+<p>For each configuration property, you need to write some Javadoc explaining its purpose.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Always make the first sentence meaningful and self-contained as it is included in the summary table.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can either use standard Javadoc comments or Asciidoc directly as a Javadoc comment.</p>
+</div>
+<div class="paragraph">
+<p>We assume you are familiar with writing Javadoc comments so let&#8217;s focus on our Asciidoc support.
+While standard Javadoc comments are perfectly fine for simple documentation (recommended even),
+if you want to include tips, source code extracts, lists&#8230;&#8203; Asciidoc comes in handy.</p>
+</div>
+<div class="paragraph">
+<p>Here is a typical configuration property commented with Asciidoc:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">/**
+ * Class name of the Hibernate ORM dialect. The complete list of bundled dialects is available in the
+ * https://docs.jboss.org/hibernate/stable/orm/javadocs/org/hibernate/dialect/package-summary.html[Hibernate ORM JavaDoc].
+ *
+ * [NOTE]
+ * ====
+ * Not all the dialects are supported in GraalVM native executables: we currently provide driver extensions for PostgreSQL,
+ * MariaDB, Microsoft SQL Server and H2.
+ * ====
+ *
+ * @asciidoclet
+ */
+@ConfigItem
+public Optional&lt;String&gt; dialect;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the simple case: you just have to write Asciidoc and mark the comment with the <code>@asciidoclet</code> tag.
+This tag has two purposes: it is used as a marker for our generation tool but it is also used by the <code>javadoc</code> process for proper Javadoc generation.</p>
+</div>
+<div class="paragraph">
+<p>Now let&#8217;s consider a more complicated example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// @formatter:off
+/**
+ * Name of the file containing the SQL statements to execute when Hibernate ORM starts.
+ * Its default value differs depending on the Quarkus launch mode:
+ *
+ * * In dev and test modes, it defaults to `import.sql`.
+ *   Simply add an `import.sql` file in the root of your resources directory
+ *   and it will be picked up without having to set this property.
+ *   Pass `no-file` to force Hibernate ORM to ignore the SQL import file.
+ * * In production mode, it defaults to `no-file`.
+ *   It means Hibernate ORM won't try to execute any SQL import file by default.
+ *   Pass an explicit value to force Hibernate ORM to execute the SQL import file.
+ *
+ * If you need different SQL statements between dev mode, test (`@QuarkusTest`) and in production, use Quarkus
+ * https://quarkus.io/guides/application-configuration-guide#configuration-profiles[configuration profiles facility].
+ *
+ * [source,property]
+ * .application.properties
+ * ----
+ * %dev.quarkus.hibernate-orm.sql-load-script = import-dev.sql
+ * %test.quarkus.hibernate-orm.sql-load-script = import-test.sql
+ * %prod.quarkus.hibernate-orm.sql-load-script = no-file
+ * ----
+ *
+ * [NOTE]
+ * ====
+ * Quarkus supports `.sql` file with SQL statements or comments spread over multiple lines.
+ * Each SQL statement must be terminated by a semicolon.
+ * ====
+ *
+ * @asciidoclet
+ */
+// @formatter:on
+@ConfigItem
+public Optional&lt;String&gt; sqlLoadScript;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A few comments on this one:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Every time you will need the indentation to be respected in the Javadoc comment (think list items spread on multiple lines or indented source code),
+you will need to disable temporarily the automatic Eclipse formatter
+(this, even if you don&#8217;t use Eclipse as the formatter is included in our build).
+To do so, use the <code>// @formatter:off</code>/<code>// @formatter:on</code> markers.
+Note the fact that they are separate comments and there is a space after the <code>//</code> marker. This is required.</p>
+</li>
+<li>
+<p>As you can see, you can use the full power of Asciidoctor (except for the limitation below)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You cannot use open blocks (<code>--</code>) in your Asciidoctor documentation.
+All the other types of blocks (source, admonitions&#8230;&#8203;) are supported.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="generating-the-documentation"><a class="anchor" href="#generating-the-documentation"></a>3.2. Generating the documentation</h3>
+<div class="paragraph">
+<p>Generating the documentation is easy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Running <code>mvn clean install -DskipTests -DskipITs</code> will do.</p>
+</li>
+<li>
+<p>You  can either do it globally or in a specific extension directory (e.g. <code>extensions/mailer</code>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The documentation is generated in the global <code>target/asciidoc/generated/config/</code> located at the root of the project.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="including-the-documentation-in-the-extension-guide"><a class="anchor" href="#including-the-documentation-in-the-extension-guide"></a>3.3. Including the documentation in the extension guide</h3>
+<div class="paragraph">
+<p>Now that you have generated the configuration reference documentation for your extension, you need to include it in your guide (and review it).</p>
+</div>
+<div class="paragraph">
+<p>This is simple, include the generated documentation in your guide:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="asciidoc" class="language-asciidoc hljs">include::{generated-dir}/config/quarkus-your-extension.adoc[opts=optional, leveloffset=+1]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A few recommendations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>opts=optional</code> is mandatory as we don&#8217;t want the build to fail if only part of the configuration documentation has been generated</p>
+</li>
+<li>
+<p>The documentation is generated with a title level of 2 (i.e. <code>==</code>).
+You usually need to adjust it.
+It can be done with <code>leveloffset=+N</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It is not recommended to include the whole configuration documentation in the middle of your guide as it&#8217;s heavy.
+If you have an <code>application.properties</code> extract with your configuration, just do as follows.</p>
+</div>
+<div class="paragraph">
+<p>First, include a tip just below your <code>application.properties</code> extract:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="asciidoc" class="language-asciidoc hljs">[TIP]
+For more information about the extension configuration please refer to the &lt;&lt;configuration-reference, Configuration Reference&gt;&gt;.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, at the end of your documentation, include the extensive documentation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="asciidoc" class="language-asciidoc hljs">[[configuration-reference]]
+== Configuration Reference
+
+include::{generated-dir}/config/quarkus-your-extension.adoc[opts=optional, leveloffset=+1]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, generate the documentation and check it out.</p>
 </div>
 </div>
 </div>

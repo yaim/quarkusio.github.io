@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Quarkus Extest</title>
+  <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
+  <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
+  <META HTTP-EQUIV='X-Frame-Options' CONTENT="DENY">
+  <META HTTP-EQUIV='X-XSS-Protection' CONTENT="1; mode=block">
+  <META HTTP-EQUIV='X-Content-Type-Options' CONTENT="nosniff">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quarkus: Supersonic Subatomic Java">
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml"  href="https://quarkus.io//feed.xml" title="Quarkus">
+  <script src="https://quarkus.io//assets/javascript/goan.js" type="text/javascript"></script>
+  <script src="https://quarkus.io//assets/javascript/hl.js" type="text/javascript"></script>
+</head>
+
+<body class="guides">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="content">
+    <div class="navigation-wrapper">
+  <div class="width-12-12">
+    <div class="header navigation">
+      <div class="logo-wrapper">
+        <a href="/"><img src="/assets/images/quarkus_logo_horizontal_rgb_reverse.svg" class="project-logo" title="Quarkus"></a>
+      </div>
+      <div class="nav-container">
+        <nav>
+          <div class="nav-mobile"><a id="nav-toggle" href="#!"><span></span></a></div>
+          <ul class="nav-list">
+            <li>
+              <a href="/get-started/" class="">Get Started</a>
+            </li>
+            <li>
+              <a href="/guides/" class="active">Guides</a>
+            </li>
+            <li>
+              <a href="https://code.quarkus.io">Start Coding</a>
+            </li>
+            <li>
+              <a href="/community/" class="">Community</a>
+            </li>
+            <li>
+              <a href="/blog/" class="">Blog</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="guide">
+  <div class="width-12-12">
+    <h1 class="text-caps">Quarkus Extest</h1>
+    <div class="hide-mobile toc">
+      <ul class="sectlevel1">
+<li><a href="#summary">Summary</a></li>
+<li><a href="#details">Details</a></li>
+</ul>
+    </div>
+    <div>
+      <div class="sect1">
+<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 65%;">
+<col style="width: 17%;">
+<col style="width: 13%;">
+<col style="width: 5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Configuration property</th>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Default</th>
+<th class="tableblock halign-center valign-middle">Lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.bt-string-opt">quarkus.bt.bt-string-opt</a></p>
+<p class="tableblock">A config string.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.bt-string-opt-with-default">quarkus.bt.bt-string-opt-with-default</a></p>
+<p class="tableblock">A config string with default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>btStringOptWithDefaultValue</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.bt-sbv">quarkus.bt.bt-sbv</a></p>
+<p class="tableblock">A config object with ctor(String).</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">StringBasedValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.bt-sbv-with-default">quarkus.bt.bt-sbv-with-default</a></p>
+<p class="tableblock">A config object with ctor(String) and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">StringBasedValue</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>btSBVWithDefaultValue</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.long-primitive">quarkus.bt.all-values.long-primitive</a></p>
+<p class="tableblock">a long primitive.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0l</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.double-primitive">quarkus.bt.all-values.double-primitive</a></p>
+<p class="tableblock">a double primitive.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0d</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.long-value">quarkus.bt.all-values.long-value</a></p>
+<p class="tableblock">a long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.opt-long-value">quarkus.bt.all-values.opt-long-value</a></p>
+<p class="tableblock">an optional long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.opt-double-value">quarkus.bt.all-values.opt-double-value</a></p>
+<p class="tableblock">an optional double value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.optional-long-value">quarkus.bt.all-values.optional-long-value</a></p>
+<p class="tableblock">an optional long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.oov">quarkus.bt.all-values.oov</a></p>
+<p class="tableblock">A config object with a static of(String) method.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.oov-with-default">quarkus.bt.all-values.oov-with-default</a></p>
+<p class="tableblock">A config object with a static of(String) method and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>defaultPart1+defaultPart2</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.ovo">quarkus.bt.all-values.ovo</a></p>
+<p class="tableblock">A config object with a static valueOf(String) method.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectValueOf</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.ovo-with-default">quarkus.bt.all-values.ovo-with-default</a></p>
+<p class="tableblock">A config object with a static of(String) method and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectValueOf</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>defaultPart1+defaultPart2</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.string-list">quarkus.bt.all-values.string-list</a></p>
+<p class="tableblock">A List of string values.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.long-list">quarkus.bt.all-values.long-list</a></p>
+<p class="tableblock">A List of long values.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.expanded-default">quarkus.bt.all-values.expanded-default</a></p>
+<p class="tableblock">A configuration item that has a default value that is an expression.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${java.vm.version}</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.root.dsa-key-location">quarkus.root.dsa-key-location</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.root.validate-build-config">quarkus.root.validate-build-config</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.bt-string-opt">quarkus.btrt.bt-string-opt</a></p>
+<p class="tableblock">A config string.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.bt-string-opt-with-default">quarkus.btrt.bt-string-opt-with-default</a></p>
+<p class="tableblock">A config string with default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>btStringOptWithDefaultValue</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.bt-sbv">quarkus.btrt.bt-sbv</a></p>
+<p class="tableblock">A config object with ctor(String).</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">StringBasedValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.bt-sbv-with-default">quarkus.btrt.bt-sbv-with-default</a></p>
+<p class="tableblock">A config object with ctor(String) and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">StringBasedValue</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>btSBVWithDefaultValue</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.long-primitive">quarkus.btrt.all-values.long-primitive</a></p>
+<p class="tableblock">a long primitive.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0l</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.double-primitive">quarkus.btrt.all-values.double-primitive</a></p>
+<p class="tableblock">a double primitive.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0d</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.long-value">quarkus.btrt.all-values.long-value</a></p>
+<p class="tableblock">a long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.opt-long-value">quarkus.btrt.all-values.opt-long-value</a></p>
+<p class="tableblock">an optional long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.opt-double-value">quarkus.btrt.all-values.opt-double-value</a></p>
+<p class="tableblock">an optional double value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.optional-long-value">quarkus.btrt.all-values.optional-long-value</a></p>
+<p class="tableblock">an optional long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.oov">quarkus.btrt.all-values.oov</a></p>
+<p class="tableblock">A config object with a static of(String) method.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.oov-with-default">quarkus.btrt.all-values.oov-with-default</a></p>
+<p class="tableblock">A config object with a static of(String) method and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>defaultPart1+defaultPart2</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.ovo">quarkus.btrt.all-values.ovo</a></p>
+<p class="tableblock">A config object with a static valueOf(String) method.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectValueOf</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.ovo-with-default">quarkus.btrt.all-values.ovo-with-default</a></p>
+<p class="tableblock">A config object with a static of(String) method and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectValueOf</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>defaultPart1+defaultPart2</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.string-list">quarkus.btrt.all-values.string-list</a></p>
+<p class="tableblock">A List of string values.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.long-list">quarkus.btrt.all-values.long-list</a></p>
+<p class="tableblock">A List of long values.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.expanded-default">quarkus.btrt.all-values.expanded-default</a></p>
+<p class="tableblock">A configuration item that has a default value that is an expression.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${java.vm.version}</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.my-enum">quarkus.btrt.my-enum</a></p>
+<p class="tableblock">Enum object.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.my-enums">quarkus.btrt.my-enums</a></p>
+<p class="tableblock">Enum list of objects.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.rt-string-opt">quarkus.rt.rt-string-opt</a></p>
+<p class="tableblock">A run time object.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.rt-string-opt-with-default">quarkus.rt.rt-string-opt-with-default</a></p>
+<p class="tableblock">A run time object with default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>rtStringOptWithDefaultValue</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.long-primitive">quarkus.rt.all-values.long-primitive</a></p>
+<p class="tableblock">a long primitive.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0l</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.double-primitive">quarkus.rt.all-values.double-primitive</a></p>
+<p class="tableblock">a double primitive.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0d</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.long-value">quarkus.rt.all-values.long-value</a></p>
+<p class="tableblock">a long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.opt-long-value">quarkus.rt.all-values.opt-long-value</a></p>
+<p class="tableblock">an optional long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.opt-double-value">quarkus.rt.all-values.opt-double-value</a></p>
+<p class="tableblock">an optional double value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.optional-long-value">quarkus.rt.all-values.optional-long-value</a></p>
+<p class="tableblock">an optional long value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.oov">quarkus.rt.all-values.oov</a></p>
+<p class="tableblock">A config object with a static of(String) method.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.oov-with-default">quarkus.rt.all-values.oov-with-default</a></p>
+<p class="tableblock">A config object with a static of(String) method and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>defaultPart1+defaultPart2</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.ovo">quarkus.rt.all-values.ovo</a></p>
+<p class="tableblock">A config object with a static valueOf(String) method.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectValueOf</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.ovo-with-default">quarkus.rt.all-values.ovo-with-default</a></p>
+<p class="tableblock">A config object with a static of(String) method and default value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectValueOf</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>defaultPart1+defaultPart2</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.string-list">quarkus.rt.all-values.string-list</a></p>
+<p class="tableblock">A List of string values.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.long-list">quarkus.rt.all-values.long-list</a></p>
+<p class="tableblock">A List of long values.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.expanded-default">quarkus.rt.all-values.expanded-default</a></p>
+<p class="tableblock">A configuration item that has a default value that is an expression.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${java.vm.version}</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.my-enum">quarkus.rt.my-enum</a></p>
+<p class="tableblock">Enum object.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.my-enums">quarkus.rt.my-enums</a></p>
+<p class="tableblock">Enum list of objects.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.my-optional-enums">quarkus.rt.my-optional-enums</a></p>
+<p class="tableblock">Enum optional value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.no-hyphenate-first-enum">quarkus.rt.no-hyphenate-first-enum</a></p>
+<p class="tableblock">No hyphenation.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.no-hyphenate-second-enum">quarkus.rt.no-hyphenate-second-enum</a></p>
+<p class="tableblock">No hyphenation.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.primitive-boolean">quarkus.rt.primitive-boolean</a></p>
+<p class="tableblock">Primitive boolean conversion with <code>ConvertWith</code>.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>NO</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.object-boolean">quarkus.rt.object-boolean</a></p>
+<p class="tableblock">Boolean conversion with <code>ConvertWith</code>.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>NO</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.primitive-integer">quarkus.rt.primitive-integer</a></p>
+<p class="tableblock">Primitive int conversion with <code>ConvertWith</code>.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>zero</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.object-integer">quarkus.rt.object-integer</a></p>
+<p class="tableblock">Integer conversion with <code>ConvertWith</code>.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>zero</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.one-to-nine">quarkus.rt.one-to-nine</a></p>
+<p class="tableblock">List of Integer conversion with <code>ConvertWith</code>.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>one</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.string-map.string-map">quarkus.rt.string-map."&lt;string-map&gt;"</a></p>
+<p class="tableblock">A map of properties.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.string-list-map.string-list-map">quarkus.rt.string-list-map."&lt;string-list-map&gt;"</a></p>
+<p class="tableblock">A map of property lists.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List&lt;java.lang.String&gt;.html">java.util.List&lt;java.lang.String&gt;</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.nested-config-map.nested-config-map.nested-value">quarkus.rt.all-values.nested-config-map."&lt;nested-config-map&gt;".nested-value</a></p>
+<p class="tableblock">A nested string value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.nested-config-map.nested-config-map.oov">quarkus.rt.all-values.nested-config-map."&lt;nested-config-map&gt;".oov</a></p>
+<p class="tableblock">A nested ObjectOfValue value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.string-map.string-map">quarkus.rt.all-values.string-map."&lt;string-map&gt;"</a></p>
+<p class="tableblock">A map of properties.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.all-values.string-list-map.string-list-map">quarkus.rt.all-values.string-list-map."&lt;string-list-map&gt;"</a></p>
+<p class="tableblock">A map of property lists.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List&lt;java.lang.String&gt;.html">java.util.List&lt;java.lang.String&gt;</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.rt.map-of-numbers.map-of-numbers">quarkus.rt.map-of-numbers."&lt;map-of-numbers&gt;"</a></p>
+<p class="tableblock">Map of Integer conversion with <code>ConvertWith</code>.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.nested-config-map.nested-config-map.nested-value">quarkus.btrt.all-values.nested-config-map."&lt;nested-config-map&gt;".nested-value</a></p>
+<p class="tableblock">A nested string value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.nested-config-map.nested-config-map.oov">quarkus.btrt.all-values.nested-config-map."&lt;nested-config-map&gt;".oov</a></p>
+<p class="tableblock">A nested ObjectOfValue value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.string-map.string-map">quarkus.btrt.all-values.string-map."&lt;string-map&gt;"</a></p>
+<p class="tableblock">A map of properties.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.all-values.string-list-map.string-list-map">quarkus.btrt.all-values.string-list-map."&lt;string-list-map&gt;"</a></p>
+<p class="tableblock">A map of property lists.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List&lt;java.lang.String&gt;.html">java.util.List&lt;java.lang.String&gt;</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.btrt.map-of-numbers.map-of-numbers">quarkus.btrt.map-of-numbers."&lt;map-of-numbers&gt;"</a></p>
+<p class="tableblock">Map of Integer conversion with <code>ConvertWith</code>.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.nested-config-map.nested-config-map.nested-value">quarkus.bt.all-values.nested-config-map."&lt;nested-config-map&gt;".nested-value</a></p>
+<p class="tableblock">A nested string value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.nested-config-map.nested-config-map.oov">quarkus.bt.all-values.nested-config-map."&lt;nested-config-map&gt;".oov</a></p>
+<p class="tableblock">A nested ObjectOfValue value.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ObjectOfValue</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.string-map.string-map">quarkus.bt.all-values.string-map."&lt;string-map&gt;"</a></p>
+<p class="tableblock">A map of properties.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.bt.all-values.string-list-map.string-list-map">quarkus.bt.all-values.string-list-map."&lt;string-list-map&gt;"</a></p>
+<p class="tableblock">A map of property lists.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List&lt;java.lang.String&gt;.html">java.util.List&lt;java.lang.String&gt;</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
+<div class="sectionbody">
+<div id="quarkus.bt.bt-string-opt" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.bt-string-opt</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config string</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.bt-string-opt-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.bt-string-opt-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config string with default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>btStringOptWithDefaultValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.bt-sbv" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.bt-sbv</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with ctor(String)</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>StringBasedValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.bt-sbv-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.bt-sbv-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with ctor(String) and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>StringBasedValue</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>btSBVWithDefaultValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.long-primitive" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.long-primitive</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a long primitive</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>0l</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.double-primitive" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.double-primitive</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a double primitive</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>double</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>0d</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.long-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.opt-long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.opt-long-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.opt-double-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.opt-double-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional double value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>double</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.optional-long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.optional-long-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.oov" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.oov</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.oov-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.oov-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>defaultPart1+defaultPart2</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.ovo" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.ovo</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static valueOf(String) method</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectValueOf</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.ovo-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.ovo-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectValueOf</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>defaultPart1+defaultPart2</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.string-list" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.string-list</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A List of string values</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.long-list" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.long-list</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A List of long values</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.expanded-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.expanded-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A configuration item that has a default value that is an expression</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>${java.vm.version}</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.root.dsa-key-location" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.root.dsa-key-location</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.root.validate-build-config" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.root.validate-build-config</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Type: <code>boolean</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>false</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.bt-string-opt" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.bt-string-opt</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config string</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.bt-string-opt-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.bt-string-opt-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config string with default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>btStringOptWithDefaultValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.bt-sbv" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.bt-sbv</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with ctor(String)</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>StringBasedValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.bt-sbv-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.bt-sbv-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with ctor(String) and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>StringBasedValue</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>btSBVWithDefaultValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.long-primitive" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.long-primitive</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a long primitive</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>0l</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.double-primitive" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.double-primitive</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a double primitive</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>double</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>0d</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.long-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.opt-long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.opt-long-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.opt-double-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.opt-double-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional double value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>double</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.optional-long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.optional-long-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.oov" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.oov</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.oov-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.oov-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>defaultPart1+defaultPart2</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.ovo" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.ovo</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static valueOf(String) method</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectValueOf</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.ovo-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.ovo-with-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectValueOf</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>defaultPart1+defaultPart2</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.string-list" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.string-list</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A List of string values</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.long-list" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.long-list</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A List of long values</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.expanded-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.expanded-default</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A configuration item that has a default value that is an expression</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>${java.vm.version}</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.my-enum" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.my-enum</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Enum object</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.my-enums" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.my-enums</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Enum list of objects</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.rt-string-opt" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.rt-string-opt</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A run time object</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.rt-string-opt-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.rt-string-opt-with-default</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A run time object with default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>rtStringOptWithDefaultValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.long-primitive" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.long-primitive</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a long primitive</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>0l</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.double-primitive" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.double-primitive</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a double primitive</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>double</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>0d</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.long-value</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>a long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.opt-long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.opt-long-value</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.opt-double-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.opt-double-value</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional double value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>double</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.optional-long-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.optional-long-value</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>an optional long value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.oov" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.oov</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.oov-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.oov-with-default</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>defaultPart1+defaultPart2</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.ovo" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.ovo</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static valueOf(String) method</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectValueOf</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.ovo-with-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.ovo-with-default</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A config object with a static of(String) method and default value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectValueOf</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>defaultPart1+defaultPart2</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.string-list" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.string-list</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A List of string values</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.long-list" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.long-list</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A List of long values</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>long</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.expanded-default" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.expanded-default</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A configuration item that has a default value that is an expression</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>${java.vm.version}</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.my-enum" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.my-enum</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Enum object</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.my-enums" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.my-enums</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Enum list of objects</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.my-optional-enums" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.my-optional-enums</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Enum optional value</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.no-hyphenate-first-enum" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.no-hyphenate-first-enum</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>No hyphenation</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.no-hyphenate-second-enum" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.no-hyphenate-second-enum</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>No hyphenation</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>optional</code>, <code>enum-one</code>, <code>enum-two</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.primitive-boolean" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.primitive-boolean</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Primitive boolean conversion with <code>ConvertWith</code></p>
+</div>
+<div class="paragraph">
+<p>Type: <code>boolean</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>NO</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.object-boolean" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.object-boolean</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Boolean conversion with <code>ConvertWith</code></p>
+</div>
+<div class="paragraph">
+<p>Type: <code>boolean</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>NO</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.primitive-integer" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.primitive-integer</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Primitive int conversion with <code>ConvertWith</code></p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>zero</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.object-integer" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.object-integer</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Integer conversion with <code>ConvertWith</code></p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>zero</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.one-to-nine" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.one-to-nine</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>List of Integer conversion with <code>ConvertWith</code></p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>one</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.string-map.string-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.string-map."&lt;string-map&gt;"</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of properties</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>String</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.string-list-map.string-list-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.string-list-map."&lt;string-list-map&gt;"</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of property lists</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>java.util.List&lt;java.lang.String&gt;</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.nested-config-map.nested-config-map.nested-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.nested-config-map."&lt;nested-config-map&gt;".nested-value</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A nested string value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.nested-config-map.nested-config-map.oov" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.nested-config-map."&lt;nested-config-map&gt;".oov</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A nested ObjectOfValue value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.string-map.string-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.string-map."&lt;string-map&gt;"</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of properties</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>String</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.all-values.string-list-map.string-list-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.all-values.string-list-map."&lt;string-list-map&gt;"</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of property lists</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>java.util.List&lt;java.lang.String&gt;</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.rt.map-of-numbers.map-of-numbers" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.rt.map-of-numbers."&lt;map-of-numbers&gt;"</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Map of Integer conversion with <code>ConvertWith</code></p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.nested-config-map.nested-config-map.nested-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.nested-config-map."&lt;nested-config-map&gt;".nested-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A nested string value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.nested-config-map.nested-config-map.oov" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.nested-config-map."&lt;nested-config-map&gt;".oov</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A nested ObjectOfValue value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.string-map.string-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.string-map."&lt;string-map&gt;"</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of properties</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>String</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.all-values.string-list-map.string-list-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.all-values.string-list-map."&lt;string-list-map&gt;"</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of property lists</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>java.util.List&lt;java.lang.String&gt;</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.btrt.map-of-numbers.map-of-numbers" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.btrt.map-of-numbers."&lt;map-of-numbers&gt;"</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Map of Integer conversion with <code>ConvertWith</code></p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.nested-config-map.nested-config-map.nested-value" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.nested-config-map."&lt;nested-config-map&gt;".nested-value</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A nested string value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.nested-config-map.nested-config-map.oov" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.nested-config-map."&lt;nested-config-map&gt;".oov</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A nested ObjectOfValue value</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>ObjectOfValue</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.string-map.string-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.string-map."&lt;string-map&gt;"</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of properties</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>String</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.bt.all-values.string-list-map.string-list-map" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.bt.all-values.string-list-map."&lt;string-list-map&gt;"</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A map of property lists</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>java.util.List&lt;java.lang.String&gt;</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+</div>
+</div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <div class="content project-footer">
+  <div class="footer-section">
+    <div class="logo-wrapper">
+      <a href="/"><img src="/assets/images/quarkus_logo_horizontal_rgb_reverse.svg" class="project-logo" title="Quarkus"></a>
+    </div>
+  </div>
+  <div class="grid-wrapper">
+    <p class="grid__item width-3-12">Quarkus is open. Quarkus and its extensions are available under the <a href='https://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache Software License 2.0</a> or compatible license.<br /><br />This website was built with <a href='https://jekyllrb.com/' target='_blank'>Jekyll</a> is hosted on <a href='https://pages.github.com/' target='_blank'>Github Pages</a> and is completely open source. If you want to make it better, <a href='https://github.com/quarkusio/quarkusio.github.io' target='_blank'>fork the website</a> and show us what you’ve got.</p>
+
+    
+      <div class="width-1-12 project-links">
+        <span>Navigation</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="/">Home</a></li>
+          
+            <li><a href="/guides">Guides</a></li>
+          
+            <li><a href="/get-started">Get Started</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Contribute</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://twitter.com/quarkusio">Follow us</a></li>
+          
+            <li><a href="https://github.com/quarkusio">GitHub</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Get Help</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://quarkusio.zulipchat.com">Chatroom</a></li>
+          
+            <li><a href="https://groups.google.com/forum/#!forum/quarkus-dev">Google&nbsp;Groups</a></li>
+          
+            <li><a href="/faq">FAQ</a></li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="width-6-12 more-links">
+        <span>Quarkus is proudly made of a number of projects including ...</span>
+        <ul class="footer-links">
+          
+            <li><a href="https://hibernate.org" target="_blank">Hibernate</a></li>
+          
+            <li><a href="https://netty.io" target="_blank">Netty</a></li>
+          
+            <li><a href="https://resteasy.github.io" target="_blank">RESTEasy</a></li>
+          
+            <li><a href="https://microprofile.io" target="_blank">Eclipse MicroProfile</a></li>
+          
+            <li><a href="https://vertx.io/" target="_blank">Eclipse Vert.x</a></li>
+          
+            <li><a href="https://camel.apache.org" target="_blank">Apache Camel</a></li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+  <div class="content redhat-footer">
+  <div class="grid-wrapper">
+    <span class="licence">
+      <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i> <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a>
+      | <a href="https://www.redhat.com/en/about/privacy-policy">Red Hat Privacy Policy</a>
+    </span>
+    <span class="redhat">
+      a Red Hat sponsored project   
+    </span>
+    <span class="redhat-logo">
+      <a href="https://www.redhat.com/" target="_blank"><img src="/assets/images/redhat_reversed.svg"></a>
+    </span>
+  </div>
+</div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" integrity="sha384-8gBf6Y4YYq7Jx97PIqmTwLPin4hxIzQw5aDmUg/DDhul9fFpbbLcLh3nTIIDJKhx" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/javascript/mobile-nav.js"></script>
+  <script type="text/javascript" src="/assets/javascript/scroll-down.js"></script>
+  <script src="/assets/javascript/satellite.js" type="text/javascript"></script>
+</body>
+
+</html>

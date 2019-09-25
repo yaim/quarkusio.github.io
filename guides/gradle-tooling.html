@@ -72,7 +72,7 @@
 <li><a href="#project-creation">Creating a new project</a></li>
 <li><a href="#enable-tests">Enable Tests</a>
 <ul class="sectlevel2">
-<li><a href="#custom-test-configuration-profile">Custom test configuration profile</a></li>
+<li><a href="#custom-test-configuration-profile">Custom test configuration profile in JVM mode</a></li>
 </ul>
 </li>
 <li><a href="#dealing-with-extensions">Dealing with extensions</a></li>
@@ -102,8 +102,9 @@ luckily setting up a Quarkus project with Gradle is very simple. You only need t
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
-    id 'io.quarkus' version '0.22.0'
-}</code></pre>
+}
+
+apply plugin: 'io.quarkus'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -113,8 +114,9 @@ luckily setting up a Quarkus project with Gradle is very simple. You only need t
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">plugins {
     java
-    id("io.quarkus") version "0.22.0"
-}</code></pre>
+}
+
+apply(plugin = "io.quarkus")</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -187,8 +189,8 @@ Quarkus also need this dependency for running tests, to provide this we use the 
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">plugins {
     java
-    id("io.quarkus") version "0.22.0"
 }
+apply(plugin = "io.quarkus")
 
 repositories {
     mavenCentral()
@@ -253,10 +255,10 @@ as recommended here:
 Quarkus supports running Substrate tests with Gradle, but the <code>buildNative</code> task is required to be completed first.</p>
 </div>
 <div class="sect2">
-<h3 id="custom-test-configuration-profile"><a class="anchor" href="#custom-test-configuration-profile"></a>Custom test configuration profile</h3>
+<h3 id="custom-test-configuration-profile"><a class="anchor" href="#custom-test-configuration-profile"></a>Custom test configuration profile in JVM mode</h3>
 <div class="paragraph">
-<p>By default, Quarkus tests are run using the <code>test</code> configuration profile. If you are not familiar with Quarkus configuration
-profiles, everything you need to know is explained in the
+<p>By default, Quarkus tests in JVM mode are run using the <code>test</code> configuration profile. If you are not familiar with Quarkus
+configuration profiles, everything you need to know is explained in the
 <a href="application-configuration-guide.html#configuration-profiles">Configuration Profiles Documentation</a>.</p>
 </div>
 <div class="paragraph">
@@ -293,6 +295,21 @@ database.</p>
 </tr>
 </table>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is not possible to use a custom test configuration profile in native mode for now. Native tests are always run using the
+<code>prod</code> profile.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -308,7 +325,43 @@ database.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Functionality to automatically add extensions to your Gradle project is not implemented yet (coming soon).</p>
+<p>You can enable an extension using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew addExtension --extensions="hibernate-validator"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Extensions are passed using a comma-separated list.</p>
+</div>
+<div class="paragraph">
+<p>The extension name is the GAV name of the extension: e.g. <code>io.quarkus:quarkus-agroal</code>.
+But you can pass a partial name and Quarkus will do its best to find the right extension.
+For example, <code>agroal</code>, <code>Agroal</code> or <code>agro</code>  will expand to <code>io.quarkus:quarkus-agroal</code>.
+If no extension is found or if more than one extensions match, you will see a red check mark  ❌ in the command result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew addExtension --extensions="jdbc,agroal,non-exist-ent"
+[...]
+❌ Multiple extensions matching 'jdbc'
+     * io.quarkus:quarkus-jdbc-h2
+     * io.quarkus:quarkus-jdbc-mariadb
+     * io.quarkus:quarkus-jdbc-postgresql
+     Be more specific e.g using the exact name or the full gav.
+✅ Adding extension io.quarkus:quarkus-agroal
+❌ Cannot find a dependency matching 'non-exist-ent', maybe a typo?
+[...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can install all extensions wich match a globbing pattern :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew addExtension --extensions="hibernate*"</code></pre>
+</div>
 </div>
 </div>
 </div>

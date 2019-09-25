@@ -66,7 +66,11 @@
       <ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
-<li><a href="#enable-kubernetes-support">Enable Kubernetes support</a></li>
+<li><a href="#enable-kubernetes-support">Enable Kubernetes support</a>
+<ul class="sectlevel2">
+<li><a href="#add-readiness-and-liveness-probes">Add readiness and liveness probes</a></li>
+</ul>
+</li>
 </ul>
     </div>
     <div>
@@ -223,6 +227,24 @@ quarkus.application.name=test-quarkus-app # this is also optional and defaults t
 </div>
 <div class="paragraph">
 <p>Also the <code>Service</code> is configured to use container port <code>8080</code> (which is automatically picked up by the standard Quarkus configuration).</p>
+</div>
+<div class="sect2">
+<h3 id="add-readiness-and-liveness-probes"><a class="anchor" href="#add-readiness-and-liveness-probes"></a>Add readiness and liveness probes</h3>
+<div class="paragraph">
+<p>By default the Kubernetes resources do not contain readiness and liveness probes in the generated <code>Deployment</code>. Adding them however is just a matter of adding the Smallrye Health extension like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
+      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+      &lt;artifactId&gt;quarkus-smallrye-health&lt;/artifactId&gt;
+    &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The values of the generated probes will be determined by the configured health properties: <code>quarkus.smallrye-health.root-path</code>, <code>quarkus.smallrye-health.liveness-path</code> and <code>quarkus.smallrye-health.readiness-path</code>.
+More information about the health extension can be found in the relevant <a href="health-guide">guide</a>.</p>
+</div>
 </div>
 </div>
 </div>

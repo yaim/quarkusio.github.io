@@ -71,6 +71,7 @@
 </ul>
 </li>
 <li><a href="#testing">Testing</a></li>
+<li><a href="#note-on-implementing-the-watcher-interface">Note on implementing the Watcher interface</a></li>
 </ul>
     </div>
     <div>
@@ -228,6 +229,103 @@ public class KubernetesClientTest {
         &lt;artifactId&gt;quarkus-test-kubernetes-client&lt;/artifactId&gt;
         &lt;scope&gt;test&lt;/scope&gt;
     &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="note-on-implementing-the-watcher-interface"><a class="anchor" href="#note-on-implementing-the-watcher-interface"></a>Note on implementing the Watcher interface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Due to the restrictions imposed by GraalVM, extra care needs to be taken when implementing a <code>io.fabric8.kubernetes.client.Watcher</code> if the application is intended to work in native mode.
+Essentially every <code>Watcher</code> implementation needs to specify the Kubernetes model class that it handles via the <code>Watcher&#8217;s generic type at class definition time.
+To better understand this, suppose we want to watch for changes to Kubernetes `Pod</code> resources. There are a couple ways to write such a Watcher that are guaranteed to work in native:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">client.pods().watch(new Watcher&lt;Pod&gt;() {
+      @Override
+      public void eventReceived(Action action, Pod pod) {
+        // do something
+      }
+
+      @Override
+      public void onClose(KubernetesClientException e) {
+        // do something
+      }
+    });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class PodResourceWatcher implements Watcher&lt;Pod&gt; {
+      @Override
+      public void eventReceived(Action action, Pod pod) {
+        // do something
+      }
+
+      @Override
+      public void onClose(KubernetesClientException e) {
+        // do something
+      }
+}
+
+...
+
+
+client.pods().watch(new PodResourceWatcher());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that defining the generic type via a class hierarchy similar to the following example will also work correctly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public abstract class MyWatcher&lt;S&gt; implements Watcher&lt;S&gt; {
+}
+
+...
+
+
+client.pods().watch(new MyWatcher&lt;Pod&gt;() {
+  @Override
+  public void eventReceived(Action action, Pod pod) {
+    // do something
+  }
+});</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The following example will <strong>not</strong> work in native mode because the generic type of watcher cannot be determined by looking at the class and method definitions
+thus making Quarkus unable to properly determine the Kubernetes model class for which reflection registration is needed:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class ResourceWatcher&lt;T extends HasMetadata&gt; implements Watcher&lt;T&gt; {
+      @Override
+      public void eventReceived(Action action, T resource) {
+        // do something
+      }
+
+      @Override
+      public void onClose(KubernetesClientException e) {
+        // do something
+      }
+}
+
+client.pods().watch(new ResourceWatcher&lt;Pod&gt;());</code></pre>
 </div>
 </div>
 </div>

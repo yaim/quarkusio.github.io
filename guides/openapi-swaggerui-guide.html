@@ -70,6 +70,7 @@
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
 <li><a href="#expose-a-rest-resource">Expose a REST Resource</a></li>
 <li><a href="#expose-openapi-specifications">Expose OpenAPI Specifications</a></li>
+<li><a href="#loading-openapi-schama-from-static-files">Loading OpenAPI Schama From Static Files</a></li>
 <li><a href="#use-swagger-ui-for-development">Use Swagger UI for development</a></li>
 </ul>
     </div>
@@ -406,6 +407,120 @@ components:
 </div>
 <div class="paragraph">
 <p>Hit <code>CTRL+C</code> to stop the application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="loading-openapi-schama-from-static-files"><a class="anchor" href="#loading-openapi-schama-from-static-files"></a>Loading OpenAPI Schama From Static Files</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Instead of dynamically creating OpenAPI schemas from annotation scanning, Quarkus also supports serving static OpenAPI documents.
+The static file to serve must be a valid document conforming to the <a href="https://swagger.io/docs/specification">OpenAPI specification</a>.
+An OpenAPI document that conforms to the  OpenAPI Specification is itself a valid JSON object, that can be represented in <code>yaml</code> or <code>json</code> formats.</p>
+</div>
+<div class="paragraph">
+<p>To see this in action, we&#8217;ll put OpenAPI documentation under <code>META-INF/openapi.yaml</code> for our <code>/fruits</code> endpoints.
+Quarkus also supports alternative <a href="#open-document-paths">OpenAPI document paths</a> if you prefer.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">openapi: 3.0.1
+info:
+  title: Static OpenAPI document of fruits resource
+  description: Fruit resources Open API documentation
+  version: "1.0"
+
+servers:
+  - url: http://localhost:8080/openapi
+    description: Optional dev mode server description
+
+paths:
+  /fruits:
+    get:
+      responses:
+        200:
+          description: OK - fruits list
+          content:
+            application/json: {}
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fruit'
+      responses:
+        200:
+          description: new fruit resource created
+          content:
+            application/json: {}
+    delete:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fruit'
+      responses:
+        200:
+          description: OK - fruit resource deleted
+          content:
+            application/json: {}
+components:
+  schemas:
+    Fruit:
+      properties:
+        description:
+          type: string
+        name:
+          type: string</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, a request to <code>/openapi</code> will serve the combined OpenAPI document from the static file and the model generated from application endpoints code.
+We can however change this to only serve the static OpenAPI document by adding <code>mp.openapi.scan.disable=true</code> configuration into <code>application.properties</code>.</p>
+</div>
+<div class="paragraph">
+<p>Now, a request to <code>/openapi</code> endpoint will serve the static OpenAPI document instead of the generated one.</p>
+</div>
+<div id="open-document-paths" class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">About OpenAPI document paths</div>
+<div class="paragraph">
+<p>Quarkus supports various paths to store your OpenAPI document under. We recommend you place it under <code>META-INF/openapi.yml</code>.
+Alternative paths are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>META-INF/openapi.yaml</code></p>
+</li>
+<li>
+<p><code>META-INF/openapi.yml</code></p>
+</li>
+<li>
+<p><code>META-INF/openapi.json</code></p>
+</li>
+<li>
+<p><code>WEB-INF/classes/META-INF/openapi.yml</code></p>
+</li>
+<li>
+<p><code>WEB-INF/classes/META-INF/openapi.yaml</code></p>
+</li>
+<li>
+<p><code>WEB-INF/classes/META-INF/openapi.json</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Live reload of static OpenAPI document is supported during development. A modification to your OpenAPI document will be picked up on fly by Quarkus.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

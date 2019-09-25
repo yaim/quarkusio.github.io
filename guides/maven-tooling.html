@@ -82,7 +82,7 @@
 <li><a href="#build-tool-maven">Maven configuration</a>
 <ul class="sectlevel2">
 <li><a href="#uber-jar-maven">Uber-Jar Creation</a></li>
-<li><a href="#custom-test-configuration-profile">Custom test configuration profile</a></li>
+<li><a href="#custom-test-configuration-profile">Custom test configuration profile in JVM mode</a></li>
 </ul>
 </li>
 </ul>
@@ -219,6 +219,14 @@ If no extension is found or if more than one extensions match, you will see a re
 ✅ Adding extension io.quarkus:quarkus-agroal
 ❌ Cannot find a dependency matching 'non-exist-ent', maybe a typo?
 [...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can install all extensions wich match a globbing pattern :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw quarkus:add-extension -Dextensions="hibernate-*"</code></pre>
 </div>
 </div>
 </div>
@@ -753,10 +761,10 @@ Note that in this case the build itself runs in a Docker container too, so you d
 </div>
 </div>
 <div class="sect2">
-<h3 id="custom-test-configuration-profile"><a class="anchor" href="#custom-test-configuration-profile"></a>Custom test configuration profile</h3>
+<h3 id="custom-test-configuration-profile"><a class="anchor" href="#custom-test-configuration-profile"></a>Custom test configuration profile in JVM mode</h3>
 <div class="paragraph">
-<p>By default, Quarkus tests are run using the <code>test</code> configuration profile. If you are not familiar with Quarkus configuration
-profiles, everything you need to know is explained in the
+<p>By default, Quarkus tests in JVM mode are run using the <code>test</code> configuration profile. If you are not familiar with Quarkus
+configuration profiles, everything you need to know is explained in the
 <a href="application-configuration-guide.html#configuration-profiles">Configuration Profiles Documentation</a>.</p>
 </div>
 <div class="paragraph">
@@ -805,6 +813,21 @@ your default testing database.</p>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>The <code>foo</code> configuration profile will be used to run the tests.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is not possible to use a custom test configuration profile in native mode for now. Native tests are always run using the
+<code>prod</code> profile.</p>
+</div>
+</td>
 </tr>
 </table>
 </div>

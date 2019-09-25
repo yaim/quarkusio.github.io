@@ -124,6 +124,45 @@
 <div class="paragraph">
 <p>It is recommended, that you have read the <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/kafka-quickstart">Kafka quickstart</a> before.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The Quarkus extension for Kafka Streams allows for very fast turnaround times during development by supporting the Quarkus Dev Mode (e.g. via <code>mvn compile quarkus:dev</code>).
+After changing the code of your Kafka Streams topology, the application will automatically be reloaded when the next input message arrives.</p>
+</div>
+<div class="paragraph">
+<p>A recommended development set-up is to have some producer which creates test messages on the processed topic(s) in fixed intervals, e.g. every second and observe the streaming application&#8217;s output topic(s) using a tool such as <code>kafkacat</code>.
+Using the dev mode, you&#8217;ll instantly see messages on the output topic(s) as produced by the latest version of your streaming application when saving.</p>
+</div>
+<div class="paragraph">
+<p>For the best development experience, we recommend applying the following configuration settings to your Kafka broker:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">group.min.session.timeout.ms=250</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also specify the following settings in your Quarkus <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kafka-streams.consumer.session.timeout.ms=250
+kafka-streams.consumer.heartbeat.interval.ms=200</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Together, these settings will ensure that the application can very quickly reconnect to the broker after being restarted in dev mode.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">

@@ -78,7 +78,12 @@
 <li><a href="#named-datasource-injection">Named Datasource Injection</a></li>
 </ul>
 </li>
-<li><a href="#agroal-configuration-reference">Agroal Configuration Reference</a></li>
+<li><a href="#configuration-reference">Agroal Configuration Reference</a>
+<ul class="sectlevel2">
+<li><a href="#summary">Summary</a></li>
+<li><a href="#details">Details</a></li>
+</ul>
+</li>
 </ul>
     </div>
     <div>
@@ -216,7 +221,10 @@ you don&#8217;t need to add the Agroal extension dependency explicitly.</p>
 <p>PostgreSQL - jdbc-postgresql</p>
 </li>
 <li>
-<p>MariaDB (and MySQL) - jdbc-mariadb</p>
+<p>MariaDB - jdbc-mariadb</p>
+</li>
+<li>
+<p>MySQL - jdbc-mysql</p>
 </li>
 <li>
 <p>Microsoft SQL Server - jdbc-mssql</p>
@@ -274,6 +282,18 @@ quarkus.datasource.max-size=13</code></pre>
 </div>
 <div class="paragraph">
 <p>There are other configuration options, detailed below.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+For more information about the Agroal extension configuration please refer to the <a href="#configuration-reference">Configuration Reference</a>.
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="jdbc-url-configurations"><a class="anchor" href="#jdbc-url-configurations"></a>JDBC URL configurations</h3>
@@ -342,9 +362,27 @@ As such, you must specify connection details, or use the defaults.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mariadbmysql"><a class="anchor" href="#mariadbmysql"></a>MariaDB/MySQL</h4>
+<h4 id="mariadb"><a class="anchor" href="#mariadb"></a>MariaDB</h4>
 <div class="paragraph">
-<p><code>jdbc:(mysql|mariadb):[replication:|failover:|sequential:|aurora:]//&lt;hostDescription&gt;[,&lt;hostDescription&gt;&#8230;&#8203;]/[database][?&lt;key1&gt;=&lt;value1&gt;[&amp;&lt;key2&gt;=&lt;value2&gt;]]</code>
+<p><code>jdbc:mariadb:[replication:|failover:|sequential:|aurora:]//&lt;hostDescription&gt;[,&lt;hostDescription&gt;&#8230;&#8203;]/[database][?&lt;key1&gt;=&lt;value1&gt;[&amp;&lt;key2&gt;=&lt;value2&gt;]]</code>
+ hostDescription:: <code>&lt;host&gt;[:&lt;portnumber&gt;]  or address=(host=&lt;host&gt;)[(port=&lt;portnumber&gt;)][(type=(master|slave))]</code></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Example</dt>
+<dd>
+<p><code>jdbc:mariadb://localhost:3306/test</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>You can find more information about this feature and others detailed in the <a href="https://mariadb.com/kb/en/library/about-mariadb-connector-j/">official documentation</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="mysql"><a class="anchor" href="#mysql"></a>MySQL</h4>
+<div class="paragraph">
+<p><code>jdbc:mysql:[replication:|failover:|sequential:|aurora:]//&lt;hostDescription&gt;[,&lt;hostDescription&gt;&#8230;&#8203;]/[database][?&lt;key1&gt;=&lt;value1&gt;[&amp;&lt;key2&gt;=&lt;value2&gt;]]</code>
  hostDescription:: <code>&lt;host&gt;[:&lt;portnumber&gt;]  or address=(host=&lt;host&gt;)[(port=&lt;portnumber&gt;)][(type=(master|slave))]</code></p>
 </div>
 <div class="dlist">
@@ -356,7 +394,7 @@ As such, you must specify connection details, or use the defaults.</p>
 </dl>
 </div>
 <div class="paragraph">
-<p>You can find more information about this feature and others detailed in the <a href="https://mariadb.com/kb/en/library/about-mariadb-connector-j/">official documentation</a>.</p>
+<p>You can find more information about this feature and others detailed in the <a href="https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-reference.html">official documentation</a>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -457,106 +495,846 @@ AgroalDataSource dataSource2;</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="agroal-configuration-reference"><a class="anchor" href="#agroal-configuration-reference"></a>Agroal Configuration Reference</h2>
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Agroal Configuration Reference</h2>
 <div class="sectionbody">
-<table class="tableblock frame-all grid-all stretch">
+<div class="sect2">
+<h3 id="summary"><a class="anchor" href="#summary"></a>Summary</h3>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 65%;">
+<col style="width: 17%;">
+<col style="width: 13%;">
+<col style="width: 5%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Configuration key</th>
-<th class="tableblock halign-left valign-top">Java type</th>
-<th class="tableblock halign-left valign-top">Example</th>
+<th class="tableblock halign-left valign-top">Configuration property</th>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Default</th>
+<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.driver</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String (class name)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">org.h2.Driver, com.mysql.jdbc.Driver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.driver">quarkus.datasource.driver</a></p>
+<p class="tableblock">The datasource driver class name.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.url</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String (JDBC Connection URL)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">jdbc:h2:tcp://localhost/mem:default, jdbc:mysql://hostname:port/dbname</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.xa">quarkus.datasource.xa</a></p>
+<p class="tableblock">Whether we want to use XA.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.username</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fred, Bill, inventory_user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.url">quarkus.datasource.url</a></p>
+<p class="tableblock">The datasource URL.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.password</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">correct horse battery staple, Tr0ub4dor&amp;3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.username">quarkus.datasource.username</a></p>
+<p class="tableblock">The datasource username.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.min-size</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5, 12, 42</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.password">quarkus.datasource.password</a></p>
+<p class="tableblock">The datasource password.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.max-size</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5, 12, 42</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.initial-size">quarkus.datasource.initial-size</a></p>
+<p class="tableblock">The initial size of the pool.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.initial-size</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5, 12, 42</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.min-size">quarkus.datasource.min-size</a></p>
+<p class="tableblock">The datasource pool minimum size.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.background-validation-interval</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PT3M, PT56S,</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.max-size">quarkus.datasource.max-size</a></p>
+<p class="tableblock">The datasource pool maximum size.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>20</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.acquisition-timeout</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PT3M, PT56S - see note below</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.background-validation-interval">quarkus.datasource.background-validation-interval</a></p>
+<p class="tableblock">The interval at which we validate idle connections in the background.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>2M</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.leak-detection-interval</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PT3M, PT56S - see note below</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.acquisition-timeout">quarkus.datasource.acquisition-timeout</a></p>
+<p class="tableblock">The timeout before cancelling the acquisition of a new connection.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.idle-removal-interval</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PT3M, PT56S - see note below</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.leak-detection-interval">quarkus.datasource.leak-detection-interval</a></p>
+<p class="tableblock">The interval at which we check for connection leaks.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.max-lifetime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PT3M, PT56S - see note below</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.idle-removal-interval">quarkus.datasource.idle-removal-interval</a></p>
+<p class="tableblock">The interval at which we try to remove idle connections.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5M</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.transaction-isolation-level</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.quarkus.agroal.runtime.TransactionIsolationLevel (enum)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">none, read-committed, read-uncommitted, repeatable-read, serializable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.max-lifetime">quarkus.datasource.max-lifetime</a></p>
+<p class="tableblock">The max lifetime of a connection.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.enable-metrics</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true or false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.transaction-isolation-level">quarkus.datasource.transaction-isolation-level</a></p>
+<p class="tableblock">The transaction isolation level.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>undefined</code>, <code>none</code>, <code>read-uncommitted</code>, <code>read-committed</code>, <code>repeatable-read</code>, <code>serializable</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.datasource.xa</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true or false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.enable-metrics">quarkus.datasource.enable-metrics</a></p>
+<p class="tableblock">Enable datasource metrics collection.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.driver">quarkus.datasource."&lt;named-data-sources&gt;".driver</a></p>
+<p class="tableblock">The datasource driver class name.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.xa">quarkus.datasource."&lt;named-data-sources&gt;".xa</a></p>
+<p class="tableblock">Whether we want to use XA.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.url">quarkus.datasource."&lt;named-data-sources&gt;".url</a></p>
+<p class="tableblock">The datasource URL.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.username">quarkus.datasource."&lt;named-data-sources&gt;".username</a></p>
+<p class="tableblock">The datasource username.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.password">quarkus.datasource."&lt;named-data-sources&gt;".password</a></p>
+<p class="tableblock">The datasource password.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.initial-size">quarkus.datasource."&lt;named-data-sources&gt;".initial-size</a></p>
+<p class="tableblock">The initial size of the pool.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.min-size">quarkus.datasource."&lt;named-data-sources&gt;".min-size</a></p>
+<p class="tableblock">The datasource pool minimum size.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.max-size">quarkus.datasource."&lt;named-data-sources&gt;".max-size</a></p>
+<p class="tableblock">The datasource pool maximum size.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>20</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.background-validation-interval">quarkus.datasource."&lt;named-data-sources&gt;".background-validation-interval</a></p>
+<p class="tableblock">The interval at which we validate idle connections in the background.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>2M</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.acquisition-timeout">quarkus.datasource."&lt;named-data-sources&gt;".acquisition-timeout</a></p>
+<p class="tableblock">The timeout before cancelling the acquisition of a new connection.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.leak-detection-interval">quarkus.datasource."&lt;named-data-sources&gt;".leak-detection-interval</a></p>
+<p class="tableblock">The interval at which we check for connection leaks.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.idle-removal-interval">quarkus.datasource."&lt;named-data-sources&gt;".idle-removal-interval</a></p>
+<p class="tableblock">The interval at which we try to remove idle connections.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5M</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.max-lifetime">quarkus.datasource."&lt;named-data-sources&gt;".max-lifetime</a></p>
+<p class="tableblock">The max lifetime of a connection.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.transaction-isolation-level">quarkus.datasource."&lt;named-data-sources&gt;".transaction-isolation-level</a></p>
+<p class="tableblock">The transaction isolation level.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>undefined</code>, <code>none</code>, <code>read-uncommitted</code>, <code>read-committed</code>, <code>repeatable-read</code>, <code>serializable</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.datasource.named-data-sources.enable-metrics">quarkus.datasource."&lt;named-data-sources&gt;".enable-metrics</a></p>
+<p class="tableblock">Enable datasource metrics collection.</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
 </tr>
 </tbody>
 </table>
-<div class="admonitionblock note">
+</div>
+<div class="sect2">
+<h3 id="details"><a class="anchor" href="#details"></a>Details</h3>
+<div id="quarkus.datasource.driver" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.driver</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource driver class name</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.xa" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.xa</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Whether we want to use XA.
+ If used, the driver has to support it.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>boolean</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>false</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.url" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.url</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource URL</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.username" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.username</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource username</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.password" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource password</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.initial-size" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.initial-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The initial size of the pool</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.min-size" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.min-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource pool minimum size</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>5</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.max-size" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.max-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource pool maximum size</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>20</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.background-validation-interval" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.background-validation-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The interval at which we validate idle connections in the background</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>2M</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.acquisition-timeout" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.acquisition-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The timeout before cancelling the acquisition of a new connection</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>5</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.leak-detection-interval" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.leak-detection-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The interval at which we check for connection leaks.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.idle-removal-interval" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.idle-removal-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The interval at which we try to remove idle connections.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>5M</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.max-lifetime" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.max-lifetime</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The max lifetime of a connection.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.transaction-isolation-level" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.transaction-isolation-level</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The transaction isolation level.</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>undefined</code>, <code>none</code>, <code>read-uncommitted</code>, <code>read-committed</code>, <code>repeatable-read</code>, <code>serializable</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.enable-metrics" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource.enable-metrics</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Enable datasource metrics collection.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>boolean</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>false</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.driver" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".driver</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource driver class name</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.xa" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".xa</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Whether we want to use XA.
+ If used, the driver has to support it.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>boolean</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>false</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.url" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".url</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource URL</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.username" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".username</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource username</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.password" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource password</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>string</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.initial-size" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".initial-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The initial size of the pool</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.min-size" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".min-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource pool minimum size</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>5</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.max-size" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".max-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The datasource pool maximum size</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>int</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>20</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.background-validation-interval" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".background-validation-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The interval at which we validate idle connections in the background</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>2M</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.acquisition-timeout" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".acquisition-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The timeout before cancelling the acquisition of a new connection</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>5</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.leak-detection-interval" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".leak-detection-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The interval at which we check for connection leaks.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.idle-removal-interval" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".idle-removal-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The interval at which we try to remove idle connections.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>5M</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.max-lifetime" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".max-lifetime</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The max lifetime of a connection.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.transaction-isolation-level" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".transaction-isolation-level</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>The transaction isolation level.</p>
+</div>
+<div class="paragraph">
+<p>Accepted values: <code>undefined</code>, <code>none</code>, <code>read-uncommitted</code>, <code>read-committed</code>, <code>repeatable-read</code>, <code>serializable</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="quarkus.datasource.named-data-sources.enable-metrics" class="dlist">
+<dl>
+<dt class="hdlist1"><code>quarkus.datasource."&lt;named-data-sources&gt;".enable-metrics</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Enable datasource metrics collection.</p>
+</div>
+<div class="paragraph">
+<p>Type: <code>boolean</code></p>
+</div>
+<div class="paragraph">
+<p>Defaults to: <code>false</code></p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<hr>
+<div id="duration-note-anchor" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
+<div class="title">About the Duration format</div>
 <div class="paragraph">
 <p>The format for durations uses the standard <code>java.time.Duration</code> format.
 You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
@@ -569,6 +1347,7 @@ Otherwise, <code>PT</code> is implicitly appended to the value to obtain a stand
 </td>
 </tr>
 </table>
+</div>
 </div>
 </div>
 </div>

@@ -64,6 +64,7 @@
     <h1 class="text-caps">Quarkus - Using Apache Tika</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
+<li><a href="#creating-the-maven-project">Creating the Maven Project</a></li>
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#simple-text-extraction-example">Simple text extraction example</a></li>
 <li><a href="#embedded-document-text-extraction-example">Embedded document text extraction example</a></li>
@@ -77,6 +78,45 @@
 </div>
 <div class="paragraph">
 <p><a href="https://tika.apache.org/">Apache Tika</a> is a content analysis toolkit which is used to parse the documents in PDF, Open Document, Excel and many other well known binary and text formats using a simple uniform API. Both the document text and properties (metadata) are available once the document has been parsed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven Project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, we need a new project. Create a new project with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.22.0:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=using-tika \
+    -Dextensions="tika"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command generates a Maven project, importing the <code>tika</code> extension.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured you can add the <code>tika</code> extension
+to your project by running the following command in your project base directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension -Dextensions="tika"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your pom.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-tika&lt;/artifactId&gt;
+    &lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -99,8 +139,13 @@
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.tika.tika-config-path</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tika-config.xml</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the <a href="https://tika.apache.org/1.22/configuring.html">Tika configuration</a> resource. Typically a file named <code>tika-config.xml</code> is located in the root of the application resources path. The default configuration will be used if no configuration resource is available.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The resource path within the application artifact to the <a href="https://tika.apache.org/1.22/configuring.html">Tika configuration</a> resource. Typically a file named <code>tika-config.xml</code> is added to the root of the application resources path. The default configuration will be used if no configuration resource is available.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.tika.parsers</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list of the abbreviated or full parser class names which have to be loaded by the extension. A <code>pdf</code> abbreviation can be used to refer to the PDF parser and custom abbreviations must be used for all other parsers. Note that this property is mutually exclusive with the <code>tika-config-path</code> property.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.tika.append-embedded-content</code></p></td>

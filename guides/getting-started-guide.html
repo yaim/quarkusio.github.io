@@ -131,6 +131,23 @@ This guide covers:</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Verify Maven is using the Java you expect</div>
+<div class="paragraph">
+<p>If you have multiple JDK&#8217;s installed it is not certain Maven will pick up the expected java
+and you could end up with unexpected results.
+You can verify which JDK Maven uses by running <code>mvn --version</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -154,11 +171,18 @@ dependency injection, this endpoint uses a <code>greeting</code> bean.</p>
 <h2 id="solution"><a class="anchor" href="#solution"></a>3. Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We recommend that you follow the instructions in the next sections and create the application step by step.
-However, you can go right to the completed example.</p>
+<p>We recommend that you follow the instructions from <a href="#bootstrapping-the-project">Boostrapping project</a> and onwards to create the application step by step.</p>
 </div>
 <div class="paragraph">
-<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+<p>However, you can go right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a> or clone the git repository:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">git clone https://github.com/quarkusio/quarkus-quickstarts.git</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The solution is located in the <code>getting-started</code> directory.</p>
@@ -181,7 +205,7 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>It generates:</p>
+<p>It generates the following in  <code>./getting-started</code>:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -198,7 +222,7 @@ However, you can go right to the completed example.</p>
 <p>a landing page that is accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code> after starting the application</p>
 </li>
 <li>
-<p>example <code>Dockerfile</code> files for both <code>native</code> and <code>jvm</code> modes</p>
+<p>example <code>Dockerfile</code> files for both <code>native</code> and <code>jvm</code> modes in <code>src/main/docker</code></p>
 </li>
 <li>
 <p>the application configuration file</p>
@@ -273,7 +297,7 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "hello\n";
+        return "hello";
     }
 }</code></pre>
 </div>
@@ -309,7 +333,8 @@ Use: <code>./mvnw compile quarkus:dev</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">[INFO] --------------------&lt; org.acme:getting-started &gt;---------------------
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ ./mvnw compile quarkus:dev
+[INFO] --------------------&lt; org.acme:getting-started &gt;---------------------
 [INFO] Building getting-started 1.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
@@ -334,12 +359,27 @@ Listening for transport dt_socket at address: 5005
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ curl http://localhost:8080/hello
+<pre class="highlightjs highlight"><code class="language-none hljs">$ curl -w "\n" http://localhost:8080/hello
 hello</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Hit <code>CTRL+C</code> to stop the application, but you can also keep it running and enjoy the blazing fast hot-reload.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Automatically add newline with <code>curl -w "\n"</code></div>
+<div class="paragraph">
+<p>We are using <code>curl -w "\n"</code> in this example to avoid your terminal printing a '%' or put both result and next command prompt on the same line.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -367,7 +407,7 @@ import javax.enterprise.context.ApplicationScoped;
 public class GreetingService {
 
     public String greeting(String name) {
-        return "hello " + name + "\n";
+        return "hello " + name;
     }
 
 }</code></pre>
@@ -403,14 +443,20 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "hello\n";
+        return "hello";
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>If you stopped the application, restart the application with <code>./mvnw compile quarkus:dev</code>.
-Then check that <a href="http://localhost:8080/hello/greeting/quarkus" class="bare">http://localhost:8080/hello/greeting/quarkus</a> returns <code>hello quarkus</code>.</p>
+Then check that the endpoint returns <code>hello quarkus</code> as expected:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl -w "\n" http://localhost:8080/hello/greeting/quarkus
+hello quarkus</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -501,7 +547,7 @@ public class GreetingResourceTest {
           .when().get("/hello")
           .then()
              .statusCode(200)    <i class="conum" data-value="2"></i><b>(2)</b>
-             .body(is("hello\n"));
+             .body(is("hello"));
     }
 
     @Test
@@ -512,7 +558,7 @@ public class GreetingResourceTest {
           .when().get("/hello/greeting/{name}")
           .then()
             .statusCode(200)
-            .body(is("hello " + uuid + "\n"));
+            .body(is("hello " + uuid));
     }
 
 }</code></pre>
@@ -534,7 +580,15 @@ public class GreetingResourceTest {
 <p>These tests use <a href="http://rest-assured.io/">RestAssured</a>, but feel free to use your favorite library.</p>
 </div>
 <div class="paragraph">
-<p>You can run the test from your IDE directly (be sure you stopped the application first), or from Maven using: <code>./mvnw test</code>.</p>
+<p>You can run these using Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also run the test from your IDE directly (be sure you stopped the application first).</p>
 </div>
 <div class="paragraph">
 <p>By default, tests will run on port <code>8081</code> so as not to conflict with the running application. We automatically
@@ -560,7 +614,7 @@ property called <code>test.url</code> that is set to the base test URL for situa
 <div class="sectionbody">
 <div class="paragraph">
 <p>The application is packaged using <code>./mvnw package</code>.
-It produces 2 jar files:</p>
+It produces 2 jar files in <code>/target</code>:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -616,7 +670,7 @@ Before running the application, don&#8217;t forget to stop the hot reload mode (
 @Produces(MediaType.TEXT_PLAIN)
 public CompletionStage&lt;String&gt; hello() {
     return CompletableFuture.supplyAsync(() -&gt; {
-        return "hello\n";
+        return "hello";
     });
 }</code></pre>
 </div>

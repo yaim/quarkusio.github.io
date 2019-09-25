@@ -76,6 +76,7 @@
 </ul>
 </li>
 <li><a href="#cors-filter">6. CORS filter</a></li>
+<li><a href="#http-limits-configuration">7. Http Limits Configuration</a></li>
 </ul>
     </div>
     <div>
@@ -270,8 +271,34 @@ not set.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The comma-separated list of HTTP headers exposed in CORS.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.cors.access-control-max-age</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The duration (see note below) indicating how long the results of a pre-flight request can be cached.
+This value will be returned in a <code>Access-Control-Max-Age</code> response header.</p></td>
+</tr>
 </tbody>
 </table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The format for durations uses the standard <code>java.time.Duration</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can also provide duration values starting with a number.
+In this case, if the value consists only of a number, the converter treats the value as seconds.
+Otherwise, <code>PT</code> is implicitly appended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Here&#8217;s what a full CORS filter configuration could look like:</p>
 </div>
@@ -281,7 +308,8 @@ not set.</p></td>
 quarkus.http.cors.origins=http://foo.com,http://www.bar.io
 quarkus.http.cors.methods=GET,PUT,POST
 quarkus.http.cors.headers=X-Custom
-quarkus.http.cors.exposed-headers=Content-Disposition</code></pre>
+quarkus.http.cors.exposed-headers=Content-Disposition
+quarkus.http.cors.access-control-max-age=24H</code></pre>
 </div>
 </div>
 <div class="admonitionblock warning">
@@ -294,6 +322,64 @@ quarkus.http.cors.exposed-headers=Content-Disposition</code></pre>
 <div class="paragraph">
 <p>If you want to use the <code>keycloak</code> Quarkus extension in your project, you should configure CORS using the <code>keycloak</code> extension
 configuration. See <a href="keycloak-guide#configuring-cors">the Keycloak guide</a> for more details.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="http-limits-configuration"><a class="anchor" href="#http-limits-configuration"></a>7. Http Limits Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following properties are supported.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.limits.max-body-size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>unlimited</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum size of request body.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.limits.max-header-size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>2OK</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum length of all headers.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The following config options would recognize strings in this format (shown as a regular expression): <code>[0-9]+[KkMmGgTtPpEeZzYy]?</code>. If no suffix is given, assume bytes.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>quarkus.http.limits.max-body-size</code>,</p>
+</li>
+<li>
+<p><code>quarkus.http.limits.max-header-size</code></p>
+</li>
+</ul>
 </div>
 </td>
 </tr>

@@ -67,7 +67,8 @@
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#serialization-key-value-types-support">Serialization (Key Value types support)</a>
 <ul class="sectlevel2">
-<li><a href="#providing-your-own-marshaller">Providing your own Marshaller</a></li>
+<li><a href="#annotation-based-serialization">Annotation based Serialization</a></li>
+<li><a href="#user-written-serialization">User written serialization</a></li>
 </ul>
 </li>
 <li><a href="#dependency-injection">Dependency Injection</a></li>
@@ -123,15 +124,17 @@ can be configured in this file:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Property</th>
 <th class="tableblock halign-left valign-top">Default Value</th>
 <th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Runtime/Buildtime</th>
 </tr>
 </thead>
 <tbody>
@@ -140,6 +143,7 @@ can be configured in this file:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&lt;empty&gt;</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Defines the list of servers to connect to upon startup. This allows for multiple servers separated by a semicolon
 for each. (eg. host1:11222;host:11222)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Runtime overridable</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.infinispan-client.near-cache-max-entries</code></p></td>
@@ -148,12 +152,14 @@ for each. (eg. host1:11222;host:11222)</p></td>
 If this value is zero or less near cache is disabled. A value greater than zero enables near
 cache and only that many entries will be held a time, removing older entries to save memory
 (per cache).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build time only / Requires compilation to change</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
 <p>It is also possible to configure a <code>hotrod-client.properties</code> as described in the Infinispan user guide. Note that
-the <code>hotrod-client.properties</code> values overwrite any matching property from the other configuration values (eg. near cache).</p>
+the <code>hotrod-client.properties</code> values overwrite any matching property from the other configuration values (eg. near cache).
+This properties file is build time only and if it is changed, requires a full rebuild.</p>
 </div>
 </div>
 </div>
@@ -200,8 +206,90 @@ some additional steps that are detailed here. Let&#8217;s say we have the follow
 </div>
 </div>
 <div class="paragraph">
-<p>The default serialization is done using a library based on protobuf. We need to define the proto
-buf schema and a marshaller for each user type(s).</p>
+<p>Serialization of user types uses a library based on protobuf, called Protostream.</p>
+</div>
+<div class="sect2">
+<h3 id="annotation-based-serialization"><a class="anchor" href="#annotation-based-serialization"></a>Annotation based Serialization</h3>
+<div class="paragraph">
+<p>This can be done automatically by adding protostream annotations to your user classes.
+In addition a single Initializer annotated interface is required which controls how
+the supporting classes are generated.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example of how the preceding classes should be changed:</p>
+</div>
+<div class="listingblock">
+<div class="title">Author.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @ProtoFactory
+    public Author(String name, String surname) {
+        this.name = Objects.requireNonNull(name);
+        this.surname = Objects.requireNonNull(surname);
+    }
+
+    @ProtoField(number = 1)
+    public String getName() {
+        return name;
+    }
+
+    @ProtoField(number = 2)
+    public String getSurname() {
+        return surname;
+    }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Book.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @ProtoFactory
+    public Book(String title, String description, int publicationYear, Set&lt;Author&gt; authors) {
+        this.title = Objects.requireNonNull(title);
+        this.description = Objects.requireNonNull(description);
+        this.publicationYear = publicationYear;
+        this.authors = Objects.requireNonNull(authors);
+    }
+
+    @ProtoField(number = 1)
+    public String getTitle() {
+        return title;
+    }
+
+    @ProtoField(number = 2)
+    public String getDescription() {
+        return description;
+    }
+
+    @ProtoField(number = 3, defaultValue = "-1")
+    public int getPublicationYear() {
+        return publicationYear;
+    }
+
+    @ProtoField(number = 4)
+    public Set&lt;Author&gt; getAuthors() {
+        return authors;
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If your classes have only mutable fields, then the <code>ProtoFactory</code> annotation
+is not required, assuming your class has a no arg constructor.</p>
+</div>
+<div class="paragraph">
+<p>Then all that is required is a very simple <code>SerializationContextInitializer</code> interface with an annotation
+on it to specify configuration settings</p>
+</div>
+<div class="listingblock">
+<div class="title">BookContextInitializer.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@AutoProtoSchemaBuilder(includeClasses = { Book.class, Author.class }, schemaPackageName = "book_sample")
+interface BookContextInitializer extends SerializationContextInitializer {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So in this case we will automatically generate the marshaller and schemas for the included classes and
+place them in the schema package automatically. The package does not have to be provided, but if you
+utilize querying, you must know the generated package.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -210,25 +298,19 @@ buf schema and a marshaller for each user type(s).</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Annotation based proto stream marshalling is not yet supported in
-the Quarkus Infinispan client. This will be added soon, allowing you to only annotate your classes,
-skipping the following steps.
+In Quarkus the <code>schemaFileName</code> and <code>schemaFilePath</code> attributes should NOT be set on the <code>AutoProtoSchemaBuilder</code> annotation, setting either will cause native runtime to error.
 </td>
 </tr>
 </table>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-This version has an issue currently requiring the Query DSL module as a dependency when running in
-native mode with proto buf based marshalling. This should be remedied in a future version.
-</td>
-</tr>
-</table>
+</div>
+<div class="sect2">
+<h3 id="user-written-serialization"><a class="anchor" href="#user-written-serialization"></a>User written serialization</h3>
+<div class="paragraph">
+<p>The previous method is suggested for any case when the user can annotate their classes.
+Unfortunately the user may not be able to annotate all classes they will put in the
+cache. In this case you must define your schema and create your own Marshaller(s)
+yourself.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -392,9 +474,6 @@ The type name must match the <code>&lt;protobuf package&gt;.&lt;protobuf message
    }</code></pre>
 </div>
 </div>
-</dd>
-</dl>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -402,36 +481,13 @@ The type name must match the <code>&lt;protobuf package&gt;.&lt;protobuf message
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Annotation based proto stream marshalling is not yet supported in
-the Quarkus Infinispan client.
+The above produced Marshaller method MUST return <code>MessageMarshaller</code> without types or else it will not be found.
 </td>
 </tr>
 </table>
 </div>
-<div class="sect2">
-<h3 id="providing-your-own-marshaller"><a class="anchor" href="#providing-your-own-marshaller"></a>Providing your own Marshaller</h3>
-<div class="paragraph">
-<p>You can implement the <code>org.infinispan.commons.marshaller.Marshaller</code> interface. This will allow you
-to put keys and values of the types it supports directly with the client. All that is required is to have your
-class available in classpath and configure the property value to be the fully qualified class name. This
-method does not require any optional dependencies.</p>
-</div>
-<div class="paragraph">
-<p>It is recommended to extend from the <code>org.infinispan.commons.marshall.AbstractMarshaller</code> class to reduce
-the lines of the class. Here is an example of a Marshaller implementation for String instances.</p>
-</div>
-<div class="paragraph">
-<p>With that class in your project/classpath, all you need to do is add the following to your
-hotrod-client.properties as mentioned above.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">infinispan.client.hotrod.marshaller=com.example.MyMarshaller</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note that the Marshaller implementation must have a no arg constructor or static factory method named
-<code>getInstance</code>.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -491,23 +547,12 @@ properties of the proto schema.</p>
 </div>
 <div class="paragraph">
 <p>Query builds upon the proto definitions you can configure when setting up the <code>ProtoStreamMarshaller</code>.
-Make sure to configure this marshaller before attempting querying. Once this is completed
-you must add another optional depdency: <code>infinispan-query-dsl</code> to start using queries.</p>
+Either method of Serialization above will automatically register the schema with the server at
+startup, meaning that you will automatically gain the ability to query objects stored in the
+remote Infinispan Server.</p>
 </div>
 <div class="paragraph">
-<p>You can do this by adding the following dependency to your project.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
-    &lt;groupId&gt;org.infinispan&lt;/groupId&gt;
-    &lt;artifactId&gt;infinispan-query-dsl&lt;/artifactId&gt;
-&lt;/dependency&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>With this added you can use Infinispan querying just as you would normally, nothing special required.
-You can read more about this at <a href="https://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl" class="bare">https://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl</a>.</p>
+<p>You can read more about this at <a href="https://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl" class="bare">https://infinispan.org/docs/dev/user_guide/user_guide.html#query_dsl</a>.</p>
 </div>
 <div class="paragraph">
 <p>You can use either the Query DSL or the Ickle Query language with the Quarkus Infinispan client
@@ -558,43 +603,8 @@ and/or keystore. This is further detailed at
 <a href="https://infinispan.org/docs/dev/user_guide/user_guide.html#hr_encryption" class="bare">https://infinispan.org/docs/dev/user_guide/user_guide.html#hr_encryption</a>.</p>
 </div>
 <div class="paragraph">
-<p>The reason that Quarkus is different is that SubstrateVM does not come with security
-services enabled. This is mentioned at
-<a href="https://github.com/oracle/graal/blob/master/substratevm/JCA-SECURITY-SERVICES.md" class="bare">https://github.com/oracle/graal/blob/master/substratevm/JCA-SECURITY-SERVICES.md</a>. To
-do this you will need to set the <code>&lt;enableAllSecurityServices&gt;true&lt;/enableAllSecurityServices&gt;</code> value
-in the <code>quarkus-maven-plugin</code> configuration values.</p>
-</div>
-<div class="paragraph">
-<p>An example is as shown here, with a comment highlighting them:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
-   &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
-   &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
-   &lt;executions&gt;
-       &lt;execution&gt;
-           &lt;id&gt;native-image&lt;/id&gt;
-           &lt;goals&gt;
-               &lt;goal&gt;native-image&lt;/goal&gt;
-           &lt;/goals&gt;
-           &lt;configuration&gt;
-               &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
-               &lt;!-- next two are to enable security - If not needed it is recommended not to enable these--&gt;
-               &lt;enableJni&gt;true&lt;/enableJni&gt;
-               &lt;enableAllSecurityServices&gt;true&lt;/enableAllSecurityServices&gt;
-           &lt;/configuration&gt;
-       &lt;/execution&gt;
-   &lt;/executions&gt;
-&lt;/plugin&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you notice the example XML above also enabled JNI. This is currently needed depending on the
-configured security provider. If JNI is required then you must locate the shared library used. In
-testing it was utilizing the <code>sunec</code> library. This shared library
-should be at <code>&lt;JAVA_HOME&gt;/jre/lib/&lt;platform&gt;/libsunec.so</code> and must be added to <code>java.library.path</code>
-for encryption to work properly.</p>
+<p>The Infinispan Client extension enables SSL by default. You can read more about this
+at <a href="native-and-ssl-guide.html">Using SSL With Native Executables</a>.</p>
 </div>
 </div>
 </div>
@@ -608,42 +618,35 @@ the Quarkus Infinispan Client extension.</p>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Mechanisms</caption>
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Name</th>
 <th class="tableblock halign-left valign-top">Verified</th>
-<th class="tableblock halign-left valign-top">Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">DIGEST-MD5</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong class="green">Y</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Requires steps from Encryption section above</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">PLAIN</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong class="green">Y</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Requires steps from Encryption section above</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EXTERNAL</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong class="green">Y</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Requires steps from Encryption section above</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">GSSAPI</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong class="red">N</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Not tested</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Custom</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong class="red">N</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Not tested</p></td>
 </tr>
 </tbody>
 </table>
