@@ -725,6 +725,9 @@ Note that in this case the build itself runs in a Docker container too, so you d
 </table>
 </div>
 <div class="paragraph">
+<p>Uber-Jar creation by default excludes <a href="https://docs.oracle.com/javase/tutorial/deployment/jar/intro.html">signature files</a> that might be present in the dependencies of the application.</p>
+</div>
+<div class="paragraph">
 <p>Uber-Jar&#8217;s final name is configurable via a Maven&#8217;s build settings <code>finalName</code> option or via a <code>finalName</code> configuration option as shown below.</p>
 </div>
 <div class="listingblock">
