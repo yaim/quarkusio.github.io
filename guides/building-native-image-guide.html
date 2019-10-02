@@ -118,7 +118,7 @@
 <li>
 <p>GraalVM installed from the <a href="http://www.graalvm.org/downloads/">GraalVM web site</a>.
 Using the community edition is enough.
-Version 19.1.1 is required.</p>
+Version 19.2.0.1 is required.</p>
 </li>
 <li>
 <p>The <code>GRAALVM_HOME</code> environment variable configured appropriately</p>
@@ -545,7 +545,7 @@ Interested by tiny Docker images, check the <a href="https://github.com/quarkusi
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="dockerfile" class="language-dockerfile hljs">## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/centos-quarkus-maven:19.1.1 AS build
+FROM quay.io/quarkus/centos-quarkus-maven:19.2.0.1 AS build
 COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
 USER root

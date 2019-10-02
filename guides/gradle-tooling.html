@@ -156,7 +156,7 @@ Here is a complete sample file for a simple REST project:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
-    id 'io.quarkus' version '0.22.0' <i class="conum" data-value="1"></i><b>(1)</b>
+    id 'io.quarkus' version '0.23.2' <i class="conum" data-value="1"></i><b>(1)</b>
 }
 
 repositories {
@@ -164,7 +164,7 @@ repositories {
 }
 
 dependencies { <i class="conum" data-value="2"></i><b>(2)</b>
-    implementation enforcedPlatform('io.quarkus:quarkus-bom:0.22.0')
+    implementation enforcedPlatform('io.quarkus:quarkus-bom:0.23.2')
     implementation 'io.quarkus:quarkus-resteasy'
 }</code></pre>
 </div>
@@ -197,7 +197,7 @@ repositories {
 }
 
 dependencies {
-    implementation(enforcedPlatform("io.quarkus:quarkus-bom:0.22.0"))
+    implementation(enforcedPlatform("io.quarkus:quarkus-bom:0.23.2"))
     implementation("io.quarkus:quarkus-resteasy")
 }</code></pre>
 </div>
@@ -234,7 +234,7 @@ dependencies {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">testCompile group: 'io.quarkus', name: 'quarkus-junit5', version: '0.22.0'
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">testCompile group: 'io.quarkus', name: 'quarkus-junit5', version: '0.23.2'
 testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'</code></pre>
 </div>
 </div>
@@ -243,7 +243,7 @@ testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'</co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">testCompile("io.quarkus:quarkus-junit5:0.22.0")
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">testCompile("io.quarkus:quarkus-junit5:0.23.2")
 testCompile("io.rest-assured:rest-assured:3.3.0")</code></pre>
 </div>
 </div>
@@ -523,7 +523,7 @@ The next screen list the found modules; select the generated project and click o
 <p>Native executables make Quarkus applications ideal for containers and serverless workloads.</p>
 </div>
 <div class="paragraph">
-<p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 19.1.1.</p>
+<p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 19.2.0.1.</p>
 </div>
 <div class="paragraph">
 <p>Create a native executable using: <code>./gradlew buildNative</code>.
