@@ -349,7 +349,7 @@ Creates the <code>src/main/java/org/acme/quarkus/sample/PriceResource.java</code
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
 
-import io.smallrye.reactive.messaging.annotations.Stream;
+import io.smallrye.reactive.messaging.annotations.Channel;
 import org.reactivestreams.Publisher;
 
 import javax.inject.Inject;
@@ -357,6 +357,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.jboss.resteasy.annotations.SseElementType;
 
 /**
  * A simple resource retrieving the in-memory "my-data-stream" and sending the items as server-sent events.
@@ -365,18 +366,13 @@ import javax.ws.rs.core.MediaType;
 public class PriceResource {
 
     @Inject
-    @Stream("my-data-stream") Publisher&lt;Double&gt; prices; <i class="conum" data-value="1"></i><b>(1)</b>
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "hello";
-    }
+    @Channel("my-data-stream") Publisher&lt;Double&gt; prices; <i class="conum" data-value="1"></i><b>(1)</b>
 
     @GET
     @Path("/stream")
-    @Produces(MediaType.SERVER_SENT_EVENTS)             <i class="conum" data-value="2"></i><b>(2)</b>
-    public Publisher&lt;Double&gt; stream() {                 <i class="conum" data-value="3"></i><b>(3)</b>
+    @Produces(MediaType.SERVER_SENT_EVENTS) <i class="conum" data-value="2"></i><b>(2)</b>
+    @SseElementType("text/plain") <i class="conum" data-value="3"></i><b>(3)</b>
+    public Publisher&lt;Double&gt; stream() { <i class="conum" data-value="4"></i><b>(4)</b>
         return prices;
     }
 }</code></pre>
@@ -386,7 +382,7 @@ public class PriceResource {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Injects the <code>my-data-stream</code> stream using the <code>@Stream</code> qualifier</td>
+<td>Injects the <code>my-data-stream</code> channel using the <code>@Channel</code> qualifier</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -394,6 +390,10 @@ public class PriceResource {
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Indicates that the data contained within the server sent events is of type <code>text/plain</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>Returns the stream (<em>Reactive Stream</em>)</td>
 </tr>
 </table>

@@ -64,510 +64,282 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Mailer</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.from">quarkus.mailer.from</a></p>
-<p class="tableblock">Configure the default <code>from</code> attribute.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.mock">quarkus.mailer.mock</a></p>
-<p class="tableblock">Enables the mock mode, not sending emails.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.bounce-address">quarkus.mailer.bounce-address</a></p>
-<p class="tableblock">Configures the default bounce email address.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.host">quarkus.mailer.host</a></p>
-<p class="tableblock">The SMTP host name.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.port">quarkus.mailer.port</a></p>
-<p class="tableblock">The SMTP port.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.username">quarkus.mailer.username</a></p>
-<p class="tableblock">The username.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.password">quarkus.mailer.password</a></p>
-<p class="tableblock">The password.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.ssl">quarkus.mailer.ssl</a></p>
-<p class="tableblock">Enables or disables the SSL on connect.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.trust-all">quarkus.mailer.trust-all</a></p>
-<p class="tableblock">Set whether to trust all certificates on ssl connect the option is also applied to <code>STARTTLS</code> operation.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.max-pool-size">quarkus.mailer.max-pool-size</a></p>
-<p class="tableblock">Configures the maximum allowed number of open connections to the mail server If not set the default is <code>10</code>.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.own-host-name">quarkus.mailer.own-host-name</a></p>
-<p class="tableblock">The hostname to be used for HELO/EHLO and the Message-ID.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.keep-alive">quarkus.mailer.keep-alive</a></p>
-<p class="tableblock">Set if connection pool is enabled, <code>true</code> by default.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.disable-esmtp">quarkus.mailer.disable-esmtp</a></p>
-<p class="tableblock">Disable ESMTP.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.start-tls">quarkus.mailer.start-tls</a></p>
-<p class="tableblock">Set the TLS security mode for the connection.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.login">quarkus.mailer.login</a></p>
-<p class="tableblock">Set the login mode for the connection.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.auth-methods">quarkus.mailer.auth-methods</a></p>
-<p class="tableblock">Set the allowed auth methods.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.key-store">quarkus.mailer.key-store</a></p>
-<p class="tableblock">Set the key store.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.mailer.key-store-password">quarkus.mailer.key-store-password</a></p>
-<p class="tableblock">Set the key store password.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.from</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.mailer.from" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.from</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Configure the default <code>from</code> attribute. It&#8217;s the sender email address.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.mock</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.mock" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.mock</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Enables the mock mode, not sending emails. The content of the emails is printed on the console.
  Disabled by default on PROD, enabled by default on DEV and TEST modes.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.bounce-address</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.bounce-address" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.bounce-address</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Configures the default bounce email address.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.host</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.host" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.host</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The SMTP host name.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>localhost</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.port</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.port" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.port</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The SMTP port.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.username</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.username" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.username</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The username.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.password</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.password" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The password.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.ssl</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.ssl" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.ssl</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Enables or disables the SSL on connect. <code>false</code> by default.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.trust-all</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.trust-all" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.trust-all</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set whether to trust all certificates on ssl connect the option is also applied to <code>STARTTLS</code> operation. <code>false</code> by default.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.max-pool-size</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.max-pool-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.max-pool-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Configures the maximum allowed number of open connections to the mail server If not set the default is <code>10</code>.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.own-host-name</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.own-host-name" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.own-host-name</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The hostname to be used for HELO/EHLO and the Message-ID</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.keep-alive</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.keep-alive" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.keep-alive</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set if connection pool is enabled, <code>true</code> by default.
  If the connection pooling is disabled, the max number of sockets is enforced nevertheless.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.disable-esmtp</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.disable-esmtp" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.disable-esmtp</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Disable ESMTP. <code>false</code> by default. The RFC-1869 states that clients should always attempt <code>EHLO</code> as first command to determine if ESMTP is supported, if this returns an error code, <code>HELO</code> is tried to use the <strong>regular</strong> SMTP command.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.start-tls</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.start-tls" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.start-tls</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set the TLS security mode for the connection. Either <code>DISABLED</code>, <code>OPTIONAL</code> or <code>REQUIRED</code>.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.login</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.login" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.login</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set the login mode for the connection. Either <code>DISABLED</code>, <code>OPTIONAL</code> or <code>REQUIRED</code></p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.auth-methods</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.auth-methods" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.auth-methods</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set the allowed auth methods. If defined, only these methods will be used, if the server supports them.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.key-store</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.key-store" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.key-store</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set the key store.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.mailer.key-store-password</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.mailer.key-store-password" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.mailer.key-store-password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set the key store password.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-</div>
-</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
     </div>
   </div>
 </div>

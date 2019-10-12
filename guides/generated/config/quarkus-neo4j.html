@@ -64,324 +64,171 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Neo4j</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.uri">quarkus.neo4j.uri</a></p>
-<p class="tableblock">The uri this driver should connect to.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>bolt://localhost:7687</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.authentication.username">quarkus.neo4j.authentication.username</a></p>
-<p class="tableblock">The login of the user connecting to the database.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>neo4j</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.authentication.password">quarkus.neo4j.authentication.password</a></p>
-<p class="tableblock">The password of the user connecting to the database.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>neo4j</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.authentication.disabled">quarkus.neo4j.authentication.disabled</a></p>
-<p class="tableblock">Set this to true to disable authentication.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.pool.metrics-enabled">quarkus.neo4j.pool.metrics-enabled</a></p>
-<p class="tableblock">Flag, if metrics are enabled.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.pool.log-leaked-sessions">quarkus.neo4j.pool.log-leaked-sessions</a></p>
-<p class="tableblock">Flag, if leaked sessions logging is enabled.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.pool.max-connection-pool-size">quarkus.neo4j.pool.max-connection-pool-size</a></p>
-<p class="tableblock">The maximum amount of connections in the connection pool towards a single database.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.pool.idle-time-before-connection-test">quarkus.neo4j.pool.idle-time-before-connection-test</a></p>
-<p class="tableblock">Pooled connections that have been idle in the pool for longer than this timeout will be tested before they are used again.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>-0.001S</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.pool.max-connection-lifetime">quarkus.neo4j.pool.max-connection-lifetime</a></p>
-<p class="tableblock">Pooled connections older than this threshold will be closed and removed from the pool.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1H</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.neo4j.pool.connection-acquisition-timeout">quarkus.neo4j.pool.connection-acquisition-timeout</a></p>
-<p class="tableblock">Acquisition of new connections will be attempted for at most configured timeout.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1M</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.uri</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.neo4j.uri" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.uri</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The uri this driver should connect to. The driver supports bolt, bolt+routing or neo4j as schemes.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>bolt://localhost:7687</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>bolt://localhost:7687</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.authentication.username</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.authentication.username" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.authentication.username</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The login of the user connecting to the database.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>neo4j</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>neo4j</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.authentication.password</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.authentication.password" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.authentication.password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The password of the user connecting to the database.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>neo4j</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>neo4j</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.authentication.disabled</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.authentication.disabled" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.authentication.disabled</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set this to true to disable authentication.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.pool.metrics-enabled</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.pool.metrics-enabled" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.pool.metrics-enabled</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Flag, if metrics are enabled.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.pool.log-leaked-sessions</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.pool.log-leaked-sessions" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.pool.log-leaked-sessions</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Flag, if leaked sessions logging is enabled.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.pool.max-connection-pool-size</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.pool.max-connection-pool-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.pool.max-connection-pool-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum amount of connections in the connection pool towards a single database.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>100</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.pool.idle-time-before-connection-test</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.pool.idle-time-before-connection-test" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.pool.idle-time-before-connection-test</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Pooled connections that have been idle in the pool for longer than this timeout will be tested before they are used again. The value <code>0</code> means connections will always be tested for validity and negative values mean connections will never be tested.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>-0.001S</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>-0.001S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.pool.max-connection-lifetime</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.pool.max-connection-lifetime" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.pool.max-connection-lifetime</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Pooled connections older than this threshold will be closed and removed from the pool.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>1H</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1H</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.neo4j.pool.connection-acquisition-timeout</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.neo4j.pool.connection-acquisition-timeout" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.neo4j.pool.connection-acquisition-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Acquisition of new connections will be attempted for at most configured timeout.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>1M</code></p>
-</div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1M</code></p></td>
+</tr>
+</tbody>
+</table>
 <div id="duration-note-anchor" class="admonitionblock note">
 <table>
 <tr>
@@ -402,8 +249,6 @@ Otherwise, <code>PT</code> is implicitly appended to the value to obtain a stand
 </td>
 </tr>
 </table>
-</div>
-</div>
 </div>
     </div>
   </div>

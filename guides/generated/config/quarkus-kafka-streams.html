@@ -64,146 +64,84 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Kafka Streams</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.kafka-streams.application-id">quarkus.kafka-streams.application-id</a></p>
-<p class="tableblock">A unique identifier for this Kafka Streams application.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.kafka-streams.bootstrap-servers">quarkus.kafka-streams.bootstrap-servers</a></p>
-<p class="tableblock">A comma-separated list of host:port pairs identifying the Kafka bootstrap server(s).</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetSocketAddress.html">InetSocketAddress</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9012</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.kafka-streams.application-server">quarkus.kafka-streams.application-server</a></p>
-<p class="tableblock">A unique identifier of this application instance, typically in the form host:port.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.kafka-streams.topics">quarkus.kafka-streams.topics</a></p>
-<p class="tableblock">A comma-separated list of topic names processed by this stream processing application.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.kafka-streams.application-id</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.kafka-streams.application-id" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.kafka-streams.application-id</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>A unique identifier for this Kafka Streams application.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.kafka-streams.bootstrap-servers</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.kafka-streams.bootstrap-servers" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.kafka-streams.bootstrap-servers</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>A comma-separated list of host:port pairs identifying the Kafka bootstrap server(s)</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>InetSocketAddress</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>localhost:9012</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">host:port</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9012</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.kafka-streams.application-server</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.kafka-streams.application-server" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.kafka-streams.application-server</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>A unique identifier of this application instance, typically in the form host:port.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.kafka-streams.topics</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.kafka-streams.topics" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.kafka-streams.topics</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>A comma-separated list of topic names processed by this stream processing application. The pipeline will only be started once all these topics are present in the Kafka cluster.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-</div>
-</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
     </div>
   </div>
 </div>

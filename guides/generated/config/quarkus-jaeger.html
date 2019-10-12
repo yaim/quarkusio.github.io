@@ -64,445 +64,253 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Jaeger</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.enabled">quarkus.jaeger.enabled</a></p>
-<p class="tableblock">Defines if the Jaeger extension is enabled.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.endpoint">quarkus.jaeger.endpoint</a></p>
-<p class="tableblock">The traces endpoint, in case the client should connect directly to the Collector, like <a href="http://jaeger-collector:14268/api/traces" class="bare">http://jaeger-collector:14268/api/traces</a>.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.auth-token">quarkus.jaeger.auth-token</a></p>
-<p class="tableblock">Authentication Token to send as "Bearer" to the endpoint.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.user">quarkus.jaeger.user</a></p>
-<p class="tableblock">Username to send as part of "Basic" authentication to the endpoint.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.password">quarkus.jaeger.password</a></p>
-<p class="tableblock">Password to send as part of "Basic" authentication to the endpoint.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.agent-host-port">quarkus.jaeger.agent-host-port</a></p>
-<p class="tableblock">The hostname and port for communicating with agent via UDP.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetSocketAddress.html">InetSocketAddress</a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.reporter-log-spans">quarkus.jaeger.reporter-log-spans</a></p>
-<p class="tableblock">Whether the reporter should also log the spans.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.reporter-max-queue-size">quarkus.jaeger.reporter-max-queue-size</a></p>
-<p class="tableblock">The reporter&#8217;s maximum queue size.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.reporter-flush-interval">quarkus.jaeger.reporter-flush-interval</a></p>
-<p class="tableblock">The reporter&#8217;s flush interval.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.sampler-type">quarkus.jaeger.sampler-type</a></p>
-<p class="tableblock">The sampler type (const, probabilistic, ratelimiting or remote).</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.sampler-param">quarkus.jaeger.sampler-param</a></p>
-<p class="tableblock">The sampler parameter (number).</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html">BigDecimal</a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.sampler-manager-host-port">quarkus.jaeger.sampler-manager-host-port</a></p>
-<p class="tableblock">The host name and port when using the remote controlled sampler.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/InetSocketAddress.html">InetSocketAddress</a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.service-name">quarkus.jaeger.service-name</a></p>
-<p class="tableblock">The service name.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.tags">quarkus.jaeger.tags</a></p>
-<p class="tableblock">A comma separated list of name = value tracer level tags, which get added to all reported spans.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.propagation">quarkus.jaeger.propagation</a></p>
-<p class="tableblock">Comma separated list of formats to use for propagating the trace context.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.jaeger.sender-factory">quarkus.jaeger.sender-factory</a></p>
-<p class="tableblock">The sender factory class name.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.enabled</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.jaeger.enabled" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.enabled</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Defines if the Jaeger extension is enabled.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.endpoint</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.endpoint" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.endpoint</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The traces endpoint, in case the client should connect directly to the Collector, like <a href="http://jaeger-collector:14268/api/traces" class="bare">http://jaeger-collector:14268/api/traces</a></p>
 </div>
-<div class="paragraph">
-<p>Type: <code>URI</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.auth-token</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.auth-token" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.auth-token</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Authentication Token to send as "Bearer" to the endpoint</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.user</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.user" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.user</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Username to send as part of "Basic" authentication to the endpoint</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.password</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.password" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Password to send as part of "Basic" authentication to the endpoint</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.agent-host-port</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.agent-host-port" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.agent-host-port</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The hostname and port for communicating with agent via UDP</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>InetSocketAddress</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">host:port</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.reporter-log-spans</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.reporter-log-spans" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.reporter-log-spans</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Whether the reporter should also log the spans</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.reporter-max-queue-size</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.reporter-max-queue-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.reporter-max-queue-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The reporter&#8217;s maximum queue size</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.reporter-flush-interval</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.reporter-flush-interval" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.reporter-flush-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The reporter&#8217;s flush interval</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.sampler-type</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.sampler-type" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.sampler-type</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The sampler type (const, probabilistic, ratelimiting or remote)</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.sampler-param</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.sampler-param" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.sampler-param</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The sampler parameter (number)</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>BigDecimal</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html">BigDecimal</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.sampler-manager-host-port</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.sampler-manager-host-port" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.sampler-manager-host-port</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The host name and port when using the remote controlled sampler</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>InetSocketAddress</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">host:port</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.service-name</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.service-name" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.service-name</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The service name</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.tags</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.tags" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.tags</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>A comma separated list of name = value tracer level tags, which get added to all reported spans. The value can also refer to an environment variable using the format ${envVarName:default}, where the :default is optional, and identifies a value to be used if the environment variable cannot be found</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.propagation</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.propagation" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.propagation</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Comma separated list of formats to use for propagating the trace context. Defaults to the standard Jaeger format. Valid values are jaeger and b3</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.jaeger.sender-factory</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.jaeger.sender-factory" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.jaeger.sender-factory</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The sender factory class name</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
 <div id="duration-note-anchor" class="admonitionblock note">
 <table>
 <tr>
@@ -523,8 +331,6 @@ Otherwise, <code>PT</code> is implicitly appended to the value to obtain a stand
 </td>
 </tr>
 </table>
-</div>
-</div>
 </div>
     </div>
   </div>

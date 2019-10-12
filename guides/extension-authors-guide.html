@@ -83,19 +83,21 @@
 <li><a href="#conditional-step-inclusion">2.5. Conditional Step Inclusion</a></li>
 <li><a href="#bytecode-recording">2.6. Bytecode Recording</a></li>
 <li><a href="#contexts-and-dependency-injection">2.7. Contexts and Dependency Injection</a></li>
-<li><a href="#testing-extensions">2.8. Testing Extensions</a></li>
-<li><a href="#testing-hot-reload">2.9. Testing hot reload</a></li>
-<li><a href="#native-executable-support">2.10. Native Executable Support</a></li>
-<li><a href="#ide-support-tips">2.11. IDE support tips</a></li>
-<li><a href="#troubleshooting-debugging-tips">2.12. Troubleshooting / Debugging Tips</a></li>
-<li><a href="#sample-test-extension">2.13. Sample Test Extension</a></li>
+<li><a href="#extension-health-check">2.8. Extension Health Check</a></li>
+<li><a href="#testing-extensions">2.9. Testing Extensions</a></li>
+<li><a href="#testing-hot-reload">2.10. Testing hot reload</a></li>
+<li><a href="#native-executable-support">2.11. Native Executable Support</a></li>
+<li><a href="#ide-support-tips">2.12. IDE support tips</a></li>
+<li><a href="#troubleshooting-debugging-tips">2.13. Troubleshooting / Debugging Tips</a></li>
+<li><a href="#sample-test-extension">2.14. Sample Test Extension</a></li>
 </ul>
 </li>
 <li><a href="#configuration-reference-documentation">3. Configuration reference documentation</a>
 <ul class="sectlevel2">
 <li><a href="#writing-the-documentation">3.1. Writing the documentation</a></li>
-<li><a href="#generating-the-documentation">3.2. Generating the documentation</a></li>
-<li><a href="#including-the-documentation-in-the-extension-guide">3.3. Including the documentation in the extension guide</a></li>
+<li><a href="#writing-section-documentation">3.2. Writing section documentation</a></li>
+<li><a href="#generating-the-documentation">3.3. Generating the documentation</a></li>
+<li><a href="#including-the-documentation-in-the-extension-guide">3.4. Including the documentation in the extension guide</a></li>
 </ul>
 </li>
 </ul>
@@ -121,7 +123,7 @@ usage as the classes etc that are used for processing are not loaded (or even pr
 <div class="sect2">
 <h3 id="why-an-extension-framework"><a class="anchor" href="#why-an-extension-framework"></a>1.1. Why an extension framework</h3>
 <div class="paragraph">
-<p>Quarkus’s mission is to transform your entire application including the libraries it uses, into an artifact optimized for GraalVM.
+<p>Quarkus’s mission is to transform your entire application including the libraries it uses, into an artifact that uses significantly less resources than traditional approaches. These can then be used to build native applications using GraalVM.
 To do this you need to analyze and understand the full "closed world" of the application.
 Without the full and complete context, the best that can be achieved is partial and limited generic support.
 By using the Quarkus extension approach, we can bring Java applications in line with memory footprint constrained environments like Kubernetes or cloud platforms.</p>
@@ -716,59 +718,511 @@ So you may consider omitting explicit <code>nameBase</code> in some cases.
 <div class="sect2">
 <h3 id="build-step-processors"><a class="anchor" href="#build-step-processors"></a>2.3. Build Step Processors</h3>
 <div class="paragraph">
-<p>Work is done at deployment time by producing and consuming instances of <code>io.quarkus.builder.item.BuildItem</code>. This is done
-by creating a class that has method(s) annotated with <code>io.quarkus.deployment.annotations.BuildStep</code>. These classes can
-consume items by injection, and produce items by either returning them from the method or by injecting an
-instance of <code>io.quarkus.deployment.annotations.BuildProducer</code> for the produced type. These processors can also record
-bytecode invocations, which is mapped to a <code>BuildItem</code> transparently.</p>
+<p>Work is done at augmentation time by <em>build steps</em> which produce and consume <em>build items</em>.  The build steps found in
+the deployment modules that correspond to the extensions in the project build are automatically wired together and executed
+to produce the final build artifact(s).</p>
+</div>
+<div class="sect3">
+<h4 id="build-steps"><a class="anchor" href="#build-steps"></a>2.3.1. Build steps</h4>
+<div class="paragraph">
+<p>A <em>build step</em> is a method which is annotated with the <code>@io.quarkus.deployment.annotations.BuildStep</code> annotation.  Each
+build step may <a href="#consuming-values">consume</a> items that are produced by earlier stages, and <a href="#producing-values">produce</a> items
+that can be consumed by later stages. Build steps are normally only run when they produce a build item that is
+ultimately consumed by another step.</p>
 </div>
 <div class="paragraph">
-<p>There are two distinct types of <code>BuildItem</code>, <code>SimpleBuildItem</code> and <code>MultiBuildItem</code>. <code>SimpleBuildItem</code> will only ever
-have a single instance created, while <code>MultiBuildItem</code> can have many instances.</p>
+<p>Build steps are normally placed on plain classes within an extension&#8217;s deployment module.  The classes are automatically
+instantiated during the augment process and utilize <a href="#injection">injection</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="build-items"><a class="anchor" href="#build-items"></a>2.3.2. Build items</h4>
+<div class="paragraph">
+<p>Build items are concrete, final subclasses of the abstract <code>io.quarkus.builder.item.BuildItem</code> class.  Each build item represents
+some unit of information that must be passed from one stage to another.  The base <code>BuildItem</code> class may not itself be directly
+subclassed; rather, there are abstract subclasses for each of the kinds of build item subclasses that <em>may</em> be created:
+<a href="#simple-build-items">simple</a>, <a href="#multi-build-items">multi</a>, and <a href="#empty-build-items">empty</a>.</p>
 </div>
 <div class="paragraph">
-<p>Injection can be done either via field injection, or via method parameter injection. Injection is used to set up
-dependencies between build steps. For example if you inject a <code>List&lt;ServletBuildItem&gt;</code> your build step will not be called
-until all possible producers of <code>ServletBuildItem</code> have been called. Injected objects are only valid during a <code>@BuildStep</code>
-method invocation, once the method is complete they are no longer valid.</p>
-</div>
-<div class="paragraph">
-<p>The following items are valid for injection:</p>
+<p>Think of build items as a way for different extensions to communicate with one another.  For example, a build item can:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>SimpleBuildItem</code> instances (at some point we may support <code>Optional&lt;SimpleBuildItem&gt;</code>, but it is not implemented yet)</p>
+<p>expose the fact that a database configuration exists</p>
 </li>
 <li>
-<p><code>List&lt;? extends MultiBuildItem&gt;</code> instances</p>
+<p>consume that database configuration (e.g. a connection pool extension or an ORM extension)</p>
 </li>
 <li>
-<p><code>BuildProducer&lt;? extends BuildItem&gt;</code> instances</p>
+<p>ask an extension to do work for another extension: e.g. an extension wanting to define a new CDI bean and asking the ArC extension
+to do so</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>If a method returns a <code>BuildItem</code>, or injects a <code>BuildProducer</code> it is considered to be a producer of that item type,
-while if it injects the item or list of items it is a consumer.</p>
+<p>This is a very flexible mechanism.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>BuildItem</code> instances should be immutable, as the producer/consumer model does not allow for mutation to be correctly
+ordered. This is not enforced but failure to adhere to this rule can result in race conditions.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="simple-build-items"><a class="anchor" href="#simple-build-items"></a>2.3.2.1. Simple build items</h5>
+<div class="paragraph">
+<p>Simple build items are final classes which extend <code>io.quarkus.builder.item.SimpleBuildItem</code>.  Simple build items may only
+be produced by one step in a given build; if multiple steps in a build declare that they produce the same simple build item,
+an error is raised.  Any number of build steps may consume a simple build item.  A build step which consumes a simple
+build item will always run <em>after</em> the build step which produced that item.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example of a single build item</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/**
+ * The build item which represents the Jandex index of the application,
+ * and would normally be used by many build steps to find usages
+ * of annotations.
+ */
+public final class ApplicationIndexBuildItem extends SimpleBuildItem {
+
+    private final Index index;
+
+    public ApplicationIndexBuildItem(Index index) {
+        this.index = index;
+    }
+
+    public Index getIndex() {
+        return index;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="multi-build-items"><a class="anchor" href="#multi-build-items"></a>2.3.2.2. Multi build items</h5>
+<div class="paragraph">
+<p>Multiple or "multi" build items are final classes which extend <code>io.quarkus.builder.item.MultiBuildItem</code>.  Any number of
+multi build items of a given class may be produced by any number of steps, but any steps which consume multi build items
+will only run <em>after</em> every step which can produce them has run.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example of a multiple build item</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public final class ServiceProviderBuildItem extends MultiBuildItem {
+    private final String serviceName;
+    private final List&lt;String&gt; implementations;
+
+    public ServiceProviderBuildItem(String serviceName, String... implementations) {
+        this.serviceName = serviceName;
+        // Make sure it's immutable
+        this.implementations = Collections.unmodifiableList(
+            Arrays.asList(
+                implementations.clone()
+            )
+        );
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public List&lt;String&gt; getImplementations() {
+        return implementations;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example of multiple build item usage</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/**
+ * This build step produces a single multi build item that declares two
+ * providers of one configuration-related service.
+ */
+@BuildStep
+public ServiceProviderBuildItem registerOneService() {
+    return new ServiceProviderBuildItem(
+        Converter.class.getName(),
+        MyFirstConfigConverterImpl.class.getName(),
+        MySecondConfigConverterImpl.class.getName()
+    );
+}
+
+/**
+ * This build step produces several multi build items that declare multiple
+ * providers of multiple configuration-related services.
+ */
+@BuildStep
+public void registerSeveralSerivces(
+    BuildProducer&lt;ServiceProviderBuildItem&gt; providerProducer
+) {
+    providerProducer.produce(new ServiceProviderBuildItem(
+        Converter.class.getName(),
+        MyThirdConfigConverterImpl.class.getName(),
+        MyFourthConfigConverterImpl.class.getName()
+    ));
+    providerProducer.produce(new ServiceProviderBuildItem(
+        ConfigSource.class.getName(),
+        MyConfigSourceImpl.class.getName()
+    ));
+}
+
+/**
+ * This build step aggregates all the produced service providers
+ * and outputs them as resources.
+ */
+@BuildStep
+public void produceServiceFiles(
+    List&lt;ServiceProviderBuildItem&gt; items,
+    BuildProducer&lt;GeneratedResourceBuildItem&gt; resourceProducer
+) throws IOException {
+    // Aggregate all of the providers
+
+    Map&lt;String, Set&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+    for (ServiceProviderBuildItem item : items) {
+        String serviceName = item.getName();
+        for (String implName : item.getImplementations()) {
+            map.computeIfAbsent(
+                serviceName,
+                (k, v) -&gt; new LinkedHashSet&lt;&gt;()
+            ).add(implName);
+        }
+    }
+
+    // Now produce the resource(s) for the SPI files
+    for (Map.Entry&lt;String, Set&lt;String&gt;&gt; entry : map.entrySet()) {
+        String serviceName = entry.getKey();
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            try (OutputStreamWriter w = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
+                for (String implName : entry.getValue()) {
+                    w.write(implName);
+                    w.write(System.lineSeparator());
+                }
+            }
+            w.flush();
+            resourceProducer.produce(
+                new GeneratedResourceBuildItem(
+                    "META-INF/services/" + serviceName,
+                    os.toByteArray()
+                )
+            );
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="empty-build-items"><a class="anchor" href="#empty-build-items"></a>2.3.2.3. Empty build items</h5>
+<div class="paragraph">
+<p>Empty build items are final (usually empty) classes which extend <code>io.quarkus.builder.item.EmptyBuildItem</code>.
+They represent build items that don&#8217;t actually carry any data, and allow such items to be produced and consumed
+without having to instantiate empty classes.  They cannot themselves be instantiated.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example of an empty build item</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public final class NativeImageBuildItem extends EmptyBuildItem {
+    // empty
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Empty build items can represent "barriers" which can impose ordering between steps.  They can also be used in
+the same way that popular build systems use "pseudo-targets", which is to say that the build item can represent a
+conceptual goal that does not have a concrete representation.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example of usage of an empty build item in a "pseudo-target" style</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/**
+ * Contrived build step that produces the native image on disk.  The main augmentation
+ * step (which is run by Maven or Gradle) would be declared to consume this empty item,
+ * causing this step to be run.
+ */
+@BuildStep
+@Produces(NativeImageBuildItem.class)
+void produceNativeImage() {
+    // ...
+    // (produce the native image)
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example of usage of an empty build item in a "barrier" style</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/**
+ * This would always run after {@link #produceNativeImage()} completes, producing
+ * an instance of {@code SomeOtherBuildItem}.
+ */
+@BuildStep
+@Consumes(NativeImageBuildItem.class)
+SomeOtherBuildItem secondBuildStep() {
+    return new SomeOtherBuildItem("foobar");
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="injection"><a class="anchor" href="#injection"></a>2.3.3. Injection</h4>
+<div class="paragraph">
+<p>Classes which contain build steps support the following types of injection:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Constructor parameter injection</p>
+</li>
+<li>
+<p>Field injection</p>
+</li>
+<li>
+<p>Method parameter injection (for build step methods only)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Build step classes are instantiated and injected for each build step invocation, and are discarded afterwards.  State
+should only be communicated between build steps by way of build items, even if the steps are on the same class.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Final fields are not considered for injection, but can be populated by way of constructor parameter injection
+if desired.  Static fields are never considered for injection.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The types of values that can be injected include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#build-items">Build items</a> produced by previous build steps</p>
+</li>
+<li>
+<p><a href="#producing-values">Build producers</a> to produce items for subsequent build steps</p>
+</li>
+<li>
+<p><a href="#configuration-roots">Configuration root</a> types</p>
+</li>
+<li>
+<p>Template objects for <a href="#bytecode-recording">bytecode recording</a></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Objects which are injected into a build step method or its class <em>must not</em> be used outside of that method&#8217;s
+execution.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Injection is resolved at compile time via an annotation processor,
+and the resulting code does not have permission to inject private fields or invoke private methods.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="producing-values"><a class="anchor" href="#producing-values"></a>2.3.4. Producing values</h4>
+<div class="paragraph">
+<p>A build step may produce values for subsequent steps in several possible ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>By returning a <a href="#simple-build-items">simple build item</a> or <a href="#multi-build-items">multi build item</a> instance</p>
+</li>
+<li>
+<p>By returning a <code>List</code> of a multi build item class</p>
+</li>
+<li>
+<p>By injecting a <code>BuildProducer</code> of a simple or multi build item class</p>
+</li>
+<li>
+<p>By annotating the method with <code>@io.quarkus.deployment.annotations.Produces</code>, giving the class name of a
+<a href="#empty-build-items">empty build item</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If a simple build item is declared on a build step, it <em>must</em> be produced during that build step, otherwise an error
+will result.  Build producers which are injected into steps <em>must not</em> be used outside of that step.</p>
 </div>
 <div class="paragraph">
 <p>Note that a <code>@BuildStep</code> method will only be called if it produces something that another consumer or the final output
 requires. If there is no consumer for a particular item then it will not be produced. What is required will depend on
-the final target that is being produced, for example when running in developer mode the final output will not ask
-for Substrate-specific build items such as <code>ReflectiveClassBuildItem</code> so methods that only produce Substrate specific
+the final target that is being produced.  For example, when running in developer mode the final output will not ask
+for GraalVM-specific build items such as <code>ReflectiveClassBuildItem</code>, so methods that only produce these
 items will not be invoked.</p>
 </div>
-<div class="paragraph">
-<p>Note that private methods and fields are not allowed, as injection is resolved at compile time via an annotation processor,
-and the resulting code does not have permission to inject private fields or invoke private methods.</p>
-</div>
-<div class="paragraph">
-<p><code>BuildItem</code> instances should be immutable, as the producer/consumer model does not allow for mutation to be correctly
-ordered. This is not enforced but failure to adhere to this can result in race conditions.</p>
 </div>
 <div class="sect3">
-<h4 id="capabilities"><a class="anchor" href="#capabilities"></a>2.3.1. Capabilities</h4>
+<h4 id="consuming-values"><a class="anchor" href="#consuming-values"></a>2.3.5. Consuming values</h4>
+<div class="paragraph">
+<p>A build step may consume values from previous steps in the following ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>By injecting a <a href="#simple-build-items">simple build item</a></p>
+</li>
+<li>
+<p>By injecting an <code>Optional</code> of a simple build item class</p>
+</li>
+<li>
+<p>By injecting a <code>List</code> of a <a href="#multi-build-items">multi build item</a> class</p>
+</li>
+<li>
+<p>By annotating the method with <code>@io.quarkus.deployment.annotations.Consumes</code>, giving the class name of a
+<a href="#empty-build-items">empty build item</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Normally it is an error for a step which is included to consume a simple build item that is not produced by any other
+step.  In this way, it is guaranteed that all of the declared values will be present and non-<code>null</code> when a step is run.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes a value isn&#8217;t necessary for the build to complete, but might inform some behavior of the build step if it is
+present.  In this case, the value can be optionally injected.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Multi build values are always considered <em>optional</em>.  If not present, an empty list will be injected.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="producing-weak-values"><a class="anchor" href="#producing-weak-values"></a>2.3.5.1. Weak value production</h5>
+<div class="paragraph">
+<p>Normally a build step is included whenever it produces any build item which is in turn consumed by any other build step.  In this way,
+only the steps necessary to produce the final artifact(s) are included, and steps which pertain to extensions which are
+not installed or which only produce build items which are not relevant for the given artifact type are excluded.</p>
+</div>
+<div class="paragraph">
+<p>For cases where this is not desired behavior, the <code>@io.quarkus.deployment.annotations.Weak</code> annotation may be used.  This
+annotation indicates that the build step should not automatically be included solely on the basis of producing the annotated value.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example of producing a build item weakly</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/**
+ * This build step is only run if something consumes the ExecutorClassBuildItem.
+ */
+@BuildStep
+void createExecutor(
+        @Weak BuildProducer&lt;GeneratedClassBuildItem&gt; classConsumer,
+        BuildProducer&lt;ExecutorClassBuildItem&gt; executorClassConsumer
+) {
+        ClassWriter cw = new ClassWriter(Opcodes.ASM7);
+        String className = generateClassThatCreatesExecutor(cw); <i class="conum" data-value="1"></i><b>(1)</b>
+        classConsumer.produce(new GeneratedClassBuildItem(true, className, cw.toByteArray()));
+        executorClassConsumer.produce(new ExecutorClassBuildItem(className));
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This method (not provided in this example) would generate the class using the ASM API.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Certain types of build items are generally always consumed, such as generated classes or resources.
+An extension might produce a build item along with a generated class to facilitate the usage
+of that build item.  Such a build step would use the <code>@Weak</code> annotation on the generated class build item, while normally
+producing the other build item.  If the other build item is ultimately consumed by something, then the step would run
+and the class would be generated.  If nothing consumes the other build item, the step would not be included in the build
+process.</p>
+</div>
+<div class="paragraph">
+<p>In the example above, <code>GeneratedClassBuildItem</code> would only be produced if <code>ExecutorClassBuildItem</code> is consumed by
+some other build step.</p>
+</div>
+<div class="paragraph">
+<p>Note that when using <a href="#bytecode-recording">bytecode recording</a>, the implicitly generated class can be declared to be weak by
+using the <code>optional</code> attribute of the <code>@io.quarkus.deployment.annotations.Record</code> annotation.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example of using a bytecode recorder where the generated class is weakly produced</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/**
+ * This build step is only run if something consumes the ExecutorBuildItem.
+ */
+@BuildStep
+@Record(value = ExecutionTime.RUNTIME_INIT, optional = true) <i class="conum" data-value="1"></i><b>(1)</b>
+ExecutorBuildItem createExecutor( <i class="conum" data-value="2"></i><b>(2)</b>
+        ExecutorTemplate executorTemplate,
+        ThreadPoolConfig threadPoolConfig
+) {
+
+    return new ExecutorBuildItem(
+        setupTemplate.setupRunTime(
+            shutdownContextBuildItem,
+            threadPoolConfig,
+            launchModeBuildItem.getLaunchMode()
+        )
+    );
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Note the <code>optional</code> attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This example is using recorder proxies; see the section on <a href="#bytecode-recording">bytecode recording</a> for more information.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="capabilities"><a class="anchor" href="#capabilities"></a>2.3.6. Capabilities</h4>
 <div class="paragraph">
 <p>The <code>@BuildStep</code> annotation has a <code>providesCapabilities</code> property that can be used to provide capability information
 to other extensions about what is present in the current application. Capabilities are simply strings that are used to
@@ -784,7 +1238,7 @@ extension will provide <code>io.quarkus.transactions</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="application-archives"><a class="anchor" href="#application-archives"></a>2.3.2. Application Archives</h4>
+<h4 id="application-archives"><a class="anchor" href="#application-archives"></a>2.3.7. Application Archives</h4>
 <div class="paragraph">
 <p>The <code>@BuildStep</code> annotation can also register marker files that determine which archives on the class path are considered
 to be 'Application Archives', and will therefore get indexed. This is done via the <code>applicationArchiveMarkers</code>. For
@@ -1361,9 +1815,6 @@ a class proxy. This interface can be directly injected as a method parameter int
 methods, and at runtime will be substituted with the class whose name was passed in to <code>classProxy</code>. This is basically a
 convenience to avoid the need to explicitly load classes in the recorders.</p>
 </div>
-<div class="paragraph">
-<p>TODO: config integration</p>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -1378,7 +1829,52 @@ Instead, Quarkus extensions can make use of various <a href="cdi-reference.html"
 </div>
 </div>
 <div class="sect2">
-<h3 id="testing-extensions"><a class="anchor" href="#testing-extensions"></a>2.8. Testing Extensions</h3>
+<h3 id="extension-health-check"><a class="anchor" href="#extension-health-check"></a>2.8. Extension Health Check</h3>
+<div class="paragraph">
+<p>Health checks are provided via the <code>quarkus-smallrye-health</code> extension. It provides both liveness and readiness checks capabilities.</p>
+</div>
+<div class="paragraph">
+<p>When writing an extension, it&#8217;s beneficial to provide health checks for the extension, that can be automatically included without the developer needing to write their own.</p>
+</div>
+<div class="paragraph">
+<p>In order to provide a health check, you should do the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Import the <code>quarkus-smallrye-health</code> extension as an <strong>optional</strong> dependency in your runtime module so it will not impact the size of the application if
+health check is not included.</p>
+</li>
+<li>
+<p>Create your health check following the <a href="health-guide.html">Quarkus - MicroProfile Health</a> guide. We advise providing only
+readiness check for an extension (liveness check is designed to express the fact that an application is up and needs to be lightweight).</p>
+</li>
+<li>
+<p>Import the <code>quarkus-smallrye-health-spi</code> library in your deployment module.</p>
+</li>
+<li>
+<p>Add a build step in your deployment module that produces a <code>HealthBuildItem</code>.</p>
+</li>
+<li>
+<p>Add a way to disable the extension health check via a config item <code>quarkus.&lt;extension&gt;.health.enabled</code> that should be enabled by default.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Following is an example from the Agroal extension that provides a <code>DataSourceHealthCheck</code> to validate the readiness of a datasource.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+HealthBuildItem addHealthCheck(AgroalBuildTimeConfig agroalBuildTimeConfig) {
+    return new HealthBuildItem("io.quarkus.agroal.runtime.health.DataSourceHealthCheck",
+            agroalBuildTimeConfig.healthEnabled, "datasource");
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="testing-extensions"><a class="anchor" href="#testing-extensions"></a>2.9. Testing Extensions</h3>
 <div class="paragraph">
 <p>Testing of extensions should be done with the <code>io.quarkus.test.QuarkusUnitTest</code> runner. This runner allows
 for Arquillian-style tests that test specific functionalities. It is not intended for testing user applications, as this
@@ -1520,7 +2016,7 @@ public class PersistenceAndQuarkusConfigTest {
 </div>
 </div>
 <div class="sect2">
-<h3 id="testing-hot-reload"><a class="anchor" href="#testing-hot-reload"></a>2.9. Testing hot reload</h3>
+<h3 id="testing-hot-reload"><a class="anchor" href="#testing-hot-reload"></a>2.10. Testing hot reload</h3>
 <div class="paragraph">
 <p>It is also possible to write tests that verify an extension works correctly in development mode and can correctly
 handle updates.</p>
@@ -1639,7 +2135,7 @@ of the current project.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="native-executable-support"><a class="anchor" href="#native-executable-support"></a>2.10. Native Executable Support</h3>
+<h3 id="native-executable-support"><a class="anchor" href="#native-executable-support"></a>2.11. Native Executable Support</h3>
 <div class="paragraph">
 <p>There Quarkus provides a lot of build items that control aspects of the native executable build. This allows for extensions
 to programmatically perform tasks such as registering classes for reflection or adding static resources to the native
@@ -1675,13 +2171,22 @@ executable. Some of these build items are listed below:</p>
 <dd>
 <p>A convenience feature that allows you to control most of the above features from a single build item.</p>
 </dd>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.NativeEnableAllCharsetsBuildItem</code></dt>
+<dd>
+<p>Indicates that all charsets should be enabled in native image.</p>
+</dd>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem</code></dt>
+<dd>
+<p>A convenient way to tell Quarkus that the extension requires SSL and it should be enabled during native image build.
+When using this feature, remember to add your extension to the list of extensions that offer SSL support automatically on the <a href="https://github.com/quarkusio/quarkus/blob/master/docs/src/main/asciidoc/native-and-ssl-guide.adoc">native and ssl guide</a>.</p>
+</dd>
 </dl>
 </div>
 </div>
 <div class="sect2">
-<h3 id="ide-support-tips"><a class="anchor" href="#ide-support-tips"></a>2.11. IDE support tips</h3>
+<h3 id="ide-support-tips"><a class="anchor" href="#ide-support-tips"></a>2.12. IDE support tips</h3>
 <div class="sect3">
-<h4 id="writing-quarkus-extensions-in-eclipse"><a class="anchor" href="#writing-quarkus-extensions-in-eclipse"></a>2.11.1. Writing Quarkus extensions in Eclipse</h4>
+<h4 id="writing-quarkus-extensions-in-eclipse"><a class="anchor" href="#writing-quarkus-extensions-in-eclipse"></a>2.12.1. Writing Quarkus extensions in Eclipse</h4>
 <div class="paragraph">
 <p>The only particular aspect of writing Quarkus extensions in Eclipse is that APT (Annotation Processing Tool) is required as part of extension builds, which means you need to:</p>
 </div>
@@ -1704,9 +2209,9 @@ executable. Some of these build items are listed below:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="troubleshooting-debugging-tips"><a class="anchor" href="#troubleshooting-debugging-tips"></a>2.12. Troubleshooting / Debugging Tips</h3>
+<h3 id="troubleshooting-debugging-tips"><a class="anchor" href="#troubleshooting-debugging-tips"></a>2.13. Troubleshooting / Debugging Tips</h3>
 <div class="sect3">
-<h4 id="saving-application-generated-classes-to-disk"><a class="anchor" href="#saving-application-generated-classes-to-disk"></a>2.12.1. Saving Application Generated Classes to Disk</h4>
+<h4 id="saving-application-generated-classes-to-disk"><a class="anchor" href="#saving-application-generated-classes-to-disk"></a>2.13.1. Saving Application Generated Classes to Disk</h4>
 <div class="paragraph">
 <p>The class augmentation step of Quarkus generates classes for various purposes. Sometimes you need to view these
 classes/bytecode to debug or understand an issue. Classes that are related to application augmentation are currently held in
@@ -1715,12 +2220,12 @@ memory in a runtime class loader. To have these classes written out to disk for 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw clean install -Dquarkus.debug.generated-classes-dir=./target/app-generated-classes</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn clean install -Dquarkus.debug.generated-classes-dir=./target/app-generated-classes</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="multi-module-maven-projects-and-the-development-mode"><a class="anchor" href="#multi-module-maven-projects-and-the-development-mode"></a>2.12.2. Multi-module Maven Projects and the Development Mode</h4>
+<h4 id="multi-module-maven-projects-and-the-development-mode"><a class="anchor" href="#multi-module-maven-projects-and-the-development-mode"></a>2.13.2. Multi-module Maven Projects and the Development Mode</h4>
 <div class="paragraph">
 <p>It&#8217;s not uncommon to develop an extension in a multi-module Maven project that also contains an "example" module.
 However, if you want to run the example in the development mode then the <code>-DnoDeps</code> system property must be used in order to exclude the local project dependencies.
@@ -1734,13 +2239,13 @@ Otherwise, Quarkus attempts to monitor the extension classes and this may result
 </div>
 </div>
 <div class="sect2">
-<h3 id="sample-test-extension"><a class="anchor" href="#sample-test-extension"></a>2.13. Sample Test Extension</h3>
+<h3 id="sample-test-extension"><a class="anchor" href="#sample-test-extension"></a>2.14. Sample Test Extension</h3>
 <div class="paragraph">
 <p>We have an extension that is used to test for regressions in the extension processing. It is located in <a href="https://github.com/quarkusio/quarkus/tree/master/core/test-extension" class="bare">https://github.com/quarkusio/quarkus/tree/master/core/test-extension</a> directory. In this section we touch on some of the tasks an extension
 author will typically need to perform using the test-extension code to illustrate how the task could be done.</p>
 </div>
 <div class="sect3">
-<h4 id="features-and-capabilities"><a class="anchor" href="#features-and-capabilities"></a>2.13.1. Features and Capabilities</h4>
+<h4 id="features-and-capabilities"><a class="anchor" href="#features-and-capabilities"></a>2.14.1. Features and Capabilities</h4>
 <div class="paragraph">
 <p>When you start a Quarkus instance, you will see a line like the one highlighted in this example:</p>
 </div>
@@ -1794,7 +2299,7 @@ using the Quarkus maven plugin as shown in this example taken from the Writing J
 </div>
 </div>
 <div class="sect3">
-<h4 id="bean-defining-annotations"><a class="anchor" href="#bean-defining-annotations"></a>2.13.2. Bean Defining Annotations</h4>
+<h4 id="bean-defining-annotations"><a class="anchor" href="#bean-defining-annotations"></a>2.14.2. Bean Defining Annotations</h4>
 <div class="paragraph">
 <p>The CDI layer processes CDI beans that are either explicitly registered or that it discovers based on bean defining annotations as defined in <a href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#bean_defining_annotations"&gt;">2.5.1. Bean defining annotations</a>. You can expand this set of annotations to include annotations your extension processes using a <code>BeanDefiningAnnotationBuildItem</code> as shown in this <code>TestProcessor#registerBeanDefinningAnnotations</code> example:</p>
 </div>
@@ -1852,7 +2357,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="parsing-config-to-objects"><a class="anchor" href="#parsing-config-to-objects"></a>2.13.3. Parsing Config to Objects</h4>
+<h4 id="parsing-config-to-objects"><a class="anchor" href="#parsing-config-to-objects"></a>2.14.3. Parsing Config to Objects</h4>
 <div class="paragraph">
 <p>One of the main things an extension is likely to do is completely separate the configuration phase of behavior from the runtime phase. Frameworks often do parsing/load of configuration on startup that can be done during build time to both reduce the runtime dependencies on frameworks like xml parsers as well as reducing the startup time the parsing incurs.</p>
 </div>
@@ -1926,7 +2431,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="scanning-deployments-using-jandex"><a class="anchor" href="#scanning-deployments-using-jandex"></a>2.13.4. Scanning Deployments Using Jandex</h4>
+<h4 id="scanning-deployments-using-jandex"><a class="anchor" href="#scanning-deployments-using-jandex"></a>2.14.4. Scanning Deployments Using Jandex</h4>
 <div class="paragraph">
 <p>If your extension defines annotations or interfaces that mark beans needing to be processed, you can locate these beans using the Jandex API, a Java annotation indexer and offline reflection library. The following <code>TestProcessor#scanForBeans</code> method shows how to find the beans annotated with our <code>@TestAnnotation</code> that also implement the <code>IConfigConsumer</code> interface:</p>
 </div>
@@ -1986,7 +2491,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="interacting-with-extension-beans"><a class="anchor" href="#interacting-with-extension-beans"></a>2.13.5. Interacting With Extension Beans</h4>
+<h4 id="interacting-with-extension-beans"><a class="anchor" href="#interacting-with-extension-beans"></a>2.14.5. Interacting With Extension Beans</h4>
 <div class="paragraph">
 <p>You can use the <code>io.quarkus.arc.runtime.BeanContainer</code> interface to interact with your extension beans. The following <code>configureBeans</code> methods illustrate interacting with the beans scanned for in the previous section:</p>
 </div>
@@ -2043,7 +2548,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="manage-non-cdi-service"><a class="anchor" href="#manage-non-cdi-service"></a>2.13.6. Manage Non-CDI Service</h4>
+<h4 id="manage-non-cdi-service"><a class="anchor" href="#manage-non-cdi-service"></a>2.14.6. Manage Non-CDI Service</h4>
 <div class="paragraph">
 <p>A common purpose for an extension is to integrate a non-CDI aware service into the CDI based Quarkus runtime. Step 1 of this task is to load any configuration needed in a STATIC_INIT build step as we did in <a href="#parsing-config-to-objects">Parsing Config to Objects</a>. Now we need to create an instance of the service using the configuration. Let&#8217;s return to the <code>TestProcessor#parseServiceXmlConfig</code> method to see how this can be done.</p>
 </div>
@@ -2105,7 +2610,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </table>
 </div>
 <div class="sect4">
-<h5 id="starting-a-service"><a class="anchor" href="#starting-a-service"></a>2.13.6.1. Starting a Service</h5>
+<h5 id="starting-a-service"><a class="anchor" href="#starting-a-service"></a>2.14.6.1. Starting a Service</h5>
 <div class="paragraph">
 <p>Now that you have recorded the creation of a service during the build phase, you need to record how to start the service at runtime during booting. You do this with a RUNTIME_INIT build step as shown in the <code>TestProcessor#startRuntimeService</code> method.</p>
 </div>
@@ -2173,7 +2678,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="startup-and-shutdown-events"><a class="anchor" href="#startup-and-shutdown-events"></a>2.13.7. Startup and Shutdown Events</h4>
+<h4 id="startup-and-shutdown-events"><a class="anchor" href="#startup-and-shutdown-events"></a>2.14.7. Startup and Shutdown Events</h4>
 <div class="paragraph">
 <p>The Quarkus container supports startup and shutdown lifecycle events to notify components of the container startup
 and shutdown. There are CDI events fired that components can observe are illustrated in this example:</p>
@@ -2250,7 +2755,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </div>
 </div>
 <div class="sect3">
-<h4 id="register-resources-for-use-in-native-image"><a class="anchor" href="#register-resources-for-use-in-native-image"></a>2.13.8. Register Resources for Use in Native Image</h4>
+<h4 id="register-resources-for-use-in-native-image"><a class="anchor" href="#register-resources-for-use-in-native-image"></a>2.14.8. Register Resources for Use in Native Image</h4>
 <div class="paragraph">
 <p>Not all configuration or resources can be consumed at build time. If you have classpath resources that the runtime needs to access, you need to inform the build phase that these resources need to be copied into the native image. This is done by producing one or more <code>SubstrateResourceBuildItem</code> or <code>SubstrateResourceBundleBuildItem</code> in the case of resource bundles. Examples of this are shown in this sample <code>registerNativeImageReources</code> build step:</p>
 </div>
@@ -2293,7 +2798,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </div>
 </div>
 <div class="sect3">
-<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.13.9. Object Substitution</h4>
+<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.14.9. Object Substitution</h4>
 <div class="paragraph">
 <p>Objects created during the build phase that are passed into the runtime need to have a default constructor in order for them to be created and configured at startup of the runtime from the build time state. If an object does not have a default constructor you will see an error similar to the following during generation of the augmented artifacts:</p>
 </div>
@@ -2390,7 +2895,7 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
 </div>
 </div>
 <div class="sect3">
-<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.13.10. Replacing Classes in the Native Image</h4>
+<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.14.10. Replacing Classes in the Native Image</h4>
 <div class="paragraph">
 <p>The Graal SDK supports substitutions of classes in the native image. An example of how one could replace the <code>XmlConfig/XmlData</code> classes with versions that have no JAXB annotation dependencies is shown in these example classes:</p>
 </div>
@@ -2622,9 +3127,72 @@ All the other types of blocks (source, admonitions&#8230;&#8203;) are supported.
 </tr>
 </table>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>By default, the doc generator will use the hyphenated field name as the key of a <code>java.util.Map</code> configuration item.
+To override this default and have a user friendly key (independent of implementation details), you may use the <code>io.quarkus.runtime.annotations.ConfigDocMapKey</code> annotation.
+See the following example,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConfigRoot
+public class SomeConfig {
+    /**
+     * Namespace configuration.
+     */
+    @ConfigItem(name = ConfigItem.PARENT)
+    @ConfigDocMapKey("cache-name") <i class="conum" data-value="1"></i><b>(1)</b>
+    Map&lt;String, CaffeineNamespaceConfig&gt; namespace;
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This will generate a configuration map key named <code>quarkus.some."cache-name"</code> instead of <code>quarkus.some."namespace"</code>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="generating-the-documentation"><a class="anchor" href="#generating-the-documentation"></a>3.2. Generating the documentation</h3>
+<h3 id="writing-section-documentation"><a class="anchor" href="#writing-section-documentation"></a>3.2. Writing section documentation</h3>
+<div class="paragraph">
+<p>If you wish to generate configuration section of a given <code>@ConfigGroup</code>, Quarkus has got you covered with the <code>@ConfigDocSection</code> annotation.
+See the code  example below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">/**
+* Config group related configuration.
+* Amazing introduction here
+*/
+@ConfigItem
+@ConfigDocSection <i class="conum" data-value="1"></i><b>(1)</b>
+public ConfigGroupConfig configGroup;</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This will add a section documentation for the <code>confgiGroup</code> config item in the generated documentation.
+Section&#8217;s title and introduction will be derived from the javadoc of the configuration item. The first sentence from the javadoc is considered as the section title and the remaining sentences used as section introduction.
+You can also use the <code>@asciidoclet</code> tag as shown above.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="generating-the-documentation"><a class="anchor" href="#generating-the-documentation"></a>3.3. Generating the documentation</h3>
 <div class="paragraph">
 <p>Generating the documentation is easy:</p>
 </div>
@@ -2643,7 +3211,7 @@ All the other types of blocks (source, admonitions&#8230;&#8203;) are supported.
 </div>
 </div>
 <div class="sect2">
-<h3 id="including-the-documentation-in-the-extension-guide"><a class="anchor" href="#including-the-documentation-in-the-extension-guide"></a>3.3. Including the documentation in the extension guide</h3>
+<h3 id="including-the-documentation-in-the-extension-guide"><a class="anchor" href="#including-the-documentation-in-the-extension-guide"></a>3.4. Including the documentation in the extension guide</h3>
 <div class="paragraph">
 <p>Now that you have generated the configuration reference documentation for your extension, you need to include it in your guide (and review it).</p>
 </div>

@@ -125,8 +125,8 @@ Version 19.2.0.1 is required.</p>
 <p>The <code>GRAALVM_HOME</code> environment variable configured appropriately</p>
 </li>
 <li>
-<p>The <code>native-image</code> tool must be installed; this can be done by running <code>gu install native-image</code> from your GraalVM
-directory</p>
+<p>The <code>native-image</code> tool must be installed; this can be done by running <code>./gu install native-image</code> from your GraalVM
+<code>bin</code> directory</p>
 </li>
 <li>
 <p>Apache Maven 3.5.3+</p>
@@ -200,6 +200,33 @@ directory</p>
 <p>Some previous releases of GraalVM included the <code>native-image</code> tool by default.  This is no longer the
 case; it now has to be installed as a second step after GraalVM itself is installed.  Use <code>gu install native-image</code>
 to do so.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>GraalVM binaries are not (yet) notarized for macOS Catalina as reported in this <a href="https://github.com/oracle/graal/issues/1724">GraalVM issue</a>.
+To bypass the issue, it is recommended to run the below command instead of disabling macOS Gatekeeper entirely:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">xattr -r -d com.apple.quarantine $HOME/Development/graalvm <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Recursively delete the <code>com.apple.quarantine</code> extended attribute on the GraalVM root directory <code>$HOME/Development/graalvm</code> we set up above.</p>
+</li>
+</ol>
 </div>
 </td>
 </tr>

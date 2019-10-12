@@ -64,116 +64,70 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Undertow</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.servlet.context-path">quarkus.servlet.context-path</a></p>
-<p class="tableblock">The context path to serve all Servlet context from.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.servlet.buffer-size">quarkus.servlet.buffer-size</a></p>
-<p class="tableblock">The buffer size to use for Servlet.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.servlet.direct-buffers">quarkus.servlet.direct-buffers</a></p>
-<p class="tableblock">If Servlet should use direct buffers, this gives maximum performance but can be problematic in memory constrained environments.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.servlet.context-path</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.servlet.context-path" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.servlet.context-path</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The context path to serve all Servlet context from. This will also affect any resources that run as a Servlet, e.g. JAX-RS</p>
-</div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
+<p>The context path to serve all Servlet context from. This will also affect any resources that run as a Servlet, e.g. JAX-RS. Note that this is relative to the HTTP root path set in quarkus.http.root-path, so if the context path is /bar and the http root is /foo then the actual Servlet path will be /foo/bar.</p>
 </div>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.servlet.buffer-size</code></p>
 </div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.servlet.buffer-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.servlet.buffer-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The buffer size to use for Servlet. If this is not specified the default will depend on the amount of available memory. If there is less than 64mb it will default to 512b heap buffer, less that 128mb 1k direct buffer and otherwise 16k direct buffers.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>MemorySize</code>  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.servlet.direct-buffers</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.servlet.direct-buffers" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.servlet.direct-buffers</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>If Servlet should use direct buffers, this gives maximum performance but can be problematic in memory constrained environments</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
 <div id="memory-size-note-anchor" class="admonitionblock note">
 <table>
 <tr>
@@ -189,8 +143,6 @@ If no suffix is given, assume bytes.</p>
 </td>
 </tr>
 </table>
-</div>
-</div>
 </div>
     </div>
   </div>

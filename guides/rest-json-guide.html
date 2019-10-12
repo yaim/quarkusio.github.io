@@ -71,7 +71,7 @@
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
 <li><a href="#creating-your-first-json-rest-service">Creating your first JSON REST service</a>
 <ul class="sectlevel2">
-<li><a href="#more-on-our-jackson-support">More on our Jackson support</a></li>
+<li><a href="#configuring-json-support">Configuring JSON support</a></li>
 </ul>
 </li>
 <li><a href="#creating-a-frontend">Creating a frontend</a></li>
@@ -319,30 +319,67 @@ It allows to reduce the size of the native executable.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="more-on-our-jackson-support"><a class="anchor" href="#more-on-our-jackson-support"></a>More on our Jackson support</h3>
+<h3 id="configuring-json-support"><a class="anchor" href="#configuring-json-support"></a>Configuring JSON support</h3>
+<div class="sect3">
+<h4 id="json-b"><a class="anchor" href="#json-b"></a>JSON-B</h4>
 <div class="paragraph">
-<p>As stated above, Quarkus provides the option of using <a href="https://github.com/FasterXML/jackson">Jackson</a> instead of JSON-B via the use of the <code>quarkus-resteasy-jackson</code> extension.</p>
+<p>Quarkus makes it very easy to configure various JSON-B settings via CDI beans. The simplest (and suggested) approach is to define a CDI bean of type <code>io.quarkus.jsonb.JsonbConfigCustomizer</code>
+inside of which any JSON-B configuration can be applied.</p>
 </div>
 <div class="paragraph">
-<p>When using Jackson, Quarkus allows users to customize the <code>ObjectMapper</code> very easily - all that needs to be done is to configure a CDI producer bean like so:</p>
+<p>If for example a custom serializer named <code>FooSerializer</code> for type <code>com.example.Foo</code> needs to be registered with JSON-B, the addition of a bean like the following would suffice:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
-public class CustomObjectMapperConfig {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.quarkus.jsonb.JsonbConfigCustomizer;
+import javax.inject.Singleton;
+import javax.json.bind.JsonbConfig;
+import javax.json.bind.serializer.JsonbSerializer;
 
-    @Singleton
-    @Produces
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        // perform configuration
-        return objectMapper;
+@Singleton
+public class FooSerializerRegistrationCustomizer implements JsonbConfigCustomizer {
+
+    public void customize(JsonbConfig config) {
+        config.withSerializers(new FooSerializer());
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If no such bean is provided, a default <code>ObjectMapper</code> is used.</p>
+<p>A more advanced option would be to directly provide a bean of <code>javax.json.bind.JsonbConfig</code> or in the extreme case to provide a bean of type <code>javax.json.bind.Jsonb</code>.
+If the latter approach is leveraged it is very important to manually inject and apply all <code>io.quarkus.jsonb.JsonbConfigCustomizer</code> beans in the CDI producer that produces <code>javax.json.bind.Jsonb</code>.
+Failure to do so will prevent JSON-B specific customizations provided by various extensions from being applied.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="jackson"><a class="anchor" href="#jackson"></a>Jackson</h4>
+<div class="paragraph">
+<p>As stated above, Quarkus provides the option of using <a href="https://github.com/FasterXML/jackson">Jackson</a> instead of JSON-B via the use of the <code>quarkus-resteasy-jackson</code> extension.</p>
+</div>
+<div class="paragraph">
+<p>Following the same approach as described in the previous section, Jackson&#8217;s <code>ObjectMapper</code> can be configured using a <code>io.quarkus.jackson.ObjectMapperCustomizer</code> bean.
+An example where a custom module needs to be registered would like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.jackson.ObjectMapperCustomizer;
+import javax.inject.Singleton;
+
+@Singleton
+public class RegisterCustomModuleCustomizer implements ObjectMapperCustomizer {
+
+    public void customize(ObjectMapper mapper) {
+        mapper.registerModule(new CustomModule());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Users can even provide their own <code>ObjectMapper</code> bean if they so choose.
+If this is done, it is very important to manually inject and apply all <code>io.quarkus.jackson.ObjectMapperCustomizer</code> beans in the CDI producer that produces <code>ObjectMapper</code>.
+Failure to do so will prevent Jackson specific customizations provided by various extensions from being applied.</p>
+</div>
 </div>
 </div>
 </div>
@@ -650,15 +687,14 @@ processing, for instance when the user does not have the permissions to access t
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.json;
 
-import javax.servlet.http.HttpServletRequest;
+import io.vertx.core.http.HttpServerRequest;
+import org.jboss.logging.Logger;
+
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
-
-import org.jboss.logging.Logger;
-
 
 @Provider
 public class LoggingFilter implements ContainerRequestFilter {
@@ -669,14 +705,14 @@ public class LoggingFilter implements ContainerRequestFilter {
     UriInfo info;
 
     @Context
-    HttpServletRequest request;
+    HttpServerRequest request;
 
     @Override
     public void filter(ContainerRequestContext context) {
 
         final String method = context.getMethod();
         final String path = info.getPath();
-        final String address = request.getRemoteAddr();
+        final String address = request.remoteAddress().toString();
 
         LOG.infof("Request %s %s from IP %s", method, path, address);
     }

@@ -136,7 +136,7 @@ them to the client, you can do it like this:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    // Get the price-stream Kafka topic
     @Inject
-    @Stream("price-stream") Publisher&lt;Double&gt; prices;
+    @Channel("price-stream") Publisher&lt;Double&gt; prices;
 
     @Transactional
     @GET

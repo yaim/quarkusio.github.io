@@ -335,7 +335,7 @@ Creates the <code>src/main/java/org/acme/quarkus/sample/PriceResource.java</code
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
 
-import io.smallrye.reactive.messaging.annotations.Stream;
+import io.smallrye.reactive.messaging.annotations.Channel;
 import org.reactivestreams.Publisher;
 
 import javax.inject.Inject;
@@ -351,7 +351,7 @@ import javax.ws.rs.core.MediaType;
 public class PriceResource {
 
     @Inject
-    @Stream("my-data-stream") Publisher&lt;Double&gt; prices;         <i class="conum" data-value="1"></i><b>(1)</b>
+    @Channel("my-data-stream") Publisher&lt;Double&gt; prices;         <i class="conum" data-value="1"></i><b>(1)</b>
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -373,7 +373,7 @@ public class PriceResource {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Injects the <code>my-data-stream</code> stream using the <code>@Stream</code> qualifier</td>
+<td>Injects the <code>my-data-stream</code> channel using the <code>@Channel</code> qualifier</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -490,7 +490,7 @@ Then, you just need to run the application using:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -518,7 +518,7 @@ If you started the AMQP broker with docker compose, stop it using <code>CTRL+C</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn package -Pnative</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative</code></pre>
 </div>
 </div>
 </div>

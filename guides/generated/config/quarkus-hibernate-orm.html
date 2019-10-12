@@ -64,180 +64,31 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Hibernate Orm</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.dialect">quarkus.hibernate-orm.dialect</a></p>
-<p class="tableblock">Class name of the Hibernate ORM dialect.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.dialect.storage-engine">quarkus.hibernate-orm.dialect.storage-engine</a></p>
-<p class="tableblock">The storage engine to use when the dialect supports multiple storage engines.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.sql-load-script">quarkus.hibernate-orm.sql-load-script</a></p>
-<p class="tableblock">Name of the file containing the SQL statements to execute when Hibernate ORM starts.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.batch-fetch-size">quarkus.hibernate-orm.batch-fetch-size</a></p>
-<p class="tableblock">The size of the batches used when loading entities and collections.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>-1</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.query.query-plan-cache-max-size">quarkus.hibernate-orm.query.query-plan-cache-max-size</a></p>
-<p class="tableblock">The maximum size of the query plan cache.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.query.default-null-ordering">quarkus.hibernate-orm.query.default-null-ordering</a></p>
-<p class="tableblock">Default precedence of null values in <code>ORDER BY</code> clauses.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.database.generation">quarkus.hibernate-orm.database.generation</a></p>
-<p class="tableblock">Select whether the database schema is generated or not.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.database.generation.halt-on-error">quarkus.hibernate-orm.database.generation.halt-on-error</a></p>
-<p class="tableblock">Whether we should stop on the first error when applying the schema.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.database.default-catalog">quarkus.hibernate-orm.database.default-catalog</a></p>
-<p class="tableblock">The default catalog to use for the database objects.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.database.default-schema">quarkus.hibernate-orm.database.default-schema</a></p>
-<p class="tableblock">The default schema to use for the database objects.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.database.charset">quarkus.hibernate-orm.database.charset</a></p>
-<p class="tableblock">The charset of the database.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.jdbc.timezone">quarkus.hibernate-orm.jdbc.timezone</a></p>
-<p class="tableblock">The time zone pushed to the JDBC driver.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.jdbc.statement-fetch-size">quarkus.hibernate-orm.jdbc.statement-fetch-size</a></p>
-<p class="tableblock">How many rows are fetched at a time by the JDBC driver.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.jdbc.statement-batch-size">quarkus.hibernate-orm.jdbc.statement-batch-size</a></p>
-<p class="tableblock">The number of updates (inserts, updates and deletes) that are sent by the JDBC driver at one time for execution.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.log.sql">quarkus.hibernate-orm.log.sql</a></p>
-<p class="tableblock">Show SQL logs and format them nicely.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.log.jdbc-warnings">quarkus.hibernate-orm.log.jdbc-warnings</a></p>
-<p class="tableblock">Whether JDBC warnings should be collected and logged.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.statistics">quarkus.hibernate-orm.statistics</a></p>
-<p class="tableblock">Whether statistics collection is enabled.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.cache.cache.expiration.max-idle">quarkus.hibernate-orm.cache."&lt;cache&gt;".expiration.max-idle</a></p>
-<p class="tableblock">The maximum time before an object of the cache is considered expired.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-orm.cache.cache.memory.object-count">quarkus.hibernate-orm.cache."&lt;cache&gt;".memory.object-count</a></p>
-<p class="tableblock">The maximum number of objects kept in memory in the cache.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.dialect</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.hibernate-orm.dialect" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.dialect</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Class name of the Hibernate ORM dialect. The complete list of bundled dialects is available in the
@@ -258,20 +109,16 @@ MariaDB, Microsoft SQL Server and H2.</p>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.dialect.storage-engine</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.dialect.storage-engine" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.dialect.storage-engine</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The storage engine to use when the dialect supports multiple storage engines.</p>
@@ -279,20 +126,16 @@ MariaDB, Microsoft SQL Server and H2.</p>
 <div class="paragraph">
 <p>E.g. <code>MyISAM</code> or <code>InnoDB</code> for MySQL.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.sql-load-script</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.sql-load-script" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.sql-load-script</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Name of the file containing the SQL statements to execute when Hibernate ORM starts.
@@ -340,20 +183,16 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>import.sql (DEV,TEST)</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.batch-fetch-size</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.batch-fetch-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.batch-fetch-size</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The size of the batches used when loading entities and collections.</p>
@@ -361,41 +200,47 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="paragraph">
 <p><code>-1</code> means batch loading is disabled. This is the default.</p>
 </div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>-1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.statistics</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
 <div class="paragraph">
-<p>Type: <code>int</code></p>
-</div>
-<div class="paragraph">
-<p>Defaults to: <code>-1</code></p>
+<p>Whether statistics collection is enabled.</p>
 </div>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Query related configuration</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.query.query-plan-cache-max-size</code></p>
 </div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.query.query-plan-cache-max-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.query.query-plan-cache-max-size</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum size of the query plan cache.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.query.default-null-ordering</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.query.default-null-ordering" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.query.default-null-ordering</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Default precedence of null values in <code>ORDER BY</code> clauses.</p>
@@ -403,263 +248,195 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="paragraph">
 <p>Valid values are: <code>none</code>, <code>first</code>, <code>last</code>.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Database related configuration</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.database.generation</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.database.generation" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.database.generation</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Select whether the database schema is generated or not. <code>drop-and-create</code> is awesome in development mode. Accepted values: <code>none</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop</code>, <code>update</code>.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>none</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.database.generation.halt-on-error</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.database.generation.halt-on-error" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.database.generation.halt-on-error</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Whether we should stop on the first error when applying the schema.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.database.default-catalog</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.database.default-catalog" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.database.default-catalog</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The default catalog to use for the database objects.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.database.default-schema</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.database.default-schema" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.database.default-schema</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The default schema to use for the database objects.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.database.charset</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.database.charset" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.database.charset</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The charset of the database.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">JDBC related configuration</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.jdbc.timezone</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.jdbc.timezone" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.jdbc.timezone</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The time zone pushed to the JDBC driver.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.jdbc.statement-fetch-size</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.jdbc.statement-fetch-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.jdbc.statement-fetch-size</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>How many rows are fetched at a time by the JDBC driver.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.jdbc.statement-batch-size</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.jdbc.statement-batch-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.jdbc.statement-batch-size</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The number of updates (inserts, updates and deletes) that are sent by the JDBC driver at one time for execution.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Logging configuration</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.log.sql</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.log.sql" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.log.sql</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Show SQL logs and format them nicely.
  Setting it to true is obviously not recommended in production.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.log.jdbc-warnings</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.log.jdbc-warnings" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.log.jdbc-warnings</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Whether JDBC warnings should be collected and logged.
- Default value depends on the dialect.</p>
-</div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
+<p>Whether JDBC warnings should be collected and logged.</p>
 </div>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>depends on dialect</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Caching configuration</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.cache."cache".expiration.max-idle</code></p>
 </div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.statistics" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.statistics</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>Whether statistics collection is enabled.</p>
-</div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
-</div>
-<div class="paragraph">
-<p>Defaults to: <code>false</code></p>
-</div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.cache.cache.expiration.max-idle" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.cache."&lt;cache&gt;".expiration.max-idle</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum time before an object of the cache is considered expired.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-orm.cache."cache".memory.object-count</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-orm.cache.cache.memory.object-count" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-orm.cache."&lt;cache&gt;".memory.object-count</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum number of objects kept in memory in the cache.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>long</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
 <div id="duration-note-anchor" class="admonitionblock note">
 <table>
 <tr>
@@ -680,8 +457,6 @@ Otherwise, <code>PT</code> is implicitly appended to the value to obtain a stand
 </td>
 </tr>
 </table>
-</div>
-</div>
 </div>
     </div>
   </div>

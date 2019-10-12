@@ -73,6 +73,7 @@
 </li>
 <li><a href="#testing">Testing</a></li>
 <li><a href="#note-on-implementing-the-watcher-interface">Note on implementing the Watcher interface</a></li>
+<li><a href="#access-to-the-kubernetes-api">Access to the Kubernetes API</a></li>
 </ul>
     </div>
     <div>
@@ -107,10 +108,10 @@ to your project by running the following command in your project base directory.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
-        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-kubernetes-client&lt;/artifactId&gt;
-    &lt;/dependency&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-kubernetes-client&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -129,7 +130,7 @@ quarkus.kubernetes-client.namespace=default</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note that the full list of properties is available in the [KubernetesClientBuildConfig](<a href="https://github.com/quarkusio/quarkus/blob/master/extensions/kubernetes-client/runtime/src/main/java/io/quarkus/kubernetes/client/runtime/KubernetesClientBuildConfig.java" class="bare">https://github.com/quarkusio/quarkus/blob/master/extensions/kubernetes-client/runtime/src/main/java/io/quarkus/kubernetes/client/runtime/KubernetesClientBuildConfig.java</a>) class.</p>
+<p>Note that the full list of properties is available in the <a href="https://github.com/quarkusio/quarkus/blob/master/extensions/kubernetes-client/runtime/src/main/java/io/quarkus/kubernetes/client/runtime/KubernetesClientBuildConfig.java">KubernetesClientBuildConfig</a> class.</p>
 </div>
 <div class="sect2">
 <h3 id="overriding"><a class="anchor" href="#overriding"></a>Overriding</h3>
@@ -225,11 +226,11 @@ public class KubernetesClientTest {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
-        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-test-kubernetes-client&lt;/artifactId&gt;
-        &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-test-kubernetes-client&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -239,22 +240,22 @@ public class KubernetesClientTest {
 <div class="sectionbody">
 <div class="paragraph">
 <p>Due to the restrictions imposed by GraalVM, extra care needs to be taken when implementing a <code>io.fabric8.kubernetes.client.Watcher</code> if the application is intended to work in native mode.
-Essentially every <code>Watcher</code> implementation needs to specify the Kubernetes model class that it handles via the <code>Watcher&#8217;s generic type at class definition time.
-To better understand this, suppose we want to watch for changes to Kubernetes `Pod</code> resources. There are a couple ways to write such a Watcher that are guaranteed to work in native:</p>
+Essentially every <code>Watcher</code> implementation needs to specify the Kubernetes model class that it handles via the <code>Watcher</code>'s generic type at class definition time.
+To better understand this, suppose we want to watch for changes to Kubernetes <code>Pod</code> resources. There are a couple ways to write such a <code>Watcher</code> that are guaranteed to work in native:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">client.pods().watch(new Watcher&lt;Pod&gt;() {
-      @Override
-      public void eventReceived(Action action, Pod pod) {
+    @Override
+    public void eventReceived(Action action, Pod pod) {
         // do something
-      }
+    }
 
-      @Override
-      public void onClose(KubernetesClientException e) {
+    @Override
+    public void onClose(KubernetesClientException e) {
         // do something
-      }
-    });</code></pre>
+    }
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -263,15 +264,15 @@ To better understand this, suppose we want to watch for changes to Kubernetes `P
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class PodResourceWatcher implements Watcher&lt;Pod&gt; {
-      @Override
-      public void eventReceived(Action action, Pod pod) {
+    @Override
+    public void eventReceived(Action action, Pod pod) {
         // do something
-      }
+    }
 
-      @Override
-      public void onClose(KubernetesClientException e) {
+    @Override
+    public void onClose(KubernetesClientException e) {
         // do something
-      }
+    }
 }
 
 ...
@@ -292,10 +293,10 @@ client.pods().watch(new PodResourceWatcher());</code></pre>
 
 
 client.pods().watch(new MyWatcher&lt;Pod&gt;() {
-  @Override
-  public void eventReceived(Action action, Pod pod) {
-    // do something
-  }
+    @Override
+    public void eventReceived(Action action, Pod pod) {
+        // do something
+    }
 });</code></pre>
 </div>
 </div>
@@ -315,19 +316,66 @@ thus making Quarkus unable to properly determine the Kubernetes model class for 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class ResourceWatcher&lt;T extends HasMetadata&gt; implements Watcher&lt;T&gt; {
-      @Override
-      public void eventReceived(Action action, T resource) {
+    @Override
+    public void eventReceived(Action action, T resource) {
         // do something
-      }
+    }
 
-      @Override
-      public void onClose(KubernetesClientException e) {
+    @Override
+    public void onClose(KubernetesClientException e) {
         // do something
-      }
+    }
 }
 
 client.pods().watch(new ResourceWatcher&lt;Pod&gt;());</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="access-to-the-kubernetes-api"><a class="anchor" href="#access-to-the-kubernetes-api"></a>Access to the Kubernetes API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In many cases in order to access the Kubernetes API server a <code>ServiceAccount</code>, <code>Role</code> and <code>RoleBinding</code> will be necessary.
+An example that allows listing all pods could look something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: &lt;applicationName&gt;
+  namespace: &lt;namespace&gt;
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: &lt;applicationName&gt;
+  namespace: &lt;namespace&gt;
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: &lt;applicationName&gt;
+  namespace: &lt;namespace&gt;
+roleRef:
+  kind: Role
+  name: &lt;applicationName&gt;
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: &lt;applicationName&gt;
+    namespace: &lt;namespace&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace <code>&lt;applicationName&gt;</code> and <code>&lt;namespace&gt;</code> with your values.
+Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">Configure Service Accounts for Pods</a> to get further information.</p>
 </div>
 </div>
 </div>

@@ -74,6 +74,7 @@
 <li><a href="#adding-a-readiness-health-check-procedure">Adding a readiness health check procedure</a></li>
 <li><a href="#negative-health-check-procedures">Negative health check procedures</a></li>
 <li><a href="#adding-user-specific-data-to-the-health-check-response">Adding user-specific data to the health check response</a></li>
+<li><a href="#extension-health-checks">Extension health checks</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
     </div>
@@ -474,6 +475,21 @@ error along with the health check response.</p>
                     .withData("error", e.getMessage()); // pass the exception message
         }</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="extension-health-checks"><a class="anchor" href="#extension-health-checks"></a>Extension health checks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some extension may provide default health checks, including the extension will automatically register its health checks.</p>
+</div>
+<div class="paragraph">
+<p>For example, <code>quarkus-agroal</code> that is used to manage Quarkus datasource(s) automatically register a readiness health check
+that will validate each datasources: <a href="datasource-guide.html#datasource-health-check">Datasource Health Check</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can disable extension health check via the property <code>quarkus.health.extensions.enabled</code> so none will be automatically registered.</p>
 </div>
 </div>
 </div>

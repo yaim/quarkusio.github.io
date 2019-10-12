@@ -64,60 +64,31 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Resteasy Server</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.resteasy.singleton-resources">quarkus.resteasy.singleton-resources</a></p>
-<p class="tableblock">If this is true then JAX-RS will use only a single instance of a resource class to service all requests.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.resteasy.path">quarkus.resteasy.path</a></p>
-<p class="tableblock">Set this to override the default path for JAX-RS resources if there are no annotated application classes.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.resteasy.singleton-resources</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.resteasy.singleton-resources" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.resteasy.singleton-resources</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>If this is true then JAX-RS will use only a single instance of a resource class to service all requests.
@@ -125,41 +96,27 @@
  If the resource class has an explicit CDI scope annotation then the value of this annotation will always be used to control the lifecycle of the resource class.
  IMPLEMENTATION NOTE: <code>javax.ws.rs.Path</code> turns into a CDI stereotype with singleton scope. As a result, if a user annotates a JAX-RS resource with a stereotype which has a different default scope the deployment fails with IllegalStateException.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.resteasy.path</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.resteasy.path" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.resteasy.path</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Set this to override the default path for JAX-RS resources if there are no annotated application classes.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>/</code></p>
-</div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-</div>
-</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/</code></p></td>
+</tr>
+</tbody>
+</table>
     </div>
   </div>
 </div>

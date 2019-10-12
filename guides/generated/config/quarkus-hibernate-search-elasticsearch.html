@@ -64,355 +64,31 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus Hibernate Search Elasticsearch</h1>
     <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#summary">Summary</a></li>
-<li><a href="#details">Details</a></li>
-</ul>
+      
     </div>
     <div>
-      <div class="sect1">
-<h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
-<div class="sectionbody">
-<div class="paragraph">
+      <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 65%;">
-<col style="width: 17%;">
-<col style="width: 13%;">
-<col style="width: 5%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Configuration property</th>
 <th class="tableblock halign-left valign-middle">Type</th>
 <th class="tableblock halign-left valign-middle">Default</th>
-<th class="tableblock halign-center valign-middle">Lifecycle</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.version">quarkus.hibernate-search.elasticsearch.version</a></p>
-<p class="tableblock">The version of Elasticsearch used in the cluster.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">ElasticsearchVersion</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.analysis-configurer">quarkus.hibernate-search.elasticsearch.analysis-configurer</a></p>
-<p class="tableblock">The class or the name of the bean used to configure full text analysis (e.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.default-backend">quarkus.hibernate-search.default-backend</a></p>
-<p class="tableblock">If not using the default backend configuration, the name of the default backend that is part of the <code>additional-backends</code>.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.hosts">quarkus.hibernate-search.elasticsearch.hosts</a></p>
-<p class="tableblock">The list of hosts of the Elasticsearch servers.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.username">quarkus.hibernate-search.elasticsearch.username</a></p>
-<p class="tableblock">The username used for authentication.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.password">quarkus.hibernate-search.elasticsearch.password</a></p>
-<p class="tableblock">The password used for authentication.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.connection-timeout">quarkus.hibernate-search.elasticsearch.connection-timeout</a></p>
-<p class="tableblock">The connection timeout.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.max-connections">quarkus.hibernate-search.elasticsearch.max-connections</a></p>
-<p class="tableblock">The maximum number of connections to all the Elasticsearch servers.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.max-connections-per-route">quarkus.hibernate-search.elasticsearch.max-connections-per-route</a></p>
-<p class="tableblock">The maximum number of connections per Elasticsearch server.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.discovery.enabled">quarkus.hibernate-search.elasticsearch.discovery.enabled</a></p>
-<p class="tableblock">Defines if automatic discovery is enabled.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.discovery.refresh-interval">quarkus.hibernate-search.elasticsearch.discovery.refresh-interval</a></p>
-<p class="tableblock">Refresh interval of the node list.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.discovery.default-scheme">quarkus.hibernate-search.elasticsearch.discovery.default-scheme</a></p>
-<p class="tableblock">The scheme that should be used for the new nodes discovered.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy</a></p>
-<p class="tableblock">The strategy used for index lifecycle.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status</a></p>
-<p class="tableblock">The minimal cluster status required.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout</a></p>
-<p class="tableblock">How long we should wait for the status before failing the bootstrap.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.index-defaults.refresh-after-write">quarkus.hibernate-search.elasticsearch.index-defaults.refresh-after-write</a></p>
-<p class="tableblock">Defines if the indexes should be refreshed after writes.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup-strategy">quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup-strategy</a></p>
-<p class="tableblock">The strategy to use when loading entities during the execution of a search query.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>skip</code>, <code>persistence-context</code>, <code>persistence-context-then-second-level-cache</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.query.loading.fetch-size">quarkus.hibernate-search.elasticsearch.query.loading.fetch-size</a></p>
-<p class="tableblock">The fetch size to use when loading entities during the execution of a search query.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy">quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy</a></p>
-<p class="tableblock">The synchronization strategy to use when indexing automatically.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>queued</code>, <code>committed</code>, <code>searchable</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check">quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check</a></p>
-<p class="tableblock">Whether to check if dirty properties are relevant to indexing before actually reindexing an entity.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.version">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".version</a></p>
-<p class="tableblock">The version of Elasticsearch used in the cluster.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">ElasticsearchVersion</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.analysis-configurer">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".analysis-configurer</a></p>
-<p class="tableblock">The class or the name of the bean used to configure full text analysis (e.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.indexes.indexes.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".lifecycle.strategy</a></p>
-<p class="tableblock">The strategy used for index lifecycle.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.indexes.indexes.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".lifecycle.required-status</a></p>
-<p class="tableblock">The minimal cluster status required.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.indexes.indexes.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".lifecycle.required-status-wait-timeout</a></p>
-<p class="tableblock">How long we should wait for the status before failing the bootstrap.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.indexes.indexes.refresh-after-write">quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".refresh-after-write</a></p>
-<p class="tableblock">Defines if the indexes should be refreshed after writes.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.hosts">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".hosts</a></p>
-<p class="tableblock">The list of hosts of the Elasticsearch servers.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.username">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".username</a></p>
-<p class="tableblock">The username used for authentication.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.password">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".password</a></p>
-<p class="tableblock">The password used for authentication.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.connection-timeout">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".connection-timeout</a></p>
-<p class="tableblock">The connection timeout.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.max-connections">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".max-connections</a></p>
-<p class="tableblock">The maximum number of connections to all the Elasticsearch servers.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.max-connections-per-route">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".max-connections-per-route</a></p>
-<p class="tableblock">The maximum number of connections per Elasticsearch server.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.discovery.enabled">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".discovery.enabled</a></p>
-<p class="tableblock">Defines if automatic discovery is enabled.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.discovery.refresh-interval">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".discovery.refresh-interval</a></p>
-<p class="tableblock">Refresh interval of the node list.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.discovery.default-scheme">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".discovery.default-scheme</a></p>
-<p class="tableblock">The scheme that should be used for the new nodes discovered.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.lifecycle.strategy</a></p>
-<p class="tableblock">The strategy used for index lifecycle.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.lifecycle.required-status</a></p>
-<p class="tableblock">The minimal cluster status required.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.lifecycle.required-status-wait-timeout</a></p>
-<p class="tableblock">How long we should wait for the status before failing the bootstrap.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.refresh-after-write">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.refresh-after-write</a></p>
-<p class="tableblock">Defines if the indexes should be refreshed after writes.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".lifecycle.strategy</a></p>
-<p class="tableblock">The strategy used for index lifecycle.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".lifecycle.required-status</a></p>
-<p class="tableblock">The minimal cluster status required.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".lifecycle.required-status-wait-timeout</a></p>
-<p class="tableblock">How long we should wait for the status before failing the bootstrap.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.refresh-after-write">quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".refresh-after-write</a></p>
-<p class="tableblock">Defines if the indexes should be refreshed after writes.</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-<td class="tableblock halign-center valign-middle"><p class="tableblock"><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.version</code></p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="details"><a class="anchor" href="#details"></a>Details</h2>
-<div class="sectionbody">
-<div id="quarkus.hibernate-search.elasticsearch.version" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.version</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The version of Elasticsearch used in the cluster.
@@ -420,333 +96,261 @@
  It doesn&#8217;t have to be the exact version (it can be 7 or 7.1 for instance) but it has to be sufficiently precise to choose a model dialect (the one used to generate the schema) compatible with the protocol dialect (the one used to communicate with Elasticsearch).
  There&#8217;s no rule of thumb here as it depends on the schema incompatibilities introduced by Elasticsearch versions. In any case, if there is a problem, you will have an error when Hibernate Search tries to connect to the cluster.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>ElasticsearchVersion</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ElasticsearchVersion</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.analysis-configurer</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.analysis-configurer" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.analysis-configurer</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The class or the name of the bean used to configure full text analysis (e.g. analyzers, normalizers).</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>class name</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.default-backend</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.default-backend" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.default-backend</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>If not using the default backend configuration, the name of the default backend that is part of the <code>additional-backends</code>.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.hosts</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.hosts" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.hosts</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The list of hosts of the Elasticsearch servers.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.username</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.username" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.username</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The username used for authentication.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.password</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.password" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The password used for authentication.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.connection-timeout</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.connection-timeout" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.connection-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The connection timeout.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.max-connections</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.max-connections" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.max-connections</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum number of connections to all the Elasticsearch servers.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.max-connections-per-route</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.max-connections-per-route" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.max-connections-per-route</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum number of connections per Elasticsearch server.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.discovery.enabled</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.discovery.enabled" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.discovery.enabled</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Defines if automatic discovery is enabled.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.discovery.refresh-interval</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.discovery.refresh-interval" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.discovery.refresh-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Refresh interval of the node list.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.discovery.default-scheme</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.discovery.default-scheme" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.discovery.default-scheme</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The scheme that should be used for the new nodes discovered.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The strategy used for index lifecycle.
  Must be one of: none, validate, update, create, drop-and-create or drop-and-create-and-drop.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The minimal cluster status required.
  Must be one of: green, yellow, red.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>green</code>, <code>yellow</code>, <code>red</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>How long we should wait for the status before failing the bootstrap.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.index-defaults.refresh-after-write</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.index-defaults.refresh-after-write" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.index-defaults.refresh-after-write</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Defines if the indexes should be refreshed after writes.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup-strategy</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup-strategy" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup-strategy</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The strategy to use when loading entities during the execution of a search query.
  Can be either one of "skip", "persistence-context" or "persistence-context-then-second-level-cache".
  Defaults to "skip".</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>skip</code>, <code>persistence-context</code>, <code>persistence-context-then-second-level-cache</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>skip</code>, <code>persistence-context</code>, <code>persistence-context-then-second-level-cache</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.query.loading.fetch-size</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.query.loading.fetch-size" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.query.loading.fetch-size</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The fetch size to use when loading entities during the execution of a search query.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
-<div class="paragraph">
-<p>Defaults to: <code>100</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The synchronization strategy to use when indexing automatically.
@@ -755,39 +359,31 @@
  Using "searchable" is recommended in unit tests.
  Defaults to "committed".</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>queued</code>, <code>committed</code>, <code>searchable</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>queued</code>, <code>committed</code>, <code>searchable</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Whether to check if dirty properties are relevant to indexing before actually reindexing an entity.
  When enabled, re-indexing of an entity is skipped if the only changes are on properties that are not used when indexing.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".version</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.version" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".version</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The version of Elasticsearch used in the cluster.
@@ -795,417 +391,332 @@
  It doesn&#8217;t have to be the exact version (it can be 7 or 7.1 for instance) but it has to be sufficiently precise to choose a model dialect (the one used to generate the schema) compatible with the protocol dialect (the one used to communicate with Elasticsearch).
  There&#8217;s no rule of thumb here as it depends on the schema incompatibilities introduced by Elasticsearch versions. In any case, if there is a problem, you will have an error when Hibernate Search tries to connect to the cluster.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>ElasticsearchVersion</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ElasticsearchVersion</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".analysis-configurer</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.analysis-configurer" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".analysis-configurer</code> <span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The class or the name of the bean used to configure full text analysis (e.g. analyzers, normalizers).</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>class name</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.indexes."indexes".lifecycle.strategy</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.indexes.indexes.lifecycle.strategy" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".lifecycle.strategy</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The strategy used for index lifecycle.
  Must be one of: none, validate, update, create, drop-and-create or drop-and-create-and-drop.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.indexes."indexes".lifecycle.required-status</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.indexes.indexes.lifecycle.required-status" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".lifecycle.required-status</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The minimal cluster status required.
  Must be one of: green, yellow, red.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>green</code>, <code>yellow</code>, <code>red</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.indexes."indexes".lifecycle.required-status-wait-timeout</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.indexes.indexes.lifecycle.required-status-wait-timeout" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".lifecycle.required-status-wait-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>How long we should wait for the status before failing the bootstrap.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.indexes."indexes".refresh-after-write</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.indexes.indexes.refresh-after-write" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.indexes."&lt;indexes&gt;".refresh-after-write</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Defines if the indexes should be refreshed after writes.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".hosts</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.hosts" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".hosts</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The list of hosts of the Elasticsearch servers.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".username</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.username" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".username</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The username used for authentication.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".password</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.password" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".password</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The password used for authentication.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".connection-timeout</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.connection-timeout" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".connection-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The connection timeout.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".max-connections</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.max-connections" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".max-connections</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum number of connections to all the Elasticsearch servers.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".max-connections-per-route</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.max-connections-per-route" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".max-connections-per-route</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The maximum number of connections per Elasticsearch server.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>int</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".discovery.enabled</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.discovery.enabled" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".discovery.enabled</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Defines if automatic discovery is enabled.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".discovery.refresh-interval</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.discovery.refresh-interval" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".discovery.refresh-interval</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Refresh interval of the node list.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".discovery.default-scheme</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.discovery.default-scheme" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".discovery.default-scheme</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The scheme that should be used for the new nodes discovered.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>string</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.lifecycle.strategy</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.lifecycle.strategy" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.lifecycle.strategy</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The strategy used for index lifecycle.
  Must be one of: none, validate, update, create, drop-and-create or drop-and-create-and-drop.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.lifecycle.required-status</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.lifecycle.required-status" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.lifecycle.required-status</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The minimal cluster status required.
  Must be one of: green, yellow, red.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>green</code>, <code>yellow</code>, <code>red</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.lifecycle.required-status-wait-timeout</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.lifecycle.required-status-wait-timeout" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.lifecycle.required-status-wait-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>How long we should wait for the status before failing the bootstrap.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.refresh-after-write</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.index-defaults.refresh-after-write" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".index-defaults.refresh-after-write</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Defines if the indexes should be refreshed after writes.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".lifecycle.strategy</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.lifecycle.strategy" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".lifecycle.strategy</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The strategy used for index lifecycle.
  Must be one of: none, validate, update, create, drop-and-create or drop-and-create-and-drop.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".lifecycle.required-status</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.lifecycle.required-status" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".lifecycle.required-status</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The minimal cluster status required.
  Must be one of: green, yellow, red.</p>
 </div>
-<div class="paragraph">
-<p>Accepted values: <code>green</code>, <code>yellow</code>, <code>red</code></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>green</code>, <code>yellow</code>, <code>red</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".lifecycle.required-status-wait-timeout</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.lifecycle.required-status-wait-timeout" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".lifecycle.required-status-wait-timeout</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>How long we should wait for the status before failing the bootstrap.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>Duration</code>  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p>
 </div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".refresh-after-write</code></p>
 </div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
-<div id="quarkus.hibernate-search.elasticsearch.backends.additional-backends.indexes.indexes.refresh-after-write" class="dlist">
-<dl>
-<dt class="hdlist1"><code>quarkus.hibernate-search.elasticsearch.backends."&lt;additional-backends&gt;".indexes."&lt;indexes&gt;".refresh-after-write</code> <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span></dt>
-<dd>
-<div class="openblock">
+<div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>Defines if the indexes should be refreshed after writes.</p>
 </div>
-<div class="paragraph">
-<p>Type: <code>boolean</code></p>
 </div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-<hr>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
 <div id="duration-note-anchor" class="admonitionblock note">
 <table>
 <tr>
@@ -1226,8 +737,6 @@ Otherwise, <code>PT</code> is implicitly appended to the value to obtain a stand
 </td>
 </tr>
 </table>
-</div>
-</div>
 </div>
     </div>
   </div>
