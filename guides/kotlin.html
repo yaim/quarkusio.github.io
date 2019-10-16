@@ -72,6 +72,8 @@
 </ul>
 </li>
 <li><a href="#important-maven-configuration-points">Important Maven configuration points</a></li>
+<li><a href="#important-gradle-configuration-points">Important Gradle configuration points</a></li>
+<li><a href="#cdi-inject-with-kotlin">CDI @Inject with Kotlin</a></li>
 <li><a href="#live-reload">Live reload</a></li>
 <li><a href="#packaging-the-application">Packaging the application</a></li>
 </ul>
@@ -108,6 +110,9 @@
 <p>Apache Maven 3.5.3+</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>NB: For Gradle project setup please see below, and for further reference consult the guide in the <a href="gradle-tooling.html">Gradle setup page</a>.</p>
 </div>
 </div>
 </div>
@@ -294,6 +299,265 @@ for example, then <code>&lt;option&gt;all-open:annotation=javax.enterprise.conte
 </div>
 </div>
 <div class="sect1">
+<h2 id="important-gradle-configuration-points"><a class="anchor" href="#important-gradle-configuration-points"></a>Important Gradle configuration points</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Similar to the Maven configuration, when using Gradle, the following modifications are required when Kotlin is selected:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>quarkus-kotlin</code> artifact is added to the dependencies. This artifact provides support for Kotlin in the live reload mode (more about this later on)</p>
+</li>
+<li>
+<p>The <code>kotlin-stdlib-jdk8</code> is also added as a dependency.</p>
+</li>
+<li>
+<p>The Kotlin plugin is activated, which implicitly adds <code>sourceDirectory</code> and <code>testSourceDirectory</code> build properties to point to Kotlin sources (<code>src/main/kotlin</code> and <code>src/test/kotlin</code> respectively)</p>
+</li>
+<li>
+<p>The all-open Kotlin plugin tells the compiler not to mark as final, those classes with the annotations highlighted (customize as required)</p>
+</li>
+<li>
+<p>When using native-image, the use of http (or https) protocol(s) must be declared</p>
+</li>
+<li>
+<p>An example configuration follows:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">group = '...' // set your group
+version = '1.0.0-SNAPSHOT'
+
+plugins {
+    id 'java'
+    id 'io.quarkus' version '0.24.0' <i class="conum" data-value="1"></i><b>(1)</b>
+
+    id "org.jetbrains.kotlin.jvm" version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
+    id "org.jetbrains.kotlin.plugin.allopen" version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:{kotlin-version}'
+
+    <i class="conum" data-value="3"></i><b>(3)</b>
+    implementation enforcedPlatform('io.quarkus:quarkus-bom:0.24.0')
+    implementation 'io.quarkus:quarkus-resteasy'
+    implementation 'io.quarkus:quarkus-resteasy-jsonb'
+    implementation 'io.quarkus:quarkus-kotlin'
+
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured:{rest-assured-version}'  <i class="conum" data-value="4"></i><b>(4)</b>
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+test {
+    useJUnitPlatform()
+    exclude '**/Native*'
+}
+
+buildNative {
+    enableHttpUrlHandler = true
+}
+
+allOpen { <i class="conum" data-value="5"></i><b>(5)</b>
+    annotation("javax.ws.rs.Path")
+    annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("io.quarkus.test.junit.QuarkusTest")
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The Quarkus plugin needs to be applied.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The Kotlin plugin version needs to be specified.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We include the Quarkus BOM using Gradle&#8217;s <a href="https://docs.gradle.org/5.4.1/userguide/managing_transitive_dependencies.html#sec:bom_import">relevant syntax</a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The rest-assured version needs to be specified</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The all-open configuration required, as per Maven guide above</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>or, if you use the Gradle Kotlin DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">import io.quarkus.gradle.tasks.QuarkusNative
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+group = "..."
+version = "1.0.0-SNAPSHOT"
+
+plugins {
+    java
+    id("io.quarkus") version "0.24.0" <i class="conum" data-value="1"></i><b>(1)</b>
+
+    kotlin("jvm") version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
+    id("org.jetbrains.kotlin.plugin.allopen") version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+
+    <i class="conum" data-value="3"></i><b>(3)</b>
+    implementation(enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}"))
+    implementation("io.quarkus:quarkus-kotlin")
+    implementation("io.quarkus:quarkus-resteasy")
+    implementation("io.quarkus:quarkus-resteasy-jsonb")
+
+    testImplementation("io.quarkus:quarkus-junit5")
+    testImplementation("io.rest-assured:rest-assured:{rest-assured-version}") <i class="conum" data-value="4"></i><b>(4)</b>
+}
+
+tasks {
+    named&lt;QuarkusNative&gt;("buildNative") {
+        setEnableHttpUrlHandler(true)
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+    exclude '**/Native*'
+}
+
+allOpen { <i class="conum" data-value="5"></i><b>(5)</b>
+    annotation("javax.ws.rs.Path")
+    annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("io.quarkus.test.junit.QuarkusTest")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The Quarkus plugin needs to be applied.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The Kotlin plugin version needs to be specified.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We include the Quarkus BOM using Gradle&#8217;s <a href="https://docs.gradle.org/5.4.1/userguide/managing_transitive_dependencies.html#sec:bom_import">relevant syntax</a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The rest-assured version needs to be specified</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The all-open configuration required, as per Maven guide above</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cdi-inject-with-kotlin"><a class="anchor" href="#cdi-inject-with-kotlin"></a>CDI @Inject with Kotlin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Kotlin reflection annotation processing differs from Java.  You may experience an error when using CDI @Inject such as:
+"kotlin.UninitializedPropertyAccessException: lateinit property xxx has not been initialized"</p>
+</div>
+<div class="paragraph">
+<p>In the example below, this can be easily solved by adapting the annotation, adding @field: Default, to handle the lack of a @Target on the Kotlin reflection annotation definition.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, prefer the use of constructor injection which works without modification of the Java examples.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">import javax.inject.Inject
+import javax.enterprise.inject.Default
+import javax.enterprise.context.ApplicationScoped
+
+import javax.ws.rs.GET
+import javax.ws.rs.Path
+import javax.ws.rs.PathParam
+import javax.ws.rs.Produces
+import javax.ws.rs.core.MediaType
+
+
+
+@ApplicationScoped
+class GreetingService {
+
+    fun greeting(name: String): String {
+        return "hello $name"
+    }
+
+}
+
+@Path("/")
+class GreetingResource {
+
+    @Inject
+    @field: Default <i class="conum" data-value="1"></i><b>(1)</b>
+    lateinit var service: GreetingService
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/greeting/{name}")
+    fun greeting(@PathParam("name") name: String): String {
+        return service.greeting(name)
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Kotlin requires a @field: xxx qualifier as it has no @Target on the annotation definition. Add @field: xxx in this example. @Default is used as the qualifier, explicitly specifying the use of the default bean.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="live-reload"><a class="anchor" href="#live-reload"></a>Live reload</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -326,7 +590,7 @@ code and immediately see their changes reflected.</p>
 <h2 id="packaging-the-application"><a class="anchor" href="#packaging-the-application"></a>Packaging the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file. You can also build the native executable using <code>./mvnw package -Pnative</code>.</p>
+<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file. You can also build the native executable using <code>./mvnw package -Pnative</code>, or <code>./gradlew buildNative</code>.</p>
 </div>
 </div>
 </div>

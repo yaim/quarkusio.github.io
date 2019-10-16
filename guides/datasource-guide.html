@@ -226,6 +226,9 @@ you don&#8217;t need to add the Agroal extension dependency explicitly.</p>
 <li>
 <p>Microsoft SQL Server - jdbc-mssql</p>
 </li>
+<li>
+<p>Derby - jdbc-derby</p>
+</li>
 </ul>
 </div>
 <div class="admonitionblock note">
@@ -413,6 +416,26 @@ As such, you must specify connection details, or use the defaults.</p>
 <div class="paragraph">
 <p>The Microsoft SQL Server JDBC driver works essentially the same as the others.
 More details can be found in the <a href="https://docs.microsoft.com/en-us/sql/connect/jdbc/connecting-to-sql-server-with-the-jdbc-driver?view=sql-server-2017">official documentation</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="derby"><a class="anchor" href="#derby"></a>Derby</h4>
+<div class="paragraph">
+<p><code>jdbc:derby:[//serverName[:portNumber]/][memory:]databaseName[;property=value[;property=value]]</code></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Example</dt>
+<dd>
+<p><code>jdbc:derby://localhost:1527/myDB</code>, <code>jdbc:derby:memory:myDB;create=true</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Derby is an embedded database.
+It can run as a server, based on a file, or live completely in memory.
+All of these options are available as listed above.
+You can find more information at the <a href="https://db.apache.org/derby/docs/10.8/devguide/cdevdvlp17453.html#cdevdvlp17453">official documentation</a>.</p>
 </div>
 </div>
 </div>

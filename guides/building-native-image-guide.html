@@ -445,6 +445,14 @@ to 300 seconds, use: <code>./mvnw verify -Pnative -Dquarkus.test.native-image-wa
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>By default, native tests runs using the <code>prod</code> profile.
+This can be overridden using the <code>quarkus.test.native-image-profile</code> property.
+For example, in your <code>application.properties</code> file, add: <code>quarkus.test.native-image-profile=test</code>.
+Alternatively, you can run your tests with: <code>./mvnw verify -Pnative -Dquarkus.test.native-image-profile=test</code>.
+However, don&#8217;t forget that when the native executable is built the <code>prod</code> profile is enabled.
+So, the profile you enable this way must be compatible with the produced executable.</p>
+</div>
 <div class="sect2">
 <h3 id="excluding-tests-when-running-as-a-native-executable"><a class="anchor" href="#excluding-tests-when-running-as-a-native-executable"></a>Excluding tests when running as a native executable</h3>
 <div class="paragraph">

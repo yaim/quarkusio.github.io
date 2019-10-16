@@ -143,6 +143,27 @@ plugins {
 apply plugin: 'io.quarkus'</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>or, if you use the Gradle Kotlin DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath("io.quarkus:quarkus-gradle-plugin:999-SNAPSHOT")
+    }
+}
+
+plugins {
+    java
+}
+
+apply(plugin = "io.quarkus")</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -223,10 +244,8 @@ dependencies {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks {
-    "test"(Test::class) {
-        useJUnitPlatform()
-    }
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks.test {
+    useJUnitPlatform()
 }</code></pre>
 </div>
 </div>
@@ -280,12 +299,10 @@ database.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks {
-    "test"(Test::class) {
-        useJUnitPlatform()
-        systemProperty("quarkus.test.profile", "foo") <i class="conum" data-value="1"></i><b>(1)</b>
-    }
-}</code></pre>
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks.test {
+    useJUnitPlatform()
+    systemProperty("quarkus.test.profile", "foo") <i class="conum" data-value="1"></i><b>(1)</b>
+ }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -576,6 +593,18 @@ However, it&#8217;s not an issue as we are going to copy it to a Docker containe
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildNative {
     enableHttpUrlHandler = true
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or, if you use the Gradle Kotlin DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks {
+    named&lt;QuarkusNative&gt;("buildNative") {
+        setEnableHttpUrlHandler(true)
+    }
 }</code></pre>
 </div>
 </div>

@@ -67,6 +67,7 @@
       <ul class="sectlevel1">
 <li><a href="#security-implementations">Security implementations</a>
 <ul class="sectlevel2">
+<li><a href="#securing-web-endpoints">Securing Web Endpoints</a></li>
 <li><a href="#registering-security-providers">Registering Security Providers</a></li>
 </ul>
 </li>
@@ -193,6 +194,88 @@ very much a work in progress, so this list will be expanded over the coming week
 </table>
 <div class="paragraph">
 <p>Please see the linked documents above for details on how to setup the various extensions.</p>
+</div>
+<div class="sect2">
+<h3 id="securing-web-endpoints"><a class="anchor" href="#securing-web-endpoints"></a>Securing Web Endpoints</h3>
+<div class="paragraph">
+<p>Quarkus has an integrated plugable web security layer. If security is enabled all HTTP requests will have a permission
+check performed to make sure they are permitted to continue.</p>
+</div>
+<div class="paragraph">
+<p>The default implementation allows you to define permissions using config in <code>application.properties</code>. An example
+config is shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.auth.policy.role-policy1.roles-allowed=user,admin                      <i class="conum" data-value="1"></i><b>(1)</b>
+
+quarkus.http.auth.permission.roles1.paths=/roles-secured/*,/other/*,/api/*          <i class="conum" data-value="2"></i><b>(2)</b>
+quarkus.http.auth.permission.roles1.policy=role-policy1
+
+quarkus.http.auth.permission.permit1.paths=/public/*                                <i class="conum" data-value="3"></i><b>(3)</b>
+quarkus.http.auth.permission.permit1.policy=permit
+quarkus.http.auth.permission.permit1.methods=GET
+
+quarkus.http.auth.permission.deny1.paths=/forbidden                                 <i class="conum" data-value="4"></i><b>(4)</b>
+quarkus.http.auth.permission.deny1.policy=deny</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This defines a role based policy that allows users with the <code>user</code> and <code>admin</code> roles. This is referenced by later rules</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is a permission set that references the previously defined policy. <code>roles1</code> is an arbitrary name, you can call the permission sets whatever you want.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This permission references the default <code>permit</code> built in policy to allow <code>GET</code> methods to <code>/public</code>. This is actually a no-op in this example, as this request would have been allowed anyway.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>This permission references the built in <code>deny</code> build in policy <code>/forbidden</code>. This is an exact path match as it does not end with *.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Permissions are defined in config using permission sets. These are arbitrarily named permission grouping. Each permission
+set must specify a policy that is used to control access. There are three built in policies: <code>deny</code>, <code>permit</code> and <code>authenticated</code>,
+which permit all, deny all and only allow authenticated users respectively.</p>
+</div>
+<div class="paragraph">
+<p>It is also possible to define role based policies, as shown in the example. These policies will only allow users with the
+specified roles to access the resources.</p>
+</div>
+<div class="paragraph">
+<p>Policies are pluggable so it is possible for other Quarkus extensions to provide additional policies.</p>
+</div>
+<div class="paragraph">
+<p>Permission sets can also specify paths and methods as a comma separated list. If a path ends with '*' then it is considered
+to be a wildcard match and will match all sub paths, otherwise it is an exact match and will only match that specific path.</p>
+</div>
+<div class="paragraph">
+<p>If a request would match one or more permission sets based on the path, but does not match any due to method requirements
+then the request is rejected.</p>
+</div>
+<div class="paragraph">
+<p>Matching is always done on a longest path basis, less specific permission sets are not considered if a more specific one
+has been matched.</p>
+</div>
+<div class="paragraph">
+<p>If a path is registered with multiple permission sets then any permission sets that specify a HTTP method will take
+precedence and permissions sets without a method will not be considered (assuming of course the method matches). In this
+instance permission sets will only come into effect if the request method does not match any of the sets with method permissions.
+If a request would have matched based on path, but does not match any permission sets because of method requirements
+then this request is rejected.</p>
+</div>
+<div class="paragraph">
+<p>If multiple permission sets specify the same path and method (or multiple have no method) then both permissions have to
+allow access for the request to proceed. Note that for this to happen both have to either have specified the method, or
+have no method, method specific matches take precedence as stated above.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="registering-security-providers"><a class="anchor" href="#registering-security-providers"></a>Registering Security Providers</h3>

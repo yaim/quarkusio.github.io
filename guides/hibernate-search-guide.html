@@ -115,10 +115,11 @@ We will also explore how you can can query your Elasticsearch cluster using the 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The version of Hibernate Search shipped with Quarkus is still an Alpha.</p>
+<p>The version of Hibernate Search shipped with Quarkus is still a Beta.</p>
 </div>
 <div class="paragraph">
-<p>While the code is of production quality and thoroughly tested, some features are still missing, performance might not be optimal and some APIs might change before the final release.</p>
+<p>While APIs are quite stable and the code is of production quality and thoroughly tested,
+some features are still missing, performance might not be optimal and some APIs might change before the final release.</p>
 </div>
 </td>
 </tr>
@@ -681,15 +682,15 @@ public class AnalysisConfigurer implements ElasticsearchAnalysisConfigurer {
     @Override
     public void configure(ElasticsearchAnalysisDefinitionContainerContext context) {
         context.analyzer("name").custom() <i class="conum" data-value="1"></i><b>(1)</b>
-                .withTokenizer("standard")
-                .withTokenFilters("asciifolding", "lowercase");
+                .tokenizer("standard")
+                .tokenFilters("asciifolding", "lowercase");
 
         context.analyzer("english").custom() <i class="conum" data-value="2"></i><b>(2)</b>
-                .withTokenizer("standard")
-                .withTokenFilters("asciifolding", "lowercase", "porter_stem");
+                .tokenizer("standard")
+                .tokenFilters("asciifolding", "lowercase", "porter_stem");
 
         context.normalizer("sort").custom() <i class="conum" data-value="3"></i><b>(3)</b>
-                .withTokenFilters("asciifolding", "lowercase");
+                .tokenFilters("asciifolding", "lowercase");
     }
 }</code></pre>
 </div>
@@ -736,17 +737,18 @@ It is definitely too aggressive for person names but it is perfect for the book 
     @GET
     @Path("author/search")
     @Transactional
-    public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern) { <i class="conum" data-value="3"></i><b>(3)</b>
+    public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern, <i class="conum" data-value="3"></i><b>(3)</b>
+            @QueryParam("size") Optional&lt;Integer&gt; size) {
         return Search.session(em) <i class="conum" data-value="4"></i><b>(4)</b>
                 .search(Author.class) <i class="conum" data-value="5"></i><b>(5)</b>
                 .predicate(f -&gt;
                     pattern == null || pattern.trim().isEmpty() ?
                             f.matchAll() : <i class="conum" data-value="6"></i><b>(6)</b>
                             f.simpleQueryString()
-                                .onFields("firstName", "lastName", "books.title").matching(pattern) <i class="conum" data-value="7"></i><b>(7)</b>
+                                .fields("firstName", "lastName", "books.title").matching(pattern) <i class="conum" data-value="7"></i><b>(7)</b>
                 )
-                .sort(f -&gt; f.byField("lastName_sort").then().byField("firstName_sort")) <i class="conum" data-value="8"></i><b>(8)</b>
-                .fetchHits(); <i class="conum" data-value="9"></i><b>(9)</b>
+                .sort(f -&gt; f.field("lastName_sort").then().field("firstName_sort")) <i class="conum" data-value="8"></i><b>(8)</b>
+                .fetchHits(size.orElse(20)); <i class="conum" data-value="9"></i><b>(9)</b>
     }</code></pre>
 </div>
 </div>
@@ -790,7 +792,7 @@ the mass indexer should then only be used when you change your indexing configur
 </tr>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>This is self explanatory. Obviously, paging is also supported.</td>
+<td>Fetch the <code>size</code> top hits, <code>20</code> by default. Obviously, paging is also supported.</td>
 </tr>
 </table>
 </div>
@@ -833,8 +835,8 @@ quarkus.hibernate-orm.database.generation=drop-and-create <i class="conum" data-
 quarkus.hibernate-orm.sql-load-script=import.sql <i class="conum" data-value="4"></i><b>(4)</b>
 
 quarkus.hibernate-search.elasticsearch.version=7 <i class="conum" data-value="5"></i><b>(5)</b>
-quarkus.hibernate-search.elasticsearch.analysis-configurer=org.acme.hibernate.search.elasticsearch.config.AnalysisConfigurer <i class="conum" data-value="6"></i><b>(6)</b>
-quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy=searchable <i class="conum" data-value="7"></i><b>(7)</b>
+quarkus.hibernate-search.elasticsearch.analysis.configurer=org.acme.hibernate.search.elasticsearch.config.AnalysisConfigurer <i class="conum" data-value="6"></i><b>(6)</b>
+quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization.strategy=searchable <i class="conum" data-value="7"></i><b>(7)</b>
 quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy=drop-and-create <i class="conum" data-value="8"></i><b>(8)</b>
 quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status=yellow <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
 </div>
@@ -951,7 +953,7 @@ INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), '4
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.0.1</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.3.1</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1044,7 +1046,8 @@ We also inject some data and execute the mass indexer.</p>
 <p>If you are interested into learning more about Hibernate Search 6, the Hibernate team has <a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/">some documentation</a> in the works.</p>
 </div>
 <div class="paragraph">
-<p>It is still very much a work in progress but it can guide you in your exploration.</p>
+<p>It is still work in progress but covers all main concepts and features,
+so it can guide you in your exploration.</p>
 </div>
 </div>
 </div>
@@ -1057,13 +1060,13 @@ We also inject some data and execute the mass indexer.</p>
 <p>To optimize the Hibernate Search bootstrap for Quarkus, the Hibernate team had to reorganize things a bit (collect the metadata offline, start the Elasticsearch client later&#8230;&#8203;).</p>
 </div>
 <div class="paragraph">
-<p>This couldn&#8217;t be done in the 5.x code base so we decided to go with the in progress Hibernate Search 6.</p>
+<p>This couldn&#8217;t be done in the 5.x code base so we decided to go with the in-progress Hibernate Search 6.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="can-i-really-use-it"><a class="anchor" href="#can-i-really-use-it"></a>Can I really use it?</h3>
 <div class="paragraph">
-<p>While Hibernate Search 6 is still at Alpha stage, the code is of production quality and can be relied on.</p>
+<p>While Hibernate Search 6 is still at Beta stage, the code is of production quality and can be relied on.</p>
 </div>
 <div class="paragraph">
 <p>What we don&#8217;t guarantee is that there might be API changes along the way to the final release of Hibernate Search 6 and you might have to adapt your code.</p>
@@ -1126,7 +1129,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.analysis-configurer</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.analysis.configurer</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1327,21 +1330,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.index-defaults.refresh-after-write</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Defines if the indexes should be refreshed after writes.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup-strategy</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup.strategy</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1371,7 +1360,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization.strategy</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1421,7 +1410,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".analysis-configurer</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".analysis.configurer</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1476,20 +1465,6 @@ Thus we focused our efforts on it.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.indexes."indexes".refresh-after-write</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Defines if the indexes should be refreshed after writes.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -1667,20 +1642,6 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.refresh-after-write</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Defines if the indexes should be refreshed after writes.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".lifecycle.strategy</code></p>
 </div>
 <div class="openblock description">
@@ -1722,20 +1683,6 @@ Thus we focused our efforts on it.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".refresh-after-write</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Defines if the indexes should be refreshed after writes.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>

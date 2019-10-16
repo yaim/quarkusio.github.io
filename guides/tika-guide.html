@@ -65,10 +65,17 @@
     <h1 class="text-caps">Quarkus - Using Apache Tika</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
-<li><a href="#creating-the-maven-project">Creating the Maven Project</a></li>
 <li><a href="#configuration">Configuration</a></li>
-<li><a href="#simple-text-extraction-example">Simple text extraction example</a></li>
-<li><a href="#embedded-document-text-extraction-example">Embedded document text extraction example</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven Project</a>
+<ul class="sectlevel2">
+<li><a href="#examine-the-generated-jax-rs-resource">Examine the generated JAX-RS resource</a></li>
+<li><a href="#update-the-jax-rs-resource">Update the JAX-RS resource</a></li>
+</ul>
+</li>
+<li><a href="#run-the-application">Run the application</a></li>
+<li><a href="#building-a-native-executable">Building a native executable</a></li>
 </ul>
     </div>
     <div>
@@ -79,45 +86,6 @@
 </div>
 <div class="paragraph">
 <p><a href="https://tika.apache.org/">Apache Tika</a> is a content analysis toolkit which is used to parse the documents in PDF, Open Document, Excel and many other well known binary and text formats using a simple uniform API. Both the document text and properties (metadata) are available once the document has been parsed.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven Project</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>First, we need a new project. Create a new project with the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.24.0:create \
-    -DprojectGroupId=org.acme \
-    -DprojectArtifactId=using-tika \
-    -Dextensions="tika"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This command generates a Maven project, importing the <code>tika</code> extension.</p>
-</div>
-<div class="paragraph">
-<p>If you already have your Quarkus project configured you can add the <code>tika</code> extension
-to your project by running the following command in your project base directory.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension -Dextensions="tika"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This will add the following to your pom.xml:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
-        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-tika&lt;/artifactId&gt;
-    &lt;/dependency&gt;</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -146,7 +114,7 @@ to your project by running the following command in your project base directory.
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.tika.parsers</code></p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list of the abbreviated or full parser class names which have to be loaded by the extension. A <code>pdf</code> abbreviation can be used to refer to the PDF parser and custom abbreviations must be used for all other parsers. Note that this property is mutually exclusive with the <code>tika-config-path</code> property.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list of the abbreviated or full parser class names which have to be loaded by the extension. Note that <code>pdf</code> and 'odf' abbreviations can be used to refer to PDF and OpenDocument format parsers and custom abbreviations must be used for all other parsers. Note that this property is mutually exclusive with the <code>tika-config-path</code> property.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.tika.append-embedded-content</code></p></td>
@@ -158,13 +126,146 @@ to your project by running the following command in your project base directory.
 </div>
 </div>
 <div class="sect1">
-<h2 id="simple-text-extraction-example"><a class="anchor" href="#simple-text-extraction-example"></a>Simple text extraction example</h2>
+<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>To complete this guide, you need:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>less than 20 minutes</p>
+</li>
+<li>
+<p>an IDE</p>
+</li>
+<li>
+<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
+</li>
+<li>
+<p>Apache Maven 3.5.3+</p>
+</li>
+<li>
+<p>Docker</p>
+</li>
+<li>
+<p><a href="building-native-image-guide">GraalVM installed if you want to run in native mode</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We recommend that you follow the instructions in the next sections and create the application step by step.
+However, you can go right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+</div>
+<div class="paragraph">
+<p>The solution is located in the <code>apache-tika</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/apache-tika">directory</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The provided solution contains a few additional elements such as tests and testing infrastructure.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven Project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, we need a new project. Create a new project with the following command:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.tika;
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.24.0:create \
+    -DprojectGroupId=org.acme.example \
+    -DprojectArtifactId=apache-tika \
+    -DclassName="org.acme.quickstart.tika.TikaParserResource" \
+    -Dpath="/parse" \
+    -Dextensions="tika,resteasy"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command generates a Maven project, importing the <code>tika</code> and <code>resteasy</code> extensions.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured you can add the <code>tika</code> and <code>resteasy</code> extensions
+to your project by running the following command in your project base directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension -Dextensions="tika,resteasy"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your pom.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-tika&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-resteasy&lt;/artifactId&gt;
+    &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="examine-the-generated-jax-rs-resource"><a class="anchor" href="#examine-the-generated-jax-rs-resource"></a>Examine the generated JAX-RS resource</h3>
+<div class="paragraph">
+<p>Open the <code>src/main/java/org/acme/quickstart/tika/TikaParserResource.java</code> file and see the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart.tika;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/parse")
+public class TikaParserResource {
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return "hello";
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="update-the-jax-rs-resource"><a class="anchor" href="#update-the-jax-rs-resource"></a>Update the JAX-RS resource</h3>
+<div class="paragraph">
+<p>Next update <code>TikaParserResource</code> to accept and parse PDF and OpenDocument format documents:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart.tika;
 
 import java.io.InputStream;
+import java.time.Duration;
+import java.time.Instant;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -172,66 +273,100 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
 import io.quarkus.tika.TikaParser;
+import org.jboss.logging.Logger;
 
 @Path("/parse")
 public class TikaParserResource {
+    private static final Logger log = Logger.getLogger(TikaParserResource.class);
 
     @Inject
     TikaParser parser;
 
     @POST
     @Path("/text")
-    @Consumes({ "application/pdf", "application/vnd.oasis.opendocument.text" })
+    @Consumes({"application/pdf", "application/vnd.oasis.opendocument.text"})
     @Produces(MediaType.TEXT_PLAIN)
     public String extractText(InputStream stream) {
-        return parser.getText(stream);
+        Instant start = Instant.now();
+
+        String text = parser.getText(stream);
+
+        Instant finish = Instant.now();
+
+        log.info(Duration.between(start, finish).toMillis() + " mls have passed");
+
+        return text;
     }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see the JAX-RS resource method was renamed to <code>extractText</code>, <code>@GET</code> annotation was replaced with <code>POST</code> and <code>@Path(/text)</code> annotation was added, and <code>@Consumes</code> annotation shows that PDF and OpenDocument media type formats can now be accepted. An injected <code>TikaParser</code> is used to parse the documents and report the extracted text. It also measures how long does it take to parse a given document.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="embedded-document-text-extraction-example"><a class="anchor" href="#embedded-document-text-extraction-example"></a>Embedded document text extraction example</h2>
+<h2 id="run-the-application"><a class="anchor" href="#run-the-application"></a>Run the application</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Now we are ready to run our application. Use:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.tika;
-
-import java.io.InputStream;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import io.quarkus.tika.TikaContent;
-import io.quarkus.tika.TikaParser;
-
-@Path("/parse")
-public class TikaParserResource {
-
-    @Inject
-    TikaParser parser;
-
-    @POST
-    @Path("/text")
-    @Consumes({ "application/pdf", "application/vnd.oasis.opendocument.text" })
-    @Produces(MediaType.TEXT_PLAIN)
-    public List&lt;String&gt; extractText(InputStream stream) {
-        TikaContent masterContent = parser.parse(stream);
-        return masterContent.getEmbeddedContent().stream()
-            .map(tc -&gt; tc.getText())
-            .collect(Collectors.toList());
-    }
-}</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>and you should see output similar to:</p>
+</div>
+<div class="listingblock">
+<div class="title">quarkus:dev Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn clean compile quarkus:dev
+[INFO] Scanning for projects...
+[INFO]
+INFO] --------------------&lt; org.acme.example:apache-tika &gt;--------------------
+[INFO] Building apache-tika 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+...
+Listening for transport dt_socket at address: 5005
+2019-10-15 14:23:26,442 INFO  [io.qua.dep.QuarkusAugmentor] (main) Beginning quarkus augmentation
+2019-10-15 14:23:26,960 INFO  [io.qua.resteasy] (build-15) Resteasy running without servlet container.
+2019-10-15 14:23:26,960 INFO  [io.qua.resteasy] (build-15) - Add quarkus-undertow to run Resteasy within a servlet container
+2019-10-15 14:23:26,991 INFO  [io.qua.dep.QuarkusAugmentor] (main) Quarkus augmentation completed in 549ms
+2019-10-15 14:23:27,637 INFO  [io.quarkus] (main) Quarkus 999-SNAPSHOT started in 1.361s. Listening on: http://0.0.0.0:8080
+2019-10-15 14:23:27,638 INFO  [io.quarkus] (main) Profile dev activated. Live Coding activated.
+2019-10-15 14:23:27,639 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, tika]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now that the REST endpoint is running, we can get it to parse PDF and OpenDocument documents using a command line tool like curl:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl -X POST -H "Content-type: application/pdf" --data-binary @target/classes/quarkus.pdf http://localhost:8080/parse/text
+Hello Quarkus</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ curl -X POST -H "Content-type: Content-type: application/vnd.oasis.opendocument.text" --data-binary @target/classes/quarkus.odt http://localhost:8080/parse/text
+Hello Quarkus</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="building-a-native-executable"><a class="anchor" href="#building-a-native-executable"></a>Building a native executable</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can build a native executable with the usual command <code>./mvnw package -Pnative</code>.
+Running it is as simple as executing <code>./target/apache-tika-1.0-SNAPSHOT-runner</code>.</p>
 </div>
 </div>
 </div>
