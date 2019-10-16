@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Generating Kubernetes resources</title>
+  <title>Quarkus 0.25.0 released - Security layer updated</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -21,7 +21,7 @@
   <script src="https://quarkus.io//assets/javascript/hl.js" type="text/javascript"></script>
 </head>
 
-<body class="guides">
+<body class="post">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -42,7 +42,7 @@
               <a href="/get-started/" class="">Get Started</a>
             </li>
             <li>
-              <a href="/guides/" class="active">Guides</a>
+              <a href="/guides/" class="">Guides</a>
             </li>
             <li>
               <a href="https://code.quarkus.io">Start Coding</a>
@@ -51,7 +51,7 @@
               <a href="/community/" class="">Community</a>
             </li>
             <li>
-              <a href="/blog/" class="">Blog</a>
+              <a href="/blog/" class="active">Blog</a>
             </li>
           </ul>
         </nav>
@@ -60,173 +60,146 @@
   </div>
 </div>
 
-    <div class="guide">
-  <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Generating Kubernetes resources</h1>
-    <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
-<li><a href="#enable-kubernetes-support">Enable Kubernetes support</a></li>
-</ul>
-    </div>
-    <div>
-      <div id="preamble">
-<div class="sectionbody">
+    <div class="post-page grid-wrapper">
+  <div class="grid__item width-10-12 width-12-12-m doc-content">
+    <h1>Quarkus 0.25.0 released - Security layer updated</h1>
+    <div class="grid-wrapper">
+      <div class="grid__item width-8-12 width-12-12-m byline-wrapper">
+        
+        
+          <img class="headshot" src="https://www.gravatar.com/avatar/ec96387a1a8295b6fd6dffb68f80c352">
+        
+        <p class="byline">By Guillaume Smet | October 16, 2019</p>
+      </div>
+      <div class="grid__item width-4-12 width-12-12-m"><div class="share-page">
+  <a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https://quarkus.io//blog/quarkus-0-25.0-released/&title=Quarkus 0.25.0 released - Security layer updated" rel="nofollow" target="_blank" title="Share on LinkedIn">
+    <img src="/assets/images/share-page/icons_social-linkedin.png"/>
+  </a>
+  <a class="share-twitter" href="https://twitter.com/intent/tweet?text=Quarkus 0.25.0 released - Security layer updated&url=https://quarkus.io//blog/quarkus-0-25.0-released/&via=quarkusio&related=quarkusio" rel="nofollow" target="_blank" title="Share on Twitter">
+    <img src="/assets/images/share-page/icons_social-twitter.png"/>
+  </a>
+  <a class="share-facebook" href="https://facebook.com/sharer.php?u=https://quarkus.io//blog/quarkus-0-25.0-released/" rel="nofollow" target="_blank" title="Share on Facebook">
+    <img src="/assets/images/share-page/icons_social-facebook.png"/>
+  </a>
+  <a class="share-reddit" href="http://www.reddit.com/submit?url=https://quarkus.io//blog/quarkus-0-25.0-released/" onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;" title="Share on Reddit" >
+    <img src="/assets/images/share-page/icons_social-reddit.png"/>
+  </a>
+  <a class="share-email" href="mailto:?subject=Quarkus 0.25.0 released - Security layer updated&amp;body=Quarkus 0.25.0 released - Security layer updated https://quarkus.io//blog/quarkus-0-25.0-released/" title="Share via Email" >
+    <img src="/assets/images/share-page/icons_social-email.png"/>
+  </a>
+</div>
+</div>
+      <div class="grid__item width-12-12">
+          <div class="paragraph">
+<p>Just a few days after 0.24.0, and to stay in line with our planning, we release 0.25.0.</p>
+</div>
 <div class="paragraph">
-<p>This guide covers generating Kubernetes resources based on sane defaults and user supplied configuration.</p>
-</div>
-</div>
+<p>This release fixes a couple of issues, mostly related to the new HTTP layer and brings some updates to the currently being rewritten security layer.</p>
 </div>
 <div class="sect1">
-<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
+<h2 id="whats-new"><a class="anchor" href="#whats-new"></a>What&#8217;s new?</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="security-layer-changes"><a class="anchor" href="#security-layer-changes"></a>Security layer changes</h3>
 <div class="paragraph">
-<p>To complete this guide, you need:</p>
+<p>HTTP based permissions can now be defined in the <code>application.properties</code>.</p>
+</div>
+<div class="paragraph">
+<p>This new feature is fully documented in the <a href="/guides/security-guide#securing-web-endpoints">Security guide</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hibernate-search-6-0-0-beta1"><a class="anchor" href="#hibernate-search-6-0-0-beta1"></a>Hibernate Search 6.0.0.Beta1</h3>
+<div class="paragraph">
+<p>We updated Hibernate Search to 6.0.0.Beta1.</p>
+</div>
+<div class="paragraph">
+<p>A few changes has been made to the APIs and please consider getting rid of the potential calls to deprecated methods in your code because they are going away in the next Hibernate Search release.</p>
+</div>
+<div class="paragraph">
+<p>Some configuration properties have also been adjusted:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>roughly 10 minutes</p>
+<p><code>quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization-strategy</code> becomes <code>quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization.strategy</code></p>
 </li>
 <li>
-<p>an IDE</p>
+<p><code>quarkus.hibernate-search.elasticsearch.analysis-configurer</code> becomes <code>quarkus.hibernate-search.elasticsearch.analysis.configurer</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="/guides/hibernate-search-guide">The documentation</a> has been updated to reflect these changes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="debugging-suspend-and-dev-mode"><a class="anchor" href="#debugging-suspend-and-dev-mode"></a>Debugging, suspend and dev mode</h3>
+<div class="paragraph">
+<p>Dev mode doesn&#8217;t suspend the execution by default anymore when you use <code>-Ddebug=true</code> or <code>-Ddebug=&lt;port&gt;</code>. You need to explicitly use <code>-Dsuspend=true</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="apache-derby-driver"><a class="anchor" href="#apache-derby-driver"></a>Apache Derby driver</h3>
+<div class="paragraph">
+<p>We now have an extension for the Apache Derby JDBC driver: it will work out of the box even with a native executable.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="rest-client-multipart-guide"><a class="anchor" href="#rest-client-multipart-guide"></a>REST Client multipart guide</h3>
+<div class="paragraph">
+<p>We now have <a href="/guides/rest-client-multipart-guide">a guide explaining how to do multipart with our REST client</a>. This allows you for instance to upload documents to a REST endpoint.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="full-changelog"><a class="anchor" href="#full-changelog"></a>Full changelog</h3>
+<div class="paragraph">
+<p>We also fixed a few bugs and usability issues: get <a href="https://github.com/quarkusio/quarkus/releases/tag/0.25.0">the full changelog of 0.25.0 on GitHub</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="contributors"><a class="anchor" href="#contributors"></a>Contributors</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus has now <a href="https://github.com/quarkusio/quarkus/graphs/contributors">163 contributors</a>.
+Many many thanks to each and everyone of them.</p>
+</div>
+<div class="paragraph">
+<p>In particular for this release, thanks to Alexey Loubyansky, Andrew Guibert, Aurea Munoz, Clement Escoffier, Daniel Petisme, Don Naro, Dusan Odalovic, George Gastaldi, Georgios Andrianakis, Guillaume Smet, Gwenneg Lepage, Harald Reinmüller, Jaikiran Pai, Jan Martiska, John O&#8217;Hara, Ken Finnigan, Luca Burgazzoli, Maciej Swiderski, Manyanda Chitimbo, Martin Kouba, Matej Novotny, Matthias Andreas Benkard, Peter Palaga, Rostislav Svoboda, Sanne Grinovero, Sergey Beryozkin, Simon Bengtsson, Stéphane Epardaud, Stuart Douglas, Timothy Power, William Burns and Yoann Rodière.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="come-join-us"><a class="anchor" href="#come-join-us"></a>Come Join Us</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We value your feedback a lot so please report bugs, ask for improvements&#8230;&#8203; Let&#8217;s build something great together!</p>
+</div>
+<div class="paragraph">
+<p>If you are a Quarkus user or just curious, don&#8217;t be shy and join our welcoming community:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>provide feedback on <a href="https://github.com/quarkusio/quarkus/issues">GitHub</a>;</p>
 </li>
 <li>
-<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
+<p>craft some code and <a href="https://github.com/quarkusio/quarkus/pulls">push a PR</a>;</p>
 </li>
 <li>
-<p>Apache Maven 3.5.3+</p>
+<p>discuss with us on <a href="https://quarkusio.zulipchat.com/">Zulip</a> and on the <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a>;</p>
 </li>
 <li>
-<p>access to a Kubernetes or cluster (Minikube is a viable options)</p>
+<p>ask your questions on <a href="https://stackoverflow.com/questions/tagged/quarkus">Stack Overflow</a>.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>First, we need a new project that contains the kubernetes extension. This can be done using the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.25.0:create \
-    -DprojectGroupId=org.acme \
-    -DprojectArtifactId=test \
-    -DclassName="org.acme.rest.GreetingResource" \
-    -Dpath="/greeting" \
-    -Dextensions="kubernetes"</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="enable-kubernetes-support"><a class="anchor" href="#enable-kubernetes-support"></a>Enable Kubernetes support</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Quarkus offers the ability to automatically generate Kubernetes resources based on sane defaults and user supplied configuration. The implementation that takes care
-of generating the actual Kubernetes resources is provided by <a href="https://github.com/ap4k/ap4k/">ap4k</a>.</p>
-</div>
-<div class="paragraph">
-<p>When we added the <code>kubernetes</code> extension to the command line invocation above, the following dependency was added to the <code>pom.xml</code></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
-      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-      &lt;artifactId&gt;quarkus-kubernetes&lt;/artifactId&gt;
-    &lt;/dependency&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>By adding this dependency, we now have the ability to configure the Kubernetes resource generation and application using the usual <code>application.properties</code> approach that Quarkus provides.
-The configuration items that are available can be found in: <code>io.quarkus.kubernetes.deployment.KubernetesConfig</code> class.
-Furthermore, the items provided by <code>io.quarkus.deployment.ApplicationConfig</code> affect the Kubernetes resources.</p>
-</div>
-<div class="paragraph">
-<p>By using the following configuration for example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.group=yourDockerUsername # this is optional and defaults to your username if not set
-quarkus.application.name=test-quarkus-app # this is also optional and defaults to the project name if not set</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and following the execution of <code>mvn package</code> you will notice amongst the other files that are created, two files named
-<code>kubernetes.json</code> and <code>kubernetes.yaml</code> in the <code>target/wiring-classes/META-INF/kubernetes/</code> directory.</p>
-</div>
-<div class="paragraph">
-<p>If you look at either file you will see that it contains both a Kubernetes <code>Deployment</code> and a <code>Service</code>.</p>
-</div>
-<div class="paragraph">
-<p>The full source of the <code>kubernetes.json</code> file looks something like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
-  "apiVersion" : "v1",
-  "kind" : "List",
-  "items" : [ {
-    "apiVersion" : "apps/v1",
-    "kind" : "Deployment",
-    "metadata" : {
-      "labels" : {
-        "app" : "test-quarkus-app",
-        "version" : "1.0-SNAPSHOT",
-        "group" : "yourDockerUsername"
-      },
-      "name" : "test-quarkus-app"
-    },
-    "spec" : {
-      "replicas" : 1,
-      "selector" : {
-        "matchLabels" : {
-          "app" : "test-quarkus-app",
-          "version" : "1.0-SNAPSHOT",
-          "group" : "yourDockerUsername"
-        }
-      },
-      "template" : {
-        "metadata" : {
-          "labels" : {
-            "app" : "test-quarkus-app",
-            "version" : "1.0-SNAPSHOT",
-            "group" : "yourDockerUsername"
-          }
-        },
-        "spec" : {
-          "containers" : [ {
-            "env" : [ {
-              "name" : "KUBERNETES_NAMESPACE",
-              "valueFrom" : {
-                "fieldRef" : {
-                  "fieldPath" : "metadata.namespace"
-                }
-              }
-            } ],
-            "image" : "yourDockerUsername/test-quarkus-app:1.0-SNAPSHOT",
-            "imagePullPolicy" : "IfNotPresent",
-            "name" : "test-quarkus-app"
-          } ]
-        }
-      }
-    }
-  } ]
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>An important thing to note about the <code>Deployment</code> is that is uses <code>yourDockerUsername/test-quarkus-app:1.0-SNAPSHOT</code> as the Docker image of the <code>Pod</code>.</p>
-</div>
-<div class="paragraph">
-<p>Also the <code>Service</code> is configured to use container port <code>8080</code> (which is automatically picked up by the standard Quarkus configuration).</p>
-</div>
-</div>
-</div>
+          
+      </div>
     </div>
   </div>
 </div>
