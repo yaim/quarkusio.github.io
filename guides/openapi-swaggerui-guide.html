@@ -73,6 +73,12 @@
 <li><a href="#expose-openapi-specifications">Expose OpenAPI Specifications</a></li>
 <li><a href="#loading-openapi-schema-from-static-files">Loading OpenAPI Schema From Static Files</a></li>
 <li><a href="#use-swagger-ui-for-development">Use Swagger UI for development</a></li>
+<li><a href="#configuration-reference">Configuration Reference</a>
+<ul class="sectlevel2">
+<li><a href="#openapi">OpenAPI</a></li>
+<li><a href="#swagger-ui">Swagger UI</a></li>
+</ul>
+</li>
 </ul>
     </div>
     <div>
@@ -164,13 +170,10 @@ However, you can skip right to the completed example.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.openapi.swaggerui;
 
-import java.util.Objects;
-
 public class Fruit {
 
-    private String name;
-
-    private String description;
+    public String name;
+    public String description;
 
     public Fruit() {
     }
@@ -178,38 +181,6 @@ public class Fruit {
     public Fruit(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Fruit)) {
-            return false;
-        }
-
-        Fruit other = (Fruit) obj;
-
-        return Objects.equals(other.name, this.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.name);
     }
 }</code></pre>
 </div>
@@ -249,7 +220,7 @@ public class FruitResource {
 
     @DELETE
     public Set&lt;Fruit&gt; delete(Fruit fruit) {
-        fruits.remove(fruit);
+        fruits.removeIf(existingFruit -&gt; existingFruit.name.contentEquals(fruit.name));
         return fruits;
     }
 }</code></pre>
@@ -612,6 +583,98 @@ The UI is automatically generated from your OpenAPI specification.</p>
 </div>
 <div class="paragraph">
 <p>Hit <code>CTRL+C</code> to stop the application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="openapi"><a class="anchor" href="#openapi"></a>OpenAPI</h3>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Configuration property</th>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.smallrye-openapi.path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The path at which to register the OpenAPI Servlet.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/openapi</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="swagger-ui"><a class="anchor" href="#swagger-ui"></a>Swagger UI</h3>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Configuration property</th>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.swagger-ui.path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The path of the swagger-ui servlet.
+ The value <code>/</code> is not allowed as it blocks the application from serving anything else.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/swagger-ui</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.swagger-ui.always-include</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this should be included every time. By default this is only included when the application is running in dev mode.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>

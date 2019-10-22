@@ -86,6 +86,7 @@
 </ul>
 </li>
 <li><a href="#building-uber-jars">Building Uber-Jars</a></li>
+<li><a href="#building-with-gradlew-build">Building with <code>./gradlew build</code></a></li>
 </ul>
     </div>
     <div>
@@ -230,24 +231,9 @@ dependencies {
 <h2 id="enable-tests"><a class="anchor" href="#enable-tests"></a>Enable Tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus uses Junit5 and to enable it in Gradle we need to add a section to our build file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">test {
-  useJUnitPlatform()
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Using the Kotlin DSL, add:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks.test {
-    useJUnitPlatform()
-}</code></pre>
-</div>
+<p>When the Quarkus Gradle plugin is applied to a build, the <code>test</code> task is configured to run regular tests while the <code>testNative</code> task
+is meant to run the native image tests.
+The source code for the native image tests should reside in <code>src/native-test</code> instead of <code>src/test</code> where the source code for regular tests resides.</p>
 </div>
 <div class="paragraph">
 <p>To follow up our Rest example from above, we would also need to add two test dependencies:</p>
@@ -289,7 +275,6 @@ database.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">test {
-    useJUnitPlatform()
     systemProperty "quarkus.test.profile", "foo" <i class="conum" data-value="1"></i><b>(1)</b>
 }</code></pre>
 </div>
@@ -300,7 +285,6 @@ database.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks.test {
-    useJUnitPlatform()
     systemProperty("quarkus.test.profile", "foo") <i class="conum" data-value="1"></i><b>(1)</b>
  }</code></pre>
 </div>
@@ -438,13 +422,26 @@ redeployed application. If there are any issues with compilation or deployment a
 <p><code>false</code> - the JVM will start with debug mode disabled</p>
 </li>
 <li>
-<p><code>true</code> - the JVM will start in debug mode and be suspended until a debugger is attached to port <code>5005</code></p>
+<p><code>true</code> - The JVM is started in debug mode and will be listening on port <code>5005</code></p>
 </li>
 <li>
 <p><code>client</code> - the JVM will start in client mode and attempt to connect to <code>localhost:5005</code></p>
 </li>
 <li>
-<p><code>{port}</code> - the JVM will start in debug mode and be suspended until a debugger is attached to <code>{port}</code></p>
+<p><code>{port}</code> - The JVM is started in debug mode and will be listening on <code>{port}</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>An additional system property <code>suspend</code> can be used to suspend the JVM, when launched in debug mode. <code>suspend</code> supports the following values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>y</code> or <code>true</code> - The debug mode JVM launch is suspended</p>
+</li>
+<li>
+<p><code>n</code> or <code>false</code> - The debug mode JVM is started without suspending</p>
 </li>
 </ul>
 </div>
@@ -456,7 +453,7 @@ redeployed application. If there are any issues with compilation or deployment a
 </td>
 <td class="content">
 <div class="paragraph">
-<p>You can also run a Quarkus application in debug mode with a suspended JVM using <code>./gradlew quarkusDev -Ddebug</code> which is a shorthand for <code>./gradlew quarkusDev -Ddebug=true</code>.</p>
+<p>You can also run a Quarkus application in debug mode with a suspended JVM using <code>./gradlew quarkusDev -Dsuspend -Ddebug</code> which is a shorthand for <code>./gradlew quarkusDev -Dsuspend=true -Ddebug=true</code>.</p>
 </div>
 <div class="paragraph">
 <p>Then, attach your debugger to <code>localhost:5005</code>.</p>
@@ -641,6 +638,19 @@ However, it&#8217;s not an issue as we are going to copy it to a Docker containe
 </div>
 <div class="paragraph">
 <p>The entries are relative to the root of the generated Uber-Jar. You can specify multiple entries by adding extra <code>--ignored-entry</code> arguments.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="building-with-gradlew-build"><a class="anchor" href="#building-with-gradlew-build"></a>Building with <code>./gradlew build</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, <code>./gradlew build</code> will build the native image also. To skip it, use</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">./gradlew build -x buildNative -x testNative</code></pre>
+</div>
 </div>
 </div>
 </div>

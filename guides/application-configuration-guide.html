@@ -77,7 +77,12 @@
 <li><a href="#additional-notes-on-configproperties">Additional notes on @ConfigProperties</a></li>
 </ul>
 </li>
-<li><a href="#configuring-quarkus">Configuring Quarkus</a></li>
+<li><a href="#configuring-quarkus">Configuring Quarkus</a>
+<ul class="sectlevel2">
+<li><a href="#list-of-all-configuration-properties">List of all configuration properties</a></li>
+<li><a href="#generating-configuration-for-your-application">Generating configuration for your application</a></li>
+</ul>
+</li>
 <li><a href="#overriding-properties-at-runtime">Overriding properties at runtime</a>
 <ul class="sectlevel2">
 <li><a href="#configuration-profiles">Configuration Profiles</a></li>
@@ -532,6 +537,32 @@ the entire interface hierarchy are used to bind properties.</p>
 for its own configuration. For example to configure the HTTP server port you can set <code>quarkus.http.port</code> in
 <code>application.properties</code>.</p>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>As mentioned above, properties prefixed with <code>quarkus.</code> are effectively reserved for configuring Quarkus itself and
+therefore `quarkus.`should <strong>never</strong> be used as prefix for application specific properties.</p>
+</div>
+<div class="paragraph">
+<p>In the previous examples using <code>quarkus.message</code> instead of <code>greeting.message</code> would result in unexpected behavior.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="list-of-all-configuration-properties"><a class="anchor" href="#list-of-all-configuration-properties"></a>List of all configuration properties</h3>
+<div class="paragraph">
+<p>All the Quarkus configuration properties are <a href="all-config">documented and searcheable</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="generating-configuration-for-your-application"><a class="anchor" href="#generating-configuration-for-your-application"></a>Generating configuration for your application</h3>
 <div class="paragraph">
 <p>It is also possible to generate an example <code>application.properties</code> with all known configuration properties, to make
 it easy to see what Quarkus configuration options are available. To do this, run:</p>
@@ -566,6 +597,7 @@ parameter:</p>
 <div class="paragraph">
 <p>If a config option is already present (commented or not) it will not be added, so it is safe to run this after
 adding an additional extension to see what additional options have been added.</p>
+</div>
 </div>
 </div>
 </div>

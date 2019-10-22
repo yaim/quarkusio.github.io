@@ -164,7 +164,7 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:0.25.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=elytron-security-jdbc \
-    -Dextensions="elytron-security-jdbc, jdbc-h2, resteasy"</code></pre>
+    -Dextensions="elytron-security-jdbc, jdbc-postgresql, resteasy"</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -175,7 +175,7 @@ However, you can go right to the completed example.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Don&#8217;t forget to add the database connector library of choice. Here we are using H2 as identity store.</p>
+<p>Don&#8217;t forget to add the database connector library of choice. Here we are using PostgreSQL as identity store.</p>
 </div>
 </td>
 </tr>
@@ -277,14 +277,14 @@ public class UserResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:h2:mem:elytron-security-jdbc;DB_CLOSE_DELAY=-1;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:import.sql' <i class="conum" data-value="1"></i><b>(1)</b>
-quarkus.datasource.driver=org.h2.Driver
-quarkus.datasource.username=sa
-quarkus.datasource.password=sa</code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:postgresql:elytron-security-jdbc
+quarkus.datasource.driver=org.postgresql.Driver
+quarkus.datasource.username=quarkus
+quarkus.datasource.password=quarkus</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In our context, we are using H2 in-memory mode as identity store and we load <code>import.sql</code> to init the database with users and roles.</p>
+<p>In our context, we are using PostgreSQL as identity store and we init the database with users and roles.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -446,15 +446,15 @@ user%</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:h2:mem:multiple-data-sources-users;DB_CLOSE_DELAY=-1;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:multiple-data-sources/users.sql'
-quarkus.datasource.driver=org.h2.Driver
-quarkus.datasource.username=sa
-quarkus.datasource.password=sa
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:postgresql:multiple-data-sources-users
+quarkus.datasource.driver=org.postgresql.Driver
+quarkus.datasource.username=quarkus
+quarkus.datasource.password=quarkus
 
-quarkus.datasource.permissions.url=jdbc:h2:mem:multiple-data-sources-permissions;DB_CLOSE_DELAY=-1;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:multiple-data-sources/permissions.sql'
-quarkus.datasource.permissions.driver=org.h2.Driver
-quarkus.datasource.permissions.username=sa
-quarkus.datasource.permissions.password=sa
+quarkus.datasource.url=jdbc:postgresql:multiple-data-sources-permissions
+quarkus.datasource.driver=org.postgresql.Driver
+quarkus.datasource.username=quarkus
+quarkus.datasource.password=quarkus
 
 quarkus.security.jdbc.enabled=true
 quarkus.security.jdbc.principal-query.sql=SELECT u.password FROM test_user u WHERE u.username=?
@@ -491,26 +491,12 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.auth-mechanism</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The authentication mechanism</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASIC</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.realm-name</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The authentication mechanism</p>
+<p>The realm name</p>
 </div>
 </div>
 </div></div></td>
@@ -543,7 +529,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -697,7 +683,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -711,7 +697,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -753,7 +739,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

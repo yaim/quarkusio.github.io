@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus Elytron Security Jdbc</title>
+  <title>Quarkus Vault</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -62,7 +62,7 @@
 
     <div class="guide">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus Elytron Security Jdbc</h1>
+    <h1 class="text-caps">Quarkus Vault</h1>
     <div class="hide-mobile toc">
       
     </div>
@@ -86,54 +86,27 @@
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.realm-name</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.url</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The realm name</p>
+<p>Vault server url.
+ Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Quarkus</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html">URL</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.authentication.client-token</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the properties store is enabled.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.sql</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The sql query to find the password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.datasource</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The data source to use</p>
+<p>Vault token, bypassing Vault authentication (kubernetes, userpass or approle). This is useful in development where an authentication mode might not have been set up. In production we will usually prefer some authentication such as userpass, or preferably kubernetes, where Vault tokens get generated with a TTL and some ability to revoke them.</p>
 </div>
 </div>
 </div></div></td>
@@ -142,166 +115,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.clear-password-mapper.enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.authentication.app-role.role-id</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the clear-password-mapper is enabled.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.clear-password-mapper.password-index</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The index (1 based numbering) of the column containing the clear password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.bcrypt-password-mapper.enabled</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If the bcrypt-password-mapper is enabled.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.bcrypt-password-mapper.password-index</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The index (1 based numbering) of the column containing the password hash</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.bcrypt-password-mapper.hash-encoding</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>A string referencing the password hash encoding ("BASE64" or "HEX")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-index</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The index (1 based numbering) of the column containing the Bcrypt salt</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-encoding</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>A string referencing the salt encoding ("BASE64" or "HEX")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.bcrypt-password-mapper.iteration-count-index</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The index (1 based numbering) of the column containing the Bcrypt iteration count</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.attribute-mappings."attribute-mappings".index</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The index (1 based numbering) of column to map</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query.attribute-mappings."attribute-mappings".to</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The target attribute name</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".sql</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The sql query to find the password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".datasource</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The data source to use</p>
+<p>Role Id for AppRole auth method. This property is required when selecting the app-role authentication type.</p>
 </div>
 </div>
 </div></div></td>
@@ -310,54 +129,144 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".attribute-mappings."attribute-mappings".index</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.authentication.app-role.secret-id</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The index (1 based numbering) of column to map</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".attribute-mappings."attribute-mappings".to</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The target attribute name</p>
+<p>Secret Id for AppRole auth method. This property is required when selecting the app-role authentication type.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".clear-password-mapper.enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.authentication.userpass.username</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the clear-password-mapper is enabled.</p>
+<p>User for userpass auth method. This property is required when selecting the userpass authentication type.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".clear-password-mapper.password-index</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.authentication.userpass.password</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The index (1 based numbering) of the column containing the clear password</p>
+<p>Password for userpass auth method. This property is required when selecting the userpass authentication type.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.authentication.kubernetes.role</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Kubernetes authentication role that has been created in Vault to associate Vault policies, with Kubernetes service accounts and/or Kubernetes namespaces. This property is required when selecting the Kubernetes authentication type.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.authentication.kubernetes.jwt-token-path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Location of the file containing the Kubernetes JWT token to authenticate against in Kubernetes authentication mode.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/var/run/secrets/kubernetes.io/serviceaccount/token</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.renew-grace-period</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Renew grace period duration.
+ This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current lease reaches its max_ttl. By default Vault leaseDuration is equal to 7 days (ie: 168h or 604800s). If a connection pool maxLifetime is set, it is reasonable to set the renewGracePeriod to be greater than the maxLifetime, so that we are sure we get a chance to renew leases before we reach the ttl. In any case you need to make sure there will be attempts to fetch secrets within the renewGracePeriod, because that is when the renewals will happen. This particularly important for db dynamic secrets because if the lease reaches its ttl or max_ttl, the password of the db user will become invalid and it will be not longer possible to log in. This value should also be smaller than the ttl, otherwise that would mean that we would try to recreate leases all the time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1H</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.secret-config-cache-period</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Vault config source cache period.
+ Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault again until the expiration of that period. This property is ignored if secret-config-kv-path is not set.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10M</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.secret-config-kv-path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Vault path in kv store, where all properties will be available as MP config.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.log-confidentiality-level</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Used to hide confidential infos, for logging in particular. Possible values are:
+ -   low: display all secrets.   medium: display only usernames and lease ids (ie: passwords and tokens are masked).   high: hide lease ids and dynamic credentials username.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>low</code>, <code>medium</code>, <code>high</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>medium</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.kv-secret-engine-version</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Kv secret engine version.
+ see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
 </div>
 </div>
 </div></div></td>
@@ -366,12 +275,28 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.kv-secret-engine-mount-path</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the bcrypt-password-mapper is enabled.</p>
+<p>Kv secret engine path.
+ see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>secret</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.tls.skip-verify</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Allows to bypass certificate validation on TLS communications.
+ If true this will allow TLS communications with Vault, without checking the validity of the certificate presented by Vault. This is discouraged in production because it allows man in the middle type of attacks.</p>
 </div>
 </div>
 </div></div></td>
@@ -380,76 +305,133 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.password-index</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.tls.ca-cert</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The index (1 based numbering) of the column containing the password hash</p>
+<p>Certificate bundle used to validate TLS communications with Vault.
+ The path to a pem bundle file, if TLS is required, and trusted certificates are not set through javax.net.ssl.trustStore system property.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.hash-encoding</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.tls.use-kubernetes-ca-cert</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>A string referencing the password hash encoding ("BASE64" or "HEX")</p>
+<p>If true and Vault authentication type is kubernetes, TLS will be active and the cacert path will be set to /var/run/secrets/kubernetes.io/serviceaccount/ca.crt. If set, this setting will take precedence over property quarkus.vault.tls.ca-cert. This means that if Vault authentication type is kubernetes and we want to use quarkus.vault.tls.ca-cert or system property javax.net.ssl.trustStore, then this property should be set to false.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.salt-index</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.connect-timeout</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The index (1 based numbering) of the column containing the Bcrypt salt</p>
+<p>Timeout to establish a connection with Vault.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5S</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.salt-encoding</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.read-timeout</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>A string referencing the salt encoding ("BASE64" or "HEX")</p>
+<p>Request timeout on Vault.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1S</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.iteration-count-index</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The index (1 based numbering) of the column containing the Bcrypt iteration count</p>
+<p>Database credentials role, as defined by <a href="https://www.vaultproject.io/docs/secrets/databases/index.html" class="bare">https://www.vaultproject.io/docs/secrets/databases/index.html</a>
+ One of database-credentials-role or kv-path needs to be defined. not both.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.credentials-provider."credentials-provider".kv-path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A path in vault kv store, where we will find the kv-key.
+ One of database-credentials-role or kv-path needs to be defined. not both.
+ see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.vault.credentials-provider."credentials-provider".kv-key</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key name to search in vault path kv-path. The value for that key is the credential.
+ kv-key should not be defined if kv-path is not.
+ see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
 </tr>
 </tbody>
 </table>
+<div id="duration-note-anchor" class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">About the Duration format</div>
+<div class="paragraph">
+<p>The format for durations uses the standard <code>java.time.Duration</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can also provide duration values starting with a number.
+In this case, if the value consists only of a number, the converter treats the value as seconds.
+Otherwise, <code>PT</code> is implicitly appended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
     </div>
   </div>
 </div>

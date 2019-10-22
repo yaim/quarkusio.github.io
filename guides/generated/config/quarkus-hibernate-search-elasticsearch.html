@@ -140,8 +140,8 @@
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -367,37 +367,6 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".version</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The version of Elasticsearch used in the cluster.
- As the schema is generated without a connection to the server, this item is mandatory.
- It doesn&#8217;t have to be the exact version (it can be 7 or 7.1 for instance) but it has to be sufficiently precise to choose a model dialect (the one used to generate the schema) compatible with the protocol dialect (the one used to communicate with Elasticsearch).
- There&#8217;s no rule of thumb here as it depends on the schema incompatibilities introduced by Elasticsearch versions. In any case, if there is a problem, you will have an error when Hibernate Search tries to connect to the cluster.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">ElasticsearchVersion</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".analysis.configurer</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The class or the name of the bean used to configure full text analysis (e.g. analyzers, normalizers).</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.indexes."indexes".lifecycle.strategy</code></p>
 </div>
 <div class="openblock description">
@@ -442,8 +411,45 @@
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Additional backends</p></th>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".hosts</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".version</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The version of Elasticsearch used in the cluster.
+ As the schema is generated without a connection to the server, this item is mandatory.
+ It doesn&#8217;t have to be the exact version (it can be 7 or 7.1 for instance) but it has to be sufficiently precise to choose a model dialect (the one used to generate the schema) compatible with the protocol dialect (the one used to communicate with Elasticsearch).
+ There&#8217;s no rule of thumb here as it depends on the schema incompatibilities introduced by Elasticsearch versions. In any case, if there is a problem, you will have an error when Hibernate Search tries to connect to the cluster.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">ElasticsearchVersion</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".analysis.configurer</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The class or the name of the bean used to configure full text analysis (e.g. analyzers, normalizers).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Additional backends</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".hosts</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -452,12 +458,12 @@
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".username</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".username</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -471,7 +477,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".password</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".password</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -485,7 +491,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".connection-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".connection-timeout</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -500,7 +506,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".max-connections</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".max-connections</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -514,7 +520,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".max-connections-per-route</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".max-connections-per-route</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -528,7 +534,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".discovery.enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.enabled</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -542,7 +548,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".discovery.refresh-interval</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.refresh-interval</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -557,7 +563,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".discovery.default-scheme</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.default-scheme</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -571,7 +577,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.lifecycle.strategy</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.strategy</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -586,7 +592,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.lifecycle.required-status</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -601,7 +607,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".index-defaults.lifecycle.required-status-wait-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status-wait-timeout</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -616,7 +622,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".lifecycle.strategy</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."indexes".lifecycle.strategy</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -631,7 +637,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".lifecycle.required-status</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."indexes".lifecycle.required-status</code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -646,7 +652,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."additional-backends".indexes."indexes".lifecycle.required-status-wait-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."indexes".lifecycle.required-status-wait-timeout</code></p>
 </div>
 <div class="openblock description">
 <div class="content">

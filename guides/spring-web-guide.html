@@ -72,6 +72,7 @@
 <li><a href="#greetingcontrollertest">GreetingControllerTest</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
 <li><a href="#run-the-application-as-a-native-executable">Run the application as a native executable</a></li>
+<li><a href="#going-further-with-an-endpoint-returning-json">Going further with an endpoint returning JSON</a></li>
 <li><a href="#supported-spring-web-functionalities">Supported Spring Web functionalities</a>
 <ul class="sectlevel2">
 <li><a href="#annotations">Annotations</a></li>
@@ -233,6 +234,76 @@ Open your browser to <a href="http://localhost:8080/greeting" class="bare">http:
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can of course create a native image using the instructions of the <a href="building-native-image-guide.html">Building a native executable guide</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="going-further-with-an-endpoint-returning-json"><a class="anchor" href="#going-further-with-an-endpoint-returning-json"></a>Going further with an endpoint returning JSON</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>GreetingController</code> above was an example of a very simple endpoint. In many cases however it is required to return JSON content.
+The following example illustrates how that could be achieved using a Spring RestController:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/greeting")
+public class GreetingController {
+
+    @GetMapping("/{name}")
+    public Greeting hello(@PathVariable(name = "name") String name) {
+        return new Greeting("hello " + name);
+    }
+
+    public static class Greeting {
+        private final String message;
+
+        public Greeting(String message) {
+            this.message = message;
+        }
+
+        public String getMessage(){
+            return message;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The corresponding test could look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.spring.web;
+
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+
+@QuarkusTest
+public class GreetingControllerTest {
+
+    @Test
+    public void testHelloEndpoint() {
+        given()
+          .when().get("/greeting/quarkus")
+          .then()
+            .statusCode(200)
+            .body("message", is("hello quarkus"));
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It should be noted that when using the Spring Web support in Quarkus, <a href="https://github.com/FasterXML/jackson">Jackson</a> is automatically added to the classpath and properly setup.</p>
 </div>
 </div>
 </div>

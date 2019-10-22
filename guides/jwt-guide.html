@@ -65,8 +65,10 @@
     <h1 class="text-caps">Quarkus - Using JWT RBAC</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
-<li><a href="#configuration">Configuration</a>
+<li><a href="#configuration-reference">Configuration Reference</a>
 <ul class="sectlevel2">
+<li><a href="#quarkus-configuration">Quarkus configuration</a></li>
+<li><a href="#microprofile-jwt-configuration">MicroProfile JWT configuration</a></li>
 <li><a href="#supported-public-key-formats">Supported Public Key Formats</a></li>
 </ul>
 </li>
@@ -104,8 +106,60 @@ secured access to the JAX-RS endpoints.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h2>
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="quarkus-configuration"><a class="anchor" href="#quarkus-configuration"></a>Quarkus configuration</h3>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Configuration property</th>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.smallrye-jwt.enabled</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The MP-JWT configuration object</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.smallrye-jwt.rsa-sig-provider</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the <code>java.security.Provider</code> that supports SHA256withRSA signatures</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>SunRsaSign</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="microprofile-jwt-configuration"><a class="anchor" href="#microprofile-jwt-configuration"></a>MicroProfile JWT configuration</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -120,21 +174,6 @@ secured access to the JAX-RS endpoints.</p>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smallrye-jwt.enabled</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Determine if the jwt extension is enabled. Enabled by default if you include the smallrye-jwt dependency, so this would be used to disable it.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smallrye-jwt.realm-name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Quarkus-JWT</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for security realm.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.smallrye-jwt.auth-mechanism</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MP-JWT</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for authentication mechanism</p></td>
-</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mp.jwt.verify.publickey</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
@@ -153,6 +192,7 @@ secured access to the JAX-RS endpoints.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <div class="sect2">
 <h3 id="supported-public-key-formats"><a class="anchor" href="#supported-public-key-formats"></a>Supported Public Key Formats</h3>
 <div class="paragraph">
@@ -500,7 +540,7 @@ Not authorized</code></pre>
 <h2 id="configuring-the-smallrye-jwt-extension-security-information"><a class="anchor" href="#configuring-the-smallrye-jwt-extension-security-information"></a>Configuring the Smallrye JWT Extension Security Information</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the <a href="#configuration">Configuration</a> section we introduce the <code>application.properties</code> file that affect the Smallrye JWT extension.</p>
+<p>In the <a href="#configuration-reference">Configuration Reference</a> section we introduce the <code>application.properties</code> file that affect the Smallrye JWT extension.</p>
 </div>
 <div class="sect2">
 <h3 id="setting-up-application-properties"><a class="anchor" href="#setting-up-application-properties"></a>Setting up application.properties</h3>
@@ -570,7 +610,7 @@ nQIDAQAB
 <h3 id="generating-a-jwt"><a class="anchor" href="#generating-a-jwt"></a>Generating a JWT</h3>
 <div class="paragraph">
 <p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the
-<a href="https://bitbucket.org/connect2id/nimbus-jose-jwt/wiki/Home">Nimbus JOSE+JWT</a> library and the TokenUtils class shown in the following listing. Take this source and place it into using-jwt-rbac/src/test/java/org/acme/jwt/TokenUtils.java.</p>
+<a href="https://bitbucket.org/b_c/jose4j/wiki/Home">Jose4J</a> library and the TokenUtils class shown in the following listing. Take this source and place it into using-jwt-rbac/src/test/java/org/acme/jwt/TokenUtils.java.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -589,33 +629,22 @@ JWT libraries for many different programming languages can be found at the JWT.i
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
-import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
-
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.Date;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.jwt.Claims;
-
-import com.nimbusds.jose.JOSEObjectType;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.crypto.RSASSASigner;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
+import org.jose4j.jws.AlgorithmIdentifiers;
+import org.jose4j.jws.JsonWebSignature;
+import org.jose4j.jwt.JwtClaims;
+import org.jose4j.jwt.NumericDate;
 
 /**
  * Utilities for generating a JWT for testing
@@ -642,63 +671,37 @@ public class TokenUtils {
         return generateTokenString(pk, "/privateKey.pem", jsonResName, timeClaims);
     }
 
-    /**
-     * Utility method to generate a JWT string from a JSON resource file that is signed by the privateKey.pem
-     * test resource key, possibly with invalid fields.
-     *
-     * @param pk - the private key to sign the token with
-     * @param kid - the kid claim to assign to the token
-     * @param jsonResName - name of test resources file
-     * @param timeClaims - used to return the exp, iat, auth_time claims
-     * @return the JWT string
-     * @throws Exception on parse failure
-     */
-    public static String generateTokenString(PrivateKey pk, String kid, String jsonResName, Map&lt;String, Long&gt; timeClaims) throws Exception {
-        InputStream contentIS = TokenUtils.class.getResourceAsStream(jsonResName);
-        if (contentIS == null) {
-            throw new IllegalStateException("Failed to find resource: " + jsonResName);
-        }
-        byte[] tmp = new byte[4096];
-        int length = contentIS.read(tmp);
-        byte[] content = new byte[length];
-        System.arraycopy(tmp, 0, content, 0, length);
+    public static String generateTokenString(PrivateKey privateKey, String kid,
+        String jsonResName, Map&lt;String, Long&gt; timeClaims) throws Exception {
 
-        JSONParser parser = new JSONParser(DEFAULT_PERMISSIVE_MODE);
-        JSONObject jwtContent = parser.parse(content, JSONObject.class);
+        JwtClaims claims = JwtClaims.parse(readTokenContent(jsonResName));
         long currentTimeInSecs = currentTimeInSecs();
-        long exp = currentTimeInSecs + 300;
-        // If exp was passed in, use it
-        if (timeClaims.containsKey(Claims.exp.name())) {
-            exp = timeClaims.get(Claims.exp.name());
-        }
-        System.out.printf("Setting exp: %d / %s%n", exp, new Date(1000*exp));
-        long iat = currentTimeInSecs;
-        long authTime = currentTimeInSecs;
-        jwtContent.put(Claims.exp.name(), exp);
-        jwtContent.put(Claims.iat.name(), iat);
-        jwtContent.put(Claims.auth_time.name(), authTime);
-        // Return the token time values if requested
-        if (timeClaims != null) {
-            timeClaims.put(Claims.iat.name(), iat);
-            timeClaims.put(Claims.auth_time.name(), authTime);
-            timeClaims.put(Claims.exp.name(), exp);
+        long exp = timeClaims != null &amp;&amp; timeClaims.containsKey(Claims.exp.name())
+            ? timeClaims.get(Claims.exp.name()) : currentTimeInSecs + 300;
+
+        claims.setIssuedAt(NumericDate.fromSeconds(currentTimeInSecs));
+        claims.setClaim(Claims.auth_time.name(), NumericDate.fromSeconds(currentTimeInSecs));
+        claims.setExpirationTime(NumericDate.fromSeconds(exp));
+
+        for (Map.Entry&lt;String, Object&gt; entry : claims.getClaimsMap().entrySet()) {
+            System.out.printf("\tAdded claim: %s, value: %s\n", entry.getKey(), entry.getValue());
         }
 
-        // Create RSA-signer with the private key
-        JWSSigner signer = new RSASSASigner(pk);
-        JWTClaimsSet claimsSet = JWTClaimsSet.parse(jwtContent);
-        for (String claim : claimsSet.getClaims().keySet()) {
-            Object claimValue = claimsSet.getClaim(claim);
-            System.out.printf("\tAdded claim: %s, value: %s%n", claim, claimValue);
+        JsonWebSignature jws = new JsonWebSignature();
+        jws.setPayload(claims.toJson());
+        jws.setKey(privateKey);
+        jws.setKeyIdHeaderValue(kid);
+        jws.setHeader("typ", "JWT");
+        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
+
+        return jws.getCompactSerialization();
+    }
+
+    private static String readTokenContent(String jsonResName) throws IOException {
+        InputStream contentIS = TokenUtils.class.getResourceAsStream(jsonResName);
+        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(contentIS))) {
+            return buffer.lines().collect(Collectors.joining("\n"));
         }
-        JWSAlgorithm alg = JWSAlgorithm.RS256;
-        JWSHeader jwtHeader = new JWSHeader.Builder(alg)
-                .keyID(kid)
-                .type(JOSEObjectType.JWT)
-                .build();
-        SignedJWT signedJWT = new SignedJWT(jwtHeader, claimsSet);
-        signedJWT.sign(signer);
-        return signedJWT.serialize();
     }
 
     /**
@@ -716,19 +719,6 @@ public class TokenUtils {
     }
 
     /**
-     * Generate a new RSA keypair.
-     *
-     * @param keySize - the size of the key
-     * @return KeyPair
-     * @throws NoSuchAlgorithmException on failure to load RSA key generator
-     */
-    public static KeyPair generateKeyPair(final int keySize) throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(keySize);
-        return keyPairGenerator.genKeyPair();
-    }
-
-    /**
      * Decode a PEM encoded private key string to an RSA PrivateKey
      *
      * @param pemEncoded - PEM string for private key
@@ -743,22 +733,7 @@ public class TokenUtils {
         return kf.generatePrivate(keySpec);
     }
 
-    /**
-     * Decode a PEM encoded public key string to an RSA PublicKey
-     *
-     * @param pemEncoded - PEM string for private key
-     * @return PublicKey
-     * @throws Exception on decode failure
-     */
-    public static PublicKey decodePublicKey(String pemEncoded) throws Exception {
-        byte[] encodedBytes = toEncodedBytes(pemEncoded);
-
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(encodedBytes);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePublic(spec);
-    }
-
-    private static byte[] toEncodedBytes(final String pemEncoded) {
+   private static byte[] toEncodedBytes(final String pemEncoded) {
         final String normalizedPem = removeBeginEnd(pemEncoded);
         return Base64.getDecoder().decode(normalizedPem);
     }
@@ -820,20 +795,6 @@ public class GenerateToken {
         System.out.println(token);
     }
 }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To get these classes to compile and run, you need to add the following dependency to your using-jwt-rbac/pom.xml:</p>
-</div>
-<div class="listingblock">
-<div class="title">nimbus-jose-jwt library dependency</div>
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
-      &lt;groupId&gt;com.nimbusds&lt;/groupId&gt;
-      &lt;artifactId&gt;nimbus-jose-jwt&lt;/artifactId&gt;
-      &lt;version&gt;6.7&lt;/version&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1034,20 +995,19 @@ the JWT, and should be '/JwtClaims.json' for this quickstart.</p>
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
 [INFO] --- exec-maven-plugin:1.6.0:java (default-cli) @ using-jwt-rbac ---
-Setting exp: 1551663155 / Sun Mar 03 17:32:35 PST 2019
-	Added claim: sub, value: jdoe-using-jwt-rbac
-	Added claim: aud, value: [using-jwt-rbac]
-	Added claim: upn, value: jdoe@quarkus.io
-	Added claim: birthdate, value: 2001-07-13
-	Added claim: auth_time, value: 1551659555
 	Added claim: iss, value: https://quarkus.io/using-jwt-rbac
-	Added claim: roleMappings, value: {"group2":"Group2MappedRole","group1":"Group1MappedRole"}
-	Added claim: groups, value: ["Echoer","Tester","Subscriber","group2"]
-	Added claim: preferred_username, value: jdoe
-	Added claim: exp, value: Sun Mar 03 17:32:35 PST 2019
-	Added claim: iat, value: Sun Mar 03 16:32:35 PST 2019
 	Added claim: jti, value: a-123
-eyJraWQiOiJcL3ByaXZhdGVLZXkucGVtIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJqZG9lLXVzaW5nLWp3dC1yYmFjIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwiYXV0aF90aW1lIjoxNTUxNjU5NTU1LCJpc3MiOiJodHRwczpcL1wvcXVhcmt1cy5pb1wvdXNpbmctand0LXJiYWMiLCJyb2xlTWFwcGluZ3MiOnsiZ3JvdXAyIjoiR3JvdXAyTWFwcGVkUm9sZSIsImdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUifSwiZ3JvdXBzIjpbIkVjaG9lciIsIlRlc3RlciIsIlN1YnNjcmliZXIiLCJncm91cDIiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiamRvZSIsImV4cCI6MTU1MTY2MzE1NSwiaWF0IjoxNTUxNjU5NTU1LCJqdGkiOiJhLTEyMyJ9.QUfvHUstBHySis40QjecA7GbNEhM_kNWPRvgT7RShqIRJxr3A3pC3uO1p6Swx-7qiR21YYmGM3-hgXJPky-dKSGye_aLOXbNsqBn8RYmrrzFIlhtkZPhdqY60wYoMC4zk13oZKozUeVr5F-tLKtkXxoTQT1QWYH0YLk5BhpD1uJVpF8jiPk-CiLBn36Qee6cS2nBW1s7e2amnzgROeLAR5f1TQYPFHA9ULK9OxXq4ciMciwC_BCIykyR0pkBHhhhGjMcTxvwNMq6zRTwMGxvz-IZ53Gi8P_gl8ntT_NAJ5gd4RTmeqbWDFcrjBsCDRN92ixH50q_XDrcOs-s9800Gw
+	Added claim: sub, value: jdoe-using-jwt-rbac
+	Added claim: upn, value: jdoe@quarkus.io
+	Added claim: preferred_username, value: jdoe
+	Added claim: aud, value: using-jwt-rbac
+	Added claim: birthdate, value: 2001-07-13
+	Added claim: roleMappings, value: {group1=Group1MappedRole, group2=Group2MappedRole}
+	Added claim: groups, value: [Echoer, Tester, Subscriber, group2]
+	Added claim: iat, value: 1571329458
+	Added claim: auth_time, value: NumericDate{1571329458 -&gt; Oct 17, 2019 5:24:18 PM IST}
+	Added claim: exp, value: 1571333058
+eyJraWQiOiIvcHJpdmF0ZUtleS5wZW0iLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL3F1YXJrdXMuaW8vdXNpbmctand0LXJiYWMiLCJqdGkiOiJhLTEyMyIsInN1YiI6Impkb2UtdXNpbmctand0LXJiYWMiLCJ1cG4iOiJqZG9lQHF1YXJrdXMuaW8iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJqZG9lIiwiYXVkIjoidXNpbmctand0LXJiYWMiLCJiaXJ0aGRhdGUiOiIyMDAxLTA3LTEzIiwicm9sZU1hcHBpbmdzIjp7Imdyb3VwMSI6Ikdyb3VwMU1hcHBlZFJvbGUiLCJncm91cDIiOiJHcm91cDJNYXBwZWRSb2xlIn0sImdyb3VwcyI6WyJFY2hvZXIiLCJUZXN0ZXIiLCJTdWJzY3JpYmVyIiwiZ3JvdXAyIl0sImlhdCI6MTU3MTMyOTQ1OCwiYXV0aF90aW1lIjoiTnVtZXJpY0RhdGV7MTU3MTMyOTQ1OCAtPiBPY3QgMTcsIDIwMTkgNToyNDoxOCBQTSBJU1R9IiwiZXhwIjoxNTcxMzMzMDU4fQ.Hn6f0qSk6wbbqOM-q9zo1KQ91VwIAdhJqdMmNK3pQrgSv68Ljdi75nSKvDmQwhtvEnHbZvoZy4BqbQagLT05JYcAWaT4NrtFLaqtJ_k8HD39_HosObF43u-vpEwisen0U219R0hpo9jx8Qohj4gzM-YL1sIFgqZSgsxH6YEorVLS70vkizTqfcclMvyrmkUq0nA4p4ST7jq987RkqXtY7U6jNc0rVnu7XmalA26VtfcqSgz9fwk_b-TmwqA6jgLvO6Rdovh0Q6tRDOW1VugQ_11-3k34ImdD3HG8gpdGatulHKWoxg9MhIcbrFWftlk7Ts97tkljp8ysfFzwFELnkg
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
@@ -1086,7 +1046,7 @@ hello + jdoe@quarkus.io, isSecure: false, authScheme: MP-JWT, hasJWT: true</code
 <p>a non-anonymous caller name of <a href="mailto:jdoe@quarkus.io">jdoe@quarkus.io</a></p>
 </li>
 <li>
-<p>an authentication scheme of MP-JWT</p>
+<p>an authentication scheme of Bearer</p>
 </li>
 <li>
 <p>a non-null JsonWebToken</p>

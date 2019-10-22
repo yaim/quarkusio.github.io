@@ -76,6 +76,7 @@
 <li><a href="#adding-user-specific-data-to-the-health-check-response">Adding user-specific data to the health check response</a></li>
 <li><a href="#extension-health-checks">Extension health checks</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#configuration-reference">Configuration Reference</a></li>
 </ul>
     </div>
     <div>
@@ -509,26 +510,110 @@ readiness checks are used to tell whether the application is able to process req
 <ul>
 <li>
 <p>adding the <code>smallrye-health</code> Quarkus extension to your project using the
-<code>quarkus-maven-plugin</code>:</p>
-<div class="literalblock">
-<div class="content">
-<pre>mvn quarkus:add-extension -Dextensions="health"</pre>
-</div>
-</div>
-</li>
-<li>
-<p>or simply adding the following Maven dependency:</p>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;dependency&gt;
-  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-  &lt;artifactId&gt;quarkus-smallrye-health&lt;/artifactId&gt;
-&lt;/dependency&gt;</pre>
-</div>
-</div>
+<code>quarkus-maven-plugin</code>:<br></p>
 </li>
 </ul>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre>./mvnw quarkus:add-extension -Dextensions="health"</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>or simply adding the following Maven dependency:<br></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-smallrye-health&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
+<div class="sectionbody">
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Configuration property</th>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.smallrye-health.root-path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Root path for health-checking servlets.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/health</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.smallrye-health.liveness-path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The relative path of the liveness health-checking servlet.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/live</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.smallrye-health.readiness-path</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The relative path of the readiness health-checking servlet.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/ready</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.health.extensions.enabled</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not extensions published health check should be enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
     </div>

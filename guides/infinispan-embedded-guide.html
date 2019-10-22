@@ -73,6 +73,7 @@
 </ul>
 </li>
 <li><a href="#injection-cdi">Injection (CDI)</a></li>
+<li><a href="#configuration-reference">Configuration Reference</a></li>
 </ul>
     </div>
     <div>
@@ -196,34 +197,41 @@ have to configure and start caches manually.</p>
 </dd>
 </dl>
 </div>
-<div class="paragraph">
-<p>Configure Infinispan embedded caches with <code>application.properties</code> in the <code>src/main/resources</code> directory.</p>
 </div>
-<div class="paragraph">
-<p>Configuration properties are as follows:</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
+<div class="sect1">
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
+<div class="sectionbody">
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Default Value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Runtime/Buildtime</th>
+<th class="tableblock halign-left valign-top">Configuration property</th>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.infinispan-embedded.xml-config</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;empty&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a valid Infinispan configuration in <code>XML</code> format, either absolute
-or relative to the working directory.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Runtime overridable</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.infinispan-embedded.xml-config</code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The configured Infinispan embeddex xml file which is used by the managed EmbeddedCacheManager and its Caches</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>
