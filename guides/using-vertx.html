@@ -236,7 +236,7 @@ vertx.fileSystem().rxReadFile("lorem-ipsum.txt")
 // Axle API:
 vertx.fileSystem().readFile("lorem-ipsum.txt")
     .thenApply(buffer -&gt; buffer.toString("UTF-8"))
-    .whenComplete((res, err) -&gt; {
+    .whenComplete((content, err) -&gt; {
         if (err != null) {
             System.out.println("Cannot read the file: " + err.getMessage());
         } else {
