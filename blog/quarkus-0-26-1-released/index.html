@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using WebSockets</title>
+  <title>Quarkus 0.26.1 released - Stabilizing things and adding Vault support</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -21,7 +21,7 @@
   <script src="https://quarkus.io//assets/javascript/hl.js" type="text/javascript"></script>
 </head>
 
-<body class="guides">
+<body class="post">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -42,7 +42,7 @@
               <a href="/get-started/" class="">Get Started</a>
             </li>
             <li>
-              <a href="/guides/" class="active">Guides</a>
+              <a href="/guides/" class="">Guides</a>
             </li>
             <li>
               <a href="https://code.quarkus.io">Start Coding</a>
@@ -51,7 +51,7 @@
               <a href="/community/" class="">Community</a>
             </li>
             <li>
-              <a href="/blog/" class="">Blog</a>
+              <a href="/blog/" class="active">Blog</a>
             </li>
           </ul>
         </nav>
@@ -60,225 +60,138 @@
   </div>
 </div>
 
-    <div class="guide">
-  <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using WebSockets</h1>
-    <div class="hide-mobile toc">
-      <ul class="sectlevel1">
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#architecture">Architecture</a></li>
-<li><a href="#solution">Solution</a></li>
-<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
-<li><a href="#handling-web-sockets">Handling web sockets</a></li>
-<li><a href="#a-slick-web-frontend">A slick web frontend</a></li>
-<li><a href="#run-the-application">Run the application</a></li>
-</ul>
-    </div>
-    <div>
-      <div id="preamble">
-<div class="sectionbody">
+    <div class="post-page grid-wrapper">
+  <div class="grid__item width-10-12 width-12-12-m doc-content">
+    <h1>Quarkus 0.26.1 released - Stabilizing things and adding Vault support</h1>
+    <div class="grid-wrapper">
+      <div class="grid__item width-8-12 width-12-12-m byline-wrapper">
+        
+        
+          <img class="headshot" src="https://www.gravatar.com/avatar/ec96387a1a8295b6fd6dffb68f80c352">
+        
+        <p class="byline">By Guillaume Smet | October 23, 2019</p>
+      </div>
+      <div class="grid__item width-4-12 width-12-12-m"><div class="share-page">
+  <a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https://quarkus.io//blog/quarkus-0-26-1-released/&title=Quarkus 0.26.1 released - Stabilizing things and adding Vault support" rel="nofollow" target="_blank" title="Share on LinkedIn">
+    <img src="/assets/images/share-page/icons_social-linkedin.png"/>
+  </a>
+  <a class="share-twitter" href="https://twitter.com/intent/tweet?text=Quarkus 0.26.1 released - Stabilizing things and adding Vault support&url=https://quarkus.io//blog/quarkus-0-26-1-released/&via=quarkusio&related=quarkusio" rel="nofollow" target="_blank" title="Share on Twitter">
+    <img src="/assets/images/share-page/icons_social-twitter.png"/>
+  </a>
+  <a class="share-facebook" href="https://facebook.com/sharer.php?u=https://quarkus.io//blog/quarkus-0-26-1-released/" rel="nofollow" target="_blank" title="Share on Facebook">
+    <img src="/assets/images/share-page/icons_social-facebook.png"/>
+  </a>
+  <a class="share-reddit" href="http://www.reddit.com/submit?url=https://quarkus.io//blog/quarkus-0-26-1-released/" onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;" title="Share on Reddit" >
+    <img src="/assets/images/share-page/icons_social-reddit.png"/>
+  </a>
+  <a class="share-email" href="mailto:?subject=Quarkus 0.26.1 released - Stabilizing things and adding Vault support&amp;body=Quarkus 0.26.1 released - Stabilizing things and adding Vault support https://quarkus.io//blog/quarkus-0-26-1-released/" title="Share via Email" >
+    <img src="/assets/images/share-page/icons_social-email.png"/>
+  </a>
+</div>
+</div>
+      <div class="grid__item width-12-12">
+          <div class="paragraph">
+<p>Keeping the rapid pace of one release per week, here comes Quarkus 0.26.1.</p>
+</div>
 <div class="paragraph">
-<p>This guide explains how your Quarkus application can utilize web sockets to create interactive web applications.
-Because it&#8217;s the <em>canonical</em> web socket application, we are going to create a simple chat application.</p>
+<p>Thanks a lot to the community at large for the useful bug reports, that helps a lot in stabilizing the new HTTP and security layers. Keep them coming.</p>
+</div>
+<div class="paragraph">
+<p>Apart from bugfixes, the new big thing in 0.26.1 is an extension adding support for <a href="https://www.vaultproject.io/">HashiCorp Vault</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The recommended version of GraalVM is still 19.2.0.1 as the 19.2.1 artifacts are still not published on Central.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect1">
+<h2 id="whats-new"><a class="anchor" href="#whats-new"></a>What&#8217;s new?</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="vault-support"><a class="anchor" href="#vault-support"></a>Vault support</h3>
+<div class="paragraph">
+<p>The latest addition in Quarkus extension universe is a Vault extension. No more plain text database credentials in your configuration files: you can now store them securely in <a href="https://www.vaultproject.io/">Vault</a>.</p>
+</div>
+<div class="paragraph">
+<p>The extension comes with a MicroProfile config source so you can directly inject secured properties coming from Vault in your application.</p>
+</div>
+<div class="paragraph">
+<p>More on that in <a href="https://quarkus.io/guides/vault-guide">our extensive guide</a>.</p>
+</div>
+<div class="paragraph">
+<p>As usual for new extensions, feedback is highly welcome, be it positive feedback or bug reports.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="gradle-plugin-published-on-gradle-portal"><a class="anchor" href="#gradle-plugin-published-on-gradle-portal"></a>Gradle plugin published on Gradle portal</h3>
+<div class="paragraph">
+<p>The Gradle plugin is now published <a href="https://plugins.gradle.org/plugin/io.quarkus">on the Gradle portal</a> for each new version as part of our release process.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="live-reload-issue-on-windows"><a class="anchor" href="#live-reload-issue-on-windows"></a>Live reload issue on Windows</h3>
+<div class="paragraph">
+<p>This time, <a href="https://github.com/quarkusio/quarkus/issues/3592">the infamous <code>InvalidPathException</code> on live reload issue</a> should be fully solved. There was one remaining problem with JDK 11+ due to a JDK bug.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="full-changelog"><a class="anchor" href="#full-changelog"></a>Full changelog</h3>
+<div class="paragraph">
+<p>We also fixed a few bugs and usability issues: get <a href="https://github.com/quarkusio/quarkus/releases/tag/0.26.0">the full changelog of 0.26.0 on GitHub</a> - and, if you&#8217;re really curious, <a href="https://github.com/quarkusio/quarkus/releases/tag/0.26.1">the issues we fixed in 0.26.1</a>.</p>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h2>
+<h2 id="contributors"><a class="anchor" href="#contributors"></a>Contributors</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To complete this guide, you need:</p>
+<p>Quarkus has now <a href="https://github.com/quarkusio/quarkus/graphs/contributors">166 contributors</a>.
+Many many thanks to each and everyone of them.</p>
+</div>
+<div class="paragraph">
+<p>In particular for this release, thanks to Alexey Loubyansky, Andrew Guibert, Andy Damevin, cknoblauch, Clement Escoffier, Daniel Petisme, Dusan Odalovic, Gary Brown, George Gastaldi, Georgios Andrianakis, Guillaume Nodet, Guillaume Smet, Gwenneg Lepage, Jaikiran Pai, Jan Martiska, John OHara, Ken Finnigan, Maciej Swiderski, Manyanda Chitimbo, Martin Kouba, Max Rydahl Andersen, Minto van der Sluis, Nelson Graça, Pedro Igor, Sanne Grinovero, Sergey Beryozkin, Stuart Douglas, Stéphane Épardaud, Tom Jenkinson and Vincent Sevel.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="come-join-us"><a class="anchor" href="#come-join-us"></a>Come Join Us</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We value your feedback a lot so please report bugs, ask for improvements&#8230;&#8203; Let&#8217;s build something great together!</p>
+</div>
+<div class="paragraph">
+<p>If you are a Quarkus user or just curious, don&#8217;t be shy and join our welcoming community:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>less than 15 minutes</p>
+<p>provide feedback on <a href="https://github.com/quarkusio/quarkus/issues">GitHub</a>;</p>
 </li>
 <li>
-<p>an IDE</p>
+<p>craft some code and <a href="https://github.com/quarkusio/quarkus/pulls">push a PR</a>;</p>
 </li>
 <li>
-<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
+<p>discuss with us on <a href="https://quarkusio.zulipchat.com/">Zulip</a> and on the <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a>;</p>
 </li>
 <li>
-<p>Apache Maven 3.5.3+</p>
+<p>ask your questions on <a href="https://stackoverflow.com/questions/tagged/quarkus">Stack Overflow</a>.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In this guide, we create a straightforward chat application using web sockets to receive and send messages to the other connected users.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="/guides/images/websocket-guide-architecture.png" alt="Architecture"></span></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We recommend that you follow the instructions in the next sections and create the application step by step.
-However, you can skip right to the completed example.</p>
-</div>
-<div class="paragraph">
-<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
-</div>
-<div class="paragraph">
-<p>The solution is located in the <code>using-websockets</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/using-websockets">directory</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>First, we need a new project. Create a new project with the following command:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.26.1:create \
-    -DprojectGroupId=org.acme \
-    -DprojectArtifactId=using-websockets \
-    -Dextensions="undertow-websockets"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This command generates the Maven project (without any classes) and import the <code>undertow-websockets</code> extension.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="handling-web-sockets"><a class="anchor" href="#handling-web-sockets"></a>Handling web sockets</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Our application contains a single class that handles the web sockets.
-Create the <code>org.acme.websocket.ChatSocket</code> class in the <code>src/main/java</code> directory.
-Copy the following content into the created file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.websocket;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-import javax.websocket.Session;
-
-@ServerEndpoint("/chat/{username}")         <i class="conum" data-value="1"></i><b>(1)</b>
-@ApplicationScoped
-public class ChatSocket {
-
-    Map&lt;String, Session&gt; sessions = new ConcurrentHashMap&lt;&gt;(); <i class="conum" data-value="2"></i><b>(2)</b>
-
-    @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) {
-        sessions.put(username, session);
-        broadcast("User " + username + " joined");
-    }
-
-    @OnClose
-    public void onClose(Session session, @PathParam("username") String username) {
-        sessions.remove(username);
-        broadcast("User " + username + " left");
-    }
-
-    @OnError
-    public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
-        sessions.remove(username);
-        broadcast("User " + username + " left on error: " + throwable);
-    }
-
-    @OnMessage
-    public void onMessage(String message, @PathParam("username") String username) {
-        broadcast("&gt;&gt; " + username + ": " + message);
-    }
-
-    private void broadcast(String message) {
-        sessions.values().forEach(s -&gt; {
-            s.getAsyncRemote().sendObject(message, result -&gt;  {
-                if (result.getException() != null) {
-                    System.out.println("Unable to send message: " + result.getException());
-                }
-            });
-        });
-    }
-
-}</code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Configures the web socket URL</p>
-</li>
-<li>
-<p>Stores the currently opened web sockets</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="a-slick-web-frontend"><a class="anchor" href="#a-slick-web-frontend"></a>A slick web frontend</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>All chat applications need a <em>nice</em> UI, well, this one may not be that nice, but does the work.
-Quarkus automatically serves static resources contained in the <code>META-INF/resources</code> directory.
-Create the <code>src/main/resources/META-INF/resources</code> directory and copy this <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/using-websockets/src/main/resources/META-INF/resources/index.html">index.html</a> file in it.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="run-the-application"><a class="anchor" href="#run-the-application"></a>Run the application</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Now, let&#8217;s see our application in action. Run it with:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw compile quarkus:dev</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then open your 2 browser windows to <a href="http://localhost:8080/" class="bare">http://localhost:8080/</a>:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Enter a name in the top text area (use 2 different names).</p>
-</li>
-<li>
-<p>Click on connect</p>
-</li>
-<li>
-<p>Send and receive messages</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="/guides/images/websocket-guide-screenshot.png" alt="Application"></span></p>
-</div>
-<div class="paragraph">
-<p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
-You can also build the native executable using <code>./mvnw package -Pnative</code>.</p>
-</div>
-<div class="paragraph">
-<p>You can also test your web socket applications using the approach detailed <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/using-websockets/src/test/java/org/acme/websocket/ChatTestCase.java">here</a>.</p>
-</div>
-</div>
-</div>
+          
+      </div>
     </div>
   </div>
 </div>
