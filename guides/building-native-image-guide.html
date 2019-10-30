@@ -125,7 +125,7 @@
 <p>A <a href="#configuring-c-development">working C development environment</a></p>
 </li>
 <li>
-<p>GraalVM version 19.2.0.1 installed and <a href="#configuring-graalvm">configured appropriately</a></p>
+<p>GraalVM version 19.2.1 installed and <a href="#configuring-graalvm">configured appropriately</a></p>
 </li>
 <li>
 <p>A working container runtime (Docker, podman)</p>
@@ -190,7 +190,7 @@ sudo apt-get install build-essential libz-dev</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>Version 19.2.0.1 is required. Using the community edition is enough.</p>
+<p>Version 19.2.1 is required. Using the community edition is enough.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -599,7 +599,7 @@ Interested by tiny Docker images, check the <a href="https://github.com/quarkusi
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="dockerfile" class="language-dockerfile hljs">## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/centos-quarkus-maven:19.2.0.1 AS build
+FROM quay.io/quarkus/centos-quarkus-maven:19.2.1 AS build
 COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
 USER root

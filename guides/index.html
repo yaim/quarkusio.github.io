@@ -86,6 +86,8 @@
       
         <li><a href="/guides/context-propagation-guide">Context Propagation</a></li>
       
+        <li><a href="/guides/writing-native-applications-tips">Writing Native Applications</a></li>
+      
       </ul>
     
       <h3 id="#web">Web</h3>
@@ -105,7 +107,7 @@
       
         <li><a href="/guides/openapi-swaggerui-guide">Using OpenAPI and Swagger UI</a></li>
       
-        <li><a href="/guides/undertow-reference">Undertow Reference Documentation</a></li>
+        <li><a href="/guides/http-reference">HTTP Reference Documentation</a></li>
       
         <li><a href="/guides/fault-tolerance-guide">Using Fault Tolerance</a></li>
       
@@ -166,13 +168,17 @@
       <h3 id="#security">Security</h3>
       <ul>
       
+        <li><a href="/guides/oidc-guide">Using OpenID Connect to Protect JAX-RS Applications</a></li>
+      
+        <li><a href="/guides/oidc-web-app-guide">Protecting Web Applications Using OpenID Connect</a></li>
+      
+        <li><a href="/guides/keycloak-authorization-guide">Using Keycloak to centralize your authorizations</a></li>
+      
         <li><a href="/guides/security-guide">Using Security</a></li>
       
         <li><a href="/guides/vault-guide">Using Vault</a></li>
       
         <li><a href="/guides/jwt-guide">Using JWT RBAC</a></li>
-      
-        <li><a href="/guides/oidc-guide">Using OpenID Connect to Protect JAX-RS Applications</a></li>
       
         <li><a href="/guides/oauth2-guide">Using OAuth2 RBAC</a></li>
       
@@ -209,7 +215,11 @@
       
         <li><a href="/guides/azure-cloud-guide">Deploying to Microsoft Azure Cloud</a></li>
       
-        <li><a href="/guides/azure-functions-http-guide">Azure Functions (Serverless) with Vert.x Web, Servlet, or Resteasy</a></li>
+        <li><a href="/guides/azure-functions-http-guide">Azure Functions (Serverless) with Vert.x Web, Servlet, or RESTEasy</a></li>
+      
+        <li><a href="/guides/amazon-lambda-guide">Amazon Lambda</a></li>
+      
+        <li><a href="/guides/amazon-lambda-http-guide">Amazon Lambda with Vert.x Web, Servlet, or RESTEasy</a></li>
       
       </ul>
     
@@ -375,6 +385,15 @@
             <p><a href="/guides/context-propagation-guide" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
+          <div class="guide-item" markdown="1">
+            <h2>Writing Native Applications</h2>
+
+            <p>This guide is a collection of tips to help you solve the problems you encounter when compiling applications to native executable.</p>
+
+
+            <p><a href="/guides/writing-native-applications-tips" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
       </div>
     
   
@@ -449,12 +468,12 @@
           </div>
         
           <div class="guide-item" markdown="1">
-            <h2>Undertow Reference Documentation</h2>
+            <h2>HTTP Reference Documentation</h2>
 
-            <p>Undertow is the webserver used by Quarkus. Learn more about configuring it.</p>
+            <p>Learn more about configuring Quarkus’ Vert.x based HTTP layer - and Undertow if you are using servlets.</p>
 
 
-            <p><a href="/guides/undertow-reference" class="button-cta secondary">READ THE GUIDE</a></p>
+            <p><a href="/guides/http-reference" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
@@ -693,6 +712,33 @@ This guide will walk you through all that.</p>
       <div class="grid__item width-8-12 width-12-12-m guides-content">
         
           <div class="guide-item" markdown="1">
+            <h2>Using OpenID Connect to Protect JAX-RS Applications</h2>
+
+            <p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token authorization, where these tokens are issued by a Keycloak server.</p>
+
+
+            <p><a href="/guides/oidc-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Protecting Web Applications Using OpenID Connect</h2>
+
+            <p>This guide demonstrates how to use the OpenID Connect Extension to protect your web application based on the Authorization Code Flow using Quarkus.</p>
+
+
+            <p><a href="/guides/oidc-web-app-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Keycloak to centralize your authorizations</h2>
+
+            <p>This guide demonstrates how your Quarkus application can authorize access to protected resources using Keycloak Authorization Services.</p>
+
+
+            <p><a href="/guides/keycloak-authorization-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
             <h2>Using Security</h2>
 
             <p>This quide demonstrates integration with the Elytron security subsystem to allow for RBAC based on the common security annotations <code class="highlighter-rouge">@RolesAllowed</code>, <code class="highlighter-rouge">@DenyAll</code>, <code class="highlighter-rouge">@PermitAll</code> on REST endpoints.</p>
@@ -717,15 +763,6 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/jwt-guide" class="button-cta secondary">READ THE GUIDE</a></p>
-          </div>
-        
-          <div class="guide-item" markdown="1">
-            <h2>Using OpenID Connect to Protect JAX-RS Applications</h2>
-
-            <p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token authorization, where these tokens are issued by a Keycloak server.</p>
-
-
-            <p><a href="/guides/oidc-guide" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
@@ -849,12 +886,30 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
-            <h2>Azure Functions (Serverless) with Vert.x Web, Servlet, or Resteasy</h2>
+            <h2>Azure Functions (Serverless) with Vert.x Web, Servlet, or RESTEasy</h2>
 
             <p>This guide explains how you can deploy Vert.x Web, Servlet, or RESTEasy microservices as an Azure Function.</p>
 
 
             <p><a href="/guides/azure-functions-http-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Amazon Lambda</h2>
+
+            <p>This guide explains how you can deploy Quarkus-based Amazon Lambdas.</p>
+
+
+            <p><a href="/guides/amazon-lambda-guide" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Amazon Lambda with Vert.x Web, Servlet, or RESTEasy</h2>
+
+            <p>This guide explains how you can deploy Vert.x Web, Servlet, or RESTEasy microservices as an Amazon Lambda.</p>
+
+
+            <p><a href="/guides/amazon-lambda-http-guide" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
