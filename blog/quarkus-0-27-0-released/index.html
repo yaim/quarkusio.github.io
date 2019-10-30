@@ -123,6 +123,21 @@
 </div>
 </div>
 <div class="sect2">
+<h3 id="dev-mode-detects-pom-xml-changes"><a class="anchor" href="#dev-mode-detects-pom-xml-changes"></a>Dev mode detects pom.xml changes</h3>
+<div class="paragraph">
+<p>Love live coding with our dev mode? It now detects the changes to your <code>pom.xml</code> and reload the application for you.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="producing-only-one-output-at-a-time"><a class="anchor" href="#producing-only-one-output-at-a-time"></a>Producing only one output at a time</h3>
+<div class="paragraph">
+<p>We made a major change in how the project outputs (jars, native images) are produced: they are produced one at a time to allow for maximum flexibility and pave the way for output-specific optimizations.</p>
+</div>
+<div class="paragraph">
+<p>In practice, it won&#8217;t change things for you except for one use case: if you build a native image, we won&#8217;t build the runner jar at the same time anymore. Two distinct builds are required.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="move-to-jakarta-artifacts"><a class="anchor" href="#move-to-jakarta-artifacts"></a>Move to Jakarta artifacts</h3>
 <div class="paragraph">
 <p>We used to have a mix of <code>javax.<strong></code> and <code>jakarta.</strong></code> artifacts in Quarkus: we have now moved everything to Jakarta.</p>
