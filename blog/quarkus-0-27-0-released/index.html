@@ -136,6 +136,14 @@
 <div class="paragraph">
 <p>In practice, it won&#8217;t change things for you except for one use case: if you build a native image, we won&#8217;t build the runner jar at the same time anymore. Two distinct builds are required.</p>
 </div>
+<div class="paragraph">
+<p>As a consequence of this change, if you use Docker to build your native images, use the following command from now on:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Dnative -Dquarkus.native.container-build=true</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="move-to-jakarta-artifacts"><a class="anchor" href="#move-to-jakarta-artifacts"></a>Move to Jakarta artifacts</h3>
