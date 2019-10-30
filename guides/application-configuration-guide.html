@@ -458,6 +458,10 @@ public interface GreetingConfiguration {
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>When using <code>@ConfigProperties</code> on a class or an interface, if the value of one of its fields is not provided, the application startup will fail and a <code>javax.enterprise.inject.spi.DeploymentException</code> indicating the missing value information will be thrown.
+This does not apply to <code>Optional</code> fields and fields with a default value.</p>
+</div>
 <div class="sect2">
 <h3 id="additional-notes-on-configproperties"><a class="anchor" href="#additional-notes-on-configproperties"></a>Additional notes on @ConfigProperties</h3>
 <div class="paragraph">

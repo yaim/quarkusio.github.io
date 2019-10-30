@@ -67,7 +67,7 @@
       <ul class="sectlevel1">
 <li><a href="#installing">Installing</a>
 <ul class="sectlevel2">
-<li><a href="#reactive-postgres-client-extension">Reactive Postgres Client extension</a></li>
+<li><a href="#reactive-postgresql-client-extension">Reactive PostgreSQL Client extension</a></li>
 <li><a href="#json-binding">JSON Binding</a></li>
 </ul>
 </li>
@@ -166,7 +166,7 @@ If you are not familiar with the Quarkus Vert.x extension, consider reading the 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Do you need a ready-to-use Postgres server to try out the examples?</p>
+<p>Do you need a ready-to-use PostgreSQL server to try out the examples?</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -183,7 +183,7 @@ If you are not familiar with the Quarkus Vert.x extension, consider reading the 
 <h2 id="installing"><a class="anchor" href="#installing"></a>Installing</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="reactive-postgres-client-extension"><a class="anchor" href="#reactive-postgres-client-extension"></a>Reactive Postgres Client extension</h3>
+<h3 id="reactive-postgresql-client-extension"><a class="anchor" href="#reactive-postgresql-client-extension"></a>Reactive PostgreSQL Client extension</h3>
 <div class="paragraph">
 <p>First, make sure your project has the <code>quarkus-reactive-pg-client</code> extension enabled.
 If you are creating a new project, set the <code>extensions</code> parameter as follows:</p>
@@ -201,7 +201,7 @@ If you are creating a new project, set the <code>extensions</code> parameter as 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn quarkus:add-extension -Dextensions="reactive-pg-client"</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw quarkus:add-extension -Dextensions="reactive-pg-client"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -222,7 +222,7 @@ If you are creating a new project, set the <code>extensions</code> parameter as 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In this guide, we will use the Axle API of the Reactive Postgres Client.
+In this guide, we will use the Axle API of the Reactive PostgreSQL Client.
 Read the <a href="using-vertx.html">Using Eclipse Vert.x</a> guide to understand the differences between the callback, RxJava and Axle based APIs.
 </td>
 </tr>
@@ -237,7 +237,7 @@ Consequently, you also need to add the <code>quarkus-resteasy-jsonb</code> exten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn quarkus:add-extension -Dextensions="resteasy-jsonb"</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw quarkus:add-extension -Dextensions="resteasy-jsonb"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -252,7 +252,7 @@ Consequently, you also need to add the <code>quarkus-resteasy-jsonb</code> exten
 </div>
 </div>
 <div class="paragraph">
-<p>Of course, this is only a requirement for this guide, not any application using the Reactive Postgres Client.</p>
+<p>Of course, this is only a requirement for this guide, not any application using the Reactive PostgreSQL Client.</p>
 </div>
 </div>
 </div>
@@ -261,7 +261,7 @@ Consequently, you also need to add the <code>quarkus-resteasy-jsonb</code> exten
 <h2 id="configuring"><a class="anchor" href="#configuring"></a>Configuring</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Reactive Postgres Client can be configured with standard Quarkus datasource properties:</p>
+<p>The Reactive PostgreSQL Client can be configured with standard Quarkus datasource properties:</p>
 </div>
 <div class="listingblock">
 <div class="title">src/main/resources/application.properties</div>
@@ -279,7 +279,7 @@ quarkus.datasource.password=quarkus_test</code></pre>
 </td>
 <td class="content">
 The eagle eyes among you might have noticed the <code>url</code> prefix is different from usual JDBC urls.
-It is required to use the <code>vertx-reactive:</code> prefix otherwise the Reactive Postgres Client extension will not use the <code>quarkus.datasource.url</code> config property.
+It is required to use the <code>vertx-reactive:</code> prefix otherwise the Reactive PostgreSQL Client extension will not use the <code>quarkus.datasource.url</code> config property.
 </td>
 </tr>
 </table>
@@ -459,7 +459,7 @@ public CompletionStage&lt;Response&gt; get() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -474,7 +474,7 @@ public CompletionStage&lt;Response&gt; get() {
 <div class="sect2">
 <h3 id="prepared-queries"><a class="anchor" href="#prepared-queries"></a>Prepared queries</h3>
 <div class="paragraph">
-<p>The Reactive Postgres Client can also prepare queries and take parameters that are replaced in the SQL statement at execution time:</p>
+<p>The Reactive PostgreSQL Client can also prepare queries and take parameters that are replaced in the SQL statement at execution time:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -637,7 +637,7 @@ We will use <a href="https://jquery.com/">jQuery</a> to simplify interactions wi
 &lt;html&gt;
 &lt;head&gt;
     &lt;meta charset="utf-8"/&gt;
-    &lt;title&gt;Reactive Postgres Client - Quarkus&lt;/title&gt;
+    &lt;title&gt;Reactive PostgreSQL Client - Quarkus&lt;/title&gt;
     &lt;script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"&gt;&lt;/script&gt;
     &lt;script type="application/javascript" src="fruits.js"&gt;&lt;/script&gt;
@@ -751,7 +751,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Postgres</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PostgreSQL</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus-reactive-pg-client</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.axle.pgclient.PgPool</code></p></td>
 </tr>
@@ -780,13 +780,13 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Configuration property</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-mysql-client_configuration"></a><a href="#quarkus-reactive-mysql-client_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.url</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-mysql-client_quarkus.datasource.url"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.datasource.url">quarkus.datasource.url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -800,7 +800,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.username</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-mysql-client_quarkus.datasource.username"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.datasource.username">quarkus.datasource.username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -814,7 +814,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.password</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-mysql-client_quarkus.datasource.password"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.datasource.password">quarkus.datasource.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -828,7 +828,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.max-size</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-mysql-client_quarkus.datasource.max-size"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.datasource.max-size">quarkus.datasource.max-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -842,7 +842,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.reactive-mysql-client.cache-prepared-statements</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-mysql-client_quarkus.reactive-mysql-client.cache-prepared-statements"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.reactive-mysql-client.cache-prepared-statements">quarkus.reactive-mysql-client.cache-prepared-statements</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -856,7 +856,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.reactive-mysql-client.charset</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-mysql-client_quarkus.reactive-mysql-client.charset"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.reactive-mysql-client.charset">quarkus.reactive-mysql-client.charset</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -870,7 +870,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.reactive-mysql-client.collation</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-mysql-client_quarkus.reactive-mysql-client.collation"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.reactive-mysql-client.collation">quarkus.reactive-mysql-client.collation</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -898,13 +898,13 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Configuration property</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-pg-client_configuration"></a><a href="#quarkus-reactive-pg-client_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.reactive-pg-client.cache-prepared-statements</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-pg-client_quarkus.reactive-pg-client.cache-prepared-statements"></a><code><a href="#quarkus-reactive-pg-client_quarkus.reactive-pg-client.cache-prepared-statements">quarkus.reactive-pg-client.cache-prepared-statements</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -918,7 +918,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.reactive-pg-client.pipelining-limit</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-pg-client_quarkus.reactive-pg-client.pipelining-limit"></a><code><a href="#quarkus-reactive-pg-client_quarkus.reactive-pg-client.pipelining-limit">quarkus.reactive-pg-client.pipelining-limit</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -932,7 +932,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.url</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-pg-client_quarkus.datasource.url"></a><code><a href="#quarkus-reactive-pg-client_quarkus.datasource.url">quarkus.datasource.url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -946,7 +946,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.username</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-pg-client_quarkus.datasource.username"></a><code><a href="#quarkus-reactive-pg-client_quarkus.datasource.username">quarkus.datasource.username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -960,7 +960,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.password</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-pg-client_quarkus.datasource.password"></a><code><a href="#quarkus-reactive-pg-client_quarkus.datasource.password">quarkus.datasource.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -974,7 +974,7 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.datasource.max-size</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-reactive-pg-client_quarkus.datasource.max-size"></a><code><a href="#quarkus-reactive-pg-client_quarkus.datasource.max-size">quarkus.datasource.max-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

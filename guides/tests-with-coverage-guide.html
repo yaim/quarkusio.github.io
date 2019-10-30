@@ -355,7 +355,7 @@ public class GreetingResourceTest {
 </td>
 <td class="content">
 This way, the <code>QuarkusTest</code> instances will be executed as part of the <code>integration-test</code> build phase while the other JUnit tests will still be ran during the <code>test</code> phase.
-You can run all the tests with the command <code>mvn clean verify</code> (and you will notice that two tests are ran in different phases).
+You can run all the tests with the command <code>./mvnw clean verify</code> (and you will notice that two tests are ran in different phases).
 </td>
 </tr>
 </table>
@@ -412,7 +412,7 @@ You can run all the tests with the command <code>mvn clean verify</code> (and yo
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you run <code>mvn clean test</code> the coverage information will be collected during the execution of the unit tests in the file <code>jacoco.exec</code>.
+If you run <code>./mvnw clean test</code> the coverage information will be collected during the execution of the unit tests in the file <code>jacoco.exec</code>.
 </td>
 </tr>
 </table>
@@ -493,7 +493,7 @@ We also need to generate a separate report for each test execution. Let&#8217;s 
 <h2 id="the-coverage-does-not-seem-to-correspond-to-the-reality"><a class="anchor" href="#the-coverage-does-not-seem-to-correspond-to-the-reality"></a>8. The coverage does not seem to correspond to the reality</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can now run the tests: <code>mvn clean verify</code> As explained earlier, it will run the unit tests first, then the integration tests. And finally, it will generate two separate reports. First a report of the coverage of the unit tests in <code>target/site/jacoco-ut</code> then a report of the coverage of the integration tests in <code>target/site/jacoco-it</code>.</p>
+<p>You can now run the tests: <code>./mvnw clean verify</code> As explained earlier, it will run the unit tests first, then the integration tests. And finally, it will generate two separate reports. First a report of the coverage of the unit tests in <code>target/site/jacoco-ut</code> then a report of the coverage of the integration tests in <code>target/site/jacoco-it</code>.</p>
 </div>
 <div class="paragraph">
 <p>Given the content of <code>GreetingResourceTest</code>, <code>GreetingResource</code> should have been covered. But when we open the report <code>target/site/jacoco-it/index.html</code>, the class <code>GreetingResource</code> is reported with 0% of coverage. But the fact that <code>GreetingService</code> is reported as covered shows that the test execution was actually recorded. How come?</p>

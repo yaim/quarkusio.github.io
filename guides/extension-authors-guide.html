@@ -84,12 +84,13 @@
 <li><a href="#bytecode-recording">2.6. Bytecode Recording</a></li>
 <li><a href="#contexts-and-dependency-injection">2.7. Contexts and Dependency Injection</a></li>
 <li><a href="#extension-health-check">2.8. Extension Health Check</a></li>
-<li><a href="#testing-extensions">2.9. Testing Extensions</a></li>
-<li><a href="#testing-hot-reload">2.10. Testing hot reload</a></li>
-<li><a href="#native-executable-support">2.11. Native Executable Support</a></li>
-<li><a href="#ide-support-tips">2.12. IDE support tips</a></li>
-<li><a href="#troubleshooting-debugging-tips">2.13. Troubleshooting / Debugging Tips</a></li>
-<li><a href="#sample-test-extension">2.14. Sample Test Extension</a></li>
+<li><a href="#customizing-json-handling-from-an-extension">2.9. Customizing JSON handling from an extension</a></li>
+<li><a href="#testing-extensions">2.10. Testing Extensions</a></li>
+<li><a href="#testing-hot-reload">2.11. Testing hot reload</a></li>
+<li><a href="#native-executable-support">2.12. Native Executable Support</a></li>
+<li><a href="#ide-support-tips">2.13. IDE support tips</a></li>
+<li><a href="#troubleshooting-debugging-tips">2.14. Troubleshooting / Debugging Tips</a></li>
+<li><a href="#sample-test-extension">2.15. Sample Test Extension</a></li>
 </ul>
 </li>
 <li><a href="#configuration-reference-documentation">3. Configuration reference documentation</a>
@@ -1874,7 +1875,153 @@ HealthBuildItem addHealthCheck(AgroalBuildTimeConfig agroalBuildTimeConfig) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="testing-extensions"><a class="anchor" href="#testing-extensions"></a>2.9. Testing Extensions</h3>
+<h3 id="customizing-json-handling-from-an-extension"><a class="anchor" href="#customizing-json-handling-from-an-extension"></a>2.9. Customizing JSON handling from an extension</h3>
+<div class="paragraph">
+<p>Extensions often need to register serializers and/or deserializers for types the extension provides.</p>
+</div>
+<div class="paragraph">
+<p>For this, both JSON-B and Jackson extension provide a way to register serializer/deserializer from within an
+extension deployment module.</p>
+</div>
+<div class="paragraph">
+<p>Keep in mind that not everybody will need JSON, so you need to make it optional.</p>
+</div>
+<div class="paragraph">
+<p>If an extension intends to provide JSON related customization,
+it is strongly advised to provide customization for both JSON-B and Jackson.</p>
+</div>
+<div class="sect3">
+<h4 id="customizing-json-b"><a class="anchor" href="#customizing-json-b"></a>2.9.1. Customizing JSON-B</h4>
+<div class="paragraph">
+<p>First, add an <strong>optional</strong> dependency to <code>quarkus-jsonb</code> on your extension&#8217;s runtime module.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+  &lt;artifactId&gt;quarkus-jsonb&lt;/artifactId&gt;
+  &lt;optional&gt;true&lt;/optional&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then create a serializer and/or a deserializer for JSON-B, an example of which can be seen in the <code>mongodb-panache</code> extension.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class ObjectIdSerializer implements JsonbSerializer&lt;ObjectId&gt; {
+    @Override
+    public void serialize(ObjectId obj, JsonGenerator generator, SerializationContext ctx) {
+        if (obj != null) {
+            generator.write(obj.toString());
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add a dependency to <code>quarkus-jsonb-spi</code> on your extension&#8217;s deployment module.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+  &lt;artifactId&gt;quarkus-jsonb-spi&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add a build step to your processor to register the serializer via the <code>JsonbSerializerBuildItem</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+JsonbSerializerBuildItem registerJsonbSerializer() {
+    return new JsonbSerializerBuildItem(io.quarkus.mongodb.panache.jsonb.ObjectIdSerializer.class.getName()));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The JSON-B extension will then use the produced build item to register your serializer/deserializer automatically.</p>
+</div>
+<div class="paragraph">
+<p>If you need more customization capabilities than registering a serializer or a deserializer,
+you can produce a CDI bean that implements <code>io.quarkus.jsonb.JsonbConfigCustomizer</code> via an <code>AdditionalBeanBuildItem</code>.
+More info about customizing JSON-B can be found on the JSON guide <a href="rest-json-guide.html#configuring-json-support">Configuring JSON support</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="customizing-jackson"><a class="anchor" href="#customizing-jackson"></a>2.9.2. Customizing Jackson</h4>
+<div class="paragraph">
+<p>First, add an <strong>optional</strong> dependency to <code>quarkus-jackson</code> on your extension&#8217;s runtime module.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+  &lt;artifactId&gt;quarkus-jackson&lt;/artifactId&gt;
+  &lt;optional&gt;true&lt;/optional&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then create a serializer or a deserializer (or both) for Jackson, an example of which can be seen in the <code>mongodb-panache</code> extension.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class ObjectIdSerializer extends StdSerializer&lt;ObjectId&gt; {
+    public ObjectIdSerializer() {
+        super(ObjectId.class);
+    }
+    @Override
+    public void serialize(ObjectId objectId, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+            throws IOException {
+        if (objectId != null) {
+            jsonGenerator.writeString(objectId.toString());
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add a dependency to <code>quarkus-jackson-spi</code> on your extension&#8217;s deployment module.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+  &lt;artifactId&gt;quarkus-jackson-spi&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add a build step to your processor to register a Jackson module via the <code>JacksonModuleBuildItem</code>.
+You need to name your module in a unique way across all Jackson modules.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+JacksonModuleBuildItem registerJacksonSerDeser() {
+    return new JacksonModuleBuildItem.Builder("ObjectIdModule")
+                    .add(io.quarkus.mongodb.panache.jackson.ObjectIdSerializer.class.getName(),
+                            io.quarkus.mongodb.panache.jackson.ObjectIdDeserializer.class.getName(),
+                            ObjectId.class.getName())
+                    .build();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Jackson extension will then use the produced build item to register a module within Jackson automatically.</p>
+</div>
+<div class="paragraph">
+<p>If you need more customization capabilities than registering a module,
+you can produce a CDI bean that implements <code>io.quarkus.jackson.ObjectMapperCustomizer</code> via an <code>AdditionalBeanBuildItem</code>.
+More info about customizing Jackson can be found on the JSON guide <a href="rest-json-guide.html#configuring-json-support">Configuring JSON support</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="testing-extensions"><a class="anchor" href="#testing-extensions"></a>2.10. Testing Extensions</h3>
 <div class="paragraph">
 <p>Testing of extensions should be done with the <code>io.quarkus.test.QuarkusUnitTest</code> runner. This runner allows
 for Arquillian-style tests that test specific functionalities. It is not intended for testing user applications, as this
@@ -2016,7 +2163,7 @@ public class PersistenceAndQuarkusConfigTest {
 </div>
 </div>
 <div class="sect2">
-<h3 id="testing-hot-reload"><a class="anchor" href="#testing-hot-reload"></a>2.10. Testing hot reload</h3>
+<h3 id="testing-hot-reload"><a class="anchor" href="#testing-hot-reload"></a>2.11. Testing hot reload</h3>
 <div class="paragraph">
 <p>It is also possible to write tests that verify an extension works correctly in development mode and can correctly
 handle updates.</p>
@@ -2135,7 +2282,7 @@ of the current project.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="native-executable-support"><a class="anchor" href="#native-executable-support"></a>2.11. Native Executable Support</h3>
+<h3 id="native-executable-support"><a class="anchor" href="#native-executable-support"></a>2.12. Native Executable Support</h3>
 <div class="paragraph">
 <p>There Quarkus provides a lot of build items that control aspects of the native executable build. This allows for extensions
 to programmatically perform tasks such as registering classes for reflection or adding static resources to the native
@@ -2143,31 +2290,31 @@ executable. Some of these build items are listed below:</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.substrate.SubstrateResourceBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.NativeImageResourceBuildItem</code></dt>
 <dd>
 <p>Includes static resources into the native executable.</p>
 </dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.substrate.RuntimeReinitializedClassBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.RuntimeReinitializedClassBuildItem</code></dt>
 <dd>
 <p>A class that will be reinitialized at runtime by Substrate. This will result in the static initializer running twice.</p>
 </dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.substrate.SubstrateSystemPropertyBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.NativeImageSystemPropertyBuildItem</code></dt>
 <dd>
 <p>A system property that will be set at native executable build time.</p>
 </dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.substrate.SubstrateResourceBundleBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.NativeImageResourceBundleBuildItem</code></dt>
 <dd>
 <p>Includes a resource bundle in the native executable.</p>
 </dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.substrate.ReflectiveClassBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem</code></dt>
 <dd>
 <p>Registers a class for reflection in Substrate. Constructors are always registered, while methods and fields are optional.</p>
 </dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.substrate.RuntimeInitializedClassBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem</code></dt>
 <dd>
 <p>A class that will be initialized at runtime rather than build time. This will cause the build to fail if the class is initialized as part of the native executable build process, so care must be taken.</p>
 </dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.substrate.SubstrateConfigBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.NativeImageConfigBuildItem</code></dt>
 <dd>
 <p>A convenience feature that allows you to control most of the above features from a single build item.</p>
 </dd>
@@ -2184,9 +2331,9 @@ When using this feature, remember to add your extension to the list of extension
 </div>
 </div>
 <div class="sect2">
-<h3 id="ide-support-tips"><a class="anchor" href="#ide-support-tips"></a>2.12. IDE support tips</h3>
+<h3 id="ide-support-tips"><a class="anchor" href="#ide-support-tips"></a>2.13. IDE support tips</h3>
 <div class="sect3">
-<h4 id="writing-quarkus-extensions-in-eclipse"><a class="anchor" href="#writing-quarkus-extensions-in-eclipse"></a>2.12.1. Writing Quarkus extensions in Eclipse</h4>
+<h4 id="writing-quarkus-extensions-in-eclipse"><a class="anchor" href="#writing-quarkus-extensions-in-eclipse"></a>2.13.1. Writing Quarkus extensions in Eclipse</h4>
 <div class="paragraph">
 <p>The only particular aspect of writing Quarkus extensions in Eclipse is that APT (Annotation Processing Tool) is required as part of extension builds, which means you need to:</p>
 </div>
@@ -2209,23 +2356,34 @@ When using this feature, remember to add your extension to the list of extension
 </div>
 </div>
 <div class="sect2">
-<h3 id="troubleshooting-debugging-tips"><a class="anchor" href="#troubleshooting-debugging-tips"></a>2.13. Troubleshooting / Debugging Tips</h3>
+<h3 id="troubleshooting-debugging-tips"><a class="anchor" href="#troubleshooting-debugging-tips"></a>2.14. Troubleshooting / Debugging Tips</h3>
 <div class="sect3">
-<h4 id="saving-application-generated-classes-to-disk"><a class="anchor" href="#saving-application-generated-classes-to-disk"></a>2.13.1. Saving Application Generated Classes to Disk</h4>
+<h4 id="saving-application-generated-classes-to-disk"><a class="anchor" href="#saving-application-generated-classes-to-disk"></a>2.14.1. Saving Application Generated Classes to Disk</h4>
 <div class="paragraph">
 <p>The class augmentation step of Quarkus generates classes for various purposes. Sometimes you need to view these
 classes/bytecode to debug or understand an issue. Classes that are related to application augmentation are currently held in
-memory in a runtime class loader. To have these classes written out to disk for inspection, specify the
-<code>quarkus.debug.generated-classes-dir</code> system property, for example:</p>
+memory in a runtime class loader.</p>
+</div>
+<div class="paragraph">
+<p>When using the dev mode (running <code>mvn clean compile quarkus:dev) you can have these classes written out to disk for inspection, for this, you need to specify the
+`quarkus.debug.generated-classes-dir</code> system property, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn clean install -Dquarkus.debug.generated-classes-dir=./target/app-generated-classes</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw clean compile quarkus:dev -Dquarkus.debug.generated-classes-dir=app-generated-classes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will see a line of log for each class outputed to the directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">2019-10-25 18:12:34,262 INFO  [io.qua.run.RuntimeClassLoader] (main) Wrote /path/to/my/app/target/generated-devmode/io.quarkus.runner.GeneratedMain.class</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="multi-module-maven-projects-and-the-development-mode"><a class="anchor" href="#multi-module-maven-projects-and-the-development-mode"></a>2.13.2. Multi-module Maven Projects and the Development Mode</h4>
+<h4 id="multi-module-maven-projects-and-the-development-mode"><a class="anchor" href="#multi-module-maven-projects-and-the-development-mode"></a>2.14.2. Multi-module Maven Projects and the Development Mode</h4>
 <div class="paragraph">
 <p>It&#8217;s not uncommon to develop an extension in a multi-module Maven project that also contains an "example" module.
 However, if you want to run the example in the development mode then the <code>-DnoDeps</code> system property must be used in order to exclude the local project dependencies.
@@ -2239,13 +2397,13 @@ Otherwise, Quarkus attempts to monitor the extension classes and this may result
 </div>
 </div>
 <div class="sect2">
-<h3 id="sample-test-extension"><a class="anchor" href="#sample-test-extension"></a>2.14. Sample Test Extension</h3>
+<h3 id="sample-test-extension"><a class="anchor" href="#sample-test-extension"></a>2.15. Sample Test Extension</h3>
 <div class="paragraph">
 <p>We have an extension that is used to test for regressions in the extension processing. It is located in <a href="https://github.com/quarkusio/quarkus/tree/master/core/test-extension" class="bare">https://github.com/quarkusio/quarkus/tree/master/core/test-extension</a> directory. In this section we touch on some of the tasks an extension
 author will typically need to perform using the test-extension code to illustrate how the task could be done.</p>
 </div>
 <div class="sect3">
-<h4 id="features-and-capabilities"><a class="anchor" href="#features-and-capabilities"></a>2.14.1. Features and Capabilities</h4>
+<h4 id="features-and-capabilities"><a class="anchor" href="#features-and-capabilities"></a>2.15.1. Features and Capabilities</h4>
 <div class="paragraph">
 <p>When you start a Quarkus instance, you will see a line like the one highlighted in this example:</p>
 </div>
@@ -2299,7 +2457,7 @@ using the Quarkus maven plugin as shown in this example taken from the Writing J
 </div>
 </div>
 <div class="sect3">
-<h4 id="bean-defining-annotations"><a class="anchor" href="#bean-defining-annotations"></a>2.14.2. Bean Defining Annotations</h4>
+<h4 id="bean-defining-annotations"><a class="anchor" href="#bean-defining-annotations"></a>2.15.2. Bean Defining Annotations</h4>
 <div class="paragraph">
 <p>The CDI layer processes CDI beans that are either explicitly registered or that it discovers based on bean defining annotations as defined in <a href="http://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#bean_defining_annotations"&gt;">2.5.1. Bean defining annotations</a>. You can expand this set of annotations to include annotations your extension processes using a <code>BeanDefiningAnnotationBuildItem</code> as shown in this <code>TestProcessor#registerBeanDefinningAnnotations</code> example:</p>
 </div>
@@ -2357,7 +2515,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="parsing-config-to-objects"><a class="anchor" href="#parsing-config-to-objects"></a>2.14.3. Parsing Config to Objects</h4>
+<h4 id="parsing-config-to-objects"><a class="anchor" href="#parsing-config-to-objects"></a>2.15.3. Parsing Config to Objects</h4>
 <div class="paragraph">
 <p>One of the main things an extension is likely to do is completely separate the configuration phase of behavior from the runtime phase. Frameworks often do parsing/load of configuration on startup that can be done during build time to both reduce the runtime dependencies on frameworks like xml parsers as well as reducing the startup time the parsing incurs.</p>
 </div>
@@ -2431,7 +2589,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="scanning-deployments-using-jandex"><a class="anchor" href="#scanning-deployments-using-jandex"></a>2.14.4. Scanning Deployments Using Jandex</h4>
+<h4 id="scanning-deployments-using-jandex"><a class="anchor" href="#scanning-deployments-using-jandex"></a>2.15.4. Scanning Deployments Using Jandex</h4>
 <div class="paragraph">
 <p>If your extension defines annotations or interfaces that mark beans needing to be processed, you can locate these beans using the Jandex API, a Java annotation indexer and offline reflection library. The following <code>TestProcessor#scanForBeans</code> method shows how to find the beans annotated with our <code>@TestAnnotation</code> that also implement the <code>IConfigConsumer</code> interface:</p>
 </div>
@@ -2491,7 +2649,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="interacting-with-extension-beans"><a class="anchor" href="#interacting-with-extension-beans"></a>2.14.5. Interacting With Extension Beans</h4>
+<h4 id="interacting-with-extension-beans"><a class="anchor" href="#interacting-with-extension-beans"></a>2.15.5. Interacting With Extension Beans</h4>
 <div class="paragraph">
 <p>You can use the <code>io.quarkus.arc.runtime.BeanContainer</code> interface to interact with your extension beans. The following <code>configureBeans</code> methods illustrate interacting with the beans scanned for in the previous section:</p>
 </div>
@@ -2548,7 +2706,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="manage-non-cdi-service"><a class="anchor" href="#manage-non-cdi-service"></a>2.14.6. Manage Non-CDI Service</h4>
+<h4 id="manage-non-cdi-service"><a class="anchor" href="#manage-non-cdi-service"></a>2.15.6. Manage Non-CDI Service</h4>
 <div class="paragraph">
 <p>A common purpose for an extension is to integrate a non-CDI aware service into the CDI based Quarkus runtime. Step 1 of this task is to load any configuration needed in a STATIC_INIT build step as we did in <a href="#parsing-config-to-objects">Parsing Config to Objects</a>. Now we need to create an instance of the service using the configuration. Let&#8217;s return to the <code>TestProcessor#parseServiceXmlConfig</code> method to see how this can be done.</p>
 </div>
@@ -2610,7 +2768,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </table>
 </div>
 <div class="sect4">
-<h5 id="starting-a-service"><a class="anchor" href="#starting-a-service"></a>2.14.6.1. Starting a Service</h5>
+<h5 id="starting-a-service"><a class="anchor" href="#starting-a-service"></a>2.15.6.1. Starting a Service</h5>
 <div class="paragraph">
 <p>Now that you have recorded the creation of a service during the build phase, you need to record how to start the service at runtime during booting. You do this with a RUNTIME_INIT build step as shown in the <code>TestProcessor#startRuntimeService</code> method.</p>
 </div>
@@ -2678,7 +2836,7 @@ public class ConfiguredBean implements IConfigConsumer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="startup-and-shutdown-events"><a class="anchor" href="#startup-and-shutdown-events"></a>2.14.7. Startup and Shutdown Events</h4>
+<h4 id="startup-and-shutdown-events"><a class="anchor" href="#startup-and-shutdown-events"></a>2.15.7. Startup and Shutdown Events</h4>
 <div class="paragraph">
 <p>The Quarkus container supports startup and shutdown lifecycle events to notify components of the container startup
 and shutdown. There are CDI events fired that components can observe are illustrated in this example:</p>
@@ -2755,27 +2913,27 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </div>
 </div>
 <div class="sect3">
-<h4 id="register-resources-for-use-in-native-image"><a class="anchor" href="#register-resources-for-use-in-native-image"></a>2.14.8. Register Resources for Use in Native Image</h4>
+<h4 id="register-resources-for-use-in-native-image"><a class="anchor" href="#register-resources-for-use-in-native-image"></a>2.15.8. Register Resources for Use in Native Image</h4>
 <div class="paragraph">
-<p>Not all configuration or resources can be consumed at build time. If you have classpath resources that the runtime needs to access, you need to inform the build phase that these resources need to be copied into the native image. This is done by producing one or more <code>SubstrateResourceBuildItem</code> or <code>SubstrateResourceBundleBuildItem</code> in the case of resource bundles. Examples of this are shown in this sample <code>registerNativeImageReources</code> build step:</p>
+<p>Not all configuration or resources can be consumed at build time. If you have classpath resources that the runtime needs to access, you need to inform the build phase that these resources need to be copied into the native image. This is done by producing one or more <code>NativeImageResourceBuildItem</code> or <code>NativeImageResourceBundleBuildItem</code> in the case of resource bundles. Examples of this are shown in this sample <code>registerNativeImageReources</code> build step:</p>
 </div>
 <div class="listingblock">
 <div class="title">Registering Resources and ResourceBundles</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public final class MyExtProcessor {
     @Inject
-    BuildProducer&lt;SubstrateResourceBuildItem&gt; resource;
+    BuildProducer&lt;NativeImageResourceBuildItem&gt; resource;
     @Inject
-    BuildProducer&lt;SubstrateResourceBundleBuildItem&gt; resourceBundle;
+    BuildProducer&lt;NativeImageResourceBundleBuildItem&gt; resourceBundle;
 
     @BuildStep
     void registerNativeImageReources() {
-        resource.produce(new SubstrateResourceBuildItem("/security/runtime.keys")); <i class="conum" data-value="1"></i><b>(1)</b>
+        resource.produce(new NativeImageResourceBuildItem("/security/runtime.keys")); <i class="conum" data-value="1"></i><b>(1)</b>
 
-        resource.produce(new SubstrateResourceBuildItem(
+        resource.produce(new NativeImageResourceBuildItem(
                 "META-INF/services/" + io.quarkus.SomeService.class.getName())); <i class="conum" data-value="2"></i><b>(2)</b>
 
-        resourceBundle.produce(new SubstrateResourceBuildItem("javax.xml.bind.Messages")); <i class="conum" data-value="3"></i><b>(3)</b>
+        resourceBundle.produce(new NativeImageResourceBuildItem("javax.xml.bind.Messages")); <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</code></pre>
 </div>
@@ -2798,7 +2956,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </div>
 </div>
 <div class="sect3">
-<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.14.9. Object Substitution</h4>
+<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.15.9. Object Substitution</h4>
 <div class="paragraph">
 <p>Objects created during the build phase that are passed into the runtime need to have a default constructor in order for them to be created and configured at startup of the runtime from the build time state. If an object does not have a default constructor you will see an error similar to the following during generation of the augmented artifacts:</p>
 </div>
@@ -2895,7 +3053,7 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
 </div>
 </div>
 <div class="sect3">
-<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.14.10. Replacing Classes in the Native Image</h4>
+<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.15.10. Replacing Classes in the Native Image</h4>
 <div class="paragraph">
 <p>The Graal SDK supports substitutions of classes in the native image. An example of how one could replace the <code>XmlConfig/XmlData</code> classes with versions that have no JAXB annotation dependencies is shown in these example classes:</p>
 </div>
@@ -3199,7 +3357,7 @@ You can also use the <code>@asciidoclet</code> tag as shown above.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Running <code>mvn clean install -DskipTests -DskipITs</code> will do.</p>
+<p>Running <code>./mvnw clean install -DskipTests -DskipITs</code> will do.</p>
 </li>
 <li>
 <p>You  can either do it globally or in a specific extension directory (e.g. <code>extensions/mailer</code>).</p>

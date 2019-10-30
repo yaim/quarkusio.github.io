@@ -78,18 +78,18 @@
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Configuration property</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-oauth2_configuration"></a><a href="#quarkus-elytron-security-oauth2_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.oauth2.enabled</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.enabled"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.enabled">quarkus.oauth2.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the OAuth2 extension is enabled.</p>
+<p>Determine if the OAuth2 extension is enabled. Enabled by default if you include the <code>elytron-security-oauth2</code> dependency, so this would be used to disable it.</p>
 </div>
 </div>
 </div></div></td>
@@ -98,12 +98,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.oauth2.client-id</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.client-id"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.client-id">quarkus.oauth2.client-id</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The identifier of the client on the OAuth2 Authorization Server</p>
+<p>The OAuth2 client id used to validate the token.</p>
 </div>
 </div>
 </div></div></td>
@@ -112,12 +112,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.oauth2.client-secret</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.client-secret"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.client-secret">quarkus.oauth2.client-secret</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The secret of the client</p>
+<p>The OAuth2 client secret used to validate the token.</p>
 </div>
 </div>
 </div></div></td>
@@ -126,12 +126,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.oauth2.introspection-url</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.introspection-url"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.introspection-url">quarkus.oauth2.introspection-url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The URL of token introspection endpoint</p>
+<p>The OAuth2 introspection endpoint URL used to validate the token and gather the authentication claims.</p>
 </div>
 </div>
 </div></div></td>
@@ -140,12 +140,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.oauth2.ca-cert-file</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.ca-cert-file"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.ca-cert-file">quarkus.oauth2.ca-cert-file</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The path to a custom cert file This is not supported in native mode</p>
+<p>The OAuth2 server certificate file. <strong>Warning</strong>: this is not supported in native mode where the certificate must be included in the truststore used during the native image generation, see <a href="native-and-ssl-guide.html">Using SSL With Native Executables</a>.</p>
 </div>
 </div>
 </div></div></td>
@@ -154,12 +154,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.oauth2.role-claim</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.role-claim"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.role-claim">quarkus.oauth2.role-claim</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The claim that provides the roles</p>
+<p>The claim that is used in the introspection endpoint response to load the roles.</p>
 </div>
 </div>
 </div></div></td>

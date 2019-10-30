@@ -78,57 +78,26 @@
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Configuration property</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy_configuration"></a><a href="#quarkus-resteasy_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.resteasy.gzip.enabled</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-resteasy_quarkus.security.jaxrs.deny-unannotated-endpoints"></a><code><a href="#quarkus-resteasy_quarkus.security.jaxrs.deny-unannotated-endpoints">quarkus.security.jaxrs.deny-unannotated-endpoints</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If gzip is enabled</p>
+<p>if set to true, access to all JAX-RS resources will be denied by default</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.resteasy.gzip.max-input</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Maximum deflated file bytes size
- If the limit is exceeded, Resteasy will return Response with status 413("Request Entity Too Large")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10M</code></p></td>
-</tr>
 </tbody>
 </table>
-<div id="memory-size-note-anchor" class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="title">About the MemorySize format</div>
-<div class="paragraph">
-<p>A size configuration option recognises string in this format (shown as a regular expression): <code>[0-9]+[KkMmGgTtPpEeZzYy]?</code>.
-If no suffix is given, assume bytes.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
     </div>
   </div>
 </div>

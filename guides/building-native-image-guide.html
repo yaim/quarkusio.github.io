@@ -65,7 +65,11 @@
     <h1 class="text-caps">Quarkus - Building a Native Executable</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
-<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#prerequisites">Prerequisites</a>
+<ul class="sectlevel2">
+<li><a href="#configuring-graalvm">Configuring GraalVM</a></li>
+</ul>
+</li>
 <li><a href="#solution">Solution</a></li>
 <li><a href="#producing-a-native-executable">Producing a native executable</a></li>
 <li><a href="#testing-the-native-executable">Testing the native executable</a>
@@ -75,6 +79,7 @@
 </li>
 <li><a href="#creating-a-container">Creating a container</a></li>
 <li><a href="#creating-a-container-with-a-multi-stage-docker-build">Creating a container with a multi-stage Docker build</a></li>
+<li><a href="#configuring-the-native-image">Configuring the Native Image</a></li>
 <li><a href="#whats-next">What&#8217;s next?</a></li>
 </ul>
     </div>
@@ -90,7 +95,7 @@
 <p>Compiling the application to a native executable</p>
 </li>
 <li>
-<p>The packaging of the application in a container</p>
+<p>Packaging the native executable in a container</p>
 </li>
 </ul>
 </div>
@@ -114,74 +119,53 @@
 <p>an IDE</p>
 </li>
 <li>
-<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
+<p>JDK 8 installed with <code>JAVA_HOME</code> configured appropriately</p>
 </li>
 <li>
-<p>GraalVM installed from the <a href="http://www.graalvm.org/downloads/">GraalVM web site</a>.
-Using the community edition is enough.
-Version 19.2.0.1 is required.</p>
+<p>A <a href="#configuring-c-development">working C development environment</a></p>
 </li>
 <li>
-<p>The <code>GRAALVM_HOME</code> environment variable configured appropriately</p>
+<p>GraalVM version 19.2.0.1 installed and <a href="#configuring-graalvm">configured appropriately</a></p>
 </li>
 <li>
-<p>The <code>native-image</code> tool must be installed; this can be done by running <code>./gu install native-image</code> from your GraalVM
-<code>bin</code> directory</p>
-</li>
-<li>
-<p>Apache Maven 3.5.3+</p>
-</li>
-<li>
-<p>A working C developer environment (see the note below for details)</p>
-</li>
-<li>
-<p>A running Docker</p>
+<p>A working container runtime (Docker, podman)</p>
 </li>
 <li>
 <p>The code of the application developed in the <a href="getting-started-guide.html">Getting Started Guide</a>.</p>
 </li>
 </ul>
 </div>
-<div class="admonitionblock note">
+<div id="configuring-c-development" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<div class="paragraph">
-<p>Once you have downloaded GraalVM, expand the archive and set the <code>GRAALVM_HOME</code> variable to this location:</p>
-</div>
-<div class="paragraph">
-<p><code>export GRAALVM_HOME=$HOME/Development/graalvm/</code></p>
-</div>
-<div class="paragraph">
-<p>On MacOS, point the variable to the <code>Home</code> sub-directory:</p>
-</div>
-<div class="paragraph">
-<p><code>export GRAALVM_HOME=$HOME/Development/graalvm/Contents/Home/</code></p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
+<div class="title">Supporting native compilation in C</div>
 <div class="paragraph">
 <p>What does having a working C developer environment mean?</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>On Linux, you will need GCC, the glibc and zlib headers (on common distributions: <code>sudo dnf install gcc glibc-devel zlib-devel</code> or <code>sudo apt-get install build-essential libz-dev</code>).</p>
+<p>On Linux, you will need GCC, and the glibc and zlib headers. Examples for common distributions:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># dnf (rpm-based)
+sudo dnf install gcc glibc-devel zlib-devel
+# Debian-based distributions:
+sudo apt-get install build-essential libz-dev</code></pre>
+</div>
+</div>
 </li>
 <li>
-<p>On macOS, execute <code>xcode-select --install</code>.</p>
+<p>XCode provides the required dependencies on macOS:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">xcode-select --install</code></pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
@@ -189,49 +173,8 @@ Version 19.2.0.1 is required.</p>
 </tr>
 </table>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Some previous releases of GraalVM included the <code>native-image</code> tool by default.  This is no longer the
-case; it now has to be installed as a second step after GraalVM itself is installed.  Use <code>gu install native-image</code>
-to do so.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>GraalVM binaries are not (yet) notarized for macOS Catalina as reported in this <a href="https://github.com/oracle/graal/issues/1724">GraalVM issue</a>.
-To bypass the issue, it is recommended to run the below command instead of disabling macOS Gatekeeper entirely:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">xattr -r -d com.apple.quarantine $HOME/Development/graalvm <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Recursively delete the <code>com.apple.quarantine</code> extended attribute on the GraalVM root directory <code>$HOME/Development/graalvm</code> we set up above.</p>
-</li>
-</ol>
-</div>
-</td>
-</tr>
-</table>
-</div>
+<div class="sect2">
+<h3 id="configuring-graalvm"><a class="anchor" href="#configuring-graalvm"></a>Configuring GraalVM</h3>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -246,14 +189,105 @@ To bypass the issue, it is recommended to run the below command instead of disab
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Version 19.2.0.1 is required. Using the community edition is enough.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install GraalVM if you haven&#8217;t already. You have a few options for this:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Use platform-specific install tools like <a href="https://github.com/graalvm/homebrew-tap">homebrew</a> or <a href="https://sdkman.io/jdks#Oracle">sdkman</a>.</p>
+</li>
+<li>
+<p>Download the appropriate Community Edition archive from <a href="https://github.com/oracle/graal/releases" class="bare">https://github.com/oracle/graal/releases</a>, and unpack it like you would any other JDK.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Configure the runtime environment. Set <code>GRAALVM_HOME</code> environment variable to the GraalVM installation directory, for example:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">export GRAALVM_HOME=$HOME/Development/graalvm/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On macOS, point the variable to the <code>Home</code> sub-directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">export GRAALVM_HOME=$HOME/Development/graalvm/Contents/Home/</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Install the <code>native-image</code> tool using <code>gu install</code>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">${GRAALVM_HOME}/bin/gu install native-image</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some previous releases of GraalVM included the <code>native-image</code> tool by default.  This is no longer the case; it must be installed as a second step after GraalVM itself is installed. Note: there is an outstanding issue <a href="#graal-and-catalina">using GraalVM with macOS Catalina</a>.</p>
+</div>
+</li>
+<li>
+<p>(Optional) Set the <code>JAVA_HOME</code> environment variable to the GraalVM installation directory.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">export JAVA_HOME=${GRAALVM_HOME}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>(Optional) Add the GraalVM <code>bin</code> directory to the path</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">export PATH=${GRAALVM_HOME}/bin:$PATH</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div id="graal-and-catalina" class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Issues using GraalVM with macOS Catalina</div>
+<div class="paragraph">
+<p>GraalVM binaries are not (yet) notarized for macOS Catalina as reported in this <a href="https://github.com/oracle/graal/issues/1724">GraalVM issue</a>. This means that you may see the following error when using <code>gu</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>“gu” cannot be opened because the developer cannot be verified</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the following command to recursively delete the <code>com.apple.quarantine</code> extended attribute on the GraalVM install directory as a workaround:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">xattr -r -d com.apple.quarantine $HOME/Development/graalvm/</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We recommend that you follow the instructions in the next sections and package the application step by step.
-However, you can go right to the completed example.</p>
+<p>We recommend that you follow the instructions in the next sections and package the application step by step. However, you can go right to the completed example.</p>
 </div>
 <div class="paragraph">
 <p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
@@ -267,15 +301,10 @@ However, you can go right to the completed example.</p>
 <h2 id="producing-a-native-executable"><a class="anchor" href="#producing-a-native-executable"></a>Producing a native executable</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s now produce a native executable for our application.
-It improves the startup time of the application, and produces a minimal disk footprint.
-The executable would have everything to run the application including the "JVM" (shrunk to be just enough to run the application), and the application.</p>
+<p>The native executable for our application will contain the application code, required libraries, Java APIs, and a reduced version of a VM. The smaller VM base improves the startup time of the application and produces a minimal disk footprint.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="/guides/images/native-executable-process.png" alt="Creating a native executable"></span></p>
-</div>
-<div class="paragraph">
-<p>Before going further, be sure that the <code>GRAALVM_HOME</code> environment variable is configured appropriately.</p>
 </div>
 <div class="paragraph">
 <p>If you have generated the application from the previous tutorial, you can find in the <code>pom.xml</code> the following <em>profile</em>:</p>
@@ -285,25 +314,9 @@ The executable would have everything to run the application including the "JVM" 
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
     &lt;profile&gt;
         &lt;id&gt;native&lt;/id&gt;
-        &lt;build&gt;
-            &lt;plugins&gt;
-                &lt;plugin&gt;
-                    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-                    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
-                    &lt;version&gt;${quarkus.version}&lt;/version&gt;
-                    &lt;executions&gt;
-                        &lt;execution&gt;
-                            &lt;goals&gt;
-                                &lt;goal&gt;native-image&lt;/goal&gt;
-                            &lt;/goals&gt;
-                            &lt;configuration&gt;
-                                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
-                            &lt;/configuration&gt;
-                        &lt;/execution&gt;
-                    &lt;/executions&gt;
-                &lt;/plugin&gt;
-            &lt;/plugins&gt;
-        &lt;/build&gt;
+        &lt;properties&gt;
+            &lt;quarkus.package.type&gt;native&lt;/quarkus.package.type&gt;
+        &lt;/properties&gt;
     &lt;/profile&gt;
 &lt;/profiles&gt;</code></pre>
 </div>
@@ -316,15 +329,16 @@ The executable would have everything to run the application including the "JVM" 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>You can provide additional options for <code>native-image</code> command using <code>&lt;additionalBuildArgs&gt;foo,bar&lt;/additionalBuildArgs&gt;</code>
-configuration element. Provided options have to be <code>,</code> separated.</p>
+<p>You can provide custom options for <code>native-image</code> command using <code>&lt;additionalBuildArgs&gt;</code> configuration element which can have multiple <code>&lt;additionalBuildArg&gt;</code> child elements.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>We use a profile because, you will see very soon, packaging the native executable takes a <em>few</em> seconds.</p>
+<p>We use a profile because, you will see very soon, packaging the native executable takes a <em>few</em> minutes. You could
+just pass -Dquarkus.package.type=native as a property on the command line, however it is better to use a profile as
+this allows native image tests to also be run.</p>
 </div>
 <div class="paragraph">
 <p>Create a native executable using: <code>./mvnw package -Pnative</code>.</p>
@@ -377,9 +391,9 @@ You can run it using: <code>./target/getting-started-1.0-SNAPSHOT-runner</code>.
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
 
 
-import io.quarkus.test.junit.SubstrateTest;
+import io.quarkus.test.junit.NativeImageTest;
 
-@SubstrateTest <i class="conum" data-value="1"></i><b>(1)</b>
+@NativeImageTest <i class="conum" data-value="1"></i><b>(1)</b>
 public class NativeGreetingResourceIT extends GreetingResourceTest { <i class="conum" data-value="2"></i><b>(2)</b>
 
     // Run the same tests
@@ -462,7 +476,7 @@ that does not call your HTTP endpoints, it&#8217;s probably not a good idea to r
 </div>
 <div class="paragraph">
 <p>If you share your test class between JVM and native executions like we advise above, you can mark certain tests
-with the <code>@DisabledOnSubstrate</code> annotation in order to only run them on the JVM.</p>
+with the <code>@DisabledOnNativeImage</code> annotation in order to only run them on the JVM.</p>
 </div>
 </div>
 </div>
@@ -496,7 +510,7 @@ we will instruct the Maven build to produce an executable from inside a containe
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dnative-image.docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dquarkus.native.container-build=true</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -512,10 +526,14 @@ we will instruct the Maven build to produce an executable from inside a containe
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># Docker
-./mvnw package -Pnative -Dnative-image.container-runtime=docker
+./mvnw package -Pnative -Dquarkus.native.container-runtime=docker
 # Podman
-./mvnw package -Pnative -Dnative-image.container-runtime=podman</code></pre>
+./mvnw package -Pnative -Dquarkus.native.container-runtime=podman</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>These are normal Quarkus config properties, so if you always want to build in a container
+it is recommended you add these to your <code>application.properties</code> so you do not need to specify them every time.</p>
 </div>
 </td>
 </tr>
@@ -648,13 +666,450 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="configuring-the-native-image"><a class="anchor" href="#configuring-the-native-image"></a>Configuring the Native Image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are a lot of different configuration options that can affect how the native image is generated.
+These are provided in <code>application.properties</code> the same as any other config property.</p>
+</div>
+<div class="paragraph">
+<p>The properties are shown below:</p>
+</div>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-native-config_configuration"></a><a href="#quarkus-core-native-config_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.report-errors-at-runtime"></a><code><a href="#quarkus-core-native-config_quarkus.native.report-errors-at-runtime">quarkus.native.report-errors-at-runtime</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If errors should be reported at runtime. This is a more relaxed setting, however it is not recommended as it means your application may fail at runtime if an unsupported feature is used by accident</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.debug-symbols"></a><code><a href="#quarkus-core-native-config_quarkus.native.debug-symbols">quarkus.native.debug-symbols</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If debug symbols should be included</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.debug-build-process"></a><code><a href="#quarkus-core-native-config_quarkus.native.debug-build-process">quarkus.native.debug-build-process</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the native image build should wait for a debugger to be attached before running. This is an advanced option and is generally only intended for those familiar with Substrate internals</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.publish-debug-build-process-port"></a><code><a href="#quarkus-core-native-config_quarkus.native.publish-debug-build-process-port">quarkus.native.publish-debug-build-process-port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the debug port should be published when building with docker and debug-build-process is true</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.cleanup-server"></a><code><a href="#quarkus-core-native-config_quarkus.native.cleanup-server">quarkus.native.cleanup-server</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the native image server should be restarted</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-http-url-handler"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-http-url-handler">quarkus.native.enable-http-url-handler</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the HTTP url handler should be enabled, allowing you to do URL.openConnection() for HTTP URLs</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-https-url-handler"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-https-url-handler">quarkus.native.enable-https-url-handler</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the HTTPS url handler should be enabled, allowing you to do URL.openConnection() for HTTPS URLs</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-all-security-services"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-all-security-services">quarkus.native.enable-all-security-services</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If all security services should be added to the native image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-retained-heap-reporting"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-retained-heap-reporting">quarkus.native.enable-retained-heap-reporting</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>This will report on the size of the retained heap after image build</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-code-size-reporting"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-code-size-reporting">quarkus.native.enable-code-size-reporting</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>This enables reporting of the code size of the native image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-isolates"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-isolates">quarkus.native.enable-isolates</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If isolates should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-fallback-images"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-fallback-images">quarkus.native.enable-fallback-images</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If a JVM based 'fallback image' should be created if native image fails. This is not recommended, as this is functionally the same as just running the application in a JVM</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.graalvm-home"></a><code><a href="#quarkus-core-native-config_quarkus.native.graalvm-home">quarkus.native.graalvm-home</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The location of the Graal distribution</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${GRAALVM_HOME:}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.java-home"></a><code><a href="#quarkus-core-native-config_quarkus.native.java-home">quarkus.native.java-home</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The location of the JDK</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${java.home}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-server"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-server">quarkus.native.enable-server</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the native image server should be used. This can speed up compilation but can result in changes not always being picked up due to cache invalidation not working 100%</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-jni"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-jni">quarkus.native.enable-jni</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If JNI should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.auto-service-loader-registration"></a><code><a href="#quarkus-core-native-config_quarkus.native.auto-service-loader-registration">quarkus.native.auto-service-loader-registration</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If all META-INF/services entries should be automatically registered</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.dump-proxies"></a><code><a href="#quarkus-core-native-config_quarkus.native.dump-proxies">quarkus.native.dump-proxies</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the bytecode of all proxies should be dumped for inspection</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.native-image-xmx"></a><code><a href="#quarkus-core-native-config_quarkus.native.native-image-xmx">quarkus.native.native-image-xmx</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The default maximum old generation size of the native image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.container-build"></a><code><a href="#quarkus-core-native-config_quarkus.native.container-build">quarkus.native.container-build</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this build should be done using a container runtime. If this is set docker will be used by default, unless container-runtime is also set.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.builder-image"></a><code><a href="#quarkus-core-native-config_quarkus.native.builder-image">quarkus.native.builder-image</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The docker image to use to do the image build</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quay.io/quarkus/ubi-quarkus-native-image:19.2.1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.container-runtime"></a><code><a href="#quarkus-core-native-config_quarkus.native.container-runtime">quarkus.native.container-runtime</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The container runtime (e.g. docker) that is used to do an image based build. If this is set then a container build is always done.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.container-runtime-options"></a><code><a href="#quarkus-core-native-config_quarkus.native.container-runtime-options">quarkus.native.container-runtime-options</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Options to pass to the container runtime</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-vm-inspection"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-vm-inspection">quarkus.native.enable-vm-inspection</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the resulting image should allow VM introspection</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.full-stack-traces"></a><code><a href="#quarkus-core-native-config_quarkus.native.full-stack-traces">quarkus.native.full-stack-traces</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If full stack traces are enabled in the resulting image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-reports"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-reports">quarkus.native.enable-reports</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If reporting on call paths should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.additional-build-args"></a><code><a href="#quarkus-core-native-config_quarkus.native.additional-build-args">quarkus.native.additional-build-args</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Additional arguments to pass to the build process</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.add-all-charsets"></a><code><a href="#quarkus-core-native-config_quarkus.native.add-all-charsets">quarkus.native.add-all-charsets</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If all character sets should be added to the native image. This increases image size</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.report-exception-stack-traces"></a><code><a href="#quarkus-core-native-config_quarkus.native.report-exception-stack-traces">quarkus.native.report-exception-stack-traces</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If exceptions should be reported with a full stack trace</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
 <h2 id="whats-next"><a class="anchor" href="#whats-next"></a>What&#8217;s next?</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide covered the creation of a native (binary) executable for your application.
 It provides an application exhibiting a swift startup time and consuming less memory.
-However, there is much more.
-We recommend continuing the journey with the <a href="kubernetes-guide.html">deployment to Kubernetes and OpenShift</a>.</p>
+However, there is much more.</p>
+</div>
+<div class="paragraph">
+<p>We recommend continuing the journey with the <a href="kubernetes-guide.html">deployment to Kubernetes and OpenShift</a>.</p>
 </div>
 </div>
 </div>

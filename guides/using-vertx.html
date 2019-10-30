@@ -272,7 +272,7 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("{name}")
-    public CompletionStage&lt;String&gt; greeting(@PathParam("name") String name) {
+    public CompletionStage&lt;String&gt; greeting(@PathParam String name) {
         // When complete, return the content to the client
         CompletableFuture&lt;String&gt; future = new CompletableFuture&lt;&gt;();
 
@@ -380,7 +380,7 @@ There are a few ways to do this:</p>
 @GET
 @Produces(MediaType.SERVER_SENT_EVENTS)
 @Path("{name}/streaming")
-public Publisher&lt;String&gt; greeting(@PathParam("name") String name) {
+public Publisher&lt;String&gt; greeting(@PathParam String name) {
     return vertx.periodicStream(2000).toPublisherBuilder()
             .map(l -&gt; String.format("Hello %s! (%s)%n", name, new Date()))
             .buildRs();
@@ -398,7 +398,7 @@ public Publisher&lt;String&gt; greeting(@PathParam("name") String name) {
 @GET
 @Produces(MediaType.SERVER_SENT_EVENTS)
 @Path("{name}/streaming")
-public Publisher&lt;String&gt; greeting(@PathParam("name") String name) {
+public Publisher&lt;String&gt; greeting(@PathParam String name) {
     return vertx.periodicStream(2000).toFlowable()
             .map(l -&gt; String.format("Hello %s! (%s)%n", name, new Date()));
 }</code></pre>
@@ -486,13 +486,13 @@ public class VertxJsonResource {
 
     @GET
     @Path("{name}/object")
-    public JsonObject jsonObject(@PathParam("name") String name) {
+    public JsonObject jsonObject(@PathParam String name) {
         return new JsonObject().put("Hello", name);
     }
 
     @GET
     @Path("{name}/array")
-    public JsonArray jsonArray(@PathParam("name") String name) {
+    public JsonArray jsonArray(@PathParam String name) {
         return new JsonArray().add("Hello").add(name);
     }
 }</code></pre>
@@ -594,10 +594,10 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.concurrent.CompletionStage;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Path("/swapi")
 public class ResourceUsingWebClient {
@@ -617,7 +617,7 @@ public class ResourceUsingWebClient {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public CompletionStage&lt;JsonObject&gt; getStarWarsCharacter(@PathParam("id") int id) {
+    public CompletionStage&lt;JsonObject&gt; getStarWarsCharacter(@PathParam int id) {
         return client.get("/api/people/" + id)
                 .send()
                 .thenApply(resp -&gt; {

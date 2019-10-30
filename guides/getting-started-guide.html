@@ -125,7 +125,7 @@ This guide covers:</p>
 <p>an IDE</p>
 </li>
 <li>
-<p>JDK 1.8+ installed with <code>JAVA_HOME</code> configured appropriately</p>
+<p>JDK 8 or 11+ installed with <code>JAVA_HOME</code> configured appropriately</p>
 </li>
 <li>
 <p>Apache Maven 3.5.3+</p>
@@ -424,9 +424,10 @@ public class GreetingService {
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Path("/hello")
 public class GreetingResource {
@@ -437,7 +438,7 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/greeting/{name}")
-    public String greeting(@PathParam("name") String name) {
+    public String greeting(@PathParam String name) {
         return service.greeting(name);
     }
 

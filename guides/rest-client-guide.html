@@ -194,10 +194,10 @@ public class Country {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import java.util.Set;
 
@@ -208,7 +208,7 @@ public interface CountriesService {
     @GET
     @Path("/name/{name}")
     @Produces("application/json")
-    Set&lt;Country&gt; getByName(@PathParam("name") String name);
+    Set&lt;Country&gt; getByName(@PathParam String name);
 }</code></pre>
 </div>
 </div>
@@ -294,11 +294,11 @@ The default scope can also be defined on the interface.</td>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Set;
@@ -314,7 +314,7 @@ public class CountriesResource {
     @GET
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set&lt;Country&gt; name(@PathParam("name") String name) {
+    public Set&lt;Country&gt; name(@PathParam String name) {
         return countriesService.getByName(name);
     }
 }</code></pre>
@@ -378,10 +378,10 @@ public class CountriesResourceTest {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import java.util.concurrent.CompletionStage;
 import java.util.Set;
@@ -393,12 +393,12 @@ public interface CountriesService {
     @GET
     @Path("/name/{name}")
     @Produces("application/json")
-    Set&lt;Country&gt; getByName(@PathParam("name") String name);
+    Set&lt;Country&gt; getByName(@PathParam String name);
 
     @GET
     @Path("/name/{name}")
     @Produces("application/json")
-    CompletionStage&lt;Set&lt;Country&gt;&gt; getByNameAsync(@PathParam("name") String name);
+    CompletionStage&lt;Set&lt;Country&gt;&gt; getByNameAsync(@PathParam String name);
 }</code></pre>
 </div>
 </div>
@@ -410,11 +410,11 @@ public interface CountriesService {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.concurrent.CompletionStage;
@@ -431,14 +431,14 @@ public class CountriesResource {
     @GET
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set&lt;Country&gt; name(@PathParam("name") String name) {
+    public Set&lt;Country&gt; name(@PathParam String name) {
         return countriesService.getByName(name);
     }
 
     @GET
     @Path("/name-async/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public CompletionStage&lt;Set&lt;Country&gt;&gt; nameAsync(@PathParam("name") String name) {
+    public CompletionStage&lt;Set&lt;Country&gt;&gt; nameAsync(@PathParam String name) {
         return countriesService.getByNameAsync(name);
     }
 }</code></pre>

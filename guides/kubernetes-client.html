@@ -88,7 +88,7 @@ in native mode while also making it easier to work with.</p>
 <p>Having a Kubernetes Client extension in Quarkus is very useful in order to unlock the power of Kubernetes Operators.
 Kubernetes Operators are quickly emerging as a new class of Cloud Native applications.
 These applications essentially watch the Kubernetes API and react to changes on various resources and can be used to manage the lifecycle of all kinds of complex systems like databases, messaging systems and much much more.
-Being able to write such operators in Java with a the very low footprint that native images provide is a great match.</p>
+Being able to write such operators in Java with the very low footprint that native images provide is a great match.</p>
 </div>
 </div>
 </div>
@@ -100,12 +100,10 @@ Being able to write such operators in Java with a the very low footprint that na
 to your project by running the following command in your project base directory.</p>
 </div>
 <div class="listingblock">
+<div class="title">/mvnw quarkus:add-extension -Dextensions="kubernetes-client"</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn quarkus:add-extension -Dextensions="kubernetes-client"</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">This will add the following to your pom.xml:</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>This will add the following to your pom.xml:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -394,13 +392,13 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Configuration property</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kubernetes-client_configuration"></a><a href="#quarkus-kubernetes-client_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.trust-certs</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.trust-certs"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.trust-certs">quarkus.kubernetes-client.trust-certs</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -414,7 +412,7 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.master-url</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.master-url"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.master-url">quarkus.kubernetes-client.master-url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -424,11 +422,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.namespace</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.namespace"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.namespace">quarkus.kubernetes-client.namespace</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -438,11 +436,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.ca-cert-file</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.ca-cert-file"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.ca-cert-file">quarkus.kubernetes-client.ca-cert-file</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -452,11 +450,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.ca-cert-data</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.ca-cert-data"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.ca-cert-data">quarkus.kubernetes-client.ca-cert-data</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -466,11 +464,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.client-cert-file</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.client-cert-file"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.client-cert-file">quarkus.kubernetes-client.client-cert-file</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -480,11 +478,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.client-cert-data</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.client-cert-data"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.client-cert-data">quarkus.kubernetes-client.client-cert-data</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -494,11 +492,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.client-key-file</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-file"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-file">quarkus.kubernetes-client.client-key-file</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -508,11 +506,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.client-key-data</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-data"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-data">quarkus.kubernetes-client.client-key-data</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -522,11 +520,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.client-key-algo</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-algo"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-algo">quarkus.kubernetes-client.client-key-algo</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -536,11 +534,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.client-key-passphrase</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-passphrase"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.client-key-passphrase">quarkus.kubernetes-client.client-key-passphrase</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -550,11 +548,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.username</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.username"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.username">quarkus.kubernetes-client.username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -564,11 +562,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.password</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.password"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.password">quarkus.kubernetes-client.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -578,11 +576,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.watch-reconnect-interval</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.watch-reconnect-interval"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.watch-reconnect-interval">quarkus.kubernetes-client.watch-reconnect-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -597,7 +595,7 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.watch-reconnect-limit</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.watch-reconnect-limit"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.watch-reconnect-limit">quarkus.kubernetes-client.watch-reconnect-limit</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -611,7 +609,7 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.connection-timeout</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.connection-timeout"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.connection-timeout">quarkus.kubernetes-client.connection-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -626,7 +624,7 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.request-timeout</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.request-timeout"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.request-timeout">quarkus.kubernetes-client.request-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -641,7 +639,7 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.rolling-timeout</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.rolling-timeout"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.rolling-timeout">quarkus.kubernetes-client.rolling-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -656,7 +654,7 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.http-proxy</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.http-proxy"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.http-proxy">quarkus.kubernetes-client.http-proxy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -666,11 +664,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.https-proxy</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.https-proxy"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.https-proxy">quarkus.kubernetes-client.https-proxy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -680,11 +678,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.proxy-username</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.proxy-username"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.proxy-username">quarkus.kubernetes-client.proxy-username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -694,11 +692,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.proxy-password</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.proxy-password"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.proxy-password">quarkus.kubernetes-client.proxy-password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -708,11 +706,11 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.kubernetes-client.no-proxy</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-client.no-proxy"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-client.no-proxy">quarkus.kubernetes-client.no-proxy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -721,7 +719,7 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Optional&lt;java.lang.String&gt;.html">java.util.Optional&lt;java.lang.String&gt;</a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 </tbody>

@@ -496,15 +496,15 @@ You can find all the information about the format of this file in <a href="https
 <div class="sect2">
 <h3 id="including-resources-2"><a class="anchor" href="#including-resources-2"></a>Including resources</h3>
 <div class="paragraph">
-<p>In the context of an extension, Quarkus eliminates the need for a JSON configuration file by allowing extension authors to specify a <code>SubstrateResourceBuildItem</code>:</p>
+<p>In the context of an extension, Quarkus eliminates the need for a JSON configuration file by allowing extension authors to specify a <code>NativeImageResourceBuildItem</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class ResourcesProcessor {
 
     @BuildStep
-    SubstrateResourceBuildItem substrateResourceBuildItem() {
-        return new SubstrateResourceBuildItem("META-INF/extra.properties");
+    NativeImageResourceBuildItem nativeImageResourceBuildItem() {
+        return new NativeImageResourceBuildItem("META-INF/extra.properties");
     }
 
 }</code></pre>
@@ -565,15 +565,15 @@ You can find all the information about the format of this file in <a href="https
 <div class="sect2">
 <h3 id="managing-proxy-classes-2"><a class="anchor" href="#managing-proxy-classes-2"></a>Managing Proxy Classes</h3>
 <div class="paragraph">
-<p>Very similarly, Quarkus allows extensions authors to register a <code>SubstrateProxyDefinitionBuildItem</code>. An example of doing so is:</p>
+<p>Very similarly, Quarkus allows extensions authors to register a <code>NativeImageProxyDefinitionBuildItem</code>. An example of doing so is:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class S3Processor {
 
     @BuildStep
-    SubstrateProxyDefinitionBuildItem httpProxies() {
-        return new SubstrateProxyDefinitionBuildItem("org.apache.http.conn.HttpClientConnectionManager",
+    NativeImageProxyDefinitionBuildItem httpProxies() {
+        return new NativeImageProxyDefinitionBuildItem("org.apache.http.conn.HttpClientConnectionManager",
                 "org.apache.http.pool.ConnPoolControl", "com.amazonaws.http.conn.Wrapped");
     }
 

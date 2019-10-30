@@ -113,7 +113,7 @@ Keep in mind it&#8217;s actively developed and does not support yet all the feat
 <div class="ulist">
 <ul>
 <li>
-<p>Blocking access using the Apache HTTP Client</p>
+<p>Blocking access using URL Connection HTTP client (by default) or the Apache HTTP Client</p>
 </li>
 <li>
 <p><a href="https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/basics-async.html">Asynchronous programming</a> based on JDK&#8217;s <code>CompletableFuture</code> objects and the Netty HTTP client.</p>
@@ -470,7 +470,54 @@ public class FruitResource {
 <h2 id="configuring-dynamodb-clients"><a class="anchor" href="#configuring-dynamodb-clients"></a>Configuring DynamoDB clients</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Both DynamoDB clients (sync and async) are configurable via the <code>application.properties</code> file that can be provided in the <code>src/main/resources</code> directory.</p>
+<p>Both DynamoDB clients (sync and async) are configurable via the <code>application.properties</code> file that can be provided in the <code>src/main/resources</code> directory.
+Additionally, you need to added to the classpath a proper implementation of the sync client. By default the extension uses URL connection HTTP client, so
+you need to add a URL connection client dependency to the <code>pom.xml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;software.amazon.awssdk&lt;/groupId&gt;
+    &lt;artifactId&gt;url-connection-client&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to use Apache HTTP client instead, configure it as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.dynamodb.sync-client.type=apache</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And add following dependency to the application <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;software.amazon.awssdk&lt;/groupId&gt;
+    &lt;artifactId&gt;apache-client&lt;/artifactId&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;commons-logging&lt;/groupId&gt;
+            &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It&#8217;s important to exclude <code>commons-logging</code> from the client dependency to force Apache HTTP client to use Quarkus logger.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>If you&#8217;re going to use a local DynamoDB instance, configure it as follows:</p>
@@ -480,7 +527,7 @@ public class FruitResource {
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.dynamodb.endpoint-override=http://localhost:8000
 
 quarkus.dynamodb.aws.region=eu-central-1
-quarkus.dynamodb.aws.credentials.type=STATIC
+quarkus.dynamodb.aws.credentials.type=static
 quarkus.dynamodb.aws.credentials.static-provider.access-key-id=test-key
 quarkus.dynamodb.aws.credentials.static-provider.secret-access-key=test-secret</code></pre>
 </div>
@@ -491,7 +538,7 @@ quarkus.dynamodb.aws.credentials.static-provider.secret-access-key=test-secret</
 <p><code>quarkus.dynamodb.aws.region</code> - It&#8217;s required by the client, but since you&#8217;re using a local DynamoDB instance you can pick any valid AWS region.</p>
 </li>
 <li>
-<p><code>quarkus.dynamodb.aws.credentials.type</code> - Set <code>STATIC</code> credentials provider with any values for <code>access-key-id</code> and <code>secret-access-key</code></p>
+<p><code>quarkus.dynamodb.aws.credentials.type</code> - Set <code>static</code> credentials provider with any values for <code>access-key-id</code> and <code>secret-access-key</code></p>
 </li>
 <li>
 <p><code>quarkus.dynamodb.endpoint-override</code> - Override the DynamoDB client to use a local instance instead of an AWS service</p>
@@ -504,7 +551,7 @@ quarkus.dynamodb.aws.credentials.static-provider.secret-access-key=test-secret</
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.dynamodb.aws.region=&lt;YOUR_REGION&gt;
-quarkus.dynamodb.aws.credentials.type=DEFAULT</code></pre>
+quarkus.dynamodb.aws.credentials.type=default</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -513,7 +560,7 @@ quarkus.dynamodb.aws.credentials.type=DEFAULT</code></pre>
 <p><code>quarkus.dynamodb.aws.region</code> you should set it to the region where you provisioned the DynamoDB table,</p>
 </li>
 <li>
-<p><code>quarkus.dynamodb.aws.credentials.type</code> - use the <code>DEFAULT</code> credentials provider chain that looks for credentials in this order:</p>
+<p><code>quarkus.dynamodb.aws.credentials.type</code> - use the <code>default</code> credentials provider chain that looks for credentials in this order:</p>
 </li>
 <li>
 <p>Java System Properties - <code>aws.accessKeyId</code> and <code>aws.secretKey</code></p>
@@ -595,7 +642,7 @@ public class FruitAsyncService extends AbstractService {
 </div>
 </div>
 <div class="paragraph">
-<p>And an asynchronous REST resource:</p>
+<p>Create an asynchronous REST resource:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -640,6 +687,17 @@ public class FruitAsyncResource {
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>And add Netty HTTP client dependency to the <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;software.amazon.awssdk&lt;/groupId&gt;
+    &lt;artifactId&gt;netty-nio-client&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -657,13 +715,13 @@ public class FruitAsyncResource {
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Configuration property</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-dynamodb_configuration"></a><a href="#quarkus-dynamodb_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.enable-endpoint-discovery</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.enable-endpoint-discovery"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.enable-endpoint-discovery">quarkus.dynamodb.enable-endpoint-discovery</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -677,7 +735,7 @@ public class FruitAsyncResource {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.endpoint-override</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.endpoint-override"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.endpoint-override">quarkus.dynamodb.endpoint-override</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -692,7 +750,7 @@ public class FruitAsyncResource {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.api-call-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.api-call-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.api-call-timeout">quarkus.dynamodb.api-call-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -709,7 +767,7 @@ public class FruitAsyncResource {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.api-call-attempt-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.api-call-attempt-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.api-call-attempt-timeout">quarkus.dynamodb.api-call-attempt-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -725,7 +783,7 @@ public class FruitAsyncResource {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.interceptors</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.interceptors"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.interceptors">quarkus.dynamodb.interceptors</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -740,7 +798,7 @@ public class FruitAsyncResource {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.region</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.region"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.region">quarkus.dynamodb.aws.region</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -777,7 +835,7 @@ region with which the DynamoDB client should communicate.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.type</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.type">quarkus.dynamodb.aws.credentials.type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -850,7 +908,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.default-provider.async-credential-update-enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.default-provider.async-credential-update-enabled"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.default-provider.async-credential-update-enabled">quarkus.dynamodb.aws.credentials.default-provider.async-credential-update-enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -865,7 +923,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.default-provider.reuse-last-provider-enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.default-provider.reuse-last-provider-enabled"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.default-provider.reuse-last-provider-enabled">quarkus.dynamodb.aws.credentials.default-provider.reuse-last-provider-enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -880,7 +938,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.static-provider.access-key-id</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.static-provider.access-key-id"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.static-provider.access-key-id">quarkus.dynamodb.aws.credentials.static-provider.access-key-id</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -894,7 +952,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.static-provider.secret-access-key</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.static-provider.secret-access-key"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.static-provider.secret-access-key">quarkus.dynamodb.aws.credentials.static-provider.secret-access-key</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -908,7 +966,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.profile-provider.profile-name</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.profile-provider.profile-name"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.profile-provider.profile-name">quarkus.dynamodb.aws.credentials.profile-provider.profile-name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -923,7 +981,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.process-provider.async-credential-update-enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.async-credential-update-enabled"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.async-credential-update-enabled">quarkus.dynamodb.aws.credentials.process-provider.async-credential-update-enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -938,7 +996,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.process-provider.credential-refresh-threshold</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.credential-refresh-threshold"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.credential-refresh-threshold">quarkus.dynamodb.aws.credentials.process-provider.credential-refresh-threshold</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -954,7 +1012,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.process-provider.process-output-limit</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.process-output-limit"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.process-output-limit">quarkus.dynamodb.aws.credentials.process-provider.process-output-limit</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -968,7 +1026,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.aws.credentials.process-provider.command</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.command"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.aws.credentials.process-provider.command">quarkus.dynamodb.aws.credentials.process-provider.command</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -982,7 +1040,21 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.connection-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.type">quarkus.dynamodb.sync-client.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Type of the sync HTTP client implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code>, <code>apache</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.connection-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.connection-timeout">quarkus.dynamodb.sync-client.connection-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -997,52 +1069,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.connection-acquisition-timeout</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The amount of time to wait when acquiring a connection from the pool before giving up and timing out.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.connection-max-idle-time</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The maximum amount of time that a connection should be allowed to remain open while idle.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>60S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.connection-time-to-live</code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The maximum amount of time that a connection should be allowed to remain open, regardless of usage frequency.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.socket-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.socket-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.socket-timeout">quarkus.dynamodb.sync-client.socket-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1057,7 +1084,52 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.max-connections</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.connection-acquisition-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.connection-acquisition-timeout">quarkus.dynamodb.sync-client.apache.connection-acquisition-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The amount of time to wait when acquiring a connection from the pool before giving up and timing out.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.connection-max-idle-time"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.connection-max-idle-time">quarkus.dynamodb.sync-client.apache.connection-max-idle-time</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum amount of time that a connection should be allowed to remain open while idle.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>60S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.connection-time-to-live"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.connection-time-to-live">quarkus.dynamodb.sync-client.apache.connection-time-to-live</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum amount of time that a connection should be allowed to remain open, regardless of usage frequency.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.max-connections"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.max-connections">quarkus.dynamodb.sync-client.apache.max-connections</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1072,7 +1144,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.expect-continue-enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.expect-continue-enabled"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.expect-continue-enabled">quarkus.dynamodb.sync-client.apache.expect-continue-enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1086,7 +1158,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.use-idle-connection-reaper</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.use-idle-connection-reaper"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.use-idle-connection-reaper">quarkus.dynamodb.sync-client.apache.use-idle-connection-reaper</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1101,7 +1173,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.enabled"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.enabled">quarkus.dynamodb.sync-client.apache.proxy.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1115,7 +1187,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.endpoint</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.endpoint"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.endpoint">quarkus.dynamodb.sync-client.apache.proxy.endpoint</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1130,7 +1202,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.username</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.username"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.username">quarkus.dynamodb.sync-client.apache.proxy.username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1144,7 +1216,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.password</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.password"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.password">quarkus.dynamodb.sync-client.apache.proxy.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1158,7 +1230,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.ntlm-domain</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.ntlm-domain"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.ntlm-domain">quarkus.dynamodb.sync-client.apache.proxy.ntlm-domain</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1172,7 +1244,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.ntlm-workstation</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.ntlm-workstation"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.ntlm-workstation">quarkus.dynamodb.sync-client.apache.proxy.ntlm-workstation</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1186,7 +1258,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.preemptive-basic-authentication-enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.preemptive-basic-authentication-enabled"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.preemptive-basic-authentication-enabled">quarkus.dynamodb.sync-client.apache.proxy.preemptive-basic-authentication-enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1200,7 +1272,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.proxy.non-proxy-hosts</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.non-proxy-hosts"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.proxy.non-proxy-hosts">quarkus.dynamodb.sync-client.apache.proxy.non-proxy-hosts</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1214,7 +1286,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.tls-managers-provider.type</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.type">quarkus.dynamodb.sync-client.apache.tls-managers-provider.type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1246,7 +1318,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.tls-managers-provider.file-store.path</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1260,7 +1332,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.tls-managers-provider.file-store.type</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1275,7 +1347,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.sync-client.tls-managers-provider.file-store.password</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1289,7 +1361,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.max-concurrency</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.max-concurrency"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.max-concurrency">quarkus.dynamodb.async-client.max-concurrency</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1304,7 +1376,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.max-pending-connection-acquires</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.max-pending-connection-acquires"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.max-pending-connection-acquires">quarkus.dynamodb.async-client.max-pending-connection-acquires</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1319,7 +1391,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.read-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.read-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.read-timeout">quarkus.dynamodb.async-client.read-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1335,7 +1407,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.write-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.write-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.write-timeout">quarkus.dynamodb.async-client.write-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1351,7 +1423,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.connection-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.connection-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.connection-timeout">quarkus.dynamodb.async-client.connection-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1366,7 +1438,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.connection-acquisition-timeout</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.connection-acquisition-timeout"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.connection-acquisition-timeout">quarkus.dynamodb.async-client.connection-acquisition-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1381,7 +1453,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.connection-time-to-live</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.connection-time-to-live"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.connection-time-to-live">quarkus.dynamodb.async-client.connection-time-to-live</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1396,7 +1468,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.connection-max-idle-time</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.connection-max-idle-time"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.connection-max-idle-time">quarkus.dynamodb.async-client.connection-max-idle-time</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1412,7 +1484,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.use-idle-connection-reaper</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.use-idle-connection-reaper"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.use-idle-connection-reaper">quarkus.dynamodb.async-client.use-idle-connection-reaper</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1427,7 +1499,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.protocol</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.protocol"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.protocol">quarkus.dynamodb.async-client.protocol</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1441,7 +1513,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.max-http2-streams</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.max-http2-streams"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.max-http2-streams">quarkus.dynamodb.async-client.max-http2-streams</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1457,7 +1529,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.ssl-provider</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.ssl-provider"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.ssl-provider">quarkus.dynamodb.async-client.ssl-provider</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1472,7 +1544,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.proxy.enabled</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.proxy.enabled"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.proxy.enabled">quarkus.dynamodb.async-client.proxy.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1486,7 +1558,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.proxy.endpoint</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.proxy.endpoint"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.proxy.endpoint">quarkus.dynamodb.async-client.proxy.endpoint</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1501,7 +1573,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.proxy.non-proxy-hosts</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.proxy.non-proxy-hosts"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.proxy.non-proxy-hosts">quarkus.dynamodb.async-client.proxy.non-proxy-hosts</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1515,7 +1587,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.tls-managers-provider.type</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.type">quarkus.dynamodb.async-client.tls-managers-provider.type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1547,7 +1619,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.tls-managers-provider.file-store.path</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path">quarkus.dynamodb.async-client.tls-managers-provider.file-store.path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1561,7 +1633,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.tls-managers-provider.file-store.type</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type">quarkus.dynamodb.async-client.tls-managers-provider.file-store.type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1576,7 +1648,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.tls-managers-provider.file-store.password</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password">quarkus.dynamodb.async-client.tls-managers-provider.file-store.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1590,7 +1662,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.event-loop.override</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.event-loop.override"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.event-loop.override">quarkus.dynamodb.async-client.event-loop.override</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1604,7 +1676,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.event-loop.number-of-threads</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.event-loop.number-of-threads"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.event-loop.number-of-threads">quarkus.dynamodb.async-client.event-loop.number-of-threads</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1619,7 +1691,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <code>quarkus.dynamodb.async-client.event-loop.thread-name-prefix</code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.event-loop.thread-name-prefix"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.event-loop.thread-name-prefix">quarkus.dynamodb.async-client.event-loop.thread-name-prefix</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

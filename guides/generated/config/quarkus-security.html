@@ -78,13 +78,13 @@
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Configuration property</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-security_configuration"></a><a href="#quarkus-security_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <code>quarkus.security.security-providers</code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-security_quarkus.security.security-providers"></a><code><a href="#quarkus-security_quarkus.security.security-providers">quarkus.security.security-providers</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -95,6 +95,20 @@
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-security_quarkus.security.deny-unannotated-members"></a><code><a href="#quarkus-security_quarkus.security.deny-unannotated-members">quarkus.security.deny-unannotated-members</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true, access to all methods of beans that have any security annotations on other members will be denied by default. E.g. if enabled, in the following bean, <code>methodB</code> will be denied.  `@`ApplicationScoped public class A { `@`RolesAllowed("admin") public void methodA() { &#8230;&#8203; } public void methodB() { &#8230;&#8203; } }</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 </tbody>
 </table>

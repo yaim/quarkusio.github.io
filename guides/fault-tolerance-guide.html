@@ -379,7 +379,7 @@ and save the file.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import javax.ws.rs.PathParam;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 ...
 public class CoffeeResource {
@@ -387,7 +387,7 @@ public class CoffeeResource {
     @GET
     @Path("/{id}/recommendations")
     @Timeout(250)
-    public List&lt;Coffee&gt; recommendations(@PathParam("id") int id) {
+    public List&lt;Coffee&gt; recommendations(@PathParam int id) {
         long started = System.currentTimeMillis();
         final long invocationNumber = counter.getAndIncrement();
 
@@ -446,7 +446,7 @@ import org.eclipse.microprofile.faulttolerance.Fallback;
 public class CoffeeResource {
     ...
     @Fallback(fallbackMethod = "fallbackRecommendations")
-    public List&lt;Coffee&gt; recommendations(@PathParam("id") int id) {
+    public List&lt;Coffee&gt; recommendations(@PathParam int id) {
         ...
     }
 
@@ -537,7 +537,7 @@ public class CoffeeRepositoryService {
     ...
     @Path("/{id}/availability")
     @GET
-    public Response availability(@PathParam("id") int id) {
+    public Response availability(@PathParam int id) {
         final Long invocationNumber = counter.getAndIncrement();
 
         Coffee coffee = coffeeRepository.getCoffeeById(id);

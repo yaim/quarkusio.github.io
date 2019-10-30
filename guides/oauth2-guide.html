@@ -65,7 +65,6 @@
     <h1 class="text-caps">Quarkus - Using OAuth2 RBAC</h1>
     <div class="hide-mobile toc">
       <ul class="sectlevel1">
-<li><a href="#configuration">Configuration</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a>
 <ul class="sectlevel2">
 <li><a href="#examine-the-jax-rs-resource">Examine the JAX-RS resource</a></li>
@@ -97,57 +96,6 @@ It can be used to implement an application authentication mechanism based on tok
 <div class="paragraph">
 <p>If your OAuth2 Authentication server provides JWT tokens, you should use <a href="jwt-guide.html">MicroProfile JWT RBAC</a> instead, this extension aims to be used with opaque tokens and validate the token by calling an introspection endpoint.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h2>
-<div class="sectionbody">
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Property Name</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.enabled</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Determine if the OAuth2 extension is enabled. Enabled by default if you include the <code>elytron-security-oauth2</code> dependency, so this would be used to disable it.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.client-id</code></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The OAuth2 client id used to validate the token.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.client-secret</code></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The OAuth2 client secret used to validate the token.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.introspection-url</code></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The OAuth2 introspection endpoint URL used to validate the token and gather the authentication claims.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.ca-cert-file</code></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The OAuth2 server certificate file. <strong>Warning</strong>: this is not supported in native mode where the certificate must be included in the truststore used during the native image generation, see <a href="native-and-ssl-guide.html">Using SSL With Native Executables</a>.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.oauth2.role-claim</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scope</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The claim that is used in the introspection endpoint response to load the roles</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 <div class="sect1">
@@ -288,7 +236,7 @@ public class TokenSecuredResource {
 <div class="listingblock">
 <div class="title">quarkus:dev Output</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn clean compile quarkus:dev
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ ./mvnw clean compile quarkus:dev
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ---------------------&lt; org.acme:using-oauth2-rbac &gt;---------------------
@@ -421,9 +369,107 @@ Not authorized</code></pre>
 <div class="sect1">
 <h2 id="configuring-the-elytron-security-oauth2-extension-security-information"><a class="anchor" href="#configuring-the-elytron-security-oauth2-extension-security-information"></a>Configuring the Elytron Security OAuth2 Extension Security Information</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>In the <a href="#configuration">Configuration</a> section we introduce the configuration properties that affect the Elytron Security OAuth2 extension.</p>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-oauth2_configuration"></a><a href="#quarkus-elytron-security-oauth2_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.enabled"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.enabled">quarkus.oauth2.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine if the OAuth2 extension is enabled. Enabled by default if you include the <code>elytron-security-oauth2</code> dependency, so this would be used to disable it.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.client-id"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.client-id">quarkus.oauth2.client-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The OAuth2 client id used to validate the token.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.client-secret"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.client-secret">quarkus.oauth2.client-secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The OAuth2 client secret used to validate the token.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.introspection-url"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.introspection-url">quarkus.oauth2.introspection-url</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The OAuth2 introspection endpoint URL used to validate the token and gather the authentication claims.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.ca-cert-file"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.ca-cert-file">quarkus.oauth2.ca-cert-file</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The OAuth2 server certificate file. <strong>Warning</strong>: this is not supported in native mode where the certificate must be included in the truststore used during the native image generation, see <a href="native-and-ssl-guide.html">Using SSL With Native Executables</a>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.role-claim"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.role-claim">quarkus.oauth2.role-claim</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The claim that is used in the introspection endpoint response to load the roles.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>scope</code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="sect2">
 <h3 id="setting-up-application-properties"><a class="anchor" href="#setting-up-application-properties"></a>Setting up application.properties</h3>
 <div class="literalblock">
