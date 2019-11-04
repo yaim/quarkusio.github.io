@@ -82,7 +82,26 @@
 <li><a href="#building-with-gradlew-build">Building with <code>./gradlew build</code></a></li>
 </ul></div>
     <div>
-      <div class="sect1">
+      <div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+Quarkus Gradle support is considered preview.
+You can use Gradle to create Quarkus projects as outlined in our guides. If you go beyond there will be cases where
+the Gradle tasks <a href="https://github.com/quarkusio/quarkus/issues/5101">does not behave as expected</a>.
+This is just a caution, and we recommend if you like Gradle you try it out and give us feedback.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="project-creation"><a class="anchor" href="#project-creation"></a>Creating a new project</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -178,7 +197,7 @@ Instructions to build the image and run the container are written in those Docke
 <div class="paragraph">
 <p>By default, Quarkus tests in JVM mode are run using the <code>test</code> configuration profile. If you are not familiar with Quarkus
 configuration profiles, everything you need to know is explained in the
-<a href="application-configuration-guide.html#configuration-profiles">Configuration Profiles Documentation</a>.</p>
+<a href="config.html#configuration-profiles">Configuration Profiles Documentation</a>.</p>
 </div>
 <div class="paragraph">
 <p>It is however possible to use a custom configuration profile for your tests with the Gradle build configuration shown below.

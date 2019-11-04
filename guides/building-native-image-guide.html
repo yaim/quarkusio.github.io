@@ -676,7 +676,7 @@ These are provided in <code>application.properties</code> the same as any other 
 <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
-<table class="tableblock frame-all grid-all stretch configuration-reference">
+<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
 <col style="width: 80%;">
 <col style="width: 10%;">
@@ -690,17 +690,129 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.report-errors-at-runtime"></a><code><a href="#quarkus-core-native-config_quarkus.native.report-errors-at-runtime">quarkus.native.report-errors-at-runtime</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.additional-build-args"></a><code><a href="#quarkus-core-native-config_quarkus.native.additional-build-args">quarkus.native.additional-build-args</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If errors should be reported at runtime. This is a more relaxed setting, however it is not recommended as it means your application may fail at runtime if an unsupported feature is used by accident</p>
+<p>Additional arguments to pass to the build process</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-http-url-handler"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-http-url-handler">quarkus.native.enable-http-url-handler</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the HTTP url handler should be enabled, allowing you to do URL.openConnection() for HTTP URLs</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-https-url-handler"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-https-url-handler">quarkus.native.enable-https-url-handler</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the HTTPS url handler should be enabled, allowing you to do URL.openConnection() for HTTPS URLs</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-all-security-services"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-all-security-services">quarkus.native.enable-all-security-services</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If all security services should be added to the native image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-jni"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-jni">quarkus.native.enable-jni</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If JNI should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.add-all-charsets"></a><code><a href="#quarkus-core-native-config_quarkus.native.add-all-charsets">quarkus.native.add-all-charsets</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If all character sets should be added to the native image. This increases image size</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.graalvm-home"></a><code><a href="#quarkus-core-native-config_quarkus.native.graalvm-home">quarkus.native.graalvm-home</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The location of the Graal distribution</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${GRAALVM_HOME:}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.java-home"></a><code><a href="#quarkus-core-native-config_quarkus.native.java-home">quarkus.native.java-home</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The location of the JDK</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${java.home}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.native-image-xmx"></a><code><a href="#quarkus-core-native-config_quarkus.native.native-image-xmx">quarkus.native.native-image-xmx</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The default maximum old generation size of the native image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -752,48 +864,6 @@ These are provided in <code>application.properties</code> the same as any other 
 <div class="content">
 <div class="paragraph">
 <p>If the native image server should be restarted</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-http-url-handler"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-http-url-handler">quarkus.native.enable-http-url-handler</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If the HTTP url handler should be enabled, allowing you to do URL.openConnection() for HTTP URLs</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-https-url-handler"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-https-url-handler">quarkus.native.enable-https-url-handler</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If the HTTPS url handler should be enabled, allowing you to do URL.openConnection() for HTTPS URLs</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-all-security-services"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-all-security-services">quarkus.native.enable-all-security-services</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If all security services should be added to the native image</p>
 </div>
 </div>
 </div></div></td>
@@ -858,54 +928,12 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.graalvm-home"></a><code><a href="#quarkus-core-native-config_quarkus.native.graalvm-home">quarkus.native.graalvm-home</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The location of the Graal distribution</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${GRAALVM_HOME:}</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.java-home"></a><code><a href="#quarkus-core-native-config_quarkus.native.java-home">quarkus.native.java-home</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The location of the JDK</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${java.home}</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-server"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-server">quarkus.native.enable-server</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>If the native image server should be used. This can speed up compilation but can result in changes not always being picked up due to cache invalidation not working 100%</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.enable-jni"></a><code><a href="#quarkus-core-native-config_quarkus.native.enable-jni">quarkus.native.enable-jni</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If JNI should be enabled</p>
 </div>
 </div>
 </div></div></td>
@@ -939,20 +967,6 @@ These are provided in <code>application.properties</code> the same as any other 
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.native-image-xmx"></a><code><a href="#quarkus-core-native-config_quarkus.native.native-image-xmx">quarkus.native.native-image-xmx</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The default maximum old generation size of the native image</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1054,34 +1068,6 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.additional-build-args"></a><code><a href="#quarkus-core-native-config_quarkus.native.additional-build-args">quarkus.native.additional-build-args</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Additional arguments to pass to the build process</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.add-all-charsets"></a><code><a href="#quarkus-core-native-config_quarkus.native.add-all-charsets">quarkus.native.add-all-charsets</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If all character sets should be added to the native image. This increases image size</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.report-exception-stack-traces"></a><code><a href="#quarkus-core-native-config_quarkus.native.report-exception-stack-traces">quarkus.native.report-exception-stack-traces</a></code></p>
 </div>
 <div class="openblock description">
@@ -1093,6 +1079,20 @@ These are provided in <code>application.properties</code> the same as any other 
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-native-config_quarkus.native.report-errors-at-runtime"></a><code><a href="#quarkus-core-native-config_quarkus.native.report-errors-at-runtime">quarkus.native.report-errors-at-runtime</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If errors should be reported at runtime. This is a more relaxed setting, however it is not recommended as it means your application may fail at runtime if an unsupported feature is used by accident.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 </tbody>
 </table>

@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Quarkus - Simplified MongoDB with Panache</title>
+  <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+  <script src="/assets/javascript/highlightjs-pack.js" type="text/javascript"></script>
+  <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
+  <META HTTP-EQUIV='X-Frame-Options' CONTENT="DENY">
+  <META HTTP-EQUIV='X-XSS-Protection' CONTENT="1; mode=block">
+  <META HTTP-EQUIV='X-Content-Type-Options' CONTENT="nosniff">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quarkus: Supersonic Subatomic Java">
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
+  <link rel="stylesheet" href="https://quarkus.io//guides/stylesheet/config.css" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml"  href="https://quarkus.io//feed.xml" title="Quarkus">
+  <script src="https://quarkus.io//assets/javascript/goan.js" type="text/javascript"></script>
+  <script src="https://quarkus.io//assets/javascript/hl.js" type="text/javascript"></script>
+</head>
+
+<body class="guides">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="content">
+    <div class="navigation-wrapper">
+  <div class="width-12-12">
+    <div class="header navigation">
+      <div class="logo-wrapper">
+        <a href="/"><img src="/assets/images/quarkus_logo_horizontal_rgb_reverse.svg" class="project-logo" title="Quarkus"></a>
+      </div>
+      <div class="nav-container">
+        <nav>
+          <div class="nav-mobile"><a id="nav-toggle" href="#!"><span></span></a></div>
+          <ul class="nav-list">
+            <li>
+              <a href="/get-started/" class="">Get Started</a>
+            </li>
+            <li>
+              <a href="/guides/" class="active">Guides</a>
+            </li>
+            <li>
+              <a href="https://code.quarkus.io">Start Coding</a>
+            </li>
+            <li>
+              <a href="/community/" class="">Community</a>
+            </li>
+            <li>
+              <a href="/blog/" class="">Blog</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="guide">
+  <div class="width-12-12">
+    <h1 class="text-caps">Quarkus - Simplified MongoDB with Panache</h1>
+    <div class="hide-mobile toc"><ul class="sectlevel1">
+<li><a href="#first-an-example">First: an example</a></li>
+<li><a href="#solution">Solution</a></li>
+<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#setting-up-and-configuring-mongodb-with-panache">Setting up and configuring MongoDB with Panache</a></li>
+<li><a href="#defining-your-entity">Defining your entity</a></li>
+<li><a href="#most-useful-operations">Most useful operations</a></li>
+<li><a href="#paging">Paging</a></li>
+<li><a href="#sorting">Sorting</a></li>
+<li><a href="#adding-entity-methods">Adding entity methods</a></li>
+<li><a href="#simplified-queries">Simplified queries</a></li>
+<li><a href="#query-parameters">Query parameters</a></li>
+<li><a href="#the-daorepository-option">The DAO/Repository option</a></li>
+<li><a href="#transactions">Transactions</a></li>
+<li><a href="#custom-ids">Custom IDs</a></li>
+<li><a href="#how-and-why-we-simplify-mongodb-api">How and why we simplify MongoDB API</a></li>
+<li><a href="#defining-entities-in-external-projects-or-jars">Defining entities in external projects or jars</a></li>
+</ul></div>
+    <div>
+      <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>MongoDB is a well known NoSQL Database that is widely used, but using its raw API can be cumbersome as you need to express your entities and your queries as a MongoDB <a href="https://mongodb.github.io/mongo-java-driver/3.11/bson/documents/#document"><code>Document</code></a>.</p>
+</div>
+<div class="paragraph">
+<p>MongoDB with Panache provides active record style entities (and repositories) like you have in <a href="hibernate-orm-panache.html">Hibernate ORM with Panache</a> and focuses on making your entities trivial and fun to write in Quarkus.</p>
+</div>
+<div class="paragraph">
+<p>It is built on top of the <a href="mongodb.html">MongoDB Client</a> extension.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This extension is still experimental, feedback is welcome on the <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="first-an-example"><a class="anchor" href="#first-an-example"></a>First: an example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Panache allows you to write your MongoDB entities like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Person extends PanacheMongoEntity {
+    public String name;
+    public LocalDate birth;
+    public Status status;
+
+    public static Person findByName(String name){
+        return find("name", name).firstResult();
+    }
+
+    public static List&lt;Person&gt; findAlive(){
+        return list("status", Status.Alive);
+    }
+
+    public static void deleteLoics(){
+        delete("name", "Loïc");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You have noticed how much more compact and readable the code is compared to using the MongoDB API?
+Does this look interesting? Read on!</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+the <code>list()</code> method might be surprising at first. It takes fragments of PanacheQL queries (subset of JPQL) and contextualizes the rest.
+That makes for very concise but yet readable code.
+MongoDB native queries are also supported.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We recommend that you follow the instructions in the next sections and create the application step by step.
+However, you can go right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+</div>
+<div class="paragraph">
+<p>The solution is located in the <code>mongodb-panache-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/mongodb-panache-quickstart">directory</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, we need a new project. Create a new project with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.27.0:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=mongodb-panache-quickstart \
+    -DclassName="org.acme.mongodb.panache.FruitResource" \
+    -Dpath="/fruits" \
+    -Dextensions="resteasy-jsonb,mongodb-panache"
+cd mongodb-panache-quickstart</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command generates a Maven structure importing the RESTEasy/JAX-RS, JSON-B and MongoDB with Panache extensions.
+After this, the <code>quarkus-mongodb-panache</code> extension has been added to your <code>pom.xml</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want to generate a new project you can add the dependency in your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-mongodb-panache&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setting-up-and-configuring-mongodb-with-panache"><a class="anchor" href="#setting-up-and-configuring-mongodb-with-panache"></a>Setting up and configuring MongoDB with Panache</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To get started:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>add your settings in <code>application.properties</code></p>
+</li>
+<li>
+<p>Make your entities extend <code>PanacheMongoEntity</code>, you can use the <code>@MongoEntity</code> annotation to specify the name of the database and the name of the collection (it will default to the name of your entity).</p>
+</li>
+<li>
+<p>place your entity logic in static methods in your entities</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Then add the relevant configuration properties in <code>application.properties</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># configure the MongoDB client for a replica set of two nodes
+quarkus.mongodb.connection-string = mongodb://mongo1:27017,mongo2:27017
+# mandatory if you don't specify the name of the database using @MongoEntity
+quarkus.mongodb.database = person</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>quarkus.mongodb.database</code> property will be used by MongoDB with Panache to determine the name of the database where your entities will be persisted.</p>
+</div>
+<div class="paragraph">
+<p>For advanced configuration of the MongoDB client, you can follow the <a href="mongodb.html#configuring-the-mongodb-database">Configuring the MongoDB database guide</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="defining-your-entity"><a class="anchor" href="#defining-your-entity"></a>Defining your entity</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To define a Panache entity, simply extend <code>PanacheMongoEntity</code> and add your columns as public fields.
+You can add the <code>@MongoEntity</code> annotation to your entity if you need to customize the name of the collection and/or the database.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@MongoEntity(collection="ThePerson")
+public class Person extends PanacheMongoEntity {
+    public String name;
+
+    // will be persisted as a 'birth' field in MongoDB
+    @BsonProperty("birth")
+    public LocalDate birthDate;
+
+    public Status status;
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+annotating with <code>@MongoEntity</code> is optional, it allows you to configure the name of the collection and the name of the database. Here the entity will be stored in the <code>ThePerson</code> collection instead of the default <code>Person</code> collection.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>MongoDB with Panache uses the <a href="https://mongodb.github.io/mongo-java-driver/3.10/bson/pojos/">PojoCodecProvider</a> to map your entities to a MongoDB <code>Document</code>.</p>
+</div>
+<div class="paragraph">
+<p>You will be allowed to use the following annotations to customize this mapping:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@BsonId</code>: allows you to customize the ID field, see <a href="#custom-ids">Custom IDs</a>.</p>
+</li>
+<li>
+<p><code>@BsonProperty</code>: customize the serialized name of the field.</p>
+</li>
+<li>
+<p><code>@BsonIgnore</code>: ignore a field during the serialization.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you need to write accessors, you can:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Person extends PanacheMongoEntity {
+    public String name;
+    public LocalDate birth;
+    public Status status;
+
+    // return name as uppercase in the model
+    public String getName(){
+        return name.toUpperCase();
+    }
+
+    // store all names in lowercase in the DB
+    public void setName(String name){
+        this.name = name.toLowerCase();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And thanks to our field access rewrite, when your users read <code>person.name</code> they will actually call your <code>getName()</code> accessor, and similarly for field writes and the setter.
+This allows for proper encapsulation at runtime as all fields calls will be replaced by the corresponding getter/setter calls.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="most-useful-operations"><a class="anchor" href="#most-useful-operations"></a>Most useful operations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once you have written your entity, here are the most common operations you will be able to do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// creating a person
+Person person = new Person();
+person.name = "Loïc";
+person.birth = LocalDate.of(1910, Month.FEBRUARY, 1);
+person.status = Status.Alive;
+
+// persist it
+person.persist();
+
+person.status = Status.Dead;
+
+// Your must call update() in order to send your entity modifications to MongoDB
+person.update();
+
+// delete it
+person.delete();
+
+// getting a list of all Person entities
+List&lt;Person&gt; allPersons = Person.listAll();
+
+// finding a specific person by ID
+person = Person.findById(personId);
+
+// finding all living persons
+List&lt;Person&gt; livingPersons = Person.list("status", Status.Alive);
+
+// counting all persons
+long countAll = Person.count();
+
+// counting all living persons
+long countAlive = Person.count("status", Status.Alive);
+
+// delete all living persons
+Person.delete("status", Status.Alive);
+
+// delete all persons
+Person.deleteAll();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All <code>list</code> methods have equivalent <code>stream</code> versions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Stream&lt;Person&gt; persons = Person.streamAll();
+List&lt;String&gt; namesButEmmanuels = persons
+    .map(p -&gt; p.name.toLowerCase() )
+    .filter( n -&gt; ! "emmanuel".equals(n) )
+    .collect(Collectors.toList());</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+A <code>persistOrUpdate()</code> method exist that persist or update an entity in the database, it uses the <em>upsert</em> capability of MongoDB to do it in a single query.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="paging"><a class="anchor" href="#paging"></a>Paging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You should only use <code>list</code> and <code>stream</code> methods if your collection contains small enough data sets. For larger data
+sets you can use the <code>find</code> method equivalents, which return a <code>PanacheQuery</code> on which you can do paging:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// create a query for all living persons
+PanacheQuery&lt;Person&gt; livingPersons = Person.find("status", Status.Alive);
+
+// make it use pages of 25 entries at a time
+livingPersons.page(Page.ofSize(25));
+
+// get the first page
+List&lt;Person&gt; firstPage = livingPersons.list();
+
+// get the second page
+List&lt;Person&gt; secondPage = livingPersons.nextPage().list();
+
+// get page 7
+List&lt;Person&gt; page7 = livingPersons.page(Page.of(7, 25)).list();
+
+// get the number of pages
+int numberOfPages = livingPersons.pageCount();
+
+// get the total number of entities returned by this query without paging
+int count = livingPersons.count();
+
+// and you can chain methods of course
+return Person.find("status", Status.Alive)
+    .page(Page.ofSize(25))
+    .nextPage()
+    .stream()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>PanacheQuery</code> type has many other methods to deal with paging and returning streams.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sorting"><a class="anchor" href="#sorting"></a>Sorting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All methods accepting a query string also accept an optional <code>Sort</code> parameter, which allows you to abstract your sorting:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">List&lt;Person&gt; persons = Person.list(Sort.by("name").and("birth"));
+
+// and with more restrictions
+List&lt;Person&gt; persons = Person.list("status", Sort.by("name").and("birth"), Status.Alive);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Sort</code> class has plenty of methods for adding columns and specifying sort direction.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adding-entity-methods"><a class="anchor" href="#adding-entity-methods"></a>Adding entity methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In general, we recommend not adding custom queries for your entities outside of the entities themselves,
+to keep all model queries close to the models they operate on. So we recommend adding them as static methods
+in your entity class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Person extends PanacheMongoEntity {
+    public String name;
+    public LocalDate birth;
+    public Status status;
+
+    public static Person findByName(String name){
+        return find("name", name).firstResult();
+    }
+
+    public static List&lt;Person&gt; findAlive(){
+        return list("status", Status.Alive);
+    }
+
+    public static void deleteLoics(){
+        delete("name", "Loïc");
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="simplified-queries"><a class="anchor" href="#simplified-queries"></a>Simplified queries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Normally, MongoDB queries are of this form: <code>{'firstname': 'John', 'lastname':'Doe'}</code>, this is what we call MongoDB native queries.</p>
+</div>
+<div class="paragraph">
+<p>You can use them if you want, but we also support what we call <strong>PanacheQL</strong> that can be seen as a subset of <a href="https://docs.oracle.com/javaee/7/tutorial/persistence-querylanguage.htm#BNBTG">JPQL</a> (or <a href="https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#hql">HQL</a>) and allows you to easily express a query.
+MongoDB with Panache will then map it to a MongoDB native query.</p>
+</div>
+<div class="paragraph">
+<p>If your query does not start with <code>{</code>, we will consider it a PanacheQL query:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;singleColumnName&gt;</code> (and single parameter) which will expand to <code>{'singleColumnName': '?'}</code></p>
+</li>
+<li>
+<p><code>&lt;query&gt;</code> will expand to <code>{&lt;query&gt;}</code> where we will map the PanacheQL query to MongoDB native query form. We support the following operators that will be mapped to the corresponding MongoDB operators: 'and', 'or' ( mixing 'and' and 'or' is not currently supported), '=', '&gt;', '&gt;=', '&lt;', '&#8656;', '!=', 'is null', 'is not null', and 'like' that is mapped to the MongoDB <code>$regex</code> operator.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here are some query examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>firstname = ?1 and status = ?2</code> will be mapped to <code>{'firstname': ?1, 'status': ?2}</code></p>
+</li>
+<li>
+<p><code>amount &gt; ?1 and firstname != ?2</code> will be mapped to <code>{'amount': {'$gt': ?1}, 'firstname': {'$ne': ?2}}</code></p>
+</li>
+<li>
+<p><code>lastname like ?1</code> will be mapped to <code>{'lastname': {'$regex': ?1}}</code>. Be careful that this will be <a href="https://docs.mongodb.com/manual/reference/operator/query/regex/#op._S_regex">MongoDB regex</a> support and not SQL like pattern.</p>
+</li>
+<li>
+<p><code>lastname is not null</code> will be mapped to <code>{'lastname':{'$exists': true}}</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We also handle some basic date type transformations: all fields of type <code>Date</code>, <code>LocalDate</code> or <code>LocalDateTime</code> will be mapped to the <a href="https://docs.mongodb.com/manual/reference/bson-types/#document-bson-type-date">BSON Date</a> using the <code>ISODate</code> type (UTC datetime).</p>
+</div>
+<div class="paragraph">
+<p>MongoDB with Panache also supports extended MongoDB queries by providing a <code>Document</code> query, this is supported by the find/list/stream/count/delete methods.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="query-parameters"><a class="anchor" href="#query-parameters"></a>Query parameters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can pass query parameters, for both native and PanacheQL queries, by index (1-based) as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Person.find("name = ?1 and status = ?2", "Loïc", Status.Alive);
+Person.find("{'name': ?1, 'status': ?2}", "Loïc", Status.Alive);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or by name using a <code>Map</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Map&lt;String, Object&gt; params = new HashMap&lt;&gt;();
+params.put("name", "Loïc");
+params.put("status", Status.Alive);
+Person.find("name = :name and status = :status", params);
+Person.find("{'name': :name, 'status', :status}", params);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or using the convenience class <code>Parameters</code> either as is or to build a <code>Map</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// generate a Map
+Person.find("name = :name and status = :status",
+         Parameters.with("name", "Loïc").and("status", Status.Alive).map());
+
+// use it as-is
+Person.find("{'name': :name, 'status': :status}",
+         Parameters.with("name", "Loïc").and("status", Status.Alive));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Every query operation accepts passing parameters by index (<code>Object&#8230;&#8203;</code>), or by name (<code>Map&lt;String,Object&gt;</code> or <code>Parameters</code>).</p>
+</div>
+<div class="paragraph">
+<p>When you use query parameters, be careful that PanacheQL queries will refer to the Object parameters name but native queries will refer to MongoDB field names.</p>
+</div>
+<div class="paragraph">
+<p>Imagine the following entity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Person extends PanacheMongoEntity {
+    @BsonProperty("lastname")
+    public String name;
+    public LocalDate birth;
+    public Status status;
+
+    public static Person findByNameWithPanacheQLQuery(String name){
+        return find("name", name).firstResult();
+    }
+
+    public static Person findByNameWithNativeQuery(String name){
+        return find("{'lastname': ?1}", name).firstResult();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Both <code>findByNameWithPanacheQLQuery()</code> and <code>findByNameWithNativeQuery()</code> methods will return the same result but query written in PanacheQL
+will use the entity field name: <code>name</code>, and native query will use the MongoDB field name: <code>lastname</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-daorepository-option"><a class="anchor" href="#the-daorepository-option"></a>The DAO/Repository option</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Repository is a very popular pattern and can be very accurate for some use case, depending on
+the complexity of your needs.</p>
+</div>
+<div class="paragraph">
+<p>Whether you want to use the Entity based approach presented above or a more traditional Repository approach, it is up to you,
+Panache and Quarkus have you covered either way.</p>
+</div>
+<div class="paragraph">
+<p>If you lean towards using Repositories, you can get the exact same convenient methods injected in your Repository by making it
+implement <code>PanacheMongoRepository</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class PersonRepository implements PanacheMongoRepository&lt;Person&gt; {
+
+   // put your custom logic here as instance methods
+
+   public Person findByName(String name){
+       return find("name", name).firstResult();
+   }
+
+   public List&lt;Person&gt; findAlive(){
+       return list("status", Status.Alive);
+   }
+
+   public void deleteLoics(){
+       delete("name", "Loïc");
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Absolutely all the operations that are defined on <code>PanacheMongoEntityBase</code> are available on your DAO, so using it
+is exactly the same except you need to inject it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+PersonRepository personRepository;
+
+@GET
+public long count(){
+    return personRepository.count();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So if Repositories are your thing, you can keep doing them. Even with repositories, you can keep your entities as
+subclasses of <code>PanacheMongoEntity</code> in order to get the ID and public fields working, but you can even skip that and
+go back to specifying your ID and using getters and setters if that&#8217;s your thing. Use what works for you.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transactions"><a class="anchor" href="#transactions"></a>Transactions</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+MongoDB offers ACID transactions since version 4.0. MongoDB with Panache doesn&#8217;t provide support for them.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="custom-ids"><a class="anchor" href="#custom-ids"></a>Custom IDs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>IDs are often a touchy subject. In MongoDB, they are usually auto-generated by the database with an <code>ObjectId</code> type.
+In MongoDB with Panache the ID are defined by a field named <code>id</code> of the <code>org.bson.types.ObjectId</code> type,
+but if you want ot customize them, once again we have you covered.</p>
+</div>
+<div class="paragraph">
+<p>You can specify your own ID strategy by extending <code>PanacheMongoEntityBase</code> instead of <code>PanacheMongoEntity</code>. Then
+you just declare whatever ID you want as a public field by annotating it by @BsonId:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@MongoEntity
+public class Person extends PanacheMongoEntityBase {
+
+    @BsonId
+    public Integer myId;
+
+    //...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re using repositories, then you will want to extend <code>PanacheMongoRepositoryBase</code> instead of <code>PanacheMongoRepository</code>
+and specify your ID type as an extra type parameter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class PersonRepository implements PanacheMongoRepositoryBase&lt;Person,Integer&gt; {
+    //...
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When using <code>ObjectId</code>, MongoDB will automatically provide a value for you, but if you use a custom field type,
+you need to provide the value by yourself.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>ObjectId</code> can be difficult to use if you want to expose its value in your REST service.
+So we created JSON-B and Jackson providers to serialize/deserialize them as a <code>String</code> which are are automatically registered if your project depends on one of the RESTEasy with JSON-B or RESTEasy with Jackson extensions.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="how-and-why-we-simplify-mongodb-api"><a class="anchor" href="#how-and-why-we-simplify-mongodb-api"></a>How and why we simplify MongoDB API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When it comes to writing MongoDB entities, there are a number of annoying things that users have grown used to
+reluctantly deal with, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Duplicating ID logic: most entities need an ID, most people don&#8217;t care how it&#8217;s set, because it&#8217;s not really
+relevant to your model.</p>
+</li>
+<li>
+<p>Dumb getters and setters: since Java lacks support for properties in the language, we have to create fields,
+then generate getters and setters for those fields, even if they don&#8217;t actually do anything more than read/write
+the fields.</p>
+</li>
+<li>
+<p>Traditional EE patterns advise to split entity definition (the model) from the operations you can do on them
+(DAOs, Repositories), but really that requires an unnatural split between the state and its operations even though
+we would never do something like that for regular objects in the Object Oriented architecture, where state and methods are in the same class. Moreover, this requires two classes per entity, and requires injection of the DAO or Repository where you need to do entity operations, which breaks your edit flow and requires you to get out of the code you&#8217;re writing to set up an injection point before coming back to use it.</p>
+</li>
+<li>
+<p>MongoDB queries are super powerful, but overly verbose for common operations, requiring you to write queries even
+when you don&#8217;t need all the parts.</p>
+</li>
+<li>
+<p>MongoDB queries are JSON based, so you will need some String manipulation or using the <code>Document</code> type and it will need a lot of boilerplate code.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>With Panache, we took an opinionated approach to tackle all these problems:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Make your entities extend <code>PanacheMongoEntity</code>: it has an ID field that is auto-generated. If you require
+a custom ID strategy, you can extend <code>PanacheMongoEntityBase</code> instead and handle the ID yourself.</p>
+</li>
+<li>
+<p>Use public fields. Get rid of dumb getter and setters. Under the hood, we will generate all getters and setters
+that are missing, and rewrite every access to these fields to use the accessor methods. This way you can still
+write <em>useful</em> accessors when you need them, which will be used even though your entity users still use field accesses.</p>
+</li>
+<li>
+<p>Don&#8217;t use DAOs or Repositories: put all your entity logic in static methods in your entity class. Your entity superclass comes with lots of super useful static methods and you can add your own in your entity class. Users can just start using your entity <code>Person</code> by typing <code>Person.</code> and getting completion for all the operations in a single place.</p>
+</li>
+<li>
+<p>Don&#8217;t write parts of the query that you don&#8217;t need: write <code>Person.find("order by name")</code> or
+<code>Person.find("name = ?1 and status = ?2", "Loïc", Status.Alive)</code> or even better <code>Person.find("name", "Loïc")</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>That&#8217;s all there is to it: with Panache, MongoDB has never looked so trim and neat.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="defining-entities-in-external-projects-or-jars"><a class="anchor" href="#defining-entities-in-external-projects-or-jars"></a>Defining entities in external projects or jars</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>MongoDB with Panache relies on compile-time bytecode enhancements to your entities.
+If you define your entities in the same project where you build your Quarkus application, everything will work fine.
+If the entities come from external projects or jars, you can make sure that your jar is treated like a Quarkus application library
+by indexing it via Jandex, see <a href="cdi-reference.html#how-to-generate-a-jandex-index">How to Generate a Jandex Index</a> in the CDI guide.
+This will allow Quarkus to index and enhance your entities as if they were inside the current project.</p>
+</div>
+</div>
+</div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <div class="content project-footer">
+  <div class="footer-section">
+    <div class="logo-wrapper">
+      <a href="/"><img src="/assets/images/quarkus_logo_horizontal_rgb_reverse.svg" class="project-logo" title="Quarkus"></a>
+    </div>
+  </div>
+  <div class="grid-wrapper">
+    <p class="grid__item width-3-12">Quarkus is open. Quarkus and its extensions are available under the <a href='https://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache Software License 2.0</a> or compatible license.<br /><br />This website was built with <a href='https://jekyllrb.com/' target='_blank'>Jekyll</a> is hosted on <a href='https://pages.github.com/' target='_blank'>Github Pages</a> and is completely open source. If you want to make it better, <a href='https://github.com/quarkusio/quarkusio.github.io' target='_blank'>fork the website</a> and show us what you’ve got.</p>
+
+    
+      <div class="width-1-12 project-links">
+        <span>Navigation</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="/">Home</a></li>
+          
+            <li><a href="/guides">Guides</a></li>
+          
+            <li><a href="/get-started">Get Started</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Contribute</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://twitter.com/quarkusio">Follow us</a></li>
+          
+            <li><a href="https://github.com/quarkusio">GitHub</a></li>
+          
+        </ul>
+      </div>
+    
+      <div class="width-1-12 project-links">
+        <span>Get Help</span>
+        <ul class="footer-links width-1-12">
+          
+            <li><a href="https://quarkusio.zulipchat.com">Chatroom</a></li>
+          
+            <li><a href="https://groups.google.com/forum/#!forum/quarkus-dev">Google&nbsp;Groups</a></li>
+          
+            <li><a href="/faq">FAQ</a></li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="width-6-12 more-links">
+        <span>Quarkus is proudly made of a number of projects including ...</span>
+        <ul class="footer-links">
+          
+            <li><a href="https://hibernate.org" target="_blank">Hibernate</a></li>
+          
+            <li><a href="https://netty.io" target="_blank">Netty</a></li>
+          
+            <li><a href="https://resteasy.github.io" target="_blank">RESTEasy</a></li>
+          
+            <li><a href="https://microprofile.io" target="_blank">Eclipse MicroProfile</a></li>
+          
+            <li><a href="https://vertx.io/" target="_blank">Eclipse Vert.x</a></li>
+          
+            <li><a href="https://camel.apache.org" target="_blank">Apache Camel</a></li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+  <div class="content redhat-footer">
+  <div class="grid-wrapper">
+    <span class="licence">
+      <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i> <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a>
+      | <a href="https://www.redhat.com/en/about/privacy-policy">Red Hat Privacy Policy</a>
+    </span>
+    <span class="redhat">
+      a Red Hat sponsored project   
+    </span>
+    <span class="redhat-logo">
+      <a href="https://www.redhat.com/" target="_blank"><img src="/assets/images/redhat_reversed.svg"></a>
+    </span>
+  </div>
+</div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" integrity="sha384-8gBf6Y4YYq7Jx97PIqmTwLPin4hxIzQw5aDmUg/DDhul9fFpbbLcLh3nTIIDJKhx" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/javascript/mobile-nav.js"></script>
+  <script type="text/javascript" src="/assets/javascript/scroll-down.js"></script>
+  <script src="/assets/javascript/satellite.js" type="text/javascript"></script>
+  <script src="https://quarkus.io//guides/javascript/config.js" type="text/javascript"></script>
+</body>
+
+</html>

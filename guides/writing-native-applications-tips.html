@@ -154,25 +154,33 @@ Here we include all the XML files and JSON files into the native executable.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
-    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;${version.quarkus}&lt;/version&gt;
-    &lt;executions&gt;
-        &lt;execution&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;native-image&lt;/goal&gt;
-            &lt;/goals&gt;
-            &lt;configuration&gt;
-                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
-                &lt;additionalBuildArgs&gt;
-                    &lt;additionalBuildArg&gt;-H:ResourceConfigurationFiles=${project.basedir}/resources-config.json&lt;/additionalBuildArg&gt;
-                &lt;/additionalBuildArgs&gt;
-            &lt;/configuration&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
-&lt;/plugin&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
+    &lt;profile&gt;
+        &lt;id&gt;native&lt;/id&gt;
+        &lt;properties&gt;
+            &lt;quarkus.package.type&gt;native&lt;/quarkus.package.type&gt;
+            &lt;quarkus.native.additional-build-args&gt;-H:ResourceConfigurationFiles=${project.basedir}/resources-config.json&lt;/quarkus.native.additional-build-args&gt;
+        &lt;/properties&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Multiple options may be separated by a comma.</p>
+</div>
+<div class="paragraph">
+<p>Another possibility is to include the <code>quarkus.native.additional-build-args</code> configuration property in your <code>application.properties</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>When using Gradle, we need to configure the additional build arguments in the plugin configuration:</p>
@@ -334,25 +342,33 @@ If Gradle is used, we need to put this file in a folder that will be deployed in
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
-    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-    &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;${version.quarkus}&lt;/version&gt;
-    &lt;executions&gt;
-        &lt;execution&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;native-image&lt;/goal&gt;
-            &lt;/goals&gt;
-            &lt;configuration&gt;
-                &lt;enableHttpUrlHandler&gt;true&lt;/enableHttpUrlHandler&gt;
-                &lt;additionalBuildArgs&gt;
-                    &lt;additionalBuildArg&gt;-H:ReflectionConfigurationFiles=${project.basedir}/reflection-config.json&lt;/additionalBuildArg&gt;
-                &lt;/additionalBuildArgs&gt;
-            &lt;/configuration&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
-&lt;/plugin&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
+    &lt;profile&gt;
+        &lt;id&gt;native&lt;/id&gt;
+        &lt;properties&gt;
+            &lt;quarkus.package.type&gt;native&lt;/quarkus.package.type&gt;
+            &lt;quarkus.native.additional-build-args&gt;-H:ReflectionConfigurationFiles=${project.basedir}/reflection-config.json&lt;/quarkus.native.additional-build-args&gt;
+        &lt;/properties&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Multiple options may be separated by a comma.</p>
+</div>
+<div class="paragraph">
+<p>Another possibility is to include the <code>quarkus.native.additional-build-args</code> configuration property in your <code>application.properties</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>When using Gradle, we need to configure the additional build arguments in the plugin configuration:</p>

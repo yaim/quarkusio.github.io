@@ -124,10 +124,11 @@
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.27.0:create \
     -DprojectGroupId=org.acme \
-    -DprojectArtifactId=rest-kotlin \
+    -DprojectArtifactId=rest-kotlin-quickstart \
     -DclassName="org.acme.rest.GreetingResource" \
     -Dpath="/greeting" \
-    -Dextensions="kotlin,resteasy-jsonb"</code></pre>
+    -Dextensions="kotlin,resteasy-jsonb"
+cd kotlin-quickstart</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -326,10 +327,7 @@ for example, then <code>&lt;option&gt;all-open:annotation=javax.enterprise.conte
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">group = '...' // set your group
-version = '1.0.0-SNAPSHOT'
-
-plugins {
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
     id 'io.quarkus' version '0.27.0' <i class="conum" data-value="1"></i><b>(1)</b>
 
@@ -341,6 +339,9 @@ repositories {
     mavenCentral()
 }
 
+group = '...' // set your group
+version = '1.0.0-SNAPSHOT'
+
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:{kotlin-version}'
 
@@ -351,7 +352,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-kotlin'
 
     testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation 'io.rest-assured:rest-assured:{rest-assured-version}'  <i class="conum" data-value="4"></i><b>(4)</b>
+    testImplementation 'io.rest-assured:rest-assured'
 }
 
 sourceCompatibility = '1.8'
@@ -366,7 +367,7 @@ buildNative {
     enableHttpUrlHandler = true
 }
 
-allOpen { <i class="conum" data-value="5"></i><b>(5)</b>
+allOpen { <i class="conum" data-value="4"></i><b>(4)</b>
     annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
@@ -389,10 +390,6 @@ allOpen { <i class="conum" data-value="5"></i><b>(5)</b>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The rest-assured version needs to be specified</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>The all-open configuration required, as per Maven guide above</td>
 </tr>
 </table>
@@ -430,7 +427,7 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy-jsonb")
 
     testImplementation("io.quarkus:quarkus-junit5")
-    testImplementation("io.rest-assured:rest-assured:{rest-assured-version}") <i class="conum" data-value="4"></i><b>(4)</b>
+    testImplementation("io.rest-assured:rest-assured")
 }
 
 tasks {
@@ -439,7 +436,7 @@ tasks {
     }
 }
 
-allOpen { <i class="conum" data-value="5"></i><b>(5)</b>
+allOpen { <i class="conum" data-value="4"></i><b>(4)</b>
     annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
@@ -477,10 +474,6 @@ compileTestKotlin.kotlinOptions {
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The rest-assured version needs to be specified</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>The all-open configuration required, as per Maven guide above</td>
 </tr>
 </table>
