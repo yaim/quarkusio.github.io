@@ -1170,7 +1170,7 @@ quarkus.mongodb.tls-insecure=true # only if TLS certificate cannot be validated<
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mongodb_quarkus.mongodb.credentials.auth-mechanism-properties.-auth-mechanism-properties"></a><code><a href="#quarkus-mongodb_quarkus.mongodb.credentials.auth-mechanism-properties.-auth-mechanism-properties">quarkus.mongodb.credentials.auth-mechanism-properties."auth-mechanism-properties"</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mongodb_quarkus.mongodb.credentials.auth-mechanism-properties-auth-mechanism-properties"></a><code><a href="#quarkus-mongodb_quarkus.mongodb.credentials.auth-mechanism-properties-auth-mechanism-properties">quarkus.mongodb.credentials.auth-mechanism-properties</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1179,7 +1179,7 @@ quarkus.mongodb.tls-insecure=true # only if TLS certificate cannot be validated<
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 </tbody>
@@ -1199,7 +1199,7 @@ You can learn more about it in the <a href="https://docs.oracle.com/javase/8/doc
 <div class="paragraph">
 <p>You can also provide duration values starting with a number.
 In this case, if the value consists only of a number, the converter treats the value as seconds.
-Otherwise, <code>PT</code> is implicitly appended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
+Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
 </div>
 </td>
 </tr>
