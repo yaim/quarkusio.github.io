@@ -96,7 +96,7 @@
 <p>This release is a bugfix/usability improvements release so the upgrade from 0.27.0 should be safe.</p>
 </div>
 <div class="paragraph">
-<p>Thus, no big changes to announce.</p>
+<p>One new item is that we now have a notion of platform to refer to a set of extensions in the Quarkus ecosystem. Details below on how to use/try it out.</p>
 </div>
 <div class="sect1">
 <h2 id="whats-new"><a class="anchor" href="#whats-new"></a>What&#8217;s new?</h2>
@@ -117,6 +117,35 @@
 </div>
 <div class="paragraph">
 <p>Thanks!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="enablement-of-platform-in-new-and-existing-projects"><a class="anchor" href="#enablement-of-platform-in-new-and-existing-projects"></a>Enablement of platform in new and existing projects</h3>
+<div class="paragraph">
+<p>Quarkus ecosystem is more than just the extensions released with Quarkus core. That is visible on <a href="https://code.quarkus.io">code.quarkus.io</a> where you can find additional Quarkus extensions such as Apache Camel.</p>
+</div>
+<div class="paragraph">
+<p>In your projects you refer to a part of the ecosystem as a platform - for now there is just one platform outside the <code>core</code> fondly named <code>universe</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you use <a href="https://code.quarkus.io">code.quarkus.io</a> you will get it automatically.</p>
+</div>
+<div class="paragraph">
+<p>If you create new projects you get it by passing <code>platformArtifactId=quarkus-universe-bom</code> and <code>platformVersion=0.28.1</code> to the project create:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:0.28.1:create \
+    -DprojectGroupId=my-groupId \
+    -DprojectArtifactId=my-artifactId \
+    -DprojectVersion=my-version \
+    -DplatformArtifactId=quarkus-universe-bom \
+    -DplatformVersion=0.28.1 \
+    -DclassName="org.my.group.MyResource"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In existing projects, you for now have to manually update your Quarkus version as usual and then update the BOM reference from <code>&lt;artifactId&gt;quarkus-bom&lt;/artifactid&gt;</code> to <code>&lt;artifactId&gt;quarkus-universe-bom&gt;&lt;/artifactId&gt;</code>.</p>
 </div>
 </div>
 <div class="sect2">
