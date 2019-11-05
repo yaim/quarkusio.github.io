@@ -94,16 +94,16 @@ Quarkus started in 0.008s</code></pre>
     <div class="width-12-12 block-content">
       <h2>Unifies Imperative and Reactive</h2>
     </div>
-    <div class="width-6-12 width-12-12-m">
+    <div class="width-12-12 width-12-12-m">
       <p>Combine both the familiar imperative code and the non-blocking reactive style when developing applications.
       <a href="/vision/continuum">Learn more</a>.</p>
     </div>
-    <div class="width-6-12 width-12-12-m">
-      <div class="tabs">
-  <input type="radio" name="tabs" id="tab1" checked="checked">
-  <label for="tab1">Imperative</label>
-  <div class="tab">
-<pre class="highlight"><code>@Inject
+    <div class="width-12-12 width-12-12-m">
+      <div class="grid-wrapper">
+        <div class="width-6-12 code-item">
+          <div class="code-label">Imperative</div>
+          <div class="code-wrapper">
+            <pre class="highlight"><code>@Inject
 SayService say;
 
 @GET
@@ -111,12 +111,12 @@ SayService say;
 public String hello() {
     return say.hello();
 }</code></pre>
-  </div>
-  
-  <input type="radio" name="tabs" id="tab2">
-  <label for="tab2">Reactive</label>
-  <div class="tab">
-<pre class="highlight"><code>@Inject @Stream("kafka")
+          </div>
+        </div>
+        <div class="width-6-12 code-item">
+          <div class="code-label">Reactive</div>
+          <div class="code-wrapper">
+            <pre class="highlight"><code>@Inject @Stream("kafka")
 Publisher&lt;String&gt; reactiveSay;
 
 @GET
@@ -124,9 +124,9 @@ Publisher&lt;String&gt; reactiveSay;
 public Publisher&lt;String&gt; stream() {
     return reactiveSay;
 }</code></pre>
-  </div>
-</div>
-
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
