@@ -94,7 +94,7 @@
 </div>
       <div class="grid__item width-12-12">
           <div class="paragraph">
-<p>The arrival of Quarkus 1.0 brings an innovative platform for developing Linux container- and kubernetes-native Java microservices. Developers typically have to set aside their existing knowledge as they begin to evaluate new and innovative runtime frameworks. Quarkus is different because it was created by a collection of engineers with a deep expertise in a broad collection of Java technologies. This includes Spring API support, brought to Quarkus by the same engineers that bring Spring Boot support to <a href="https://www.redhat.com/en/products/runtimes">Red Hat Runtimes</a>.</p>
+<p>The arrival of Quarkus 1.0 brings an innovative platform for developing Linux container- and kubernetes-native Java microservices. Developers typically have to set aside their existing knowledge as they begin to evaluate new and innovative runtime frameworks. Quarkus is different because it was created by a collection of engineers with a deep expertise in a broad collection of Java technologies. This includes Spring API compatibility, brought to Quarkus by the same engineers that bring Spring Boot support to <a href="https://www.redhat.com/en/products/runtimes">Red Hat Runtimes</a>.</p>
 </div>
 <div class="sect1">
 <h2 id="im-a-spring-developer-why-quarkus"><a class="anchor" href="#im-a-spring-developer-why-quarkus"></a>I&#8217;m a Spring developer. Why Quarkus?</h2>
@@ -121,7 +121,7 @@
 <h2 id="what-existing-knowledge-can-spring-developers-bring-to-quarkus"><a class="anchor" href="#what-existing-knowledge-can-spring-developers-bring-to-quarkus"></a>What existing knowledge can Spring developers bring to Quarkus?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus’ Spring API compatibility includes <a href="https://quarkus.io/guides/spring-di-guide">Spring DI</a>, <a href="https://quarkus.io/guides/spring-web-guide">Spring Web</a>, and <a href="https://quarkus.io/guides/spring-data-jpa-guide">Spring Data JPA</a>. Additional Spring APIs are being planned like Spring Security and Spring Config. When running on the JVM, Quarkus applications can utilize virtually any Java library. Many libraries, as long as they do not use Java reflection, will compile to native". Lombok, a popular library among Spring developers for example, works with native compilation. To be clear, the Spring API support in Quarkus is not intended to be a complete Spring platform to re-host existing Spring applications. The intent is to offer enough Spring API support to make developing new applications with Quarkus a natural getting started experience. When combined with pre-optimized extensions, Quarkus delivers an <a href="https://quarkus.io/guides/">amazing amount of functionality</a> for microservices development. With all this being said, developers have successfully migrated Spring applications to Quarkus :-)</p>
+<p>Quarkus’ Spring API compatibility includes <a href="https://quarkus.io/guides/spring-di-guide">Spring DI</a>, <a href="https://quarkus.io/guides/spring-web-guide">Spring Web</a>, and <a href="https://quarkus.io/guides/spring-data-jpa-guide">Spring Data JPA</a>. Additional Spring APIs are being planned like Spring Security and Spring Config. When running on the JVM, Quarkus applications can utilize virtually any Java library. Many libraries, as long as they do not use Java reflection, will compile to native". Lombok, a popular library among Spring developers for example, works with native compilation. To be clear, the Spring API compatibility in Quarkus is not intended to be a complete Spring platform to re-host existing Spring applications. The intent is to offer enough Spring API compatibility to make developing new applications with Quarkus a natural getting started experience. When combined with pre-optimized extensions, Quarkus delivers an <a href="https://quarkus.io/guides/">amazing amount of functionality</a> for microservices development. With all this being said, developers have successfully migrated Spring applications to Quarkus :-)</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -189,18 +189,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Service                                                    // Spring
+@Service                                            // Spring
 public class PersonService {
 
-    @Autowired                                              // Spring
-    @RestClient                                             // MicroProfile
+    @Autowired                                      // Spring
+    @RestClient                                     // MicroProfile
     SalutationMicroProfileRestClient salutationRestClient;
 
-    @Value("${fallbackSalutation}")                         // Spring
+    @Value("${fallbackSalutation}")                 // Spring
     String fallbackSalutation;
 
-    @CircuitBreaker(delay=5000, failureRatio=.5)            // MicroProfile
-    @Fallback(fallbackMethod = "salutationFallback")        // MicroProfile
+    @CircuitBreaker(delay=5000, failureRatio=.5)    // MicroProfile
+    @Fallback(fallbackMethod = "salutationFallback")// MicroProfile
     public String getSalutation() {
         return salutationRestClient.getSalutation();
     }</code></pre>
@@ -229,7 +229,7 @@ public class PersonService {
 <p><strong>Early detection of dependency injection errors.</strong> Quarkus catches dependency injection errors during compilation instead of at runtime.</p>
 </li>
 <li>
-<p><strong>Use best of breed frameworks and standards together.</strong> Quarkus supports Spring, Eclipse Vert.x, MicroProfile (JAX-RS, CDI, etc), reactive streams and messaging, and more in the same application. Read <a href="https://developers.redhat.com/blog/2019/10/02/autowire-microprofile-into-spring-with-quarkus/">“@Autowire MicroProfile into Spring Boot”</a> for using Spring and MicroProfile APIs together in the same project.</p>
+<p><strong>Use best of breed frameworks and standards together.</strong> Quarkus supports Spring API compatibility, Eclipse Vert.x, MicroProfile (JAX-RS, CDI, etc), reactive streams and messaging, and more in the same application. Read <a href="https://developers.redhat.com/blog/2019/10/02/autowire-microprofile-into-spring-with-quarkus/">“@Autowire MicroProfile into Spring Boot”</a> for using Spring and MicroProfile APIs together in the same project.</p>
 </li>
 </ul>
 </div>
