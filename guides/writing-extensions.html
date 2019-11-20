@@ -819,11 +819,11 @@ will only run <em>after</em> every step which can produce them has run.</p>
 <div class="listingblock">
 <div class="title">Example of a multiple build item</div>
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public final class ServiceProviderBuildItem extends MultiBuildItem {
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public final class ServiceWriterBuildItem extends MultiBuildItem {
     private final String serviceName;
     private final List&lt;String&gt; implementations;
 
-    public ServiceProviderBuildItem(String serviceName, String... implementations) {
+    public ServiceWriterBuildItem(String serviceName, String... implementations) {
         this.serviceName = serviceName;
         // Make sure it's immutable
         this.implementations = Collections.unmodifiableList(
@@ -851,8 +851,8 @@ will only run <em>after</em> every step which can produce them has run.</p>
  * providers of one configuration-related service.
  */
 @BuildStep
-public ServiceProviderBuildItem registerOneService() {
-    return new ServiceProviderBuildItem(
+public ServiceWriterBuildItem registerOneService() {
+    return new ServiceWriterBuildItem(
         Converter.class.getName(),
         MyFirstConfigConverterImpl.class.getName(),
         MySecondConfigConverterImpl.class.getName()
@@ -865,14 +865,14 @@ public ServiceProviderBuildItem registerOneService() {
  */
 @BuildStep
 public void registerSeveralSerivces(
-    BuildProducer&lt;ServiceProviderBuildItem&gt; providerProducer
+    BuildProducer&lt;ServiceWriterBuildItem&gt; providerProducer
 ) {
-    providerProducer.produce(new ServiceProviderBuildItem(
+    providerProducer.produce(new ServiceWriterBuildItem(
         Converter.class.getName(),
         MyThirdConfigConverterImpl.class.getName(),
         MyFourthConfigConverterImpl.class.getName()
     ));
-    providerProducer.produce(new ServiceProviderBuildItem(
+    providerProducer.produce(new ServiceWriterBuildItem(
         ConfigSource.class.getName(),
         MyConfigSourceImpl.class.getName()
     ));
@@ -884,13 +884,13 @@ public void registerSeveralSerivces(
  */
 @BuildStep
 public void produceServiceFiles(
-    List&lt;ServiceProviderBuildItem&gt; items,
+    List&lt;ServiceWriterBuildItem&gt; items,
     BuildProducer&lt;GeneratedResourceBuildItem&gt; resourceProducer
 ) throws IOException {
     // Aggregate all of the providers
 
     Map&lt;String, Set&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
-    for (ServiceProviderBuildItem item : items) {
+    for (ServiceWriterBuildItem item : items) {
         String serviceName = item.getName();
         for (String implName : item.getImplementations()) {
             map.computeIfAbsent(
@@ -1841,7 +1841,7 @@ convenience to avoid the need to explicitly load classes in the recorders.</p>
 <div class="paragraph">
 <p>As a CDI based runtime, Quarkus extensions often make CDI beans available as part of the extension behavior.
 However, Quarkus DI solution does not support CDI Portable Extensions.
-Instead, Quarkus extensions can make use of various <a href="cdi-reference.html">Build Time Extension Points</a>.</p>
+Instead, Quarkus extensions can make use of various <a href="cdi-reference">Build Time Extension Points</a>.</p>
 </div>
 </div>
 </div>
@@ -1863,7 +1863,7 @@ Instead, Quarkus extensions can make use of various <a href="cdi-reference.html"
 health check is not included.</p>
 </li>
 <li>
-<p>Create your health check following the <a href="microprofile-health.html">Quarkus - MicroProfile Health</a> guide. We advise providing only
+<p>Create your health check following the <a href="microprofile-health">Quarkus - MicroProfile Health</a> guide. We advise providing only
 readiness check for an extension (liveness check is designed to express the fact that an application is up and needs to be lightweight).</p>
 </li>
 <li>
@@ -1963,7 +1963,7 @@ JsonbSerializerBuildItem registerJsonbSerializer() {
 <div class="paragraph">
 <p>If you need more customization capabilities than registering a serializer or a deserializer,
 you can produce a CDI bean that implements <code>io.quarkus.jsonb.JsonbConfigCustomizer</code> via an <code>AdditionalBeanBuildItem</code>.
-More info about customizing JSON-B can be found on the JSON guide <a href="rest-json.html#configuring-json-support">Configuring JSON support</a></p>
+More info about customizing JSON-B can be found on the JSON guide <a href="rest-json#configuring-json-support">Configuring JSON support</a></p>
 </div>
 </div>
 <div class="sect3">
@@ -2032,7 +2032,7 @@ JacksonModuleBuildItem registerJacksonSerDeser() {
 <div class="paragraph">
 <p>If you need more customization capabilities than registering a module,
 you can produce a CDI bean that implements <code>io.quarkus.jackson.ObjectMapperCustomizer</code> via an <code>AdditionalBeanBuildItem</code>.
-More info about customizing Jackson can be found on the JSON guide <a href="rest-json.html#configuring-json-support">Configuring JSON support</a></p>
+More info about customizing Jackson can be found on the JSON guide <a href="rest-json#configuring-json-support">Configuring JSON support</a></p>
 </div>
 </div>
 </div>
@@ -2550,7 +2550,7 @@ public class ConfiguredBean implements IConfigConsumer {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         InputStream is = getClass().getResourceAsStream("/config.xml"); <i class="conum" data-value="1"></i><b>(1)</b>
         if (is != null) {
-            log.infof("Have XmlConfig, loading");
+            log.info("Have XmlConfig, loading");
             XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is); <i class="conum" data-value="2"></i><b>(2)</b>
 ...
         }
@@ -2690,7 +2690,7 @@ public class ConfiguredBean implements IConfigConsumer {
     public void configureBeans(BeanContainer beanContainer, Class&lt;IConfigConsumer&gt; beanClass,
             TestBuildAndRunTimeConfig buildTimeConfig,
             TestRunTimeConfig runTimeConfig) {
-        log.infof("Begin BeanContainerListener callback\n");
+        log.info("Begin BeanContainerListener callback\n");
         IConfigConsumer instance = beanContainer.instance(beanClass); <i class="conum" data-value="4"></i><b>(4)</b>
         instance.loadConfig(buildTimeConfig, runTimeConfig); <i class="conum" data-value="5"></i><b>(5)</b>
         log.infof("configureBeans, instance=%s\n", instance);
@@ -2739,9 +2739,9 @@ public class ConfiguredBean implements IConfigConsumer {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         InputStream is = getClass().getResourceAsStream("/config.xml");
         if (is != null) {
-            log.infof("Have XmlConfig, loading");
+            log.info("Have XmlConfig, loading");
             XmlConfig config = (XmlConfig) unmarshaller.unmarshal(is);
-            log.infof("Loaded XmlConfig, creating service");
+            log.info("Loaded XmlConfig, creating service");
             RuntimeValue&lt;RuntimeXmlConfigService&gt; service = recorder.initRuntimeService(config); <i class="conum" data-value="1"></i><b>(1)</b>
             serviceBuildItem = new RuntimeServiceBuildItem(service); <i class="conum" data-value="3"></i><b>(3)</b>
         }
@@ -2948,7 +2948,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
         resource.produce(new NativeImageResourceBuildItem("/security/runtime.keys")); <i class="conum" data-value="1"></i><b>(1)</b>
 
         resource.produce(new NativeImageResourceBuildItem(
-                "META-INF/services/" + io.quarkus.SomeService.class.getName())); <i class="conum" data-value="2"></i><b>(2)</b>
+                "META-INF/my-descriptor.xml")); <i class="conum" data-value="2"></i><b>(2)</b>
 
         resourceBundle.produce(new NativeImageResourceBuildItem("javax.xml.bind.Messages")); <i class="conum" data-value="3"></i><b>(3)</b>
     }
@@ -2963,7 +2963,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Indicate that the <code>io.quarkus.SomeService</code> ServiceLoader resource should be copied into native image.</td>
+<td>Indicate that the <code>META-INF/my-descriptor.xml</code> resource should be copied into native image</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -2973,7 +2973,147 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 </div>
 </div>
 <div class="sect3">
-<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.15.9. Object Substitution</h4>
+<h4 id="service-files"><a class="anchor" href="#service-files"></a>2.15.9. Service files</h4>
+<div class="paragraph">
+<p>If you are using <code>META-INF/services</code> files you need to register the files as resources so that your native image can find them,
+but you also need to register each listed class for reflection so they can be instantiated or inspected at run-time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public final class MyExtProcessor {
+
+    @BuildStep
+    void registerNativeImageReources(BuildProducer&lt;ServiceProviderBuildItem&gt; services) {
+        String service = "META-INF/services/" + io.quarkus.SomeService.class.getName();
+
+        // find out all the implementation classes listed in the service files
+        Set&lt;String&gt; implementations =
+            ServiceUtil.classNamesNamedIn(Thread.currentThread().getContextClassLoader(),
+                                          service);
+
+        // register every listed implementation class so they can be instantiated
+        // in native-image at run-time
+        services.produce(
+            new ServiceProviderBuildItem(io.quarkus.SomeService.class.getName(),
+                                         implementations.toArray(new String[0])));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<code>ServiceProviderBuildItem</code> takes a list of service implementation classes as parameters: if
+you are not reading them from the service file, make sure that they correspond to the service file contents
+because the service file will still be read and used at run-time. This is not a substitute for writing a service
+file.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This only registers the implementation classes for instantiation via reflection (you will not be able
+to inspect its fields and methods). If you need to do that, you can do it this way:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public final class MyExtProcessor {
+
+    @BuildStep
+    void registerNativeImageReources(BuildProducer&lt;NativeImageResourceBuildItem&gt; resource,
+                                     BuildProducer&lt;ReflectiveClassBuildItem&gt; reflectionClasses) {
+        String service = "META-INF/services/" + io.quarkus.SomeService.class.getName();
+
+        // register the service file so it is visible in native-image
+        resource.produce(new NativeImageResourceBuildItem(service));
+
+        // register every listed implementation class so they can be inspected/instantiated
+        // in native-image at run-time
+        Set&lt;String&gt; implementations =
+            ServiceUtil.classNamesNamedIn(Thread.currentThread().getContextClassLoader(),
+                                          service);
+        reflectionClasses.produce(
+            new ReflectiveClassBuildItem(true, true, implementations.toArray(new String[0])));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>While this is the easiest way to get your services running natively, it&#8217;s less efficient than scanning the implementation
+classes at build time and generating code that registers them at static-init time instead of relying on reflection.</p>
+</div>
+<div class="paragraph">
+<p>You can achieve that by adapting the previous build step to use a static-init recorder instead of registering
+classes for reflection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public final class MyExtProcessor {
+
+    @BuildStep
+    @Record(ExecutionTime.STATIC_INIT)
+    void registerNativeImageReources(RecorderContext recorderContext,
+                                     SomeServiceRecorder recorder) {
+        String service = "META-INF/services/" + io.quarkus.SomeService.class.getName();
+
+        // read the implementation classes
+        Collection&lt;Class&lt;? extends io.quarkus.SomeService&gt;&gt; implementationClasses = new LinkedHashSet&lt;&gt;();
+        Set&lt;String&gt; implementations = ServiceUtil.classNamesNamedIn(Thread.currentThread().getContextClassLoader(),
+                                                                    service);
+        for(String implementation : implementations) {
+            implementationClasses.add((Class&lt;? extends io.quarkus.SomeService&gt;)
+                recorderContext.classProxy(implementation));
+        }
+
+        // produce a static-initializer with those classes
+        recorder.configure(implementationClasses);
+    }
+}
+
+@Recorder
+public class SomeServiceRecorder {
+
+    public void configure(List&lt;Class&lt;? extends io.quarkus.SomeService&gt;&gt; implementations) {
+        // configure our service statically
+        SomeServiceProvider serviceProvider = SomeServiceProvider.instance();
+        SomeServiceBuilder builder = serviceProvider.getSomeServiceBuilder();
+
+        List&lt;io.quarkus.SomeService&gt; services = new ArrayList&lt;&gt;(implementations.size());
+        // instantiate the service implementations
+        for (Class&lt;? extends io.quarkus.SomeService&gt; implementationClass : implementations) {
+            try {
+                services.add(implementationClass.getConstructor().newInstance());
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Unable to instantiate service " + implementationClass, e);
+            }
+        }
+
+        // build our service
+        builder.withSomeServices(implementations.toArray(new io.quarkus.SomeService[0]));
+        ServiceManager serviceManager = builder.build();
+
+        // register it
+        serviceProvider.registerServiceManager(serviceManager, Thread.currentThread().getContextClassLoader());
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="object-substitution"><a class="anchor" href="#object-substitution"></a>2.15.10. Object Substitution</h4>
 <div class="paragraph">
 <p>Objects created during the build phase that are passed into the runtime need to have a default constructor in order for them to be created and configured at startup of the runtime from the build time state. If an object does not have a default constructor you will see an error similar to the following during generation of the augmented artifacts:</p>
 </div>
@@ -2994,7 +3134,7 @@ we saw the production of a <code>ServiceStartBuildItem</code> in the previous se
 <div class="listingblock">
 <div class="title">DSAPublicKeyObjectSubstitution Example</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">package io.quarkus.extest.runtime.subst;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package io.quarkus.extest.runtime.subst;
 
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -3063,14 +3203,14 @@ public class DSAPublicKeyObjectSubstitution implements ObjectSubstitution&lt;DSA
         ObjectSubstitutionBuildItem keysub = new ObjectSubstitutionBuildItem(holder);
         substitutions.produce(keysub);
 
-        log.infof("loadDSAPublicKey run");
+        log.info("loadDSAPublicKey run");
         return new PublicKeyBuildItem(publicKey);
     }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.15.10. Replacing Classes in the Native Image</h4>
+<h4 id="replacing-classes-in-the-native-image"><a class="anchor" href="#replacing-classes-in-the-native-image"></a>2.15.11. Replacing Classes in the Native Image</h4>
 <div class="paragraph">
 <p>The Graal SDK supports substitutions of classes in the native image. An example of how one could replace the <code>XmlConfig/XmlData</code> classes with versions that have no JAXB annotation dependencies is shown in these example classes:</p>
 </div>

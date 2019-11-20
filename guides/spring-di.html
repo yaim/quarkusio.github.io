@@ -79,6 +79,7 @@
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
 <li><a href="#run-the-application-as-a-native">Run the application as a native</a></li>
 <li><a href="#important-technical-note">Important Technical Note</a></li>
+<li><a href="#conversion-table">Conversion Table</a></li>
 <li><a href="#more-spring-guides">More Spring guides</a></li>
 </ul></div>
     <div>
@@ -374,7 +375,7 @@ Open your browser to <a href="http://localhost:8080/greeting" class="bare">http:
 <h2 id="run-the-application-as-a-native"><a class="anchor" href="#run-the-application-as-a-native"></a>Run the application as a native</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can of course create a native image using instructions similar to <a href="building-native-image.html">this</a> guide.</p>
+<p>You can of course create a native image using instructions similar to <a href="building-native-image">this</a> guide.</p>
 </div>
 </div>
 </div>
@@ -387,6 +388,75 @@ Spring classes and annotations are only used for reading metadata and / or are u
 What that means for end users, is that adding arbitrary Spring libraries will not have any effect. Moreover Spring infrastructure
 classes (like <code>org.springframework.beans.factory.config.BeanPostProcessor</code> for example) will not be executed.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="conversion-table"><a class="anchor" href="#conversion-table"></a>Conversion Table</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following table shows how Spring DI annotations can be converted to CDI and / or MicroProfile annotations.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Spring</th>
+<th class="tableblock halign-left valign-top">CDI / MicroProfile</th>
+<th class="tableblock halign-left valign-top">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Autowired</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Inject</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Qualifier</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Named</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@ConfigProperty</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@ConfigProperty doesn&#8217;t support an expression language the way @Value does, but makes the typical use cases much easier to handle</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Component</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Singleton</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By default Spring stereotype annotations are singleton beans</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Service</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Singleton</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By default Spring stereotype annotations are singleton beans</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Repository</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Singleton</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By default Spring stereotype annotations are singleton beans</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Configuration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@ApplicationScoped</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In CDI a producer bean isn&#8217;t limited to the application scope, it could just as well be @Singleton or @Dependent</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Bean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Produces</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@Scope</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Doesn&#8217;t have a one-to-one mapping to a CDI annotation. Depending on the value of @Scope, one of the @Singleton, @ApplicationScoped, @SessionScoped, @RequestScoped, @Dependent could be used</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect1">

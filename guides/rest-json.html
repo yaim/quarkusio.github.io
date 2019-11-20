@@ -83,6 +83,13 @@
 <li><a href="#http-filters-and-interceptors">HTTP filters and interceptors</a></li>
 <li><a href="#cors-filter">CORS filter</a></li>
 <li><a href="#gzip-support">GZip Support</a></li>
+<li><a href="#servlet-compatibility">Servlet compatibility</a></li>
+<li><a href="#whats-different-from-jakarta-ee-development">What&#8217;s Different from Jakarta EE Development</a>
+<ul class="sectlevel2">
+<li><a href="#no-need-for-application-class">No Need for <code>Application</code> Class</a></li>
+<li><a href="#lifecycle-of-resources">Lifecycle of Resources</a></li>
+</ul>
+</li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></div>
     <div>
@@ -689,7 +696,7 @@ allows restricted resources on a web page to be requested from another domain ou
 was served.</p>
 </div>
 <div class="paragraph">
-<p>Quarkus comes with a CORS filter. Read the <a href="http-reference.html#cors-filter">HTTP Reference Documentation</a> to learn
+<p>Quarkus comes with a CORS filter. Read the <a href="http-reference#cors-filter">HTTP Reference Documentation</a> to learn
 how to use it.</p>
 </div>
 </div>
@@ -718,6 +725,47 @@ quarkus.resteasy.gzip.max-input=10M <i class="conum" data-value="2"></i><b>(2)</
 This configuration option would recognize strings in this format (shown as a regular expression): <code>[0-9]+[KkMmGgTtPpEeZzYy]?</code>. If no suffix is given, assume bytes.</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="servlet-compatibility"><a class="anchor" href="#servlet-compatibility"></a>Servlet compatibility</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Quarkus, RESTEasy can either run directly on top of the Vert.x HTTP server, or on top of Undertow if you have any servlet dependency.</p>
+</div>
+<div class="paragraph">
+<p>As a result, certain classes, such as <code>HttpServletRequest</code> are not always available for injection. Most use-cases for this particular
+class are covered by JAX-RS equivalents, except for getting the remote client&#8217;s IP. RESTEasy comes with a replacement API which you can inject:
+<a href="https://docs.jboss.org/resteasy/docs/4.4.1.Final/javadocs/org/jboss/resteasy/spi/HttpRequest.html"><code>HttpRequest</code></a>, which has the methods
+<a href="https://docs.jboss.org/resteasy/docs/4.4.1.Final/javadocs/org/jboss/resteasy/spi/HttpRequest.html#getRemoteAddress--"><code>getRemoteAddress()</code></a>
+and <a href="https://docs.jboss.org/resteasy/docs/4.4.1.Final/javadocs/org/jboss/resteasy/spi/HttpRequest.html#getRemoteHost--"><code>getRemoteHost()</code></a>
+to solve this problem.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="whats-different-from-jakarta-ee-development"><a class="anchor" href="#whats-different-from-jakarta-ee-development"></a>What&#8217;s Different from Jakarta EE Development</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="no-need-for-application-class"><a class="anchor" href="#no-need-for-application-class"></a>No Need for <code>Application</code> Class</h3>
+<div class="paragraph">
+<p>Configuration via an application-supplied subclass of <code>Application</code> is supported, but not required.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="lifecycle-of-resources"><a class="anchor" href="#lifecycle-of-resources"></a>Lifecycle of Resources</h3>
+<div class="paragraph">
+<p>In Quarkus all JAX-RS resources are treated as CDI beans.
+It&#8217;s possible to inject other beans via <code>@Inject</code>, bind interceptors using bindings such as <code>@Transactional</code>, define <code>@PostConstruct</code> callbacks, etc.</p>
+</div>
+<div class="paragraph">
+<p>If there is no scope annotation declared on the resource class then the scope is defaulted.
+The default scope can be controlled through the <code>quarkus.resteasy.singleton-resources</code> property.
+If set to <code>true</code> (default) then a <strong>single instance</strong> of a resource class is created to service all requests (as defined by <code>@javax.inject.Singleton</code>).
+If set to <code>false</code> then a <strong>new instance</strong> of the resource class is created per each request.
+An explicit CDI scope annotation (<code>@RequestScoped</code>, <code>@ApplicationScoped</code>, etc.) always overrides the default behavior and specifies the lifecycle of resource instances.</p>
+</div>
 </div>
 </div>
 </div>

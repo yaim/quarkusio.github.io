@@ -79,7 +79,7 @@
 <p>Traditional blocking code uses <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ThreadLocal.html"><code>ThreadLocal</code></a>
  variables to store contextual objects in order to avoid
 passing them as parameters everywhere. Many Quarkus extensions require those contextual objects to operate
-properly: <a href="getting-started.html">RESTEasy</a>, <a href="getting-started.html">ArC</a> and <a href="transaction.html">Transaction</a>
+properly: <a href="rest-json">RESTEasy</a>, <a href="cdi-reference">ArC</a> and <a href="transaction">Transaction</a>
 for example.</p>
 </div>
 <div class="paragraph">
@@ -129,8 +129,8 @@ module is automatically imported.</p>
 <div class="paragraph">
 <p>If you are using SmallRye Reactive Streams Operators (the <code>quarkus-smallrye-reactive-streams-operators</code> module),
 you get context propagation out of the box, so, for example, let&#8217;s write a REST endpoint that reads the next
-3 items from a <a href="kafka.html">Kafka topic</a>, stores them in a database using
-<a href="hibernate-orm-panache.html">Hibernate ORM with Panache</a> (all in the same transaction) before returning
+3 items from a <a href="kafka">Kafka topic</a>, stores them in a database using
+<a href="hibernate-orm-panache">Hibernate ORM with Panache</a> (all in the same transaction) before returning
 them to the client, you can do it like this:</p>
 </div>
 <div class="listingblock">
@@ -171,9 +171,9 @@ them to the client, you can do it like this:</p>
 <div class="paragraph">
 <p>If you are using <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletionStage.html"><code>CompletionStage</code></a>
 you need manual context propagation. You can do that by injecting a <code>ThreadContext</code>
-or <code>ManagedExecutor</code> that will propagate every context. For example, here we use the <a href="vertx.html">Vert.x Web Client</a>
+or <code>ManagedExecutor</code> that will propagate every context. For example, here we use the <a href="vertx">Vert.x Web Client</a>
 to get the list of Star Wars people, then store them in the database using
-<a href="hibernate-orm-panache.html">Hibernate ORM with Panache</a> (all in the same transaction) before returning
+<a href="hibernate-orm-panache">Hibernate ORM with Panache</a> (all in the same transaction) before returning
 them to the client:</p>
 </div>
 <div class="listingblock">

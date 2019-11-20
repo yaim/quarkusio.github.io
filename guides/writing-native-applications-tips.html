@@ -122,13 +122,13 @@
 <h3 id="including-resources"><a class="anchor" href="#including-resources"></a>Including resources</h3>
 <div class="paragraph">
 <p>By default, when building a native executable, GraalVM will not include any of the resources that are on the classpath into the native executable it creates.
-Such resources that are meant to be part of the native executable need to be specified explicitly.</p>
+Resources that are meant to be part of the native executable need to be configured explicitly.</p>
 </div>
 <div class="paragraph">
 <p>Quarkus automatically includes the resources present in <code>META-INF/resources</code> (the web resources) but, outside of this directory, you are on your own.</p>
 </div>
 <div class="paragraph">
-<p>To include more resources in the native executable, create a <code>resources-config.json</code> JSON file defining which resources should be included:</p>
+<p>To include more resources in the native executable, create a <code>resources-config.json</code> (the most common location is within <code>src/main/resources</code>) JSON file defining which resources should be included:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -145,60 +145,8 @@ Such resources that are meant to be part of the native executable need to be spe
 </div>
 </div>
 <div class="paragraph">
-<p>When using Maven, you can put this file at the root of your project.
-If Gradle is used, we need to put this file in a folder that will be deployed in the build folder (for example <code>src/main/resources</code>) because the build folder is used as the project folder when creating the native image.</p>
-</div>
-<div class="paragraph">
 <p>The patterns are valid Java regexps.
 Here we include all the XML files and JSON files into the native executable.</p>
-</div>
-<div class="paragraph">
-<p>Now, let&#8217;s tell the <code>native-image</code> executable about this configuration file by tweaking the <code>native-image</code> execution in your <code>pom.xml</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
-    &lt;profile&gt;
-        &lt;id&gt;native&lt;/id&gt;
-        &lt;properties&gt;
-            &lt;quarkus.package.type&gt;native&lt;/quarkus.package.type&gt;
-            &lt;quarkus.native.additional-build-args&gt;-H:ResourceConfigurationFiles=${project.basedir}/resources-config.json&lt;/quarkus.native.additional-build-args&gt;
-        &lt;/properties&gt;
-    &lt;/profile&gt;
-&lt;/profiles&gt;</code></pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Multiple options may be separated by a comma.</p>
-</div>
-<div class="paragraph">
-<p>Another possibility is to include the <code>quarkus.native.additional-build-args</code> configuration property in your <code>application.properties</code>.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>When using Gradle, we need to configure the additional build arguments in the plugin configuration:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildNative {
-    additionalBuildArgs = [
-            '-H:DynamicProxyConfigurationFiles=resources/main/resources-config.json'
-    ]
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Your resources will now be included in your native executable.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -213,6 +161,73 @@ Here we include all the XML files and JSON files into the native executable.</p>
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>The final order of business is to make the configuration file known to the <code>native-image</code> executable by adding the proper configuration to <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.native.additional-build-args =-H:ResourceConfigurationFiles=resources-config.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the previous snippet we were able to simply use <code>resources-config.json</code> instead of specifying the entire path of the file simply because it was added to <code>src/main/resources</code>.
+If the file had been added to another directory, the proper file path would have had to be specified manually.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Multiple options may be separated by a comma. For example, one could use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.native.additional-build-args =\
+    -H:ResourceConfigurationFiles=resource-config.json,\
+    -H:ReflectionConfigurationFiles=reflection-config.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in order to ensure that various resources are included and additional reflection is registered.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If for some reason adding the aforementioned configuration to <code>application.properties</code> is not desirable, it is possible to configure the build tool to effectively perform the same operation.</p>
+</div>
+<div class="paragraph">
+<p>When using Maven, we could use the following configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
+    &lt;profile&gt;
+        &lt;id&gt;native&lt;/id&gt;
+        &lt;properties&gt;
+            &lt;quarkus.package.type&gt;native&lt;/quarkus.package.type&gt;
+            &lt;quarkus.native.additional-build-args&gt;-H:ResourceConfigurationFiles=resources-config.json&lt;/quarkus.native.additional-build-args&gt;
+        &lt;/properties&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using Gradle, configuring the <code>buildNative</code> task like so suffices:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildNative {
+    additionalBuildArgs = [
+            '-H:ResourceConfigurationFiles=resources-config.json'
+    ]
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -278,6 +293,14 @@ To include these elements in your native executable, you need to register them f
 </div>
 </div>
 <div class="paragraph">
+<p>or if you are using Jackson:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.fasterxml.jackson.databind.exc.InvalidDefinitionException: No serializer found for class org.acme.jsonb.Person and no properties discovered to create BeanSerializer (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS)</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>An even nastier possible outcome could be for no exception to be thrown, but instead the JSON result would be completely empty.</p>
 </div>
 <div class="paragraph">
@@ -305,7 +328,7 @@ public class MyClass {
 <p>In this case, you can use a configuration file to register classes for reflection.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create the <code>reflection-config.json</code> file:</p>
+<p>As an example, in order to register all methods of class <code>com.acme.MyClass</code> for reflection, we create <code>reflection-config.json</code> (the most common location is within <code>src/main/resources</code>)</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -322,10 +345,6 @@ public class MyClass {
 ]</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>When using Maven, you can put this file at the root of your project.
-If Gradle is used, we need to put this file in a folder that will be deployed in the build folder (for example <code>src/main/resources</code>) because the build folder is used as the project folder when creating the native image.</p>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -341,20 +360,16 @@ If Gradle is used, we need to put this file in a folder that will be deployed in
 </table>
 </div>
 <div class="paragraph">
-<p>Now, let&#8217;s tell the <code>native-image</code> executable about this configuration file by tweaking the <code>native-image</code> execution in the <code>pom.xml</code>:</p>
+<p>The final order of business is to make the configuration file known to the <code>native-image</code> executable by adding the proper configuration to <code>application.properties</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
-    &lt;profile&gt;
-        &lt;id&gt;native&lt;/id&gt;
-        &lt;properties&gt;
-            &lt;quarkus.package.type&gt;native&lt;/quarkus.package.type&gt;
-            &lt;quarkus.native.additional-build-args&gt;-H:ReflectionConfigurationFiles=${project.basedir}/reflection-config.json&lt;/quarkus.native.additional-build-args&gt;
-        &lt;/properties&gt;
-    &lt;/profile&gt;
-&lt;/profiles&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.native.additional-build-args =-H:ResourceConfigurationFiles=reflection-config.json</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>In the previous snippet we were able to simply use <code>reflection-config.json</code> instead of specifying the entire path of the file simply because it was added to <code>src/main/resources</code>.
+If the file had been added to another directory, the proper file path would have had to be specified manually.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -364,29 +379,52 @@ If Gradle is used, we need to put this file in a folder that will be deployed in
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Multiple options may be separated by a comma.</p>
+<p>Multiple options may be separated by a comma. For example, one could use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.native.additional-build-args =\
+    -H:ResourceConfigurationFiles=resource-config.json,\
+    -H:ReflectionConfigurationFiles=reflection-config.json</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Another possibility is to include the <code>quarkus.native.additional-build-args</code> configuration property in your <code>application.properties</code>.</p>
+<p>in order to ensure that various resources are included and additional reflection is registered.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>When using Gradle, we need to configure the additional build arguments in the plugin configuration:</p>
+<p>If for some reason adding the aforementioned configuration to <code>application.properties</code> is not desirable, it is possible to configure the build tool to effectively perform the same operation.</p>
+</div>
+<div class="paragraph">
+<p>When using Maven, we could use the following configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
+    &lt;profile&gt;
+        &lt;id&gt;native&lt;/id&gt;
+        &lt;properties&gt;
+            &lt;quarkus.package.type&gt;native&lt;/quarkus.package.type&gt;
+            &lt;quarkus.native.additional-build-args&gt;-H:ReflectionConfigurationFiles=reflection-config.json&lt;/quarkus.native.additional-build-args&gt;
+        &lt;/properties&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using Gradle, configuring the <code>buildNative</code> task like so suffices:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildNative {
     additionalBuildArgs = [
-            '-H:ReflectionConfigurationFiles=resources/main/reflection-config.json'
+            '-H:ReflectionConfigurationFiles=reflection-config.json'
     ]
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p><code>com.acme.MyClass</code> will now be registered for reflection and included in the native executable.</p>
 </div>
 </div>
 </div>

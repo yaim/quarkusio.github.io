@@ -92,14 +92,12 @@
 <div class="paragraph">
 <p>The synchronization strategy to use when indexing automatically.
  Defines the status for which you wait before considering the operation completed by Hibernate Search.
- Can be either one of "queued", "committed" or "searchable".
- Using "searchable" is recommended in unit tests.
- Defaults to "committed".</p>
+ Use <code>queued</code> or <code>committed</code> in production environments. <code>searchable</code> is useful in integration tests.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>queued</code>, <code>committed</code>, <code>searchable</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>committed</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -114,7 +112,7 @@
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 </tbody>
 </table>

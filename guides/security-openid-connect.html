@@ -468,7 +468,7 @@ quarkus.oidc.client-id=backend-service</code></pre>
 <div class="sect2">
 <h3 id="configuring-cors"><a class="anchor" href="#configuring-cors"></a>Configuring CORS</h3>
 <div class="paragraph">
-<p>If you plan to consume this application from another application running on a different domain, you will need to configure CORS (Cross-Origin Resource Sharing). Please read the <a href="http-reference.html#cors-filter">HTTP CORS documentation</a> for more details.</p>
+<p>If you plan to consume this application from another application running on a different domain, you will need to configure CORS (Cross-Origin Resource Sharing). Please read the <a href="http-reference#cors-filter">HTTP CORS documentation</a> for more details.</p>
 </div>
 </div>
 </div>
@@ -612,19 +612,6 @@ which basically returns a JSON payload with details about the user.</p>
     -H 'content-type: application/x-www-form-urlencoded' \
     -d 'username=admin&amp;password=admin&amp;grant_type=password' | jq --raw-output '.access_token' \
  )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code><a href="http://localhost:8080/api/confidential" class="bare">http://localhost:8080/api/confidential</a></code> endpoint is protected with a policy defined in the Keycloak Server. The policy only grants access to the resource if the user is granted with a <code>confidential</code> role. The difference here is that the application is  delegating the access decision to Keycloak. To access the confidential endpoint, you should obtain an access token for user <code>jdoe</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">export access_token=$(\
- curl -X POST http://localhost:8180/auth/realms/quarkus/protocol/openid-connect/token \
- --user backend-service:secret \
- -H 'content-type: application/x-www-form-urlencoded' \
- -d 'username=jdoe&amp;password=jdoe&amp;grant_type=password' | jq --raw-output '.access_token' \
-)</code></pre>
 </div>
 </div>
 </div>

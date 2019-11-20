@@ -196,11 +196,23 @@ cd security-openid-connect-web-authentication-quickstart</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.oidc.auth-server-url=http://localhost:8180/auth/realms/quarkus
 quarkus.oidc.client-id=frontend
-quarkus.oidc.client-type=web-app</code></pre>
+quarkus.oidc.application-type=web-app
+quarkus.http.auth.permission.authenticated.paths=/*
+quarkus.http.auth.permission.authenticated.policy=authenticated</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note that the <code>quarkus.oidc.client-type</code> is set to <code>web-app</code>. This setting tells Quarkus that you want to enable the OpenID Connect Authorization Code Flow, so that your users are redirected to the OpenID Connect Provider to authenticate.</p>
+<p>This is the simplest configuration you can have when enabling authentication to your application.</p>
+</div>
+<div class="paragraph">
+<p>The <code>quarkus.oidc.client-id</code> property references the <code>client_id</code> issued by the OpenID Connect Provider and, in this case, the application is a public client (no client secret is defined).</p>
+</div>
+<div class="paragraph">
+<p>The <code>quarkus.oidc.application-type</code> property is set to <code>web-app</code> in order to tell Quarkus that you want to enable the OpenID Connect Authorization Code Flow, so that your users are redirected to the OpenID Connect Provider to authenticate.</p>
+</div>
+<div class="paragraph">
+<p>For last, the <code>quarkus.http.auth.permission.authenticated</code> permission is set to tell Quarkus about the paths you want to protect. In this case,
+all paths are being protected by a policy that ensures that only <code>authenticated</code> users are allowed to access. For more details check <a href="security">Security Guide</a>.</p>
 </div>
 </div>
 </div>
