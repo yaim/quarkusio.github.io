@@ -97,6 +97,7 @@
 <li><a href="#test-with-enabled-persistence">Test with enabled persistence</a></li>
 </ul>
 </li>
+<li><a href="#using-decision-tables">Using decision tables</a></li>
 <li><a href="#references">References</a></li>
 </ul></div>
     <div>
@@ -111,6 +112,22 @@ to power it up with business processes and rules.</p>
 Drools (for business rules) and jBPM (for business processes). Kogito aims at providing another approach
 to business automation where the main message is to expose your business knowledge (processes, rules and decisions)
 in a domain specific way.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This extension is considered <code>preview</code>.
+API or configuration properties might change as the extension matures.
+Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -686,6 +703,26 @@ state is preserved across application restarts.</p>
 <div class="paragraph">
 <p>To learn more about persistence in Kogito visit <a href="https://github.com/kiegroup/kogito-runtimes/wiki/Persistence">this page</a></p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-decision-tables"><a class="anchor" href="#using-decision-tables"></a>Using decision tables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Kogito allows to define business rules as decision tables using the Microsoft Excel file formats.
+To be able to use such assets in your application, an additional dependency is required:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.kie.kogito&lt;/groupId&gt;
+    &lt;artifactId&gt;drools-decisiontables&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the dependency is added to the project, decision tables in <code>xls</code> or <code>xlsx</code> format can be properly handled.</p>
 </div>
 </div>
 </div>
