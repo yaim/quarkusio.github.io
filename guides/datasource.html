@@ -152,7 +152,7 @@ and features first class integration with the other components in Quarkus, such 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.0.0.Final:create \
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.0.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=agroal-quickstart \
     -DclassName="org.acme.datasource.GreetingResource" \
@@ -578,7 +578,7 @@ this will work as usual in JVM mode but such an application will not compile int
 <p>If you want the ability to run such integration test in both JVM and/or native images, we have some cool helpers for you: just add either <code>@QuarkusTestResource(H2DatabaseTestResource.class)</code> or <code>@QuarkusTestResource(DerbyDatabaseTestResource.class)</code> on any class in your integration tests, this will make sure the testsuite starts (and stops) the embedded database into a separate process as necessary to run your tests.</p>
 </div>
 <div class="paragraph">
-<p>These additional helpers are provided by the artifacts having Maven coordinates <code>io.quarkus:quarkus-test-h2:1.0.0.Final</code> and <code>io.quarkus:quarkus-test-derby:1.0.0.Final</code>, respectively for H2 and Derby.</p>
+<p>These additional helpers are provided by the artifacts having Maven coordinates <code>io.quarkus:quarkus-test-h2:1.0.1.Final</code> and <code>io.quarkus:quarkus-test-derby:1.0.1.Final</code>, respectively for H2 and Derby.</p>
 </div>
 <div class="paragraph">
 <p>Follows an example for H2:</p>
