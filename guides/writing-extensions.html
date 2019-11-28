@@ -674,7 +674,25 @@ mvn io.quarkus:quarkus-maven-plugin:1.0.0.Final:create-extension -N \
 </div>
 <div class="paragraph">
 <p>There is one step (specific to the Quarkus source tree) that you should do manually when creating a new extension:
-Add the extension coordinates to <code>devtools/common/src/main/filtered/extensions.json</code>.</p>
+create a <code>quarkus-extension.yaml</code> file that describe your extension inside the runtime module <code>src/main/resources/META-INF</code> folder.</p>
+</div>
+<div class="paragraph">
+<p>This is the <code>quarkus-extension.yaml</code> of the <code>quarkus-agroal</code> extension, you can use it as an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">name: "Agroal - Database connection pool"
+metadata:
+  keywords:
+  - "agroal"
+  - "database-connection-pool"
+  - "datasource"
+  - "jdbc"
+  guide: "https://quarkus.io/guides/datasource"
+  categories:
+  - "data"
+  status: "stable"</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Note that the parameters of the mojo that will be constant for all the extensions added to this source tree are configured in <code>extensions/pom.xml</code> so that they do not need to be passed on the command line each time a new extension is added:</p>

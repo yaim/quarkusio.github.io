@@ -156,6 +156,21 @@ for user inputs. You can disable (and use default values) this interactive mode 
 <td class="tableblock halign-left valign-top"><p class="tableblock">The version of the created project</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>platformGroupId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.quarkus</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The group id of the target platform. Given that all the existing platforms are coming from <code>io.quarkus</code> this one won&#8217;t practically be used explicitly. But it&#8217;s still an option.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>platformArtifactId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus-universe-bom</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The artifact id of the target platform BOM. It should be <code>quarkus-bom</code> in order to use the locally built Quarkus.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>platformVersion</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If it&#8217;s not specified, the latest one will be resolved.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The version of the platform you want the project to use. It can also accept a version range, in which case the latest from the specified range will be used.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>className</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Not created if omitted</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The fully qualified name of the generated resource</p></td>
@@ -172,6 +187,9 @@ for user inputs. You can disable (and use default values) this interactive mode 
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>By default, the command will target the latest version of <code>quarkus-universe-bom</code> (unless specific coordinates have been specified). If you run offline however, it will look for the latest locally available and if <code>quarkus-universe-bom</code> (satisfying the default version range which is currently up to 2.0) is not available locally, it will fallback to the bundled platform based on <code>quarkus-bom</code> (the version will match the version of the plugin).</p>
+</div>
 <div class="paragraph">
 <p>If you decide to generate a REST resource (using the <code>className</code> attribute), the endpoint is exposed at: <code><a href="http://localhost:8080/$path" class="bare">http://localhost:8080/$path</a></code>.
 If you use the default <code>path</code>, the URL is: <a href="http://localhost:8080/hello" class="bare">http://localhost:8080/hello</a>.</p>
