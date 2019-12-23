@@ -81,7 +81,8 @@
 <li><a href="#servlet-config">6. Servlet Config</a>
 <ul class="sectlevel2">
 <li><a href="#undertow-handlers-conf">6.1. undertow-handlers.conf</a></li>
-<li><a href="#web-xml">6.2. web.xml</a></li>
+<li><a href="#configuring-http-access-logs">6.2. Configuring HTTP Access Logs</a></li>
+<li><a href="#web-xml">6.3. web.xml</a></li>
 </ul>
 </li>
 </ul></div>
@@ -403,7 +404,40 @@ in the <code>META-INF</code> directory of your application jar. This file contai
 </div>
 </div>
 <div class="sect2">
-<h3 id="web-xml"><a class="anchor" href="#web-xml"></a>6.2. web.xml</h3>
+<h3 id="configuring-http-access-logs"><a class="anchor" href="#configuring-http-access-logs"></a>6.2. Configuring HTTP Access Logs</h3>
+<div class="paragraph">
+<p>You can add HTTP request logging by configuring the <code>AccessHandler</code> in the <code>undertow-handlers.conf</code> file.</p>
+</div>
+<div class="paragraph">
+<p>The simplest possible configuration can be a standard Apache <code>common</code> Log Format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">access-log('common')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will log every request using the standard Quarkus logging infrastructure under the <code>io.undertow.accesslog</code> category.</p>
+</div>
+<div class="paragraph">
+<p>You can customize the category like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">access-log(format='common', category='my.own.category')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally the logging format can be customized:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">access-log(format='%h %l %u %t "%r" %s %b %D "%{i,Referer}" "%{i,User-Agent}" "%{i,X-Request-ID}"', category='my.own.category')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="web-xml"><a class="anchor" href="#web-xml"></a>6.3. web.xml</h3>
 <div class="paragraph">
 <p>If you are using a <code>web.xml</code> file as your configuration file, you can place it in the <code>src/main/resources/META-INF</code> directory.</p>
 </div>

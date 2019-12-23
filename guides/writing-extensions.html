@@ -410,7 +410,7 @@ process, and any retained objects that are produced in this stage will be direct
 This means that if a framework can boot in this phase then it will have its booted state directly written to the
 image, and so the boot code does not need to be executed when the image is started.</p>
 <div class="paragraph">
-<p>There are some restrictions on what can be done in this stage as the Substrate VM disallows some objects in the native executable. For example you should not attempt to listen on a port or start threads in this phase.</p>
+<p>There are some restrictions on what can be done in this stage as the Substrate VM disallows some objects in the native executable. For example you should not attempt to listen on a port or start threads in this phase. In addition, it is disallowed to read run time configuration during static initialization.</p>
 </div>
 <div class="paragraph">
 <p>In non-native pure JVM mode, there is no real difference between Static and Runtime Init, except that Static Init is always executed first. This mode benefits from the same build phase augmentation as native mode as the descriptor parsing and annotation scanning are done
@@ -970,7 +970,7 @@ conceptual goal that does not have a concrete representation.</p>
  * causing this step to be run.
  */
 @BuildStep
-@Produces(NativeImageBuildItem.class)
+@Produce(NativeImageBuildItem.class)
 void produceNativeImage() {
     // ...
     // (produce the native image)
@@ -986,7 +986,7 @@ void produceNativeImage() {
  * an instance of {@code SomeOtherBuildItem}.
  */
 @BuildStep
-@Consumes(NativeImageBuildItem.class)
+@Consume(NativeImageBuildItem.class)
 SomeOtherBuildItem secondBuildStep() {
     return new SomeOtherBuildItem("foobar");
 }</code></pre>
@@ -1092,7 +1092,7 @@ and the resulting code does not have permission to inject private fields or invo
 <p>By injecting a <code>BuildProducer</code> of a simple or multi build item class</p>
 </li>
 <li>
-<p>By annotating the method with <code>@io.quarkus.deployment.annotations.Produces</code>, giving the class name of a
+<p>By annotating the method with <code>@io.quarkus.deployment.annotations.Produce</code>, giving the class name of a
 <a href="#empty-build-items">empty build item</a></p>
 </li>
 </ul>
@@ -1126,7 +1126,7 @@ items will not be invoked.</p>
 <p>By injecting a <code>List</code> of a <a href="#multi-build-items">multi build item</a> class</p>
 </li>
 <li>
-<p>By annotating the method with <code>@io.quarkus.deployment.annotations.Consumes</code>, giving the class name of a
+<p>By annotating the method with <code>@io.quarkus.deployment.annotations.Consume</code>, giving the class name of a
 <a href="#empty-build-items">empty build item</a></p>
 </li>
 </ul>
@@ -1265,6 +1265,27 @@ to be 'Application Archives', and will therefore get indexed. This is done via t
 example the ArC extension registers <code>META-INF/beans.xml</code>, which means that all archives on the class path with a <code>beans.xml</code>
 file will be indexed.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>BuildStep.applicationArchiveMarkers()</code> is deprecated and will be removed at some point post Quarkus 1.1. Extensions are encouraged to use <code>io.quarkus.deployment.builditem.AdditionalApplicationArchiveMarkerBuildItem</code> instead.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-threads-context-class-loader"><a class="anchor" href="#using-threads-context-class-loader"></a>2.3.8. Using Thread&#8217;s Context Class Loader</h4>
+<div class="paragraph">
+<p>If <code>@BuildStep.loadsApplicationClasses()</code> is set to <code>true</code> the build step will be run with a TCCL that can load user classes from the deployment in a transformer-safe way.
+This class loader only lasts for the life of the augmentation, and is discarded afterwards.
+The classes will be loaded again in a different class loader at runtime.
+This means that loading a class during augmentation does not stop it from being transformed when running in the development/test mode.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1385,16 +1406,50 @@ extensions may use the full range of configuration types made available by Small
 <div class="paragraph">
 <p>Though these implicit converters use reflection, Quarkus will automatically ensure that they are loaded at the appropriate time.</p>
 </div>
+<div class="sect4">
+<h5 id="optional-values"><a class="anchor" href="#optional-values"></a>2.4.2.1. Optional Values</h5>
+<div class="paragraph">
+<p>If the configuration type is one of the optional types, then empty values are allowed for the configuration key; otherwise,
+specification of an empty value will result in a configuration error which prevents the application from starting.  This
+is especially relevant to configuration properties of inherently emptiable values such as <code>List</code>, <code>Set</code>, and <code>String</code>.  Such
+value types will never be empty; in the event of an empty value, an empty <code>Optional</code> is always used.</p>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="configuration-groups"><a class="anchor" href="#configuration-groups"></a>2.4.3. Configuration Groups</h4>
+<h4 id="configuration-default-values"><a class="anchor" href="#configuration-default-values"></a>2.4.3. Configuration Default Values</h4>
+<div class="paragraph">
+<p>A configuration item can be marked to have a default value.  The default value is used when no matching configuration key
+is specified in the configuration.</p>
+</div>
+<div class="paragraph">
+<p>Configuration items with a primitive type (such as <code>int</code> or <code>boolean</code>) implicitly use a default value of <code>0</code> or <code>false</code>.  The
+sole exception to this rule is the <code>char</code> type which does not have an implicit default value.</p>
+</div>
+<div class="paragraph">
+<p>A property with a default value is not implicitly optional.  If a non-optional configuration item with a default value
+is explicitly specified to have an empty value, the application will report a configuration error and will not start.  If
+it is desired for a property to have a default value and also be optional, it must have an <code>Optional</code> type as described above.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuration-groups"><a class="anchor" href="#configuration-groups"></a>2.4.4. Configuration Groups</h4>
 <div class="paragraph">
 <p>Configuration values are always collected into grouping classes which are marked with the <code>@io.quarkus.runtime.annotations.ConfigGroup</code>
 annotation.  These classes contain a field for each key within its group.  In addition, configuration groups can be nested.</p>
 </div>
+<div class="sect4">
+<h5 id="optional-configuration-groups"><a class="anchor" href="#optional-configuration-groups"></a>2.4.4.1. Optional Configuration Groups</h5>
+<div class="paragraph">
+<p>A nested configuration group may be wrapped with an <code>Optional</code> type.  In this case, the group is not populated unless one
+or more properties within that group are specified in the configuration.  If the group is populated, then any required
+properties in the group must also be specified otherwise a configuration error will be reported and the application will
+not start.</p>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="configuration-maps"><a class="anchor" href="#configuration-maps"></a>2.4.4. Configuration Maps</h4>
+<h4 id="configuration-maps"><a class="anchor" href="#configuration-maps"></a>2.4.5. Configuration Maps</h4>
 <div class="paragraph">
 <p>A <code>Map</code> can be used for configuration at any position where a configuration group would be allowed.  The key type of such a
 map <strong>must</strong> be <code>String</code>, and its value may be either a configuration group class or a valid leaf type.  The configuration
@@ -1402,7 +1457,7 @@ key segment following the map&#8217;s key segment will be used as the key for ma
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuration-roots"><a class="anchor" href="#configuration-roots"></a>2.4.5. Configuration Roots</h4>
+<h4 id="configuration-roots"><a class="anchor" href="#configuration-roots"></a>2.4.6. Configuration Roots</h4>
 <div class="paragraph">
 <p>Configuration roots are configuration groups that appear in the root of the configuration tree.  A configuration property&#8217;s full
 name is determined by joining the string <code>quarkus.</code> with the hyphenated name of the fields that form the path from the root to the
@@ -1426,9 +1481,10 @@ is recommended that the injection site (field or parameter) have the same name a
 this change is complete.</p>
 </div>
 <div class="sect4">
-<h5 id="configuration-root-phases"><a class="anchor" href="#configuration-root-phases"></a>2.4.5.1. Configuration Root Phases</h5>
+<h5 id="configuration-root-phases"><a class="anchor" href="#configuration-root-phases"></a>2.4.6.1. Configuration Root Phases</h5>
 <div class="paragraph">
-<p>A configuration root dictates when its contained keys are read from configuration, and when they are available to applications.  The phases defined by <code>io.quarkus.runtime.annotations.ConfigPhase</code> are as follows:</p>
+<p>Configuration roots are strictly bound by configuration phase, and attempting to access a configuration root from outside of its corresponding phase will result in an error.
+A configuration root dictates when its contained keys are read from configuration, and when they are available to applications.  The phases defined by <code>io.quarkus.runtime.annotations.ConfigPhase</code> are as follows:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1482,7 +1538,7 @@ this change is complete.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuration-example"><a class="anchor" href="#configuration-example"></a>2.4.6. Configuration Example</h4>
+<h4 id="configuration-example"><a class="anchor" href="#configuration-example"></a>2.4.7. Configuration Example</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">import io.quarkus.runtime.annotations.ConfigItem;
@@ -1510,7 +1566,6 @@ public class FileConfig {
     /**
      * The level of logs to be written into the file.
      */
-    @DefaultConverter
     @ConfigItem(defaultValue = "ALL")
     Level level;
 
@@ -2328,6 +2383,10 @@ executable. Some of these build items are listed below:</p>
 <dd>
 <p>Includes static resources into the native executable.</p>
 </dd>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.NativeImageResourceDirectoryBuildItem</code></dt>
+<dd>
+<p>Includes directory&#8217;s static resources into the native executable.</p>
+</dd>
 <dt class="hdlist1"><code>io.quarkus.deployment.builditem.nativeimage.RuntimeReinitializedClassBuildItem</code></dt>
 <dd>
 <p>A class that will be reinitialized at runtime by Substrate. This will result in the static initializer running twice.</p>
@@ -2352,9 +2411,13 @@ executable. Some of these build items are listed below:</p>
 <dd>
 <p>A convenience feature that allows you to control most of the above features from a single build item.</p>
 </dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.NativeEnableAllCharsetsBuildItem</code></dt>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.NativeImageEnableAllCharsetsBuildItem</code></dt>
 <dd>
 <p>Indicates that all charsets should be enabled in native image.</p>
+</dd>
+<dt class="hdlist1"><code>io.quarkus.deployment.builditem.NativeImageEnableAllTimeZonesBuildItem</code></dt>
+<dd>
+<p>Indicates that all timezones should be enabled in native image.</p>
 </dd>
 <dt class="hdlist1"><code>io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem</code></dt>
 <dd>

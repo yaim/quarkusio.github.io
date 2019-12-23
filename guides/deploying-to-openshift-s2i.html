@@ -196,8 +196,8 @@ oc start-build quarkus-quickstart-native</code></pre>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">oc new-build --name=minimal-quarkus-quickstart-native \
     --docker-image=registry.access.redhat.com/ubi7-dev-preview/ubi-minimal \
     --source-image=quarkus-quickstart-native \
-    --source-image-path='/home/quarkus/quarkus-quickstart-1.0-SNAPSHOT-runner:.' \
-    --dockerfile=$'FROM registry.access.redhat.com/ubi7-dev-preview/ubi-minimal:latest\nCOPY *-runner /application\nCMD /application\nEXPOSE 8080' \</code></pre>
+    --source-image-path='/home/quarkus/application:.' \
+    --dockerfile=$'FROM registry.access.redhat.com/ubi7-dev-preview/ubi-minimal:latest\nCOPY application /application\nCMD /application\nEXPOSE 8080'</code></pre>
 </div>
 </div>
 <div class="paragraph">

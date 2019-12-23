@@ -173,6 +173,37 @@ quarkus.mailer.username=....
 quarkus.mailer.password=....</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is recommended to encrypt any sensitive data, such as the <code>quarkus.mailer.password</code>.
+One approach is to save the value into a secure store like HashiCorp Vault, and refer to it from the configuration.
+Assuming for instance that Vault contains key <code>mail-password</code> at path <code>myapps/myapp/myconfig</code>, then the mailer
+extension can be simply configured as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">...
+# path within the kv secret engine where is located the application sensitive configuration
+quarkus.vault.secret-config-kv-path=myapps/myapp/myconfig
+
+...
+quarkus.mailer.password=${mail-password}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please note that the password value is evaluated only once, at startup time. If <code>mail-password</code> was changed in Vault,
+the only way to get the new value would be to restart the application.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="admonitionblock tip">
 <table>
 <tr>

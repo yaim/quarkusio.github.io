@@ -75,18 +75,12 @@
 <li><a href="#deploy-to-aws-lambda-java-runtime">Deploy to AWS Lambda Java Runtime</a></li>
 <li><a href="#build-and-deploy">Build and Deploy</a></li>
 <li><a href="#create-an-execution-role">Create an Execution Role</a></li>
-<li><a href="#edit-script-files">Edit Script Files</a></li>
 <li><a href="#create-the-function">Create the function</a></li>
 <li><a href="#invoke-the-lambda">Invoke the Lambda</a></li>
 <li><a href="#update-the-lambda">Update the Lambda</a></li>
 <li><a href="#deploy-to-aws-lambda-custom-native-runtime">Deploy to AWS Lambda Custom (native) Runtime</a></li>
-<li><a href="#build-and-deploy-native">Build and Deploy (native)</a></li>
-<li><a href="#create-an-execution-role-2">Create an Execution Role</a></li>
-<li><a href="#edit-native-script-files">Edit native script files</a></li>
-<li><a href="#create-the-native-lambda">Create the Native Lambda</a></li>
-<li><a href="#invoke-the-native-lambda">Invoke the Native Lambda</a></li>
-<li><a href="#update-the-native-lambda">Update the Native Lambda</a></li>
 <li><a href="#examine-the-pom">Examine the POM</a></li>
+<li><a href="#testing-with-the-sam-cli">Testing with the SAM CLI</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -96,7 +90,7 @@
 Your lambdas can use injection annotations from CDI or Spring and other Quarkus facilities as you need them.</p>
 </div>
 <div class="paragraph">
-<p>Quarkus lambdas can be deployed using the Amazon Java Runtime, or you can build a native GraalVM executable and use
+<p>Quarkus lambdas can be deployed using the Amazon Java Runtime, or you can build a native executable and use
 Amazon&#8217;s Custom Runtime if you want a smaller memory footprint and faster cold boot startup time.</p>
 </div>
 <div class="admonitionblock note">
@@ -107,9 +101,15 @@ Amazon&#8217;s Custom Runtime if you want a smaller memory footprint and faster 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This extension is considered <code>preview</code>.
-API or configuration properties might change as the extension matures.
+<p>This technology is considered preview.</p>
+</div>
+<div class="paragraph">
+<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
+Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
 Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
 </div>
 </td>
 </tr>
@@ -139,6 +139,9 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
 </li>
 <li>
 <p><a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html">AWS CLI</a></p>
+</li>
+<li>
+<p><a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html">AWS SAM CLI</a>, for local testing</p>
 </li>
 </ul>
 </div>
@@ -182,16 +185,16 @@ for installing AWS CLI.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The <code>quarkus-amazon-lambda</code> extension scans your project for a class that implements the Amazon <code>RequestHandler</code> interface.
-It must find a class in your project that implements this interface, or it will throw a build time failure.
+It must find a class in your project that implements this interface or it will throw a build time failure.
 If it finds more than one handler class, a build time exception will also be thrown.</p>
 </div>
 <div class="paragraph">
-<p>Sometimes though, you might have a few related lambdas that share a ton of code and creating multiple maven modules is just
+<p>Sometimes, though, you might have a few related lambdas that share code and creating multiple maven modules is just
 an overhead you don&#8217;t want to do.  The <code>quarkus-amazon-lambda</code> extension allows you to bundle multiple lambdas in one
 project and use configuration or an environment variable to pick the handler you want to deploy.</p>
 </div>
 <div class="paragraph">
-<p>The generated project has two lambdas within it.  One that is used, and one that is unused.  If you open up
+<p>The generated project has two lambdas within it.  One that is used and one that is unused.  If you open up
 <code>src/main/resources/application.properties</code> you&#8217;ll see this:</p>
 </div>
 <div class="listingblock">
@@ -200,7 +203,7 @@ project and use configuration or an environment variable to pick the handler you
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>quarkus.lambda.handler</code> property tells Quarkus which lambda handler to deploy. This can be overriden
+<p>The <code>quarkus.lambda.handler</code> property tells Quarkus which lambda handler to deploy. This can be overridden
 with an environment variable too.</p>
 </div>
 <div class="paragraph">
@@ -210,12 +213,10 @@ with an environment variable too.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">@Named("test")
 public class TestLambda implements RequestHandler&lt;InputObject, OutputObject&gt; {
-
 }
 
 @Named("unused")
 public class UnusedLambda implements RequestHandler&lt;InputObject, OutputObject&gt; {
-
 }</code></pre>
 </div>
 </div>
@@ -228,7 +229,7 @@ public class UnusedLambda implements RequestHandler&lt;InputObject, OutputObject
 <h2 id="deploy-to-aws-lambda-java-runtime"><a class="anchor" href="#deploy-to-aws-lambda-java-runtime"></a>Deploy to AWS Lambda Java Runtime</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are a few steps to get your lambda running on AWS.  The generated maven project contains some helpful scripts to
+<p>There are a few steps to get your lambda running on AWS.  The generated maven project contains a helpful script to
 create, update, delete, and invoke your lambdas for pure Java and native deployments.</p>
 </div>
 </div>
@@ -255,16 +256,14 @@ create, update, delete, and invoke your lambdas for pure Java and native deploym
 <div class="paragraph">
 <p>View the <a href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html">Getting Started Guide</a> for deploying
 a lambda with AWS CLI.  Specifically, make sure you have created an <code>Execution Role</code>.  You will need to copy and
-paste the <code>Role Arn</code> into the scripts generated by the maven archetype.</p>
+paste the <code>Role Arn</code> into the scripts generated by the maven archetype.  To use the provided scripts, you will either
+need to define a <code>LAMBDA_ROLE_ARN</code> environment variable in your profile or define it prior to executing the scripts like
+this:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">LAMBDA_ROLE_ARN="arn:aws:iam::1234567890:role/lambda-role"</code></pre>
 </div>
-</div>
-<div class="sect1">
-<h2 id="edit-script-files"><a class="anchor" href="#edit-script-files"></a>Edit Script Files</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Edit the <code>create.sh</code> and <code>create-native.sh</code> scripts included with the generated project.  After the <code>--role</code> switch
-replace the dummy <code>Role Arn</code> with the Arn of the <code>Execution Role</code> you created in the Amazon IAM console.</p>
 </div>
 </div>
 </div>
@@ -272,29 +271,56 @@ replace the dummy <code>Role Arn</code> with the Arn of the <code>Execution Role
 <h2 id="create-the-function"><a class="anchor" href="#create-the-function"></a>Create the function</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>create.sh</code> script is for deploying your lambda using the AWS Lambda Java runtime.</p>
+<p>The <code>manage.sh</code> script is for managing your lambda using the AWS Lambda Java runtime.  This script is provided only for
+your convenience.  Should you choose to use Amazon provided tools, you can freely skip these sections and consult the
+appropriate Amazon documentation.</p>
+</div>
+<div class="paragraph">
+<p><code>manage.sh</code> supports four operation:  <code>create</code>, <code>delete</code>, <code>update</code>, and <code>invoke</code>.  You can create your function using
+the following command:</p>
 </div>
 <div class="listingblock">
-<div class="title">create.sh</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">aws lambda create-function --function-name my-function \
-           --zip-file fileb://target/my-function-1.0-SNAPSHOT-runner.jar \
-           --handler io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest \
-           --runtime java8 \
-           --role arn:aws:iam::1234567:role/lambda-cli-role</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">sh manage.sh create</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Don&#8217;t forget to replace the <code>--role</code> flag with the Arn of your <code>Execution Role</code>.</p>
+<p>or if you do not have <code>LAMBDA_ROLE_ARN</code> already defined in this shell:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">LAMBDA_ROLE_ARN="arn:aws:iam::1234567890:role/lambda-role" sh manage.sh create</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Do not change the handler switch.  This must be hardcoded to <code>io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest</code>.  This
+handler bootstraps Quarkus and wraps your actual handler so that injection can be performed.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>DO NOT CHANGE the handler switch.
-This must be hardcoded to <code>io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest</code>.  This Quarkus
-handler bootstraps Quarkus and wraps your actual handler so that injection can be performed.</p>
+<p>If there are any problems creating the function, you must delete it with the <code>delete</code> function before re-running
+the <code>create</code> command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">sh manage.sh delete</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>If there are any problems creating the function, you must delete it with the <code>delete.sh</code> script before re-running
-the <code>create.sh</code> script.</p>
+<p>Commands may also be stacked:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">sh manage.sh delete create</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -302,20 +328,25 @@ the <code>create.sh</code> script.</p>
 <h2 id="invoke-the-lambda"><a class="anchor" href="#invoke-the-lambda"></a>Invoke the Lambda</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Use the <code>invoke.sh</code> script to invoke your function.</p>
+<p>Use the <code>invoke</code> command to invoke your function.</p>
 </div>
 <div class="listingblock">
-<div class="title">invoke.sh</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">aws lambda invoke --function-name my-function
-                  --payload file://payload.json out
-                  --log-type Tail --query 'LogResult' --output text |  base64 -d</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">sh manage.sh invoke</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The example lambda takes input.  This input is passed in via the <code>--payload</code> switch which points to a json file
-in the root directory of the project.  If you want to see the return output of the lambda, open the <code>out</code> file.
-This script will also write the log output to the console.</p>
+<p>The example lambda takes input passed in via the <code>--payload</code> switch which points to a json file
+in the root directory of the project.  If you want to see the output of the lambda, open the <code>response.txt</code> file.
+The lambda can also be invoked locally like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">sam local invoke --template sam.jvm.yaml --event payload.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are working with your native image build, simply replace the template name above with the native version.</p>
 </div>
 </div>
 </div>
@@ -324,13 +355,11 @@ This script will also write the log output to the console.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can update the Java code as you see fit.  Once you&#8217;ve rebuilt, you can redeploy your lambda by executing the
-<code>update.sh</code> script.</p>
+<code>update</code> command.</p>
 </div>
 <div class="listingblock">
-<div class="title">update.sh</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">aws lambda update-function-code --function-name my-function \
-           --zip-file fileb://target/my-function-1.0-SNAPSHOT-runner.jar</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">sh manage.sh update</code></pre>
 </div>
 </div>
 </div>
@@ -340,111 +369,35 @@ This script will also write the log output to the console.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you want a lower memory footprint and faster initialization times for your lambda, you can compile your Java
-code to a native executable using GraalVM.  Just make sure to rebuild your project with the <code>-Dnative</code> switch.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="build-and-deploy-native"><a class="anchor" href="#build-and-deploy-native"></a>Build and Deploy (native)</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Build the native executable.</p>
+code to a native executable.  Just make sure to rebuild your project with the <code>-Pnative</code> switch.  If you are building
+on a non-linux system, you will need to also pass in a property instructing quarkus to use a docker build as Amazon
+Lambda requires linux binaries.  You can do this by passing this property to your maven build:
+<code>-Dnative-image.docker-build=true</code>.  This requires you to have docker installed locally, however.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean install -Dnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean install -Pnative -Dnative-image.docker-build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This will compile and create a native executable image using GraalVM.  It also generates a zip file <code>target/function.zip</code>.
+<p>This will compile and create a native executable image.  It also generates a zip file <code>target/function.zip</code>.
 This zip file contains your native executable image renamed to <code>bootstrap</code>.  This is a requirement of Amazon Lambda
-Custom Runtime.</p>
+Custom Runtime.  If you are building on Linux, the <code>native-image.docker-build</code> property is mildly redundant but its primary
+cost is a slightly longer build cycle.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="create-an-execution-role-2"><a class="anchor" href="#create-an-execution-role-2"></a>Create an Execution Role</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>View the <a href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html">Getting Started Guide</a> for deploying
-a lambda with AWS CLI.  Specifically make sure you have created an <code>Execution Role</code>.  You will need the <code>Role Arn</code> to copy/paste
-into the scripts generated by the maven archetype.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="edit-native-script-files"><a class="anchor" href="#edit-native-script-files"></a>Edit native script files</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Edit the <code>create-native.sh</code> scripts included with the generated project.  After the <code>--role</code> switch
-replace the dummy <code>Role Arn</code> with the Arn of the <code>Execution Role</code> you created in the Amazon IAM console.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="create-the-native-lambda"><a class="anchor" href="#create-the-native-lambda"></a>Create the Native Lambda</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The <code>create-native.sh</code> script is for deploying your lambda using the AWS Lambda Custom runtime.</p>
+<p>The instructions here are exactly as above with one change:  you&#8217;ll need to add <code>native</code> as the first parameter to the
+<code>manage.sh</code> script:</p>
 </div>
 <div class="listingblock">
-<div class="title">create-native.sh</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">aws lambda create-function --function-name my-native-function \
-           --zip-file fileb://target/function.zip --handler any.name.not.used \
-           --runtime provided --role arn:aws:iam::1234567:role/lambda-cli-role \
-           --environment Variables="{DISABLE_SIGNAL_HANDLERS=true}"</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">sh manage.sh native create</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Don&#8217;t forget to replace the <code>--role</code> flag with the Arn of your <code>Execution Role</code>.</p>
-</div>
-<div class="paragraph">
-<p>Notice that the <code>--zip-file</code> flag points to the <code>function.zip</code> file generated by the build.
-The handler switch is not used, but must be set.  It can be any value.  Finally, notice that an environment variable
-must be set: <code>DISABLE_SIGNAL_HANDLERS</code>.  This resolves an incompatibility with the Amazon Lambda Custom Runtime container
-and GraalVM.</p>
-</div>
-<div class="paragraph">
-<p>If there are any problems creating the function, you must delete it with the <code>delete-native.sh</code> script before re-running
-the <code>create-native.sh</code> script.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="invoke-the-native-lambda"><a class="anchor" href="#invoke-the-native-lambda"></a>Invoke the Native Lambda</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Use the <code>invoke-native.sh</code> script to invoke your function.</p>
-</div>
-<div class="listingblock">
-<div class="title">invoke-native.sh</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">aws lambda invoke --function-name my-native-function
-                  --payload file://payload.json out
-                  --log-type Tail --query 'LogResult' --output text |  base64 -d</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The example lambda takes input.  This input is passed in via the <code>--payload</code> switch which points to a json file
-in the root directory of the project.  If you want to see the return output of the lambda, open the <code>out</code> file.
-This script will also write the log output to the console.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="update-the-native-lambda"><a class="anchor" href="#update-the-native-lambda"></a>Update the Native Lambda</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can update the Java code as you see fit.  Once you&#8217;ve rebuilt, you can redeploy your lambda by executing the
-<code>update-native.sh</code> script.</p>
-</div>
-<div class="listingblock">
-<div class="title">update-native.sh</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">aws lambda update-function-code --function-name my-native-function \
-           --zip-file fileb://target/function.zip</code></pre>
-</div>
+<p>As above, commands can be stacked.  The only requirement is that <code>native</code> be the first parameter should you wish
+to work with native image builds.  The script will take care of the rest of the details necessary to manage your native
+image function deployments.</p>
 </div>
 </div>
 </div>
@@ -452,7 +405,7 @@ This script will also write the log output to the console.</p>
 <h2 id="examine-the-pom"><a class="anchor" href="#examine-the-pom"></a>Examine the POM</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you want to adapt an existing project to use Quarku&#8217;s Amazon Lambda extension, there&#8217;s a couple
+<p>If you want to adapt an existing project to use Quarkus&#8217;s Amazon Lambda extension, there are a couple
 of things you need to do.  Take a look at the generated example project to get an example of what you need to adapt.</p>
 </div>
 <div class="olist arabic">
@@ -461,12 +414,46 @@ of things you need to do.  Take a look at the generated example project to get a
 <p>Include the <code>quarkus-amazon-lambda</code> extension as a pom dependency</p>
 </li>
 <li>
-<p>Configure Quarkus to build an <code>uber-jar</code></p>
+<p>Configure Quarkus to build an <code>uber-jar</code> (via quarkus.package.uber-jar=true in the application.properties)</p>
 </li>
 <li>
-<p>If you are doing a native GraalVM build, Amazon requires you to rename your executable to <code>bootstrap</code> and zip it up.  Notice that the <code>pom.xml</code> uses the <code>maven-assemby-plugin</code> to perform this requirement.</p>
+<p>If you are doing a native image build, Amazon requires you to rename your executable to <code>bootstrap</code> and zip it up.
+Notice that the <code>pom.xml</code> uses the <code>maven-assembly-plugin</code> to perform this requirement.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>NB: With gradle, to build the uber-jar execute: ./gradlew quarkusBuild --uber-jar</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing-with-the-sam-cli"><a class="anchor" href="#testing-with-the-sam-cli"></a>Testing with the SAM CLI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html">AWS SAM CLI</a>
+allows you to run your lambdas locally on your laptop in a simulated Lambda environment.  This requires
+<a href="https://www.docker.com/products/docker-desktop">docker</a> to be installed.  This is an optional approach should you choose
+to take advantage of it.  Otherwise, dev mode should be sufficient for most of your needs.</p>
+</div>
+<div class="paragraph">
+<p>A starter template has been generated for both JVM and native execution modes.</p>
+</div>
+<div class="paragraph">
+<p>Run the following SAM CLI command to locally test your lambda function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">sam local invoke --template sam.jvm.yaml --event {json test file}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The native image can also be locally tested using the <code>sam.native.yaml</code> template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">sam local invoke --template sam.native.yaml --event {json test file}</code></pre>
+</div>
 </div>
 </div>
 </div>

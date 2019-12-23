@@ -69,8 +69,21 @@
     <div class="hide-mobile toc"></div>
     <div>
       <div class="paragraph">
-<p>Quarkus Gradle plugin is not yet published to the <a href="https://plugins.gradle.org/">Gradle Plugin Portal</a>,
-so you need to add the following at the top of your './settings.gradle' file:</p>
+<p>The Quarkus Gradle plugin is published to the <a href="https://plugins.gradle.org/plugin/io.quarkus">Gradle Plugin Portal</a>.</p>
+</div>
+<div class="paragraph">
+<p>To use it, add the following to your <code>build.gradle</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
+    id 'java'
+    id 'io.quarkus'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You also need to add the following at the top of your <code>settings.gradle</code> file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -79,38 +92,27 @@ so you need to add the following at the top of your './settings.gradle' file:</p
         mavenCentral()
         gradlePluginPortal()
     }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == 'io.quarkus') {
-                useModule("io.quarkus:quarkus-gradle-plugin:${requested.version}")
-            }
-        }
+    plugins {
+      id 'io.quarkus' version "${quarkusPluginVersion}"
     }
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Or, if you use the Gradle Kotlin DSL, you need to add the following at the top of your './settings.gradle.kts' file:</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">NOTE</dt>
+<dd>
+<p>the <code>plugins{}</code> method in <code>settings.gradle</code> is not supported in Gradle 5.x. In this case make sure to explicitly declare the plugin version in the <code>build.gradle</code> file like the example below:</p>
+</dd>
+</dl>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "io.quarkus") {
-                useModule("io.quarkus:quarkus-gradle-plugin:${requested.version}")
-            }
-        }
-    }
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
+    id 'java'
+    id 'io.quarkus' version '1.0.1.Final'
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>This won&#8217;t be necessary anymore once the Quarkus Gradle plugin is published in the Gradle plugin portal.</p>
 </div>
     </div>
   </div>

@@ -110,9 +110,15 @@ any transparent token or lease renewals according to ttl and max-ttl.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This extension is considered <code>preview</code>.
-API or configuration properties might change as the extension matures.
+<p>This technology is considered preview.</p>
+</div>
+<div class="paragraph">
+<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
+Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
 Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
 </div>
 </td>
 </tr>
@@ -614,6 +620,34 @@ quarkus.datasource.credentials-provider = mydatabase
 # drop and create the database at startup (use `update` to only update the schema)
 quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Another way to specify the datasource password is with property indirection. Assuming that vault path
+<code>myapps/vault-quickstart/config</code> contains key <code>my-db-password</code>, all is required on the datasource configuration is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.datasource.username = sarah
+quarkus.datasource.password = ${my-db-password}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The only drawback is that the password will never be fetched again from vault after the initial property loading.
+This means that if the db password was changed while running, the application would have to be restarted after
+vault has been updated with the new password.
+This contrasts with the credentials provider approach, which fetches the password from vault everytime a connection
+creation is attempted.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Restart the application after rebuilding it, and test it with the new endpoint:</p>

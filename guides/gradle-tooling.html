@@ -81,6 +81,7 @@
 <li><a href="#build-a-container-friendly-executable">Build a container friendly executable</a></li>
 </ul>
 </li>
+<li><a href="#running-native-tests">Running native tests</a></li>
 <li><a href="#building-uber-jars">Building Uber-Jars</a></li>
 <li><a href="#building-with-gradlew-build">Building with <code>./gradlew build</code></a></li>
 </ul></div>
@@ -553,6 +554,22 @@ However, it&#8217;s not an issue as we are going to copy it to a Docker containe
 </div>
 </div>
 <div class="sect1">
+<h2 id="running-native-tests"><a class="anchor" href="#running-native-tests"></a>Running native tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Run the native tests using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew testNative</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This task depends on <code>buildNative</code>, so it will generate the native image before running the tests.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="building-uber-jars"><a class="anchor" href="#building-uber-jars"></a>Building Uber-Jars</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -580,12 +597,7 @@ However, it&#8217;s not an issue as we are going to copy it to a Docker containe
 <h2 id="building-with-gradlew-build"><a class="anchor" href="#building-with-gradlew-build"></a>Building with <code>./gradlew build</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default, <code>./gradlew build</code> will build the native image also. To skip it, use</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./gradlew build -x buildNative -x testNative</code></pre>
-</div>
+<p>Starting from 1.1.0.Final, <code>./gradlew build</code> will no longer build the native image. Use the <code>buildNative</code> task explicitly as explained above if needed.</p>
 </div>
 </div>
 </div>

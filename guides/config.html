@@ -74,6 +74,7 @@
 <li><a href="#create-the-configuration">Create the configuration</a></li>
 <li><a href="#update-the-test">Update the test</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
+<li><a href="#programmatically-access-the-configuration">Programmatically access the configuration</a></li>
 <li><a href="#using-configproperties">Using @ConfigProperties</a>
 <ul class="sectlevel2">
 <li><a href="#additional-notes-on-configproperties">Additional notes on @ConfigProperties</a></li>
@@ -88,12 +89,20 @@
 <li><a href="#overriding-properties-at-runtime">Overriding properties at runtime</a>
 <ul class="sectlevel2">
 <li><a href="#configuration-profiles">Configuration Profiles</a></li>
+<li><a href="#clearing-properties">Clearing properties</a></li>
 </ul>
 </li>
 <li><a href="#custom-configuration">Custom Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#custom-configuration-sources">Custom configuration sources</a></li>
 <li><a href="#custom-configuration-converters">Custom configuration converters</a></li>
+</ul>
+</li>
+<li><a href="#yaml">YAML for Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#add-yaml-config-support">Add YAML Config Support</a></li>
+<li><a href="#profile-dependent-configuration">Profile dependent configuration</a></li>
+<li><a href="#configuration-key-conflicts">Configuration key conflicts</a></li>
 </ul>
 </li>
 <li><a href="#more-info-on-how-to-configure">More info on how to configure</a></li>
@@ -346,6 +355,24 @@ You can add the <code>greeting.suffix</code>, remove the other properties, chang
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
 You can also generate the native executable with <code>./mvnw clean package -Pnative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="programmatically-access-the-configuration"><a class="anchor" href="#programmatically-access-the-configuration"></a>Programmatically access the configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can access the configuration programmatically.
+It can be handy to achieve dynamic lookup, or retrieve configured values from classes that are neither CDI beans or JAX-RS resources.</p>
+</div>
+<div class="paragraph">
+<p>You can access the configuration programmatically using <code>org.eclipse.microprofile.config.ConfigProvider.getConfig()</code> such as in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">String databaseName = ConfigProvider.getConfig().getValue("database.name", String.class);
+Optional&lt;String&gt; maybeDatabaseName = ConfigProvider.getConfig().getOptionalValue("database.name", String.class);</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -748,6 +775,18 @@ I can add the following to <code>application.properties</code>:</p>
 <div class="paragraph">
 <p>And then set the <code>QUARKUS_PROFILE</code> environment variable to <code>staging</code> to activate my profile.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="clearing-properties"><a class="anchor" href="#clearing-properties"></a>Clearing properties</h3>
+<div class="paragraph">
+<p>Run time properties which are optional, and which have had values set at build time or which have a default value,
+may be explicitly cleared by assigning an empty string to the property.  Note that this will <em>only</em> affect
+run time properties, and will <em>only</em> work with properties whose values are not required.</p>
+</div>
+<div class="paragraph">
+<p>The property may be cleared by setting the corresponding <code>application.properties</code> property, setting the
+corresponding system property, or setting the corresponding environment variable.</p>
+</div>
 <div class="sect3">
 <h4 id="miscellaneous"><a class="anchor" href="#miscellaneous"></a>Miscellaneous</h4>
 <div class="paragraph">
@@ -914,6 +953,106 @@ This new converter also needs to be listed in a service file, i.e. <code>META-IN
 </tr>
 </table>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="yaml"><a class="anchor" href="#yaml"></a>YAML for Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="add-yaml-config-support"><a class="anchor" href="#add-yaml-config-support"></a>Add YAML Config Support</h3>
+<div class="paragraph">
+<p>You might want to use YAML over properties for configuration.
+Since <a href="https://github.com/smallrye/smallrye-config">SmallRye Config</a> brings support for YAML
+configuration, Quarkus supports this as well.</p>
+</div>
+<div class="paragraph">
+<p>First you will need to add the YAML extension to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-config-yaml&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now Quarkus can read YAML configuration files.
+The config directories and priorities are the same as before.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Quarkus will choose an <code>application.properties</code> over an <code>application.yaml</code>.
+YAML files are just an alternative way to configure your application.
+You should decide and keep one configuration type to avoid errors.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="configuration-example"><a class="anchor" href="#configuration-example"></a>Configuration Example</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs"># YAML supports comments
+quarkus:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/some-database
+    driver: org.postgresql.Driver
+    username: quarkus
+    password: quarkus</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="profile-dependent-configuration"><a class="anchor" href="#profile-dependent-configuration"></a>Profile dependent configuration</h3>
+<div class="paragraph">
+<p>Providing profile depedent configuration with YAML is done like with properties.
+Just add the <code>%profile</code> wrapped in quotation marks before defining the key-value pairs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">"%dev":
+    quarkus:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/some-database
+        driver: org.postgresql.Driver
+        username: quarkus
+        password: quarkus</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-key-conflicts"><a class="anchor" href="#configuration-key-conflicts"></a>Configuration key conflicts</h3>
+<div class="paragraph">
+<p>The Microprofile Configuration specification defines configuration keys as an arbitrary <code>.</code>-delimited string.
+However, structured formats like YAML naively only support a subset of the possible configuration namespace.
+For example, consider the two configuration properties <code>quarkus.http.cors</code> and <code>quarkus.http.cors.methods</code>.
+One property is the prefix of another, so it may not be immediately evident how to specify both keys in your YAML configuration.</p>
+</div>
+<div class="paragraph">
+<p>This is solved by using a null key (normally represented by <code>~</code>) for any YAML property which is a prefix of another one.  Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="title">An example YAML configuration resolving prefix-related key name conflicts</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">quarkus:
+    http:
+        cors:
+            ~: true
+            methods: GET,PUT,POST</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In general, null YAML keys are not included in assembly of the configuration property name, allowing them to be used to
+any level for disambiguating configuration keys.</p>
 </div>
 </div>
 </div>

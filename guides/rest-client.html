@@ -297,6 +297,24 @@ The default scope can also be defined on the interface.</td>
 <div class="paragraph">
 <p>Note that <code>org.acme.restclient.CountriesService</code> <em>must</em> match the fully qualified name of the <code>CountriesService</code> interface we created in the previous section.</p>
 </div>
+<div class="paragraph">
+<p>To facilitate the configuration, you can use the <code>@RegisterRestClient</code> <code>configKey</code> property that allows to use another configuration root than the fully qualified name of your interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RegisterRestClient(configKey="country-api")
+public interface CountriesService {
+    [...]
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># Your configuration properties
+country-api/mp-rest/url=https://restcountries.eu/rest #
+country-api/mp-rest/scope=javax.inject.Singleton # /</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

@@ -79,6 +79,7 @@
 <li><a href="#the-html-page">The HTML page</a></li>
 <li><a href="#get-it-running">Get it running</a></li>
 <li><a href="#running-native">Running Native</a></li>
+<li><a href="#kafka-health-check">Kafka Health Check</a></li>
 <li><a href="#going-further">Going further</a></li>
 </ul></div>
     <div>
@@ -539,6 +540,22 @@ If you started the Kafka broker with docker compose, stop it using <code>CTRL+C<
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-health-check"><a class="anchor" href="#kafka-health-check"></a>Kafka Health Check</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using the <code>quarkus-smallrye-health</code> extension, <code>quarkus-kafka</code> can add a readiness health check
+to validate the connection to the broker. This is disabled by default.</p>
+</div>
+<div class="paragraph">
+<p>If enabled, when you access the <code>/health/ready</code> endpoint of your application you will have information about the connection validation status.</p>
+</div>
+<div class="paragraph">
+<p>This behavior can be enabled by setting the <code>quarkus.kafka.health.enabled</code> property to <code>true</code> in your <code>application.properties</code>.
+You also need to point <code>quarkus.kafka.bootstrap-servers</code> to your Kafka cluster.</p>
 </div>
 </div>
 </div>

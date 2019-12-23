@@ -78,6 +78,7 @@
 <li><a href="#cdi-inject-with-kotlin">CDI @Inject with Kotlin</a></li>
 <li><a href="#live-reload">Live reload</a></li>
 <li><a href="#packaging-the-application">Packaging the application</a></li>
+<li><a href="#kotlin-and-jackson">Kotlin and Jackson</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -96,9 +97,15 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This extension is considered <code>preview</code>.
-API or configuration properties might change as the extension matures.
+<p>This technology is considered preview.</p>
+</div>
+<div class="paragraph">
+<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
+Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
 Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
 </div>
 </td>
 </tr>
@@ -147,7 +154,7 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
     -DclassName="org.acme.rest.GreetingResource" \
     -Dpath="/greeting" \
     -Dextensions="kotlin,resteasy-jsonb"
-cd kotlin-quickstart</code></pre>
+cd rest-kotlin-quickstart</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -596,6 +603,15 @@ code and immediately see their changes reflected.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file. You can also build the native executable using <code>./mvnw package -Pnative</code>, or <code>./gradlew buildNative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kotlin-and-jackson"><a class="anchor" href="#kotlin-and-jackson"></a>Kotlin and Jackson</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If the <code>com.fasterxml.jackson.module:jackson-module-kotlin</code> dependency and the <code>quarkus-jackson</code> extension (or the <code>quarkus-resteasy-extension</code>) have been added to project,
+then Quarkus automatically registers the <code>KotlinModule</code> to the <code>ObjectMapper</code> bean (see <a href="rest-json#Jackson">this</a> guide for more details).</p>
 </div>
 </div>
 </div>

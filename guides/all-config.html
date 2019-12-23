@@ -79,9 +79,23 @@
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-amazon-lambda_aws-lambda"></a><a href="#quarkus-amazon-lambda_aws-lambda">AWS Lambda</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-amazon-lambda_quarkus-amazon-lambda"></a><a href="#quarkus-amazon-lambda_quarkus-amazon-lambda">AWS Lambda</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-amazon-lambda_quarkus.lambda.enable-polling-jvm-mode"></a><code><a href="#quarkus-amazon-lambda_quarkus.lambda.enable-polling-jvm-mode">quarkus.lambda.enable-polling-jvm-mode</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If true, this will enable the aws event poll loop within a Quarkus test run. This loop normally only runs in native image. This option is strictly for testing purposes.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -98,21 +112,7 @@
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-lambda_quarkus.lambda.enable-polling-jvm-mode"></a><code><a href="#quarkus-amazon-lambda_quarkus.lambda.enable-polling-jvm-mode">quarkus.lambda.enable-polling-jvm-mode</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If true, this will enable the aws event poll loop within a Quarkus test run. This loop normally only runs in native image. This option is strictly for testing purposes.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-agroal_agroal-database-connection-pool"></a><a href="#quarkus-agroal_agroal-database-connection-pool">Agroal - Database connection pool</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-agroal_quarkus-agroal"></a><a href="#quarkus-agroal_quarkus-agroal">Agroal - Database connection pool</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -152,7 +152,7 @@
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Whether or not an healtcheck is published in case the smallrye-health extension is present (default to true).</p>
+<p>Whether or not an health check is published in case the smallrye-health extension is present</p>
 </div>
 </div>
 </div></div></td>
@@ -406,7 +406,21 @@
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-agroal_additional-named-datasources"></a><a href="#quarkus-agroal_additional-named-datasources">Additional named datasources</a></p></th>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.validation-query-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.validation-query-sql">quarkus.datasource.validation-query-sql</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Query executed to validate a connection.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-agroal_quarkus.datasource.named-data-sources"></a><a href="#quarkus-agroal_quarkus.datasource.named-data-sources">Additional named datasources</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -686,9 +700,52 @@
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-amazon-dynamodb_amazon-dynamodb-client"></a><a href="#quarkus-amazon-dynamodb_amazon-dynamodb-client">Amazon DynamoDB client</a></p></th>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.validation-query-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.validation-query-sql">quarkus.datasource."datasource-name".validation-query-sql</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Query executed to validate a connection.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-amazon-dynamodb_quarkus-amazon-dynamodb"></a><a href="#quarkus-amazon-dynamodb_quarkus-amazon-dynamodb">Amazon DynamoDB client</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.interceptors"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.interceptors">quarkus.dynamodb.interceptors</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of execution interceptors that will have access to read and modify the request and response objects as they are processed by the AWS SDK.
+ The list should consists of class names which implements <code>software.amazon.awssdk.core.interceptor.ExecutionInterceptor</code> interface.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of class name</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.type"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.type">quarkus.dynamodb.sync-client.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Type of the sync HTTP client implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code>, <code>apache</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -751,21 +808,6 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.interceptors"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.interceptors">quarkus.dynamodb.interceptors</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>List of execution interceptors that will have access to read and modify the request and response objects as they are processed by the AWS SDK.
- The list should consists of class names which implements <code>software.amazon.awssdk.core.interceptor.ExecutionInterceptor</code> interface.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of class name</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -919,7 +961,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -933,7 +975,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1007,21 +1049,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.type"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.type">quarkus.dynamodb.sync-client.type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Type of the sync HTTP client implementation</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code>, <code>apache</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1169,7 +1197,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1253,7 +1281,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1286,49 +1314,6 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>system-property</code>, <code>file-store</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>system-property</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Path to the key store.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store type.
- See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1540,7 +1525,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1554,7 +1539,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1587,49 +1572,6 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>system-property</code>, <code>file-store</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>system-property</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path">quarkus.dynamodb.async-client.tls-managers-provider.file-store.path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Path to the key store.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type">quarkus.dynamodb.async-client.tls-managers-provider.file-store.type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store type.
- See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password">quarkus.dynamodb.async-client.tls-managers-provider.file-store.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1677,9 +1619,155 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kafka-streams_apache-kafka-streams"></a><a href="#quarkus-kafka-streams_apache-kafka-streams">Apache Kafka Streams</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store"></a><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store">Configuration of the file store provider</a>
+This configuration section is optional</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path to the key store.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store type.
+ See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store password</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store"></a><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store">Configuration of the file store provider</a>
+This configuration section is optional</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path">quarkus.dynamodb.async-client.tls-managers-provider.file-store.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path to the key store.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type">quarkus.dynamodb.async-client.tls-managers-provider.file-store.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store type.
+ See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-amazon-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password">quarkus.dynamodb.async-client.tls-managers-provider.file-store.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store password</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kafka-client_quarkus-kafka-client"></a><a href="#quarkus-kafka-client_quarkus-kafka-client">Apache Kafka Client</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kafka-client_quarkus.kafka.health.enabled"></a><code><a href="#quarkus-kafka-client_quarkus.kafka.health.enabled">quarkus.kafka.health.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not an health check is published in case the smallrye-health extension is present.
+ If you enable the health check, you must specify the <code>kafka.bootstrap.servers</code> property.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-kafka-client_quarkus.kafka.bootstrap-servers"></a><code><a href="#quarkus-kafka-client_quarkus.kafka.bootstrap-servers">quarkus.kafka.bootstrap-servers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A comma-separated list of host:port pairs identifying the Kafka bootstrap server(s)</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of host:port</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9012</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kafka-streams_quarkus-kafka-streams"></a><a href="#quarkus-kafka-streams_quarkus-kafka-streams">Apache Kafka Streams</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.health.enabled"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.health.enabled">quarkus.kafka-streams.health.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not a health check is published in case the smallrye-health extension is present (defaults to true).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1738,7 +1826,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-tika_apache-tika"></a><a href="#quarkus-tika_apache-tika">Apache Tika</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-tika_quarkus-tika"></a><a href="#quarkus-tika_quarkus-tika">Apache Tika</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -1765,7 +1853,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <div class="paragraph">
 <p>Comma separated list of the parsers which must be supported.
  Most of the document formats recognized by Apache Tika are supported by default but it affects the application memory and native executable sizes. One can list only the required parsers in <code>tika-config.xml</code> to minimize a number of parsers loaded into the memory, but using this property is recommended to achieve both optimizations.
- Either the abbreviated or full parser class names can be used. At the moment only PDF parser can be listed using a reserved 'pdf' abbreviation. Custom class name abbreviations have to be used for all other parsers. For example: // Only PDF parser is required: tika-parsers = pdf // Only PDF and Java class parsers are required: tika-parsers = pdf,classparser classparser = org.apache.tika.parser.asm.ClassParser  This property will have no effect if the `tikaConfigPath' property has been set.</p>
+ Either the abbreviated or full parser class names can be used. Only PDF and OpenDocument format parsers can be listed using the reserved 'pdf' and 'odf' abbreviations. Custom class name abbreviations have to be used for all other parsers. For example: // Only PDF parser is required: quarkus.tika.parsers = pdf // Only PDF and OpenDocument parsers are required: quarkus.tika.parsers = pdf,odf  This property will have no effect if the `tikaConfigPath' property has been set.</p>
 </div>
 </div>
 </div></div></td>
@@ -1787,7 +1875,35 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-arc_arc"></a><a href="#quarkus-arc_arc">ArC</a></p></th>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parser-options-parser-options"></a><code><a href="#quarkus-tika_quarkus.tika.parser-options-parser-options">quarkus.tika.parser-options</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Configuration of the individual parsers. For example: quarkus.tika.parsers = pdf,odf quarkus.tika.parser-options.pdf.sort-by-position = true</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,Map&lt;String,String&gt;&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parser-parser"></a><code><a href="#quarkus-tika_quarkus.tika.parser-parser">quarkus.tika.parser</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Full parser class name for a given parser abbreviation. For example: quarkus.tika.parsers = classparser quarkus.tika.parser.classparser = org.apache.tika.parser.asm.ClassParser</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-arc_quarkus-arc"></a><a href="#quarkus-arc_quarkus-arc">ArC</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -1842,9 +1958,37 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-artemis-core_artemis-core"></a><a href="#quarkus-artemis-core_artemis-core">Artemis Core</a></p></th>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods"></a><code><a href="#quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods">quarkus.arc.remove-final-for-proxyable-methods</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true, Arc will transform the bytecode of beans containing methods that need to be proxyable but have been declared as final. The transformation is simply a matter of removing final. This ensures that a proxy can be created properly. If the value is set to false, then an exception is thrown at build time indicating that a proxy could not be created because a method was final.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-artemis-core_quarkus-artemis-core"></a><a href="#quarkus-artemis-core_quarkus-artemis-core">Artemis Core</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-artemis-core_quarkus.artemis.health.enabled"></a><code><a href="#quarkus-artemis-core_quarkus.artemis.health.enabled">quarkus.artemis.health.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not an health check is published in case the smallrye-health extension is present</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1889,7 +2033,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-core_eclipse-vert.x-core"></a><a href="#quarkus-vertx-core_eclipse-vert.x-core">Eclipse Vert.x - Core</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-core_quarkus-vertx-core"></a><a href="#quarkus-vertx-core_quarkus-vertx-core">Eclipse Vert.x - Core</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -2504,7 +2648,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>20</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-http_eclipse-vert.x-http"></a><a href="#quarkus-vertx-http_eclipse-vert.x-http">Eclipse Vert.x - HTTP</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-http_quarkus-vertx-http"></a><a href="#quarkus-vertx-http_quarkus-vertx-http">Eclipse Vert.x - HTTP</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -2590,7 +2734,21 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/index.html</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http_quarkus.http.auth.form.redirect-after-login"></a><code><a href="#quarkus-vertx-http_quarkus.http.auth.form.redirect-after-login">quarkus.http.auth.form.redirect-after-login</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Option to disable redirect to landingPage if there is no saved page to redirect back to. Form Auth POST is followed by redirect to landingPage by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2649,6 +2807,20 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Quarkus</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http_quarkus.http.virtual"></a><code><a href="#quarkus-vertx-http_quarkus.http.virtual">quarkus.http.virtual</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this is true then only a virtual channel will be set up for vertx web. We have this switch for testing purposes.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2746,7 +2918,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2759,8 +2931,8 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of <code>options</code>, <code>get</code>, <code>head</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>trace</code>, <code>connect</code>, <code>patch</code>, <code>other</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of <a href="https://vertx.io/docs/apidocs/io/vertx/core/http/HttpMethod.html">HttpMethod</a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2774,7 +2946,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2788,7 +2960,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2877,6 +3049,48 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.ssl.certificate.trust-store-file"></a><code><a href="#quarkus-vertx-http_quarkus.http.ssl.certificate.trust-store-file">quarkus.http.ssl.certificate.trust-store-file</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>An optional trust store which holds the certificate information of the certificates to trust</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.ssl.certificate.trust-store-file-type"></a><code><a href="#quarkus-vertx-http_quarkus.http.ssl.certificate.trust-store-file-type">quarkus.http.ssl.certificate.trust-store-file-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>An optional parameter to specify type of the trust store file. If not given, the type is automatically detected based on the file name.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.ssl.certificate.trust-store-password"></a><code><a href="#quarkus-vertx-http_quarkus.http.ssl.certificate.trust-store-password">quarkus.http.ssl.certificate.trust-store-password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A parameter to specify the password of the trust store file.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.ssl.cipher-suites"></a><code><a href="#quarkus-vertx-http_quarkus.http.ssl.cipher-suites">quarkus.http.ssl.cipher-suites</a></code></p>
 </div>
 <div class="openblock description">
@@ -2887,7 +3101,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2905,6 +3119,20 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.ssl.client-auth"></a><code><a href="#quarkus-vertx-http_quarkus.http.ssl.client-auth">quarkus.http.ssl.client-auth</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Configures the engine to require/request client authentication. NONE, REQUEST, REQUIRED</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>request</code>, <code>required</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>NONE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.io-threads"></a><code><a href="#quarkus-vertx-http_quarkus.http.io-threads">quarkus.http.io-threads</a></code></p>
 </div>
 <div class="openblock description">
@@ -2916,20 +3144,6 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.virtual"></a><code><a href="#quarkus-vertx-http_quarkus.http.virtual">quarkus.http.virtual</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If this is true then only a virtual channel will be set up for vertx web. We have this switch for testing purposes.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -2958,6 +3172,21 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vertx-http_quarkus.http.idle-timeout"></a><code><a href="#quarkus-vertx-http_quarkus.http.idle-timeout">quarkus.http.idle-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Http connection idle timeout</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>30M</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3046,7 +3275,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3074,7 +3303,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3088,7 +3317,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3105,7 +3334,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-jdbc_elytron-security-jdbc-realm"></a><a href="#quarkus-elytron-security-jdbc_elytron-security-jdbc-realm">Elytron Security JDBC Realm</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-jdbc_quarkus-elytron-security-jdbc"></a><a href="#quarkus-elytron-security-jdbc_quarkus-elytron-security-jdbc">Elytron Security JDBC Realm</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -3474,7 +3703,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-oauth2_elytron-security-oauth-2.0"></a><a href="#quarkus-elytron-security-oauth2_elytron-security-oauth-2.0">Elytron Security OAuth 2.0</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-oauth2_quarkus-elytron-security-oauth2"></a><a href="#quarkus-elytron-security-oauth2_quarkus-elytron-security-oauth2">Elytron Security OAuth 2.0</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -3563,7 +3792,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>scope</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-flyway_flyway"></a><a href="#quarkus-flyway_flyway">Flyway</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-flyway_quarkus-flyway"></a><a href="#quarkus-flyway_quarkus-flyway">Flyway</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -3574,12 +3803,14 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Comma-separated list of locations to scan recursively for migrations. The location type is determined by its prefix. Unprefixed locations or locations starting with classpath: point to a package on the classpath and may contain both SQL and Java-based migrations. Locations starting with filesystem: point to a directory on the filesystem, may only contain SQL migrations and are only scanned recursively down non-hidden directories.</p>
+<p>Comma-separated list of locations to scan recursively for migrations. The location type is determined by its prefix.
+ Unprefixed locations or locations starting with classpath: point to a package on the classpath and may contain both SQL and Java-based migrations.
+ Locations starting with filesystem: point to a directory on the filesystem, may only contain SQL migrations and are only scanned recursively down non-hidden directories.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>db/migration</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3607,7 +3838,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3650,6 +3881,20 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.clean-at-start"></a><code><a href="#quarkus-flyway_quarkus.flyway.clean-at-start">quarkus.flyway.clean-at-start</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>true to execute Flyway clean command automatically when the application starts, false otherwise.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3708,7 +3953,163 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_hibernate-orm"></a><a href="#quarkus-hibernate-orm_hibernate-orm">Hibernate ORM</a></p></th>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.locations"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.locations">quarkus.flyway."named-data-sources".locations</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Comma-separated list of locations to scan recursively for migrations. The location type is determined by its prefix.
+ Unprefixed locations or locations starting with classpath: point to a package on the classpath and may contain both SQL and Java-based migrations.
+ Locations starting with filesystem: point to a directory on the filesystem, may only contain SQL migrations and are only scanned recursively down non-hidden directories.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>db/migration</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.connect-retries"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.connect-retries">quarkus.flyway."named-data-sources".connect-retries</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum number of retries when attempting to connect to the database. After each failed attempt, Flyway will wait 1 second before attempting to connect again, up to the maximum number of times specified by connectRetries.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.schemas"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.schemas">quarkus.flyway."named-data-sources".schemas</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Comma-separated case-sensitive list of schemas managed by Flyway. The first schema in the list will be automatically set as the default one during the migration. It will also be the one containing the schema history table.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.table"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.table">quarkus.flyway."named-data-sources".table</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of Flyway&#8217;s schema history table. By default (single-schema mode) the schema history table is placed in the default schema for the connection provided by the datasource. When the flyway.schemas property is set (multi-schema mode), the schema history table is placed in the first schema of the list.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.sql-migration-prefix"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.sql-migration-prefix">quarkus.flyway."named-data-sources".sql-migration-prefix</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The file name prefix for versioned SQL migrations. Versioned SQL migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix , which using the defaults translates to V1.1__My_description.sql</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.repeatable-sql-migration-prefix"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.repeatable-sql-migration-prefix">quarkus.flyway."named-data-sources".repeatable-sql-migration-prefix</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The file name prefix for repeatable SQL migrations. Repeatable SQL migrations have the following file name structure: prefixSeparatorDESCRIPTIONsuffix , which using the defaults translates to R__My_description.sql</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.clean-at-start"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.clean-at-start">quarkus.flyway."named-data-sources".clean-at-start</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>true to execute Flyway clean command automatically when the application starts, false otherwise.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.migrate-at-start"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.migrate-at-start">quarkus.flyway."named-data-sources".migrate-at-start</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>true to execute Flyway automatically when the application starts, false otherwise.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.baseline-on-migrate"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.baseline-on-migrate">quarkus.flyway."named-data-sources".baseline-on-migrate</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable the creation of the history table if it does not exist already.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.baseline-version"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.baseline-version">quarkus.flyway."named-data-sources".baseline-version</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The initial baseline version.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.baseline-description"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.baseline-description">quarkus.flyway."named-data-sources".baseline-description</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The description to tag an existing schema with when executing baseline.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus-hibernate-orm"></a><a href="#quarkus-hibernate-orm_quarkus-hibernate-orm">Hibernate ORM</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -3848,7 +4249,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_query-related-configuration"></a><a href="#quarkus-hibernate-orm_query-related-configuration">Query related configuration</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.query"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.query">Query related configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -3884,7 +4285,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_database-related-configuration"></a><a href="#quarkus-hibernate-orm_database-related-configuration">Database related configuration</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database">Database related configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -3959,7 +4360,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_jdbc-related-configuration"></a><a href="#quarkus-hibernate-orm_jdbc-related-configuration">JDBC related configuration</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc">JDBC related configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -4006,7 +4407,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_logging-configuration"></a><a href="#quarkus-hibernate-orm_logging-configuration">Logging configuration</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.log"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.log">Logging configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -4040,7 +4441,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>depends on dialect</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_caching-configuration"></a><a href="#quarkus-hibernate-orm_caching-configuration">Caching configuration</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.cache"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.cache">Caching configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -4074,7 +4475,86 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-search-elasticsearch_hibernate-search-elasticsearch"></a><a href="#quarkus-hibernate-search-elasticsearch_hibernate-search-elasticsearch">Hibernate Search + Elasticsearch</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-search-elasticsearch_quarkus-hibernate-search-elasticsearch"></a><a href="#quarkus-hibernate-search-elasticsearch_quarkus-hibernate-search-elasticsearch">Hibernate Search + Elasticsearch</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler">quarkus.hibernate-search.background-failure-handler</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The class or the name of the bean that should be notified of any failure occurring in a background process (mainly index operations).
+ Must implement <code>org.hibernate.search.engine.reporting.FailureHandler</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy">quarkus.hibernate-search.query.loading.cache-lookup.strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The strategy to use when loading entities during the execution of a search query.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>skip</code>, <code>persistence-context</code>, <code>persistence-context-then-second-level-cache</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>skip</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.fetch-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.fetch-size">quarkus.hibernate-search.query.loading.fetch-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The fetch size to use when loading entities during the execution of a search query.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.synchronization.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.synchronization.strategy">quarkus.hibernate-search.automatic-indexing.synchronization.strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The synchronization strategy to use when indexing automatically.
+ Defines the status for which you wait before considering the operation completed by Hibernate Search.
+ Use <code>queued</code> or <code>committed</code> in production environments. <code>searchable</code> is useful in integration tests.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>queued</code>, <code>committed</code>, <code>searchable</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>committed</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.enable-dirty-check"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.enable-dirty-check">quarkus.hibernate-search.automatic-indexing.enable-dirty-check</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to check if dirty properties are relevant to indexing before actually reindexing an entity.
+ When enabled, re-indexing of an entity is skipped if the only changes are on properties that are not used when indexing.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.default-backend"></a><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.default-backend">Default backend</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -4103,35 +4583,6 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="content">
 <div class="paragraph">
 <p>The class or the name of the bean used to configure full text analysis (e.g. analyzers, normalizers).</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.default-backend"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.default-backend">quarkus.hibernate-search.default-backend</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If not using the default backend configuration, the name of the default backend that is part of the <code>additional-backends</code>.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler">quarkus.hibernate-search.background-failure-handler</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The class or the name of the bean that should be notified of any failure occurring in a background process (mainly index operations).
- Must implement <code>org.hibernate.search.engine.reporting.FailureHandler</code>.</p>
 </div>
 </div>
 </div></div></td>
@@ -4311,65 +4762,6 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup.strategy">quarkus.hibernate-search.elasticsearch.query.loading.cache-lookup.strategy</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The strategy to use when loading entities during the execution of a search query.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>skip</code>, <code>persistence-context</code>, <code>persistence-context-then-second-level-cache</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>skip</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.query.loading.fetch-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.query.loading.fetch-size">quarkus.hibernate-search.elasticsearch.query.loading.fetch-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The fetch size to use when loading entities during the execution of a search query.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization.strategy">quarkus.hibernate-search.elasticsearch.automatic-indexing.synchronization.strategy</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The synchronization strategy to use when indexing automatically.
- Defines the status for which you wait before considering the operation completed by Hibernate Search.
- Use <code>queued</code> or <code>committed</code> in production environments. <code>searchable</code> is useful in integration tests.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>queued</code>, <code>committed</code>, <code>searchable</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>committed</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check">quarkus.hibernate-search.elasticsearch.automatic-indexing.enable-dirty-check</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Whether to check if dirty properties are relevant to indexing before actually reindexing an entity.
- When enabled, re-indexing of an entity is skipped if the only changes are on properties that are not used when indexing.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
@@ -4412,9 +4804,23 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-search-elasticsearch_additional-backends"></a><a href="#quarkus-hibernate-search-elasticsearch_additional-backends">Additional backends</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.additional-backends"></a><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.additional-backends">Additional backends</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.default-backend"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.default-backend">quarkus.hibernate-search.elasticsearch.default-backend</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Only useful when defining <code>backends additional backends</code>: the name of the default backend, i.e. the backend that will be assigned to <code>@Indexed</code> entities that do not specify a backend explicitly through <code>@Indexed(backend = &#8230;&#8203;)</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4662,7 +5068,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-infinispan-client_infinispan-client"></a><a href="#quarkus-infinispan-client_infinispan-client">Infinispan Client</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-infinispan-client_quarkus-infinispan-client"></a><a href="#quarkus-infinispan-client_quarkus-infinispan-client">Infinispan Client</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -4821,7 +5227,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-infinispan-embedded_infinispan-embedded"></a><a href="#quarkus-infinispan-embedded_infinispan-embedded">Infinispan Embedded</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-infinispan-embedded_quarkus-infinispan-embedded"></a><a href="#quarkus-infinispan-embedded_quarkus-infinispan-embedded">Infinispan Embedded</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -4840,13 +5246,13 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-jaeger_jaeger"></a><a href="#quarkus-jaeger_jaeger">Jaeger</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-jaeger_quarkus-jaeger"></a><a href="#quarkus-jaeger_quarkus-jaeger">Jaeger</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-jaeger_quarkus.jaeger.enabled"></a><code><a href="#quarkus-jaeger_quarkus.jaeger.enabled">quarkus.jaeger.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-jaeger_quarkus.jaeger.enabled"></a><code><a href="#quarkus-jaeger_quarkus.jaeger.enabled">quarkus.jaeger.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -5070,7 +5476,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-keycloak-authorization_keycloak-authorization"></a><a href="#quarkus-keycloak-authorization_keycloak-authorization">Keycloak Authorization</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-keycloak-authorization_quarkus-keycloak-authorization"></a><a href="#quarkus-keycloak-authorization_quarkus-keycloak-authorization">Keycloak Authorization</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -5305,7 +5711,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kubernetes-client_kubernetes-client"></a><a href="#quarkus-kubernetes-client_kubernetes-client">Kubernetes Client</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kubernetes-client_quarkus-kubernetes-client"></a><a href="#quarkus-kubernetes-client_quarkus-kubernetes-client">Kubernetes Client</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -5632,11 +6038,293 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Optional&lt;java.lang.String&gt;.html">java.util.Optional&lt;java.lang.String&gt;</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-gelf_quarkus-logging-gelf"></a><a href="#quarkus-logging-gelf_quarkus-logging-gelf">Logging GELF</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.enabled"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.enabled">quarkus.log.handler.gelf.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to enable the GELF logging handler</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.host"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.host">quarkus.log.handler.gelf.host</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Hostname/IP-Address of the Logstash/Graylog Host By default it uses UDP, prepend tcp: to the hostname to switch to TCP, example: "tcp:localhost"</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.port"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.port">quarkus.log.handler.gelf.port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The port</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>12201</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.version"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.version">quarkus.log.handler.gelf.version</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>GELF version: 1.0 or 1.1</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1.1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.extract-stack-trace"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.extract-stack-trace">quarkus.log.handler.gelf.extract-stack-trace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to post Stack-Trace to StackTrace field.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.stack-trace-throwable-reference"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.stack-trace-throwable-reference">quarkus.log.handler.gelf.stack-trace-throwable-reference</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Only used when <code>extractStackTrace</code> is <code>true</code>. A value of 0 will extract the whole stack trace. Any positive value will walk the cause chain: 1 corresponds with exception.getCause(), 2 with exception.getCause().getCause(), &#8230;&#8203; Negative throwable reference walk the exception chain from the root cause side: -1 will extract the root cause, -2 the exception wrapping the root cause, &#8230;&#8203;</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.filter-stack-trace"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.filter-stack-trace">quarkus.log.handler.gelf.filter-stack-trace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to perform Stack-Trace filtering</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.timestamp-pattern"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.timestamp-pattern">quarkus.log.handler.gelf.timestamp-pattern</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Java date pattern, see <code>java.text.SimpleDateFormat</code></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>yyyy-MM-dd HH:mm:ss,SSS</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-json_quarkus-logging-json"></a><a href="#quarkus-logging-json_quarkus-logging-json">Logging JSON</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json">quarkus.log.console.json</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to enable the JSON console formatting extension, which disables "normal" console formatting.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.pretty-print"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.pretty-print">quarkus.log.console.json.pretty-print</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable "pretty printing" of the JSON record. Note that some JSON parsers will fail to read pretty printed output.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.date-format"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.date-format">quarkus.log.console.json.date-format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The date format to use. The special string "default" indicates that the default format should be used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>default</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.record-delimiter"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.record-delimiter">quarkus.log.console.json.record-delimiter</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The special end-of-record delimiter to be used. By default, no delimiter is used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.zone-id"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.zone-id">quarkus.log.console.json.zone-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The zone ID to use. The special string "default" indicates that the default zone should be used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>default</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.exception-output-type"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.exception-output-type">quarkus.log.console.json.exception-output-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The exception output type to specify.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>detailed</code>, <code>formatted</code>, <code>detailed-and-formatted</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>detailed</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.print-details"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.print-details">quarkus.log.console.json.print-details</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable printing of more details in the log.
+ Printing the details can be expensive as the values are retrieved from the caller. The details include the source class name, source file name, source method name and source line number.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-sentry_quarkus-logging-sentry"></a><a href="#quarkus-logging-sentry_quarkus-logging-sentry">Logging Sentry</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-sentry_quarkus.log.sentry"></a><code><a href="#quarkus-logging-sentry_quarkus.log.sentry">quarkus.log.sentry</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to enable the Sentry logging extension.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-sentry_quarkus.log.sentry.dsn"></a><code><a href="#quarkus-logging-sentry_quarkus.log.sentry.dsn">quarkus.log.sentry.dsn</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Sentry DSN The DSN is the first and most important thing to configure because it tells the SDK where to send events. You can find your project’s DSN in the “Client Keys” section of your “Project Settings” in Sentry.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mailer_mailer"></a><a href="#quarkus-mailer_mailer">Mailer</a></p></th>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-sentry_quarkus.log.sentry.level"></a><code><a href="#quarkus-logging-sentry_quarkus.log.sentry.level">quarkus.log.sentry.level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The sentry log level.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>WARN</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-sentry_quarkus.log.sentry.in-app-packages"></a><code><a href="#quarkus-logging-sentry_quarkus.log.sentry.in-app-packages">quarkus.log.sentry.in-app-packages</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Sentry differentiates stack frames that are directly related to your application (“in application”) from stack frames that come from other packages such as the standard library, frameworks, or other dependencies. The difference is visible in the Sentry web interface where only the “in application” frames are displayed by default. You can configure which package prefixes your application uses with this option. This option is highly recommended as it affects stacktrace grouping and display on Sentry. See documentation: <a href="https://quarkus.io/guides/logging-sentry#in-app-packages" class="bare">https://quarkus.io/guides/logging-sentry#in-app-packages</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mailer_quarkus-mailer"></a><a href="#quarkus-mailer_quarkus-mailer">Mailer</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -5895,9 +6583,23 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mongodb-client_mongodb-client"></a><a href="#quarkus-mongodb-client_mongodb-client">MongoDB client</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mongodb-client_quarkus-mongodb-client"></a><a href="#quarkus-mongodb-client_quarkus-mongodb-client">MongoDB client</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-mongodb-client_quarkus.mongodb.health.enabled"></a><code><a href="#quarkus-mongodb-client_quarkus.mongodb.health.enabled">quarkus.mongodb.health.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not an health check is published in case the smallrye-health extension is present.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -5932,12 +6634,12 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Configures the Mongo server addressed (one if single mode). The addressed are passed as <code>host:port</code>.</p>
+<p>Configures the MongoDB server addressed (one if single mode). The addresses are passed as <code>host:port</code>.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>127.0.0.1:27017</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -6230,7 +6932,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mongodb-client_write-concern"></a><a href="#quarkus-mongodb-client_write-concern">Write concern</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mongodb-client_quarkus.mongodb.write-concern"></a><a href="#quarkus-mongodb-client_quarkus.mongodb.write-concern">Write concern</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -6307,7 +7009,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mongodb-client_credentials-and-authentication-mechanism"></a><a href="#quarkus-mongodb-client_credentials-and-authentication-mechanism">Credentials and authentication mechanism</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mongodb-client_quarkus.mongodb.credentials"></a><a href="#quarkus-mongodb-client_quarkus.mongodb.credentials">Credentials and authentication mechanism</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -6382,7 +7084,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-narayana-jta_narayana-jta-transaction-manager"></a><a href="#quarkus-narayana-jta_narayana-jta-transaction-manager">Narayana JTA - Transaction manager</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-narayana-jta_quarkus-narayana-jta"></a><a href="#quarkus-narayana-jta_quarkus-narayana-jta">Narayana JTA - Transaction manager</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -6416,9 +7118,23 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>60</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_neo4j-client"></a><a href="#quarkus-neo4j_neo4j-client">Neo4j client</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_quarkus-neo4j"></a><a href="#quarkus-neo4j_quarkus-neo4j">Neo4j client</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-neo4j_quarkus.neo4j.health.enabled"></a><code><a href="#quarkus-neo4j_quarkus.neo4j.health.enabled">quarkus.neo4j.health.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not an health check is published in case the smallrye-health extension is present.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -6435,7 +7151,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>bolt://localhost:7687</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_authentication"></a><a href="#quarkus-neo4j_authentication">Authentication</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_quarkus.neo4j.authentication"></a><a href="#quarkus-neo4j_quarkus.neo4j.authentication">Authentication</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -6482,7 +7198,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_connection-pool"></a><a href="#quarkus-neo4j_connection-pool">Connection pool</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_quarkus.neo4j.pool"></a><a href="#quarkus-neo4j_quarkus.neo4j.pool">Connection pool</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -6574,13 +7290,13 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1M</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-oidc_openid-connect"></a><a href="#quarkus-oidc_openid-connect">OpenID Connect</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-oidc_quarkus-oidc"></a><a href="#quarkus-oidc_quarkus-oidc">OpenID Connect</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.enabled"></a><code><a href="#quarkus-oidc_quarkus.oidc.enabled">quarkus.oidc.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-oidc_quarkus.oidc.enabled"></a><code><a href="#quarkus-oidc_quarkus.oidc.enabled">quarkus.oidc.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6591,6 +7307,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-oidc_quarkus.oidc.application-type"></a><code><a href="#quarkus-oidc_quarkus.oidc.application-type">quarkus.oidc.application-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The application type, which can be one of the following values from enum <code>ApplicationType</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>web-app</code>, <code>service</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>service</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -6664,6 +7394,21 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.connection-delay"></a><code><a href="#quarkus-oidc_quarkus.oidc.connection-delay">quarkus.oidc.connection-delay</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum amount of time the adapter will try connecting to the currently unavailable OIDC server for. For example, setting it to '20S' will let the adapter keep requesting the connection for up to 20 seconds.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.roles.role-claim-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.roles.role-claim-path">quarkus.oidc.roles.role-claim-path</a></code></p>
 </div>
 <div class="openblock description">
@@ -6692,6 +7437,34 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.token.issuer"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.issuer">quarkus.oidc.token.issuer</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected issuer 'iss' claim value</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.token.audience"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.audience">quarkus.oidc.token.audience</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected audience <code>aud</code> claim value which may be a string or an array of strings</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.credentials.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.secret">quarkus.oidc.credentials.secret</a></code></p>
 </div>
 <div class="openblock description">
@@ -6706,39 +7479,39 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.authentication.redirect-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.redirect-path">quarkus.oidc.authentication.redirect-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path for calculating a "redirect_uri" parameter. It set it will be appended to the request URI&#8217;s host and port, otherwise the complete request URI will be used. It has to start from the forward slash, for example: "/service"</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.authentication.scopes"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.scopes">quarkus.oidc.authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Defines a fixed list of scopes which should be added to authorization requests when authenticating users using the Authorization Code Grant Type.</p>
+<p>List of scopes</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.application-type"></a><code><a href="#quarkus-oidc_quarkus.oidc.application-type">quarkus.oidc.application-type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The application type, which can be one of the following values from enum <code>ApplicationType</code>..</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>web-app</code>, <code>service</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>service</code></p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-properties-file_properties-file-based-security"></a><a href="#quarkus-elytron-security-properties-file_properties-file-based-security">Properties File based Security</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-properties-file_quarkus-elytron-security-properties-file"></a><a href="#quarkus-elytron-security-properties-file_quarkus-elytron-security-properties-file">Properties File based Security</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-properties-file_property-files-realm-configuration"></a><a href="#quarkus-elytron-security-properties-file_property-files-realm-configuration">Property Files Realm Configuration</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-properties-file_quarkus.security.users.file"></a><a href="#quarkus-elytron-security-properties-file_quarkus.security.users.file">Property Files Realm Configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -6813,7 +7586,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>roles.properties</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-properties-file_embedded-realm-configuration"></a><a href="#quarkus-elytron-security-properties-file_embedded-realm-configuration">Embedded Realm Configuration</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-properties-file_quarkus.security.users.embedded"></a><a href="#quarkus-elytron-security-properties-file_quarkus.security.users.embedded">Embedded Realm Configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -6922,6 +7695,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.package.manifest.add-implementation-entries"></a><code><a href="#quarkus-core_quarkus.package.manifest.add-implementation-entries">quarkus.package.manifest.add-implementation-entries</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the Implementation information should be included in the runner jar&#8217;s MANIFEST.MF.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.package.main-class"></a><code><a href="#quarkus-core_quarkus.package.main-class">quarkus.package.main-class</a></code></p>
 </div>
 <div class="openblock description">
@@ -6946,7 +7733,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -6964,6 +7751,90 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.package.output-directory"></a><code><a href="#quarkus-core_quarkus.package.output-directory">quarkus.package.output-directory</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The output folder in which to place the output, this is resolved relative to the build systems target directory.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.package.output-name"></a><code><a href="#quarkus-core_quarkus.package.output-name">quarkus.package.output-name</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the final artifact</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.debug.reflection"></a><code><a href="#quarkus-core_quarkus.debug.reflection">quarkus.debug.reflection</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true, writes a list of all reflective classes to META-INF</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.debug.generated-classes-dir"></a><code><a href="#quarkus-core_quarkus.debug.generated-classes-dir">quarkus.debug.generated-classes-dir</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to a directory, all generated classes will be written into that directory</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.live-reload.password"></a><code><a href="#quarkus-core_quarkus.live-reload.password">quarkus.live-reload.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Password used to use to connect to the remote dev-mode application</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.live-reload.url"></a><code><a href="#quarkus-core_quarkus.live-reload.url">quarkus.live-reload.url</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>URL used to use to connect to the remote dev-mode application</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.application.name"></a><code><a href="#quarkus-core_quarkus.application.name">quarkus.application.name</a></code></p>
 </div>
 <div class="openblock description">
@@ -6974,7 +7845,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -6988,7 +7859,49 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.platform.group-id"></a><code><a href="#quarkus-core_quarkus.platform.group-id">quarkus.platform.group-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>groupId of the platform to use</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>io.quarkus</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.platform.artifact-id"></a><code><a href="#quarkus-core_quarkus.platform.artifact-id">quarkus.platform.artifact-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>artifactId of the platform to use</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quarkus-universe-bom</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.platform.version"></a><code><a href="#quarkus-core_quarkus.platform.version">quarkus.platform.version</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>version of the platform to use</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>999-SNAPSHOT</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7016,7 +7929,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7296,7 +8209,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7310,7 +8223,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7384,6 +8297,35 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.test.native-image-wait-time"></a><code><a href="#quarkus-core_quarkus.test.native-image-wait-time">quarkus.test.native-image-wait-time</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Duration to wait for the native image to built during testing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>PT5M</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.test.native-image-profile"></a><code><a href="#quarkus-core_quarkus.test.native-image-profile">quarkus.test.native-image-profile</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The profile to use when testing the native image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>prod</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.jni.library-paths"></a><code><a href="#quarkus-core_quarkus.jni.library-paths">quarkus.jni.library-paths</a></code></p>
 </div>
 <div class="openblock description">
@@ -7394,7 +8336,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7556,6 +8498,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.profile"></a><code><a href="#quarkus-core_quarkus.profile">quarkus.profile</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Profile that will be active when Quarkus launches</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>prod</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.index-dependency.-index-dependency-.group-id"></a><code><a href="#quarkus-core_quarkus.index-dependency.-index-dependency-.group-id">quarkus.index-dependency."index-dependency".group-id</a></code></p>
 </div>
 <div class="openblock description">
@@ -7594,26 +8550,12 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_logging-categories"></a><a href="#quarkus-core_logging-categories">Logging categories</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.categories"></a><a href="#quarkus-core_quarkus.log.categories">Logging categories</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.category.-categories-.min-level"></a><code><a href="#quarkus-core_quarkus.log.category.-categories-.min-level">quarkus.log.category."categories".min-level</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The minimum level that this category can be set to</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7630,7 +8572,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_console-logging"></a><a href="#quarkus-core_console-logging">Console logging</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.console"></a><a href="#quarkus-core_quarkus.log.console">Console logging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -7655,7 +8597,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The log format</p>
+<p>The log format. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
 </div>
 </div>
 </div></div></td>
@@ -7669,7 +8611,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The console log level</p>
+<p>The console log level.</p>
 </div>
 </div>
 </div></div></td>
@@ -7683,7 +8625,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the console logging should be in color. If undefined quarkus takes best guess based on operating system and environment.</p>
+<p>If the console logging should be in color. If undefined quarkus takes best guess based on operating system and environment. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
 </div>
 </div>
 </div></div></td>
@@ -7697,7 +8639,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Specify how much the colors should be darkened</p>
+<p>Specify how much the colors should be darkened. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
 </div>
 </div>
 </div></div></td>
@@ -7747,7 +8689,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_file-logging"></a><a href="#quarkus-core_file-logging">File logging</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.file"></a><a href="#quarkus-core_quarkus.log.file">File logging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -7906,7 +8848,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_syslog-logging"></a><a href="#quarkus-core_syslog-logging">Syslog logging</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.syslog"></a><a href="#quarkus-core_quarkus.log.syslog">Syslog logging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8122,7 +9064,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_log-cleanup-filters-internal-use"></a><a href="#quarkus-core_log-cleanup-filters-internal-use">Log cleanup filters - internal use</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.filters"></a><a href="#quarkus-core_quarkus.log.filters">Log cleanup filters - internal use</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8141,7 +9083,143 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy_resteasy-jax-rs"></a><a href="#quarkus-resteasy_resteasy-jax-rs">RESTEasy JAX-RS</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-graphql_quarkus-vertx-graphql"></a><a href="#quarkus-vertx-graphql_quarkus-vertx-graphql">Quarkus - Quarkus - Vert.x GraphQL - Runtime</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-graphql_quarkus.vertx-graphql.ui.always-include"></a><code><a href="#quarkus-vertx-graphql_quarkus.vertx-graphql.ui.always-include">quarkus.vertx-graphql.ui.always-include</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If GraphQL UI should be included every time. By default this is only included when the application is running in dev mode.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-graphql_quarkus.vertx-graphql.ui.path"></a><code><a href="#quarkus-vertx-graphql_quarkus.vertx-graphql.ui.path">quarkus.vertx-graphql.ui.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The path where GraphQL UI is available.
+ The value <code>/</code> is not allowed as it blocks the application from serving anything else.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/graphql-ui</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-quartz_quarkus-quartz"></a><a href="#quarkus-quartz_quarkus-quartz">Quartz</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.clustered"></a><code><a href="#quarkus-quartz_quarkus.quartz.clustered">quarkus.quartz.clustered</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable cluster mode or not.
+ If enabled make sure to set the appropriate cluster properties.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.store-type"></a><code><a href="#quarkus-quartz_quarkus.quartz.store-type">quarkus.quartz.store-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The type of store to use.
+ When using the <code>db</code> store type configuration value make sure that you have the datasource configured. See <a href="https://quarkus.io/guides/datasource">Configuring your datasource</a> for more information.
+ To create Quartz tables, you can perform a schema migration via the <a href="https://quarkus.io/guides/flyway">Flyway extension</a> using a SQL script matching your database picked from <a href="https://github.com/quartz-scheduler/quartz/blob/master/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore">Quartz repository</a>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ram</code>, <code>db</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ram</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.datasource"></a><code><a href="#quarkus-quartz_quarkus.quartz.datasource">quarkus.quartz.datasource</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the datasource to use.
+ Optionally needed when using the <code>db</code> store type. If not specified, defaults to using the default datasource.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-quartz_quarkus.quartz.thread-count"></a><code><a href="#quarkus-quartz_quarkus.quartz.thread-count">quarkus.quartz.thread-count</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The size of scheduler thread pool. This will initialize the number of worker threads in the pool.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>25</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-quartz_quarkus.quartz.thread-priority"></a><code><a href="#quarkus-quartz_quarkus.quartz.thread-priority">quarkus.quartz.thread-priority</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Thread priority of worker threads in the pool.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-qute_quarkus-qute"></a><a href="#quarkus-qute_quarkus-qute">Qute Templating</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-qute_quarkus.qute.suffixes"></a><code><a href="#quarkus-qute_quarkus.qute.suffixes">quarkus.qute.suffixes</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The set of suffixes used when attempting to locate a template file.</p>
+</div>
+<div class="paragraph">
+<p>By default, <code>engine.getTemplate("foo")</code> would result in several lookups: <code>src/main/resources/templates/foo</code>,
+<code>src/main/resources/templates/foo.html</code> and <code>src/main/resources/templates/foo.txt</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>html,txt</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy_quarkus-resteasy"></a><a href="#quarkus-resteasy_quarkus-resteasy">RESTEasy JAX-RS</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8160,7 +9238,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy-common_resteasy-jax-rs-common"></a><a href="#quarkus-resteasy-common_resteasy-jax-rs-common">RESTEasy JAX-RS Common</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy-common_quarkus-resteasy-common"></a><a href="#quarkus-resteasy-common_quarkus-resteasy-common">RESTEasy JAX-RS Common</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8194,7 +9272,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10M</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy-server-common_resteasy-server-common"></a><a href="#quarkus-resteasy-server-common_resteasy-server-common">RESTEasy Server Common</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy-server-common_quarkus-resteasy-server-common"></a><a href="#quarkus-resteasy-server-common_quarkus-resteasy-server-common">RESTEasy Server Common</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8230,7 +9308,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-mysql-client_reactive-mysql-client"></a><a href="#quarkus-reactive-mysql-client_reactive-mysql-client">Reactive MySQL client</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-mysql-client_quarkus-reactive-mysql-client"></a><a href="#quarkus-reactive-mysql-client_quarkus-reactive-mysql-client">Reactive MySQL client</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8333,7 +9411,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-pg-client_reactive-postgresql-client"></a><a href="#quarkus-reactive-pg-client_reactive-postgresql-client">Reactive PostgreSQL client</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-pg-client_quarkus-reactive-pg-client"></a><a href="#quarkus-reactive-pg-client_quarkus-reactive-pg-client">Reactive PostgreSQL client</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8422,7 +9500,26 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-security_security"></a><a href="#quarkus-security_security">Security</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-scheduler_quarkus-scheduler"></a><a href="#quarkus-scheduler_quarkus-scheduler">Scheduler - tasks</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-scheduler_quarkus.scheduler.cron-type"></a><code><a href="#quarkus-scheduler_quarkus.scheduler.cron-type">quarkus.scheduler.cron-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The syntax used in CRON expressions.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cron4j</code>, <code>quartz</code>, <code>unix</code>, <code>spring</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quartz</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-security_quarkus-security"></a><a href="#quarkus-security_quarkus-security">Security</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8438,7 +9535,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8455,7 +9552,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-health_smallrye-health"></a><a href="#quarkus-smallrye-health_smallrye-health">SmallRye Health</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-health_quarkus-smallrye-health"></a><a href="#quarkus-smallrye-health_quarkus-smallrye-health">SmallRye Health</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8516,7 +9613,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-jwt_smallrye-jwt"></a><a href="#quarkus-smallrye-jwt_smallrye-jwt">SmallRye JWT</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-jwt_quarkus-smallrye-jwt"></a><a href="#quarkus-smallrye-jwt_quarkus-smallrye-jwt">SmallRye JWT</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8549,7 +9646,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>SunRsaSign</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-metrics_smallrye-metrics"></a><a href="#quarkus-smallrye-metrics_smallrye-metrics">SmallRye Metrics</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-metrics_quarkus-smallrye-metrics"></a><a href="#quarkus-smallrye-metrics_quarkus-smallrye-metrics">SmallRye Metrics</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8568,7 +9665,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/metrics</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-openapi_smallrye-openapi"></a><a href="#quarkus-smallrye-openapi_smallrye-openapi">SmallRye OpenAPI</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-openapi_quarkus-smallrye-openapi"></a><a href="#quarkus-smallrye-openapi_quarkus-smallrye-openapi">SmallRye OpenAPI</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8587,7 +9684,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/openapi</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-swagger-ui_swagger-ui"></a><a href="#quarkus-swagger-ui_swagger-ui">Swagger UI</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-swagger-ui_quarkus-swagger-ui"></a><a href="#quarkus-swagger-ui_quarkus-swagger-ui">Swagger UI</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8621,7 +9718,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-undertow_undertow-servlet"></a><a href="#quarkus-undertow_undertow-servlet">Undertow Servlet</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-undertow_quarkus-undertow"></a><a href="#quarkus-undertow_quarkus-undertow">Undertow Servlet</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8668,7 +9765,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-undertow-websockets_undertow-websockets"></a><a href="#quarkus-undertow-websockets_undertow-websockets">Undertow WebSockets</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-undertow-websockets_quarkus-undertow-websockets"></a><a href="#quarkus-undertow-websockets_quarkus-undertow-websockets">Undertow WebSockets</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
@@ -8682,7 +9779,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8694,10 +9791,10 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_vault"></a><a href="#quarkus-vault_vault">Vault</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus-vault"></a><a href="#quarkus-vault_quarkus-vault">Vault</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>

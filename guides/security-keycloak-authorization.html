@@ -306,6 +306,18 @@ quarkus.oidc.credentials.secret=secret
 quarkus.keycloak.policy-enforcer.enable=true</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+By default, applications using the <code>quarkus-oidc</code> extension are marked as a <code>service</code> type application (see <code>quarkus.oidc.application-type</code>). This extension currently supports only such <code>service</code> type applications.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -317,7 +329,7 @@ quarkus.keycloak.policy-enforcer.enable=true</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 {keycloak-docker-image}</code></pre>
 </div>
 </div>
 <div class="paragraph">

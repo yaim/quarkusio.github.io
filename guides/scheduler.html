@@ -75,6 +75,7 @@
 <li><a href="#updating-the-application-configuration-file">Updating the application configuration file</a></li>
 <li><a href="#updating-the-resource-and-the-test">Updating the resource and the test</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
+<li><a href="#scheduler-configuration-reference">Scheduler Configuration Reference</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -83,18 +84,14 @@
 <p>Modern applications often need to run specific tasks periodically.
 In this guide, you learn how to schedule periodic tasks.</p>
 </div>
-<div class="admonitionblock note">
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<div class="paragraph">
-<p>This extension is considered <code>preview</code>.
-API or configuration properties might change as the extension matures.
-Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
-</div>
+If you need a clustered scheduler use the <a href="quartz">Quartz extension</a>.
 </td>
 </tr>
 </table>
@@ -259,7 +256,7 @@ it should be invoked as soon as possible. The invocation of the scheduled method
 <p>The code is pretty straightforward. Every 10 seconds, the counter is incremented.</p>
 </li>
 <li>
-<p>Define a job with a cron-like expression. The syntax is currently based on <a href="http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html">Quartz Cron Trigger</a>. The annotated method is executed at 10:15am every day.</p>
+<p>Define a job with a cron-like expression. The annotated method is executed at 10:15am every day.</p>
 </li>
 <li>
 <p>Define a job with a cron-like expression <code>cron.expr</code> which is configurable in <code>application.properties</code>.</p>
@@ -276,7 +273,10 @@ it should be invoked as soon as possible. The invocation of the scheduled method
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">cron.expr=*/5 * * * * ?</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># By default, the syntax used for cron expressions is based on Quartz - http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html
+# You can change the syntax using the following property:
+# quarkus.scheduler.cron-type=unix
+cron.expr=*/5 * * * * ?</code></pre>
 </div>
 </div>
 </div>
@@ -375,6 +375,42 @@ that the cron job using an expression configured in <code>application.properties
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
 You can also generate the native executable with <code>./mvnw clean package -Pnative</code>.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="scheduler-configuration-reference"><a class="anchor" href="#scheduler-configuration-reference"></a>Scheduler Configuration Reference</h2>
+<div class="sectionbody">
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-scheduler_configuration"></a><a href="#quarkus-scheduler_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-scheduler_quarkus.scheduler.cron-type"></a><code><a href="#quarkus-scheduler_quarkus.scheduler.cron-type">quarkus.scheduler.cron-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The syntax used in CRON expressions.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cron4j</code>, <code>quartz</code>, <code>unix</code>, <code>spring</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quartz</code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
     </div>

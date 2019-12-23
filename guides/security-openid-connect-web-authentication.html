@@ -225,7 +225,7 @@ all paths are being protected by a policy that ensures that only <code>authentic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:7.0.0</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">docker run --name keycloak -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8180:8080 {keycloak-docker-image}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -362,7 +362,7 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.enabled"></a><code><a href="#quarkus-oidc_quarkus.oidc.enabled">quarkus.oidc.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-oidc_quarkus.oidc.enabled"></a><code><a href="#quarkus-oidc_quarkus.oidc.enabled">quarkus.oidc.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -373,6 +373,20 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-oidc_quarkus.oidc.application-type"></a><code><a href="#quarkus-oidc_quarkus.oidc.application-type">quarkus.oidc.application-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The application type, which can be one of the following values from enum <code>ApplicationType</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>web-app</code>, <code>service</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>service</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -446,6 +460,21 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.connection-delay"></a><code><a href="#quarkus-oidc_quarkus.oidc.connection-delay">quarkus.oidc.connection-delay</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum amount of time the adapter will try connecting to the currently unavailable OIDC server for. For example, setting it to '20S' will let the adapter keep requesting the connection for up to 20 seconds.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.roles.role-claim-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.roles.role-claim-path">quarkus.oidc.roles.role-claim-path</a></code></p>
 </div>
 <div class="openblock description">
@@ -474,6 +503,34 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.token.issuer"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.issuer">quarkus.oidc.token.issuer</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected issuer 'iss' claim value</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.token.audience"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.audience">quarkus.oidc.token.audience</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected audience <code>aud</code> claim value which may be a string or an array of strings</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.credentials.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.secret">quarkus.oidc.credentials.secret</a></code></p>
 </div>
 <div class="openblock description">
@@ -488,34 +545,55 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.authentication.redirect-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.redirect-path">quarkus.oidc.authentication.redirect-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path for calculating a "redirect_uri" parameter. It set it will be appended to the request URI&#8217;s host and port, otherwise the complete request URI will be used. It has to start from the forward slash, for example: "/service"</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.authentication.scopes"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.scopes">quarkus.oidc.authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Defines a fixed list of scopes which should be added to authorization requests when authenticating users using the Authorization Code Grant Type.</p>
+<p>List of scopes</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.application-type"></a><code><a href="#quarkus-oidc_quarkus.oidc.application-type">quarkus.oidc.application-type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The application type, which can be one of the following values from enum <code>ApplicationType</code>..</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>web-app</code>, <code>service</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>service</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>
+<div id="duration-note-anchor" class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">About the Duration format</div>
+<div class="paragraph">
+<p>The format for durations uses the standard <code>java.time.Duration</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can also provide duration values starting with a number.
+In this case, if the value consists only of a number, the converter treats the value as seconds.
+Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">

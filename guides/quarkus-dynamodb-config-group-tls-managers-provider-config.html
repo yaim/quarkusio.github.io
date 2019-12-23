@@ -117,6 +117,44 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.async-client.tls-managers-provider.type"></a><code><a href="#quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.async-client.tls-managers-provider.type">quarkus.dynamodb.async-client.tls-managers-provider.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>TLS managers provider type.</p>
+</div>
+<div class="paragraph">
+<p>Available providers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>none</code> - Use this provider if you don&#8217;t want the client to present any certificates to the remote TLS host.</p>
+</li>
+<li>
+<p><code>system-property</code> - Provider checks the standard <code>javax.net.ssl.keyStore</code>, <code>javax.net.ssl.keyStorePassword</code>, and
+<code>javax.net.ssl.keyStoreType</code> properties defined by the
+ <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html">JSSE</a>.</p>
+</li>
+<li>
+<p><code>file-store</code> - Provider that loads a the key store from a file.</p>
+</li>
+</ul>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>system-property</code>, <code>file-store</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>system-property</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store"></a><a href="#quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store">Configuration of the file store provider</a>
+This configuration section is optional</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path</a></code></p>
 </div>
 <div class="openblock description">
@@ -159,36 +197,10 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.async-client.tls-managers-provider.type"></a><code><a href="#quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.async-client.tls-managers-provider.type">quarkus.dynamodb.async-client.tls-managers-provider.type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>TLS managers provider type.</p>
-</div>
-<div class="paragraph">
-<p>Available providers:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>none</code> - Use this provider if you don&#8217;t want the client to present any certificates to the remote TLS host.</p>
-</li>
-<li>
-<p><code>system-property</code> - Provider checks the standard <code>javax.net.ssl.keyStore</code>, <code>javax.net.ssl.keyStorePassword</code>, and
-<code>javax.net.ssl.keyStoreType</code> properties defined by the
- <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html">JSSE</a>.</p>
-</li>
-<li>
-<p><code>file-store</code> - Provider that loads a the key store from a file.</p>
-</li>
-</ul>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>system-property</code>, <code>file-store</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>system-property</code></p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.async-client.tls-managers-provider.file-store"></a><a href="#quarkus-dynamodb-config-group-tls-managers-provider-config_quarkus.dynamodb.async-client.tls-managers-provider.file-store">Configuration of the file store provider</a>
+This configuration section is optional</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

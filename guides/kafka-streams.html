@@ -85,6 +85,12 @@
 <li><a href="#interactive-queries">Interactive Queries</a></li>
 <li><a href="#scaling-out">Scaling Out</a></li>
 <li><a href="#running-natively">Running Natively</a></li>
+<li><a href="#kafka-streams-health-checks">Kafka Streams Health Checks</a>
+<ul class="sectlevel2">
+<li><a href="#liveness-health-check">Liveness health check</a></li>
+<li><a href="#readiness-health-check">Readiness health check</a></li>
+</ul>
+</li>
 <li><a href="#going-further">Going Further</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a></li>
 </ul></div>
@@ -265,8 +271,7 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 import io.reactivex.Flowable;
 import io.smallrye.reactive.messaging.kafka.KafkaMessage;
@@ -280,7 +285,7 @@ import io.smallrye.reactive.messaging.kafka.KafkaMessage;
 @ApplicationScoped
 public class ValuesGenerator {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ValuesGenerator.class);
+    private static final Logger LOG = Logger.getLogger(ValuesGenerator.class);
 
     private Random random = new Random();
 
@@ -1428,6 +1433,144 @@ To do so, add the <code>Xmx</code> option to the program invocation in <code>agg
 </div>
 </div>
 <div class="sect1">
+<h2 id="kafka-streams-health-checks"><a class="anchor" href="#kafka-streams-health-checks"></a>Kafka Streams Health Checks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using the <code>quarkus-smallrye-health</code> extension, <code>quarkus-kafka-streams</code> will automatically add:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a readiness health check to validate that all topics declared in the <code>quarkus.kafka-streams.topics</code> property are created,</p>
+</li>
+<li>
+<p>a liveness health check based on the Kafka Streams state.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So when you access the <code>/health</code> endpoint of your application you will have information about the state of the Kafka Streams and the available and/or missing topics.</p>
+</div>
+<div class="paragraph">
+<p>This is an example of when the status is <code>DOWN</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -i http://aggregator:8080/health
+
+HTTP/1.1 503 Service Unavailable
+content-type: application/json; charset=UTF-8
+content-length: 454
+
+{
+    "status": "DOWN",
+    "checks": [
+        {
+            "name": "Kafka Streams state health check",  <i class="conum" data-value="1"></i><b>(1)</b>
+            "status": "DOWN",
+            "data": {
+                "state": "CREATED"
+            }
+        },
+        {
+            "name": "Kafka Streams topics health check",  <i class="conum" data-value="2"></i><b>(2)</b>
+            "status": "DOWN",
+            "data": {
+                "available_topics": "weather-stations,temperature-values",
+                "missing_topics": "hygrometry-values"
+            }
+        }
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Liveness health check. Also available at <code>/health/live</code> endpoint.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Readiness health check. Also available at <code>/health/ready</code> endpoint.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>So as you can see, the status is <code>DOWN</code> as soon as one of the <code>quarkus.kafka-streams.topics</code> is missing or the Kafka Streams <code>state</code> is not <code>RUNNING</code>.</p>
+</div>
+<div class="paragraph">
+<p>If no topics are available, the <code>available_topics</code> key will not be present in the <code>data</code> field of the <code>Kafka Streams topics health check</code>.
+As well as if no topics are missing, the <code>missing_topics</code> key will not be present in the <code>data</code> field of the <code>Kafka Streams topics health check</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can of course disable the health check of the <code>quarkus-kafka-streams</code> extension by setting the <code>quarkus.kafka-streams.health.enabled</code> property to <code>false</code> in your <code>application.properties</code>.</p>
+</div>
+<div class="paragraph">
+<p>Obviously you can create your liveness and readiness probes based on the respective endpoints <code>/health/live</code> and <code>/health/ready</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="liveness-health-check"><a class="anchor" href="#liveness-health-check"></a>Liveness health check</h3>
+<div class="paragraph">
+<p>Here is an example of the liveness check:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -i http://aggregator:8080/health/live
+
+HTTP/1.1 503 Service Unavailable
+content-type: application/json; charset=UTF-8
+content-length: 225
+
+{
+    "status": "DOWN",
+    "checks": [
+        {
+            "name": "Kafka Streams state health check",
+            "status": "DOWN",
+            "data": {
+                "state": "CREATED"
+            }
+        }
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>state</code> is coming from the <code>KafkaStreams.State</code> enum.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="readiness-health-check"><a class="anchor" href="#readiness-health-check"></a>Readiness health check</h3>
+<div class="paragraph">
+<p>Here is an example of the readiness check:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -i http://aggregator:8080/health/ready
+
+HTTP/1.1 503 Service Unavailable
+content-type: application/json; charset=UTF-8
+content-length: 265
+
+{
+    "status": "DOWN",
+    "checks": [
+        {
+            "name": "Kafka Streams topics health check",
+            "status": "DOWN",
+            "data": {
+                "missing_topics": "weather-stations,temperature-values"
+            }
+        }
+    ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="going-further"><a class="anchor" href="#going-further"></a>Going Further</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1455,6 +1598,20 @@ Refer to the Quarkus guides on <a href="/guides/microprofile-metrics">metrics</a
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kafka-streams_configuration"></a><a href="#quarkus-kafka-streams_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.health.enabled"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.health.enabled">quarkus.kafka-streams.health.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not a health check is published in case the smallrye-health extension is present (defaults to true).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

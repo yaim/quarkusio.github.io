@@ -750,7 +750,7 @@ These are provided in <code>application.properties</code> the same as any other 
 <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
-<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
 <col style="width: 80%;">
 <col style="width: 10%;">
@@ -758,13 +758,13 @@ These are provided in <code>application.properties</code> the same as any other 
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-package-config_configuration"></a><a href="#quarkus-core-package-config_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-package-pkg-package-config_configuration"></a><a href="#quarkus-package-pkg-package-config_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-package-config_quarkus.package.type"></a><code><a href="#quarkus-core-package-config_quarkus.package.type">quarkus.package.type</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.type"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.type">quarkus.package.type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -778,7 +778,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-package-config_quarkus.package.uber-jar"></a><code><a href="#quarkus-core-package-config_quarkus.package.uber-jar">quarkus.package.uber-jar</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.uber-jar"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.uber-jar">quarkus.package.uber-jar</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -792,7 +792,21 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-package-config_quarkus.package.main-class"></a><code><a href="#quarkus-core-package-config_quarkus.package.main-class">quarkus.package.main-class</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.manifest.add-implementation-entries"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.manifest.add-implementation-entries">quarkus.package.manifest.add-implementation-entries</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the Implementation information should be included in the runner jar&#8217;s MANIFEST.MF.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.main-class"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.main-class">quarkus.package.main-class</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -806,7 +820,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-package-config_quarkus.package.user-configured-ignored-entries"></a><code><a href="#quarkus-core-package-config_quarkus.package.user-configured-ignored-entries">quarkus.package.user-configured-ignored-entries</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.user-configured-ignored-entries"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.user-configured-ignored-entries">quarkus.package.user-configured-ignored-entries</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -816,11 +830,11 @@ These are provided in <code>application.properties</code> the same as any other 
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core-package-config_quarkus.package.runner-suffix"></a><code><a href="#quarkus-core-package-config_quarkus.package.runner-suffix">quarkus.package.runner-suffix</a></code></p>
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.runner-suffix"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.runner-suffix">quarkus.package.runner-suffix</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -831,6 +845,34 @@ These are provided in <code>application.properties</code> the same as any other 
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>-runner</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.output-directory"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.output-directory">quarkus.package.output-directory</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The output folder in which to place the output, this is resolved relative to the build systems target directory.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.output-name"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.output-name">quarkus.package.output-name</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the final artifact</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>

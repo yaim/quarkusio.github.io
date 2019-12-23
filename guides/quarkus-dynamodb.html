@@ -85,6 +85,35 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.interceptors"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.interceptors">quarkus.dynamodb.interceptors</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of execution interceptors that will have access to read and modify the request and response objects as they are processed by the AWS SDK.
+ The list should consists of class names which implements <code>software.amazon.awssdk.core.interceptor.ExecutionInterceptor</code> interface.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of class name</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.type">quarkus.dynamodb.sync-client.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Type of the sync HTTP client implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code>, <code>apache</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.enable-endpoint-discovery"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.enable-endpoint-discovery">quarkus.dynamodb.enable-endpoint-discovery</a></code></p>
 </div>
 <div class="openblock description">
@@ -144,21 +173,6 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.interceptors"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.interceptors">quarkus.dynamodb.interceptors</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>List of execution interceptors that will have access to read and modify the request and response objects as they are processed by the AWS SDK.
- The list should consists of class names which implements <code>software.amazon.awssdk.core.interceptor.ExecutionInterceptor</code> interface.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of class name</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -312,7 +326,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -326,7 +340,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -400,21 +414,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.type">quarkus.dynamodb.sync-client.type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Type of the sync HTTP client implementation</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code>, <code>apache</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>url</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -562,7 +562,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -646,7 +646,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -679,49 +679,6 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>system-property</code>, <code>file-store</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>system-property</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Path to the key store.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store type.
- See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -933,7 +890,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">URI</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -947,7 +904,7 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -980,49 +937,6 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>system-property</code>, <code>file-store</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>system-property</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path">quarkus.dynamodb.async-client.tls-managers-provider.file-store.path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Path to the key store.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type">quarkus.dynamodb.async-client.tls-managers-provider.file-store.type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store type.
- See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password">quarkus.dynamodb.async-client.tls-managers-provider.file-store.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Key store password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1068,6 +982,98 @@ fail unless the resource or API&#8217;s policy has been configured to specifical
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store"></a><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store">Configuration of the file store provider</a>
+This configuration section is optional</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path to the key store.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store type.
+ See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password">quarkus.dynamodb.sync-client.apache.tls-managers-provider.file-store.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store password</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.path">quarkus.dynamodb.async-client.tls-managers-provider.file-store.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path to the key store.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.type">quarkus.dynamodb.async-client.tls-managers-provider.file-store.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store type.
+ See the KeyStore section in the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyStore">Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard keystore types.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password"></a><code><a href="#quarkus-dynamodb_quarkus.dynamodb.async-client.tls-managers-provider.file-store.password">quarkus.dynamodb.async-client.tls-managers-provider.file-store.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key store password</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 </tbody>
 </table>

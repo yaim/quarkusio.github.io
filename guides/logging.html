@@ -73,9 +73,14 @@
 <li><a href="#root-logger-configuration">Root logger configuration</a></li>
 </ul>
 </li>
-<li><a href="#format_string">Format String</a></li>
+<li><a href="#format-string">Format String</a>
+<ul class="sectlevel2">
+<li><a href="#alt-console-format">Alternative Console Logging Formats</a></li>
+</ul>
+</li>
 <li><a href="#examples">Examples</a></li>
 <li><a href="#supported-logging-apis">Supported Logging APIs</a></li>
+<li><a href="#centralized-log-management">Centralized log management</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -94,7 +99,7 @@
 <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
 </div>
-<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
 <col style="width: 80%;">
 <col style="width: 10%;">
@@ -102,13 +107,13 @@
 </colgroup>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-log-config_configuration"></a><a href="#quarkus-core-log-config_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-log-logging-log-config_configuration"></a><a href="#quarkus-log-logging-log-config_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.level"></a><code><a href="#quarkus-core-log-config_quarkus.log.level">quarkus.log.level</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.level"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.level">quarkus.log.level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -122,7 +127,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.min-level"></a><code><a href="#quarkus-core-log-config_quarkus.log.min-level">quarkus.log.min-level</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.min-level"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.min-level">quarkus.log.min-level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -135,27 +140,13 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>INFO</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-log-config_logging-categories"></a><a href="#quarkus-core-log-config_logging-categories">Logging categories</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-log-logging-log-config_quarkus.log.categories"></a><a href="#quarkus-log-logging-log-config_quarkus.log.categories">Logging categories</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.category.-categories-.min-level"></a><code><a href="#quarkus-core-log-config_quarkus.log.category.-categories-.min-level">quarkus.log.category."categories".min-level</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The minimum level that this category can be set to</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.category.-categories-.level"></a><code><a href="#quarkus-core-log-config_quarkus.log.category.-categories-.level">quarkus.log.category."categories".level</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.category.-categories-.level"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.category.-categories-.level">quarkus.log.category."categories".level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -168,13 +159,13 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-log-config_console-logging"></a><a href="#quarkus-core-log-config_console-logging">Console logging</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-log-logging-log-config_quarkus.log.console"></a><a href="#quarkus-log-logging-log-config_quarkus.log.console">Console logging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.enable"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.enable">quarkus.log.console.enable</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.enable"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.enable">quarkus.log.console.enable</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -188,12 +179,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.format"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.format">quarkus.log.console.format</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.format"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.format">quarkus.log.console.format</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The log format</p>
+<p>The log format. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
 </div>
 </div>
 </div></div></td>
@@ -202,12 +193,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.level"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.level">quarkus.log.console.level</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.level"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.level">quarkus.log.console.level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The console log level</p>
+<p>The console log level.</p>
 </div>
 </div>
 </div></div></td>
@@ -216,12 +207,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.color"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.color">quarkus.log.console.color</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.color"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.color">quarkus.log.console.color</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the console logging should be in color. If undefined quarkus takes best guess based on operating system and environment.</p>
+<p>If the console logging should be in color. If undefined quarkus takes best guess based on operating system and environment. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
 </div>
 </div>
 </div></div></td>
@@ -230,12 +221,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.darken"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.darken">quarkus.log.console.darken</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.darken"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.darken">quarkus.log.console.darken</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Specify how much the colors should be darkened</p>
+<p>Specify how much the colors should be darkened. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
 </div>
 </div>
 </div></div></td>
@@ -244,7 +235,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.async"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.async">quarkus.log.console.async</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.async"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.async">quarkus.log.console.async</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -258,7 +249,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.async.queue-length"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.async.queue-length">quarkus.log.console.async.queue-length</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.async.queue-length"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.async.queue-length">quarkus.log.console.async.queue-length</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -272,7 +263,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.console.async.overflow"></a><code><a href="#quarkus-core-log-config_quarkus.log.console.async.overflow">quarkus.log.console.async.overflow</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.console.async.overflow"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.console.async.overflow">quarkus.log.console.async.overflow</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -285,13 +276,13 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-log-config_file-logging"></a><a href="#quarkus-core-log-config_file-logging">File logging</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-log-logging-log-config_quarkus.log.file"></a><a href="#quarkus-log-logging-log-config_quarkus.log.file">File logging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.enable"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.enable">quarkus.log.file.enable</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.enable"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.enable">quarkus.log.file.enable</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -305,7 +296,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.format"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.format">quarkus.log.file.format</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.format"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.format">quarkus.log.file.format</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -319,7 +310,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.level"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.level">quarkus.log.file.level</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.level"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.level">quarkus.log.file.level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -333,7 +324,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.path"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.path">quarkus.log.file.path</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.path"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.path">quarkus.log.file.path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -347,7 +338,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.async"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.async">quarkus.log.file.async</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.async"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.async">quarkus.log.file.async</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -361,7 +352,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.async.queue-length"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.async.queue-length">quarkus.log.file.async.queue-length</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.async.queue-length"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.async.queue-length">quarkus.log.file.async.queue-length</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -375,7 +366,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.async.overflow"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.async.overflow">quarkus.log.file.async.overflow</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.async.overflow"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.async.overflow">quarkus.log.file.async.overflow</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -389,7 +380,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.rotation.max-file-size"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.rotation.max-file-size">quarkus.log.file.rotation.max-file-size</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.rotation.max-file-size"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.rotation.max-file-size">quarkus.log.file.rotation.max-file-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -403,7 +394,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.rotation.max-backup-index"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.rotation.max-backup-index">quarkus.log.file.rotation.max-backup-index</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.rotation.max-backup-index"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.rotation.max-backup-index">quarkus.log.file.rotation.max-backup-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -417,7 +408,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.rotation.file-suffix"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.rotation.file-suffix">quarkus.log.file.rotation.file-suffix</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.rotation.file-suffix"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.rotation.file-suffix">quarkus.log.file.rotation.file-suffix</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -431,7 +422,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.file.rotation.rotate-on-boot"></a><code><a href="#quarkus-core-log-config_quarkus.log.file.rotation.rotate-on-boot">quarkus.log.file.rotation.rotate-on-boot</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.file.rotation.rotate-on-boot"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.file.rotation.rotate-on-boot">quarkus.log.file.rotation.rotate-on-boot</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -444,13 +435,13 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-log-config_syslog-logging"></a><a href="#quarkus-core-log-config_syslog-logging">Syslog logging</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-log-logging-log-config_quarkus.log.syslog"></a><a href="#quarkus-log-logging-log-config_quarkus.log.syslog">Syslog logging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.enable"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.enable">quarkus.log.syslog.enable</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.enable"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.enable">quarkus.log.syslog.enable</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -464,7 +455,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.endpoint"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.endpoint">quarkus.log.syslog.endpoint</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.endpoint"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.endpoint">quarkus.log.syslog.endpoint</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -478,7 +469,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.app-name"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.app-name">quarkus.log.syslog.app-name</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.app-name"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.app-name">quarkus.log.syslog.app-name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -492,7 +483,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.hostname"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.hostname">quarkus.log.syslog.hostname</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.hostname"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.hostname">quarkus.log.syslog.hostname</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -506,7 +497,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.facility"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.facility">quarkus.log.syslog.facility</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.facility"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.facility">quarkus.log.syslog.facility</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -520,7 +511,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.syslog-type"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.syslog-type">quarkus.log.syslog.syslog-type</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.syslog-type"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.syslog-type">quarkus.log.syslog.syslog-type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -534,7 +525,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.protocol"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.protocol">quarkus.log.syslog.protocol</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.protocol"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.protocol">quarkus.log.syslog.protocol</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -548,7 +539,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.use-counting-framing"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.use-counting-framing">quarkus.log.syslog.use-counting-framing</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.use-counting-framing"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.use-counting-framing">quarkus.log.syslog.use-counting-framing</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -562,7 +553,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.truncate"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.truncate">quarkus.log.syslog.truncate</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.truncate"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.truncate">quarkus.log.syslog.truncate</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -576,7 +567,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.block-on-reconnect"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.block-on-reconnect">quarkus.log.syslog.block-on-reconnect</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.block-on-reconnect"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.block-on-reconnect">quarkus.log.syslog.block-on-reconnect</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -591,7 +582,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.format"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.format">quarkus.log.syslog.format</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.format"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.format">quarkus.log.syslog.format</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -605,7 +596,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.level"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.level">quarkus.log.syslog.level</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.level"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.level">quarkus.log.syslog.level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -619,7 +610,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.async"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.async">quarkus.log.syslog.async</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.async"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.async">quarkus.log.syslog.async</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -633,7 +624,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.async.queue-length"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.async.queue-length">quarkus.log.syslog.async.queue-length</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.async.queue-length"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.async.queue-length">quarkus.log.syslog.async.queue-length</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -647,7 +638,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.syslog.async.overflow"></a><code><a href="#quarkus-core-log-config_quarkus.log.syslog.async.overflow">quarkus.log.syslog.async.overflow</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.syslog.async.overflow"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.syslog.async.overflow">quarkus.log.syslog.async.overflow</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -660,13 +651,13 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-log-config_log-cleanup-filters-internal-use"></a><a href="#quarkus-core-log-config_log-cleanup-filters-internal-use">Log cleanup filters - internal use</a></p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-log-logging-log-config_quarkus.log.filters"></a><a href="#quarkus-log-logging-log-config_quarkus.log.filters">Log cleanup filters - internal use</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-log-config_quarkus.log.filter.-filters-.if-starts-with"></a><code><a href="#quarkus-core-log-config_quarkus.log.filter.-filters-.if-starts-with">quarkus.log.filter."filters".if-starts-with</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-log-logging-log-config_quarkus.log.filter.-filters-.if-starts-with"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.filter.-filters-.if-starts-with">quarkus.log.filter."filters".if-starts-with</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -768,7 +759,7 @@ be escaped. An example is shown in <a href="#category-example">File TRACE Loggin
 </div>
 </div>
 <div class="sect1">
-<h2 id="format_string"><a class="anchor" href="#format_string"></a>Format String</h2>
+<h2 id="format-string"><a class="anchor" href="#format-string"></a>Format String</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The logging format string supports the following symbols:</p>
@@ -909,6 +900,187 @@ be escaped. An example is shown in <a href="#category-example">File TRACE Loggin
 </tr>
 </tbody>
 </table>
+<div class="sect2">
+<h3 id="alt-console-format"><a class="anchor" href="#alt-console-format"></a>Alternative Console Logging Formats</h3>
+<div class="paragraph">
+<p>It is possible to change the output format of the console log. This can be useful in environments where the output
+of the Quarkus application is captured by a service which can, for example, process and store the log information for
+later analysis.</p>
+</div>
+<div class="sect3">
+<h4 id="json-logging"><a class="anchor" href="#json-logging"></a>JSON Logging</h4>
+<div class="paragraph">
+<p>In order to configure JSON logging, the <code>quarkus-logging-json</code> extension may be employed.  Add this extension to your
+application POM as the following snippet illustrates.</p>
+</div>
+<div class="listingblock">
+<div class="title">Modifications to POM file to add the JSON logging extension</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
+  &lt;dependencies&gt;
+    &lt;!-- ... your other dependencies are here ... --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+      &lt;artifactId&gt;quarkus-logging-json&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The presence of this extension will, by default, replace the output format configuration from the console configuration.
+This means that the format string and the color settings (if any) will be ignored.  The other console configuration items
+(including those controlling asynchronous logging and the log level) will continue to be applied.</p>
+</div>
+<div class="sect4">
+<h5 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h5>
+<div class="paragraph">
+<p>The JSON logging extension can be configured in various ways.  The following properties are supported:</p>
+</div>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-json_configuration"></a><a href="#quarkus-logging-json_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json">quarkus.log.console.json</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to enable the JSON console formatting extension, which disables "normal" console formatting.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.pretty-print"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.pretty-print">quarkus.log.console.json.pretty-print</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable "pretty printing" of the JSON record. Note that some JSON parsers will fail to read pretty printed output.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.date-format"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.date-format">quarkus.log.console.json.date-format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The date format to use. The special string "default" indicates that the default format should be used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>default</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.record-delimiter"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.record-delimiter">quarkus.log.console.json.record-delimiter</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The special end-of-record delimiter to be used. By default, no delimiter is used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.zone-id"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.zone-id">quarkus.log.console.json.zone-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The zone ID to use. The special string "default" indicates that the default zone should be used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>default</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.exception-output-type"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.exception-output-type">quarkus.log.console.json.exception-output-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The exception output type to specify.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>detailed</code>, <code>formatted</code>, <code>detailed-and-formatted</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>detailed</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-json_quarkus.log.console.json.print-details"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.print-details">quarkus.log.console.json.print-details</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable printing of more details in the log.
+ Printing the details can be expensive as the values are retrieved from the caller. The details include the source class name, source file name, source method name and source line number.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Enabling pretty printing might cause certain processors and JSON parsers to fail.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Printing the details can be expensive as the values are retrieved from the caller. The details include the
+source class name, source file name, source method name and source line number.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -974,6 +1146,14 @@ quarkus.log.category."io.undertow.request.security".level=TRACE</code></pre>
 <p><a href="https://commons.apache.org/proper/commons-logging/">Apache Commons Logging</a></p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="centralized-log-management"><a class="anchor" href="#centralized-log-management"></a>Centralized log management</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to send your logs to a centralized tool like Graylog, Logstash or Fluentd, you can follow the <a href="centralized-log-management">Centralized log management guide</a>.</p>
 </div>
 </div>
 </div>

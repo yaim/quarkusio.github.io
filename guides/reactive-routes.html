@@ -68,7 +68,11 @@
     <h1 class="text-caps">Using Reactive Routes</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#quarkus-http">Quarkus HTTP</a></li>
-<li><a href="#declaring-reactive-routes">Declaring reactive routes</a></li>
+<li><a href="#declaring-reactive-routes">Declaring reactive routes</a>
+<ul class="sectlevel2">
+<li><a href="#routebase"><code>@RouteBase</code></a></li>
+</ul>
+</li>
 <li><a href="#using-the-vert-x-web-router">Using the Vert.x Web Router</a></li>
 <li><a href="#intercepting-http-requests">Intercepting HTTP requests</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
@@ -134,31 +138,41 @@ import io.vertx.ext.web.RoutingContext;
 
 import javax.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+@ApplicationScoped <i class="conum" data-value="1"></i><b>(1)</b>
 public class MyDeclarativeRoutes {
 
-
-    @Route(path = "/", methods = HttpMethod.GET)
-    public void handle(RoutingContext rc) {
+    // neither path nor regex is set - match a path derived from the method name
+    @Route(methods = HttpMethod.GET) <i class="conum" data-value="2"></i><b>(2)</b>
+    void hello(RoutingContext rc) { <i class="conum" data-value="3"></i><b>(3)</b>
         rc.response().end("hello");
     }
 
-    @Route(path = "/hello", methods = HttpMethod.GET)
-    public void greetings(RoutingContext rc) {
-        String name = rc.request().getParam("name");
-        if (name == null) {
-            name = "world";
-        }
-        rc.response().end("hello " + name);
+    @Route(path = "/greetings", methods = HttpMethod.GET)
+    void greetings(RoutingExchange ex) { <i class="conum" data-value="4"></i><b>(4)</b>
+        ex.ok("hello " + ex.getParam("name").orElse("world"));
     }
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>The <code>@Route</code> annotation indicates that the method is a reactive route.
-Again, by default, the code contained in the method must not block.
-The method gets a <a href="https://vertx.io/docs/apidocs/io/vertx/ext/web/RoutingContext.html"><code>RoutingContext</code></a> as a parameter.
-From the <code>RoutingContext</code> you can retrieve the HTTP request (using <code>request()</code>) and write the response using <code>response().end(&#8230;&#8203;)</code>.</p>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If there is a reactive route found on a class with no scope annotation then <code>@javax.inject.Singleton</code> is added automatically.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>@Route</code> annotation indicates that the method is a reactive route. Again, by default, the code contained in the method must not block.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The method gets a <a href="https://vertx.io/docs/apidocs/io/vertx/ext/web/RoutingContext.html"><code>RoutingContext</code></a> as a parameter. From the <code>RoutingContext</code> you can retrieve the HTTP request (using <code>request()</code>) and write the response using <code>response().end(&#8230;&#8203;)</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>RoutingExchange</code> is a convenient wrapper of <code>RoutingContext</code> which provides some useful methods.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>More details about using the <code>RoutingContext</code> is available in the <a href="https://vertx.io/docs/vertx-web/java/">Vert.x Web documentation</a>.</p>
@@ -169,11 +183,10 @@ From the <code>RoutingContext</code> you can retrieve the HTTP request (using <c
 <div class="ulist">
 <ul>
 <li>
-<p>The <code>path</code> - using the <a href="https://vertx.io/docs/vertx-web/java/#_capturing_path_parameters">Vert.x Web format</a></p>
+<p>The <code>path</code> - for routing by path, using the <a href="https://vertx.io/docs/vertx-web/java/#_capturing_path_parameters">Vert.x Web format</a></p>
 </li>
 <li>
-<p>The <code>regex</code> - when <code>path</code> is not used.
-See <a href="https://vertx.io/docs/vertx-web/java/#_routing_with_regular_expressions">for more details</a></p>
+<p>The <code>regex</code> - for routing with regular expressions, see <a href="https://vertx.io/docs/vertx-web/java/#_routing_with_regular_expressions">for more details</a></p>
 </li>
 <li>
 <p>The <code>methods</code> - the HTTP verb triggering the route such as <code>GET</code>, <code>POST</code>&#8230;&#8203;</p>
@@ -206,10 +219,8 @@ public void blocking(RoutingContext rc) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route.Routes({
-    @Route(path = "/first"),
-    @Route(path = "/second")
-})
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/first")
+@Route(path = "/second")
 public void route(RoutingContext rc) {
     // ...
 }</code></pre>
@@ -217,6 +228,32 @@ public void route(RoutingContext rc) {
 </div>
 <div class="paragraph">
 <p>Each route can use different paths, methods&#8230;&#8203;</p>
+</div>
+<div class="sect2">
+<h3 id="routebase"><a class="anchor" href="#routebase"></a><code>@RouteBase</code></h3>
+<div class="paragraph">
+<p>This annotation can be used to configure some defaults for reactive routes declared on a class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RouteBase(path = "simple", produces = "text/plain") <i class="conum" data-value="1"></i><b>(1)</b>
+public class SimpleRoutes {
+
+    @Route(path = "ping") // the final path is /simple/ping
+    void ping(RoutingContext rc) {
+        rc.response().end("pong");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>path</code> value is used as a prefix for any route method declared on the class where <code>Route#path()</code> is used. The <code>produces</code> value is used for content-based routing for all routes where <code>Route#produces()</code> is empty.</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -268,28 +305,29 @@ Note that these filters are also applied for servlets, JAX-RS resources, and rea
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
 
-import io.quarkus.vertx.http.runtime.filters.Filters;
+import io.vertx.ext.web.RoutingContext;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
+public class MyFilters {
 
-@ApplicationScoped
-public class MyFilter {
-
-    public void registerMyFilter(@Observes Filters filters) {
-        filters.register(rc -&gt; {
-            rc.response().putHeader("X-Header", "intercepting the request");
-            rc.next();
-        }, 100);
+    @RouteFilter(100) <i class="conum" data-value="1"></i><b>(1)</b>
+    void myFilter(RoutingContext rc) {
+       rc.response().putHeader("X-Header", "intercepting the request");
+       rc.next(); <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>The registration is done using <code>Filters.register</code>.
-The first parameter is the handler receiving the <code>RoutingContext</code>.
-The handler is likely required to call the <code>next()</code> method to continue to chain.
-The second parameter is the priority used to sort the filters Highest priority are called first.</p>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>RouteFilter#value()</code> defines the priority used to sort the filters - filters with higher priority are called first.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The filter is likely required to call the <code>next()</code> method to continue the chain.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

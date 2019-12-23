@@ -104,9 +104,15 @@
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This extension is considered <code>preview</code>.
-API or configuration properties might change as the extension matures.
+<p>This technology is considered preview.</p>
+</div>
+<div class="paragraph">
+<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
+Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
 Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
 </div>
 </td>
 </tr>
@@ -360,6 +366,10 @@ List&lt;Person&gt; allPersons = Person.listAll();
 
 // finding a specific person by ID
 person = Person.findById(personId);
+
+// finding a specific person by ID via an Optional
+Optional&lt;Person&gt; optional = Person.findByIdOptional(personId);
+person = optional.orElseThrow(() -&gt; new NotFoundException());
 
 // finding all living persons
 List&lt;Person&gt; livingPersons = Person.list("status", Status.Alive);
@@ -701,7 +711,7 @@ but if you want ot customize them, once again we have you covered.</p>
 </div>
 <div class="paragraph">
 <p>You can specify your own ID strategy by extending <code>PanacheMongoEntityBase</code> instead of <code>PanacheMongoEntity</code>. Then
-you just declare whatever ID you want as a public field by annotating it by @BsonId:</p>
+you just declare whatever ID you want as a public field by annotating it by <code>@BsonId</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">

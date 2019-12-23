@@ -76,6 +76,7 @@
 </ul>
 </li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
+<li><a href="#launch-modes">Launch Modes</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -194,13 +195,12 @@ import javax.enterprise.event.Observes;
 
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class AppLifecycleBean {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("ListenerBean");
+    private static final Logger LOGGER = Logger.getLogger("ListenerBean");
 
     void onStart(@Observes StartupEvent ev) {               <i class="conum" data-value="1"></i><b>(1)</b>
         LOGGER.info("The application is starting...");
@@ -279,6 +279,19 @@ When the application is stopped, the second log message is printed.</p>
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
 You can also generate the native executable using <code>./mvnw clean package -Pnative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="launch-modes"><a class="anchor" href="#launch-modes"></a>Launch Modes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus has 3 different launch modes, <code>NORMAL</code> (i.e. production), <code>DEVELOPMENT</code> and <code>TEST</code>. If you are running <code>quarkus:dev</code>
+then the mode will be <code>DEVELOPMENT</code>, if you are running a JUnit test it will be <code>TEST</code>, otherwise it will be <code>NORMAL</code>.</p>
+</div>
+<div class="paragraph">
+<p>Your application can get the launch mode by injecting the <code>io.quarkus.runtime.LaunchMode</code> enum into a CDI bean,
+or by invoking the static method <code>io.quarkus.runtime.LaunchMode.current()</code>.</p>
 </div>
 </div>
 </div>

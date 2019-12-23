@@ -93,7 +93,7 @@ Undertow (servlet), or Vert.x Web and make these microservices deployable as an 
 using <a href="https://aws.amazon.com/api-gateway/">Amazon&#8217;s API Gateway</a> and <a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html">Amazon&#8217;s SAM framework</a>.</p>
 </div>
 <div class="paragraph">
-<p>You can deploy your Lambda as a pure Java jar, or you can compile your project to a native image (GraalVM) and deploy that for a smaller
+<p>You can deploy your Lambda as a pure Java jar, or you can compile your project to a native image and deploy that for a smaller
 memory footprint and startup time.</p>
 </div>
 <div class="admonitionblock note">
@@ -104,9 +104,15 @@ memory footprint and startup time.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This extension is considered <code>preview</code>.
-API or configuration properties might change as the extension matures.
+<p>This technology is considered preview.</p>
+</div>
+<div class="paragraph">
+<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
+Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
 Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
 </div>
 </td>
 </tr>
@@ -188,8 +194,8 @@ for installing AWS SAM CLI.</p>
 </div>
 <div class="paragraph">
 <p>This will compile the code and run the unit tests included within the generated project.
-Unit testing is all regular local Java and does not require running on Amazon.  Quarkus dev-mode is also
-usable.</p>
+Unit testing is the same as any other Java project and does not require running on Amazon.  Quarkus dev-mode is also
+available with this extension.</p>
 </div>
 <div class="paragraph">
 <p>If you want to build for native too, make sure you have GraalVM installed correctly and just add a <code>native</code> property
@@ -215,18 +221,18 @@ After you have built your maven project, execute this command</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This will start a docker container that mimic&#8217;s Amazon&#8217;s Lamba&#8217;s deployment environment.  Once the environment
-is started, you can invoke the example lambda in your browser by going to</p>
+<p>This will start a docker container that mimics Amazon&#8217;s Lambda&#8217;s deployment environment.  Once the environment
+is started you can invoke the example lambda in your browser by going to</p>
 </div>
 <div class="paragraph">
 <p><a href="http://127.0.0.1:3000/hello" class="bare">http://127.0.0.1:3000/hello</a></p>
 </div>
 <div class="paragraph">
-<p>In the console you&#8217;ll see startup messages of the example lambda.  This particular deployment starts a JVM and loads your
+<p>In the console you&#8217;ll see startup messages from the lambda.  This particular deployment starts a JVM and loads your
 lambda as pure Java.</p>
 </div>
 <div class="paragraph">
-<p>If you want to deploy a native GraalVM executable of your lambda, use a different yaml template that is provided in your
+<p>If you want to deploy a native executable of your lambda, use a different yaml template that is provided in your
 generated project:</p>
 </div>
 <div class="listingblock">
@@ -342,6 +348,21 @@ it before trying to deploy again:</p>
 <div class="paragraph">
 <p>The <code>OutputValue</code> attribute is the root URL for your lambda. Copy it to your browser and add <code>hello</code> at the end.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Responses for binary types will be automatically encoded with base64.  This is different than the behavior using
+<code>quarkus:dev</code> which will return the raw bytes.  Amazon&#8217;s API has additional restrictions requiring the base64 encoding.
+In general, client code will automatically handle this encoding but in certain custom situations, you should be aware
+you may need to manually manage that encoding.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -413,7 +434,7 @@ you&#8217;ll see this:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This environment variable resolves some incompatibilites between GraalVM and the Amazon Lambda Custom Runtime environment.</p>
+<p>This environment variable resolves some incompatibilities between Quarkus and the Amazon Lambda Custom Runtime environment.</p>
 </div>
 </div>
 </div>

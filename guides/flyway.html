@@ -68,6 +68,7 @@
     <h1 class="text-caps">Quarkus - Using Flyway</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#setting-up-support-for-flyway">Setting up support for Flyway</a></li>
+<li><a href="#multiple-datasources">Multiple datasources</a></li>
 <li><a href="#using-the-flyway-object">Using the Flyway object</a></li>
 </ul></div>
     <div>
@@ -129,8 +130,10 @@ your migration as you normally do</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Flyway support relies on the Quarkus default datasource config, you must add the default datasource properties
-to the <code>application.properties</code> file in order to allow Flyway to manage the schema.
+<p>Flyway support relies on the Quarkus datasource config.
+It can be customized for the default datasource as well as for every <a href="#multiple-datasources">named datasource</a>.
+First, you need to add the datasource config to the <code>application.properties</code> file
+in order to allow Flyway to manage the schema.
 Also, you can customize the Flyway behaviour by using the following properties:</p>
 </div>
 <div class="dlist">
@@ -138,6 +141,11 @@ Also, you can customize the Flyway behaviour by using the following properties:<
 <dt class="hdlist1"><code>quarkus.flyway.migrate-at-start</code></dt>
 <dd>
 <p><strong>true</strong> to execute Flyway automatically when the application starts, <strong>false</strong> otherwise.<br>
+<strong>default:</strong> false</p>
+</dd>
+<dt class="hdlist1"><code>quarkus.flyway.clean-at-start</code></dt>
+<dd>
+<p><strong>true</strong> to execute Flyway clean command automatically when the application starts, <strong>false</strong> otherwise.<br>
 <strong>default:</strong> false</p>
 </dd>
 <dt class="hdlist1"><code>quarkus.flyway.locations</code></dt>
@@ -278,6 +286,67 @@ public class MigrationService {
 </div>
 </div>
 <div class="sect1">
+<h2 id="multiple-datasources"><a class="anchor" href="#multiple-datasources"></a>Multiple datasources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Flyway can be configured for multiple datasources.
+The Flyway properties are prefixed exactly the same way as the named datasources, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.driver=org.h2.Driver
+quarkus.datasource.url=jdbc:h2:tcp://localhost/mem:default
+quarkus.datasource.username=username-default
+quarkus.datasource.min-size=3
+quarkus.datasource.max-size=13
+
+quarkus.datasource.users.driver=org.h2.Driver
+quarkus.datasource.users.url=jdbc:h2:tcp://localhost/mem:users
+quarkus.datasource.users.username=username1
+quarkus.datasource.users.min-size=1
+quarkus.datasource.users.max-size=11
+
+quarkus.datasource.inventory.driver=org.h2.Driver
+quarkus.datasource.inventory.url=jdbc:h2:tcp://localhost/mem:inventory
+quarkus.datasource.inventory.username=username2
+quarkus.datasource.inventory.min-size=2
+quarkus.datasource.inventory.max-size=12
+
+# Flyway configuration for the default datasource
+quarkus.flyway.schemas=DEFAULT_TEST_SCHEMA
+quarkus.flyway.locations=db/default/location1,db/default/location2
+quarkus.flyway.migrate-at-start=true
+
+# Flyway configuration for the "users" datasource
+quarkus.flyway.users.schemas=USERS_TEST_SCHEMA
+quarkus.flyway.users.locations=db/users/location1,db/users/location2
+quarkus.flyway.users.migrate-at-start=true
+
+# Flyway configuration for the "inventory" datasource
+quarkus.flyway.inventory.schemas=INVENTORY_TEST_SCHEMA
+quarkus.flyway.inventory.locations=db/inventory/location1,db/inventory/location2
+quarkus.flyway.inventory.migrate-at-start=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice there&#8217;s an extra bit in the key.
+The syntax is as follows: <code>quarkus.flyway.[optional name.][datasource property]</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Without configuration, Flyway is set up for every datasource using the default settings.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="using-the-flyway-object"><a class="anchor" href="#using-the-flyway-object"></a>Using the Flyway object</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -304,9 +373,17 @@ public class MigrationService {
     @Inject
     Flyway flyway; <i class="conum" data-value="1"></i><b>(1)</b>
 
+    @Inject
+    @FlywayDataSource("inventory") <i class="conum" data-value="2"></i><b>(2)</b>
+    Flyway flywayForInventory;
+
+    @Inject
+    @Named("flyway_users") <i class="conum" data-value="3"></i><b>(3)</b>
+    Flyway flywayForUsers;
+
     public void checkMigration() {
         // Use the flyway instance manually
-        flyway.clean(); <i class="conum" data-value="2"></i><b>(2)</b>
+        flyway.clean(); <i class="conum" data-value="4"></i><b>(4)</b>
         flyway.migrate();
         // This will print 1.0.0
         System.out.println(flyway.info().current().getVersion().toString());
@@ -322,6 +399,14 @@ public class MigrationService {
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Inject Flyway for named datasources using the Quarkus <code>FlywayDataSource</code> qualifier</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Inject Flyway for named datasources</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>Use the Flyway instance directly</td>
 </tr>
 </table>

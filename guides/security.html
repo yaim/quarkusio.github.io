@@ -74,7 +74,7 @@
 <li><a href="#form-based-authentication">Form Based Authentication</a></li>
 </ul>
 </li>
-<li><a href="#authorization-in-rest-endpoints-and-cdi-beans-using-annotations">Authorization in REST endpoints and CDI beans using annotations</a></li>
+<li><a href="#standard-security-annotations">Authorization in REST endpoints and CDI beans using annotations</a></li>
 <li><a href="#authorization-of-web-endpoints-using-configuration">Authorization of Web Endpoints using configuration</a>
 <ul class="sectlevel2">
 <li><a href="#matching-on-paths-methods">Matching on paths, methods</a></li>
@@ -252,7 +252,21 @@ is in use.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/index.html</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.redirect-after-login"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.redirect-after-login">quarkus.http.auth.form.redirect-after-login</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Option to disable redirect to landingPage if there is no saved page to redirect back to. Form Auth POST is followed by redirect to landingPage by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -325,7 +339,7 @@ Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a stan
 </div>
 </div>
 <div class="sect1">
-<h2 id="authorization-in-rest-endpoints-and-cdi-beans-using-annotations"><a class="anchor" href="#authorization-in-rest-endpoints-and-cdi-beans-using-annotations"></a>Authorization in REST endpoints and CDI beans using annotations</h2>
+<h2 id="standard-security-annotations"><a class="anchor" href="#standard-security-annotations"></a>Authorization in REST endpoints and CDI beans using annotations</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus comes with built-in security to allow for Role-Based Access Control (<a href="https://en.wikipedia.org/wiki/Role-based_access_control">RBAC</a>)
