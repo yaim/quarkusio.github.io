@@ -161,12 +161,15 @@
 <div class="sect2">
 <h3 id="logging-improvements"><a class="anchor" href="#logging-improvements"></a>Logging improvements</h3>
 <div class="paragraph">
-<p>1.1 comes with 2 major improvements to our logging layer:</p>
+<p>1.1 comes with several major improvements to our logging layer:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>we added a <code>logging-json</code> extension so that you can format your log as JSON. More info in <a href="https://quarkus.io/guides/logging#json-logging">our Logging documentation</a>. Note that centralized log management support is coming in 1.2 with a GELF extension.</p>
+<p>we now support the Graylog Extended Log Format (GELF) via the <code>logging-gelf</code> extension: you can push your logs to an ELK or EFK stack. Go explore this new possibility in the <a href="https://quarkus.io/guides/centralized-log-management">Centralized log management guide</a>.</p>
+</li>
+<li>
+<p>we added a <code>logging-json</code> extension so that you can format your log as JSON. More info in <a href="https://quarkus.io/guides/logging#json-logging">our Logging documentation</a>.</p>
 </li>
 <li>
 <p>a <code>logging-sentry</code> extension was added to allow for application exception monitoring. Note that, <a href="https://quarkus.io/guides/logging-sentry">as stated in our documentation</a>, Sentry is not open source anymore.</p>
