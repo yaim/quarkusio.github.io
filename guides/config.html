@@ -719,7 +719,7 @@ Environment variables names are following the conversion rules of <a href="https
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The <code>config/application.properties</code> features is available in development mode as well. To make use of it, <code>config/application.properties</code> needs to be placed inside the build tool&#8217;s output directory (<code>target</code> for Maven and <code>build</code> for Gradle).
+The <code>config/application.properties</code> features is available in development mode as well. To make use of it, <code>config/application.properties</code> needs to be placed inside the build tool&#8217;s output directory (<code>target</code> for Maven and <code>build/classes/java/main</code> for Gradle).
 Keep in mind however that any cleaning operation from the build tool like <code>mvn clean</code> or <code>gradle clean</code> will remove the <code>config</code> directory as well.
 </td>
 </tr>
@@ -774,6 +774,23 @@ I can add the following to <code>application.properties</code>:</p>
 </div>
 <div class="paragraph">
 <p>And then set the <code>QUARKUS_PROFILE</code> environment variable to <code>staging</code> to activate my profile.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The proper way to check the active profile programmatically is to use the <code>getActiveProfile</code> method of <code>io.quarkus.runtime.configuration.ProfileManager</code>.</p>
+</div>
+<div class="paragraph">
+<p>Using <code>@ConfigProperty("quarkus.profile")</code> will <strong>not</strong> work properly.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1020,12 +1037,12 @@ Just add the <code>%profile</code> wrapped in quotation marks before defining th
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">"%dev":
-    quarkus:
+  quarkus:
     datasource:
-        url: jdbc:postgresql://localhost:5432/some-database
-        driver: org.postgresql.Driver
-        username: quarkus
-        password: quarkus</code></pre>
+      url: jdbc:postgresql://localhost:5432/some-database
+      driver: org.postgresql.Driver
+      username: quarkus
+      password: quarkus</code></pre>
 </div>
 </div>
 </div>
@@ -1044,10 +1061,10 @@ One property is the prefix of another, so it may not be immediately evident how 
 <div class="title">An example YAML configuration resolving prefix-related key name conflicts</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">quarkus:
-    http:
-        cors:
-            ~: true
-            methods: GET,PUT,POST</code></pre>
+  http:
+    cors:
+      ~: true
+      methods: GET,PUT,POST</code></pre>
 </div>
 </div>
 <div class="paragraph">

@@ -162,21 +162,6 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
 </tr>
 </table>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>It is based on an alpha version of the Neo4j driver.
-Hence the reason for it to be <em>preview</em></p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -289,7 +274,7 @@ public class Fruit {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:3.5.13</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.0.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -530,14 +515,14 @@ It uses transaction functions of the driver:</p>
 public CompletionStage&lt;Response&gt; create(Fruit fruit) {
     AsyncSession session = driver.asyncSession();
     return session
-        .writeTransactionAsync(tx -&gt;
-            tx.runAsync("CREATE (f:Fruit {name: $name}) RETURN f", Values.parameters("name", fruit.name))
+        .writeTransactionAsync(tx -&gt; tx
+            .runAsync("CREATE (f:Fruit {name: $name}) RETURN f", Values.parameters("name", fruit.name))
+            .thenCompose(fn -&gt; fn.singleAsync())
         )
-        .thenCompose(fn -&gt; fn.singleAsync())
         .thenApply(record -&gt; Fruit.from(record.get("f").asNode()))
-        .thenCompose(persistedFruid -&gt; session.closeAsync().thenApply(signal -&gt; persistedFruid))
-        .thenApply(persistedFruid -&gt; Response
-            .created(URI.create("/fruits/" + persistedFruid.id))
+        .thenCompose(persistedFruit -&gt; session.closeAsync().thenApply(signal -&gt; persistedFruit))
+        .thenApply(persistedFruit -&gt; Response
+            .created(URI.create("/fruits/" + persistedFruit.id))
             .build()
         );
 }</code></pre>
@@ -577,10 +562,10 @@ We also add some exception handling, in case the resource is called with an inva
 public CompletionStage&lt;Response&gt; getSingle(@PathParam("id") Long id) {
     AsyncSession session = driver.asyncSession();
     return session
-        .readTransactionAsync(tx -&gt;
-            tx.runAsync("MATCH (f:Fruit) WHERE id(f) = $id RETURN f", Values.parameters("id", id))
+        .readTransactionAsync(tx -&gt; tx
+            .runAsync("MATCH (f:Fruit) WHERE id(f) = $id RETURN f", Values.parameters("id", id))
+            .thenCompose(fn -&gt; fn.singleAsync())
     )
-    .thenCompose(fn -&gt; fn.singleAsync())
     .handle((record, exception) -&gt; {
         if(exception != null) {
             Throwable source = exception;
@@ -637,10 +622,10 @@ public CompletionStage&lt;Response&gt; delete(@PathParam("id") Long id) {
 
     AsyncSession session = driver.asyncSession();
     return session
-        .writeTransactionAsync(tx -&gt;
-            tx.runAsync("MATCH (f:Fruit) WHERE id(f) = $id DELETE f", Values.parameters("id", id))
+        .writeTransactionAsync(tx -&gt; tx
+            .runAsync("MATCH (f:Fruit) WHERE id(f) = $id DELETE f", Values.parameters("id", id))
+            .thenCompose(fn -&gt; fn.consumeAsync()) <i class="conum" data-value="1"></i><b>(1)</b>
         )
-        .thenCompose(fn -&gt; fn.consumeAsync()) <i class="conum" data-value="1"></i><b>(1)</b>
         .thenCompose(response -&gt; session.closeAsync())
         .thenApply(signal -&gt; Response.noContent().build());
 }</code></pre>

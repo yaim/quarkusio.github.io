@@ -126,7 +126,7 @@ We will always need some <strong>template contents</strong>:</p>
 <div class="title">hello.html</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;html&gt;
- &lt;p&gt;Hello {name}! <i class="conum" data-value="1"></i><b>(1)</b>
+  &lt;p&gt;Hello {name}! <i class="conum" data-value="1"></i><b>(1)</b>
 &lt;/html&gt;</code></pre>
 </div>
 </div>
@@ -387,7 +387,7 @@ A typical example is the for/each loop - during iteration the content of the sec
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#each items}
- {count}. {it.name} <i class="conum" data-value="1"></i><b>(1)</b>
+  {count}. {it.name} <i class="conum" data-value="1"></i><b>(1)</b>
 {/each}
 
 {! Another form of iteration... !}
@@ -566,7 +566,7 @@ The first one is using the <code>each</code> name alias.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#each items}
- {it.name} <i class="conum" data-value="1"></i><b>(1)</b>
+  {it.name} <i class="conum" data-value="1"></i><b>(1)</b>
 {/each}</code></pre>
 </div>
 </div>
@@ -594,7 +594,7 @@ The first one is using the <code>each</code> name alias.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#each items}
- {count}. {it.name} <i class="conum" data-value="1"></i><b>(1)</b>
+  {count}. {it.name} <i class="conum" data-value="1"></i><b>(1)</b>
 {/each}</code></pre>
 </div>
 </div>
@@ -616,7 +616,7 @@ The simplest possible version accepts a single parameter and renders the content
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#if item.active}
- This item is active.
+  This item is active.
 {/if}</code></pre>
 </div>
 </div>
@@ -664,7 +664,7 @@ The simplest possible version accepts a single parameter and renders the content
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#if item.age &gt; 10}
- This item is very old.
+  This item is very old.
 {/if}</code></pre>
 </div>
 </div>
@@ -686,13 +686,13 @@ Multiple conditions are not supported.
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#if item.age &gt; 10}
- This item is very old.
+  This item is very old.
 {#else if item.age &gt; 5}
- This item is quite old.
+  This item is quite old.
 {#else if item.age &gt; 2}
- This item is old.
+  This item is old.
 {#else}
- This item is not old at all!
+  This item is not old at all!
 {/if}</code></pre>
 </div>
 </div>
@@ -706,7 +706,7 @@ This could be useful to simplify the template structure.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#with item.parent}
- {name}  <i class="conum" data-value="1"></i><b>(1)</b>
+  {name}  <i class="conum" data-value="1"></i><b>(1)</b>
 {/with}</code></pre>
 </div>
 </div>
@@ -724,7 +724,7 @@ This could be useful to simplify the template structure.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">{#with item.parent as myParent}
- {myParent.name}
+  {myParent.name}
 {/with}</code></pre>
 </div>
 </div>
@@ -743,7 +743,7 @@ This could be useful to simplify the template structure.</p>
 &lt;title&gt;{#insert title}Default Title{/}&lt;/title&gt; <i class="conum" data-value="1"></i><b>(1)</b>
 &lt;/head&gt;
 &lt;body&gt;
-    {#insert body}No body!{/} <i class="conum" data-value="2"></i><b>(2)</b>
+  {#insert body}No body!{/} <i class="conum" data-value="2"></i><b>(2)</b>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 </div>
@@ -764,10 +764,10 @@ This could be useful to simplify the template structure.</p>
 <div class="title">Template "detail"</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#include base} <i class="conum" data-value="1"></i><b>(1)</b>
-    {#title}My Title{/title} <i class="conum" data-value="2"></i><b>(2)</b>
-    {#body}
+  {#title}My Title{/title} <i class="conum" data-value="2"></i><b>(2)</b>
+  {#body}
     &lt;div&gt;
-        My body.
+      My body.
     &lt;/div&gt;
 {/include}</code></pre>
 </div>
@@ -851,9 +851,9 @@ In Quarkus, all files from the <code>src/main/resources/templates/tags</code> ar
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;ul&gt;
 {#each items}
- &lt;li&gt;
- {#item this showImage=true /} <i class="conum" data-value="1"></i><b>(1)</b>
- &lt;/li&gt;
+  &lt;li&gt;
+  {#item this showImage=true /} <i class="conum" data-value="1"></i><b>(1)</b>
+  &lt;/li&gt;
 {/each}
 &lt;/ul&gt;</code></pre>
 </div>
@@ -902,8 +902,8 @@ In Quarkus, all templates from the <code>src/main/resources/templates</code> are
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
-   &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-   &lt;artifactId&gt;quarkus-qute&lt;/artifactId&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-qute&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -919,15 +919,14 @@ import io.quarkus.qute.api.ResourcePath;
 
 class MyBean {
 
-  @Inject
-  Template items; <i class="conum" data-value="1"></i><b>(1)</b>
+    @Inject
+    Template items; <i class="conum" data-value="1"></i><b>(1)</b>
 
-  @ResourcePath("detail/items2_v1.html") <i class="conum" data-value="2"></i><b>(2)</b>
-  Template items2;
+    @ResourcePath("detail/items2_v1.html") <i class="conum" data-value="2"></i><b>(2)</b>
+    Template items2;
 
-  @Inject
-  Engine engine; <i class="conum" data-value="3"></i><b>(3)</b>
-
+    @Inject
+    Engine engine; <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -1011,8 +1010,8 @@ Only properties are currently validated in expressions; virtual methods are curr
 &lt;title&gt;Qute Hello&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;h1&gt;{title}&lt;/h1&gt; <i class="conum" data-value="2"></i><b>(2)</b>
-    Hello {foo.message}! <i class="conum" data-value="3"></i><b>(3)</b>
+  &lt;h1&gt;{title}&lt;/h1&gt; <i class="conum" data-value="2"></i><b>(2)</b>
+  Hello {foo.message}! <i class="conum" data-value="3"></i><b>(3)</b>
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 </div>
@@ -1057,10 +1056,10 @@ A value resolver is also generated for all types used in parameter declarations 
 &lt;title&gt;Qute Hello&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;h1&gt;{foo.message}&lt;/h1&gt; <i class="conum" data-value="1"></i><b>(1)</b>
-    {#for foo in baz.foos}
-     &lt;p&gt;Hello {foo.message}!&lt;/p&gt; <i class="conum" data-value="2"></i><b>(2)</b>
-    {/for}
+  &lt;h1&gt;{foo.message}&lt;/h1&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+  {#for foo in baz.foos}
+    &lt;p&gt;Hello {foo.message}!&lt;/p&gt; <i class="conum" data-value="2"></i><b>(2)</b>
+  {/for}
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 </div>
@@ -1122,7 +1121,7 @@ class MyExtensions {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#each items} <i class="conum" data-value="1"></i><b>(1)</b>
-   {it.discountedPrice}
+  {it.discountedPrice}
 {/each}</code></pre>
 </div>
 </div>
@@ -1178,7 +1177,7 @@ class Item {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#each items} <i class="conum" data-value="1"></i><b>(1)</b>
-   {it.price} / {it.discountedPrice}
+  {it.price} / {it.discountedPrice}
 {/each}</code></pre>
 </div>
 </div>
@@ -1211,7 +1210,7 @@ class Item {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#each items} <i class="conum" data-value="1"></i><b>(1)</b>
-   {it.price.setScale(2, rounding)} <i class="conum" data-value="1"></i><b>(1)</b>
+  {it.price.setScale(2, rounding)} <i class="conum" data-value="1"></i><b>(1)</b>
 {/each}</code></pre>
 </div>
 </div>
@@ -1296,14 +1295,14 @@ public class HelloResource {
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/detail")
 class DetailResource {
 
-  @Inject
-  VariantTemplate item; <i class="conum" data-value="1"></i><b>(1)</b>
+    @Inject
+    VariantTemplate item; <i class="conum" data-value="1"></i><b>(1)</b>
 
-  @GET
-  @Produces({ MediaType.TEXT_HTML, MediaType.TEXT_PLAIN })
-  public Rendering item() {
-      return item.data(new Item("Alpha", 1000)); <i class="conum" data-value="2"></i><b>(2)</b>
-  }
+    @GET
+    @Produces({ MediaType.TEXT_HTML, MediaType.TEXT_PLAIN })
+    public Rendering item() {
+        return item.data(new Item("Alpha", 1000)); <i class="conum" data-value="2"></i><b>(2)</b>
+    }
 }</code></pre>
 </div>
 </div>

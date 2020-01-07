@@ -604,34 +604,6 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.application.name"></a><code><a href="#quarkus-core_quarkus.application.name">quarkus.application.name</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The name of the application. If not set, defaults to the name of the project.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.application.version"></a><code><a href="#quarkus-core_quarkus.application.version">quarkus.application.version</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The version of the application. If not set, defaults to the version of the project</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.jni.library-paths"></a><code><a href="#quarkus-core_quarkus.jni.library-paths">quarkus.jni.library-paths</a></code></p>
 </div>
 <div class="openblock description">
@@ -772,6 +744,34 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.application.name"></a><code><a href="#quarkus-core_quarkus.application.name">quarkus.application.name</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the application. If not set, defaults to the name of the project (except for tests where it is not set at all).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.application.version"></a><code><a href="#quarkus-core_quarkus.application.version">quarkus.application.version</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The version of the application. If not set, defaults to the version of the project (except for tests where it is not set at all).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.level"></a><code><a href="#quarkus-core_quarkus.log.level">quarkus.log.level</a></code></p>
 </div>
 <div class="openblock description">
@@ -797,6 +797,20 @@
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>INFO</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.profile"></a><code><a href="#quarkus-core_quarkus.profile">quarkus.profile</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Profile that will be active when Quarkus launches</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>prod</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -913,20 +927,6 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>30</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.profile"></a><code><a href="#quarkus-core_quarkus.profile">quarkus.profile</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Profile that will be active when Quarkus launches</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>prod</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

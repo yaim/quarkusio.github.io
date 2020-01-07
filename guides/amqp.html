@@ -79,6 +79,7 @@
 <li><a href="#the-html-page">The HTML page</a></li>
 <li><a href="#get-it-running">Get it running</a></li>
 <li><a href="#running-native">Running Native</a></li>
+<li><a href="#imperative-usage">Imperative usage</a></li>
 <li><a href="#going-further">Going further</a></li>
 </ul></div>
     <div>
@@ -544,6 +545,58 @@ If you started the AMQP broker with docker compose, stop it using <code>CTRL+C</
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="imperative-usage"><a class="anchor" href="#imperative-usage"></a>Imperative usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes you need to have an imperative way of sending messages.</p>
+</div>
+<div class="paragraph">
+<p>For example, if you need to send a message to a stream from inside a REST endpoint when receiving a POST request.
+In this case, you cannot use <code>@Output</code> because your method has parameters.</p>
+</div>
+<div class="paragraph">
+<p>For this, you can use an <code>Emitter</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.reactive.messaging.annotations.Channel;
+import io.smallrye.reactive.messaging.annotations.Emitter;
+
+import javax.inject.Inject;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
+
+@Path("/prices")
+public class PriceResource {
+
+    @Inject @Channel("price-create") Emitter&lt;Double&gt; priceEmitter;
+
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    public void addPrice(Double price) {
+        priceEmitter.send(price);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>Emitter</code> configuration is done the same way as the other stream configuration used by <code>@Incoming</code> and <code>@Outgoing</code>.
+In addition, you can use <code>@OnOverflow</code> to configure a back-pressure strategy.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

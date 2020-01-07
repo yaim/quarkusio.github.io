@@ -916,21 +916,29 @@ application POM as the following snippet illustrates.</p>
 <div class="listingblock">
 <div class="title">Modifications to POM file to add the JSON logging extension</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
-  &lt;dependencies&gt;
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">  &lt;dependencies&gt;
     &lt;!-- ... your other dependencies are here ... --&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
       &lt;artifactId&gt;quarkus-logging-json&lt;/artifactId&gt;
     &lt;/dependency&gt;
-  &lt;/dependencies&gt;
-&lt;/build&gt;</code></pre>
+  &lt;/dependencies&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The presence of this extension will, by default, replace the output format configuration from the console configuration.
 This means that the format string and the color settings (if any) will be ignored.  The other console configuration items
 (including those controlling asynchronous logging and the log level) will continue to be applied.</p>
+</div>
+<div class="paragraph">
+<p>For some, it will make sense to use logging that is humanly readable (unstructured) in dev mode and JSON logging (structured) in production mode. This can be achieved using different profiles, as shown in the following configuration.</p>
+</div>
+<div class="listingblock">
+<div class="title">Disable JSON logging in application.properties for dev and test mode</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">%dev.quarkus.log.console.json=false
+%test.quarkus.log.console.json=false</code></pre>
+</div>
 </div>
 <div class="sect4">
 <h5 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h5>

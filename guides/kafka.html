@@ -79,7 +79,15 @@
 <li><a href="#the-html-page">The HTML page</a></li>
 <li><a href="#get-it-running">Get it running</a></li>
 <li><a href="#running-native">Running Native</a></li>
+<li><a href="#imperative-usage">Imperative usage</a></li>
 <li><a href="#kafka-health-check">Kafka Health Check</a></li>
+<li><a href="#json-serialization">JSON serialization</a>
+<ul class="sectlevel2">
+<li><a href="#serializing-via-json-b">Serializing via JSON-B</a></li>
+<li><a href="#serializing-via-jackson">Serializing via Jackson</a></li>
+<li><a href="#sending-json-server-sent-events-sse">Sending JSON Server-Sent Events (SSE)</a></li>
+</ul>
+</li>
 <li><a href="#going-further">Going further</a></li>
 </ul></div>
     <div>
@@ -544,6 +552,58 @@ If you started the Kafka broker with docker compose, stop it using <code>CTRL+C<
 </div>
 </div>
 <div class="sect1">
+<h2 id="imperative-usage"><a class="anchor" href="#imperative-usage"></a>Imperative usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes, you need to have an imperative way of sending messages.</p>
+</div>
+<div class="paragraph">
+<p>For example, if you need to send a message to a stream, from inside a REST endpoint, when receiving a POST request.
+In this case, you cannot use <code>@Output</code> because your method has parameters.</p>
+</div>
+<div class="paragraph">
+<p>For this, you can use an <code>Emitter</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.reactive.messaging.annotations.Channel;
+import io.smallrye.reactive.messaging.annotations.Emitter;
+
+import javax.inject.Inject;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
+
+@Path("/prices")
+public class PriceResource {
+
+    @Inject @Channel("price-create") Emitter&lt;Double&gt; priceEmitter;
+
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    public void addPrice(Double price) {
+        priceEmitter.send(price);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>Emitter</code> configuration is done the same way as the other stream configuration used by <code>@Incoming</code> and <code>@Outgoing</code>.
+In addition, you can use <code>@OnOverflow</code> to configure back-pressure strategy.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="kafka-health-check"><a class="anchor" href="#kafka-health-check"></a>Kafka Health Check</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -556,6 +616,239 @@ to validate the connection to the broker. This is disabled by default.</p>
 <div class="paragraph">
 <p>This behavior can be enabled by setting the <code>quarkus.kafka.health.enabled</code> property to <code>true</code> in your <code>application.properties</code>.
 You also need to point <code>quarkus.kafka.bootstrap-servers</code> to your Kafka cluster.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="json-serialization"><a class="anchor" href="#json-serialization"></a>JSON serialization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus has built-in capabilities to deal with JSON Kafka messages.</p>
+</div>
+<div class="paragraph">
+<p>Imagine we have a <code>Fruit</code> pojo as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Fruit {
+
+    public String name;
+    public int price;
+
+    public Fruit() {
+    }
+
+    public Fruit(String name, int price) {
+        this.name = name;
+        this.price = price;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And we want to use it to receive messages from Kafka, make some price transformation, and send messages back to Kafka.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.reactive.messaging.annotations.Broadcast;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
+import javax.enterprise.context.ApplicationScoped;
+
+/**
+* A bean consuming data from the "fruit-in" Kafka topic and applying some price conversion.
+* The result is pushed to the "fruit-out" stream.
+*/
+@ApplicationScoped
+public class FruitProcessor {
+
+    private static final double CONVERSION_RATE = 0.88;
+
+    @Incoming("fruit-in")
+    @Outgoing("fruit-out")
+    @Broadcast
+    public double process(Fruit fruit) {
+        fruit.price = fruit.price * CONVERSION_RATE;
+        return fruit;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To do this, we will need to setup JSON serialization with JSON-B or Jackson.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+With JSON serialization correctly configured, you can also use <code>Publisher&lt;Fruit&gt;</code> and <code>Emitter&lt;Fruit&gt;</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="serializing-via-json-b"><a class="anchor" href="#serializing-via-json-b"></a>Serializing via JSON-B</h3>
+<div class="paragraph">
+<p>First, you need to include the <code>quarkus-jsonb</code> extension (if you already use the <code>quarkus-resteasy-jsonb</code> extension, this is not needed).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-jsonb&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is an existing <code>JsonbSerializer</code> that can be used to serialize all pojos via JSON-B,
+but the corresponding deserializer is generic, so it needs to be subclassed.</p>
+</div>
+<div class="paragraph">
+<p>So, let&#8217;s create a <code>FruitDeserializer</code> that extends the generic <code>JsonbDeserializer</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme.fruit.jsonb;
+
+import io.quarkus.kafka.client.serialization.JsonbDeserializer;
+
+public class FruitDeserializer extends JsonbDeserializer&lt;Fruit&gt; {
+    public FruitDeserializer(){
+        // pass the class to the parent.
+        super(Fruit.class);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you don&#8217;t want to create a deserializer for each of your pojo, you can use the generic <code>io.vertx.kafka.client.serialization.JsonObjectDeserializer</code>
+that will deserialize to a <code>javax.json.JsonObject</code>. The corresponding serializer can also be used: <code>io.vertx.kafka.client.serialization.JsonObjectSerializer</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Finally, configure your streams to use the JSON-B serializer and deserializer.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># Configure the Kafka source (we read from it)
+mp.messaging.incoming.fruit-in.connector=smallrye-kafka
+mp.messaging.incoming.fruit-in.topic=fruit-in
+mp.messaging.incoming.fruit-in.value.deserializer=com.acme.fruit.jsonb.FruitDeserializer
+
+# Configure the Kafka sink (we write to it)
+mp.messaging.outgoing.fruit-out.connector=smallrye-kafka
+mp.messaging.outgoing.fruit-out.topic=fruit-out
+mp.messaging.outgoing.fruit-out.value.serializer=io.quarkus.kafka.client.serialization.JsonbSerializer</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, your Kafka messages will contain a JSON-B serialized representation of your Fruit pojo.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="serializing-via-jackson"><a class="anchor" href="#serializing-via-jackson"></a>Serializing via Jackson</h3>
+<div class="paragraph">
+<p>First, you need to include the <code>quarkus-jackson</code> extension (if you already use the <code>quarkus-jackson-jsonb</code> extension, this is not needed).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-jackson&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is an existing <code>ObjectMapperSerializer</code> that can be used to serialize all pojos via Jackson,
+but the corresponding deserializer is generic, so it needs to be subclassed.</p>
+</div>
+<div class="paragraph">
+<p>So, let&#8217;s create a <code>FruitDeserializer</code> that extends the <code>ObjectMapperDeserializer</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme.fruit.jackson;
+
+import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer;
+
+public class FruitDeserializer extends ObjectMapperDeserializer&lt;Fruit&gt; {
+    public FruitDeserializer(){
+        // pass the class to the parent.
+        super(Fruit.class);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, configure your streams to use the Jackson serializer and deserializer.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># Configure the Kafka source (we read from it)
+mp.messaging.incoming.fruit-in.connector=smallrye-kafka
+mp.messaging.incoming.fruit-in.topic=fruit-in
+mp.messaging.incoming.fruit-in.value.deserializer=com.acme.fruit.jackson.FruitDeserializer
+
+# Configure the Kafka sink (we write to it)
+mp.messaging.outgoing.fruit-out.connector=smallrye-kafka
+mp.messaging.outgoing.fruit-out.topic=fruit-out
+mp.messaging.outgoing.fruit-out.value.serializer=io.quarkus.kafka.client.serialization.ObjectMapperSerializer</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, your Kafka messages will contain a Jackson serialized representation of your Fruit pojo.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sending-json-server-sent-events-sse"><a class="anchor" href="#sending-json-server-sent-events-sse"></a>Sending JSON Server-Sent Events (SSE)</h3>
+<div class="paragraph">
+<p>If you want RESTEasy to send JSON Server-Sent Events, you need to use the <code>@SseElementType</code> annotation to define the content type of the events,
+as the method will be annotated with <code>@Produces(MediaType.SERVER_SENT_EVENTS)</code>.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to use SSE from a Kafka topic source.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.reactive.messaging.annotations.Channel;
+import org.reactivestreams.Publisher;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.jboss.resteasy.annotations.SseElementType;
+
+@Path("/fruits")
+public class PriceResource {
+
+    @Inject
+    @Channel("fruit-out") Publisher&lt;Fruit&gt; fruits;
+
+    @GET
+    @Path("/stream")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    public Publisher&lt;Fruit&gt; stream() {
+        return fruits;
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

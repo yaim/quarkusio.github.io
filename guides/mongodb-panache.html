@@ -521,7 +521,7 @@ MongoDB with Panache will then map it to a MongoDB native query.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>&lt;singleColumnName&gt;</code> (and single parameter) which will expand to <code>{'singleColumnName': '?'}</code></p>
+<p><code>&lt;singlePropertyName&gt;</code> (and single parameter) which will expand to <code>{'singleColumnName': '?'}</code></p>
 </li>
 <li>
 <p><code>&lt;query&gt;</code> will expand to <code>{&lt;query&gt;}</code> where we will map the PanacheQL query to MongoDB native query form. We support the following operators that will be mapped to the corresponding MongoDB operators: 'and', 'or' ( mixing 'and' and 'or' is not currently supported), '=', '&gt;', '&gt;=', '&lt;', '&#8656;', '!=', 'is null', 'is not null', and 'like' that is mapped to the MongoDB <code>$regex</code> operator.</p>
