@@ -81,6 +81,7 @@
 <li><a href="#going-further">Going further</a>
 <ul class="sectlevel2">
 <li><a href="#hibernate-validator-extension-and-cdi">Hibernate Validator extension and CDI</a></li>
+<li><a href="#validation-and-localization">Validation and localization</a></li>
 </ul>
 </li>
 </ul></div>
@@ -265,7 +266,7 @@ In case of failures, the messages are concatenated and sent back to the browser.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">private class Result {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public static class Result {
 
     Result(String message) {
         this.success = true;
@@ -543,6 +544,31 @@ Quarkus will check if a bean of this type is available and, if so, it will use i
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="validation-and-localization"><a class="anchor" href="#validation-and-localization"></a>Validation and localization</h3>
+<div class="paragraph">
+<p>By default, constraint violation messages will be returned in the build system locale.</p>
+</div>
+<div class="paragraph">
+<p>You can configure this behavior by adding the following configuration in your <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># The default locale to use
+quarkus.default-locale=fr-FR</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are using RESTEasy, in the context of a JAX-RS endpoint, Hibernate Validator will automatically resolve the optimal locale to use from the <code>Accept-Language</code> HTTP header,
+provided the supported locales have been properly specified in the <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># The list of all the supported locales
+quarkus.locales=en-US,es-ES,fr-FR</code></pre>
 </div>
 </div>
 </div>

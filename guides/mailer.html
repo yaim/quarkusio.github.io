@@ -74,6 +74,7 @@
 <li><a href="#sending-simple-emails">Sending simple emails</a></li>
 <li><a href="#sending-attachments">Sending attachments</a></li>
 <li><a href="#sending-html-emails-with-inlined-attachments">Sending HTML emails with inlined attachments</a></li>
+<li><a href="#message-body-based-on-qute-templates">Message Body Based on Qute Templates</a></li>
 <li><a href="#testing-email-sending">Testing email sending</a></li>
 <li><a href="#gmail-specific-configuration">Gmail specific configuration</a></li>
 <li><a href="#using-ssl-with-native-executables">Using SSL with native executables</a></li>
@@ -170,7 +171,8 @@ quarkus.mailer.host=smtp.sendgrid.net
 quarkus.mailer.port=465
 quarkus.mailer.ssl=true
 quarkus.mailer.username=....
-quarkus.mailer.password=....</code></pre>
+quarkus.mailer.password=....
+quarkus.mailer.mock=false</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -370,6 +372,63 @@ When you want to reference your attachment, for instance in the <code>src</code>
 </div>
 </div>
 <div class="sect1">
+<h2 id="message-body-based-on-qute-templates"><a class="anchor" href="#message-body-based-on-qute-templates"></a>Message Body Based on Qute Templates</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It&#8217;s also possible to inject a mail template, where the message body is created automatically using <a href="qute">Qute templates</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+MailTemplate hello; <i class="conum" data-value="1"></i><b>(1)</b>
+
+@GET
+@Path("/mail")
+public CompletionStage&lt;Response&gt; send() {
+    return hello.to("to@acme.org") <i class="conum" data-value="2"></i><b>(2)</b>
+       .subject("Hello from Qute template")
+       // the template looks like: Hello {name}!
+       .data("name", "John") <i class="conum" data-value="3"></i><b>(3)</b>
+       .send() <i class="conum" data-value="4"></i><b>(4)</b>
+       .thenApply(x -&gt; Response.accepted().build());
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If there is no <code>@ResourcePath</code> qualifier provided, the field name is used to locate the template. In this particular case, we will use the <code>hello.html</code> and <code>hello.txt</code> templates to create the message body.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Create a mail template instance and set the recipient.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Set the data used in the template.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>MailTemplate.send()</code> triggers the rendering and, once finished, sends the e-mail via a <code>Mailer</code> instance.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Injected mail templates are validated during build. If there is no matching template in <code>src/main/resources/templates</code> the build fails.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="testing-email-sending"><a class="anchor" href="#testing-email-sending"></a>Testing email sending</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -478,7 +537,7 @@ By default both the mailer and Gmail default to <code>XOAUTH2</code> which requi
 <div class="sectionbody">
 <div class="paragraph">
 <p>Note that if you enable SSL for the mailer and you want to build a native executable, you will need to enable the SSL support.
-Please refer to the native-and-ssl[Using SSL With Native Executables] guide for more information.</p>
+Please refer to the <a href="native-and-ssl">Using SSL With Native Executables</a> guide for more information.</p>
 </div>
 </div>
 </div>

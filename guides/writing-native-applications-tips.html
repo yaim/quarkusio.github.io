@@ -465,6 +465,26 @@ Call path from entry point to com.amazonaws.services.s3.model.CryptoConfiguratio
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When multiple classes or packages need to be specified via the <code>quarkus.native.additional-build-args</code> configuration property, the <code>,</code> symbol needs to be escaped.
+An example of this is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.native.additional-build-args=--initialize-at-run-time=com.example.SomeClass\\,org.acme.SomeOtherClass</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="managing-proxy-classes"><a class="anchor" href="#managing-proxy-classes"></a>Managing Proxy Classes</h3>

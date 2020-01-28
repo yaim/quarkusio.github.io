@@ -206,12 +206,54 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.physical-naming-strategy"></a><code><a href="#quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.physical-naming-strategy">quarkus.hibernate-orm.physical-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Pluggable strategy contract for applying physical naming rules for database object names. Class name of the Hibernate PhysicalNamingStrategy implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.implicit-naming-strategy"></a><code><a href="#quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.implicit-naming-strategy">quarkus.hibernate-orm.implicit-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Pluggable strategy for applying implicit naming rules when an explicit name is not given. Class name of the Hibernate ImplicitNamingStrategy implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.statistics"></a><code><a href="#quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.statistics">quarkus.hibernate-orm.statistics</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Whether statistics collection is enabled.</p>
+<p>Whether statistics collection is enabled. If 'metrics.enabled' is true, then the default here is considered true, otherwise the default is false.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.metrics.enabled"></a><code><a href="#quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.metrics.enabled">quarkus.hibernate-orm.metrics.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not metrics are published in case the smallrye-metrics extension is present (default to false).</p>
 </div>
 </div>
 </div></div></td>
@@ -328,6 +370,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.database.globally-quoted-identifiers"></a><code><a href="#quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.database.globally-quoted-identifiers">quarkus.hibernate-orm.database.globally-quoted-identifiers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether Hibernate should quote all identifiers.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.jdbc"></a><a href="#quarkus-hibernate-orm-hibernate-orm-config_quarkus.hibernate-orm.jdbc">JDBC related configuration</a></p></th>

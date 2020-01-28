@@ -437,7 +437,7 @@ Requests that do not time out should show two recommended coffee samples in JSON
 coffees.</p>
 </div>
 <div class="paragraph">
-<p>Add a fallback method to <code>CaffeeResource</code> and a <code>@Fallback</code> annotation to <code>CoffeeResource#recommendations()</code> method
+<p>Add a fallback method to <code>CoffeeResource</code> and a <code>@Fallback</code> annotation to <code>CoffeeResource#recommendations()</code> method
 as follows:</p>
 </div>
 <div class="listingblock">
@@ -472,9 +472,9 @@ two recommendations returned by the original method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">2019-03-06 13:21:54,170 INFO  [org.acm.fau.CoffeeResource] (pool-15-thread-3) CoffeeResource#recommendations() invocation #2 returning successfully
-2019-03-06 13:21:55,159 ERROR [org.acm.fau.CoffeeResource] (pool-15-thread-4) CoffeeResource#recommendations() invocation #3 timed out after 248 ms
-2019-03-06 13:21:55,161 INFO  [org.acm.fau.CoffeeResource] (HystrixTimer-1) Falling back to RecommendationResource#fallbackRecommendations()</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">2020-01-09 13:21:34,250 INFO  [org.acm.fau.CoffeeResource] (executor-thread-1) CoffeeResource#recommendations() invocation #1 returning successfully
+2020-01-09 13:21:36,354 ERROR [org.acm.fau.CoffeeResource] (executor-thread-1) CoffeeResource#recommendations() invocation #2 timed out after 250 ms
+2020-01-09 13:21:36,355 INFO  [org.acm.fau.CoffeeResource] (executor-thread-1) Falling back to RecommendationResource#fallbackRecommendations()</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">

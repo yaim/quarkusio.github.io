@@ -85,6 +85,68 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Database credentials role, as defined by <a href="https://www.vaultproject.io/docs/secrets/databases/index.html" class="bare">https://www.vaultproject.io/docs/secrets/databases/index.html</a></p>
+</div>
+<div class="paragraph">
+<p>One of <code>database-credentials-role</code> or <code>kv-path</code> needs to be defined. not both.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A path in vault kv store, where we will find the kv-key.</p>
+</div>
+<div class="paragraph">
+<p>One of <code>database-credentials-role</code> or <code>kv-path</code> needs to be defined. not both.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key name to search in vault path <code>kv-path</code>. The value for that key is the credential.</p>
+</div>
+<div class="paragraph">
+<p><code>kv-key</code> should not be defined if <code>kv-path</code> is not.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault-general-config-items_quarkus.vault.authentication"></a><a href="#quarkus-vault-general-config-items_quarkus.vault.authentication">Authentication</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.authentication.client-token"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.authentication.client-token">quarkus.vault.authentication.client-token</a></code></p>
 </div>
 <div class="openblock description">
@@ -182,6 +244,11 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/var/run/secrets/kubernetes.io/serviceaccount/token</code></p></td>
 </tr>
 <tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault-general-config-items_quarkus.vault.tls"></a><a href="#quarkus-vault-general-config-items_quarkus.vault.tls">TLS</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.tls.skip-verify"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.tls.skip-verify">quarkus.vault.tls.skip-verify</a></code></p>
 </div>
@@ -226,14 +293,31 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault-general-config-items_quarkus.vault.transit"></a><a href="#quarkus-vault-general-config-items_quarkus.vault.transit">Transit Engine</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.name"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.name">quarkus.vault.transit.key."key".name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Database credentials role, as defined by <a href="https://www.vaultproject.io/docs/secrets/databases/index.html" class="bare">https://www.vaultproject.io/docs/secrets/databases/index.html</a>
- One of database-credentials-role or kv-path needs to be defined. not both.</p>
+<p>Specifies the name of the key to use. By default this will be the property key alias. Used when
+the same transit key is used with different configurations. Such as in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.vault.transit.key.my-foo-key.name=foo
+
+quarkus.vault.transit.key.my-foo-key-with-prehashed.name=foo
+quarkus.vault.transit.key.my-foo-key-with-prehashed.prehashed=true
+...
+transitSecretEngine.sign("my-foo-key", "my raw content");
+or
+transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content");</code></pre>
+</div>
 </div>
 </div>
 </div></div></td>
@@ -242,14 +326,26 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.prehashed"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.prehashed">quarkus.vault.transit.key."key".prehashed</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>A path in vault kv store, where we will find the kv-key.
- One of database-credentials-role or kv-path needs to be defined. not both.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Set to true when the input is already hashed. Applies to sign operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.signature-algorithm"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.signature-algorithm">quarkus.vault.transit.key."key".signature-algorithm</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>When using a RSA key, specifies the RSA signature algorithm. Applies to sign operations.</p>
 </div>
 </div>
 </div></div></td>
@@ -258,19 +354,45 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.hash-algorithm"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.hash-algorithm">quarkus.vault.transit.key."key".hash-algorithm</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Key name to search in vault path kv-path. The value for that key is the credential.
- kv-key should not be defined if kv-path is not.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Specifies the hash algorithm to use for supporting key types. Applies to sign operations.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.type"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.type">quarkus.vault.transit.key."key".type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specifies the type of key to create for the encrypt operation. Applies to encrypt operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.convergent-encryption"></a><code><a href="#quarkus-vault-general-config-items_quarkus.vault.transit.key.-key-.convergent-encryption">quarkus.vault.transit.key."key".convergent-encryption</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If enabled, the key will support convergent encryption, where the same plaintext creates the same ciphertext. Applies to encrypt operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>

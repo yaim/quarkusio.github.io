@@ -94,6 +94,7 @@
 <li><a href="#quarkus-configuration">Quarkus configuration</a></li>
 <li><a href="#microprofile-jwt-configuration">MicroProfile JWT configuration</a></li>
 <li><a href="#supported-public-key-formats">Supported Public Key Formats</a></li>
+<li><a href="#additional-smallrye-jwt-configuration">Additional Smallrye JWT configuration</a></li>
 </ul>
 </li>
 </ul></div>
@@ -193,6 +194,7 @@ this quickstart. See <a href="https://github.com/eclipse/microprofile-jwt-auth/r
 import java.security.Principal;
 
 import javax.annotation.security.PermitAll;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -220,7 +222,7 @@ public class TokenSecuredResource {
     public String hello(@Context SecurityContext ctx) { <i class="conum" data-value="4"></i><b>(4)</b>
         Principal caller =  ctx.getUserPrincipal(); <i class="conum" data-value="5"></i><b>(5)</b>
         String name = caller == null ? "anonymous" : caller.getName();
-        boolean hasJWT = jwt.getClaims() != null;
+        boolean hasJWT = jwt.getClaimNames() != null;
         String helloReply = String.format("hello + %s, isSecure: %s, authScheme: %s, hasJWT: %s", name, ctx.isSecure(), ctx.getAuthenticationScheme(), hasJWT);
         return helloReply; <i class="conum" data-value="6"></i><b>(6)</b>
     }
@@ -335,6 +337,7 @@ import java.security.Principal;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -488,43 +491,29 @@ nQIDAQAB
 <div class="sect2">
 <h3 id="generating-a-jwt"><a class="anchor" href="#generating-a-jwt"></a>Generating a JWT</h3>
 <div class="paragraph">
-<p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the
-<a href="https://bitbucket.org/b_c/jose4j/wiki/Home">Jose4J</a> library and the TokenUtils class shown in the following listing. Take this source and place it into <code>security-jwt-quickstart/src/test/java/org/acme/jwt/TokenUtils.java</code>.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-JWT libraries for many different programming languages can be found at the JWT.io website <a href="https://jwt.io/#libraries">JWT Libraries</a>.
-</td>
-</tr>
-</table>
+<p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the JWT generation API provided by <code>smallrye-jwt</code> and the TokenUtils class shown in the following listing. Take this source and place it into <code>security-jwt-quickstart/src/test/java/org/acme/jwt/TokenUtils.java</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">JWT utility class</div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.jwt.Claims;
-import org.jose4j.jws.AlgorithmIdentifiers;
-import org.jose4j.jws.JsonWebSignature;
-import org.jose4j.jwt.JwtClaims;
-import org.jose4j.jwt.NumericDate;
 
+import io.smallrye.jwt.build.Jwt;
+import io.smallrye.jwt.build.JwtClaimsBuilder;
 /**
  * Utilities for generating a JWT for testing
  */
@@ -553,34 +542,16 @@ public class TokenUtils {
     public static String generateTokenString(PrivateKey privateKey, String kid,
         String jsonResName, Map&lt;String, Long&gt; timeClaims) throws Exception {
 
-        JwtClaims claims = JwtClaims.parse(readTokenContent(jsonResName));
+        JwtClaimsBuilder claims = Jwt.claims(jsonResName);
         long currentTimeInSecs = currentTimeInSecs();
         long exp = timeClaims != null &amp;&amp; timeClaims.containsKey(Claims.exp.name())
             ? timeClaims.get(Claims.exp.name()) : currentTimeInSecs + 300;
 
-        claims.setIssuedAt(NumericDate.fromSeconds(currentTimeInSecs));
-        claims.setClaim(Claims.auth_time.name(), NumericDate.fromSeconds(currentTimeInSecs));
-        claims.setExpirationTime(NumericDate.fromSeconds(exp));
+        claims.issuedAt(currentTimeInSecs);
+        claims.claim(Claims.auth_time.name(), currentTimeInSecs);
+        claims.expiresAt(exp);
 
-        for (Map.Entry&lt;String, Object&gt; entry : claims.getClaimsMap().entrySet()) {
-            System.out.printf("\tAdded claim: %s, value: %s\n", entry.getKey(), entry.getValue());
-        }
-
-        JsonWebSignature jws = new JsonWebSignature();
-        jws.setPayload(claims.toJson());
-        jws.setKey(privateKey);
-        jws.setKeyIdHeaderValue(kid);
-        jws.setHeader("typ", "JWT");
-        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
-
-        return jws.getCompactSerialization();
-    }
-
-    private static String readTokenContent(String jsonResName) throws IOException {
-        InputStream contentIS = TokenUtils.class.getResourceAsStream(jsonResName);
-        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(contentIS))) {
-            return buffer.lines().collect(Collectors.joining("\n"));
-        }
+        return claims.jws().signatureKeyId(kid).sign(privateKey);
     }
 
     /**
@@ -963,8 +934,8 @@ import java.util.ArrayList;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.json.JsonString;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -979,12 +950,12 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 /**
  * Version 3 of the TokenSecuredResource
  */
- @Path("/secured")
- @RequestScoped
+@Path("/secured")
+@RequestScoped
 public class TokenSecuredResourceV3 {
 
-     @Inject
-     JsonWebToken jwt;
+    @Inject
+    JsonWebToken jwt;
 
 ...
 
@@ -1076,7 +1047,9 @@ import java.util.Optional;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.json.JsonString;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -1099,7 +1072,7 @@ public class TokenSecuredResource {
     JsonWebToken jwt;
     @Inject <i class="conum" data-value="1"></i><b>(1)</b>
     @Claim(standard = Claims.birthdate) <i class="conum" data-value="2"></i><b>(2)</b>
-    Optional&lt;String&gt; birthdate; <i class="conum" data-value="3"></i><b>(3)</b>
+    Optional&lt;JsonString&gt; birthdate; <i class="conum" data-value="3"></i><b>(3)</b>
 
     ...
 
@@ -1113,7 +1086,7 @@ public class TokenSecuredResource {
 
         // If the JWT contains a birthdate claim, use the day of the month as a pick
         if (birthdate.isPresent()) { <i class="conum" data-value="4"></i><b>(4)</b>
-            String bdayString = birthdate.get(); <i class="conum" data-value="5"></i><b>(5)</b>
+            String bdayString = birthdate.get().getString(); <i class="conum" data-value="5"></i><b>(5)</b>
             LocalDate bday = LocalDate.parse(bdayString);
             numbers.add(bday.getDayOfMonth());
             remaining --;
@@ -1141,7 +1114,7 @@ public class TokenSecuredResource {
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>an <code>Optional&lt;String&gt;</code> value.</td>
+<td>an <code>Optional&lt;JsonString&gt;</code> value.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -1345,6 +1318,88 @@ precedence:</p>
 </li>
 </ul>
 </div>
+</div>
+<div class="sect2">
+<h3 id="additional-smallrye-jwt-configuration"><a class="anchor" href="#additional-smallrye-jwt-configuration"></a>Additional Smallrye JWT configuration</h3>
+<div class="paragraph">
+<p>Smallrye JWT provides more properties which can be used to customize the token processing:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.token.header</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>Authorization</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set this property if another header such as <code>Cookie</code> is used to pass the token.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.token.cookie</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the cookie containing a token. This property will be effective only if  <code>smallrye.jwt.token.header</code> is set to <code>Cookie</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.token.schemes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>Bearer</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list containing an alternative single or multiple schemes, for example, <code>DPoP</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.require.named-principal</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>false</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If an application relies on <code>java.security.Principal</code> returning a name then a token must have a <code>upn</code> or <code>preferred_username</code> or <code>sub</code> claim set. Setting this property will result in Smallrye JWT throwing an exception if none of these claims is available for the application code to reliably deal with a non-null <code>Principal</code> name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.path.sub</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the claim containing the subject name. It starts from the top level JSON object and can contain multiple segments where each segment represents a JSON object name only, example: <code>realms/subject</code>. This property can be used if a token has no 'sub' claim but has the subject set in a different claim.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.claims.sub</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This property can be used to set a default sub claim value when the current token has no standard or custom <code>sub</code> claim available. Effectively this property can be used to customize <code>java.security.Principal</code> name if no <code>upn</code> or <code>preferred_username</code> or <code>sub</code> claim is set.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.path.groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the claim containing the groups. It starts from the top level JSON object and can contain multiple segments where each segment represents a JSON object name only, example: <code>realm/groups</code>. This property can be used if a token has no 'groups' claim but has the groups set in a different claim.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.path.groups-separator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>` `</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Separator for splitting a string which may contain multiple group values. It will only be used if the <code>smallrye.jwt.path.groups</code> property points to a custom claim whose value is a string. The default value is a single space because a standard OAuth2 <code>scope</code> claim may contain a space separated sequence.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.claims.groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This property can be used to set a default groups claim value when the current token has no standard or custom groups claim available.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.jwk.refresh-interval</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>60</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWK cache refresh interval in minutes. It will be ignored unless the <code>mp.jwt.verify.publickey.location</code> points to the HTTPS URL based JWK set and no HTTP <code>Cache-Control</code> response header with a positive <code>max-age</code> parameter value is returned from a JWK HTTPS endpoint.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.expiration.grace</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>60</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Expiration grace in seconds. By default an expired token will still be accepted if the current time is no more than 1 min after the token expiry time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.verify.audience</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated list of the audiences that a token <code>aud</code> claim may contain.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>

@@ -159,6 +159,526 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.category.-categories-.handlers"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.category.-categories-.handlers">quarkus.log.category."categories".handlers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The names of the handlers to link to this category.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.category.-categories-.use-parent-handlers"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.category.-categories-.use-parent-handlers">quarkus.log.category."categories".use-parent-handlers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specify whether or not this logger should send its output to its parent Logger</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-general-config-items_quarkus.log.console-handlers"></a><a href="#quarkus-core-general-config-items_quarkus.log.console-handlers">Console handlers</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.enable"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.enable">quarkus.log.handler.console."console-handlers".enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If console logging should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.format"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.format">quarkus.log.handler.console."console-handlers".format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log format. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.level"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.level">quarkus.log.handler.console."console-handlers".level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The console log level.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.color"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.color">quarkus.log.handler.console."console-handlers".color</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the console logging should be in color. If undefined quarkus takes best guess based on operating system and environment. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.darken"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.darken">quarkus.log.handler.console."console-handlers".darken</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specify how much the colors should be darkened. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.async"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.async">quarkus.log.handler.console."console-handlers".async</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to log asynchronously</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.async.queue-length"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.async.queue-length">quarkus.log.handler.console."console-handlers".async.queue-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The queue length to use before flushing writing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>512</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.async.overflow"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.console.-console-handlers-.async.overflow">quarkus.log.handler.console."console-handlers".async.overflow</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to block the publisher (rather than drop the message) when the queue is full</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code>, <code>discard</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-general-config-items_quarkus.log.file-handlers"></a><a href="#quarkus-core-general-config-items_quarkus.log.file-handlers">File handlers</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.enable"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.enable">quarkus.log.handler.file."file-handlers".enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If file logging should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.format"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.format">quarkus.log.handler.file."file-handlers".format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log format</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %h %N[%i] %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.level"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.level">quarkus.log.handler.file."file-handlers".level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The level of logs to be written into the file.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.path"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.path">quarkus.log.handler.file."file-handlers".path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the file in which logs will be written.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quarkus.log</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.async"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.async">quarkus.log.handler.file."file-handlers".async</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to log asynchronously</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.async.queue-length"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.async.queue-length">quarkus.log.handler.file."file-handlers".async.queue-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The queue length to use before flushing writing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>512</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.async.overflow"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.async.overflow">quarkus.log.handler.file."file-handlers".async.overflow</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to block the publisher (rather than drop the message) when the queue is full</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code>, <code>discard</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.max-file-size"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.max-file-size">quarkus.log.handler.file."file-handlers".rotation.max-file-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum file size of the log file after which a rotation is executed.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.max-backup-index"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.max-backup-index">quarkus.log.handler.file."file-handlers".rotation.max-backup-index</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum number of backups to keep.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.file-suffix"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.file-suffix">quarkus.log.handler.file."file-handlers".rotation.file-suffix</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>File handler rotation file suffix. Example fileSuffix: .yyyy-MM-dd</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.rotate-on-boot"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.file.-file-handlers-.rotation.rotate-on-boot">quarkus.log.handler.file."file-handlers".rotation.rotate-on-boot</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to rotate log files on server initialization.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-general-config-items_quarkus.log.syslog-handlers"></a><a href="#quarkus-core-general-config-items_quarkus.log.syslog-handlers">Syslog handlers</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.enable"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.enable">quarkus.log.handler.syslog."syslog-handlers".enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If syslog logging should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.endpoint"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.endpoint">quarkus.log.handler.syslog."syslog-handlers".endpoint</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The IP address and port of the syslog server</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">host:port</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:514</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.app-name"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.app-name">quarkus.log.handler.syslog."syslog-handlers".app-name</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The app name used when formatting the message in RFC5424 format</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.hostname"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.hostname">quarkus.log.handler.syslog."syslog-handlers".hostname</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the host the messages are being sent from</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.facility"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.facility">quarkus.log.handler.syslog."syslog-handlers".facility</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Sets the facility used when calculating the priority of the message as defined by RFC-5424 and RFC-3164</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>kernel</code>, <code>user-level</code>, <code>mail-system</code>, <code>system-daemons</code>, <code>security</code>, <code>syslogd</code>, <code>line-printer</code>, <code>network-news</code>, <code>uucp</code>, <code>clock-daemon</code>, <code>security2</code>, <code>ftp-daemon</code>, <code>ntp</code>, <code>log-audit</code>, <code>log-alert</code>, <code>clock-daemon2</code>, <code>local-use-0</code>, <code>local-use-1</code>, <code>local-use-2</code>, <code>local-use-3</code>, <code>local-use-4</code>, <code>local-use-5</code>, <code>local-use-6</code>, <code>local-use-7</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>user-level</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.syslog-type"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.syslog-type">quarkus.log.handler.syslog."syslog-handlers".syslog-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Set the <code>SyslogType syslog type</code> this handler should use to format the message sent</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>rfc5424</code>, <code>rfc3164</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>rfc5424</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.protocol"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.protocol">quarkus.log.handler.syslog."syslog-handlers".protocol</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Sets the protocol used to connect to the syslog server</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code>, <code>ssl-tcp</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.use-counting-framing"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.use-counting-framing">quarkus.log.handler.syslog."syslog-handlers".use-counting-framing</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Set to <code>true</code> if the message being sent should be prefixed with the size of the message</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.truncate"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.truncate">quarkus.log.handler.syslog."syslog-handlers".truncate</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Set to <code>true</code> if the message should be truncated</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.block-on-reconnect"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.block-on-reconnect">quarkus.log.handler.syslog."syslog-handlers".block-on-reconnect</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enables or disables blocking when attempting to reconnect a <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#TCP
+TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP SSL TCP</code> protocol</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.format"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.format">quarkus.log.handler.syslog."syslog-handlers".format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log message format</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.level"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.level">quarkus.log.handler.syslog."syslog-handlers".level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log level specifying, which message levels will be logged by syslog logger</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.async"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.async">quarkus.log.handler.syslog."syslog-handlers".async</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to log asynchronously</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.async.queue-length"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.async.queue-length">quarkus.log.handler.syslog."syslog-handlers".async.queue-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The queue length to use before flushing writing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>512</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.async.overflow"></a><code><a href="#quarkus-core-general-config-items_quarkus.log.handler.syslog.-syslog-handlers-.async.overflow">quarkus.log.handler.syslog."syslog-handlers".async.overflow</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to block the publisher (rather than drop the message) when the queue is full</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code>, <code>discard</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core-general-config-items_quarkus.log.console"></a><a href="#quarkus-core-general-config-items_quarkus.log.console">Console logging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>

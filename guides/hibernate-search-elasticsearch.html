@@ -426,6 +426,9 @@ public class LibraryResource {
         book.title = title;
         book.author = author;
         book.persist();
+
+        author.books.add(book);
+        author.persist();
     }
 
     @DELETE
@@ -978,7 +981,7 @@ INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), '4
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.4.0</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.5.0</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1255,7 +1258,21 @@ Thus we focused our efforts on it.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol">quarkus.hibernate-search.elasticsearch.protocol</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The protocol to use when contacting Elasticsearch servers. Set to "https" to enable SSL/TLS.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code>, <code>https</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1356,20 +1373,6 @@ Thus we focused our efforts on it.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.default-scheme"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.default-scheme">quarkus.hibernate-search.elasticsearch.discovery.default-scheme</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The scheme that should be used for the new nodes discovered.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1519,7 +1522,21 @@ Thus we focused our efforts on it.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol">quarkus.hibernate-search.elasticsearch.backends."backend-name".protocol</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The protocol to use when contacting Elasticsearch servers. Set to "https" to enable SSL/TLS.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code>, <code>https</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1620,20 +1637,6 @@ Thus we focused our efforts on it.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.default-scheme"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.default-scheme">quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.default-scheme</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The scheme that should be used for the new nodes discovered.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

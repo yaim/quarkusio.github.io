@@ -85,6 +85,123 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.enable"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.enable">quarkus.log.handler.console."console-handlers".enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If console logging should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.format"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.format">quarkus.log.handler.console."console-handlers".format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log format. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.level"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.level">quarkus.log.handler.console."console-handlers".level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The console log level.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.color"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.color">quarkus.log.handler.console."console-handlers".color</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the console logging should be in color. If undefined quarkus takes best guess based on operating system and environment. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.darken"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.darken">quarkus.log.handler.console."console-handlers".darken</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specify how much the colors should be darkened. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.async"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.async">quarkus.log.handler.console."console-handlers".async</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to log asynchronously</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.async.queue-length"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.async.queue-length">quarkus.log.handler.console."console-handlers".async.queue-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The queue length to use before flushing writing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>512</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.async.overflow"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.handler.console.-console-handlers-.async.overflow">quarkus.log.handler.console."console-handlers".async.overflow</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to block the publisher (rather than drop the message) when the queue is full</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code>, <code>discard</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-config-group-logging-console-config_quarkus.log.console"></a><a href="#quarkus-config-group-logging-console-config_quarkus.log.console">Console logging</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-config-group-logging-console-config_quarkus.log.console.enable"></a><code><a href="#quarkus-config-group-logging-console-config_quarkus.log.console.enable">quarkus.log.console.enable</a></code></p>
 </div>
 <div class="openblock description">

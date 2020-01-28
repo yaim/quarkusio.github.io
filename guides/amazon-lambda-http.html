@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Amazon Lambda with Resteasy, Undertow, or Vert.x Web </title>
+  <title>Quarkus - Amazon Lambda with RESTEasy, Undertow, or Vert.x Web </title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlight.pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -65,7 +65,7 @@
   <div class="content">
     <div class="guide">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Amazon Lambda with Resteasy, Undertow, or Vert.x Web </h1>
+    <h1 class="text-caps">Quarkus - Amazon Lambda with RESTEasy, Undertow, or Vert.x Web </h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#getting-started">Getting Started</a></li>
@@ -88,7 +88,7 @@
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>quarkus-amazon-lambda-http</code> extension allows you to write microservices with Resteasy (JAX-RS),
+<p>The <code>quarkus-amazon-lambda-http</code> extension allows you to write microservices with RESTEasy (JAX-RS),
 Undertow (servlet), or Vert.x Web and make these microservices deployable as an Amazon Lambda
 using <a href="https://aws.amazon.com/api-gateway/">Amazon&#8217;s API Gateway</a> and <a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html">Amazon&#8217;s SAM framework</a>.</p>
 </div>
@@ -369,7 +369,7 @@ you may need to manually manage that encoding.
 <h2 id="examine-the-pom"><a class="anchor" href="#examine-the-pom"></a>Examine the POM</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you want to adapt an existing Resteasy, Undertow, or Vert.x Web project to Amazon Lambda, there&#8217;s a couple
+<p>If you want to adapt an existing RESTEasy, Undertow, or Vert.x Web project to Amazon Lambda, there&#8217;s a couple
 of things you need to do.  Take a look at the generate example project to get an example of what you need to adapt.</p>
 </div>
 <div class="olist arabic">
@@ -381,7 +381,7 @@ of things you need to do.  Take a look at the generate example project to get an
 <p>Configure Quarkus build an <code>uber-jar</code></p>
 </li>
 <li>
-<p>If you are doing a native GraalVM build, Amazon requires you to rename your executable to <code>bootstrap</code> and zip it up.  Notice that the <code>pom.xml</code> uses the <code>maven-assemby-plugin</code> to perform this requirement.</p>
+<p>If you are doing a native GraalVM build, Amazon requires you to rename your executable to <code>bootstrap</code> and zip it up.  Notice that the <code>pom.xml</code> uses the <code>maven-assembly-plugin</code> to perform this requirement.</p>
 </li>
 </ol>
 </div>

@@ -85,6 +85,7 @@
 <li><a href="#limitations-of-caching">Limitations of Caching</a></li>
 </ul>
 </li>
+<li><a href="#metrics">Metrics</a></li>
 <li><a href="#limitations-and-other-things-you-should-know">Limitations and other things you should know</a>
 <ul class="sectlevel2">
 <li><a href="#automatic-build-time-enhancement">Automatic build time enhancement</a></li>
@@ -448,12 +449,54 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy">quarkus.hibernate-orm.physical-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Pluggable strategy contract for applying physical naming rules for database object names. Class name of the Hibernate PhysicalNamingStrategy implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy">quarkus.hibernate-orm.implicit-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Pluggable strategy for applying implicit naming rules when an explicit name is not given. Class name of the Hibernate ImplicitNamingStrategy implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.statistics"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.statistics">quarkus.hibernate-orm.statistics</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Whether statistics collection is enabled.</p>
+<p>Whether statistics collection is enabled. If 'metrics.enabled' is true, then the default here is considered true, otherwise the default is false.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled">quarkus.hibernate-orm.metrics.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not metrics are published in case the smallrye-metrics extension is present (default to false).</p>
 </div>
 </div>
 </div></div></td>
@@ -570,6 +613,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers">quarkus.hibernate-orm.database.globally-quoted-identifiers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether Hibernate should quote all identifiers.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc">JDBC related configuration</a></p></th>
@@ -1171,6 +1228,16 @@ Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a stan
 <div class="paragraph">
 <p>When second-level cache is disabled, all cache annotations are ignored and all queries are run ignoring caches; this is generally useful only to diagnose issues.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="metrics"><a class="anchor" href="#metrics"></a>Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The SmallRye Metrics extension is capable of exposing metrics that Hibernate ORM collects at runtime. To enable exposure of Hibernate metrics
+on the <code>/metrics</code> endpoint, make sure your project depends on the <code>quarkus-smallrye-metrics</code> artifact and set the configuration property <code>quarkus.hibernate-orm.metrics.enabled</code> to <code>true</code>.
+Metrics will then be available under the <code>vendor</code> scope.</p>
 </div>
 </div>
 </div>

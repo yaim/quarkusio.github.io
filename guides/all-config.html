@@ -147,6 +147,20 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.enable-metrics">quarkus.datasource.enable-metrics</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable datasource metrics collection. If unspecified, collecting metrics will be enabled by default if the smallrye-metrics extension is active.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.health.enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.health.enabled">quarkus.datasource.health.enabled</a></code></p>
 </div>
 <div class="openblock description">
@@ -158,6 +172,20 @@
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.metrics.enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.metrics.enabled">quarkus.datasource.metrics.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not datasource metrics are published in case the smallrye-metrics extension is present (default to false). NOTE: This is different from the "enable-metrics" property that needs to be set on data source level to enable collection of metrics for that data source.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -365,20 +393,6 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.enable-metrics">quarkus.datasource.enable-metrics</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Enable datasource metrics collection.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.detect-statement-leaks"></a><code><a href="#quarkus-agroal_quarkus.datasource.detect-statement-leaks">quarkus.datasource.detect-statement-leaks</a></code></p>
 </div>
 <div class="openblock description">
@@ -452,6 +466,20 @@
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>enabled</code>, <code>xa</code>, <code>disabled</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>enabled</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics">quarkus.datasource."datasource-name".enable-metrics</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable datasource metrics collection. If unspecified, collecting metrics will be enabled by default if the smallrye-metrics extension is active.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -656,20 +684,6 @@
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>undefined</code>, <code>none</code>, <code>read-uncommitted</code>, <code>read-committed</code>, <code>repeatable-read</code>, <code>serializable</code></p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics">quarkus.datasource."datasource-name".enable-metrics</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Enable datasource metrics collection.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -883,7 +897,7 @@ region with which the DynamoDB client should communicate.</p>
 </div>
 </li>
 <li>
-<p><code>static</code> - the provider that uses the access key and secret access key specified in the <code>tatic-provider</code> section of the config.</p>
+<p><code>static</code> - the provider that uses the access key and secret access key specified in the <code>static-provider</code> section of the config.</p>
 </li>
 <li>
 <p><code>system-property</code> - it loads credentials from the <code>aws.accessKeyId</code>, <code>aws.secretAccessKey</code> and <code>aws.sessionToken</code> system properties.</p>
@@ -1903,6 +1917,83 @@ This configuration section is optional</p></th>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-cache_quarkus-cache"></a><a href="#quarkus-cache_quarkus-cache">Application Data Caching</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache_quarkus.cache.type"></a><code><a href="#quarkus-cache_quarkus.cache.type">quarkus.cache.type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Cache type.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>caffeine</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache_quarkus.cache.caffeine.-cache-name-.initial-capacity"></a><code><a href="#quarkus-cache_quarkus.cache.caffeine.-cache-name-.initial-capacity">quarkus.cache.caffeine."cache-name".initial-capacity</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Minimum total size for the internal data structures. Providing a large enough estimate at construction time avoids the need for expensive resizing operations later, but setting this value unnecessarily high wastes memory.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache_quarkus.cache.caffeine.-cache-name-.maximum-size"></a><code><a href="#quarkus-cache_quarkus.cache.caffeine.-cache-name-.maximum-size">quarkus.cache.caffeine."cache-name".maximum-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Maximum number of entries the cache may contain. Note that the cache <strong>may evict an entry before this limit is exceeded or temporarily exceed the threshold while evicting</strong>. As the cache size grows close to the maximum, the cache evicts entries that are less likely to be used again. For example, the cache may evict an entry because it hasn&#8217;t been used recently or very often.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache_quarkus.cache.caffeine.-cache-name-.expire-after-write"></a><code><a href="#quarkus-cache_quarkus.cache.caffeine.-cache-name-.expire-after-write">quarkus.cache.caffeine."cache-name".expire-after-write</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specifies that each entry should be automatically removed from the cache once a fixed duration has elapsed after the entry&#8217;s creation, or the most recent replacement of its value.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache_quarkus.cache.caffeine.-cache-name-.expire-after-access"></a><code><a href="#quarkus-cache_quarkus.cache.caffeine.-cache-name-.expire-after-access">quarkus.cache.caffeine."cache-name".expire-after-access</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specifies that each entry should be automatically removed from the cache once a fixed duration has elapsed after the entry&#8217;s creation, the most recent replacement of its value, or its last read.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-arc_quarkus-arc"></a><a href="#quarkus-arc_quarkus-arc">ArC</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -1970,6 +2061,20 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.config-properties-default-naming-strategy"></a><code><a href="#quarkus-arc_quarkus.arc.config-properties-default-naming-strategy">quarkus.arc.config-properties-default-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The default naming strategy for <code>ConfigProperties.NamingStrategy</code>. The allowed values are determined by that enum</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>from-config</code>, <code>verbatim</code>, <code>kebab-case</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>kebab-case</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-artemis-core_quarkus-artemis-core"></a><a href="#quarkus-artemis-core_quarkus-artemis-core">Artemis Core</a></p></th>
@@ -3728,12 +3833,12 @@ This configuration section is optional</p></th>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The OAuth2 client id used to validate the token.</p>
+<p>The OAuth2 client id used to validate the token. Mandatory if the extension is enabled.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3742,12 +3847,12 @@ This configuration section is optional</p></th>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The OAuth2 client secret used to validate the token.</p>
+<p>The OAuth2 client secret used to validate the token. Mandatory if the extension is enabled.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3756,12 +3861,12 @@ This configuration section is optional</p></th>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The OAuth2 introspection endpoint URL used to validate the token and gather the authentication claims.</p>
+<p>The OAuth2 introspection endpoint URL used to validate the token and gather the authentication claims. Mandatory if the extension is enabled.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3954,6 +4059,20 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.validate-on-migrate"></a><code><a href="#quarkus-flyway_quarkus.flyway.validate-on-migrate">quarkus.flyway.validate-on-migrate</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to automatically call validate when performing a migration.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.locations"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.locations">quarkus.flyway."named-data-sources".locations</a></code></p>
 </div>
 <div class="openblock description">
@@ -4109,6 +4228,20 @@ This configuration section is optional</p></th>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-flyway_quarkus.flyway.-named-data-sources-.validate-on-migrate"></a><code><a href="#quarkus-flyway_quarkus.flyway.-named-data-sources-.validate-on-migrate">quarkus.flyway."named-data-sources".validate-on-migrate</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to automatically call validate when performing a migration.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus-hibernate-orm"></a><a href="#quarkus-hibernate-orm_quarkus-hibernate-orm">Hibernate ORM</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -4236,12 +4369,54 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy">quarkus.hibernate-orm.physical-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Pluggable strategy contract for applying physical naming rules for database object names. Class name of the Hibernate PhysicalNamingStrategy implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy">quarkus.hibernate-orm.implicit-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Pluggable strategy for applying implicit naming rules when an explicit name is not given. Class name of the Hibernate ImplicitNamingStrategy implementation</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.statistics"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.statistics">quarkus.hibernate-orm.statistics</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Whether statistics collection is enabled.</p>
+<p>Whether statistics collection is enabled. If 'metrics.enabled' is true, then the default here is considered true, otherwise the default is false.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled">quarkus.hibernate-orm.metrics.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not metrics are published in case the smallrye-metrics extension is present (default to false).</p>
 </div>
 </div>
 </div></div></td>
@@ -4358,6 +4533,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers">quarkus.hibernate-orm.database.globally-quoted-identifiers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether Hibernate should quote all identifiers.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc">JDBC related configuration</a></p></th>
@@ -4601,7 +4790,21 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol">quarkus.hibernate-search.elasticsearch.protocol</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The protocol to use when contacting Elasticsearch servers. Set to "https" to enable SSL/TLS.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code>, <code>https</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4702,20 +4905,6 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.default-scheme"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.default-scheme">quarkus.hibernate-search.elasticsearch.discovery.default-scheme</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The scheme that should be used for the new nodes discovered.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4865,7 +5054,21 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol">quarkus.hibernate-search.elasticsearch.backends."backend-name".protocol</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The protocol to use when contacting Elasticsearch servers. Set to "https" to enable SSL/TLS.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code>, <code>https</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4966,20 +5169,6 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.default-scheme"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.default-scheme">quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.default-scheme</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The scheme that should be used for the new nodes discovered.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>http</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -5474,6 +5663,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-jaeger_quarkus.jaeger.log-trace-context"></a><code><a href="#quarkus-jaeger_quarkus.jaeger.log-trace-context">quarkus.jaeger.log-trace-context</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether the trace context should be logged.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-keycloak-authorization_quarkus-keycloak-authorization"></a><a href="#quarkus-keycloak-authorization_quarkus-keycloak-authorization">Keycloak Authorization</a></p></th>
@@ -6157,6 +6360,81 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>yyyy-MM-dd HH:mm:ss,SSS</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.level"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.level">quarkus.log.handler.gelf.level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The logging-gelf log level.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.facility"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.facility">quarkus.log.handler.gelf.facility</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Name of the facility.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>jboss-logmanager</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.include-full-mdc"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.include-full-mdc">quarkus.log.handler.gelf.include-full-mdc</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to include all fields from the MDC.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field"></a><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field">Post additional fields</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.value"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.value">quarkus.log.handler.gelf.additional-field."field-name".value</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Additional field value.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.type"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.type">quarkus.log.handler.gelf.additional-field."field-name".type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Additional field type specification. Supported types: String, long, Long, double, Double and discover. Discover is the default if not specified, it discovers field type based on parseability.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>discover</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-json_quarkus-logging-json"></a><a href="#quarkus-logging-json_quarkus-logging-json">Logging JSON</a></p></th>
@@ -7324,6 +7602,21 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.connection-delay"></a><code><a href="#quarkus-oidc_quarkus.oidc.connection-delay">quarkus.oidc.connection-delay</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum amount of time the adapter will try connecting to the currently unavailable OIDC server for. For example, setting it to '20S' will let the adapter keep requesting the connection for up to 20 seconds.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.auth-server-url"></a><code><a href="#quarkus-oidc_quarkus.oidc.auth-server-url">quarkus.oidc.auth-server-url</a></code></p>
 </div>
 <div class="openblock description">
@@ -7334,7 +7627,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7390,21 +7683,6 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.connection-delay"></a><code><a href="#quarkus-oidc_quarkus.oidc.connection-delay">quarkus.oidc.connection-delay</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The maximum amount of time the adapter will try connecting to the currently unavailable OIDC server for. For example, setting it to '20S' will let the adapter keep requesting the connection for up to 20 seconds.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -7465,6 +7743,20 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.token.principal-claim"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.principal-claim">quarkus.oidc.token.principal-claim</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Name of the claim which contains a principal name. By default, the 'upn', 'preferred_username' and <code>sub</code> claims are checked.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.credentials.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.secret">quarkus.oidc.credentials.secret</a></code></p>
 </div>
 <div class="openblock description">
@@ -7494,6 +7786,208 @@ Each SQL statement must be terminated by a semicolon.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.authentication.scopes"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.scopes">quarkus.oidc.authentication.scopes</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of scopes</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-oidc_quarkus.oidc.named-tenants"></a><a href="#quarkus-oidc_quarkus.oidc.named-tenants">Additional named tenants</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.connection-delay"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.connection-delay">quarkus.oidc."tenant".connection-delay</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum amount of time the adapter will try connecting to the currently unavailable OIDC server for. For example, setting it to '20S' will let the adapter keep requesting the connection for up to 20 seconds.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.auth-server-url"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.auth-server-url">quarkus.oidc."tenant".auth-server-url</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. All the other OIDC server page and service URLs are derived from this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.introspection-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.introspection-path">quarkus.oidc."tenant".introspection-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the RFC7662 introspection service.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.jwks-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.jwks-path">quarkus.oidc."tenant".jwks-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC service returning a JWK set.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.public-key"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.public-key">quarkus.oidc."tenant".public-key</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Public key for the local JWT token verification.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.client-id"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.client-id">quarkus.oidc."tenant".client-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The client-id of the application. Each application has a client-id that is used to identify the application</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.roles.role-claim-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.roles.role-claim-path">quarkus.oidc."tenant".roles.role-claim-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path to the claim containing an array of groups. It starts from the top level JWT JSON object and can contain multiple segments where each segment represents a JSON object name only, example: "realm/groups". This property can be used if a token has no 'groups' claim but has the groups set in a different claim.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.roles.role-claim-separator"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.roles.role-claim-separator">quarkus.oidc."tenant".roles.role-claim-separator</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Separator for splitting a string which may contain multiple group values. It will only be used if the "role-claim-path" property points to a custom claim whose value is a string. A single space will be used by default because the standard 'scope' claim may contain a space separated sequence.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.token.issuer"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.issuer">quarkus.oidc."tenant".token.issuer</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected issuer 'iss' claim value</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.token.audience"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.audience">quarkus.oidc."tenant".token.audience</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected audience <code>aud</code> claim value which may be a string or an array of strings</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.token.principal-claim"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.principal-claim">quarkus.oidc."tenant".token.principal-claim</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Name of the claim which contains a principal name. By default, the 'upn', 'preferred_username' and <code>sub</code> claims are checked.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.secret">quarkus.oidc."tenant".credentials.secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The client secret</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.redirect-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.redirect-path">quarkus.oidc."tenant".authentication.redirect-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path for calculating a "redirect_uri" parameter. It set it will be appended to the request URI&#8217;s host and port, otherwise the complete request URI will be used. It has to start from the forward slash, for example: "/service"</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.scopes"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.scopes">quarkus.oidc."tenant".authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -8354,6 +8848,38 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.locales"></a><code><a href="#quarkus-core_quarkus.locales">quarkus.locales</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The set of supported locales that can be consumed by the extensions.
+ The locales must be specified in the IETF BCP 47 format e.g. en-US or fr-FR.
+ For instance, the Hibernate Validator extension makes use of it.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html">Locale</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${user.language:en}-${user.country:}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.default-locale"></a><code><a href="#quarkus-core_quarkus.default-locale">quarkus.default-locale</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Default locale that can be consumed by the extensions.
+ The locales must be specified in the IETF BCP 47 format e.g. en-US or fr-FR.
+ For instance, the Hibernate Validator extension makes use of it.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html">Locale</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${user.language:en}-${user.country:}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.level"></a><code><a href="#quarkus-core_quarkus.log.level">quarkus.log.level</a></code></p>
 </div>
 <div class="openblock description">
@@ -8570,6 +9096,526 @@ Each SQL statement must be terminated by a semicolon.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.category.-categories-.handlers"></a><code><a href="#quarkus-core_quarkus.log.category.-categories-.handlers">quarkus.log.category."categories".handlers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The names of the handlers to link to this category.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.category.-categories-.use-parent-handlers"></a><code><a href="#quarkus-core_quarkus.log.category.-categories-.use-parent-handlers">quarkus.log.category."categories".use-parent-handlers</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specify whether or not this logger should send its output to its parent Logger</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.console-handlers"></a><a href="#quarkus-core_quarkus.log.console-handlers">Console handlers</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.enable"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.enable">quarkus.log.handler.console."console-handlers".enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If console logging should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.format"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.format">quarkus.log.handler.console."console-handlers".format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log format. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.level"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.level">quarkus.log.handler.console."console-handlers".level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The console log level.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.color"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.color">quarkus.log.handler.console."console-handlers".color</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the console logging should be in color. If undefined quarkus takes best guess based on operating system and environment. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.darken"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.darken">quarkus.log.handler.console."console-handlers".darken</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specify how much the colors should be darkened. Note that this value will be ignored if an extension is present that takes control of console formatting (e.g. an XML or JSON-format extension).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.async"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.async">quarkus.log.handler.console."console-handlers".async</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to log asynchronously</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.async.queue-length"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.async.queue-length">quarkus.log.handler.console."console-handlers".async.queue-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The queue length to use before flushing writing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>512</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.console.-console-handlers-.async.overflow"></a><code><a href="#quarkus-core_quarkus.log.handler.console.-console-handlers-.async.overflow">quarkus.log.handler.console."console-handlers".async.overflow</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to block the publisher (rather than drop the message) when the queue is full</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code>, <code>discard</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.file-handlers"></a><a href="#quarkus-core_quarkus.log.file-handlers">File handlers</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.enable"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.enable">quarkus.log.handler.file."file-handlers".enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If file logging should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.format"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.format">quarkus.log.handler.file."file-handlers".format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log format</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %h %N[%i] %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.level"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.level">quarkus.log.handler.file."file-handlers".level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The level of logs to be written into the file.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.path"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.path">quarkus.log.handler.file."file-handlers".path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the file in which logs will be written.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quarkus.log</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.async"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.async">quarkus.log.handler.file."file-handlers".async</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to log asynchronously</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.async.queue-length"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.async.queue-length">quarkus.log.handler.file."file-handlers".async.queue-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The queue length to use before flushing writing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>512</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.async.overflow"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.async.overflow">quarkus.log.handler.file."file-handlers".async.overflow</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to block the publisher (rather than drop the message) when the queue is full</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code>, <code>discard</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.max-file-size"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.max-file-size">quarkus.log.handler.file."file-handlers".rotation.max-file-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum file size of the log file after which a rotation is executed.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.max-backup-index"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.max-backup-index">quarkus.log.handler.file."file-handlers".rotation.max-backup-index</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum number of backups to keep.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.file-suffix"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.file-suffix">quarkus.log.handler.file."file-handlers".rotation.file-suffix</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>File handler rotation file suffix. Example fileSuffix: .yyyy-MM-dd</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.rotate-on-boot"></a><code><a href="#quarkus-core_quarkus.log.handler.file.-file-handlers-.rotation.rotate-on-boot">quarkus.log.handler.file."file-handlers".rotation.rotate-on-boot</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to rotate log files on server initialization.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.syslog-handlers"></a><a href="#quarkus-core_quarkus.log.syslog-handlers">Syslog handlers</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.enable"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.enable">quarkus.log.handler.syslog."syslog-handlers".enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If syslog logging should be enabled</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.endpoint"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.endpoint">quarkus.log.handler.syslog."syslog-handlers".endpoint</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The IP address and port of the syslog server</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">host:port</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:514</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.app-name"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.app-name">quarkus.log.handler.syslog."syslog-handlers".app-name</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The app name used when formatting the message in RFC5424 format</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.hostname"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.hostname">quarkus.log.handler.syslog."syslog-handlers".hostname</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the host the messages are being sent from</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.facility"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.facility">quarkus.log.handler.syslog."syslog-handlers".facility</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Sets the facility used when calculating the priority of the message as defined by RFC-5424 and RFC-3164</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>kernel</code>, <code>user-level</code>, <code>mail-system</code>, <code>system-daemons</code>, <code>security</code>, <code>syslogd</code>, <code>line-printer</code>, <code>network-news</code>, <code>uucp</code>, <code>clock-daemon</code>, <code>security2</code>, <code>ftp-daemon</code>, <code>ntp</code>, <code>log-audit</code>, <code>log-alert</code>, <code>clock-daemon2</code>, <code>local-use-0</code>, <code>local-use-1</code>, <code>local-use-2</code>, <code>local-use-3</code>, <code>local-use-4</code>, <code>local-use-5</code>, <code>local-use-6</code>, <code>local-use-7</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>user-level</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.syslog-type"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.syslog-type">quarkus.log.handler.syslog."syslog-handlers".syslog-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Set the <code>SyslogType syslog type</code> this handler should use to format the message sent</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>rfc5424</code>, <code>rfc3164</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>rfc5424</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.protocol"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.protocol">quarkus.log.handler.syslog."syslog-handlers".protocol</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Sets the protocol used to connect to the syslog server</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code>, <code>ssl-tcp</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.use-counting-framing"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.use-counting-framing">quarkus.log.handler.syslog."syslog-handlers".use-counting-framing</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Set to <code>true</code> if the message being sent should be prefixed with the size of the message</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.truncate"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.truncate">quarkus.log.handler.syslog."syslog-handlers".truncate</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Set to <code>true</code> if the message should be truncated</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.block-on-reconnect"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.block-on-reconnect">quarkus.log.handler.syslog."syslog-handlers".block-on-reconnect</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enables or disables blocking when attempting to reconnect a <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#TCP
+TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP SSL TCP</code> protocol</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.format"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.format">quarkus.log.handler.syslog."syslog-handlers".format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log message format</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.level"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.level">quarkus.log.handler.syslog."syslog-handlers".level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log level specifying, which message levels will be logged by syslog logger</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.async"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.async">quarkus.log.handler.syslog."syslog-handlers".async</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Indicates whether to log asynchronously</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.async.queue-length"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.async.queue-length">quarkus.log.handler.syslog."syslog-handlers".async.queue-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The queue length to use before flushing writing</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>512</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.async.overflow"></a><code><a href="#quarkus-core_quarkus.log.handler.syslog.-syslog-handlers-.async.overflow">quarkus.log.handler.syslog."syslog-handlers".async.overflow</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to block the publisher (rather than drop the message) when the queue is full</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code>, <code>discard</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>block</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus.log.console"></a><a href="#quarkus-core_quarkus.log.console">Console logging</a></p></th>
@@ -9210,13 +10256,12 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <p>The set of suffixes used when attempting to locate a template file.</p>
 </div>
 <div class="paragraph">
-<p>By default, <code>engine.getTemplate("foo")</code> would result in several lookups: <code>src/main/resources/templates/foo</code>,
-<code>src/main/resources/templates/foo.html</code> and <code>src/main/resources/templates/foo.txt</code>.</p>
+<p>By default, <code>engine.getTemplate("foo")</code> would result in several lookups: <code>foo</code>, <code>foo.html</code>, <code>foo.txt</code>, etc.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>html,txt</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>qute.html,qute.txt,html,txt</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-resteasy_quarkus-resteasy"></a><a href="#quarkus-resteasy_quarkus-resteasy">RESTEasy JAX-RS</a></p></th>
@@ -9665,6 +10710,20 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/metrics</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-metrics_quarkus.smallrye-metrics.extensions.enabled"></a><code><a href="#quarkus-smallrye-metrics_quarkus.smallrye-metrics.extensions.enabled">quarkus.smallrye-metrics.extensions.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not metrics published by Quarkus extensions should be enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-openapi_quarkus-smallrye-openapi"></a><a href="#quarkus-smallrye-openapi_quarkus-smallrye-openapi">SmallRye OpenAPI</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -9716,6 +10775,20 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-swagger-ui_quarkus.swagger-ui.enable"></a><code><a href="#quarkus-swagger-ui_quarkus.swagger-ui.enable">quarkus.swagger-ui.enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If Swagger UI should be enabled. By default, Swagger UI is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-undertow_quarkus-undertow"></a><a href="#quarkus-undertow_quarkus-undertow">Undertow Servlet</a></p></th>
@@ -9805,13 +10878,281 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault server url.
- Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
+<p>Vault server url.</p>
+</div>
+<div class="paragraph">
+<p>Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html">URL</a></p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.renew-grace-period"></a><code><a href="#quarkus-vault_quarkus.vault.renew-grace-period">quarkus.vault.renew-grace-period</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Renew grace period duration.</p>
+</div>
+<div class="paragraph">
+<p>This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current
+lease reaches its max_ttl.
+By default Vault leaseDuration is equal to 7 days (ie: 168h or 604800s).
+If a connection pool maxLifetime is set, it is reasonable to set the renewGracePeriod to be greater
+than the maxLifetime, so that we are sure we get a chance to renew leases before we reach the ttl.
+In any case you need to make sure there will be attempts to fetch secrets within the renewGracePeriod,
+because that is when the renewals will happen. This is particularly important for db dynamic secrets
+because if the lease reaches its ttl or max_ttl, the password of the db user will become invalid and
+it will be not longer possible to log in.
+This value should also be smaller than the ttl, otherwise that would mean that we would try to recreate
+leases all the time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1H</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-cache-period"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-cache-period">quarkus.vault.secret-config-cache-period</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Vault config source cache period.</p>
+</div>
+<div class="paragraph">
+<p>Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault
+again until the expiration of that period.
+This property is ignored if <code>secret-config-kv-path</code> is not set.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10M</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path">quarkus.vault.secret-config-kv-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of comma separated vault paths in kv store,
+where all properties will be available as MP config properties <strong>as-is</strong>, with no prefix.</p>
+</div>
+<div class="paragraph">
+<p>For instance, if vault contains property <code>foo</code>, it will be made available to the
+quarkus application as <code>@ConfigProperty(name = "foo") String foo;</code></p>
+</div>
+<div class="paragraph">
+<p>If 2 paths contain the same property, the last path will win.</p>
+</div>
+<div class="paragraph">
+<p>For instance if</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>secret/base-config</code> contains <code>foo=bar</code> and</p>
+</li>
+<li>
+<p><code>secret/myapp/config</code> contains <code>foo=myappbar</code>, then</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>@ConfigProperty(name = "foo") String foo</code> will have value <code>myappbar</code>
+with application properties <code>quarkus.vault.secret-config-kv-path=base-config,myapp/config</code></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.log-confidentiality-level"></a><code><a href="#quarkus-vault_quarkus.vault.log-confidentiality-level">quarkus.vault.log-confidentiality-level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Used to hide confidential infos, for logging in particular.
+Possible values are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>low: display all secrets.</p>
+</li>
+<li>
+<p>medium: display only usernames and lease ids (ie: passwords and tokens are masked).</p>
+</li>
+<li>
+<p>high: hide lease ids and dynamic credentials username.</p>
+</li>
+</ul>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>low</code>, <code>medium</code>, <code>high</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>medium</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-version"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-version">quarkus.vault.kv-secret-engine-version</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Kv secret engine version.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-mount-path"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-mount-path">quarkus.vault.kv-secret-engine-mount-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Kv secret engine path.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>secret</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.connect-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.connect-timeout">quarkus.vault.connect-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Timeout to establish a connection with Vault.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.read-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.read-timeout">quarkus.vault.read-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Request timeout on Vault.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path">quarkus.vault.secret-config-kv-path."prefix"</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of comma separated vault paths in kv store,
+where all properties will be available as <strong>prefixed</strong> MP config properties.</p>
+</div>
+<div class="paragraph">
+<p>For instance if the application properties contains
+<code>quarkus.vault.secret-config-kv-path.myprefix=config</code>, and
+vault path <code>secret/config</code> contains <code>foo=bar</code>, then <code>myprefix.foo</code>
+will be available in the MP config.</p>
+</div>
+<div class="paragraph">
+<p>If the same property is available in 2 different paths for the same prefix, the last one
+will win.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,List&lt;String&gt;&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Database credentials role, as defined by <a href="https://www.vaultproject.io/docs/secrets/databases/index.html" class="bare">https://www.vaultproject.io/docs/secrets/databases/index.html</a></p>
+</div>
+<div class="paragraph">
+<p>One of <code>database-credentials-role</code> or <code>kv-path</code> needs to be defined. not both.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A path in vault kv store, where we will find the kv-key.</p>
+</div>
+<div class="paragraph">
+<p>One of <code>database-credentials-role</code> or <code>kv-path</code> needs to be defined. not both.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key name to search in vault path <code>kv-path</code>. The value for that key is the credential.</p>
+</div>
+<div class="paragraph">
+<p><code>kv-key</code> should not be defined if <code>kv-path</code> is not.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.authentication"></a><a href="#quarkus-vault_quarkus.vault.authentication">Authentication</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -9912,95 +11253,9 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/var/run/secrets/kubernetes.io/serviceaccount/token</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.renew-grace-period"></a><code><a href="#quarkus-vault_quarkus.vault.renew-grace-period">quarkus.vault.renew-grace-period</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Renew grace period duration.
- This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current lease reaches its max_ttl. By default Vault leaseDuration is equal to 7 days (ie: 168h or 604800s). If a connection pool maxLifetime is set, it is reasonable to set the renewGracePeriod to be greater than the maxLifetime, so that we are sure we get a chance to renew leases before we reach the ttl. In any case you need to make sure there will be attempts to fetch secrets within the renewGracePeriod, because that is when the renewals will happen. This particularly important for db dynamic secrets because if the lease reaches its ttl or max_ttl, the password of the db user will become invalid and it will be not longer possible to log in. This value should also be smaller than the ttl, otherwise that would mean that we would try to recreate leases all the time.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1H</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-cache-period"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-cache-period">quarkus.vault.secret-config-cache-period</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Vault config source cache period.
- Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault again until the expiration of that period. This property is ignored if secret-config-kv-path is not set.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10M</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path">quarkus.vault.secret-config-kv-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Vault path in kv store, where all properties will be available as MP config.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.log-confidentiality-level"></a><code><a href="#quarkus-vault_quarkus.vault.log-confidentiality-level">quarkus.vault.log-confidentiality-level</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Used to hide confidential infos, for logging in particular. Possible values are:
- -   low: display all secrets.   medium: display only usernames and lease ids (ie: passwords and tokens are masked).   high: hide lease ids and dynamic credentials username.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>low</code>, <code>medium</code>, <code>high</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>medium</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-version"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-version">quarkus.vault.kv-secret-engine-version</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Kv secret engine version.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-mount-path"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-mount-path">quarkus.vault.kv-secret-engine-mount-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Kv secret engine path.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>secret</code></p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.tls"></a><a href="#quarkus-vault_quarkus.vault.tls">TLS</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -10047,44 +11302,31 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.connect-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.connect-timeout">quarkus.vault.connect-timeout</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Timeout to establish a connection with Vault.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5S</code></p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.transit"></a><a href="#quarkus-vault_quarkus.vault.transit">Transit Engine</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.read-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.read-timeout">quarkus.vault.read-timeout</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.name"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.name">quarkus.vault.transit.key."key".name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Request timeout on Vault.</p>
+<p>Specifies the name of the key to use. By default this will be the property key alias. Used when
+the same transit key is used with different configurations. Such as in:</p>
 </div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
-</div>
-<div class="openblock description">
+<div class="listingblock">
 <div class="content">
-<div class="paragraph">
-<p>Database credentials role, as defined by <a href="https://www.vaultproject.io/docs/secrets/databases/index.html" class="bare">https://www.vaultproject.io/docs/secrets/databases/index.html</a>
- One of database-credentials-role or kv-path needs to be defined. not both.</p>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.vault.transit.key.my-foo-key.name=foo
+
+quarkus.vault.transit.key.my-foo-key-with-prehashed.name=foo
+quarkus.vault.transit.key.my-foo-key-with-prehashed.prehashed=true
+...
+transitSecretEngine.sign("my-foo-key", "my raw content");
+or
+transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content");</code></pre>
+</div>
 </div>
 </div>
 </div></div></td>
@@ -10093,14 +11335,26 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.prehashed"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.prehashed">quarkus.vault.transit.key."key".prehashed</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>A path in vault kv store, where we will find the kv-key.
- One of database-credentials-role or kv-path needs to be defined. not both.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Set to true when the input is already hashed. Applies to sign operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm">quarkus.vault.transit.key."key".signature-algorithm</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>When using a RSA key, specifies the RSA signature algorithm. Applies to sign operations.</p>
 </div>
 </div>
 </div></div></td>
@@ -10109,19 +11363,45 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm">quarkus.vault.transit.key."key".hash-algorithm</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Key name to search in vault path kv-path. The value for that key is the credential.
- kv-key should not be defined if kv-path is not.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Specifies the hash algorithm to use for supporting key types. Applies to sign operations.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.type"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.type">quarkus.vault.transit.key."key".type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specifies the type of key to create for the encrypt operation. Applies to encrypt operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption">quarkus.vault.transit.key."key".convergent-encryption</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If enabled, the key will support convergent encryption, where the same plaintext creates the same ciphertext. Applies to encrypt operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>

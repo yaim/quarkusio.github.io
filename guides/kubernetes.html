@@ -72,7 +72,7 @@
 <li><a href="#enable-kubernetes-support">Enable Kubernetes support</a>
 <ul class="sectlevel2">
 <li><a href="#add-readiness-and-liveness-probes">Add readiness and liveness probes</a></li>
-<li><a href="#using-the-kubernetes-client">Using the kubernetes client</a></li>
+<li><a href="#using-the-kubernetes-client">Using the Kubernetes client</a></li>
 </ul>
 </li>
 <li><a href="#tuning-the-generated-resources-using-application-properties">Tuning the generated resources using application.properties</a>
@@ -267,22 +267,22 @@ More information about the health extension can be found in the relevant <a href
 </div>
 </div>
 <div class="sect2">
-<h3 id="using-the-kubernetes-client"><a class="anchor" href="#using-the-kubernetes-client"></a>Using the kubernetes client</h3>
+<h3 id="using-the-kubernetes-client"><a class="anchor" href="#using-the-kubernetes-client"></a>Using the Kubernetes client</h3>
 <div class="paragraph">
-<p>Applications, that are deployed to kubernetes and need to access the API server, will usually make use of the <code>kubernetes-client</code> exetension:</p>
+<p>Applications that are deployed to Kubernetes and need to access the API server, will usually make use of the <code>kubernetes-client</code> extension:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
       &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-      &lt;artifactId&gt;quarkus-kubernetes&lt;/artifactId&gt;
+      &lt;artifactId&gt;quarkus-kubernetes-client&lt;/artifactId&gt;
     &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To access the API server from within a kubernetes cluster, some RBAC related resources are required (e.g. a ServiceAccount, a RoleBinding etc).
-So, when the <code>kubernetes-client</code> extension is present, those resources are going to be automatically created, so that application will be greanted the <code>view</code> role.
-If more roles, are required they will have to be added manually.</p>
+<p>To access the API server from within a Kubernetes cluster, some RBAC related resources are required (e.g. a ServiceAccount, a RoleBinding etc.).
+So, when the <code>kubernetes-client</code> extension is present, the <code>kubernetes</code> extension is going to create those resources automatically, so that application will be granted the <code>view</code> role.
+If more roles are required, they will have to be added manually.</p>
 </div>
 </div>
 </div>
@@ -313,7 +313,7 @@ Here are some examples:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">kubernetes.group=myUser
-kubernetes.registry=http://my.docker-registry.net</code></pre>
+docker.registry=http://my.docker-registry.net</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -520,13 +520,13 @@ kubernetes.readiness-probe.period-seconds=45</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">kubernetes.liveness-probe</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Probe</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">( see Probe )</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">kubernetes.readiness-probe</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Probe</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">( see Probe )</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">kubernetes.sidecars</p></td>
@@ -541,16 +541,10 @@ kubernetes.readiness-probe.period-seconds=45</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">kubernetes.docker-file</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">kubernetes.headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Dockerfile</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">kubernetes.registry</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">kubernetes.auto-deploy-enabled</p></td>
@@ -697,40 +691,40 @@ Below you will find tables describing all available types.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Default Value</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">------------------------------------------+---------------</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">http-action-path</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">exec-action</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tcp-socket-action</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">initial-delay-seconds</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">period-seconds</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">30</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">30</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timeout-seconds</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
 </tr>
 </tbody>
 </table>
@@ -762,7 +756,7 @@ Below you will find tables describing all available types.</p>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">hostPort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host-port</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
@@ -1239,28 +1233,28 @@ Below you will find tables describing all available types.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Default Value</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker-file</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">docker.docker-file</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Dockerfile</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">registry</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">docker.registry</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">auto-push-enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">docker.auto-push-enabled</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">auto-build-enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">docker.auto-build-enabled</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 </tbody>
 </table>
@@ -1475,6 +1469,12 @@ Below you will find tables describing all available types.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">openshift.headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">openshift.auto-deploy-enabled</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -1504,6 +1504,12 @@ Below you will find tables describing all available types.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">s2i.docker-file</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dockerfile</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">s2i.registry</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -1529,6 +1535,12 @@ Below you will find tables describing all available types.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">s2i.auto-build-enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">s2i.auto-deploy-enabled</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
@@ -1766,12 +1778,6 @@ Below you will find tables describing all available types.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">knative.expose</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">knative.auto-deploy-enabled</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>

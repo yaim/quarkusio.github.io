@@ -197,6 +197,9 @@ dependency injection, this endpoint uses a <code>greeting</code> bean.</p>
 <div class="paragraph">
 <p>The easiest way to create a new Quarkus project is to open a terminal and run the following command:</p>
 </div>
+<div class="paragraph">
+<p>For Linux &amp; MacOS users</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.1.1.Final:create \
@@ -205,6 +208,33 @@ dependency injection, this endpoint uses a <code>greeting</code> bean.</p>
     -DclassName="org.acme.quickstart.GreetingResource" \
     -Dpath="/hello"
 cd getting-started</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Windows users</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If using cmd , (don&#8217;t use forward slash <code>\</code>)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.1.1.Final:create -DprojectGroupId=org.acme -DprojectArtifactId=getting-started -DclassName="org.acme.quickstart.GreetingResource" -Dpath="/hello"</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If using Powershell , wrap <code>-D</code> parameters in double quotes</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.1.1.Final:create "-DprojectGroupId=org.acme" "-DprojectArtifactId=getting-started" "-DclassName=org.acme.quickstart.GreetingResource" "-Dpath=/hello"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -367,7 +397,7 @@ hello</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Hit <code>CTRL+C</code> to stop the application, but you can also keep it running and enjoy the blazing fast hot-reload.</p>
+<p>Hit <code>CTRL+C</code> to stop the application, or keep it running and enjoy the blazing fast hot-reload.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -689,7 +719,7 @@ public CompletionStage&lt;String&gt; hello() {
 <div class="paragraph">
 <p>This guide covered the creation of an application using Quarkus.
 However, there is much more.
-We recommend continuing the journey with the <a href="building-native-image">building a native executable guide</a>, where you learn about the native executable creation and the packaging in a container.</p>
+We recommend continuing the journey with the <a href="building-native-image">building a native executable guide</a>, where you learn about creating a native executable and packaging it in a container.</p>
 </div>
 <div class="paragraph">
 <p>In addition, the <a href="tooling">tooling guide</a> document explains how to:</p>

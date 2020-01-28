@@ -79,6 +79,7 @@
 <li><a href="#simplifying-mongodb-client-usage-using-bson-codec">Simplifying MongoDB Client usage using BSON codec</a></li>
 <li><a href="#simplifying-mongodb-with-panache">Simplifying MongoDB with Panache</a></li>
 <li><a href="#connection-health-check">Connection Health Check</a></li>
+<li><a href="#the-legacy-client">The legacy client</a></li>
 <li><a href="#building-a-native-executable">Building a native executable</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a></li>
@@ -512,7 +513,7 @@ More information in the codec documentation: <a href="https://mongodb.github.io/
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.json.codec;
 
-import com.mongodb.MongoClient;
+import com.mongodb.MongoClientSettings;
 import org.acme.rest.json.Fruit;
 import org.bson.*;
 import org.bson.codecs.Codec;
@@ -527,7 +528,7 @@ public class FruitCodec implements CollectibleCodec&lt;Fruit&gt; {
     private final Codec&lt;Document&gt; documentCodec;
 
     public FruitCodec() {
-        this.documentCodec = MongoClient.getDefaultCodecRegistry().get(Document.class);
+        this.documentCodec = MongoClientSettings.getDefaultCodecRegistry().get(Document.class);
     }
 
     @Override
@@ -672,6 +673,26 @@ to validate the connection to the cluster.</p>
 </div>
 <div class="paragraph">
 <p>This behavior can be disabled by setting the <code>quarkus.mongodb.health.enabled</code> property to <code>false</code> in your <code>application.properties</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-legacy-client"><a class="anchor" href="#the-legacy-client"></a>The legacy client</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We don&#8217;t include the legacy MongoDB client by default. It contains the now retired MongoDB Java API (DB, DBCollection,&#8230;&#8203; )
+and the <code>com.mongodb.MongoClient</code> that is now superseded by <code>com.mongodb.client.MongoClient</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you want to use the legacy API, you need to add the following dependency to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.mongodb&lt;/groupId&gt;
+    &lt;artifactId&gt;mongodb-driver-legacy&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>

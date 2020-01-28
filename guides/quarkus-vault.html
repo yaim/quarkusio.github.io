@@ -90,13 +90,281 @@
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault server url.
- Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
+<p>Vault server url.</p>
+</div>
+<div class="paragraph">
+<p>Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html">URL</a></p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.renew-grace-period"></a><code><a href="#quarkus-vault_quarkus.vault.renew-grace-period">quarkus.vault.renew-grace-period</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Renew grace period duration.</p>
+</div>
+<div class="paragraph">
+<p>This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current
+lease reaches its max_ttl.
+By default Vault leaseDuration is equal to 7 days (ie: 168h or 604800s).
+If a connection pool maxLifetime is set, it is reasonable to set the renewGracePeriod to be greater
+than the maxLifetime, so that we are sure we get a chance to renew leases before we reach the ttl.
+In any case you need to make sure there will be attempts to fetch secrets within the renewGracePeriod,
+because that is when the renewals will happen. This is particularly important for db dynamic secrets
+because if the lease reaches its ttl or max_ttl, the password of the db user will become invalid and
+it will be not longer possible to log in.
+This value should also be smaller than the ttl, otherwise that would mean that we would try to recreate
+leases all the time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1H</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-cache-period"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-cache-period">quarkus.vault.secret-config-cache-period</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Vault config source cache period.</p>
+</div>
+<div class="paragraph">
+<p>Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault
+again until the expiration of that period.
+This property is ignored if <code>secret-config-kv-path</code> is not set.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10M</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path">quarkus.vault.secret-config-kv-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of comma separated vault paths in kv store,
+where all properties will be available as MP config properties <strong>as-is</strong>, with no prefix.</p>
+</div>
+<div class="paragraph">
+<p>For instance, if vault contains property <code>foo</code>, it will be made available to the
+quarkus application as <code>@ConfigProperty(name = "foo") String foo;</code></p>
+</div>
+<div class="paragraph">
+<p>If 2 paths contain the same property, the last path will win.</p>
+</div>
+<div class="paragraph">
+<p>For instance if</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>secret/base-config</code> contains <code>foo=bar</code> and</p>
+</li>
+<li>
+<p><code>secret/myapp/config</code> contains <code>foo=myappbar</code>, then</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>@ConfigProperty(name = "foo") String foo</code> will have value <code>myappbar</code>
+with application properties <code>quarkus.vault.secret-config-kv-path=base-config,myapp/config</code></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.log-confidentiality-level"></a><code><a href="#quarkus-vault_quarkus.vault.log-confidentiality-level">quarkus.vault.log-confidentiality-level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Used to hide confidential infos, for logging in particular.
+Possible values are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>low: display all secrets.</p>
+</li>
+<li>
+<p>medium: display only usernames and lease ids (ie: passwords and tokens are masked).</p>
+</li>
+<li>
+<p>high: hide lease ids and dynamic credentials username.</p>
+</li>
+</ul>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>low</code>, <code>medium</code>, <code>high</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>medium</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-version"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-version">quarkus.vault.kv-secret-engine-version</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Kv secret engine version.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-mount-path"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-mount-path">quarkus.vault.kv-secret-engine-mount-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Kv secret engine path.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>secret</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.connect-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.connect-timeout">quarkus.vault.connect-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Timeout to establish a connection with Vault.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.read-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.read-timeout">quarkus.vault.read-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Request timeout on Vault.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path">quarkus.vault.secret-config-kv-path."prefix"</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of comma separated vault paths in kv store,
+where all properties will be available as <strong>prefixed</strong> MP config properties.</p>
+</div>
+<div class="paragraph">
+<p>For instance if the application properties contains
+<code>quarkus.vault.secret-config-kv-path.myprefix=config</code>, and
+vault path <code>secret/config</code> contains <code>foo=bar</code>, then <code>myprefix.foo</code>
+will be available in the MP config.</p>
+</div>
+<div class="paragraph">
+<p>If the same property is available in 2 different paths for the same prefix, the last one
+will win.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,List&lt;String&gt;&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Database credentials role, as defined by <a href="https://www.vaultproject.io/docs/secrets/databases/index.html" class="bare">https://www.vaultproject.io/docs/secrets/databases/index.html</a></p>
+</div>
+<div class="paragraph">
+<p>One of <code>database-credentials-role</code> or <code>kv-path</code> needs to be defined. not both.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A path in vault kv store, where we will find the kv-key.</p>
+</div>
+<div class="paragraph">
+<p>One of <code>database-credentials-role</code> or <code>kv-path</code> needs to be defined. not both.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Key name to search in vault path <code>kv-path</code>. The value for that key is the credential.</p>
+</div>
+<div class="paragraph">
+<p><code>kv-key</code> should not be defined if <code>kv-path</code> is not.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.authentication"></a><a href="#quarkus-vault_quarkus.vault.authentication">Authentication</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -197,95 +465,9 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/var/run/secrets/kubernetes.io/serviceaccount/token</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.renew-grace-period"></a><code><a href="#quarkus-vault_quarkus.vault.renew-grace-period">quarkus.vault.renew-grace-period</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Renew grace period duration.
- This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current lease reaches its max_ttl. By default Vault leaseDuration is equal to 7 days (ie: 168h or 604800s). If a connection pool maxLifetime is set, it is reasonable to set the renewGracePeriod to be greater than the maxLifetime, so that we are sure we get a chance to renew leases before we reach the ttl. In any case you need to make sure there will be attempts to fetch secrets within the renewGracePeriod, because that is when the renewals will happen. This particularly important for db dynamic secrets because if the lease reaches its ttl or max_ttl, the password of the db user will become invalid and it will be not longer possible to log in. This value should also be smaller than the ttl, otherwise that would mean that we would try to recreate leases all the time.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1H</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-cache-period"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-cache-period">quarkus.vault.secret-config-cache-period</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Vault config source cache period.
- Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault again until the expiration of that period. This property is ignored if secret-config-kv-path is not set.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10M</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path">quarkus.vault.secret-config-kv-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Vault path in kv store, where all properties will be available as MP config.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.log-confidentiality-level"></a><code><a href="#quarkus-vault_quarkus.vault.log-confidentiality-level">quarkus.vault.log-confidentiality-level</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Used to hide confidential infos, for logging in particular. Possible values are:
- -   low: display all secrets.   medium: display only usernames and lease ids (ie: passwords and tokens are masked).   high: hide lease ids and dynamic credentials username.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>low</code>, <code>medium</code>, <code>high</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>medium</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-version"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-version">quarkus.vault.kv-secret-engine-version</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Kv secret engine version.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-mount-path"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-mount-path">quarkus.vault.kv-secret-engine-mount-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Kv secret engine path.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>secret</code></p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.tls"></a><a href="#quarkus-vault_quarkus.vault.tls">TLS</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -332,44 +514,31 @@
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.connect-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.connect-timeout">quarkus.vault.connect-timeout</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Timeout to establish a connection with Vault.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5S</code></p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.transit"></a><a href="#quarkus-vault_quarkus.vault.transit">Transit Engine</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.read-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.read-timeout">quarkus.vault.read-timeout</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.name"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.name">quarkus.vault.transit.key."key".name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Request timeout on Vault.</p>
+<p>Specifies the name of the key to use. By default this will be the property key alias. Used when
+the same transit key is used with different configurations. Such as in:</p>
 </div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
-  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
-</div>
-<div class="openblock description">
+<div class="listingblock">
 <div class="content">
-<div class="paragraph">
-<p>Database credentials role, as defined by <a href="https://www.vaultproject.io/docs/secrets/databases/index.html" class="bare">https://www.vaultproject.io/docs/secrets/databases/index.html</a>
- One of database-credentials-role or kv-path needs to be defined. not both.</p>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.vault.transit.key.my-foo-key.name=foo
+
+quarkus.vault.transit.key.my-foo-key-with-prehashed.name=foo
+quarkus.vault.transit.key.my-foo-key-with-prehashed.prehashed=true
+...
+transitSecretEngine.sign("my-foo-key", "my raw content");
+or
+transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content");</code></pre>
+</div>
 </div>
 </div>
 </div></div></td>
@@ -378,14 +547,26 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.prehashed"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.prehashed">quarkus.vault.transit.key."key".prehashed</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>A path in vault kv store, where we will find the kv-key.
- One of database-credentials-role or kv-path needs to be defined. not both.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Set to true when the input is already hashed. Applies to sign operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm">quarkus.vault.transit.key."key".signature-algorithm</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>When using a RSA key, specifies the RSA signature algorithm. Applies to sign operations.</p>
 </div>
 </div>
 </div></div></td>
@@ -394,19 +575,45 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm">quarkus.vault.transit.key."key".hash-algorithm</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Key name to search in vault path kv-path. The value for that key is the credential.
- kv-key should not be defined if kv-path is not.
- see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Specifies the hash algorithm to use for supporting key types. Applies to sign operations.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.type"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.type">quarkus.vault.transit.key."key".type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specifies the type of key to create for the encrypt operation. Applies to encrypt operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption">quarkus.vault.transit.key."key".convergent-encryption</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If enabled, the key will support convergent encryption, where the same plaintext creates the same ciphertext. Applies to encrypt operations.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>

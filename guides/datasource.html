@@ -82,6 +82,7 @@
 </ul>
 </li>
 <li><a href="#datasource-health-check">Datasource Health Check</a></li>
+<li><a href="#datasource-metrics">Datasource Metrics</a></li>
 <li><a href="#narayana-transaction-manager-integration">Narayana Transaction Manager integration</a></li>
 <li><a href="#in-memory-databases">Testing with in-memory databases</a></li>
 <li><a href="#configuration-reference">Agroal Configuration Reference</a></li>
@@ -546,6 +547,29 @@ If you have multiple datasources, all datasources will be checked and the status
 </div>
 </div>
 <div class="sect1">
+<h2 id="datasource-metrics"><a class="anchor" href="#datasource-metrics"></a>Datasource Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using the <code>quarkus-smallrye-metrics</code> extension, <code>quarkus-agroal</code> can expose some data source metrics on the
+<code>/metrics</code> endpoint. This can be turned on by setting the property <code>quarkus.datasource.metrics.enabled</code> to true.</p>
+</div>
+<div class="paragraph">
+<p>For the exposed metrics to contain any actual values, it is necessary that metric collection is enabled internally
+by Agroal mechanisms. By default, this metric collection mechanism gets turned on for all data sources if the <code>quarkus-smallrye-metrics</code>
+is present and metrics for the Agroal extension are enabled. If you want to disable metrics for a particular data source,
+this can be done by setting <code>quarkus.datasource.enable-metrics</code> to <code>false</code> (or <code>quarkus.datasource.&lt;datasource name&gt;.enable-metrics</code> for a named datasource). This disables
+collecting the metrics as well as exposing them in the <code>/metrics</code> endpoint, because it does not make sense to
+expose metrics if the mechanism to collect them is disabled.</p>
+</div>
+<div class="paragraph">
+<p>Conversely, setting <code>quarkus.datasource.enable-metrics</code> to <code>true</code> (or <code>quarkus.datasource.&lt;datasource name&gt;.enable-metrics</code> for a named datasource) explicitly can be used to enable collection of metrics even if
+the <code>quarkus-smallrye-metrics</code> extension is not in use. This can be useful if you need to access the collected metrics programmatically.
+They are available after calling <code>dataSource.getMetrics()</code> on an injected <code>AgroalDataSource</code> instance. If collection of metrics is disabled
+for this data source, all values will be zero.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="narayana-transaction-manager-integration"><a class="anchor" href="#narayana-transaction-manager-integration"></a>Narayana Transaction Manager integration</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -659,6 +683,20 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.enable-metrics">quarkus.datasource.enable-metrics</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable datasource metrics collection. If unspecified, collecting metrics will be enabled by default if the smallrye-metrics extension is active.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.health.enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.health.enabled">quarkus.datasource.health.enabled</a></code></p>
 </div>
 <div class="openblock description">
@@ -670,6 +708,20 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.metrics.enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.metrics.enabled">quarkus.datasource.metrics.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not datasource metrics are published in case the smallrye-metrics extension is present (default to false). NOTE: This is different from the "enable-metrics" property that needs to be set on data source level to enable collection of metrics for that data source.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -877,20 +929,6 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.enable-metrics">quarkus.datasource.enable-metrics</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Enable datasource metrics collection.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.detect-statement-leaks"></a><code><a href="#quarkus-agroal_quarkus.datasource.detect-statement-leaks">quarkus.datasource.detect-statement-leaks</a></code></p>
 </div>
 <div class="openblock description">
@@ -964,6 +1002,20 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>enabled</code>, <code>xa</code>, <code>disabled</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>enabled</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics">quarkus.datasource."datasource-name".enable-metrics</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable datasource metrics collection. If unspecified, collecting metrics will be enabled by default if the smallrye-metrics extension is active.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1168,20 +1220,6 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>undefined</code>, <code>none</code>, <code>read-uncommitted</code>, <code>read-committed</code>, <code>repeatable-read</code>, <code>serializable</code></p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics">quarkus.datasource."datasource-name".enable-metrics</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Enable datasource metrics collection.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

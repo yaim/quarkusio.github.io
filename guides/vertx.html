@@ -297,7 +297,7 @@ Now let&#8217;s use the Vert.x API to implement the artificially delayed reply w
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Delay reply by 10ms
 vertx.setTimer(10, l -&gt; {
     // Compute elapsed time in milliseconds
-    long duration = MILLISECONDS.convert(System.nanoTime() - start, NANOSECONDS);
+    long duration = TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS);
 
     // Format message
     String message = String.format("Hello %s! (%d ms)%n", name, duration);
