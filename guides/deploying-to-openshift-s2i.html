@@ -134,7 +134,7 @@ We are going to create an OpenShift <code>build</code> executing it:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># To build the image on OpenShift
-oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started --name=quarkus-quickstart-native
+oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started --name=quarkus-quickstart-native
 oc logs -f bc/quarkus-quickstart-native
 
 # To create the route
@@ -145,6 +145,21 @@ export URL="http://$(oc get route | grep quarkus-quickstart-native | awk '{print
 echo $URL
 curl $URL/hello/greeting/quarkus</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The <code>oc new-app</code> command above uses a builder image compatible with JDK 8.
+In order to create a JDK 11 native compatible image use <code>quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11</code> as a builder image.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Your application is accessible at the printed URL.</p>
@@ -226,9 +241,12 @@ oc expose svc minimal-quarkus-quickstart-native</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1~https://github.com/quarkusio/quarkus-quickstarts.git \
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8~https://github.com/quarkusio/quarkus-quickstarts.git \
     --context-dir=getting-started --name=quarkus-quickstart-native</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Like in previous commands, use <code>quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11</code> for building a JDK 11 compatible image.</p>
 </div>
 </td>
 </tr>

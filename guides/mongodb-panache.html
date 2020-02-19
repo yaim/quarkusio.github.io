@@ -832,6 +832,23 @@ you need to provide the value by yourself.</p>
 <p><code>ObjectId</code> can be difficult to use if you want to expose its value in your REST service.
 So we created JSON-B and Jackson providers to serialize/deserialize them as a <code>String</code> which are are automatically registered if your project depends on one of the RESTEasy with JSON-B or RESTEasy with Jackson extensions.</p>
 </div>
+<div class="paragraph">
+<p>The last option is to the use the <a href="https://kotlinlang.org/docs/reference/compiler-plugins.html#no-arg-compiler-plugin">no-arg</a> compiler plugin.
+This plugin is configured with a list of annotations, and the end result is the generation of no-args constructor for each class annotated with them.</p>
+</div>
+<div class="paragraph">
+<p>For MongoDB with Panache, you could use the <code>@MongoEntity</code> annotation on your data class for this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">@MongoEntity
+data class Person (
+    var name: String,
+    var birth: LocalDate,
+    var status: Status
+): PanacheMongoEntity()</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

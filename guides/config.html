@@ -1022,7 +1022,7 @@ You should decide and keep one configuration type to avoid errors.
 </table>
 </div>
 <div class="sect3">
-<h4 id="configuration-example"><a class="anchor" href="#configuration-example"></a>Configuration Example</h4>
+<h4 id="configuration-examples"><a class="anchor" href="#configuration-examples"></a>Configuration Examples</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs"># YAML supports comments
@@ -1031,7 +1031,20 @@ quarkus:
     url: jdbc:postgresql://localhost:5432/some-database
     driver: org.postgresql.Driver
     username: quarkus
-    password: quarkus</code></pre>
+    password: quarkus
+
+# REST Client configuration property
+org:
+  acme:
+    restclient:
+      CountriesService/mp-rest/url: https://restcountries.eu/rest
+
+# For configuration property names that use quotes, do not split the string inside the quotes.
+quarkus:
+  log:
+    category:
+      "io.quarkus.category":
+        level: INFO</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">

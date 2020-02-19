@@ -204,7 +204,7 @@ sudo apt-get install build-essential libz-dev zlib1g-dev</code></pre>
 <p>Use platform-specific install tools like <a href="https://github.com/graalvm/homebrew-tap">homebrew</a> or <a href="https://sdkman.io/jdks#Oracle">sdkman</a>.</p>
 </li>
 <li>
-<p>Download the appropriate Community Edition archive from <a href="https://github.com/oracle/graal/releases" class="bare">https://github.com/oracle/graal/releases</a>, and unpack it like you would any other JDK.</p>
+<p>Download the appropriate Community Edition archive from <a href="https://github.com/graalvm/graalvm-ce-builds/releases" class="bare">https://github.com/graalvm/graalvm-ce-builds/releases</a>, and unpack it like you would any other JDK.</p>
 </li>
 </ul>
 </div>
@@ -620,7 +620,7 @@ Interested by tiny Docker images, check the <a href="https://github.com/quarkusi
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="dockerfile" class="language-dockerfile hljs">## Stage 1 : build with maven builder image with native capabilities
-FROM quay.io/quarkus/centos-quarkus-maven:19.3.1 AS build
+FROM quay.io/quarkus/centos-quarkus-maven:19.3.1-java8 AS build
 COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
 USER root
@@ -647,6 +647,9 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
+<div class="paragraph">
+<p>Replace the -java8 in the base image with -java11 if you want to use Java 11.</p>
+</div>
 <div class="paragraph">
 <p>Before launching our Docker build, we need to update the default <code>.dockerignore</code> file as it filters everything except the <code>target</code> directory and as we plan to build inside a container we need to be able to copy the <code>src</code> directory. So edit your <code>.dockerignore</code> and remove or comment its content.</p>
 </div>
