@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Qute</title>
+  <title>Qute - Why (Not Just) Yet Another Templating Engine</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlight.pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -66,7 +66,7 @@
     <div class="post-page grid-wrapper">
   <div class="grid__item width-10-12 width-12-12-m doc-content">
     <div class="post-date">February 23, 2020</div>
-    <h1>Qute</h1>
+    <h1>Qute - Why (Not Just) Yet Another Templating Engine</h1>
     <div class="grid-wrapper">
       <div class="grid__item width-8-12 width-12-12-m byline-wrapper">
         
@@ -76,10 +76,7 @@
         <p class="byline">By Martin Kouba</p>
       </div>
       <div class="grid__item width-12-12">
-          <div class="sect1">
-<h2 id="qute-why-not-just-yet-another-templating-engine"><a class="anchor" href="#qute-why-not-just-yet-another-templating-engine"></a>Qute - Why (Not Just) Yet Another Templating Engine</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
+          <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
@@ -108,8 +105,9 @@ On the other hand, the Quarkus community is also a powerful innovation catalyst.
 And so we decided to start Qute (QUarkus TEmplates) - a templating engine designed specifically to meet the Quarkus needs.
 We believe that we can bring new ideas even to such an explored area as the templating is.</p>
 </div>
-<div class="sect2">
-<h3 id="basic-ideas"><a class="anchor" href="#basic-ideas"></a>Basic Ideas</h3>
+<div class="sect1">
+<h2 id="basic-ideas"><a class="anchor" href="#basic-ideas"></a>Basic Ideas</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Our main goal is to provide an opinionated innovative templating engine.
 But we don&#8217;t want to reinvent the wheel.
@@ -140,8 +138,10 @@ Just a few examples:</p>
 We introduce new features based on Quarkus principles&#8230;&#8203;</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="asynchronous-data-resolution-on-the-way-to-reactive"><a class="anchor" href="#asynchronous-data-resolution-on-the-way-to-reactive"></a>Asynchronous Data Resolution - On The Way To Reactive</h3>
+</div>
+<div class="sect1">
+<h2 id="asynchronous-data-resolution-on-the-way-to-reactive"><a class="anchor" href="#asynchronous-data-resolution-on-the-way-to-reactive"></a>Asynchronous Data Resolution - On The Way To Reactive</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>When we started to design Qute we had one important aspect in mind - the data resolution API should be asynchronous.
 This allows for better resource utilization and fits the Quarkus reactive model.
@@ -191,8 +191,10 @@ Another consequence of this design decision is that it&#8217;s possible to lever
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="type-safe-templates"><a class="anchor" href="#type-safe-templates"></a>Type-safe Templates</h3>
+</div>
+<div class="sect1">
+<h2 id="type-safe-templates"><a class="anchor" href="#type-safe-templates"></a>Type-safe Templates</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Most of the templating engines are not type-safe, ie. do not prevent type errors.
 It&#8217;s quite natural because dynamicity in templates is very often practical.
@@ -285,8 +287,10 @@ Only properties are currently validated in expressions; "virtual methods" such a
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="first-class-quarkus-citizen"><a class="anchor" href="#first-class-quarkus-citizen"></a>First-class Quarkus Citizen</h3>
+</div>
+<div class="sect1">
+<h2 id="first-class-quarkus-citizen"><a class="anchor" href="#first-class-quarkus-citizen"></a>First-class Quarkus Citizen</h2>
+<div class="sectionbody">
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -340,8 +344,10 @@ class MyBean {
 The <code>Engine</code> is a central point for template management and provides some low-level API.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="resteasy-integration"><a class="anchor" href="#resteasy-integration"></a>RESTEasy Integration</h3>
+</div>
+<div class="sect1">
+<h2 id="resteasy-integration"><a class="anchor" href="#resteasy-integration"></a>RESTEasy Integration</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>If used together with RESTEasy a resource method may return a <code>TemplateInstance</code> and the integration code takes care of all the necessary steps and renders the output to the response.
 See <a href="https://quarkus.io/guides/qute-reference#resteasy-integration">RESTEasy Integration</a> for more information.</p>
@@ -386,8 +392,10 @@ public class HelloResource {
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="mailer-integration"><a class="anchor" href="#mailer-integration"></a>Mailer Integration</h3>
+</div>
+<div class="sect1">
+<h2 id="mailer-integration"><a class="anchor" href="#mailer-integration"></a>Mailer Integration</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Templates may come in handy when creating e-mail messages.
 The Mailer extension integrates with Qute to provide a convenient way of sending e-mails.
@@ -395,8 +403,10 @@ In particular, the message body is automatically created using <code>*.html</cod
 See the <a href="https://quarkus.io/guides/mailer#message-body-based-on-qute-templates">Sending Emails</a> guide for more details.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="conclusion"><a class="anchor" href="#conclusion"></a>Conclusion</h3>
+</div>
+<div class="sect1">
+<h2 id="conclusion"><a class="anchor" href="#conclusion"></a>Conclusion</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Qute first landed in Quarkus 1.1.0.Final.
 Since then we fixed many bugs and implemented some feature requests.
@@ -404,14 +414,13 @@ Feel free to join our community to stabilize the API, harden the implementation 
 </div>
 </div>
 </div>
-</div>
           
       </div>
       <div class="grid__item width-12-12"><div class="share-page">
-  <a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https://quarkus.io/blog/qute/&title=Qute" rel="nofollow" target="_blank" title="Share on LinkedIn">
+  <a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https://quarkus.io/blog/qute/&title=Qute - Why (Not Just) Yet Another Templating Engine" rel="nofollow" target="_blank" title="Share on LinkedIn">
     <img src="/assets/images/share-page/icons_social-linkedin.png"/>
   </a>
-  <a class="share-twitter" href="https://twitter.com/intent/tweet?text=Qute&url=https://quarkus.io/blog/qute/&via=quarkusio&related=quarkusio" rel="nofollow" target="_blank" title="Share on Twitter">
+  <a class="share-twitter" href="https://twitter.com/intent/tweet?text=Qute - Why (Not Just) Yet Another Templating Engine&url=https://quarkus.io/blog/qute/&via=quarkusio&related=quarkusio" rel="nofollow" target="_blank" title="Share on Twitter">
     <img src="/assets/images/share-page/icons_social-twitter.png"/>
   </a>
   <a class="share-facebook" href="https://facebook.com/sharer.php?u=https://quarkus.io/blog/qute/" rel="nofollow" target="_blank" title="Share on Facebook">
@@ -420,7 +429,7 @@ Feel free to join our community to stabilize the API, harden the implementation 
   <a class="share-reddit" href="http://www.reddit.com/submit?url=https://quarkus.io/blog/qute/" onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;" title="Share on Reddit" >
     <img src="/assets/images/share-page/icons_social-reddit.png"/>
   </a>
-  <a class="share-email" href="mailto:?subject=Qute&amp;body=Qute https://quarkus.io/blog/qute/" title="Share via Email" >
+  <a class="share-email" href="mailto:?subject=Qute - Why (Not Just) Yet Another Templating Engine&amp;body=Qute - Why (Not Just) Yet Another Templating Engine https://quarkus.io/blog/qute/" title="Share via Email" >
     <img src="/assets/images/share-page/icons_social-email.png"/>
   </a>
 </div>
