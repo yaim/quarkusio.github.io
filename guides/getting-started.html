@@ -80,7 +80,8 @@
 <li><a href="#development-mode">7. Development Mode</a></li>
 <li><a href="#testing">8. Testing</a></li>
 <li><a href="#packaging-and-run-the-application">9. Packaging and run the application</a></li>
-<li><a href="#whats-next">10. What&#8217;s next?</a></li>
+<li><a href="#banner">10. Configuring the banner</a></li>
+<li><a href="#whats-next">11. What&#8217;s next?</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -691,7 +692,17 @@ Before running the application, don&#8217;t forget to stop the hot reload mode (
 </div>
 </div>
 <div class="sect1">
-<h2 id="whats-next"><a class="anchor" href="#whats-next"></a>10. What&#8217;s next?</h2>
+<h2 id="banner"><a class="anchor" href="#banner"></a>10. Configuring the banner</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default when a Quarkus application starts (in regular or dev mode), it will display an ASCII art banner. The banner can be disabled by setting <code>quarkus.banner.enabled=false</code> in <code>application.properties</code>,
+by setting the <code>-Dquarkus.banner.enabled=false</code> Java System Property, or by setting the <code>QUARKUS_BANNER_ENABLED</code> environment variable to <code>false</code>.
+Furthermore, users can supply a custom banner by placing the banner file in <code>src/main/resources</code> and configuring <code>quarkus.banner.path=name-of-file</code> in <code>application.properties</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="whats-next"><a class="anchor" href="#whats-next"></a>11. What&#8217;s next?</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide covered the creation of an application using Quarkus.
