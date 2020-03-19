@@ -73,10 +73,12 @@
 <li><a href="#listening-for-startup-and-shutdown-events">Listening for startup and shutdown events</a>
 <ul class="sectlevel2">
 <li><a href="#what-is-the-difference-from-initializedapplicationscoped-class-and-destroyedapplicationscoped-class">What is the difference from <code>@Initialized(ApplicationScoped.class)</code> and <code>@Destroyed(ApplicationScoped.class)</code></a></li>
+<li><a href="#using-startup-to-initialize-a-cdi-bean-at-application-startup">Using <code>@Startup</code> to initialize a CDI bean at application startup</a></li>
 </ul>
 </li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
 <li><a href="#launch-modes">Launch Modes</a></li>
+<li><a href="#graceful-shutdown">Graceful Shutdown</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -147,7 +149,7 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=lifecycle-quickstart \
-    -DclassName="org.acme.events.GreetingResource" \
+    -DclassName="org.acme.lifecycle.GreetingResource" \
     -Dpath="/hello"
 cd lifecycle-quickstart</code></pre>
 </div>
@@ -170,7 +172,7 @@ cd lifecycle-quickstart</code></pre>
 <p>the application configuration file</p>
 </li>
 <li>
-<p>an <code>org.acme.events.GreetingResource</code> resource</p>
+<p>an <code>org.acme.lifecycle.GreetingResource</code> resource</p>
 </li>
 <li>
 <p>an associated test</p>
@@ -183,12 +185,12 @@ cd lifecycle-quickstart</code></pre>
 <h2 id="listening-for-startup-and-shutdown-events"><a class="anchor" href="#listening-for-startup-and-shutdown-events"></a>Listening for startup and shutdown events</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Create a new class named <code>AppLifecycleBean</code> (or pick another name) in the <code>org.acme.events</code> package, and copy the
+<p>Create a new class named <code>AppLifecycleBean</code> (or pick another name) in the <code>org.acme.lifecycle</code> package, and copy the
 following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.events;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.lifecycle;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -242,7 +244,7 @@ The events are also called in <em>dev mode</em> between each redeployment.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The methods can access injected beans. Check the <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/lifecycle-quickstart/src/main/java/org/acme/events/AppLifecycleBean.java">AppLifecycleBean.java</a> class for details.
+The methods can access injected beans. Check the <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/lifecycle-quickstart/src/main/java/org/acme/lifecycle/AppLifecycleBean.java">AppLifecycleBean.java</a> class for details.
 </td>
 </tr>
 </table>
@@ -262,6 +264,64 @@ See <a href="writing-extensions#bootstrap-three-phases">Three Phases of Bootstra
 </td>
 <td class="content">
 In CDI applications, an event with qualifier <code>@Initialized(ApplicationScoped.class)</code> is fired when the application context is initialized. See <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec.html#application_context" target="_blank" rel="noopener">the spec</a> for more info.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-startup-to-initialize-a-cdi-bean-at-application-startup"><a class="anchor" href="#using-startup-to-initialize-a-cdi-bean-at-application-startup"></a>Using <code>@Startup</code> to initialize a CDI bean at application startup</h3>
+<div class="paragraph">
+<p>A bean represented by a class, producer method or field annotated with <code>@Startup</code> is initialized at application startup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.lifecycle;
+
+import javax.enterprise.context.ApplicationScoped;
+
+@Startup <i class="conum" data-value="1"></i><b>(1)</b>
+@ApplicationScoped
+public class EagerAppBean {
+
+   private final String name;
+
+   EagerAppBean(NameGenerator generator) { <i class="conum" data-value="2"></i><b>(2)</b>
+     this.name = generator.createName();
+   }
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>For each bean annotated with <code>@Startup</code> a synthetic observer of <code>StartupEvent</code> is generated. The default priority is used.</p>
+</li>
+<li>
+<p>The bean constructor is called when the application starts and the resulting contextual instance is stored in the application context.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>@Dependent</code> beans are destroyed immediately afterwards to follow the behavior of observers declared on <code>@Dependent</code> beans.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If a class is annotated with <code>@Startup</code> but with no scope annotation then <code>@ApplicationScoped</code> is added automatically.
 </td>
 </tr>
 </table>
@@ -292,6 +352,22 @@ then the mode will be <code>DEVELOPMENT</code>, if you are running a JUnit test 
 <div class="paragraph">
 <p>Your application can get the launch mode by injecting the <code>io.quarkus.runtime.LaunchMode</code> enum into a CDI bean,
 or by invoking the static method <code>io.quarkus.runtime.LaunchMode.current()</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="graceful-shutdown"><a class="anchor" href="#graceful-shutdown"></a>Graceful Shutdown</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus includes support for graceful shutdown, this allows Quarkus to wait for running requests to finish, up
+till a set timeout. By default this is disabled, however you can configure this by setting the <code>quarkus.shutdown.timeout</code>
+config property. When this is set shutdown will not happen until all running requests have completed, or until
+this timeout has elapsed. This config property is a duration, and can be set using the standard
+<code>java.time.Duration</code> format, if only a number is specified it is interpreted as seconds.</p>
+</div>
+<div class="paragraph">
+<p>Extensions that accept requests need to add support for this on an individual basis. At the moment only the
+HTTP extension supports this, so shutdown may still happen when messaging requests are active.</p>
 </div>
 </div>
 </div>

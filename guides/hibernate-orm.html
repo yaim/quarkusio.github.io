@@ -193,10 +193,10 @@ then add the relevant configuration properties in <code>application.properties</
 <div class="title">Example <code>application.properties</code></div>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># datasource configuration
-quarkus.datasource.url = jdbc:postgresql://localhost:5432/hibernate_db
-quarkus.datasource.driver = org.postgresql.Driver
+quarkus.datasource.db-kind = postgresql
 quarkus.datasource.username = hibernate
 quarkus.datasource.password = hibernate
+quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/hibernate_db
 
 # drop and create the database at startup (use `update` to only update the schema)
 quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
@@ -312,7 +312,7 @@ and will have it use the default datasource.</p>
 <p>The configuration properties listed here allow you to override such defaults, and customize and tune various aspects.</p>
 </div>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -328,7 +328,7 @@ and will have it use the default datasource.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.dialect"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.dialect">quarkus.hibernate-orm.dialect</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.dialect"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.dialect">quarkus.hibernate-orm.dialect</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -358,7 +358,7 @@ MariaDB, Microsoft SQL Server and H2.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.dialect.storage-engine"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.dialect.storage-engine">quarkus.hibernate-orm.dialect.storage-engine</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.dialect.storage-engine"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.dialect.storage-engine">quarkus.hibernate-orm.dialect.storage-engine</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -375,7 +375,7 @@ MariaDB, Microsoft SQL Server and H2.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.sql-load-script"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.sql-load-script">quarkus.hibernate-orm.sql-load-script</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.sql-load-script"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.sql-load-script">quarkus.hibernate-orm.sql-load-script</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -432,7 +432,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.batch-fetch-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.batch-fetch-size">quarkus.hibernate-orm.batch-fetch-size</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.batch-fetch-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.batch-fetch-size">quarkus.hibernate-orm.batch-fetch-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -449,7 +449,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy">quarkus.hibernate-orm.physical-naming-strategy</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.physical-naming-strategy">quarkus.hibernate-orm.physical-naming-strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -463,7 +463,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy">quarkus.hibernate-orm.implicit-naming-strategy</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.implicit-naming-strategy">quarkus.hibernate-orm.implicit-naming-strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -477,7 +477,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.statistics"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.statistics">quarkus.hibernate-orm.statistics</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.statistics"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.statistics">quarkus.hibernate-orm.statistics</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -491,7 +491,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled">quarkus.hibernate-orm.metrics.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.metrics.enabled">quarkus.hibernate-orm.metrics.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -504,13 +504,29 @@ Each SQL statement must be terminated by a semicolon.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.second-level-caching-enabled"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.second-level-caching-enabled">quarkus.hibernate-orm.second-level-caching-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The default in Quarkus is for 2nd level caching to be enabled, and a good implementation is already integrated for you.
+ Just cherry-pick which entities should be using the cache.
+ Set this to false to disable all 2nd level caches.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-orm_quarkus.hibernate-orm.query"></a><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.query">Query related configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.query.query-plan-cache-max-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.query.query-plan-cache-max-size">quarkus.hibernate-orm.query.query-plan-cache-max-size</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.query.query-plan-cache-max-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.query.query-plan-cache-max-size">quarkus.hibernate-orm.query.query-plan-cache-max-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -524,7 +540,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.query.default-null-ordering"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.query.default-null-ordering">quarkus.hibernate-orm.query.default-null-ordering</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.query.default-null-ordering"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.query.default-null-ordering">quarkus.hibernate-orm.query.default-null-ordering</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -546,7 +562,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation">quarkus.hibernate-orm.database.generation</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation">quarkus.hibernate-orm.database.generation</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -560,7 +576,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation.halt-on-error"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation.halt-on-error">quarkus.hibernate-orm.database.generation.halt-on-error</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation.halt-on-error"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.generation.halt-on-error">quarkus.hibernate-orm.database.generation.halt-on-error</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -574,7 +590,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-catalog"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-catalog">quarkus.hibernate-orm.database.default-catalog</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-catalog"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-catalog">quarkus.hibernate-orm.database.default-catalog</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -588,7 +604,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-schema"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-schema">quarkus.hibernate-orm.database.default-schema</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-schema"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.default-schema">quarkus.hibernate-orm.database.default-schema</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -602,7 +618,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.charset"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.charset">quarkus.hibernate-orm.database.charset</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.charset"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.charset">quarkus.hibernate-orm.database.charset</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -616,7 +632,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers">quarkus.hibernate-orm.database.globally-quoted-identifiers</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.database.globally-quoted-identifiers">quarkus.hibernate-orm.database.globally-quoted-identifiers</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -635,7 +651,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.timezone"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.timezone">quarkus.hibernate-orm.jdbc.timezone</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.timezone"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.timezone">quarkus.hibernate-orm.jdbc.timezone</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -649,7 +665,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-fetch-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-fetch-size">quarkus.hibernate-orm.jdbc.statement-fetch-size</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-fetch-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-fetch-size">quarkus.hibernate-orm.jdbc.statement-fetch-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -663,7 +679,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-batch-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-batch-size">quarkus.hibernate-orm.jdbc.statement-batch-size</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-batch-size"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.jdbc.statement-batch-size">quarkus.hibernate-orm.jdbc.statement-batch-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -682,7 +698,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.log.sql"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.log.sql">quarkus.hibernate-orm.log.sql</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.log.sql"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.log.sql">quarkus.hibernate-orm.log.sql</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -697,7 +713,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.log.jdbc-warnings"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.log.jdbc-warnings">quarkus.hibernate-orm.log.jdbc-warnings</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.log.jdbc-warnings"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.log.jdbc-warnings">quarkus.hibernate-orm.log.jdbc-warnings</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -716,7 +732,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.expiration.max-idle"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.expiration.max-idle">quarkus.hibernate-orm.cache."cache".expiration.max-idle</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.expiration.max-idle"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.expiration.max-idle">quarkus.hibernate-orm.cache."cache".expiration.max-idle</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -731,7 +747,7 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.memory.object-count"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.memory.object-count">quarkus.hibernate-orm.cache."cache".memory.object-count</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.memory.object-count"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.cache.-cache-.memory.object-count">quarkus.hibernate-orm.cache."cache".memory.object-count</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

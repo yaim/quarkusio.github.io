@@ -91,6 +91,7 @@
 <li><a href="#implicit-simple-cache-key">Implicit simple cache key</a></li>
 <li><a href="#explicit-composite-cache-key">Explicit composite cache key</a></li>
 <li><a href="#default-cache-key">Default cache key</a></li>
+<li><a href="#multiple-annotations-on-a-single-method">Multiple annotations on a single method</a></li>
 </ul>
 </li>
 </ul></div>
@@ -187,7 +188,7 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=cache-quickstart \
-    -DclassName="org.acme.caching.WeatherForecastResource" \
+    -DclassName="org.acme.cache.WeatherForecastResource" \
     -Dpath="/weather" \
     -Dextensions="cache,resteasy-jsonb"</code></pre>
 </div>
@@ -202,11 +203,11 @@ However, you can go right to the completed example.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Let&#8217;s start by creating a service that will simulate an extremely slow call to the external meteorological service.
-Create <code>src/main/java/org/acme/caching/WeatherForecastService.java</code> with the following content:</p>
+Create <code>src/main/java/org/acme/cache/WeatherForecastService.java</code> with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.caching;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
 
 import java.time.LocalDate;
 
@@ -251,11 +252,11 @@ public class WeatherForecastService {
 </div>
 <div class="paragraph">
 <p>We also need a class that will contain the response sent to the users when they ask for the next three days weather forecast.
-Create <code>src/main/java/org/acme/caching/WeatherForecast.java</code> this way:</p>
+Create <code>src/main/java/org/acme/cache/WeatherForecast.java</code> this way:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.caching;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
 
 import java.util.List;
 
@@ -285,7 +286,7 @@ public class WeatherForecast {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.caching;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -372,7 +373,7 @@ Update the <code>WeatherForecastService</code> class like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.caching;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
 
 import java.time.LocalDate;
 
@@ -477,9 +478,6 @@ See the parameter Javadoc for more details.</p>
 <div class="paragraph">
 <p>This annotation cannot be used on a method returning <code>void</code>.</p>
 </div>
-<div class="paragraph">
-<p>You can only use one of the cache operations (and this annotation) on a given method: <code>@CacheResult</code>, <code>@CacheInvalidate</code> or <code>@CacheInvalidateAll</code>.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="cacheinvalidate"><a class="anchor" href="#cacheinvalidate"></a>@CacheInvalidate</h3>
@@ -491,9 +489,6 @@ See the parameter Javadoc for more details.</p>
 If the method has one or more arguments, the key computation is done from all the method arguments if none of them is annotated with <code>@CacheKey</code>, or all the arguments annotated with <code>@CacheKey</code> otherwise.
 This annotation can also be used on a method with no arguments, a default key derived from the cache name is generated in that case.
 If the key does not identify any cache entry, nothing will happen.</p>
-</div>
-<div class="paragraph">
-<p>You can only use one of the cache operations (and this annotation) on a given method: <code>@CacheResult</code>, <code>@CacheInvalidate</code> or <code>@CacheInvalidateAll</code>.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -514,9 +509,6 @@ If the key does not identify any cache entry, nothing will happen.</p>
 <h3 id="cacheinvalidateall"><a class="anchor" href="#cacheinvalidateall"></a>@CacheInvalidateAll</h3>
 <div class="paragraph">
 <p>When a method annotated with <code>@CacheInvalidateAll</code> is invoked, Quarkus will remove all entries from the cache.</p>
-</div>
-<div class="paragraph">
-<p>You can only use one of the cache operations (and this annotation) on a given method: <code>@CacheResult</code>, <code>@CacheInvalidate</code> or <code>@CacheInvalidateAll</code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -559,7 +551,7 @@ properties in the <code>application.properties</code> file.</p>
 </table>
 </div>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
@@ -575,7 +567,7 @@ properties in the <code>application.properties</code> file.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.initial-capacity"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.initial-capacity">quarkus.cache.caffeine."cache-name".initial-capacity</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.initial-capacity"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.initial-capacity">quarkus.cache.caffeine."cache-name".initial-capacity</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -589,7 +581,7 @@ properties in the <code>application.properties</code> file.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.maximum-size"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.maximum-size">quarkus.cache.caffeine."cache-name".maximum-size</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.maximum-size"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.maximum-size">quarkus.cache.caffeine."cache-name".maximum-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -603,7 +595,7 @@ properties in the <code>application.properties</code> file.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-write"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-write">quarkus.cache.caffeine."cache-name".expire-after-write</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-write"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-write">quarkus.cache.caffeine."cache-name".expire-after-write</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -618,7 +610,7 @@ properties in the <code>application.properties</code> file.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-access"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-access">quarkus.cache.caffeine."cache-name".expire-after-access</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-access"></a><code><a href="#quarkus-cache-config-group-cache-config-caffeine-config_quarkus.cache.caffeine.-cache-name-.expire-after-access">quarkus.cache.caffeine."cache-name".expire-after-access</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -660,8 +652,8 @@ Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a stan
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.cache.caffeine."foo".initial-capacity=10 <i class="conum" data-value="1"></i><b>(1)</b>
-quarkus.cache.caffeine."foo".maximum-size=20 <i class="conum" data-value="1"></i><b>(1)</b>
-quarkus.cache.caffeine."foo".expire-after-write <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.cache.caffeine."foo".maximum-size=20
+quarkus.cache.caffeine."foo".expire-after-write=60S
 quarkus.cache.caffeine."bar".maximum-size=1000 <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
@@ -687,7 +679,7 @@ quarkus.cache.caffeine."bar".maximum-size=1000 <i class="conum" data-value="2"><
 <h3 id="implicit-simple-cache-key"><a class="anchor" href="#implicit-simple-cache-key"></a>Implicit simple cache key</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.caching;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -696,7 +688,7 @@ import io.quarkus.cache.CacheInvalidateAll;
 import io.quarkus.cache.CacheResult;
 
 @ApplicationScoped
-public class CachedBean {
+public class CachedService {
 
     @CacheResult(cacheName = "foo")
     public Object load(Object key) { <i class="conum" data-value="1"></i><b>(1)</b>
@@ -726,7 +718,7 @@ public class CachedBean {
 <h3 id="explicit-composite-cache-key"><a class="anchor" href="#explicit-composite-cache-key"></a>Explicit composite cache key</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.caching;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
 
 import javax.enterprise.context.Dependent;
 
@@ -766,7 +758,7 @@ public class CachedService {
 <h3 id="default-cache-key"><a class="anchor" href="#default-cache-key"></a>Default cache key</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.caching;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
 
 import javax.enterprise.context.Dependent;
 
@@ -797,6 +789,47 @@ public class CachedService {
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>A unique default cache key derived from the cache name is generated and used.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="multiple-annotations-on-a-single-method"><a class="anchor" href="#multiple-annotations-on-a-single-method"></a>Multiple annotations on a single method</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.cache;
+
+import javax.inject.Singleton;
+
+import io.quarkus.cache.CacheInvalidate;
+import io.quarkus.cache.CacheInvalidateAll;
+import io.quarkus.cache.CacheResult;
+
+@Singleton
+public class CachedService {
+
+    @CacheInvalidate(cacheName = "foo")
+    @CacheResult(cacheName = "foo")
+    public String forceCacheEntryRefresh(Object key) { <i class="conum" data-value="1"></i><b>(1)</b>
+        // Call expensive service here.
+    }
+
+    @CacheInvalidateAll(cacheName = "foo")
+    @CacheInvalidateAll(cacheName = "bar")
+    public void multipleInvalidateAll(Object key) { <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This method can be used to force a refresh of the cache entry corresponding to the given key.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This method will invalidate all entries from the <code>foo</code> and <code>bar</code> caches with a single call.</td>
 </tr>
 </table>
 </div>

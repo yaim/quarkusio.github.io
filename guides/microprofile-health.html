@@ -227,11 +227,11 @@ any health check procedure yet so let&#8217;s define some.</p>
 <p>In this section, we create our first simple health check procedure.</p>
 </div>
 <div class="paragraph">
-<p>Create the <code>org.acme.health.SimpleHealthCheck</code> class:</p>
+<p>Create the <code>org.acme.microprofile.health.SimpleHealthCheck</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.microprofile.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -298,11 +298,11 @@ an external service provider such as a database. For starters, we will always re
 the response indicating the application is ready.</p>
 </div>
 <div class="paragraph">
-<p>Create <code>org.acme.health.DatabaseConnectionHealthCheck</code> class:</p>
+<p>Create <code>org.acme.microprofile.health.DatabaseConnectionHealthCheck</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.microprofile.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -360,11 +360,11 @@ database connection cannot be established. For simplicity reasons, we only deter
 whether the database is accessible or not by a configuration property.</p>
 </div>
 <div class="paragraph">
-<p>Update the <code>org.acme.health.DatabaseConnectionHealthCheck</code> class:</p>
+<p>Update the <code>org.acme.microprofile.health.DatabaseConnectionHealthCheck</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.microprofile.health;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
@@ -446,11 +446,11 @@ done by using the <code>withData(key, value)</code> method of the health check r
 builder API.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s create a new health check procedure <code>org.acme.health.DataHealthCheck</code>:</p>
+<p>Let&#8217;s create a new health check procedure <code>org.acme.microprofile.health.DataHealthCheck</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.health;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.microprofile.health;
 
 import org.eclipse.microprofile.health.Liveness;
 import org.eclipse.microprofile.health.HealthCheck;
@@ -558,7 +558,7 @@ readiness checks are used to tell whether the application is able to process req
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -574,7 +574,7 @@ readiness checks are used to tell whether the application is able to process req
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.root-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.root-path">quarkus.smallrye-health.root-path</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.root-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.root-path">quarkus.smallrye-health.root-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -588,7 +588,7 @@ readiness checks are used to tell whether the application is able to process req
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.liveness-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.liveness-path">quarkus.smallrye-health.liveness-path</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.liveness-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.liveness-path">quarkus.smallrye-health.liveness-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -602,7 +602,7 @@ readiness checks are used to tell whether the application is able to process req
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.readiness-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.readiness-path">quarkus.smallrye-health.readiness-path</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.readiness-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.readiness-path">quarkus.smallrye-health.readiness-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -616,7 +616,7 @@ readiness checks are used to tell whether the application is able to process req
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.health.extensions.enabled"></a><code><a href="#quarkus-smallrye-health_quarkus.health.extensions.enabled">quarkus.health.extensions.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.health.extensions.enabled"></a><code><a href="#quarkus-smallrye-health_quarkus.health.extensions.enabled">quarkus.health.extensions.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

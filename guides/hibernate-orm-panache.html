@@ -68,19 +68,37 @@
     <h1 class="text-caps">Quarkus - Simplified Hibernate ORM with Panache</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#first-an-example">First: an example</a></li>
+<li><a href="#solution">Solution</a></li>
 <li><a href="#setting-up-and-configuring-hibernate-orm-with-panache">Setting up and configuring Hibernate ORM with Panache</a></li>
+<li><a href="#solution-1-using-the-active-record-pattern">Solution 1: using the active record pattern</a>
+<ul class="sectlevel2">
 <li><a href="#defining-your-entity">Defining your entity</a></li>
 <li><a href="#most-useful-operations">Most useful operations</a></li>
+<li><a href="#adding-entity-methods">Adding entity methods</a></li>
+</ul>
+</li>
+<li><a href="#solution-2-using-the-repository-pattern">Solution 2: using the repository pattern</a>
+<ul class="sectlevel2">
+<li><a href="#defining-your-entity-2">Defining your entity</a></li>
+<li><a href="#defining-your-repository">Defining your repository</a></li>
+<li><a href="#most-useful-operations-2">Most useful operations</a></li>
+</ul>
+</li>
+<li><a href="#advanced-query">Advanced Query</a>
+<ul class="sectlevel2">
 <li><a href="#paging">Paging</a></li>
 <li><a href="#sorting">Sorting</a></li>
-<li><a href="#adding-entity-methods">Adding entity methods</a></li>
 <li><a href="#simplified-queries">Simplified queries</a></li>
 <li><a href="#query-parameters">Query parameters</a></li>
-<li><a href="#the-daorepository-option">The DAO/Repository option</a></li>
+</ul>
+</li>
 <li><a href="#transactions">Transactions</a></li>
-<li><a href="#lock-management">Lock management</a></li>
+<li><a href="#lock-management">Lock management</a>
+<ul class="sectlevel2">
 <li><a href="#first-locking-using-findbyid">First: Locking using findById().</a></li>
 <li><a href="#second-locking-in-a-find">Second: Locking in a find().</a></li>
+</ul>
+</li>
 <li><a href="#custom-ids">Custom IDs</a></li>
 <li><a href="#how-and-why-we-simplify-hibernate-orm-mappings">How and why we simplify Hibernate ORM mappings</a></li>
 <li><a href="#defining-entities-in-external-projects-or-jars">Defining entities in external projects or jars</a></li>
@@ -139,6 +157,34 @@ the <code>list()</code> method might be surprising at first. It takes fragments 
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+what was described above is essentially the <a href="https://www.martinfowler.com/eaaCatalog/activeRecord.html">active record pattern</a>, sometimes just called the entity pattern.
+Hibernate with Panache also allows for the use of the more classical <a href="https://martinfowler.com/eaaCatalog/repository.html">repository pattern</a> via <code>PanacheRepository</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We recommend that you follow the instructions in the next sections and create the application step by step.
+However, you can go right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+</div>
+<div class="paragraph">
+<p>The solution is located in the <code>hibernate-orm-panache-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/hibernate-orm-panache-quickstart">directory</a>.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -153,10 +199,10 @@ the <code>list()</code> method might be surprising at first. It takes fragments 
 <p>add your settings in <code>application.properties</code></p>
 </li>
 <li>
-<p>annotate your entities with <code>@Entity</code> and make them extend <code>PanacheEntity</code></p>
+<p>annotate your entities with <code>@Entity</code></p>
 </li>
 <li>
-<p>place your entity logic in static methods in your entities</p>
+<p>make your entities extend <code>PanacheEntity</code> (optional if you are using the repository pattern)</p>
 </li>
 </ul>
 </div>
@@ -199,10 +245,10 @@ the <code>list()</code> method might be surprising at first. It takes fragments 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># configure your datasource
-quarkus.datasource.url = jdbc:postgresql://localhost:5432/mydatabase
-quarkus.datasource.driver = org.postgresql.Driver
+quarkus.datasource.db-kind = postgresql
 quarkus.datasource.username = sarah
 quarkus.datasource.password = connor
+quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/mydatabase
 
 # drop and create the database at startup (use `update` to only update the schema)
 quarkus.hibernate-orm.database.generation = drop-and-create</code></pre>
@@ -211,8 +257,10 @@ quarkus.hibernate-orm.database.generation = drop-and-create</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="defining-your-entity"><a class="anchor" href="#defining-your-entity"></a>Defining your entity</h2>
+<h2 id="solution-1-using-the-active-record-pattern"><a class="anchor" href="#solution-1-using-the-active-record-pattern"></a>Solution 1: using the active record pattern</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="defining-your-entity"><a class="anchor" href="#defining-your-entity"></a>Defining your entity</h3>
 <div class="paragraph">
 <p>To define a Panache entity, simply extend <code>PanacheEntity</code>, annotate it with <code>@Entity</code> and add your
 columns as public fields:</p>
@@ -257,12 +305,10 @@ and similarly for field writes and the setter.
 This allows for proper encapsulation at runtime as all fields calls will be replaced by the corresponding getter/setter calls.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="most-useful-operations"><a class="anchor" href="#most-useful-operations"></a>Most useful operations</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="most-useful-operations"><a class="anchor" href="#most-useful-operations"></a>Most useful operations</h3>
 <div class="paragraph">
-<p>Once you have written your entity, here are the most common operations you will be able to do:</p>
+<p>Once you have written your entity, here are the most common operations you will be able to perform:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -318,7 +364,222 @@ Person.update("name = 'Moral' where status = ?1", Status.Alive);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Stream&lt;Person&gt; persons = Person.streamAll();
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">try (Stream&lt;Person&gt; persons = Person.streamAll()) {
+    List&lt;String&gt; namesButEmmanuels = persons
+        .map(p -&gt; p.name.toLowerCase() )
+        .filter( n -&gt; ! "emmanuel".equals(n) )
+        .collect(Collectors.toList());
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>stream</code> methods require a transaction to work.<br>
+As they perform I/O operations, they should be closed via the <code>close()</code> method or via a try-with-resource to close the underlying <code>ResultSet</code>.
+If not, you will see warnings from Agroal that will close the underlying <code>ResultSet</code> for you.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-entity-methods"><a class="anchor" href="#adding-entity-methods"></a>Adding entity methods</h3>
+<div class="paragraph">
+<p>Add custom queries on your entities inside the entities themselves.
+That way, you and your co-workers can find them easily, and queries are co-located with the object they operate on.
+Adding them as static methods in your entity class is the Panache Active Record way.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
+public class Person extends PanacheEntity {
+    public String name;
+    public LocalDate birth;
+    public Status status;
+
+    public static Person findByName(String name){
+        return find("name", name).firstResult();
+    }
+
+    public static List&lt;Person&gt; findAlive(){
+        return list("status", Status.Alive);
+    }
+
+    public static void deleteStefs(){
+        delete("name", "Stef");
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="solution-2-using-the-repository-pattern"><a class="anchor" href="#solution-2-using-the-repository-pattern"></a>Solution 2: using the repository pattern</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="defining-your-entity-2"><a class="anchor" href="#defining-your-entity-2"></a>Defining your entity</h3>
+<div class="paragraph">
+<p>When using the repository pattern, you can define your entities as regular JPA entities.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
+public class Person {
+    @Id @GeneratedValue private Long id;
+    private String name;
+    private LocalDate birth;
+    private Status status;
+
+    public Long getId(){
+        return id;
+    }
+    public void setId(Long id){
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public LocalDate getBirth() {
+        return birth;
+    }
+    public void setBirth(LocalDate birth) {
+        this.birth = birth;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you don&#8217;t want to bother defining getters/setters for your entities, you can make them extend <code>PanacheEntityBase</code> and
+Quarkus will generate them for you. You can even extend <code>PanacheEntity</code> and take advantage of the default ID it provides.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="defining-your-repository"><a class="anchor" href="#defining-your-repository"></a>Defining your repository</h3>
+<div class="paragraph">
+<p>When using Repositories, you get the exact same convenient methods as with the active record pattern, injected in your Repository,
+by making them implements <code>PanacheRepository</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class PersonRepository implements PanacheRepository&lt;Person&gt; {
+
+   // put your custom logic here as instance methods
+
+   public Person findByName(String name){
+       return find("name", name).firstResult();
+   }
+
+   public List&lt;Person&gt; findAlive(){
+       return list("status", Status.Alive);
+   }
+
+   public void deleteStefs(){
+       delete("name", "Stef");
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All the operations that are defined on <code>PanacheEntityBase</code> are available on your repository, so using it
+is exactly the same as using the active record pattern, except you need to inject it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+PersonRepository personRepository;
+
+@GET
+public long count(){
+    return personRepository.count();
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="most-useful-operations-2"><a class="anchor" href="#most-useful-operations-2"></a>Most useful operations</h3>
+<div class="paragraph">
+<p>Once you have written your repository, here are the most common operations you will be able to perform:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// creating a person
+Person person = new Person();
+person.name = "Stef";
+person.birth = LocalDate.of(1910, Month.FEBRUARY, 1);
+person.status = Status.Alive;
+
+// persist it
+personRepository.persist(person);
+
+// note that once persisted, you don't need to explicitly save your entity: all
+// modifications are automatically persisted on transaction commit.
+
+// check if it's persistent
+if(personRepository.isPersistent(person)){
+    // delete it
+    personRepository.delete(person);
+}
+
+// getting a list of all Person entities
+List&lt;Person&gt; allPersons = personRepository.listAll();
+
+// finding a specific person by ID
+person = personRepository.findById(personId);
+
+// finding a specific person by ID via an Optional
+Optional&lt;Person&gt; optional = personRepository.findByIdOptional(personId);
+person = optional.orElseThrow(() -&gt; new NotFoundException());
+
+// finding all living persons
+List&lt;Person&gt; livingPersons = personRepository.list("status", Status.Alive);
+
+// counting all persons
+long countAll = personRepository.count();
+
+// counting all living persons
+long countAlive = personRepository.count("status", Status.Alive);
+
+// delete all living persons
+personRepository.delete("status", Status.Alive);
+
+// delete all persons
+personRepository.deleteAll();
+
+// update all living persons
+personRepository.update("name = 'Moral' where status = ?1", Status.Alive);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All <code>list</code> methods have equivalent <code>stream</code> versions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Stream&lt;Person&gt; persons = personRepository.streamAll();
 List&lt;String&gt; namesButEmmanuels = persons
     .map(p -&gt; p.name.toLowerCase() )
     .filter( n -&gt; ! "emmanuel".equals(n) )
@@ -337,11 +598,28 @@ The <code>stream</code> methods require a transaction to work.
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The rest of the documentation show usages based on the active record pattern only,
+but keep in mind that they can be performed with the repository pattern as well.
+The repository pattern examples have been omitted for brevity.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="paging"><a class="anchor" href="#paging"></a>Paging</h2>
+<h2 id="advanced-query"><a class="anchor" href="#advanced-query"></a>Advanced Query</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="paging"><a class="anchor" href="#paging"></a>Paging</h3>
 <div class="paragraph">
 <p>You should only use <code>list</code> and <code>stream</code> methods if your table contains small enough data sets. For larger data
 sets you can use the <code>find</code> method equivalents, which return a <code>PanacheQuery</code> on which you can do paging:</p>
@@ -380,10 +658,8 @@ return Person.find("status", Status.Alive)
 <p>The <code>PanacheQuery</code> type has many other methods to deal with paging and returning streams.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="sorting"><a class="anchor" href="#sorting"></a>Sorting</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="sorting"><a class="anchor" href="#sorting"></a>Sorting</h3>
 <div class="paragraph">
 <p>All methods accepting a query string also accept the following simplified query form:</p>
 </div>
@@ -407,42 +683,8 @@ List&lt;Person&gt; persons = Person.list("status", Sort.by("name").and("birth"),
 <p>The <code>Sort</code> class has plenty of methods for adding columns and specifying sort direction.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="adding-entity-methods"><a class="anchor" href="#adding-entity-methods"></a>Adding entity methods</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In general, we recommend not adding custom queries for your entities outside of the entities themselves,
-to keep all model queries close to the models they operate on. So we recommend adding them as static methods
-in your entity class:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
-public class Person extends PanacheEntity {
-    public String name;
-    public LocalDate birth;
-    public Status status;
-
-    public static Person findByName(String name){
-        return find("name", name).firstResult();
-    }
-
-    public static List&lt;Person&gt; findAlive(){
-        return list("status", Status.Alive);
-    }
-
-    public static void deleteStefs(){
-        delete("name", "Stef");
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="simplified-queries"><a class="anchor" href="#simplified-queries"></a>Simplified queries</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="simplified-queries"><a class="anchor" href="#simplified-queries"></a>Simplified queries</h3>
 <div class="paragraph">
 <p>Normally, HQL queries are of this form: <code>from EntityName [where &#8230;&#8203;] [order by &#8230;&#8203;]</code>, with optional elements
 at the end.</p>
@@ -499,10 +741,8 @@ Order.update("update from Person set name = 'Moral' where status = ?", Status.Al
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="query-parameters"><a class="anchor" href="#query-parameters"></a>Query parameters</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="query-parameters"><a class="anchor" href="#query-parameters"></a>Query parameters</h3>
 <div class="paragraph">
 <p>You can pass query parameters by index (1-based) as shown below:</p>
 </div>
@@ -539,63 +779,6 @@ Person.find("name = :name and status = :status",
 <div class="paragraph">
 <p>Every query operation accepts passing parameters by index (<code>Object&#8230;&#8203;</code>), or by name (<code>Map&lt;String,Object&gt;</code> or <code>Parameters</code>).</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="the-daorepository-option"><a class="anchor" href="#the-daorepository-option"></a>The DAO/Repository option</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Repository is a very popular pattern and can be very accurate for some use case, depending on
-the complexity of your needs.</p>
-</div>
-<div class="paragraph">
-<p>Whether you want to use the Entity based approach presented above or a more traditional Repository approach, it is up to you,
-Panache and Quarkus have you covered either way.</p>
-</div>
-<div class="paragraph">
-<p>If you lean towards using Repositories, you can get the exact same convenient methods injected in your Repository by making it
-implement <code>PanacheRepository</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
-public class PersonRepository implements PanacheRepository&lt;Person&gt; {
-
-   // put your custom logic here as instance methods
-
-   public Person findByName(String name){
-       return find("name", name).firstResult();
-   }
-
-   public List&lt;Person&gt; findAlive(){
-       return list("status", Status.Alive);
-   }
-
-   public void deleteStefs(){
-       delete("name", "Stef");
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Absolutely all the operations that are defined on <code>PanacheEntityBase</code> are available on your DAO, so using it
-is exactly the same except you need to inject it:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
-PersonRepository personRepository;
-
-@GET
-public long count(){
-    return personRepository.count();
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>So if Repositories are your thing, you can keep doing them. Even with repositories, you can keep your entities as
-subclasses of <code>PanacheEntity</code> in order to get the ID and public fields working, but you can even skip that and
-go back to specifying your ID and using getters and setters if that&#8217;s your thing. Use what works for you.</p>
 </div>
 </div>
 </div>
@@ -642,13 +825,10 @@ public void create(Parameter parameter){
 <p>Panache provides direct support for database locking with your entity/repository, using <code>findById(Object, LockModeType)</code> or <code>find().withLock(LockModeType)</code>.</p>
 </div>
 <div class="paragraph">
-<p>The following examples are for the entity pattern but the same can be used with repositories.</p>
+<p>The following examples are for the entity pattern, but the same can be used with repositories.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="first-locking-using-findbyid"><a class="anchor" href="#first-locking-using-findbyid"></a>First: Locking using findById().</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="first-locking-using-findbyid"><a class="anchor" href="#first-locking-using-findbyid"></a>First: Locking using findById().</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class PersonEndpoint {
@@ -665,10 +845,8 @@ public void create(Parameter parameter){
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="second-locking-in-a-find"><a class="anchor" href="#second-locking-in-a-find"></a>Second: Locking in a find().</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="second-locking-in-a-find"><a class="anchor" href="#second-locking-in-a-find"></a>Second: Locking in a find().</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class PersonEndpoint {
@@ -686,6 +864,7 @@ public void create(Parameter parameter){
 </div>
 <div class="paragraph">
 <p>Be careful that locks are released when the transaction ends, so the method that invokes the lock query must be annotated with the <code>@Transactional</code> annotation.</p>
+</div>
 </div>
 </div>
 </div>
@@ -783,9 +962,9 @@ that are missing, and rewrite every access to these fields to use the accessor m
 write <em>useful</em> accessors when you need them, which will be used even though your entity users still use field accesses.</p>
 </li>
 <li>
-<p>Don&#8217;t use DAOs or Repositories: put all your entity logic in static methods in your entity class. Your entity superclass
-comes with lots of super useful static methods and you can add your own in your entity class. Users can just start using
-your entity <code>Person</code> by typing <code>Person.</code> and getting completion for all the operations in a single place.</p>
+<p>With the active record pattern: put all your entity logic in static methods in your entity class and don&#8217;t create DAOs.
+Your entity superclass comes with lots of super useful static methods, and you can add your own in your entity class.
+Users can just start using your entity <code>Person</code> by typing <code>Person.</code> and getting completion for all the operations in a single place.</p>
 </li>
 <li>
 <p>Don&#8217;t write parts of the query that you don&#8217;t need: write <code>Person.find("order by name")</code> or

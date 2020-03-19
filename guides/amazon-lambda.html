@@ -81,6 +81,7 @@
 <li><a href="#deploy-to-aws-lambda-custom-native-runtime">Deploy to AWS Lambda Custom (native) Runtime</a></li>
 <li><a href="#examine-the-pom">Examine the POM</a></li>
 <li><a href="#testing-with-the-sam-cli">Testing with the SAM CLI</a></li>
+<li><a href="#tracing-with-aws-xray-and-graalvm">Tracing with AWS XRay and GraalVM</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -242,7 +243,7 @@ create, update, delete, and invoke your lambdas for pure Java and native deploym
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean install</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean install</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -272,12 +273,11 @@ this:</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The <code>manage.sh</code> script is for managing your lambda using the AWS Lambda Java runtime.  This script is provided only for
-your convenience.  Should you choose to use Amazon provided tools, you can freely skip these sections and consult the
-appropriate Amazon documentation.</p>
+your convenience. Examine the output of the <code>manage.sh</code> script if you want to learn what aws commands are executed
+to create, delete, and update your lambdas.</p>
 </div>
 <div class="paragraph">
-<p><code>manage.sh</code> supports four operation:  <code>create</code>, <code>delete</code>, <code>update</code>, and <code>invoke</code>.  You can create your function using
-the following command:</p>
+<p><code>manage.sh</code> supports four operation:  <code>create</code>, <code>delete</code>, <code>update</code>, and <code>invoke</code>.  You can create your function using the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -369,21 +369,27 @@ The lambda can also be invoked locally like this:</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you want a lower memory footprint and faster initialization times for your lambda, you can compile your Java
-code to a native executable.  Just make sure to rebuild your project with the <code>-Pnative</code> switch.  If you are building
-on a non-linux system, you will need to also pass in a property instructing quarkus to use a docker build as Amazon
+code to a native executable.  Just make sure to rebuild your project with the <code>-Pnative</code> switch.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean install -Pnative</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are building on a non-linux system, you will need to also pass in a property instructing quarkus to use a docker build as Amazon
 Lambda requires linux binaries.  You can do this by passing this property to your maven build:
 <code>-Dnative-image.docker-build=true</code>.  This requires you to have docker installed locally, however.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean install -Pnative -Dnative-image.docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean install -Pnative -Dnative-image.docker-build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This will compile and create a native executable image.  It also generates a zip file <code>target/function.zip</code>.
+<p>Either of these commands will compile and create a native executable image.  It also generates a zip file <code>target/function.zip</code>.
 This zip file contains your native executable image renamed to <code>bootstrap</code>.  This is a requirement of Amazon Lambda
-Custom Runtime.  If you are building on Linux, the <code>native-image.docker-build</code> property is mildly redundant but its primary
-cost is a slightly longer build cycle.</p>
+Custom Runtime.</p>
 </div>
 <div class="paragraph">
 <p>The instructions here are exactly as above with one change:  you&#8217;ll need to add <code>native</code> as the first parameter to the
@@ -398,6 +404,19 @@ cost is a slightly longer build cycle.</p>
 <p>As above, commands can be stacked.  The only requirement is that <code>native</code> be the first parameter should you wish
 to work with native image builds.  The script will take care of the rest of the details necessary to manage your native
 image function deployments.</p>
+</div>
+<div class="paragraph">
+<p>Examine the output of the <code>manage.sh</code> script if you want to learn what aws commands are executed
+to create, delete, and update your lambdas.</p>
+</div>
+<div class="paragraph">
+<p>One thing to note about the create command for native is that the <code>aws lambda create-function</code>
+call must set a specific environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">--environment 'Variables={DISABLE_SIGNAL_HANDLERS=true}'</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -454,6 +473,16 @@ to take advantage of it.  Otherwise, dev mode should be sufficient for most of y
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">sam local invoke --template sam.native.yaml --event {json test file}</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tracing-with-aws-xray-and-graalvm"><a class="anchor" href="#tracing-with-aws-xray-and-graalvm"></a>Tracing with AWS XRay and GraalVM</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are building native images, and want to use <a href="https://aws.amazon.com/xray">AWS X-Ray Tracing</a> with your lambda
+you will need to include <code>quarkus-amazon-lambda-xray</code> as a dependency in your pom.  The AWS X-Ray
+library is not fully compatible with GraalVM so we had to do some integration work to make this work.</p>
 </div>
 </div>
 </div>

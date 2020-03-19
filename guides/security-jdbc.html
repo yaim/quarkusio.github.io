@@ -197,7 +197,7 @@ which is an <a href="https://docs.wildfly.org/17/WildFly_Elytron_Security.html#j
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.elytron.security.jdbc;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jdbc;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.GET;
@@ -222,7 +222,7 @@ public class PublicResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.elytron.security.jdbc;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jdbc;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
@@ -248,7 +248,7 @@ We are using <code>SecurityContext</code> to get access to the current authentic
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.elytron.security.jdbc;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jdbc;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -279,10 +279,10 @@ public class UserResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:postgresql:elytron-security-jdbc
-quarkus.datasource.driver=org.postgresql.Driver
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.db-kind=postgresql
 quarkus.datasource.username=quarkus
-quarkus.datasource.password=quarkus</code></pre>
+quarkus.datasource.password=quarkus
+quarkus.datasource.jdbc.url=jdbc:postgresql:elytron-security-jdbc</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -448,15 +448,15 @@ user%</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:postgresql:multiple-data-sources-users
-quarkus.datasource.driver=org.postgresql.Driver
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.db-kind=postgresql
 quarkus.datasource.username=quarkus
 quarkus.datasource.password=quarkus
+quarkus.datasource.jdbc.url=jdbc:postgresql:multiple-data-sources-users
 
-quarkus.datasource.permissions.url=jdbc:postgresql:multiple-data-sources-permissions
-quarkus.datasource.permissions.driver=org.postgresql.Driver
+quarkus.datasource.permissions.db-kind=postgresql
 quarkus.datasource.permissions.username=quarkus
 quarkus.datasource.permissions.password=quarkus
+quarkus.datasource.permissions.jdbc.url=jdbc:postgresql:multiple-data-sources-permissions
 
 quarkus.security.jdbc.enabled=true
 quarkus.security.jdbc.principal-query.sql=SELECT u.password FROM test_user u WHERE u.username=?
@@ -475,7 +475,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -491,7 +491,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.realm-name"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.realm-name">quarkus.security.jdbc.realm-name</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.realm-name"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.realm-name">quarkus.security.jdbc.realm-name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -505,7 +505,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.enabled">quarkus.security.jdbc.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.enabled">quarkus.security.jdbc.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -519,7 +519,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.sql"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.sql">quarkus.security.jdbc.principal-query.sql</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.sql"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.sql">quarkus.security.jdbc.principal-query.sql</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -529,11 +529,11 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.datasource"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.datasource">quarkus.security.jdbc.principal-query.datasource</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.datasource"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.datasource">quarkus.security.jdbc.principal-query.datasource</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -547,7 +547,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.enabled">quarkus.security.jdbc.principal-query.clear-password-mapper.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.enabled">quarkus.security.jdbc.principal-query.clear-password-mapper.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -561,7 +561,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.password-index">quarkus.security.jdbc.principal-query.clear-password-mapper.password-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.clear-password-mapper.password-index">quarkus.security.jdbc.principal-query.clear-password-mapper.password-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -575,7 +575,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.enabled">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.enabled">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -589,7 +589,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.password-index">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.password-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.password-index">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.password-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -603,7 +603,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.hash-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.hash-encoding">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.hash-encoding</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.hash-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.hash-encoding">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.hash-encoding</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -617,7 +617,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-index">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-index">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -631,7 +631,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-encoding">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-encoding</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-encoding">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.salt-encoding</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -645,7 +645,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.iteration-count-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.iteration-count-index">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.iteration-count-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.iteration-count-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.bcrypt-password-mapper.iteration-count-index">quarkus.security.jdbc.principal-query.bcrypt-password-mapper.iteration-count-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -659,7 +659,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.index">quarkus.security.jdbc.principal-query.attribute-mappings."attribute-mappings".index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.index">quarkus.security.jdbc.principal-query.attribute-mappings."attribute-mappings".index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -673,7 +673,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.to"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.to">quarkus.security.jdbc.principal-query.attribute-mappings."attribute-mappings".to</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.to"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.attribute-mappings.-attribute-mappings-.to">quarkus.security.jdbc.principal-query.attribute-mappings."attribute-mappings".to</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -687,7 +687,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.sql"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.sql">quarkus.security.jdbc.principal-query."named-principal-queries".sql</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.sql"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.sql">quarkus.security.jdbc.principal-query."named-principal-queries".sql</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -697,11 +697,11 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.datasource"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.datasource">quarkus.security.jdbc.principal-query."named-principal-queries".datasource</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.datasource"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.datasource">quarkus.security.jdbc.principal-query."named-principal-queries".datasource</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -715,7 +715,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.index">quarkus.security.jdbc.principal-query."named-principal-queries".attribute-mappings."attribute-mappings".index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.index">quarkus.security.jdbc.principal-query."named-principal-queries".attribute-mappings."attribute-mappings".index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -729,7 +729,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.to"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.to">quarkus.security.jdbc.principal-query."named-principal-queries".attribute-mappings."attribute-mappings".to</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.to"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.attribute-mappings.-attribute-mappings-.to">quarkus.security.jdbc.principal-query."named-principal-queries".attribute-mappings."attribute-mappings".to</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -743,7 +743,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.enabled">quarkus.security.jdbc.principal-query."named-principal-queries".clear-password-mapper.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.enabled">quarkus.security.jdbc.principal-query."named-principal-queries".clear-password-mapper.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -757,7 +757,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.password-index">quarkus.security.jdbc.principal-query."named-principal-queries".clear-password-mapper.password-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.clear-password-mapper.password-index">quarkus.security.jdbc.principal-query."named-principal-queries".clear-password-mapper.password-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -771,7 +771,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.enabled">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.enabled"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.enabled">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -785,7 +785,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.password-index">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.password-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.password-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.password-index">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.password-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -799,7 +799,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.hash-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.hash-encoding">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.hash-encoding</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.hash-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.hash-encoding">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.hash-encoding</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -813,7 +813,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-index">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.salt-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-index">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.salt-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -827,7 +827,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-encoding">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.salt-encoding</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-encoding"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.salt-encoding">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.salt-encoding</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -841,7 +841,7 @@ quarkus.security.jdbc.principal-query.roles.attribute-mappings.0.to=groups</code
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.iteration-count-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.iteration-count-index">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.iteration-count-index</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.iteration-count-index"></a><code><a href="#quarkus-elytron-security-jdbc_quarkus.security.jdbc.principal-query.-named-principal-queries-.bcrypt-password-mapper.iteration-count-index">quarkus.security.jdbc.principal-query."named-principal-queries".bcrypt-password-mapper.iteration-count-index</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

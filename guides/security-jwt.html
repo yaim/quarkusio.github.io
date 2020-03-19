@@ -97,6 +97,15 @@
 <li><a href="#additional-smallrye-jwt-configuration">Additional Smallrye JWT configuration</a></li>
 </ul>
 </li>
+<li><a href="#generate-jwt-tokens">Generate JWT tokens with Smallrye JWT</a>
+<ul class="sectlevel2">
+<li><a href="#create-jwtclaimsbuilder-and-set-the-claims">Create JwtClaimsBuilder and set the claims</a></li>
+<li><a href="#sign-the-claims">Sign the claims</a></li>
+<li><a href="#encrypt-the-claims">Encrypt the claims</a></li>
+<li><a href="#sign-the-claims-and-encrypt-the-nested-jwt-token">Sign the claims and encrypt the nested JWT token</a></li>
+</ul>
+</li>
+<li><a href="#references">References</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -134,7 +143,7 @@ However, you can skip right to the completed example.</p>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=security-jwt-quickstart \
-    -DclassName="org.acme.jwt.TokenSecuredResource" \
+    -DclassName="org.acme.security.jwt.TokenSecuredResource" \
     -Dpath="/secured" \
     -Dextensions="resteasy-jsonb, jwt"
 cd security-jwt-quickstart</code></pre>
@@ -146,12 +155,12 @@ cd security-jwt-quickstart</code></pre>
 <div class="sect2">
 <h3 id="examine-the-jax-rs-resource"><a class="anchor" href="#examine-the-jax-rs-resource"></a>Examine the JAX-RS resource</h3>
 <div class="paragraph">
-<p>Open the <code>src/main/java/org/acme/jwt/TokenSecuredResource.java</code> file and see the following content:</p>
+<p>Open the <code>src/main/java/org/acme/security/jwt/TokenSecuredResource.java</code> file and see the following content:</p>
 </div>
 <div class="listingblock">
 <div class="title">Basic REST Endpoint</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jwt;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -189,7 +198,7 @@ this quickstart. See <a href="https://github.com/eclipse/microprofile-jwt-auth/r
 <div class="listingblock">
 <div class="title">REST Endpoint V1</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jwt;
 
 import java.security.Principal;
 
@@ -331,7 +340,7 @@ the response is consistent with that:</p>
 <div class="listingblock">
 <div class="title">REST Endpoint V2</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jwt;
 
 import java.security.Principal;
 
@@ -491,12 +500,12 @@ nQIDAQAB
 <div class="sect2">
 <h3 id="generating-a-jwt"><a class="anchor" href="#generating-a-jwt"></a>Generating a JWT</h3>
 <div class="paragraph">
-<p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the JWT generation API provided by <code>smallrye-jwt</code> and the TokenUtils class shown in the following listing. Take this source and place it into <code>security-jwt-quickstart/src/test/java/org/acme/jwt/TokenUtils.java</code>.</p>
+<p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the JWT generation API provided by <code>smallrye-jwt</code> (see <a href="#generate-jwt-tokens">Generate JWT tokens with Smallrye JWT</a> for more infomation) and the TokenUtils class shown in the following listing. Take this source and place it into <code>security-jwt-quickstart/src/test/java/org/acme/security/jwt/TokenUtils.java</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">JWT utility class</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jwt;
 
 import java.io.InputStream;
 import java.security.KeyFactory;
@@ -562,10 +571,11 @@ public class TokenUtils {
      * @throws Exception on decode failure
      */
     public static PrivateKey readPrivateKey(final String pemResName) throws Exception {
-        InputStream contentIS = TokenUtils.class.getResourceAsStream(pemResName);
-        byte[] tmp = new byte[4096];
-        int length = contentIS.read(tmp);
-        return decodePrivateKey(new String(tmp, 0, length, "UTF-8"));
+        try (InputStream contentIS = TokenUtils.class.getResourceAsStream(pemResName)) {
+            byte[] tmp = new byte[4096];
+            int length = contentIS.read(tmp);
+            return decodePrivateKey(new String(tmp, 0, length, "UTF-8"));
+        }
     }
 
     /**
@@ -608,12 +618,12 @@ public class TokenUtils {
 </div>
 </div>
 <div class="paragraph">
-<p>Next take the code from the following listing and place into <code>security-jwt-quickstart/src/test/java/org/acme/jwt/GenerateToken.java</code>:</p>
+<p>Next take the code from the following listing and place into <code>security-jwt-quickstart/src/test/java/org/acme/security/jwt/GenerateToken.java</code>:</p>
 </div>
 <div class="listingblock">
 <div class="title">GenerateToken main Driver Class</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jwt;
 
 import java.util.HashMap;
 
@@ -621,7 +631,7 @@ import org.eclipse.microprofile.jwt.Claims;
 
 /**
  * A simple utility class to generate and print a JWT token string to stdout. Can be run with:
- * mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test
+ * mvn exec:java -Dexec.mainClass=org.acme.security.jwt.GenerateToken -Dexec.classpathScope=test
  */
 public class GenerateToken {
     /**
@@ -774,7 +784,7 @@ also include a "Group2MappedRole" due to the <code>roleMappings</code> claim hav
 <div class="listingblock">
 <div class="title">Command to Generate JWT</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn exec:java -Dexec.mainClass=org.acme.security.jwt.GenerateToken -Dexec.classpathScope=test</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -793,7 +803,7 @@ automatically compiles code as you write it.
 <div class="listingblock">
 <div class="title">Sample JWT Generation Output</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn exec:java -Dexec.mainClass=org.acme.security.jwt.GenerateToken -Dexec.classpathScope=test
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ----------------------&lt; org.acme:security-jwt-quickstart &gt;-----------------------
@@ -837,7 +847,7 @@ the JWT, and should be '/JwtClaims.json' for this quickstart.</p>
 <div class="listingblock">
 <div class="title">Example Command to Generate JWT with Lifetime of 3600 Seconds</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn exec:java -Dexec.mainClass=org.acme.jwt.GenerateToken -Dexec.classpathScope=test -Dexec.args="/JwtClaims.json 3600"
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">$ mvn exec:java -Dexec.mainClass=org.acme.security.jwt.GenerateToken -Dexec.classpathScope=test -Dexec.args="/JwtClaims.json 3600"
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ----------------------&lt; org.acme: &gt;-----------------------
@@ -926,7 +936,7 @@ claims that are required by the MicroProfile JWT RBAC specification as well as a
 <div class="listingblock">
 <div class="title">TokenSecuredResource#winners Method Addition</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jwt;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -1038,7 +1048,7 @@ version of the <code>winners()</code> method that injects the <code>birthday</co
 <div class="listingblock">
 <div class="title">TokenSecuredResource#winners2 Method Addition</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.jwt;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.jwt;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -1213,7 +1223,7 @@ explore the <code>security-jwt-quickstart</code> directory to learn more about t
 <div class="sect2">
 <h3 id="quarkus-configuration"><a class="anchor" href="#quarkus-configuration"></a>Quarkus configuration</h3>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -1229,7 +1239,7 @@ explore the <code>security-jwt-quickstart</code> directory to learn more about t
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-jwt_quarkus.smallrye-jwt.enabled"></a><code><a href="#quarkus-smallrye-jwt_quarkus.smallrye-jwt.enabled">quarkus.smallrye-jwt.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-jwt_quarkus.smallrye-jwt.enabled"></a><code><a href="#quarkus-smallrye-jwt_quarkus.smallrye-jwt.enabled">quarkus.smallrye-jwt.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1243,7 +1253,7 @@ explore the <code>security-jwt-quickstart</code> directory to learn more about t
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-jwt_quarkus.smallrye-jwt.rsa-sig-provider"></a><code><a href="#quarkus-smallrye-jwt_quarkus.smallrye-jwt.rsa-sig-provider">quarkus.smallrye-jwt.rsa-sig-provider</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-jwt_quarkus.smallrye-jwt.rsa-sig-provider"></a><code><a href="#quarkus-smallrye-jwt_quarkus.smallrye-jwt.rsa-sig-provider">quarkus.smallrye-jwt.rsa-sig-provider</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1339,6 +1349,11 @@ precedence:</p>
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.verify.algorithm</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>RS256</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Signature algorithm. Set it to <code>ES256</code> to support the Elliptic Curve signature algorithm.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.token.header</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>Authorization</code></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set this property if another header such as <code>Cookie</code> is used to pass the token.</p></td>
@@ -1349,9 +1364,24 @@ precedence:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Name of the cookie containing a token. This property will be effective only if  <code>smallrye.jwt.token.header</code> is set to <code>Cookie</code>.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.always-check-authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set this property to true for Authorization header be checked even if the smallrye.jwt.token.header is set to Cookie but no cookie with a smallrye.jwt.token.cookie name exists.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.token.schemes</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>Bearer</code></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Comma-separated list containing an alternative single or multiple schemes, for example, <code>DPoP</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.token.kid</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key identifier. If it is set then the verification JWK key as well every JWT token must have a matching <code>kid</code> header.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.time-to-live</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of seconds that a JWT may be issued for use. Effectively, the difference between the expiration date of the JWT and the issued at date must not exceed this value.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.require.named-principal</code></p></td>
@@ -1361,7 +1391,7 @@ precedence:</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.path.sub</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the claim containing the subject name. It starts from the top level JSON object and can contain multiple segments where each segment represents a JSON object name only, example: <code>realms/subject</code>. This property can be used if a token has no 'sub' claim but has the subject set in a different claim.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the claim containing the subject name. It starts from the top level JSON object and can contain multiple segments where each segment represents a JSON object name only, example: <code>realms/subject</code>. This property can be used if a token has no 'sub' claim but has the subject set in a different claim. Use double quotes with the namespace qualified claims.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.claims.sub</code></p></td>
@@ -1371,11 +1401,11 @@ precedence:</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.path.groups</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the claim containing the groups. It starts from the top level JSON object and can contain multiple segments where each segment represents a JSON object name only, example: <code>realm/groups</code>. This property can be used if a token has no 'groups' claim but has the groups set in a different claim.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the claim containing the groups. It starts from the top level JSON object and can contain multiple segments where each segment represents a JSON object name only, example: <code>realm/groups</code>. This property can be used if a token has no 'groups' claim but has the groups set in a different claim. Use double quotes with the namespace qualified claims.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.path.groups-separator</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>` `</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.groups-separator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>' '</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Separator for splitting a string which may contain multiple group values. It will only be used if the <code>smallrye.jwt.path.groups</code> property points to a custom claim whose value is a string. The default value is a single space because a standard OAuth2 <code>scope</code> claim may contain a space separated sequence.</p></td>
 </tr>
 <tr>
@@ -1384,7 +1414,7 @@ precedence:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">This property can be used to set a default groups claim value when the current token has no standard or custom groups claim available.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.jwk.refresh-interval</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.jwks.refresh-interval</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>60</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JWK cache refresh interval in minutes. It will be ignored unless the <code>mp.jwt.verify.publickey.location</code> points to the HTTPS URL based JWK set and no HTTP <code>Cache-Control</code> response header with a positive <code>max-age</code> parameter value is returned from a JWK HTTPS endpoint.</p></td>
 </tr>
@@ -1394,12 +1424,141 @@ precedence:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Expiration grace in seconds. By default an expired token will still be accepted if the current time is no more than 1 min after the token expiry time.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.verify.audience</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.verify.aud</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>none</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated list of the audiences that a token <code>aud</code> claim may contain.</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="generate-jwt-tokens"><a class="anchor" href="#generate-jwt-tokens"></a>Generate JWT tokens with Smallrye JWT</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>JWT claims can be signed or encrypted or signed first and the nested JWT token encrypted.
+Signing the claims is used most often to secure the claims. What is known today as a JWT token is typically produced by signing the claims in a JSON format using the steps described in the <a href="https://tools.ietf.org/html/rfc7515">JSON Web Signature</a> specification.
+However, when the claims are sensitive, their confidentiality can be guaranteed by following the steps described in the <a href="https://tools.ietf.org/html/rfc7516">JSON Web Encryption</a> specification to produce a JWT token with the encrypted claims.
+Finally both the confidentiality and integrity of the claims can be further enforced by signing them first and then encrypting the nested JWT token.</p>
+</div>
+<div class="paragraph">
+<p>SmallRye JWT provides an API for securing the JWT claims using all of these options.</p>
+</div>
+<div class="sect2">
+<h3 id="create-jwtclaimsbuilder-and-set-the-claims"><a class="anchor" href="#create-jwtclaimsbuilder-and-set-the-claims"></a>Create JwtClaimsBuilder and set the claims</h3>
+<div class="paragraph">
+<p>The first step is to initialize a <code>JwtClaimsBuilder</code> using one of the options below and add some claims to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import java.util.Collections;
+import io.smallrye.jwt.build.Jwt;
+import io.smallrye.jwt.build.JwtClaimsBuilder;
+...
+// Create an empty builder and add some claims
+JwtClaimsBuilder builder1 = Jwt.claims();
+builder1.claim("customClaim", "custom-value").issuer("https://issuer.org");
+
+// Builder created from the existing claims
+JwtClaimsBuilder builder2 = Jwt.claims("/tokenClaims.json");
+
+// Builder created from a map of claims
+JwtClaimsBuilder builder3 = Jwt.claims(Collections.singletonMap("customClaim", "custom-value"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The API is fluent so the builder initialization can be done as part of the fluent API sequence. The builder will also set <code>iat</code> (issued at) to the current time, <code>exp</code> (expires at) to 5 minutes away from the current time and <code>jti</code> (unique token identifier) claims if they have not already been set, so one can skip setting them when possible.</p>
+</div>
+<div class="paragraph">
+<p>The next step is to decide how to secure the claims.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sign-the-claims"><a class="anchor" href="#sign-the-claims"></a>Sign the claims</h3>
+<div class="paragraph">
+<p>The claims can be signed immediately or after the <code>JSON Web Signature</code> headers have been set:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.jwt.build.Jwt;
+...
+
+// Sign the claims using the private key loaded from the location set with a 'smallrye.jwt.sign.key-location' property.
+// No 'jws()' transition is necessary.
+String jwt1 = Jwt.claims("/tokenClaims.json").sign();
+
+// Set the headers and sign the claims with an RSA private key loaded in the code (the implementation of this method is omitted). Note a 'jws()' transition to a 'JwtSignatureBuilder'.
+String jwt2 = Jwt.claims("/tokenClaims.json").jws().signatureKeyId("kid1").header("custom-header", "custom-value").sign(getPrivateKey());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the <code>alg</code> (algorithm) header is set to <code>RS256</code> by default.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="encrypt-the-claims"><a class="anchor" href="#encrypt-the-claims"></a>Encrypt the claims</h3>
+<div class="paragraph">
+<p>The claims can be encrypted immediately or after the <code>JSON Web Encryption</code> headers have been set the same way as they can be signed.
+The only minor difference is that encrypting the claims always requires a <code>jwe()</code> <code>JwtEncryptionBuilder</code> transition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.jwt.build.Jwt;
+...
+
+// Encrypt the claims using the public key loaded from the location set with a 'smallrye.jwt.encrypt.key-location' property.
+String jwt1 = Jwt.claims("/tokenClaims.json").jwe().encrypt();
+
+// Set the headers and encrypt the claims with an RSA public key loaded in the code (the implementation of this method is omitted).
+String jwt2 = Jwt.claims("/tokenClaims.json").jwe().header("custom-header", "custom-value").encrypt(getPublicKey());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the <code>alg</code> (key management algorithm) header is set to <code>RSA-OAEP-256</code> (it will be changed to <code>RSA-OAEP</code> in a future version of smallrye-jwt) and the <code>enc</code> (content encryption header) is set to <code>A256GCM</code> by default.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sign-the-claims-and-encrypt-the-nested-jwt-token"><a class="anchor" href="#sign-the-claims-and-encrypt-the-nested-jwt-token"></a>Sign the claims and encrypt the nested JWT token</h3>
+<div class="paragraph">
+<p>The claims can be signed and then the nested JWT token encrypted by combining the sign and encrypt steps.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.jwt.build.Jwt;
+...
+
+// Sign the claims and encrypt the nested token using the private and public keys loaded from the locations set with the 'smallrye.jwt.sign.key-location' and 'smallrye.jwt.encrypt.key-location' properties respectively.
+String jwt = Jwt.claims("/tokenClaims.json").innerSign().encrypt();</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="references"><a class="anchor" href="#references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/eclipse/microprofile-jwt-auth/releases/download/1.1.1/microprofile-jwt-auth-spec.html">MP JWT 1.1.1</a></p>
+</li>
+<li>
+<p><a href="https://github.com/smallrye/smallrye-jwt">Smallrye JWT</a></p>
+</li>
+<li>
+<p><a href="https://tools.ietf.org/html/rfc7519">JSON Web Token</a></p>
+</li>
+<li>
+<p><a href="https://tools.ietf.org/html/rfc7515">JSON Web Signature</a></p>
+</li>
+<li>
+<p><a href="https://tools.ietf.org/html/rfc7516">JSON Web Encryption</a></p>
+</li>
+<li>
+<p><a href="https://tools.ietf.org/html/rfc7518">JSON Web Algorithms</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

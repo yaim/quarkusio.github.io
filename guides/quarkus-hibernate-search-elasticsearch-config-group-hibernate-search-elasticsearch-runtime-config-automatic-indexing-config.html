@@ -69,7 +69,7 @@
     <div class="hide-mobile toc"></div>
     <div>
       <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
@@ -85,23 +85,66 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.synchronization.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.synchronization.strategy">quarkus.hibernate-search.automatic-indexing.synchronization.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.synchronization.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.synchronization.strategy">quarkus.hibernate-search.automatic-indexing.synchronization.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The synchronization strategy to use when indexing automatically.
- Defines the status for which you wait before considering the operation completed by Hibernate Search.
- Use <code>queued</code> or <code>committed</code> in production environments. <code>searchable</code> is useful in integration tests.</p>
+ Defines how complete indexing should be before resuming the application thread after a database transaction is committed.
+ Available values:
+ Strategy
+ Guarantees when the application thread resumes
+ Throughput
+ Changes applied
+ Changes safe from crash/power loss
+ Changes visible on search
+ <code>``AutomaticIndexingSynchronizationStrategyNames#ASYNC</code></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>No guarantee
+No guarantee
+No guarantee
+Best
+```AutomaticIndexingSynchronizationStrategyNames#WRITE_SYNC` (default)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+Guaranteed
+No guarantee
+Medium
+```AutomaticIndexingSynchronizationStrategyNames#READ_SYNC`</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+No guarantee
+Guaranteed
+Medium to worst
+```AutomaticIndexingSynchronizationStrategyNames#SYNC`</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+Guaranteed
+Guaranteed
+Worst
+See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization[this section of the reference documentation] for more information.</pre>
+</div>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>queued</code>, <code>committed</code>, <code>searchable</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>committed</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>write-sync</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.enable-dirty-check"></a><code><a href="#quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.enable-dirty-check">quarkus.hibernate-search.automatic-indexing.enable-dirty-check</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.enable-dirty-check"></a><code><a href="#quarkus-hibernate-search-elasticsearch-config-group-hibernate-search-elasticsearch-runtime-config-automatic-indexing-config_quarkus.hibernate-search.automatic-indexing.enable-dirty-check">quarkus.hibernate-search.automatic-indexing.enable-dirty-check</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

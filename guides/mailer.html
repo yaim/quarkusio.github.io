@@ -244,7 +244,7 @@ ReactiveMailer reactiveMailer;</code></pre>
 <p><code>io.quarkus.mailer.Mailer</code> provides the imperative (blocking and synchronous) API;</p>
 </li>
 <li>
-<p><code>io.quarkus.mailer.ReactiveMailer</code> provides the reactive (non-blocking and asynchronous) API</p>
+<p><code>io.quarkus.mailer.reactive.ReactiveMailer</code> provides the reactive (non-blocking and asynchronous) API</p>
 </li>
 </ul>
 </div>
@@ -260,6 +260,36 @@ The two APIs are equivalent feature-wise. Actually the <code>Mailer</code> imple
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Deprecation</div>
+<div class="paragraph">
+<p><code>io.quarkus.mailer.ReactiveMailer</code> is deprecated in favor of <code>io.quarkus.mailer.reactive.ReactiveMailer</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Mutiny</div>
+<div class="paragraph">
+<p>The reactive mailer uses Mutiny reactive types, if you&#8217;re not familiar with them, read the <a href="getting-started-reactive#mutiny">Getting Started with Reactive guide</a> first.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>To send a simple email, proceed as follows:</p>
 </div>
@@ -268,7 +298,7 @@ The two APIs are equivalent feature-wise. Actually the <code>Mailer</code> imple
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Imperative API:
 mailer.send(Mail.withText("to@acme.org", "A simple email from quarkus", "This is my body."));
 // Reactive API:
-CompletionStage&lt;Void&gt; stage = reactiveMailer.send(Mail.withText("to@acme.org", "A reactive email from quarkus", "This is my body."));</code></pre>
+Uni&lt;Void&gt; stage = reactiveMailer.send(Mail.withText("to@acme.org", "A reactive email from quarkus", "This is my body."));</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -288,9 +318,24 @@ public Response sendASimpleEmail() {
 public CompletionStage&lt;Response&gt; sendASimpleEmailAsync() {
     return reactiveMailer.send(
             Mail.withText("to@acme.org", "A reactive email from quarkus", "This is my body"))
+            .subscribeAsCompletionStage()
             .thenApply(x -&gt; Response.accepted().build());
 }</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>With the <code>quarkus-resteasy-mutiny</code> extension, you can return an instance of <code>Uni</code> directly.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>With such a JAX-RS resource, you can check that everything is working with:</p>
@@ -390,6 +435,7 @@ public CompletionStage&lt;Response&gt; send() {
        // the template looks like: Hello {name}!
        .data("name", "John") <i class="conum" data-value="3"></i><b>(3)</b>
        .send() <i class="conum" data-value="4"></i><b>(4)</b>
+       .subscribeAsCompletionStage()
        .thenApply(x -&gt; Response.accepted().build());
 }</code></pre>
 </div>
@@ -559,10 +605,13 @@ If you need fine control on how the mail is sent, for instance if you need to re
 <div class="ulist">
 <ul>
 <li>
-<p>the Axle client (<code>io.vertx.axle.ext.mail.MailClient</code>), using <code>CompletionStage</code> and Reactive Streams <code>Publisher</code></p>
+<p>the Mutiny client (<code>io.vertx.mutiny.ext.mail.MailClient</code>)</p>
 </li>
 <li>
-<p>the RX Java 2 client (<code>io.vertx.reactivex.ext.mail.MailClient</code>)</p>
+<p>the Axle client (<code>io.vertx.axle.ext.mail.MailClient</code>), using <code>CompletionStage</code> and Reactive Streams <code>Publisher</code> - deprecated, it is recommended to switch to the Mutiny client</p>
+</li>
+<li>
+<p>the RX Java 2 client (<code>io.vertx.reactivex.ext.mail.MailClient</code>) - deprecated, it is recommended to switch to the Mutiny client</p>
 </li>
 <li>
 <p>the bare client (<code>io.vertx.ext.mail.MailClient</code>)</p>
@@ -591,7 +640,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Mailer Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -607,7 +656,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.from"></a><code><a href="#quarkus-mailer_quarkus.mailer.from">quarkus.mailer.from</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.from"></a><code><a href="#quarkus-mailer_quarkus.mailer.from">quarkus.mailer.from</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -621,7 +670,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.mock"></a><code><a href="#quarkus-mailer_quarkus.mailer.mock">quarkus.mailer.mock</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.mock"></a><code><a href="#quarkus-mailer_quarkus.mailer.mock">quarkus.mailer.mock</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -636,7 +685,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.bounce-address"></a><code><a href="#quarkus-mailer_quarkus.mailer.bounce-address">quarkus.mailer.bounce-address</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.bounce-address"></a><code><a href="#quarkus-mailer_quarkus.mailer.bounce-address">quarkus.mailer.bounce-address</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -650,7 +699,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.host"></a><code><a href="#quarkus-mailer_quarkus.mailer.host">quarkus.mailer.host</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.host"></a><code><a href="#quarkus-mailer_quarkus.mailer.host">quarkus.mailer.host</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -664,7 +713,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.port"></a><code><a href="#quarkus-mailer_quarkus.mailer.port">quarkus.mailer.port</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.port"></a><code><a href="#quarkus-mailer_quarkus.mailer.port">quarkus.mailer.port</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -678,7 +727,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.username"></a><code><a href="#quarkus-mailer_quarkus.mailer.username">quarkus.mailer.username</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.username"></a><code><a href="#quarkus-mailer_quarkus.mailer.username">quarkus.mailer.username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -692,7 +741,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.password"></a><code><a href="#quarkus-mailer_quarkus.mailer.password">quarkus.mailer.password</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.password"></a><code><a href="#quarkus-mailer_quarkus.mailer.password">quarkus.mailer.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -706,7 +755,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.ssl"></a><code><a href="#quarkus-mailer_quarkus.mailer.ssl">quarkus.mailer.ssl</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.ssl"></a><code><a href="#quarkus-mailer_quarkus.mailer.ssl">quarkus.mailer.ssl</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -720,7 +769,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.trust-all"></a><code><a href="#quarkus-mailer_quarkus.mailer.trust-all">quarkus.mailer.trust-all</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.trust-all"></a><code><a href="#quarkus-mailer_quarkus.mailer.trust-all">quarkus.mailer.trust-all</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -734,7 +783,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.max-pool-size"></a><code><a href="#quarkus-mailer_quarkus.mailer.max-pool-size">quarkus.mailer.max-pool-size</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.max-pool-size"></a><code><a href="#quarkus-mailer_quarkus.mailer.max-pool-size">quarkus.mailer.max-pool-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -748,7 +797,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.own-host-name"></a><code><a href="#quarkus-mailer_quarkus.mailer.own-host-name">quarkus.mailer.own-host-name</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.own-host-name"></a><code><a href="#quarkus-mailer_quarkus.mailer.own-host-name">quarkus.mailer.own-host-name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -762,7 +811,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.keep-alive"></a><code><a href="#quarkus-mailer_quarkus.mailer.keep-alive">quarkus.mailer.keep-alive</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.keep-alive"></a><code><a href="#quarkus-mailer_quarkus.mailer.keep-alive">quarkus.mailer.keep-alive</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -777,7 +826,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.disable-esmtp"></a><code><a href="#quarkus-mailer_quarkus.mailer.disable-esmtp">quarkus.mailer.disable-esmtp</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.disable-esmtp"></a><code><a href="#quarkus-mailer_quarkus.mailer.disable-esmtp">quarkus.mailer.disable-esmtp</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -791,7 +840,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.start-tls"></a><code><a href="#quarkus-mailer_quarkus.mailer.start-tls">quarkus.mailer.start-tls</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.start-tls"></a><code><a href="#quarkus-mailer_quarkus.mailer.start-tls">quarkus.mailer.start-tls</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -805,7 +854,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.login"></a><code><a href="#quarkus-mailer_quarkus.mailer.login">quarkus.mailer.login</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.login"></a><code><a href="#quarkus-mailer_quarkus.mailer.login">quarkus.mailer.login</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -819,7 +868,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.auth-methods"></a><code><a href="#quarkus-mailer_quarkus.mailer.auth-methods">quarkus.mailer.auth-methods</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.auth-methods"></a><code><a href="#quarkus-mailer_quarkus.mailer.auth-methods">quarkus.mailer.auth-methods</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -833,7 +882,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.key-store"></a><code><a href="#quarkus-mailer_quarkus.mailer.key-store">quarkus.mailer.key-store</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.key-store"></a><code><a href="#quarkus-mailer_quarkus.mailer.key-store">quarkus.mailer.key-store</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -847,7 +896,7 @@ The <em>mailer</em> extension works in JVM and native mode.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-mailer_quarkus.mailer.key-store-password"></a><code><a href="#quarkus-mailer_quarkus.mailer.key-store-password">quarkus.mailer.key-store-password</a></code></p>
+<p><a id="quarkus-mailer_quarkus.mailer.key-store-password"></a><code><a href="#quarkus-mailer_quarkus.mailer.key-store-password">quarkus.mailer.key-store-password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

@@ -69,7 +69,7 @@
     <div class="hide-mobile toc"></div>
     <div>
       <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
@@ -85,7 +85,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.core-threads"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.core-threads">quarkus.thread-pool.core-threads</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.core-threads"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.core-threads">quarkus.thread-pool.core-threads</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -99,7 +99,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.max-threads"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.max-threads">quarkus.thread-pool.max-threads</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.prefill"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.prefill">quarkus.thread-pool.prefill</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Prefill core thread pool. The core thread pool will be initialised with the core number of threads at startup</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.max-threads"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.max-threads">quarkus.thread-pool.max-threads</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -113,7 +127,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.queue-size"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.queue-size">quarkus.thread-pool.queue-size</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.queue-size"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.queue-size">quarkus.thread-pool.queue-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -127,7 +141,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.growth-resistance"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.growth-resistance">quarkus.thread-pool.growth-resistance</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.growth-resistance"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.growth-resistance">quarkus.thread-pool.growth-resistance</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -141,7 +155,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-timeout"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-timeout">quarkus.thread-pool.shutdown-timeout</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-timeout"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-timeout">quarkus.thread-pool.shutdown-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -156,7 +170,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-interrupt"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-interrupt">quarkus.thread-pool.shutdown-interrupt</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-interrupt"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-interrupt">quarkus.thread-pool.shutdown-interrupt</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -171,7 +185,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-check-interval"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-check-interval">quarkus.thread-pool.shutdown-check-interval</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-check-interval"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.shutdown-check-interval">quarkus.thread-pool.shutdown-check-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -186,7 +200,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.keep-alive-time"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.keep-alive-time">quarkus.thread-pool.keep-alive-time</a></code></p>
+<p><a id="quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.keep-alive-time"></a><code><a href="#quarkus-thread-pool-thread-pool-config_quarkus.thread-pool.keep-alive-time">quarkus.thread-pool.keep-alive-time</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

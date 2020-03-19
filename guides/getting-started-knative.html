@@ -69,8 +69,14 @@
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#solution">Solution</a></li>
-<li><a href="#deploying-the-application-in-knative">Deploying the application in Knative</a></li>
-<li><a href="#accessing-your-application">Accessing your application</a></li>
+<li><a href="#set-up-kubernetes-cluster">Set up Kubernetes Cluster</a></li>
+<li><a href="#set-up-nexusoptional">Set up Nexus(Optional)</a></li>
+<li><a href="#why-skaffold">Why Skaffold ?</a></li>
+<li><a href="#build-and-deploy-application">Build and deploy application</a>
+<ul class="sectlevel2">
+<li><a href="#cleanup">Cleanup</a></li>
+</ul>
+</li>
 <li><a href="#going-further">Going further</a></li>
 </ul></div>
     <div>
@@ -79,12 +85,8 @@
 <div class="paragraph">
 <p>This guide covers:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>The deployment of the application to Kubernetes</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>The deployment of a serverless application to Kubernetes using <a href="https://knative.dev">Knative</a>.</p>
 </div>
 <div class="paragraph">
 <p>This guide takes as input the application developed in the <a href="building-native-image">native application guide</a>.
@@ -108,11 +110,13 @@ The OpenShift section leverages OpenShift build and route features which are not
 <p>roughly 20 minutes</p>
 </li>
 <li>
-<p>having access to a Kubernetes and/or OpenShift cluster. Minikube and Minishift are valid options.</p>
+<p>having access to a Kubernetes cluster. Minikube is a valid option.</p>
 </li>
 <li>
-<p>having deployed Knative components on <a href="https://knative.dev/docs/install/knative-with-minikube/">Minikube</a>
-or <a href="https://knative.dev/v0.6-docs/install/knative-with-minishift/">Minishift</a></p>
+<p>having deployed Knative components on <a href="https://knative.dev/docs/install/knative-with-minikube/">minikube</a></p>
+</li>
+<li>
+<p>having <a href="https://https://skaffold.dev/">Skaffold</a> CLI on your PATH</p>
 </li>
 </ul>
 </div>
@@ -122,8 +126,7 @@ or <a href="https://knative.dev/v0.6-docs/install/knative-with-minishift/">Minis
 <h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We recommend to follow the instructions in the next sections and build the application step by step.
-However, you can go right to the completed example.</p>
+<p>We recommend to follow the instructions in the next sections and build the application step by step. However, you can go right to the completed example.</p>
 </div>
 <div class="paragraph">
 <p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
@@ -134,26 +137,73 @@ However, you can go right to the completed example.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="deploying-the-application-in-knative"><a class="anchor" href="#deploying-the-application-in-knative"></a>Deploying the application in Knative</h2>
+<h2 id="set-up-kubernetes-cluster"><a class="anchor" href="#set-up-kubernetes-cluster"></a>Set up Kubernetes Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before we deploy the application to Knative in Minikube or Minishift we need to create the following Kubernetes objects:</p>
+<p>The following script will start minikube and deploy Knative.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/knative/docs/blob/master/docs/serving/deploying-with-private-registry.md#provide-container-registry-credentials-to-knative">Container registry secrets</a> :-
-This is required to for the built container image to be pushed to the container registry of your choice</p>
-</li>
-<li>
-<p><a href="https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys">Deploy Key</a> :-
-This is required only if you are going to pull the sources from private repository.</p>
-</li>
-<li>
-<p><a href="https://github.com/knative/docs/tree/master/serving/samples/build-private-repo-go#setting-up-our-build-service-account">Build Service Account</a> :-
-The Kubernetes Service Account that will have access to Container Registry secret and Deploy Key secret</p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./bin/start-minikube.sh
+eval $(minikube docker-env) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Make the current Docker context to be that of minikube</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="set-up-nexusoptional"><a class="anchor" href="#set-up-nexusoptional"></a>Set up Nexus(Optional)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Nexus is used for caching maven artifacts so that Apache Maven builds are faster.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">kubectl apply -f k8s/nexus.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait for some time to have Nexus initialize and run. You can watch the status via <code>kubectl get pods -w</code>, use <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>c</kbd></span> to terminate the watch.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="why-skaffold"><a class="anchor" href="#why-skaffold"></a>Why Skaffold ?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As vanilla Kubernetes does not have an easy and developer friendly way to build and deploy application to a local cluster like minikube, without the need to push the image to external container registry. We will be using Skaffold to help us build and deploy the Quarkus application onto Kubernetes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="build-and-deploy-application"><a class="anchor" href="#build-and-deploy-application"></a>Build and deploy application</h2>
+<div class="sectionbody">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The container image will not be pushed to a remote container registry, and hence the container image url has to be <code>dev.local</code>, to make Knative deploy it without trying to pull it from external container registry.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To run Knative Quarkus applications, we need to use the multi stage docker build; to build the Quarkus application container image and use it in Kubernetes application deployment.</p>
+</div>
+<div class="paragraph">
+<p>The following command start a one time deployment of Quarkus application and runs starts the Knative service after successful container image build.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -163,138 +213,75 @@ The Kubernetes Service Account that will have access to Container Registry secre
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you are not using private GitHub repo then you dont need the <code>Deploy Key</code> created and added to the Build Service Account</p>
+<p>If you want to deploy a Quarkus JVM image (using HotSpot), then run the following command before running Skaffold:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">cp src/main/docker/Dockerfile.jvm Dockerfile</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to deploy a Quarkus Native executable image (using GraalVM), then run the following command before running Skaffold:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">cp src/main/docker/Dockerfile.native Dockerfile</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is very important to note that the Dockerfile in <code>src/main/docker</code> folder has been modified Dockerfiles to support multi stage Docker build.The multi stage Docker build helps in building and containerization of application with single Dockerfile.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>Run the following commands to kick start <a href="https://github.com/knative/build">Knative Build</a> which will build the quarkus application container image
-using Dockerfile and <a href="https://github.com/GoogleContainerTools/kaniko">Kaniko</a>.  After a successful build you will have the
-Knative serving application deployed with the built container image.  You can watch the application build pods using the
-command <code>kubectl get pods -w</code>. You can terminate the watch using the command <span class="keyseq"><kbd>CTRL</kbd>+<kbd>c</kbd></span></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">skaffold run</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Since there are some parameters that you need to pass to the builds, which are right now configurable via maven properties,
-you need to run the following maven command to make them passed to the Knative resource yamls.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Maven Parameters</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Use</th>
-<th class="tableblock halign-left valign-top">Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">github.deploy.key</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">the base64 encoded private key that is configured to be used as the GitHub private repo Deploy key</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cat ~/.ssh/quarkus-quickstarts | base64 -w 0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">github.keyscan</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">the base64 encoded value of <code>ssh-keyscan github.com</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ssh-keyscan github.com | base64 -w 0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">container.registry.url</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">the container registry url, NOTE: this should be a v2 container registry</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://index.docker.io/v1/" class="bare">https://index.docker.io/v1/</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">container.registry.user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The user name to authenticate with the container registry</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">container.registry.password</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The user password to authenticate with the container registry</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">git.source.revision</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The revision of the source to checkout from GitHub</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">master</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">git.source.repo.url</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The GitHub repo url</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">app.container.image</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The fully qualified name of the container image that will be pushed to the container registry after build</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.io/demo/quarkus-knative-quickstart</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>The following is the example command to generate the need knative resource files</p>
+<p>As it will take a few minutes for the build and deployment to be completed you can watch the status using:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn -Dgithub.deploy.key=$(cat ~/.ssh/quarkus-quickstarts | base64 -w 0) \
-    -Dgithub.keyscan=$(ssh-keyscan github.com | base64 -w 0) \
-    -Dcontainer.registry.url='https://quay.io/v2' \
-    -Dcontainer.registry.user='demo' \
-    -Dcontainer.registry.password='password' \
-    -Dgit.source.revision='master' \
-    -Dgit.source.repo.url='https://github.com/quarkusio/quarkus-quickstarts.git' \ <i class="conum" data-value="1"></i><b>(1)</b>
-    -Dapp.container.image='docker.io/demo/getting-started-knative' \
-    clean process-resources</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">watch kubectl get pods</code></pre>
 </div>
 </div>
-<div class="colist arabic">
+<div class="paragraph">
+<p>A successful Knative service deployment will show the following pods in the current namespace:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">NAME                                     READY   STATUS    AGE
+greeter-deployment-5749cc98fc-gs6zr      2/2     Running   10s</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>If your are using a private repo then you might need to use git ssh url</td>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The deployment name could differ in your environment.
+</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The above command will apply the property values to the Knative resources found in <code>${project.basedir}/src/main/knative</code>
-and copy them to <code>${project.build.directory}/knative</code></p>
+<p>Once the Knative service is successfully running, you can call it using the script <code>./bin/call.sh</code>, which should return a response like <code>hello</code>. Allowing it to idle for approximately 60-65 seconds - that is without any further requests -, you will see it automatically scales down to zero pods.</p>
 </div>
+<div class="sect2">
+<h3 id="cleanup"><a class="anchor" href="#cleanup"></a>Cleanup</h3>
 <div class="paragraph">
-<p>Run the following command to create the Knative resources:</p>
+<p>To delete the application:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">kubectl apply --recursive --filename target/knative</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">skaffold delete</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="accessing-your-application"><a class="anchor" href="#accessing-your-application"></a>Accessing your application</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The application is now exposed as an internal service. If you are using <code>minikube</code> or <code>minishift</code>, you can access it using:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">INGRESSGATEWAY=istio-ingressgateway
-IP_ADDRESS="$(minikube ip):$(kubectl get svc $INGRESSGATEWAY --namespace istio-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')" <i class="conum" data-value="1"></i><b>(1)</b>
-
-curl -v -H 'Host: getting-started-knative.example.com' $IP_ADDRESS/hello/greeting/redhat</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>you can replace <code>minikube ip</code> with <code>minishift ip</code> if you are using OpenShift</td>
-</tr>
-</table>
 </div>
 </div>
 </div>

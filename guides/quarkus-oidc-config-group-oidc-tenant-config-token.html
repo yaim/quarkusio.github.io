@@ -69,7 +69,7 @@
     <div class="hide-mobile toc"></div>
     <div>
       <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
@@ -85,12 +85,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.issuer"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.issuer">quarkus.oidc.token.issuer</a></code></p>
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.issuer"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.issuer">quarkus.oidc.token.issuer</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected issuer 'iss' claim value</p>
+<p>Expected issuer 'iss' claim value.</p>
 </div>
 </div>
 </div></div></td>
@@ -99,12 +99,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.audience"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.audience">quarkus.oidc.token.audience</a></code></p>
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.audience"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.audience">quarkus.oidc.token.audience</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected audience <code>aud</code> claim value which may be a string or an array of strings</p>
+<p>Expected audience 'aud' claim value which may be a string or an array of strings.</p>
 </div>
 </div>
 </div></div></td>
@@ -113,7 +113,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.principal-claim"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.principal-claim">quarkus.oidc.token.principal-claim</a></code></p>
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.expiration-grace"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.expiration-grace">quarkus.oidc.token.expiration-grace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.principal-claim"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.token.principal-claim">quarkus.oidc.token.principal-claim</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -127,12 +141,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.issuer"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.issuer">quarkus.oidc."tenant".token.issuer</a></code></p>
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.issuer"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.issuer">quarkus.oidc."tenant".token.issuer</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected issuer 'iss' claim value</p>
+<p>Expected issuer 'iss' claim value.</p>
 </div>
 </div>
 </div></div></td>
@@ -141,12 +155,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.audience"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.audience">quarkus.oidc."tenant".token.audience</a></code></p>
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.audience"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.audience">quarkus.oidc."tenant".token.audience</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected audience <code>aud</code> claim value which may be a string or an array of strings</p>
+<p>Expected audience 'aud' claim value which may be a string or an array of strings.</p>
 </div>
 </div>
 </div></div></td>
@@ -155,7 +169,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.principal-claim"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.principal-claim">quarkus.oidc."tenant".token.principal-claim</a></code></p>
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.expiration-grace"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.expiration-grace">quarkus.oidc."tenant".token.expiration-grace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.principal-claim"></a><code><a href="#quarkus-oidc-config-group-oidc-tenant-config-token_quarkus.oidc.-tenant-.token.principal-claim">quarkus.oidc."tenant".token.principal-claim</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

@@ -71,7 +71,8 @@
 <li><a href="#core-features">2. Core Features</a>
 <ul class="sectlevel2">
 <li><a href="#syntax-and-building-blocks">2.1. Syntax and Building Blocks</a></li>
-<li><a href="#engine-configuration">2.2. Engine Configuration</a></li>
+<li><a href="#identifiers">2.2. Identifiers</a></li>
+<li><a href="#engine-configuration">2.3. Engine Configuration</a></li>
 </ul>
 </li>
 <li><a href="#quarkus_integration">3. Quarkus Integration</a>
@@ -248,88 +249,142 @@ In Quarkus, the caching is done automatically.
 <div class="ulist">
 <ul>
 <li>
-<p><strong>comment</strong></p>
+<p><strong>Comment</strong></p>
 <div class="ulist">
 <ul>
 <li>
 <p><code>{! This is a comment !}</code>,</p>
 </li>
 <li>
-<p>could be multi-line,</p>
+<p>Could be multi-line,</p>
 </li>
 <li>
-<p>may contain expressions and sections: <code>{! {#if true} !}</code>.</p>
+<p>May contain expressions and sections: <code>{! {#if true} !}</code>.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>expression</strong></p>
+<p><strong>Expression</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>outputs the evaluated value,</p>
+<p>Outputs the evaluated value,</p>
 </li>
 <li>
-<p>simple properties: <code>{foo}</code>, <code>{item.name}</code>,</p>
+<p>Simple properties: <code>{foo}</code>, <code>{item.name}</code>,</p>
 </li>
 <li>
-<p>virtual methods: <code>{item.get(name)}</code>, <code>{name ?: 'John'}</code>,</p>
+<p>Virtual methods: <code>{item.get(name)}</code>, <code>{name ?: 'John'}</code>,</p>
 </li>
 <li>
-<p>with namespace: <code>{inject:colors}</code>.</p>
+<p>With namespace: <code>{inject:colors}</code>.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>section tag</strong></p>
+<p><strong>Section</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>may contain expressions and sections: <code>{#if foo}{foo.name}{/if}</code>,</p>
+<p>May contain expressions and sections: <code>{#if foo}{foo.name}{/if}</code>,</p>
 </li>
 <li>
-<p>the name in the closing tag is optional: <code>{#if active}ACTIVE!{/}</code>,</p>
+<p>The name in the closing tag is optional: <code>{#if active}ACTIVE!{/}</code>,</p>
 </li>
 <li>
-<p>can be empty: <code>{#myTag image=true /}</code>,</p>
+<p>Can be empty: <code>{#myTag image=true /}</code>,</p>
 </li>
 <li>
-<p>may declare nested section blocks: <code>{#if item.valid} Valid. {#else} Invalid. {/if}</code> and decide which block to render.</p>
+<p>May declare nested section blocks: <code>{#if item.valid} Valid. {#else} Invalid. {/if}</code> and decide which block to render.</p>
 </li>
 </ul>
 </div>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="identifiers"><a class="anchor" href="#identifiers"></a>2.2. Identifiers</h3>
+<div class="paragraph">
+<p>Expressions/tags must start with a curly bracket (<code>{</code>) followed by a valid identifier.
+A valid identifier is a digit, an alphabet character, underscore (<code>_</code>), or a section command (<code>#</code>).
+Expressions/tags starting with an invalid identifier are ignored.
+A closing curly bracket (<code>}</code>) is ignored if not inside an expression/tag.</p>
+</div>
+<div class="listingblock">
+<div class="title">hello.html</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;html&gt;
+   &lt;body&gt;
+   {_foo}       <i class="conum" data-value="1"></i><b>(1)</b>
+   {  foo}      <i class="conum" data-value="2"></i><b>(2)</b>
+   {{foo}}      <i class="conum" data-value="3"></i><b>(3)</b>
+   {"foo":true} <i class="conum" data-value="4"></i><b>(4)</b>
+   &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Evaluated: expression starts with underscore.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Ignored: expression starts with whitespace.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Ignored: expression starts with <code>{</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Ignored: expression starts with <code>"</code>.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+It is also possible to use escape sequences <code>\{</code> and <code>\}</code> to insert delimiters in the text. In fact, an escape sequence is usually only needed for the start delimiter, ie. <code>\{foo}</code> will be rendered as <code>{foo}</code> (no evaluation will happen).
+</td>
+</tr>
+</table>
 </div>
 <div class="sect3">
-<h4 id="expressions"><a class="anchor" href="#expressions"></a>2.1.1. Expressions</h4>
+<h4 id="expressions"><a class="anchor" href="#expressions"></a>2.2.1. Expressions</h4>
 <div class="paragraph">
 <p>An expression consists of:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>an optional namespace followed by a colon <code>:</code>,</p>
+<p>an optional namespace followed by a colon (<code>:</code>),</p>
 </li>
 <li>
-<p>parts separated by dot <code>.</code>.</p>
+<p>one or more parts separated by dot (<code>.</code>).</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
 <p>The first part of the expression is always resolved against the <a href="#current_context_object">current context object</a>.
 If no result is found for the first part it&#8217;s resolved against the parent context object (if available).
-For an expression that starts with a namespace the current context object is found using the available <code>NamespaceResolver</code>s.
+For an expression that starts with a namespace the current context object is found using all the available <code>NamespaceResolver</code>s.
 For an expression that does not start with a namespace the current context object is <strong>derived from the position</strong> of the tag.
-All other parts are resolved using <code>ValueResolver</code> s against the result of the previous resolution.</p>
+All other parts are resolved using <code>ValueResolver</code>s against the result of the previous resolution.</p>
 </div>
 <div class="paragraph">
-<p>For example, expression <code>{name}</code> has no namespace and single part - "name".
+<p>For example, expression <code>{name}</code> has no namespace and single part - <code>name</code>.
 The "name" will be resolved using all available value resolvers against the current context object.
-However, the expression <code>{global:colors}</code> has the namespace "global" and single part - "colors".
-First, all available <code>NamespaceResolver</code> s will be used to find the current context object.
+However, the expression <code>{global:colors}</code> has the namespace <code>global</code> and single part - <code>colors</code>.
+First, all available <code>NamespaceResolver</code>s will be used to find the current context object.
 And afterwards value resolvers will be used to resolve "colors" against the context object found.</p>
 </div>
 <div class="listingblock">
@@ -356,7 +411,7 @@ And afterwards value resolvers will be used to resolve "colors" against the cont
 </table>
 </div>
 <div class="paragraph">
-<p>An expression part could be a "virtual method" in which case the name can be followed by parameters in parentheses.</p>
+<p>An expression part could be a "virtual method" in which case the name can be followed by a list of comma-separated parameters in parentheses:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -377,7 +432,7 @@ And afterwards value resolvers will be used to resolve "colors" against the cont
 </table>
 </div>
 <div class="sect4">
-<h5 id="current_context_object"><a class="anchor" href="#current_context_object"></a>2.1.1.1. Current Context</h5>
+<h5 id="current_context_object"><a class="anchor" href="#current_context_object"></a>2.2.1.1. Current Context</h5>
 <div class="paragraph">
 <p>If an expression does not specify a namespace the current context object is derived from the position of the tag.
 By default, the current context object represents the data passed to the template instance.
@@ -461,7 +516,48 @@ This could be useful to access data for which the key is overriden:</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="character-escapes"><a class="anchor" href="#character-escapes"></a>2.1.1.2. Character Escapes</h5>
+<h5 id="built-in-operators"><a class="anchor" href="#built-in-operators"></a>2.2.1.2. Built-in Operators</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Operator</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Elvis</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Outputs the default value if the previous part cannot be resolved or resolves to <code>null</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{person.name ?: 'John'}</code>, <code>{person.name or 'John'}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ternary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shorthand for if-then-else statement. Unlike in <a href="#if_section">If Section</a> nested operators are not supported.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{item.isActive ? item.name : 'Inactive item'}</code> outputs the value of <code>item.name</code> if <code>item.isActive</code> resolves to <code>true</code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In fact, the operators are implemented as "virtual methods" that consume one parameter and can be used with infix notation, i.e. <code>{person.name or 'John'}</code> is translated to <code>{person.name.or('John')}</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="character-escapes"><a class="anchor" href="#character-escapes"></a>2.2.1.3. Character Escapes</h5>
 <div class="paragraph">
 <p>For HTML and XML templates the <code>'</code>, <code>"</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code> characters are escaped by default.
 If you need to render the unescaped value:</p>
@@ -499,7 +595,7 @@ If you need to render the unescaped value:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="sections"><a class="anchor" href="#sections"></a>2.1.2. Sections</h4>
+<h4 id="sections"><a class="anchor" href="#sections"></a>2.2.2. Sections</h4>
 <div class="paragraph">
 <p>A section:</p>
 </div>
@@ -557,9 +653,9 @@ A section helper that defines the logic of a section can "execute" any of the bl
 </div>
 </div>
 <div class="sect4">
-<h5 id="loop-section"><a class="anchor" href="#loop-section"></a>2.1.2.1. Loop Section</h5>
+<h5 id="loop-section"><a class="anchor" href="#loop-section"></a>2.2.2.1. Loop Section</h5>
 <div class="paragraph">
-<p>The loop section makes it possible to iterate over an instance of <code>Iterable</code>, <code>Map</code> 's entry set and <code>Stream</code>.
+<p>The loop section makes it possible to iterate over an instance of <code>Iterable</code>, <code>Map</code> 's entry set, <code>Stream</code> and an Integer.
 It has two flavors.
 The first one is using the <code>each</code> name alias.</p>
 </div>
@@ -606,9 +702,27 @@ The first one is using the <code>each</code> name alias.</p>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>The <code>for</code> statement also works with integers, starting from 1. In the example below, considering that <code>total = 3</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">{#for i in total}
+  {i}:
+{/for}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output will be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">1:2:3:</code></pre>
+</div>
+</div>
 </div>
 <div class="sect4">
-<h5 id="if-section"><a class="anchor" href="#if-section"></a>2.1.2.2. If Section</h5>
+<h5 id="if_section"><a class="anchor" href="#if_section"></a>2.2.2.2. If Section</h5>
 <div class="paragraph">
 <p>A basic control flow section.
 The simplest possible version accepts a single parameter and renders the content if it&#8217;s evaluated to <code>true</code> (or <code>Boolean.TRUE</code>).</p>
@@ -732,15 +846,16 @@ The simplest possible version accepts a single parameter and renders the content
 </div>
 </div>
 <div class="sect4">
-<h5 id="with-section"><a class="anchor" href="#with-section"></a>2.1.2.3. With Section</h5>
+<h5 id="with-section"><a class="anchor" href="#with-section"></a>2.2.2.3. With Section</h5>
 <div class="paragraph">
 <p>This section can be used to set the current context object.
-This could be useful to simplify the template structure.</p>
+This could be useful to simplify the template structure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">{#with item.parent}
-  {name}  <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.parent}
+  &lt;h1&gt;{name}&lt;/h1&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
+  &lt;p&gt;{description}&lt;/p&gt; <i class="conum" data-value="2"></i><b>(2)</b>
 {/with}</code></pre>
 </div>
 </div>
@@ -748,7 +863,11 @@ This could be useful to simplify the template structure.</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The name will be resolved against the <code>item.parent</code>.</td>
+<td>The <code>name</code> will be resolved against the <code>item.parent</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>description</code> will be also resolved against the <code>item.parent</code>.</td>
 </tr>
 </table>
 </div>
@@ -757,14 +876,44 @@ This could be useful to simplify the template structure.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">{#with item.parent as myParent}
-  {myParent.name}
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.parent as myParent} <i class="conum" data-value="1"></i><b>(1)</b>
+  &lt;h1&gt;{myParent.name}&lt;/h1&gt;
 {/with}</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>myParent</code> is the alias that can be used inside the tag.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This section might also come in handy when we&#8217;d like to avoid multiple expensive invocations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.callExpensiveLogicToGetTheValue(true) as it}
+  {#if it is "fun"} <i class="conum" data-value="1"></i><b>(1)</b>
+    &lt;h1&gt;Yay!&lt;/h1&gt;
+  {#else}
+    &lt;h1&gt;{it} is not fun at all!&lt;/h1&gt;
+  {/if}
+{/with}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>it</code> is the result of <code>item.callExpensiveLogicToGetTheValue(1,'foo',bazinga)</code>. The method is only invoked once even though the result may be used in multiple expressions.</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect4">
-<h5 id="include_helper"><a class="anchor" href="#include_helper"></a>2.1.2.4. Include/Insert Sections</h5>
+<h5 id="include_helper"><a class="anchor" href="#include_helper"></a>2.2.2.4. Include/Insert Sections</h5>
 <div class="paragraph">
 <p>These sections can be used to include another template and possibly override some parts of the template (template inheritance).</p>
 </div>
@@ -833,7 +982,7 @@ Section blocks can also define an optional end tag - <code>{/title}</code>.
 </div>
 </div>
 <div class="sect4">
-<h5 id="user_tags"><a class="anchor" href="#user_tags"></a>2.1.2.5. User-defined Tags</h5>
+<h5 id="user_tags"><a class="anchor" href="#user_tags"></a>2.2.2.5. User-defined Tags</h5>
 <div class="paragraph">
 <p>User-defined tags can be used to include a template and optionally pass some parameters.
 Let&#8217;s suppose we have a template called <code>item.html</code>:</p>
@@ -905,9 +1054,9 @@ In Quarkus, all files from the <code>src/main/resources/templates/tags</code> ar
 </div>
 </div>
 <div class="sect2">
-<h3 id="engine-configuration"><a class="anchor" href="#engine-configuration"></a>2.2. Engine Configuration</h3>
+<h3 id="engine-configuration"><a class="anchor" href="#engine-configuration"></a>2.3. Engine Configuration</h3>
 <div class="sect3">
-<h4 id="template-locator"><a class="anchor" href="#template-locator"></a>2.2.1. Template Locator</h4>
+<h4 id="template-locator"><a class="anchor" href="#template-locator"></a>2.3.1. Template Locator</h4>
 <div class="paragraph">
 <p>Manual registration is sometimes handy but it&#8217;s also possible to register a template locator using <code>EngineBuilder.addLocator(Function&lt;String, Optional&lt;Reader&gt;&gt;)</code>.
 This locator is used whenever the <code>Engine.getTemplate()</code> method is called and the engine has no template for a given id stored in the cache.</p>
@@ -1022,18 +1171,6 @@ A <code>ValueResolver</code> is also generated for all beans annotated with <cod
 <p>It is possible to specify optional parameter declarations in a template.
 Quarkus attempts to validate all expressions that reference such parameters.
 If an invalid/incorrect expression is found the build fails.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Only properties are currently validated in expressions; virtual methods are currently ignored.
-</td>
-</tr>
-</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1243,6 +1380,103 @@ class MyExtensions {
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="built-in-template-extension-methods"><a class="anchor" href="#built-in-template-extension-methods"></a>3.3.2. Built-in Template Extension methods</h4>
+<div class="paragraph">
+<p>Quarkus provides a set of built-in extension methods.</p>
+</div>
+<div class="sect4">
+<h5 id="map-extension-methods"><a class="anchor" href="#map-extension-methods"></a>3.3.2.1. Map extension methods:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><code>keys</code> or <code>keySet</code>: Returns a Set view of the keys contained in a map</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{#for key in map.keySet}</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>values</code>: Returns a Collection view of the values contained in a map</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{#for value in map.values}</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>size</code>: Returns the number of key-value mappings in a map</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{map.size}</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>isEmpty</code>: Returns true if a map contains no key-value mappings</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{#if map.isEmpty}</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>get(key)</code>: Returns the value to which the specified key is mapped</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{map.get('foo')}</code> or <code>{map['foo']}</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="collection-extension-methods"><a class="anchor" href="#collection-extension-methods"></a>3.3.2.2. Collection extension methods:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><code>get(index)</code>: Returns the element at the specified position in a list</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{list.get(0)}</code> or <code>{list[0]}</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="number-extension-methods"><a class="anchor" href="#number-extension-methods"></a>3.3.2.3. Number extension methods:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><code>mod</code>: Modulo operation</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{#if counter.mod(5) == 0}</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="templatedata"><a class="anchor" href="#templatedata"></a>3.4. @TemplateData</h3>
@@ -1439,7 +1673,7 @@ class DetailResource {
 <div class="sect2">
 <h3 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>3.7. Configuration Reference</h3>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -1455,7 +1689,7 @@ class DetailResource {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-qute_quarkus.qute.suffixes"></a><code><a href="#quarkus-qute_quarkus.qute.suffixes">quarkus.qute.suffixes</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-qute_quarkus.qute.suffixes"></a><code><a href="#quarkus-qute_quarkus.qute.suffixes">quarkus.qute.suffixes</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

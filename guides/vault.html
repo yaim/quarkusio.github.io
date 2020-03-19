@@ -70,7 +70,7 @@
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#starting-vault">Starting Vault</a></li>
 <li><a href="#create-a-quarkus-application-with-a-secret-configuration">Create a quarkus application with a secret configuration</a></li>
-<li><a href="#fetching-credentials-from-vault-with-hibernate-orm">Fetching credentials from Vault with Hibernate ORM</a></li>
+<li><a href="#datasource">Fetching credentials from Vault for a datasource</a></li>
 <li><a href="#programmatic-access-to-the-kv-secret-engine">Programmatic access to the KV secret engine</a></li>
 <li><a href="#tls">TLS</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
@@ -502,7 +502,7 @@ java -jar target/vault-quickstart-1.0-SNAPSHOT-runner.jar</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="fetching-credentials-from-vault-with-hibernate-orm"><a class="anchor" href="#fetching-credentials-from-vault-with-hibernate-orm"></a>Fetching credentials from Vault with Hibernate ORM</h2>
+<h2 id="datasource"><a class="anchor" href="#datasource"></a>Fetching credentials from Vault for a datasource</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Start a PostgreSQL database:</p>
@@ -611,11 +611,10 @@ property:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># configure your datasource
-quarkus.datasource.url = jdbc:postgresql://localhost:5432/mydatabase
-quarkus.datasource.driver = org.postgresql.Driver
+quarkus.datasource.db-kind = postgresql
 quarkus.datasource.username = sarah
-#quarkus.datasource.password = connor
 quarkus.datasource.credentials-provider = mydatabase
+quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/mydatabase
 
 # drop and create the database at startup (use `update` to only update the schema)
 quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
@@ -634,15 +633,15 @@ quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.datasource.username = sarah
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.username = sarah
 quarkus.datasource.password = ${my-db-password}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The only drawback is that the password will never be fetched again from vault after the initial property loading.
+<p>The only drawback is that the password will never be fetched again from Vault after the initial property loading.
 This means that if the db password was changed while running, the application would have to be restarted after
 vault has been updated with the new password.
-This contrasts with the credentials provider approach, which fetches the password from vault everytime a connection
+This contrasts with the credentials provider approach, which fetches the password from Vault every time a connection
 creation is attempted.</p>
 </div>
 </td>
@@ -778,7 +777,7 @@ credentials), which goes a long way towards creating secured applications.</p>
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -794,7 +793,7 @@ credentials), which goes a long way towards creating secured applications.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.url"></a><code><a href="#quarkus-vault_quarkus.vault.url">quarkus.vault.url</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.url"></a><code><a href="#quarkus-vault_quarkus.vault.url">quarkus.vault.url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -811,7 +810,7 @@ credentials), which goes a long way towards creating secured applications.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.renew-grace-period"></a><code><a href="#quarkus-vault_quarkus.vault.renew-grace-period">quarkus.vault.renew-grace-period</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.renew-grace-period"></a><code><a href="#quarkus-vault_quarkus.vault.renew-grace-period">quarkus.vault.renew-grace-period</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -839,7 +838,7 @@ leases all the time.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-cache-period"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-cache-period">quarkus.vault.secret-config-cache-period</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.secret-config-cache-period"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-cache-period">quarkus.vault.secret-config-cache-period</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -859,7 +858,7 @@ This property is ignored if <code>secret-config-kv-path</code> is not set.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path">quarkus.vault.secret-config-kv-path</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.secret-config-kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path">quarkus.vault.secret-config-kv-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -898,7 +897,7 @@ with application properties <code>quarkus.vault.secret-config-kv-path=base-confi
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.log-confidentiality-level"></a><code><a href="#quarkus-vault_quarkus.vault.log-confidentiality-level">quarkus.vault.log-confidentiality-level</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.log-confidentiality-level"></a><code><a href="#quarkus-vault_quarkus.vault.log-confidentiality-level">quarkus.vault.log-confidentiality-level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -926,7 +925,7 @@ Possible values are:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-version"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-version">quarkus.vault.kv-secret-engine-version</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.kv-secret-engine-version"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-version">quarkus.vault.kv-secret-engine-version</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -943,7 +942,7 @@ Possible values are:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.kv-secret-engine-mount-path"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-mount-path">quarkus.vault.kv-secret-engine-mount-path</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.kv-secret-engine-mount-path"></a><code><a href="#quarkus-vault_quarkus.vault.kv-secret-engine-mount-path">quarkus.vault.kv-secret-engine-mount-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -960,7 +959,7 @@ Possible values are:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.connect-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.connect-timeout">quarkus.vault.connect-timeout</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.connect-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.connect-timeout">quarkus.vault.connect-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -975,7 +974,7 @@ Possible values are:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.read-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.read-timeout">quarkus.vault.read-timeout</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.read-timeout"></a><code><a href="#quarkus-vault_quarkus.vault.read-timeout">quarkus.vault.read-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -990,7 +989,7 @@ Possible values are:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path">quarkus.vault.secret-config-kv-path."prefix"</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path"></a><code><a href="#quarkus-vault_quarkus.vault.secret-config-kv-path.-prefix-secret-config-kv-prefix-path">quarkus.vault.secret-config-kv-path."prefix"</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1015,7 +1014,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.database-credentials-role">quarkus.vault.credentials-provider."credentials-provider".database-credentials-role</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1032,7 +1031,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-path">quarkus.vault.credentials-provider."credentials-provider".kv-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1052,7 +1051,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key"></a><code><a href="#quarkus-vault_quarkus.vault.credentials-provider.-credentials-provider-.kv-key">quarkus.vault.credentials-provider."credentials-provider".kv-key</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1077,7 +1076,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.authentication.client-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.client-token">quarkus.vault.authentication.client-token</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.authentication.client-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.client-token">quarkus.vault.authentication.client-token</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1091,7 +1090,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.authentication.app-role.role-id"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.app-role.role-id">quarkus.vault.authentication.app-role.role-id</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.authentication.app-role.role-id"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.app-role.role-id">quarkus.vault.authentication.app-role.role-id</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1105,7 +1104,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.authentication.app-role.secret-id"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.app-role.secret-id">quarkus.vault.authentication.app-role.secret-id</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.authentication.app-role.secret-id"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.app-role.secret-id">quarkus.vault.authentication.app-role.secret-id</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1119,7 +1118,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.authentication.userpass.username"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.username">quarkus.vault.authentication.userpass.username</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.authentication.userpass.username"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.username">quarkus.vault.authentication.userpass.username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1133,7 +1132,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.authentication.userpass.password"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.password">quarkus.vault.authentication.userpass.password</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.authentication.userpass.password"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.password">quarkus.vault.authentication.userpass.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1147,7 +1146,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.authentication.kubernetes.role"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.kubernetes.role">quarkus.vault.authentication.kubernetes.role</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.authentication.kubernetes.role"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.kubernetes.role">quarkus.vault.authentication.kubernetes.role</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1161,7 +1160,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.authentication.kubernetes.jwt-token-path"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.kubernetes.jwt-token-path">quarkus.vault.authentication.kubernetes.jwt-token-path</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.authentication.kubernetes.jwt-token-path"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.kubernetes.jwt-token-path">quarkus.vault.authentication.kubernetes.jwt-token-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1180,7 +1179,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.tls.skip-verify"></a><code><a href="#quarkus-vault_quarkus.vault.tls.skip-verify">quarkus.vault.tls.skip-verify</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.tls.skip-verify"></a><code><a href="#quarkus-vault_quarkus.vault.tls.skip-verify">quarkus.vault.tls.skip-verify</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1195,7 +1194,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.tls.ca-cert"></a><code><a href="#quarkus-vault_quarkus.vault.tls.ca-cert">quarkus.vault.tls.ca-cert</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.tls.ca-cert"></a><code><a href="#quarkus-vault_quarkus.vault.tls.ca-cert">quarkus.vault.tls.ca-cert</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1210,7 +1209,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.tls.use-kubernetes-ca-cert"></a><code><a href="#quarkus-vault_quarkus.vault.tls.use-kubernetes-ca-cert">quarkus.vault.tls.use-kubernetes-ca-cert</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.tls.use-kubernetes-ca-cert"></a><code><a href="#quarkus-vault_quarkus.vault.tls.use-kubernetes-ca-cert">quarkus.vault.tls.use-kubernetes-ca-cert</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1229,7 +1228,7 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.name"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.name">quarkus.vault.transit.key."key".name</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.transit.key.-key-.name"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.name">quarkus.vault.transit.key."key".name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1256,7 +1255,7 @@ transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.prehashed"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.prehashed">quarkus.vault.transit.key."key".prehashed</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.transit.key.-key-.prehashed"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.prehashed">quarkus.vault.transit.key."key".prehashed</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1270,7 +1269,7 @@ transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm">quarkus.vault.transit.key."key".signature-algorithm</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.signature-algorithm">quarkus.vault.transit.key."key".signature-algorithm</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1284,7 +1283,7 @@ transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm">quarkus.vault.transit.key."key".hash-algorithm</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.hash-algorithm">quarkus.vault.transit.key."key".hash-algorithm</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1298,7 +1297,7 @@ transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.type"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.type">quarkus.vault.transit.key."key".type</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.transit.key.-key-.type"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.type">quarkus.vault.transit.key."key".type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1312,7 +1311,7 @@ transitSecretEngine.sign("my-foo-key-with-prehashed", "my already hashed content
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption">quarkus.vault.transit.key."key".convergent-encryption</a></code></p>
+<p><a id="quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption"></a><code><a href="#quarkus-vault_quarkus.vault.transit.key.-key-.convergent-encryption">quarkus.vault.transit.key."key".convergent-encryption</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

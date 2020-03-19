@@ -86,6 +86,7 @@
 <li><a href="#testing-the-application">Testing the Application</a></li>
 <li><a href="#checking-permissions-programmatically">Checking Permissions Programmatically</a></li>
 <li><a href="#mapping-protected-resources">Mapping Protected Resources</a></li>
+<li><a href="#more-about-configuring-protected-resources">More About Configuring Protected Resources</a></li>
 <li><a href="#references">References</a></li>
 </ul></div>
     <div>
@@ -219,7 +220,7 @@ As you can see from the source code below it is just a regular JAX-RS resource:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.keycloak;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.keycloak.authorization;;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -245,7 +246,7 @@ public class UsersResource {
         return new User(identity);
     }
 
-    public class User {
+    public static class User {
 
         private final String userName;
 
@@ -265,7 +266,7 @@ public class UsersResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.keycloak;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.security.keycloak.authorization;;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -506,6 +507,17 @@ in your application that should be protected. This is done during the applicatio
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.keycloak.policy-enforcer.lazy-load-paths=true</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more-about-configuring-protected-resources"><a class="anchor" href="#more-about-configuring-protected-resources"></a>More About Configuring Protected Resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the default configuration, Keycloak is responsible for managing the roles and deciding who can access which routes.</p>
+</div>
+<div class="paragraph">
+<p>To configure the protected routes using the <code>@RolesAllowed</code> annotation or the <code>application.properties</code> file, check the <a href="security-openid-connect">Using OpenID Connect Adapter to Protect JAX-RS Applications</a> guide. For more details, check the <a href="security">Security guide</a>.</p>
 </div>
 </div>
 </div>

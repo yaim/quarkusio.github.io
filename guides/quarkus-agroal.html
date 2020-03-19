@@ -69,7 +69,7 @@
     <div class="hide-mobile toc"></div>
     <div>
       <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -85,7 +85,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.driver"></a><code><a href="#quarkus-agroal_quarkus.datasource.driver">quarkus.datasource.driver</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.jdbc"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc">quarkus.datasource.jdbc</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If we create a JDBC datasource for this datasource.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.jdbc.driver"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.driver">quarkus.datasource.jdbc.driver</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -99,7 +113,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.transactions"></a><code><a href="#quarkus-agroal_quarkus.datasource.transactions">quarkus.datasource.transactions</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.jdbc.transactions"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.transactions">quarkus.datasource.jdbc.transactions</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -114,7 +128,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.enable-metrics">quarkus.datasource.enable-metrics</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.jdbc.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.enable-metrics">quarkus.datasource.jdbc.enable-metrics</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -128,35 +142,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.health.enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.health.enabled">quarkus.datasource.health.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Whether or not an health check is published in case the smallrye-health extension is present</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.metrics.enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.metrics.enabled">quarkus.datasource.metrics.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Whether or not datasource metrics are published in case the smallrye-metrics extension is present (default to false). NOTE: This is different from the "enable-metrics" property that needs to be set on data source level to enable collection of metrics for that data source.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.url"></a><code><a href="#quarkus-agroal_quarkus.datasource.url">quarkus.datasource.url</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.url"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.url">quarkus.datasource.jdbc.url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -170,65 +156,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.username"></a><code><a href="#quarkus-agroal_quarkus.datasource.username">quarkus.datasource.username</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The datasource username</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.password"></a><code><a href="#quarkus-agroal_quarkus.datasource.password">quarkus.datasource.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The datasource password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.credentials-provider"></a><code><a href="#quarkus-agroal_quarkus.datasource.credentials-provider">quarkus.datasource.credentials-provider</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The credentials provider name</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.credentials-provider-type"></a><code><a href="#quarkus-agroal_quarkus.datasource.credentials-provider-type">quarkus.datasource.credentials-provider-type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The credentials provider type.
- It is the <code>&#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
- For Vault it is: vault-credentials-provider. Not necessary if there is only one credentials provider available.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.initial-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.initial-size">quarkus.datasource.initial-size</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.initial-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.initial-size">quarkus.datasource.jdbc.initial-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -242,7 +170,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.min-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.min-size">quarkus.datasource.min-size</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.min-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.min-size">quarkus.datasource.jdbc.min-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -256,7 +184,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.max-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.max-size">quarkus.datasource.max-size</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.max-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.max-size">quarkus.datasource.jdbc.max-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -270,7 +198,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.background-validation-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.background-validation-interval">quarkus.datasource.background-validation-interval</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.background-validation-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.background-validation-interval">quarkus.datasource.jdbc.background-validation-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -286,7 +214,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.acquisition-timeout"></a><code><a href="#quarkus-agroal_quarkus.datasource.acquisition-timeout">quarkus.datasource.acquisition-timeout</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.acquisition-timeout"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.acquisition-timeout">quarkus.datasource.jdbc.acquisition-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -301,7 +229,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.leak-detection-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.leak-detection-interval">quarkus.datasource.leak-detection-interval</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.leak-detection-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.leak-detection-interval">quarkus.datasource.jdbc.leak-detection-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -316,7 +244,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.idle-removal-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.idle-removal-interval">quarkus.datasource.idle-removal-interval</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.idle-removal-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.idle-removal-interval">quarkus.datasource.jdbc.idle-removal-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -331,7 +259,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.max-lifetime"></a><code><a href="#quarkus-agroal_quarkus.datasource.max-lifetime">quarkus.datasource.max-lifetime</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.max-lifetime"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.max-lifetime">quarkus.datasource.jdbc.max-lifetime</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -346,7 +274,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.transaction-isolation-level"></a><code><a href="#quarkus-agroal_quarkus.datasource.transaction-isolation-level">quarkus.datasource.transaction-isolation-level</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.transaction-isolation-level"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.transaction-isolation-level">quarkus.datasource.jdbc.transaction-isolation-level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -360,7 +288,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.detect-statement-leaks"></a><code><a href="#quarkus-agroal_quarkus.datasource.detect-statement-leaks">quarkus.datasource.detect-statement-leaks</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.detect-statement-leaks"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.detect-statement-leaks">quarkus.datasource.jdbc.detect-statement-leaks</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -374,7 +302,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.new-connection-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.new-connection-sql">quarkus.datasource.new-connection-sql</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.new-connection-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.new-connection-sql">quarkus.datasource.jdbc.new-connection-sql</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -388,7 +316,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.validation-query-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.validation-query-sql">quarkus.datasource.validation-query-sql</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.validation-query-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.validation-query-sql">quarkus.datasource.jdbc.validation-query-sql</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -407,7 +335,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.driver"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.driver">quarkus.datasource."datasource-name".driver</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc">quarkus.datasource."datasource-name".jdbc</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If we create a JDBC datasource for this datasource.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.driver"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.driver">quarkus.datasource."datasource-name".jdbc.driver</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -421,7 +363,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.transactions"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.transactions">quarkus.datasource."datasource-name".transactions</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.transactions"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.transactions">quarkus.datasource."datasource-name".jdbc.transactions</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -436,7 +378,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.enable-metrics">quarkus.datasource."datasource-name".enable-metrics</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.enable-metrics"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.enable-metrics">quarkus.datasource."datasource-name".jdbc.enable-metrics</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -450,7 +392,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.url"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.url">quarkus.datasource."datasource-name".url</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.url"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.url">quarkus.datasource."datasource-name".jdbc.url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -464,65 +406,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.username"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.username">quarkus.datasource."datasource-name".username</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The datasource username</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.password"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.password">quarkus.datasource."datasource-name".password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The datasource password</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.credentials-provider"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.credentials-provider">quarkus.datasource."datasource-name".credentials-provider</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The credentials provider name</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.credentials-provider-type"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.credentials-provider-type">quarkus.datasource."datasource-name".credentials-provider-type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The credentials provider type.
- It is the <code>&#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
- For Vault it is: vault-credentials-provider. Not necessary if there is only one credentials provider available.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.initial-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.initial-size">quarkus.datasource."datasource-name".initial-size</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.initial-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.initial-size">quarkus.datasource."datasource-name".jdbc.initial-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -536,7 +420,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.min-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.min-size">quarkus.datasource."datasource-name".min-size</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.min-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.min-size">quarkus.datasource."datasource-name".jdbc.min-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -550,7 +434,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.max-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.max-size">quarkus.datasource."datasource-name".max-size</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.max-size"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.max-size">quarkus.datasource."datasource-name".jdbc.max-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -564,7 +448,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.background-validation-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.background-validation-interval">quarkus.datasource."datasource-name".background-validation-interval</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.background-validation-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.background-validation-interval">quarkus.datasource."datasource-name".jdbc.background-validation-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -580,7 +464,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.acquisition-timeout"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.acquisition-timeout">quarkus.datasource."datasource-name".acquisition-timeout</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.acquisition-timeout"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.acquisition-timeout">quarkus.datasource."datasource-name".jdbc.acquisition-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -595,7 +479,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.leak-detection-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.leak-detection-interval">quarkus.datasource."datasource-name".leak-detection-interval</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.leak-detection-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.leak-detection-interval">quarkus.datasource."datasource-name".jdbc.leak-detection-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -610,7 +494,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.idle-removal-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.idle-removal-interval">quarkus.datasource."datasource-name".idle-removal-interval</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.idle-removal-interval"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.idle-removal-interval">quarkus.datasource."datasource-name".jdbc.idle-removal-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -625,7 +509,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.max-lifetime"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.max-lifetime">quarkus.datasource."datasource-name".max-lifetime</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.max-lifetime"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.max-lifetime">quarkus.datasource."datasource-name".jdbc.max-lifetime</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -640,7 +524,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.transaction-isolation-level"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.transaction-isolation-level">quarkus.datasource."datasource-name".transaction-isolation-level</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.transaction-isolation-level"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.transaction-isolation-level">quarkus.datasource."datasource-name".jdbc.transaction-isolation-level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -654,7 +538,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.detect-statement-leaks"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.detect-statement-leaks">quarkus.datasource."datasource-name".detect-statement-leaks</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.detect-statement-leaks"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.detect-statement-leaks">quarkus.datasource."datasource-name".jdbc.detect-statement-leaks</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -668,7 +552,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.new-connection-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.new-connection-sql">quarkus.datasource."datasource-name".new-connection-sql</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.new-connection-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.new-connection-sql">quarkus.datasource."datasource-name".jdbc.new-connection-sql</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -682,7 +566,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-agroal_quarkus.datasource.-datasource-name-.validation-query-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.validation-query-sql">quarkus.datasource."datasource-name".validation-query-sql</a></code></p>
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.validation-query-sql"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.validation-query-sql">quarkus.datasource."datasource-name".jdbc.validation-query-sql</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

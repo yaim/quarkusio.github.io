@@ -281,7 +281,15 @@ curl $URL/hello/greeting/quarkus</code></pre>
 <p>Your application is accessible at the printed URL.</p>
 </div>
 <div class="paragraph">
-<p>The <code>.s2i/environment</code> file in the quickstart sets required variables for the S2I Builder image to find the Quarkus <code>runner</code> JAR, and copy the JARs from the <code>lib/</code> directory.</p>
+<p>The <code>.s2i/environment</code> file in the quickstart sets required variables for the S2I Builder image to find the Quarkus <code>runner</code> JAR, and copy the JARs from the <code>lib/</code> directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">MAVEN_S2I_ARTIFACT_DIRS=target
+S2I_SOURCE_DEPLOYMENTS_FILTER=*-runner.jar lib
+JAVA_OPTIONS=-Dquarkus.http.host=0.0.0.0
+AB_JOLOKIA_OFF=true</code></pre>
+</div>
 </div>
 </div>
 </div>

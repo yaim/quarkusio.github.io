@@ -72,7 +72,11 @@
 <li><a href="#solution">Solution</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
 <li><a href="#creating-the-task-entity">Creating the Task Entity</a></li>
-<li><a href="#creating-a-scheduled-job">Creating a scheduled job</a></li>
+<li><a href="#creating-a-scheduled-job">Creating a scheduled job</a>
+<ul class="sectlevel2">
+<li><a href="#scheduling-jobs-programmatically">Scheduling Jobs Programmatically</a></li>
+</ul>
+</li>
 <li><a href="#updating-the-application-configuration-file">Updating the application configuration file</a></li>
 <li><a href="#updating-the-resource-and-the-test">Updating the resource and the test</a></li>
 <li><a href="#creating-quartz-tables">Creating Quartz Tables</a></li>
@@ -307,6 +311,80 @@ public class TaskBean {
 </li>
 </ol>
 </div>
+<div class="sect2">
+<h3 id="scheduling-jobs-programmatically"><a class="anchor" href="#scheduling-jobs-programmatically"></a>Scheduling Jobs Programmatically</h3>
+<div class="paragraph">
+<p>It is also possible to leverage the Quartz API directly.
+You can inject the underlying <code>org.quartz.Scheduler</code> in any bean:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quartz;
+
+@ApplicationScoped
+public class TaskBean {
+
+    @Inject
+    org.quartz.Scheduler quartz; <i class="conum" data-value="1"></i><b>(1)</b>
+
+    void onStart(@Observes StartupEvent event) {
+       JobDetail job = JobBuilder.newJob(MyJob.class)
+                         .withIdentity("myJob", "myGroup")
+                         .build();
+       Trigger trigger = TriggerBuilder.newTrigger()
+                            .withIdentity("myTrigger", "myGroup")
+                            .startNow()
+                            .withSchedule(
+                               SimpleScheduleBuilder.simpleSchedule()
+                                  .withIntervalInSeconds(10)
+                                  .repeatForever())
+                            .build();
+       quartz.scheduleJob(job, trigger); <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+
+    @Transactional
+    void performTask() {
+        Task task = new Task();
+        task.persist();
+    }
+
+    // A new instance of MyJob is created by Quartz for every job execution
+    static class MyJob implements Job {
+
+       public void execute(JobExecutionContext context) throws JobExecutionException {
+          Arc.container().instance(TaskBean.class).get(). performTask(); <i class="conum" data-value="3"></i><b>(3)</b>
+       }
+
+    }
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Inject the underlying <code>org.quartz.Scheduler</code> instance.</p>
+</li>
+<li>
+<p>Schedule a new job using the Quartz API.</p>
+</li>
+<li>
+<p>Lookup the bean instance of <code>TaskBean</code> and invoke the <code>performTask()</code> method from the job.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+By default, the scheduler is not started unless a <code>@Scheduled</code> business method is found. You may need to force the start of the scheduler for "pure" programmatic scheduling. See also <a href="#quartz-configuration-reference">Quartz Configuration Reference</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -322,10 +400,10 @@ quarkus.quartz.clustered=true <i class="conum" data-value="1"></i><b>(1)</b>
 quarkus.quartz.store-type=db <i class="conum" data-value="2"></i><b>(2)</b>
 
 # Datasource configuration.
-quarkus.datasource.url=jdbc:postgresql://localhost/quarkus_test
-quarkus.datasource.driver=org.postgresql.Driver
+quarkus.datasource.db-kind=postgresql
 quarkus.datasource.username=quarkus_test
 quarkus.datasource.password=quarkus_test
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost/quarkus_test
 
 # Hibernate configuration
 quarkus.hibernate-orm.database.generation=none
@@ -599,7 +677,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 <h2 id="quartz-configuration-reference"><a class="anchor" href="#quartz-configuration-reference"></a>Quartz Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -615,7 +693,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.clustered"></a><code><a href="#quarkus-quartz_quarkus.quartz.clustered">quarkus.quartz.clustered</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.clustered"></a><code><a href="#quarkus-quartz_quarkus.quartz.clustered">quarkus.quartz.clustered</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -630,7 +708,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.store-type"></a><code><a href="#quarkus-quartz_quarkus.quartz.store-type">quarkus.quartz.store-type</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.store-type"></a><code><a href="#quarkus-quartz_quarkus.quartz.store-type">quarkus.quartz.store-type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -646,7 +724,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.datasource"></a><code><a href="#quarkus-quartz_quarkus.quartz.datasource">quarkus.quartz.datasource</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.datasource"></a><code><a href="#quarkus-quartz_quarkus.quartz.datasource">quarkus.quartz.datasource</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -661,7 +739,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-quartz_quarkus.quartz.thread-count"></a><code><a href="#quarkus-quartz_quarkus.quartz.thread-count">quarkus.quartz.thread-count</a></code></p>
+<p><a id="quarkus-quartz_quarkus.quartz.thread-count"></a><code><a href="#quarkus-quartz_quarkus.quartz.thread-count">quarkus.quartz.thread-count</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -675,7 +753,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-quartz_quarkus.quartz.thread-priority"></a><code><a href="#quarkus-quartz_quarkus.quartz.thread-priority">quarkus.quartz.thread-priority</a></code></p>
+<p><a id="quarkus-quartz_quarkus.quartz.thread-priority"></a><code><a href="#quarkus-quartz_quarkus.quartz.thread-priority">quarkus.quartz.thread-priority</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -686,6 +764,20 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-quartz_quarkus.quartz.force-start"></a><code><a href="#quarkus-quartz_quarkus.quartz.force-start">quarkus.quartz.force-start</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>By default, the scheduler is not started unless a <code>io.quarkus.scheduler.Scheduled</code> business method is found. If set to true the scheduler will be started even if no scheduled business methods are found. This is necessary for "pure" programmatic scheduling.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 </tbody>
 </table>

@@ -150,7 +150,7 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=rest-client-quickstart \
-    -DclassName="org.acme.restclient.CountriesResource" \
+    -DclassName="org.acme.rest.client.CountriesResource" \
     -Dpath="/country" \
     -Dextensions="rest-client, resteasy-jsonb"
 cd rest-client-quickstart</code></pre>
@@ -169,11 +169,11 @@ cd rest-client-quickstart</code></pre>
 Our first order of business is to setup the model we will be using, in the form of a <code>Country</code> POJO.</p>
 </div>
 <div class="paragraph">
-<p>Create a <code>src/main/java/org/acme/restclient/Country.java</code> file and set the following content:</p>
+<p>Create a <code>src/main/java/org/acme/rest/client/Country.java</code> file and set the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
 
 import java.util.List;
 
@@ -201,11 +201,11 @@ public class Country {
 <h2 id="create-the-interface"><a class="anchor" href="#create-the-interface"></a>Create the interface</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Using the MicroProfile REST Client is as simple as creating an interface using the proper JAX-RS and MicroProfile annotations. In our case the interface should be created at <code>src/main/java/org/acme/restclient/CountriesService.java</code> and have the following content:</p>
+<p>Using the MicroProfile REST Client is as simple as creating an interface using the proper JAX-RS and MicroProfile annotations. In our case the interface should be created at <code>src/main/java/org/acme/rest/client/CountriesService.java</code> and have the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -276,26 +276,26 @@ The name of the property needs to follow a certain convention which is best disp
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># Your configuration properties
-org.acme.restclient.CountriesService/mp-rest/url=https://restcountries.eu/rest # <i class="conum" data-value="1"></i><b>(1)</b>
-org.acme.restclient.CountriesService/mp-rest/scope=javax.inject.Singleton # <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+org.acme.rest.client.CountriesService/mp-rest/url=https://restcountries.eu/rest # <i class="conum" data-value="1"></i><b>(1)</b>
+org.acme.rest.client.CountriesService/mp-rest/scope=javax.inject.Singleton # <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Having this configuration means that all requests performed using <code>org.acme.restclient.CountriesService</code> will use <code><a href="https://restcountries.eu/rest" class="bare">https://restcountries.eu/rest</a></code> as the base URL.
+<td>Having this configuration means that all requests performed using <code>org.acme.rest.client.CountriesService</code> will use <code><a href="https://restcountries.eu/rest" class="bare">https://restcountries.eu/rest</a></code> as the base URL.
 Using the configuration above, calling the <code>getByName</code> method of <code>CountriesService</code> with a value of <code>France</code> would result in an HTTP GET request being made to <code><a href="https://restcountries.eu/rest/v2/name/France" class="bare">https://restcountries.eu/rest/v2/name/France</a></code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Having this configuration means that the default scope of <code>org.acme.restclient.CountriesService</code> will be <code>@Singleton</code>. Supported scope values are <code>@Singleton</code>, <code>@Dependent</code>, <code>@ApplicationScoped</code> and <code>@RequestScoped</code>. The default scope is <code>@Dependent</code>.
+<td>Having this configuration means that the default scope of <code>org.acme.rest.client.CountriesService</code> will be <code>@Singleton</code>. Supported scope values are <code>@Singleton</code>, <code>@Dependent</code>, <code>@ApplicationScoped</code> and <code>@RequestScoped</code>. The default scope is <code>@Dependent</code>.
 The default scope can also be defined on the interface.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Note that <code>org.acme.restclient.CountriesService</code> <em>must</em> match the fully qualified name of the <code>CountriesService</code> interface we created in the previous section.</p>
+<p>Note that <code>org.acme.rest.client.CountriesService</code> <em>must</em> match the fully qualified name of the <code>CountriesService</code> interface we created in the previous section.</p>
 </div>
 <div class="paragraph">
 <p>To facilitate the configuration, you can use the <code>@RegisterRestClient</code> <code>configKey</code> property that allows to use another configuration root than the fully qualified name of your interface.</p>
@@ -321,7 +321,7 @@ country-api/mp-rest/scope=javax.inject.Singleton # /</code></pre>
 <h2 id="update-the-jax-rs-resource"><a class="anchor" href="#update-the-jax-rs-resource"></a>Update the JAX-RS resource</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Open the <code>src/main/java/org/acme/restclient/CountriesResource.java</code> file and update it with the following content:</p>
+<p>Open the <code>src/main/java/org/acme/rest/client/CountriesResource.java</code> file and update it with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -362,11 +362,11 @@ public class CountriesResource {
 <div class="sectionbody">
 <div class="paragraph">
 <p>We also need to update the functional test to reflect the changes made to the endpoint.
-Edit the <code>src/test/java/org/acme/restclient/CountriesResourceTest.java</code> file and change the content of the <code>testCountryNameEndpoint</code> method to:</p>
+Edit the <code>src/test/java/org/acme/rest/client/CountriesResourceTest.java</code> file and change the content of the <code>testCountryNameEndpoint</code> method to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -403,11 +403,13 @@ public class CountriesResourceTest {
 <h2 id="async-support"><a class="anchor" href="#async-support"></a>Async Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The rest client supports asynchronous rest calls. Let&#8217;s see it in action by adding a <code>getByNameAsync</code> method in our <code>CountriesService</code> REST interface. The code should look like:</p>
+<p>The rest client supports asynchronous rest calls.
+Async support comes in 2 flavors: you can return a <code>CompletionStage</code> or a <code>Uni</code> (requires the <code>quarkus-resteasy-mutiny</code> extension).
+Let&#8217;s see it in action by adding a <code>getByNameAsync</code> method in our <code>CountriesService</code> REST interface. The code should look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -435,11 +437,11 @@ public interface CountriesService {
 </div>
 </div>
 <div class="paragraph">
-<p>Open the <code>src/main/java/org/acme/restclient/CountriesResource.java</code> file and update it with the following content:</p>
+<p>Open the <code>src/main/java/org/acme/rest/client/CountriesResource.java</code> file and update it with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.restclient;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -495,6 +497,87 @@ public void testCountryNameAsyncEndpoint() {
         );
     }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The <code>Uni</code> version is very similar:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
+
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import java.util.concurrent.CompletionStage;
+import java.util.Set;
+
+@Path("/v2")
+@RegisterRestClient
+public interface CountriesService {
+
+    // ...
+
+    @GET
+    @Path("/name/{name}")
+    @Produces("application/json")
+    Uni&lt;Set&lt;Country&gt;&gt; getByNameAsUni(@PathParam String name);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>CountriesResource</code> becomes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
+
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.concurrent.CompletionStage;
+import java.util.Set;
+
+@Path("/country")
+public class CountriesResource {
+
+    @Inject
+    @RestClient
+    CountriesService countriesService;
+
+
+    // ...
+
+    @GET
+    @Path("/name-uni/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni&lt;Set&lt;Country&gt;&gt; nameAsync(@PathParam String name) {
+        return countriesService.getByNameAsUni(name);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Mutiny</div>
+<div class="paragraph">
+<p>The previous snippet uses Mutiny reactive types, if you&#8217;re not familiar with them, read the <a href="getting-started-reactive#mutiny">Getting Started with Reactive guide</a> first.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

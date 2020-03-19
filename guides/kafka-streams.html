@@ -251,12 +251,12 @@ mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
 <div class="sect2">
 <h3 id="the-temperature-value-producer"><a class="anchor" href="#the-temperature-value-producer"></a>The Temperature Value Producer</h3>
 <div class="paragraph">
-<p>Create the <code>producer/src/main/java/org/acme/quarkus/sample/generator/ValuesGenerator.java</code> file,
+<p>Create the <code>producer/src/main/java/org/acme/kafka/streams/producer/generator/ValuesGenerator.java</code> file,
 with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.generator;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.producer.generator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -274,7 +274,7 @@ import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.jboss.logging.Logger;
 
 import io.reactivex.Flowable;
-import io.smallrye.reactive.messaging.kafka.KafkaMessage;
+import io.smallrye.reactive.messaging.kafka.KafkaRecord;
 
 /**
  * A bean producing random temperature data every second.
@@ -304,26 +304,24 @@ public class ValuesGenerator {
 
 
     @Outgoing("temperature-values")                             <i class="conum" data-value="1"></i><b>(1)</b>
-    public Flowable&lt;KafkaMessage&lt;Integer, String&gt;&gt; generate() {
+    public Flowable&lt;KafkaRecord&lt;Integer, String&gt;&gt; generate() {
 
         return Flowable.interval(500, TimeUnit.MILLISECONDS)    <i class="conum" data-value="2"></i><b>(2)</b>
                 .onBackpressureDrop()
                 .map(tick -&gt; {
                     WeatherStation station = stations.get(random.nextInt(stations.size()));
-                    double temperature = new BigDecimal(
-                                random.nextGaussian() * 15 + station.averageTemperature
-                            )
+                    double temperature = BigDecimal.valueOf(random.nextGaussian() * 15 + station.averageTemperature)
                             .setScale(1, RoundingMode.HALF_UP)
                             .doubleValue();
 
                     LOG.info("station: {}, temperature: {}", station.name, temperature);
-                    return KafkaMessage.of(station.id, Instant.now() + ";" + temperature);
+                    return KafkaRecord.of(station.id, Instant.now() + ";" + temperature);
                 });
     }
 
     @Outgoing("weather-stations")                               <i class="conum" data-value="3"></i><b>(3)</b>
-    public Flowable&lt;KafkaMessage&lt;Integer, String&gt;&gt; weatherStations() {
-        List&lt;KafkaMessage&lt;Integer, String&gt;&gt; stationsAsJson = stations.stream()
+    public Flowable&lt;KafkaRecord&lt;Integer, String&gt;&gt; weatherStations() {
+        List&lt;KafkaRecord&lt;Integer, String&gt;&gt; stationsAsJson = stations.stream()
             .map(s -&gt; KafkaMessage.of(
                     s.id,
                     "{ \"id\" : " + s.id +
@@ -423,12 +421,12 @@ mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
 a few value objects for representing temperature measurements, weather stations and for keeping track of aggregated values.</p>
 </div>
 <div class="paragraph">
-<p>First, create the file <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/model/WeatherStation.java</code>,
+<p>First, create the file <code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/model/WeatherStation.java</code>,
 representing a weather station, with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.model;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.model;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
@@ -449,12 +447,12 @@ public class WeatherStation {
 </table>
 </div>
 <div class="paragraph">
-<p>Then the file <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/model/TemperatureMeasurement.java</code>,
+<p>Then the file <code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/model/TemperatureMeasurement.java</code>,
 representing temperature measurements for a given station:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.model;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.model;
 
 import java.time.Instant;
 
@@ -476,12 +474,12 @@ public class TemperatureMeasurement {
 </div>
 </div>
 <div class="paragraph">
-<p>And finally <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/model/Aggregation.java</code>,
+<p>And finally <code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/model/Aggregation.java</code>,
 which will be used to keep track of the aggregated values while the events are processed in the streaming pipeline:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.model;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -516,22 +514,22 @@ public class Aggregation {
 </div>
 </div>
 <div class="paragraph">
-<p>Next, let&#8217;s create the actual streaming query implementation itself in the <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/streams/TopologyProducer.java</code> file.
+<p>Next, let&#8217;s create the actual streaming query implementation itself in the <code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/streams/TopologyProducer.java</code> file.
 All we need to do for that is to declare a CDI producer method which returns the Kafka Streams <code>Topology</code>;
 the Quarkus extension will take care of configuring, starting and stopping the actual Kafka Streams engine.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.streams;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.streams;
 
 import java.time.Instant;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
-import org.acme.quarkus.sample.kafkastreams.model.Aggregation;
-import org.acme.quarkus.sample.kafkastreams.model.TemperatureMeasurement;
-import org.acme.quarkus.sample.kafkastreams.model.WeatherStation;
+import org.acme.kafka.streams.aggregator.model.Aggregation;
+import org.acme.kafka.streams.aggregator.model.TemperatureMeasurement;
+import org.acme.kafka.streams.aggregator.model.WeatherStation;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
@@ -669,8 +667,8 @@ Changing their values requires a rebuild of the application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean package -f producer/pom.xml
-mvn clean package -f aggregator/pom.xml</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean package -f producer/pom.xml
+./mvnw clean package -f aggregator/pom.xml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -793,20 +791,20 @@ By exposing a simple REST endpoint which queries the state store,
 the latest aggregation result can be retrieved without having to subscribe to any Kafka topic.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s begin by creating a new class <code>InteractiveQueries</code> in the file <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/streams/InteractiveQueries.java</code>:</p>
+<p>Let&#8217;s begin by creating a new class <code>InteractiveQueries</code> in the file <code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/streams/InteractiveQueries.java</code>:</p>
 </div>
 <div class="paragraph">
 <p>one more method to the <code>KafkaStreamsPipeline</code> class which obtains the current state for a given key:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.streams;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.streams;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.acme.quarkus.sample.kafkastreams.model.Aggregation;
-import org.acme.quarkus.sample.kafkastreams.model.WeatherStationData;
+import org.acme.kafka.streams.aggregator.model.Aggregation;
+import org.acme.kafka.streams.aggregator.model.WeatherStationData;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.errors.InvalidStateStoreException;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
@@ -854,16 +852,16 @@ public class InteractiveQueries {
 </table>
 </div>
 <div class="paragraph">
-<p>Also create the method&#8217;s return type in the file <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/streams/GetWeatherStationDataResult.java</code>:</p>
+<p>Also create the method&#8217;s return type in the file <code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/streams/GetWeatherStationDataResult.java</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.streams;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.streams;
 
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import org.acme.quarkus.sample.kafkastreams.model.WeatherStationData;
+import org.acme.kafka.streams.aggregator.model.WeatherStationData;
 
 public class GetWeatherStationDataResult {
 
@@ -891,12 +889,12 @@ public class GetWeatherStationDataResult {
 </div>
 </div>
 <div class="paragraph">
-<p>Also create <code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/model/WeatherStationData.java</code>,
+<p>Also create <code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/model/WeatherStationData.java</code>,
 which represents the actual aggregation result for a weather station:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.model;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.model;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
@@ -933,12 +931,12 @@ public class WeatherStationData {
 </div>
 </div>
 <div class="paragraph">
-<p>We now can add a simple REST endpoint (<code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/rest/WeatherStationEndpoint.java</code>),
+<p>We now can add a simple REST endpoint (<code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/rest/WeatherStationEndpoint.java</code>),
 which invokes <code>getWeatherStationData()</code> and returns the data to the client:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.rest;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -955,8 +953,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.acme.quarkus.sample.kafkastreams.streams.GetWeatherStationDataResult;
-import org.acme.quarkus.sample.kafkastreams.streams.KafkaStreamsPipeline;
+import org.acme.kafka.streams.aggregator.streams.GetWeatherStationDataResult;
+import org.acme.kafka.streams.aggregator.streams.KafkaStreamsPipeline;
 
 @ApplicationScoped
 @Path("/weather-stations")
@@ -996,7 +994,7 @@ public class WeatherStationEndpoint {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean package -f aggregator/pom.xml
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean package -f aggregator/pom.xml
 docker-compose stop aggregator
 docker-compose up --build -d</code></pre>
 </div>
@@ -1123,12 +1121,12 @@ public List&lt;PipelineMetadata&gt; getMetaData() {                           <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.streams;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.streams;
 
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import org.acme.quarkus.sample.kafkastreams.model.WeatherStationData;
+import org.acme.kafka.streams.aggregator.model.WeatherStationData;
 
 public class GetWeatherStationDataResult {
 
@@ -1174,11 +1172,11 @@ public class GetWeatherStationDataResult {
 </div>
 <div class="paragraph">
 <p>Also the return type for <code>getMetaData()</code> must be defined
-(<code>aggregator/src/main/java/org/acme/quarkus/sample/kafkastreams/streams/PipelineMetadata.java</code>):</p>
+(<code>aggregator/src/main/java/org/acme/kafka/streams/aggregator/streams/PipelineMetadata.java</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.streams;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.streams;
 
 import java.util.Set;
 
@@ -1199,7 +1197,7 @@ public class PipelineMetadata {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample.kafkastreams.rest;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka.streams.aggregator.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -1216,9 +1214,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.acme.quarkus.sample.kafkastreams.streams.GetWeatherStationDataResult;
-import org.acme.quarkus.sample.kafkastreams.streams.KafkaStreamsPipeline;
-import org.acme.quarkus.sample.kafkastreams.streams.PipelineMetadata;
+import org.acme.kafka.streams.aggregator.streams.GetWeatherStationDataResult;
+import org.acme.kafka.streams.aggregator.streams.KafkaStreamsPipeline;
+import org.acme.kafka.streams.aggregator.streams.PipelineMetadata;
 
 @ApplicationScoped
 @Path("/weather-stations")
@@ -1292,7 +1290,7 @@ Then let&#8217;s spin up three instances of it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean package -f aggregator/pom.xml
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean package -f aggregator/pom.xml
 docker-compose stop aggregator
 docker-compose up --build -d --scale aggregator=3</code></pre>
 </div>
@@ -1404,8 +1402,8 @@ the Maven builds can be executed using the <code>native</code> profile:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn clean package -f producer/pom.xml -Pnative -Dnative-image.container-runtime=docker
-mvn clean package -f aggregator/pom.xml -Pnative -Dnative-image.container-runtime=docker</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw clean package -f producer/pom.xml -Pnative -Dnative-image.container-runtime=docker
+./mvnw clean package -f aggregator/pom.xml -Pnative -Dnative-image.container-runtime=docker</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1585,7 +1583,7 @@ Refer to the Quarkus guides on <a href="/guides/microprofile-metrics">metrics</a
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -1601,7 +1599,7 @@ Refer to the Quarkus guides on <a href="/guides/microprofile-metrics">metrics</a
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.health.enabled"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.health.enabled">quarkus.kafka-streams.health.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.health.enabled"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.health.enabled">quarkus.kafka-streams.health.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1615,7 +1613,7 @@ Refer to the Quarkus guides on <a href="/guides/microprofile-metrics">metrics</a
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.application-id"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.application-id">quarkus.kafka-streams.application-id</a></code></p>
+<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.application-id"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.application-id">quarkus.kafka-streams.application-id</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1629,7 +1627,7 @@ Refer to the Quarkus guides on <a href="/guides/microprofile-metrics">metrics</a
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.bootstrap-servers"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.bootstrap-servers">quarkus.kafka-streams.bootstrap-servers</a></code></p>
+<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.bootstrap-servers"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.bootstrap-servers">quarkus.kafka-streams.bootstrap-servers</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1643,7 +1641,7 @@ Refer to the Quarkus guides on <a href="/guides/microprofile-metrics">metrics</a
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.application-server"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.application-server">quarkus.kafka-streams.application-server</a></code></p>
+<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.application-server"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.application-server">quarkus.kafka-streams.application-server</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1657,7 +1655,7 @@ Refer to the Quarkus guides on <a href="/guides/microprofile-metrics">metrics</a
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.topics"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.topics">quarkus.kafka-streams.topics</a></code></p>
+<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.topics"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.topics">quarkus.kafka-streams.topics</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

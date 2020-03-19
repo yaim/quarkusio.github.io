@@ -706,7 +706,7 @@ metadata:
     &lt;version&gt;${quarkus.version}&lt;/version&gt;
     &lt;inherited&gt;false&lt;/inherited&gt;
     &lt;!-- Settings for stubbing new extensions via
-           mvn quarkus:create-extension -N -Dquarkus.artifactIdBase=my-ext -Dquarkus.nameBase="My Extension"
+           ./mvnw quarkus:create-extension -N -Dquarkus.artifactIdBase=my-ext -Dquarkus.nameBase="My Extension"
     --&gt;
     &lt;configuration&gt;
         &lt;namePrefix xml:space="preserve"&gt;Quarkus - &lt;/namePrefix&gt;
@@ -1174,7 +1174,7 @@ void createExecutor(
         @Weak BuildProducer&lt;GeneratedClassBuildItem&gt; classConsumer,
         BuildProducer&lt;ExecutorClassBuildItem&gt; executorClassConsumer
 ) {
-        ClassWriter cw = new ClassWriter(Opcodes.ASM7);
+        ClassWriter cw = new ClassWriter(Gizmo.ASM_API_VERSION);
         String className = generateClassThatCreatesExecutor(cw); <i class="conum" data-value="1"></i><b>(1)</b>
         classConsumer.produce(new GeneratedClassBuildItem(true, className, cw.toByteArray()));
         executorClassConsumer.produce(new ExecutorClassBuildItem(className));
@@ -1474,7 +1474,7 @@ lowercased, and re-joined using hyphens (<code>-</code>).</p>
 <p>A configuration root&#8217;s class name can contain an extra suffix segment for the case where there are configuration
 roots for multiple <a href="#configuration-root-phases">Configuration Root Phases</a>.  Classes which correspond to the <code>BUILD_TIME</code> and <code>BUILD_AND_RUN_TIME_FIXED</code>
 may end with <code>BuildTimeConfig</code> or <code>BuildTimeConfiguration</code>, and classes which correspond to the <code>RUN_TIME</code> phase
-may end with <code>RunTimeConfig</code> or <code>RunTimeConfiguration</code>.</p>
+may end with <code>RuntimeConfig</code>, <code>RunTimeConfig</code>, <code>RuntimeConfiguration</code> or <code>RunTimeConfiguration</code>.</p>
 </div>
 <div class="paragraph">
 <p>Note: The current implementation is still using injection site to determine the root set, so to avoid migration problems, it
@@ -2653,7 +2653,7 @@ classes/bytecode to debug or understand an issue. Classes that are related to ap
 memory in a runtime class loader.</p>
 </div>
 <div class="paragraph">
-<p>When using the dev mode (running <code>mvn clean compile quarkus:dev</code>) you can have these classes written out to disk for inspection, for this, you need to specify the
+<p>When using the dev mode (running <code>./mvnw clean compile quarkus:dev</code>) you can have these classes written out to disk for inspection, for this, you need to specify the
 <code>quarkus.debug.generated-classes-dir</code> system property, for example:</p>
 </div>
 <div class="listingblock">
@@ -3771,7 +3771,7 @@ public ConfigGroupConfig configGroup;</code></pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>This will add a section documentation for the <code>confgiGroup</code> config item in the generated documentation.
+<p>This will add a section documentation for the <code>configGroup</code> config item in the generated documentation.
 Section&#8217;s title and introduction will be derived from the javadoc of the configuration item. The first sentence from the javadoc is considered as the section title and the remaining sentences used as section introduction.
 You can also use the <code>@asciidoclet</code> tag as shown above.</p>
 </li>

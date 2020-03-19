@@ -765,7 +765,7 @@ It is definitely too aggressive for person names but it is perfect for the book 
             @QueryParam Optional&lt;Integer&gt; size) {
         return Search.session(em) <i class="conum" data-value="5"></i><b>(5)</b>
                 .search(Author.class) <i class="conum" data-value="6"></i><b>(6)</b>
-                .predicate(f -&gt;
+                .where(f -&gt;
                     pattern == null || pattern.trim().isEmpty() ?
                             f.matchAll() : <i class="conum" data-value="7"></i><b>(7)</b>
                             f.simpleQueryString()
@@ -832,8 +832,12 @@ the mass indexer should then only be used when you change your indexing configur
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Hibernate Search supports a significant part of the Elasticsearch predicates (match, range, nested, phrase, spatial&#8230;&#8203;).
-Feel free to explore the DSL by using autocompletion.</p>
+<p>The Hibernate Search DSL supports a significant subset of the Elasticsearch predicates (match, range, nested, phrase, spatial&#8230;&#8203;).
+Feel free to explore the DSL using autocompletion.</p>
+</div>
+<div class="paragraph">
+<p>When that&#8217;s not enough, you can always fall back to
+[defining a predicate using JSON directly](<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json" class="bare">https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json</a>).</p>
 </div>
 </td>
 </tr>
@@ -854,10 +858,10 @@ Feel free to explore the DSL by using autocompletion.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.ssl.native=false <i class="conum" data-value="1"></i><b>(1)</b>
 
-quarkus.datasource.url=jdbc:postgresql:quarkus_test <i class="conum" data-value="2"></i><b>(2)</b>
-quarkus.datasource.driver=org.postgresql.Driver
+quarkus.datasource.db-kind=postgresql <i class="conum" data-value="2"></i><b>(2)</b>
 quarkus.datasource.username=quarkus_test
 quarkus.datasource.password=quarkus_test
+quarkus.datasource.jdbc.url=jdbc:postgresql:quarkus_test
 
 quarkus.hibernate-orm.database.generation=drop-and-create <i class="conum" data-value="3"></i><b>(3)</b>
 quarkus.hibernate-orm.sql-load-script=import.sql <i class="conum" data-value="4"></i><b>(4)</b>
@@ -866,7 +870,7 @@ quarkus.hibernate-search.elasticsearch.version=7 <i class="conum" data-value="5"
 quarkus.hibernate-search.elasticsearch.analysis.configurer=org.acme.hibernate.search.elasticsearch.config.AnalysisConfigurer <i class="conum" data-value="6"></i><b>(6)</b>
 quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy=drop-and-create <i class="conum" data-value="7"></i><b>(7)</b>
 quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status=yellow <i class="conum" data-value="8"></i><b>(8)</b>
-quarkus.hibernate-search.automatic-indexing.synchronization.strategy=searchable <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+quarkus.hibernate-search.automatic-indexing.synchronization.strategy=sync <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -910,7 +914,8 @@ It should not be used in production.</td>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
 <td>This means that we wait for the entities to be searchable before considering a write complete.
-While, on a production setup, the <code>committed</code> default might be a suitable value, using <code>searchable</code> is especially important when testing as you need the entities to be searchable immediately.</td>
+On a production setup, the <code>write-sync</code> default will provide better performance.
+Using <code>sync</code> is especially important when testing as you need the entities to be searchable immediately.</td>
 </tr>
 </table>
 </div>
@@ -1122,7 +1127,7 @@ Thus we focused our efforts on it.</p>
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Hibernate Search Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -1138,7 +1143,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler">quarkus.hibernate-search.background-failure-handler</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.background-failure-handler">quarkus.hibernate-search.background-failure-handler</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1153,7 +1158,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy">quarkus.hibernate-search.query.loading.cache-lookup.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy">quarkus.hibernate-search.query.loading.cache-lookup.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1167,7 +1172,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.fetch-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.fetch-size">quarkus.hibernate-search.query.loading.fetch-size</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.fetch-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.fetch-size">quarkus.hibernate-search.query.loading.fetch-size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1181,23 +1186,66 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.synchronization.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.synchronization.strategy">quarkus.hibernate-search.automatic-indexing.synchronization.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.synchronization.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.synchronization.strategy">quarkus.hibernate-search.automatic-indexing.synchronization.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
 <p>The synchronization strategy to use when indexing automatically.
- Defines the status for which you wait before considering the operation completed by Hibernate Search.
- Use <code>queued</code> or <code>committed</code> in production environments. <code>searchable</code> is useful in integration tests.</p>
+ Defines how complete indexing should be before resuming the application thread after a database transaction is committed.
+ Available values:
+ Strategy
+ Guarantees when the application thread resumes
+ Throughput
+ Changes applied
+ Changes safe from crash/power loss
+ Changes visible on search
+ <code>``AutomaticIndexingSynchronizationStrategyNames#ASYNC</code></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>No guarantee
+No guarantee
+No guarantee
+Best
+```AutomaticIndexingSynchronizationStrategyNames#WRITE_SYNC` (default)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+Guaranteed
+No guarantee
+Medium
+```AutomaticIndexingSynchronizationStrategyNames#READ_SYNC`</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+No guarantee
+Guaranteed
+Medium to worst
+```AutomaticIndexingSynchronizationStrategyNames#SYNC`</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+Guaranteed
+Guaranteed
+Worst
+See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization[this section of the reference documentation] for more information.</pre>
+</div>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>queued</code>, <code>committed</code>, <code>searchable</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>committed</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>write-sync</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.enable-dirty-check"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.enable-dirty-check">quarkus.hibernate-search.automatic-indexing.enable-dirty-check</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.enable-dirty-check"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.automatic-indexing.enable-dirty-check">quarkus.hibernate-search.automatic-indexing.enable-dirty-check</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1217,7 +1265,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.version"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.version">quarkus.hibernate-search.elasticsearch.version</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.version"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.version">quarkus.hibernate-search.elasticsearch.version</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1234,7 +1282,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.analysis.configurer"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.analysis.configurer">quarkus.hibernate-search.elasticsearch.analysis.configurer</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.analysis.configurer"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.analysis.configurer">quarkus.hibernate-search.elasticsearch.analysis.configurer</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1248,7 +1296,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.hosts"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.hosts">quarkus.hibernate-search.elasticsearch.hosts</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.hosts"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.hosts">quarkus.hibernate-search.elasticsearch.hosts</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1262,7 +1310,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol">quarkus.hibernate-search.elasticsearch.protocol</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.protocol">quarkus.hibernate-search.elasticsearch.protocol</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1276,7 +1324,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.username"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.username">quarkus.hibernate-search.elasticsearch.username</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.username"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.username">quarkus.hibernate-search.elasticsearch.username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1290,7 +1338,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.password"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.password">quarkus.hibernate-search.elasticsearch.password</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.password"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.password">quarkus.hibernate-search.elasticsearch.password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1304,7 +1352,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.connection-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.connection-timeout">quarkus.hibernate-search.elasticsearch.connection-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.connection-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.connection-timeout">quarkus.hibernate-search.elasticsearch.connection-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1319,7 +1367,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections">quarkus.hibernate-search.elasticsearch.max-connections</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections">quarkus.hibernate-search.elasticsearch.max-connections</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1333,7 +1381,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections-per-route"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections-per-route">quarkus.hibernate-search.elasticsearch.max-connections-per-route</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections-per-route"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.max-connections-per-route">quarkus.hibernate-search.elasticsearch.max-connections-per-route</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1347,7 +1395,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.enabled"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.enabled">quarkus.hibernate-search.elasticsearch.discovery.enabled</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.enabled"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.enabled">quarkus.hibernate-search.elasticsearch.discovery.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1361,7 +1409,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.refresh-interval"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.refresh-interval">quarkus.hibernate-search.elasticsearch.discovery.refresh-interval</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.refresh-interval"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.discovery.refresh-interval">quarkus.hibernate-search.elasticsearch.discovery.refresh-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1376,7 +1424,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1390,7 +1438,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1404,7 +1452,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1419,7 +1467,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1433,7 +1481,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1447,7 +1495,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1467,7 +1515,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.default-backend"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.default-backend">quarkus.hibernate-search.elasticsearch.default-backend</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.default-backend"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.default-backend">quarkus.hibernate-search.elasticsearch.default-backend</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1481,7 +1529,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.version"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.version">quarkus.hibernate-search.elasticsearch.backends."backend-name".version</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.version"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.version">quarkus.hibernate-search.elasticsearch.backends."backend-name".version</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1498,7 +1546,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.analysis.configurer"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.analysis.configurer">quarkus.hibernate-search.elasticsearch.backends."backend-name".analysis.configurer</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.analysis.configurer"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.analysis.configurer">quarkus.hibernate-search.elasticsearch.backends."backend-name".analysis.configurer</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1512,7 +1560,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.hosts"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.hosts">quarkus.hibernate-search.elasticsearch.backends."backend-name".hosts</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.hosts"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.hosts">quarkus.hibernate-search.elasticsearch.backends."backend-name".hosts</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1526,7 +1574,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol">quarkus.hibernate-search.elasticsearch.backends."backend-name".protocol</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.protocol">quarkus.hibernate-search.elasticsearch.backends."backend-name".protocol</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1540,7 +1588,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.username"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.username">quarkus.hibernate-search.elasticsearch.backends."backend-name".username</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.username"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.username">quarkus.hibernate-search.elasticsearch.backends."backend-name".username</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1554,7 +1602,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.password"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.password">quarkus.hibernate-search.elasticsearch.backends."backend-name".password</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.password"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.password">quarkus.hibernate-search.elasticsearch.backends."backend-name".password</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1568,7 +1616,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.connection-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.connection-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".connection-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.connection-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.connection-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".connection-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1583,7 +1631,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections">quarkus.hibernate-search.elasticsearch.backends."backend-name".max-connections</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections">quarkus.hibernate-search.elasticsearch.backends."backend-name".max-connections</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1597,7 +1645,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections-per-route"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections-per-route">quarkus.hibernate-search.elasticsearch.backends."backend-name".max-connections-per-route</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections-per-route"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.max-connections-per-route">quarkus.hibernate-search.elasticsearch.backends."backend-name".max-connections-per-route</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1611,7 +1659,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.enabled"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.enabled">quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.enabled</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.enabled"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.enabled">quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1625,7 +1673,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.refresh-interval"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.refresh-interval">quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.refresh-interval</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.refresh-interval"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.discovery.refresh-interval">quarkus.hibernate-search.elasticsearch.backends."backend-name".discovery.refresh-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1640,7 +1688,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1654,7 +1702,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1668,7 +1716,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1683,7 +1731,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1697,7 +1745,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1711,7 +1759,7 @@ Thus we focused our efforts on it.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

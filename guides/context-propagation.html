@@ -68,7 +68,7 @@
     <h1 class="text-caps">Context Propagation in Quarkus</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#setting-it-up">Setting it up</a></li>
-<li><a href="#usage-example-with-smallrye-reactive-streams-operators">Usage example with SmallRye Reactive Streams Operators</a></li>
+<li><a href="#usage-example-with-mutiny">Usage example with Mutiny</a></li>
 <li><a href="#usage-example-for-completionstage">Usage example for <code>CompletionStage</code></a></li>
 <li><a href="#adding-support-for-rxjava2">Adding support for RxJava2</a></li>
 </ul></div>
@@ -99,17 +99,24 @@ values that used to be in thread-locals, and restoring them when your code is ca
 <h2 id="setting-it-up"><a class="anchor" href="#setting-it-up"></a>Setting it up</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you are using <a href="https://github.com/eclipse/microprofile-reactive-streams-operators">SmallRye Reactive Streams Operators</a>
-(the <code>quarkus-smallrye-reactive-streams-operators</code> module),
-you get automatic context propagation for all your streams, because the <code>quarkus-smallrye-context-propagation</code>
-module is automatically imported.</p>
+<p>If you are using <a href="http://smallrye.io/smallrye-mutiny">Mutiny</a> (the <code>quarkus-mutiny</code> extension), you just need to add the
+the <code>quarkus-smallrye-context-propagation</code> extension to enable context propagation.</p>
 </div>
 <div class="paragraph">
-<p>If you are not using SmallRye Reactive Streams Operators, add the following to your <code>pom.xml</code>:</p>
+<p>In other words, add the following dependencies to your <code>pom.xml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependencies&gt;
+    &lt;!-- Mutiny and RestEasy support extensions if not already included --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-mutiny&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-resteasy-mutiny&lt;/artifactId&gt;
+    &lt;/dependency&gt;
     &lt;!-- Context Propagation extension --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
@@ -124,28 +131,43 @@ module is automatically imported.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="usage-example-with-smallrye-reactive-streams-operators"><a class="anchor" href="#usage-example-with-smallrye-reactive-streams-operators"></a>Usage example with SmallRye Reactive Streams Operators</h2>
+<h2 id="usage-example-with-mutiny"><a class="anchor" href="#usage-example-with-mutiny"></a>Usage example with Mutiny</h2>
 <div class="sectionbody">
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Mutiny</div>
 <div class="paragraph">
-<p>If you are using SmallRye Reactive Streams Operators (the <code>quarkus-smallrye-reactive-streams-operators</code> module),
-you get context propagation out of the box, so, for example, let&#8217;s write a REST endpoint that reads the next
-3 items from a <a href="kafka">Kafka topic</a>, stores them in a database using
+<p>This section uses Mutiny reactive types, if you&#8217;re not familiar with them, read the <a href="getting-started-reactive#mutiny">Getting Started with Reactive guide</a> first.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s write a REST endpoint that reads the next 3 items from a <a href="kafka">Kafka topic</a>, stores them in a database using
 <a href="hibernate-orm-panache">Hibernate ORM with Panache</a> (all in the same transaction) before returning
 them to the client, you can do it like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    // Get the price-stream Kafka topic
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    // Get the prices stream
     @Inject
-    @Channel("price-stream") Publisher&lt;Double&gt; prices;
+    @Channel("prices") Publisher&lt;Double&gt; prices;
 
     @Transactional
     @GET
     @Path("/prices")
-    public Publisher&lt;Double&gt; prices() throws SystemException {
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.TEXT_PLAIN)
+    public Publisher&lt;Double&gt; prices() {
         // get the next three prices from the price stream
-        return ReactiveStreams.fromPublisher(prices)
-                .limit(3)
+        return Multi.createFrom().publisher(prices)
+                .transform().byTakingFirstItems(3)
                 .map(price -&gt; {
                     // store each price before we send them
                     Price priceEntity = new Price();
@@ -153,15 +175,15 @@ them to the client, you can do it like this:</p>
                     // here we are all in the same transaction
                     // thanks to context propagation
                     priceEntity.persist();
-
                     return price;
-                })
-                .buildRs();
+                    // the transaction is committed once the stream completes
+                });
     }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice that thanks to automatic support for context propagation with Reactive Streams Operators this works out of the box.</p>
+<p>Notice that thanks to Mutiny support for context propagation, this works out of the box.
+The 3 items are persisted using the same transaction and this transaction is committed when the stream completes.</p>
 </div>
 </div>
 </div>
@@ -174,17 +196,19 @@ you need manual context propagation. You can do that by injecting a <code>Thread
 or <code>ManagedExecutor</code> that will propagate every context. For example, here we use the <a href="vertx">Vert.x Web Client</a>
 to get the list of Star Wars people, then store them in the database using
 <a href="hibernate-orm-panache">Hibernate ORM with Panache</a> (all in the same transaction) before returning
-them to the client:</p>
+them to the client as JSON using <a href="rest-json">JSON-B or Jackson</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">    @Inject ThreadContext threadContext;
+    @Inject ManagedExecutor managedExecutor;
     @Inject Vertx vertx;
 
     @Transactional
     @GET
     @Path("/people")
-    public CompletionStage&lt;Person&gt; people() throws SystemException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public CompletionStage&lt;List&lt;Person&gt;&gt; people() throws SystemException {
         // Create a REST client to the Star Wars API
         WebClient client = WebClient.create(vertx,
                          new WebClientOptions()
@@ -193,19 +217,19 @@ them to the client:</p>
                           .setSsl(true));
         // get the list of Star Wars people, with context capture
         return threadContext.withContextCapture(client.get("/api/people/").send())
-                .thenApply(response -&gt; {
+                .thenApplyAsync(response -&gt; {
                     JsonObject json = response.bodyAsJsonObject();
                     List&lt;Person&gt; persons = new ArrayList&lt;&gt;(json.getInteger("count"));
                     // Store them in the DB
                     // Note that we're still in the same transaction as the outer method
                     for (Object element : json.getJsonArray("results")) {
                         Person person = new Person();
-                        person.name = ((JsonObject)element).getString("name");
+                        person.name = ((JsonObject) element).getString("name");
                         person.persist();
                         persons.add(person);
                     }
                     return persons;
-                });
+                }, managedExecutor);
     }</code></pre>
 </div>
 </div>

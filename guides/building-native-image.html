@@ -492,7 +492,7 @@ with the <code>@DisabledOnNativeImage</code> annotation in order to only run the
 <h3 id="testing-an-existing-native-executable"><a class="anchor" href="#testing-an-existing-native-executable"></a>Testing an existing native executable</h3>
 <div class="paragraph">
 <p>It is also possible to re-run the tests against a native executable that has already been built. To do this run
-<code>./mvnw failsafe:integration-test</code>. This will discover the existing native image and run the tests against it using
+<code>./mvnw test-compile failsafe:integration-test</code>. This will discover the existing native image and run the tests against it using
 failsafe.</p>
 </div>
 <div class="paragraph">
@@ -700,7 +700,7 @@ These are provided in <code>application.properties</code> the same as any other 
 <p>The properties are shown below:</p>
 </div>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
@@ -716,7 +716,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.additional-build-args"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.additional-build-args">quarkus.native.additional-build-args</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.additional-build-args"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.additional-build-args">quarkus.native.additional-build-args</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -730,7 +730,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-http-url-handler"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-http-url-handler">quarkus.native.enable-http-url-handler</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-http-url-handler"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-http-url-handler">quarkus.native.enable-http-url-handler</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -744,7 +744,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-https-url-handler"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-https-url-handler">quarkus.native.enable-https-url-handler</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-https-url-handler"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-https-url-handler">quarkus.native.enable-https-url-handler</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -758,7 +758,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-all-security-services"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-all-security-services">quarkus.native.enable-all-security-services</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-all-security-services"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-all-security-services">quarkus.native.enable-all-security-services</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -772,21 +772,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-jni"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-jni">quarkus.native.enable-jni</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If JNI should be enabled</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.add-all-charsets"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.add-all-charsets">quarkus.native.add-all-charsets</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.add-all-charsets"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.add-all-charsets">quarkus.native.add-all-charsets</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -800,7 +786,21 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.graalvm-home"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.graalvm-home">quarkus.native.graalvm-home</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.include-all-time-zones"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.include-all-time-zones">quarkus.native.include-all-time-zones</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If all time zones should be added to the native image. This increases image size</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.graalvm-home"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.graalvm-home">quarkus.native.graalvm-home</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -814,7 +814,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.java-home"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.java-home">quarkus.native.java-home</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.java-home"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.java-home">quarkus.native.java-home</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -828,12 +828,12 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.native-image-xmx"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.native-image-xmx">quarkus.native.native-image-xmx</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.native-image-xmx"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.native-image-xmx">quarkus.native.native-image-xmx</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The default maximum old generation size of the native image</p>
+<p>The maximum Java heap to be used during the native image generation</p>
 </div>
 </div>
 </div></div></td>
@@ -842,7 +842,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.debug-symbols"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.debug-symbols">quarkus.native.debug-symbols</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.debug-symbols"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.debug-symbols">quarkus.native.debug-symbols</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -856,12 +856,12 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.debug-build-process"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.debug-build-process">quarkus.native.debug-build-process</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.debug-build-process"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.debug-build-process">quarkus.native.debug-build-process</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If the native image build should wait for a debugger to be attached before running. This is an advanced option and is generally only intended for those familiar with Substrate internals</p>
+<p>If the native image build should wait for a debugger to be attached before running. This is an advanced option and is generally only intended for those familiar with GraalVM internals</p>
 </div>
 </div>
 </div></div></td>
@@ -870,7 +870,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.publish-debug-build-process-port"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.publish-debug-build-process-port">quarkus.native.publish-debug-build-process-port</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.publish-debug-build-process-port"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.publish-debug-build-process-port">quarkus.native.publish-debug-build-process-port</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -884,7 +884,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.cleanup-server"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.cleanup-server">quarkus.native.cleanup-server</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.cleanup-server"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.cleanup-server">quarkus.native.cleanup-server</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -898,7 +898,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-isolates"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-isolates">quarkus.native.enable-isolates</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-isolates"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-isolates">quarkus.native.enable-isolates</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -912,7 +912,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-fallback-images"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-fallback-images">quarkus.native.enable-fallback-images</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-fallback-images"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-fallback-images">quarkus.native.enable-fallback-images</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -926,7 +926,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-server"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-server">quarkus.native.enable-server</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-server"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-server">quarkus.native.enable-server</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -940,7 +940,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.auto-service-loader-registration"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.auto-service-loader-registration">quarkus.native.auto-service-loader-registration</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.auto-service-loader-registration"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.auto-service-loader-registration">quarkus.native.auto-service-loader-registration</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -954,7 +954,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.dump-proxies"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.dump-proxies">quarkus.native.dump-proxies</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.dump-proxies"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.dump-proxies">quarkus.native.dump-proxies</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -968,7 +968,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.container-build"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.container-build">quarkus.native.container-build</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.container-build"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.container-build">quarkus.native.container-build</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -982,7 +982,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.builder-image"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.builder-image">quarkus.native.builder-image</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.builder-image"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.builder-image">quarkus.native.builder-image</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -992,11 +992,11 @@ These are provided in <code>application.properties</code> the same as any other 
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quay.io/quarkus/ubi-quarkus-native-image:19.2.1</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java8</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.container-runtime"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.container-runtime">quarkus.native.container-runtime</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.container-runtime"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.container-runtime">quarkus.native.container-runtime</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1010,7 +1010,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.container-runtime-options"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.container-runtime-options">quarkus.native.container-runtime-options</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.container-runtime-options"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.container-runtime-options">quarkus.native.container-runtime-options</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1024,7 +1024,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-vm-inspection"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-vm-inspection">quarkus.native.enable-vm-inspection</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-vm-inspection"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-vm-inspection">quarkus.native.enable-vm-inspection</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1038,7 +1038,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.full-stack-traces"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.full-stack-traces">quarkus.native.full-stack-traces</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.full-stack-traces"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.full-stack-traces">quarkus.native.full-stack-traces</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1052,7 +1052,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-reports"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-reports">quarkus.native.enable-reports</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.enable-reports"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.enable-reports">quarkus.native.enable-reports</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1066,7 +1066,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.report-exception-stack-traces"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.report-exception-stack-traces">quarkus.native.report-exception-stack-traces</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.report-exception-stack-traces"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.report-exception-stack-traces">quarkus.native.report-exception-stack-traces</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1080,7 +1080,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.report-errors-at-runtime"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.report-errors-at-runtime">quarkus.native.report-errors-at-runtime</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.report-errors-at-runtime"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.report-errors-at-runtime">quarkus.native.report-errors-at-runtime</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

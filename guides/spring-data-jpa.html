@@ -253,12 +253,12 @@ public class Fruit {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=jdbc:postgresql:quarkus_test
-quarkus.datasource.driver=org.postgresql.Driver
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.db-kind=postgresql
 quarkus.datasource.username=quarkus_test
 quarkus.datasource.password=quarkus_test
-quarkus.datasource.max-size=8
-quarkus.datasource.min-size=2
+quarkus.datasource.jdbc.url=jdbc:postgresql:quarkus_test
+quarkus.datasource.jdbc.max-size=8
+quarkus.datasource.jdbc.min-size=2
 quarkus.hibernate-orm.database.generation=drop-and-create</code></pre>
 </div>
 </div>
@@ -466,7 +466,7 @@ class FruitResourceTest {
                 );
 
         //Create a new Fruit
-        String idOfNewFruit = given()
+        given()
                 .when().post("/fruits/name/Orange/color/Orange")
                 .then()
                 .statusCode(200)
@@ -831,7 +831,7 @@ Spring classes and annotations are only used for reading metadata and / or are u
 <h2 id="more-spring-guides"><a class="anchor" href="#more-spring-guides"></a>More Spring guides</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus support has more Spring compatibility features. See the following guides for more details:</p>
+<p>Quarkus has more Spring compatibility features. See the following guides for more details:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -843,6 +843,9 @@ Spring classes and annotations are only used for reading metadata and / or are u
 </li>
 <li>
 <p><a href="spring-security">Quarkus - Extension for Spring Security</a></p>
+</li>
+<li>
+<p><a href="spring-spring-config-client">Quarkus - Reading properties from Spring Cloud Config Server</a></p>
 </li>
 </ul>
 </div>

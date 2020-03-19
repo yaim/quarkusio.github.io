@@ -71,7 +71,7 @@
 <li><a href="#looks-like-it-works-out-of-the-box">Looks like it works out of the box?!?</a></li>
 <li><a href="#lets-disable-ssl-and-see-how-it-goes">Let&#8217;s disable SSL and see how it goes</a></li>
 <li><a href="#lets-start-again-with-a-clean-slate">Let&#8217;s start again with a clean slate</a></li>
-<li><a href="#the-sunec-library-and-friends">The SunEC library and friends</a>
+<li><a href="#the-truststore-path">The TrustStore path</a>
 <ul class="sectlevel2">
 <li><a href="#working-with-containers">Working with containers</a></li>
 </ul>
@@ -361,18 +361,15 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="the-sunec-library-and-friends"><a class="anchor" href="#the-sunec-library-and-friends"></a>The SunEC library and friends</h2>
+<h2 id="the-truststore-path"><a class="anchor" href="#the-truststore-path"></a>The TrustStore path</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You haven&#8217;t noticed anything but, while building the image,
-Quarkus has automatically set <code>java.library.path</code> to point to the GraalVM library folder (the one containing the SunEC library).</p>
-</div>
-<div class="paragraph">
-<p>It has also set <code>javax.net.ssl.trustStore</code> to point to the <code>cacerts</code> file bundled in the GraalVM distribution.
+Quarkus has automatically set <code>javax.net.ssl.trustStore</code> to point to the <code>cacerts</code> file bundled in the GraalVM distribution.
 This file contains the root certificates.</p>
 </div>
 <div class="paragraph">
-<p>This is useful when running tests but, obviously, it is not portable as these paths are hardcoded.</p>
+<p>This is useful when running tests but, obviously, it is not portable as this path is hardcoded.</p>
 </div>
 <div class="paragraph">
 <p>You can check that pretty easily:</p>
@@ -392,8 +389,7 @@ This file contains the root certificates.</p>
 <p>you will have an Internal Server Error</p>
 </li>
 <li>
-<p>in your terminal, you should have a warning <code>WARNING: The sunec native library, required by the SunEC provider, could not be loaded.</code>
-and an exception too: <code>java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty</code></p>
+<p>in your terminal, you should have an exception: <code>java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty</code></p>
 </li>
 <li>
 <p>hit <code>Ctrl+C</code> to stop the application</p>
@@ -401,11 +397,11 @@ and an exception too: <code>java.security.InvalidAlgorithmParameterException: th
 </ul>
 </div>
 <div class="paragraph">
-<p>To make it work, you need to manually set <code>java.library.path</code> and <code>javax.net.ssl.trustStore</code> to point to the new GraalVM home:</p>
+<p>To make it work, you need to manually set <code>javax.net.ssl.trustStore</code> to point to the new GraalVM home:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./target/rest-client-1.0-SNAPSHOT-runner -Djava.library.path=&lt;new-graalvm-home&gt;/jre/lib/amd64 -Djavax.net.ssl.trustStore=&lt;new-graalvm-home&gt;/jre/lib/security/cacerts</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./target/rest-client-1.0-SNAPSHOT-runner -Djavax.net.ssl.trustStore=&lt;new-graalvm-home&gt;/jre/lib/security/cacerts</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -461,6 +457,8 @@ If you have issues with some certificates, your best bet is to include the <code
 <div class="paragraph">
 <p>You can for example modify your <code>Dockerfile.native</code> as follows to copy the required files to your final image:</p>
 </div>
+<div class="sect3">
+<h4 id="java-8"><a class="anchor" href="#java-8"></a>Java 8</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">FROM quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java8 as nativebuilder
@@ -472,9 +470,29 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal
 WORKDIR /work/
 COPY --from=nativebuilder /tmp/ssl-libs/ /work/
 COPY target/*-runner /work/application
-RUN chmod 775 /work
+RUN chmod 775 /work /work/application
 EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Djava.library.path=/work/lib", "-Djavax.net.ssl.trustStore=/work/cacerts"]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="java-11"><a class="anchor" href="#java-11"></a>Java 11</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">FROM quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11 as nativebuilder
+RUN mkdir -p /tmp/ssl-libs/lib \
+  &amp;&amp; cp /opt/graalvm/lib/security/cacerts /tmp/ssl-libs \
+  &amp;&amp; cp /opt/graalvm/lib/libsunec.so /tmp/ssl-libs/lib/
+
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+WORKDIR /work/
+COPY --from=nativebuilder /tmp/ssl-libs/ /work/
+COPY target/*-runner /work/application
+RUN chmod 775 /work /work/application
+EXPOSE 8080
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Djava.library.path=/work/lib", "-Djavax.net.ssl.trustStore=/work/cacerts"]</code></pre>
+</div>
 </div>
 </div>
 </div>

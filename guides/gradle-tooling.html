@@ -135,6 +135,23 @@ for user inputs. You can disable (and use default values) this interactive mode 
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Quarkus project scaffolding automatically installs the Gradle wrapper (<code>./gradlew</code>) in your project.</p>
+</div>
+<div class="paragraph">
+<p>If you prefer to use a standalone Gradle installation, please use Gradle 6.2.2.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The following table lists the attributes you can pass to the <code>create</code> command:</p>
 </div>
@@ -294,7 +311,7 @@ If no extension is found or if more than one extensions match, you will see a re
 </div>
 </div>
 <div class="paragraph">
-<p>You can install all extensions wich match a globbing pattern :</p>
+<p>You can install all extensions which match a globbing pattern:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -336,9 +353,9 @@ redeployed application. If there are any issues with compilation or deployment a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>quarkusDev {
+<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">quarkusDev {
     workingDir = rootProject.projectDir
-}</pre>
+}</code></pre>
 </div>
 </div>
 </div>

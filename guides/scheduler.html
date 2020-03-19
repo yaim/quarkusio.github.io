@@ -160,7 +160,7 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=scheduler-quickstart \
-    -DclassName="org.acme.scheduling.CountResource" \
+    -DclassName="org.acme.scheduler.CountResource" \
     -Dpath="/count" \
     -Dextensions="scheduler"
 cd scheduler-quickstart</code></pre>
@@ -184,7 +184,7 @@ cd scheduler-quickstart</code></pre>
 <p>the application configuration file</p>
 </li>
 <li>
-<p>an <code>org.acme.scheduling.CountResource</code> resource</p>
+<p>an <code>org.acme.scheduler.CountResource</code> resource</p>
 </li>
 <li>
 <p>an associated test</p>
@@ -200,11 +200,11 @@ cd scheduler-quickstart</code></pre>
 <h2 id="creating-a-scheduled-job"><a class="anchor" href="#creating-a-scheduled-job"></a>Creating a scheduled job</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the <code>org.acme.scheduling</code> package, create the <code>CounterBean</code> class, with the following content:</p>
+<p>In the <code>org.acme.scheduler</code> package, create the <code>CounterBean</code> class, with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduling;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduler;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
@@ -289,7 +289,7 @@ cron.expr=*/5 * * * * ?</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduling;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduler;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -327,7 +327,7 @@ public class CountResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduling;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduler;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -381,7 +381,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 <h2 id="scheduler-configuration-reference"><a class="anchor" href="#scheduler-configuration-reference"></a>Scheduler Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -397,7 +397,7 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-scheduler_quarkus.scheduler.cron-type"></a><code><a href="#quarkus-scheduler_quarkus.scheduler.cron-type">quarkus.scheduler.cron-type</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-scheduler_quarkus.scheduler.cron-type"></a><code><a href="#quarkus-scheduler_quarkus.scheduler.cron-type">quarkus.scheduler.cron-type</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

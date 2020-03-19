@@ -69,7 +69,7 @@
     <div class="hide-mobile toc"></div>
     <div>
       <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
@@ -85,7 +85,49 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.connection-delay"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.connection-delay">quarkus.oidc.connection-delay</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.tenant-id"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.tenant-id">quarkus.oidc.tenant-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A unique tenant identifier. It must be set by <code>TenantConfigResolver</code> providers which resolve the tenant configuration dynamically and is optional in all other cases.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.tenant-enabled"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.tenant-enabled">quarkus.oidc.tenant-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this tenant configuration is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.application-type"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.application-type">quarkus.oidc.application-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The application type, which can be one of the following values from enum <code>ApplicationType</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>web-app</code>, <code>service</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>service</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.connection-delay"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.connection-delay">quarkus.oidc.connection-delay</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -100,7 +142,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.auth-server-url"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.auth-server-url">quarkus.oidc.auth-server-url</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.auth-server-url"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.auth-server-url">quarkus.oidc.auth-server-url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -114,7 +156,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.introspection-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.introspection-path">quarkus.oidc.introspection-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.introspection-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.introspection-path">quarkus.oidc.introspection-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -128,7 +170,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.jwks-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.jwks-path">quarkus.oidc.jwks-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.jwks-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.jwks-path">quarkus.oidc.jwks-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -142,7 +184,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.public-key"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.public-key">quarkus.oidc.public-key</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.public-key"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.public-key">quarkus.oidc.public-key</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -156,7 +198,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.client-id"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.client-id">quarkus.oidc.client-id</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.client-id"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.client-id">quarkus.oidc.client-id</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -170,12 +212,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-path">quarkus.oidc.roles.role-claim-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-path">quarkus.oidc.roles.role-claim-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Path to the claim containing an array of groups. It starts from the top level JWT JSON object and can contain multiple segments where each segment represents a JSON object name only, example: "realm/groups". This property can be used if a token has no 'groups' claim but has the groups set in a different claim.</p>
+<p>Path to the claim containing an array of groups. It starts from the top level JWT JSON object and can contain multiple segments where each segment represents a JSON object name only, example: "realm/groups". Use double quotes with the namespace qualified claim names. This property can be used if a token has no 'groups' claim but has the groups set in a different claim.</p>
 </div>
 </div>
 </div></div></td>
@@ -184,7 +226,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-separator"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-separator">quarkus.oidc.roles.role-claim-separator</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-separator"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.roles.role-claim-separator">quarkus.oidc.roles.role-claim-separator</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -198,12 +240,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.token.issuer"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.token.issuer">quarkus.oidc.token.issuer</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.token.issuer"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.token.issuer">quarkus.oidc.token.issuer</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected issuer 'iss' claim value</p>
+<p>Expected issuer 'iss' claim value.</p>
 </div>
 </div>
 </div></div></td>
@@ -212,12 +254,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.token.audience"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.token.audience">quarkus.oidc.token.audience</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.token.audience"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.token.audience">quarkus.oidc.token.audience</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected audience <code>aud</code> claim value which may be a string or an array of strings</p>
+<p>Expected audience 'aud' claim value which may be a string or an array of strings.</p>
 </div>
 </div>
 </div></div></td>
@@ -226,7 +268,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.token.principal-claim"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.token.principal-claim">quarkus.oidc.token.principal-claim</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.token.expiration-grace"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.token.expiration-grace">quarkus.oidc.token.expiration-grace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.token.principal-claim"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.token.principal-claim">quarkus.oidc.token.principal-claim</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -240,7 +296,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.credentials.secret"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.credentials.secret">quarkus.oidc.credentials.secret</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.credentials.secret"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.credentials.secret">quarkus.oidc.credentials.secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.credentials.client-secret.value"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.credentials.client-secret.value">quarkus.oidc.credentials.client-secret.value</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -254,12 +324,26 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.authentication.redirect-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.authentication.redirect-path">quarkus.oidc.authentication.redirect-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.credentials.client-secret.method"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.credentials.client-secret.method">quarkus.oidc.credentials.client-secret.method</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Relative path for calculating a "redirect_uri" parameter. It set it will be appended to the request URI&#8217;s host and port, otherwise the complete request URI will be used. It has to start from the forward slash, for example: "/service"</p>
+<p>Authentication method.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.authentication.redirect-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.authentication.redirect-path">quarkus.oidc.authentication.redirect-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path for calculating a "redirect_uri" query parameter. It has to start from a forward slash and will be appended to the request URI&#8217;s host and port. For example, if the current request URI is 'https://localhost:8080/service' then a 'redirect_uri' parameter will be set to 'https://localhost:8080/' if this property is set to '/' and be the same as the request URI if this property has not been configured. Note the original request URI will be restored after the user has authenticated.</p>
 </div>
 </div>
 </div></div></td>
@@ -268,7 +352,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.authentication.scopes"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.authentication.scopes">quarkus.oidc.authentication.scopes</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.authentication.restore-path-after-redirect"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.authentication.restore-path-after-redirect">quarkus.oidc.authentication.restore-path-after-redirect</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this property is set to 'true' then the original request URI which was used before the authentication will be restored after the user has been redirected back to the application.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.authentication.scopes"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.authentication.scopes">quarkus.oidc.authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -279,6 +377,34 @@
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.authentication.cookie-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.authentication.cookie-path">quarkus.oidc.authentication.cookie-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Cookie path parameter value which, if set, will be used for the session and state cookies. It may need to be set when the redirect path has a root different to that of the original request URL.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.authentication.extra-params-extra-params"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.authentication.extra-params-extra-params">quarkus.oidc.authentication.extra-params</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Additional properties which will be added as the query parameters to the authentication redirect URI.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-oidc-general-config-items_quarkus.oidc.named-tenants"></a><a href="#quarkus-oidc-general-config-items_quarkus.oidc.named-tenants">Additional named tenants</a></p></th>
@@ -287,7 +413,49 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.connection-delay"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.connection-delay">quarkus.oidc."tenant".connection-delay</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.tenant-id"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.tenant-id">quarkus.oidc."tenant".tenant-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A unique tenant identifier. It must be set by <code>TenantConfigResolver</code> providers which resolve the tenant configuration dynamically and is optional in all other cases.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.tenant-enabled"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.tenant-enabled">quarkus.oidc."tenant".tenant-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this tenant configuration is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.application-type"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.application-type">quarkus.oidc."tenant".application-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The application type, which can be one of the following values from enum <code>ApplicationType</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>web-app</code>, <code>service</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>service</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.connection-delay"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.connection-delay">quarkus.oidc."tenant".connection-delay</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -302,7 +470,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.auth-server-url"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.auth-server-url">quarkus.oidc."tenant".auth-server-url</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.auth-server-url"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.auth-server-url">quarkus.oidc."tenant".auth-server-url</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -316,7 +484,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.introspection-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.introspection-path">quarkus.oidc."tenant".introspection-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.introspection-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.introspection-path">quarkus.oidc."tenant".introspection-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -330,7 +498,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.jwks-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.jwks-path">quarkus.oidc."tenant".jwks-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.jwks-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.jwks-path">quarkus.oidc."tenant".jwks-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -344,7 +512,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.public-key"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.public-key">quarkus.oidc."tenant".public-key</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.public-key"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.public-key">quarkus.oidc."tenant".public-key</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -358,7 +526,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.client-id"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.client-id">quarkus.oidc."tenant".client-id</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.client-id"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.client-id">quarkus.oidc."tenant".client-id</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -372,12 +540,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-path">quarkus.oidc."tenant".roles.role-claim-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-path">quarkus.oidc."tenant".roles.role-claim-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Path to the claim containing an array of groups. It starts from the top level JWT JSON object and can contain multiple segments where each segment represents a JSON object name only, example: "realm/groups". This property can be used if a token has no 'groups' claim but has the groups set in a different claim.</p>
+<p>Path to the claim containing an array of groups. It starts from the top level JWT JSON object and can contain multiple segments where each segment represents a JSON object name only, example: "realm/groups". Use double quotes with the namespace qualified claim names. This property can be used if a token has no 'groups' claim but has the groups set in a different claim.</p>
 </div>
 </div>
 </div></div></td>
@@ -386,7 +554,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-separator"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-separator">quarkus.oidc."tenant".roles.role-claim-separator</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-separator"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.roles.role-claim-separator">quarkus.oidc."tenant".roles.role-claim-separator</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -400,12 +568,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.issuer"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.issuer">quarkus.oidc."tenant".token.issuer</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.issuer"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.issuer">quarkus.oidc."tenant".token.issuer</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected issuer 'iss' claim value</p>
+<p>Expected issuer 'iss' claim value.</p>
 </div>
 </div>
 </div></div></td>
@@ -414,12 +582,12 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.audience"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.audience">quarkus.oidc."tenant".token.audience</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.audience"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.audience">quarkus.oidc."tenant".token.audience</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expected audience <code>aud</code> claim value which may be a string or an array of strings</p>
+<p>Expected audience 'aud' claim value which may be a string or an array of strings.</p>
 </div>
 </div>
 </div></div></td>
@@ -428,7 +596,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.principal-claim"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.principal-claim">quarkus.oidc."tenant".token.principal-claim</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.expiration-grace"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.expiration-grace">quarkus.oidc."tenant".token.expiration-grace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.principal-claim"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.token.principal-claim">quarkus.oidc."tenant".token.principal-claim</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -442,7 +624,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.secret"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.secret">quarkus.oidc."tenant".credentials.secret</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.secret"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.secret">quarkus.oidc."tenant".credentials.secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.client-secret.value"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.client-secret.value">quarkus.oidc."tenant".credentials.client-secret.value</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -456,12 +652,26 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.redirect-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.redirect-path">quarkus.oidc."tenant".authentication.redirect-path</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.client-secret.method"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.credentials.client-secret.method">quarkus.oidc."tenant".credentials.client-secret.method</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Relative path for calculating a "redirect_uri" parameter. It set it will be appended to the request URI&#8217;s host and port, otherwise the complete request URI will be used. It has to start from the forward slash, for example: "/service"</p>
+<p>Authentication method.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.redirect-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.redirect-path">quarkus.oidc."tenant".authentication.redirect-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path for calculating a "redirect_uri" query parameter. It has to start from a forward slash and will be appended to the request URI&#8217;s host and port. For example, if the current request URI is 'https://localhost:8080/service' then a 'redirect_uri' parameter will be set to 'https://localhost:8080/' if this property is set to '/' and be the same as the request URI if this property has not been configured. Note the original request URI will be restored after the user has authenticated.</p>
 </div>
 </div>
 </div></div></td>
@@ -470,7 +680,21 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span> <a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.scopes"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.scopes">quarkus.oidc."tenant".authentication.scopes</a></code></p>
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.restore-path-after-redirect"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.restore-path-after-redirect">quarkus.oidc."tenant".authentication.restore-path-after-redirect</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this property is set to 'true' then the original request URI which was used before the authentication will be restored after the user has been redirected back to the application.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.scopes"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.scopes">quarkus.oidc."tenant".authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -480,6 +704,34 @@
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.extra-params-extra-params"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.extra-params-extra-params">quarkus.oidc."tenant".authentication.extra-params</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Additional properties which will be added as the query parameters to the authentication redirect URI.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.cookie-path"></a><code><a href="#quarkus-oidc-general-config-items_quarkus.oidc.-tenant-.authentication.cookie-path">quarkus.oidc."tenant".authentication.cookie-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Cookie path parameter value which, if set, will be used for the session and state cookies. It may need to be set when the redirect path has a root different to that of the original request URL.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>

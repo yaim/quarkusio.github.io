@@ -68,6 +68,12 @@
     <h1 class="text-caps">Quarkus - Using Eclipse Vert.x</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#installing">Installing</a></li>
+<li><a href="#native-transport">Native Transport</a>
+<ul class="sectlevel2">
+<li><a href="#native-linux-transport">Native Linux Transport</a></li>
+<li><a href="#native-macos-transport">Native MacOS Transport</a></li>
+</ul>
+</li>
 <li><a href="#accessing-vert-x">Accessing Vert.x</a></li>
 <li><a href="#using-vert-x-in-reactive-jax-rs-resources">Using Vert.x in Reactive JAX-RS resources</a>
 <ul class="sectlevel2">
@@ -81,6 +87,8 @@
 <li><a href="#picking-the-right-dependency">Picking the right dependency</a></li>
 </ul>
 </li>
+<li><a href="#deploying-verticles">Deploying verticles</a></li>
+<li><a href="#listening-to-a-unix-domain-socket">Listening to a Unix Domain Socket</a></li>
 <li><a href="#read-only-deployment-environments">Read only deployment environments</a></li>
 <li><a href="#going-further">Going further</a></li>
 </ul></div>
@@ -90,11 +98,13 @@
 <div class="paragraph">
 <p>Eclipse <a href="https://vertx.io">Vert.x</a> is a toolkit for building reactive applications.
 It is designed to be lightweight and embeddable.
-Vert.x defines a reactive execution model and provides a large ecosystem.
-Quarkus integrates Vert.x to implement different reactive features, such as asynchronous message passing, and non-blocking HTTP client.
-Basically, Quarkus uses Vert.x as its reactive engine.
+Vert.x defines a reactive execution model and provides a large ecosystem.</p>
+</div>
+<div class="paragraph">
+<p>Quarkus is based on Vert.x, and almost all network-related features rely on Vert.x.
 While lots of reactive features from Quarkus don&#8217;t <em>show</em> Vert.x, it&#8217;s used underneath.
-But you can also access the managed Vert.x instance and benefit from the Vert.x ecosystem.</p>
+Quarkus also integrates smoothly with the Vert.x event bus (to enable asynchronous messaging passing between application components) and some reactive clients.
+You can also use various Vert.x APIs in your Quarkus application, such as deploying <em>verticles</em>, instantiating clients&#8230;&#8203;</p>
 </div>
 </div>
 </div>
@@ -137,6 +147,130 @@ the <code>add-extension</code> command:</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="native-transport"><a class="anchor" href="#native-transport"></a>Native Transport</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vert.x is capable of using <a href="https://netty.io/wiki/native-transports.html">Netty&#8217;s native transports</a> which offers
+performance improvements on certain platforms. To enable them you must include the appropriate dependency for your
+platform. It&#8217;s usually a good idea to include both to keep your application platform agnostic. Netty is smart enough
+to use the correct one, that includes none at all on unsupported platforms:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+  &lt;groupId&gt;io.netty&lt;/groupId&gt;
+  &lt;artifactId&gt;netty-transport-native-epoll&lt;/artifactId&gt;
+  &lt;classifier&gt;linux-x86_64&lt;/classifier&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+  &lt;groupId&gt;io.netty&lt;/groupId&gt;
+  &lt;artifactId&gt;netty-transport-native-kqueue&lt;/artifactId&gt;
+  &lt;classifier&gt;osx-x86_64&lt;/classifier&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will also have to explicitly configure Vert.x to use the native transport. In <code>application.properties</code> add:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.vertx.prefer-native-transport=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or in <code>application.yml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yml" class="language-yml hljs">quarkus:
+  vertx:
+    prefer-native-transport: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If all is well quarkus will log:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[io.qua.ver.cor.run.VertxCoreRecorder] (main) Vertx has Native Transport Enabled: true</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="native-linux-transport"><a class="anchor" href="#native-linux-transport"></a>Native Linux Transport</h3>
+<div class="paragraph">
+<p>On Linux you can enable the following socket options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SO_REUSEPORT</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.so-reuse-port=true</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>TCP_QUICKACK</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.tcp-quick-ack=true</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>TCP_CORK</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.tcp-cork=true</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>TCP_FASTOPEN</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.tcp-fast-open=true</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="native-macos-transport"><a class="anchor" href="#native-macos-transport"></a>Native MacOS Transport</h3>
+<div class="paragraph">
+<p>On MacOS Sierra and above you can enable the following socket options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SO_REUSEPORT</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.so-reuse-port=true</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="accessing-vert-x"><a class="anchor" href="#accessing-vert-x"></a>Accessing Vert.x</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -149,10 +283,10 @@ the <code>add-extension</code> command:</p>
 </div>
 <div class="paragraph">
 <p>If you are familiar with Vert.x, you know that Vert.x provides different API models.
-For instance <em>bare</em> Vert.x uses callbacks, the RX Java 2 version uses <code>Single</code>, <code>Maybe</code>, <code>Completable</code>, <code>Observable</code> and <code>Flowable</code>.</p>
+For instance <em>bare</em> Vert.x uses callbacks, the Mutiny variants uses <code>Uni</code> and <code>Multi</code>, the RX Java 2 version uses <code>Single</code>, <code>Maybe</code>, <code>Completable</code>, <code>Observable</code> and <code>Flowable</code>&#8230;&#8203;</p>
 </div>
 <div class="paragraph">
-<p>Quarkus provides 3 Vert.x APIs:</p>
+<p>Quarkus provides 4 Vert.x APIs:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -174,14 +308,19 @@ For instance <em>bare</em> Vert.x uses callbacks, the RX Java 2 version uses <co
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>bare</em> Vert.x instance, the API uses callbacks.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://smallrye.io/smallrye-mutiny/">Mutiny</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Inject io.vertx.mutiny.core.Vertx vertx</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Mutiny API for Vert.x.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">RX Java 2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Inject io.vertx.reactivex.core.Vertx vertx</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">RX Java 2 Vert.x, the API uses RX Java 2 types.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RX Java 2 Vert.x, the API uses RX Java 2 types (deprecated).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Axle</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Inject io.vertx.axle.core.Vertx vertx</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Axle Vert.x, the API uses <code>CompletionStage</code> and <code>Reactive Streams</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Axle Vert.x, the API uses <code>CompletionStage</code> and <code>Reactive Streams</code> (deprecated).</p></td>
 </tr>
 </tbody>
 </table>
@@ -192,7 +331,7 @@ For instance <em>bare</em> Vert.x uses callbacks, the RX Java 2 version uses <co
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-You may inject any of the 3 flavors of <code>Vertx</code> as well as the <code>EventBus</code> in your Quarkus application beans: <code>bare</code>, <code>Axle</code>, <code>RxJava2</code>.
+You may inject any of the 4 flavors of <code>Vertx</code> as well as the <code>EventBus</code> in your Quarkus application beans: <code>bare</code>, <code>Mutiny</code>, <code>Axle</code>, <code>RxJava2</code>.
 They are just shims and rely on a single <em>managed</em> Vert.x instance.
 </td>
 </tr>
@@ -207,15 +346,18 @@ They are just shims and rely on a single <em>managed</em> Vert.x instance.
 <p><code>bare</code>: for advanced usage or if you have existing Vert.x code you want to reuse in your Quarkus application</p>
 </li>
 <li>
-<p><code>Axle</code>: works well with Quarkus and MicroProfile APIs (<code>CompletionStage</code> for single results and <code>Publisher</code> for streams)</p>
+<p><code>mutiny</code>: Mutiny is an event-driven reactive programming API. It uses 2 types: <code>Uni</code> and <code>Multi</code>. This is the recommended API.</p>
 </li>
 <li>
-<p><code>Rx Java 2</code>: when you need support for a wide range of data transformation operators on your streams</p>
+<p><code>Axle</code>: works well with Quarkus and MicroProfile APIs (<code>CompletionStage</code> for single results and <code>Publisher</code> for streams) - deprecated, it is recommended to switch to Mutiny</p>
+</li>
+<li>
+<p><code>Rx Java 2</code>: when you need support for a wide range of data transformation operators on your streams - deprecated, it is recommended to switch to Mutiny</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The following snippets illustrate the difference between these 3 APIs:</p>
+<p>The following snippets illustrate the difference between these 4 APIs:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -227,6 +369,14 @@ vertx.fileSystem().readFile("lorem-ipsum.txt", ar -&gt; {
         System.out.println("Cannot read the file: " + ar.cause().getMessage());
     }
 });
+
+// Mutiny Vert.x:
+vertx.fileSystem().readFile("lorem-ipsum.txt")
+    .onItem().apply(buffer -&gt; buffer.toString("UTF-8"))
+    .subscribe(
+            content -&gt; System.out.println("Content: " + content),
+            err -&gt; System.out.println("Cannot read the file: " + err.getMessage())
+    );
 
 // Rx Java 2 Vert.x
 vertx.fileSystem().rxReadFile("lorem-ipsum.txt")
@@ -248,6 +398,21 @@ vertx.fileSystem().readFile("lorem-ipsum.txt")
     });</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Mutiny</div>
+<div class="paragraph">
+<p>If you&#8217;re not familiar with Mutiny, we recommend to read the <a href="getting-started-reactive#mutiny">Getting Started with Reactive guide</a> first.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -259,57 +424,23 @@ vertx.fileSystem().readFile("lorem-ipsum.txt")
 <div class="sect2">
 <h3 id="asynchronous-processing"><a class="anchor" href="#asynchronous-processing"></a>Asynchronous processing</h3>
 <div class="paragraph">
-<p>Most programming guides start easy with a greeting service and this one makes no exception.</p>
-</div>
-<div class="paragraph">
-<p>To asynchronously greet a client, the endpoint method must return a <code>java.util.concurrent.CompletionStage</code>:</p>
+<p>To asynchronously handle the HTTP request, the endpoint method must return a <code>java.util.concurrent.CompletionStage</code> or an <code>io.smallrye.mutiny.Uni</code> (requires the <code>quarkus-resteasy-mutiny</code> extension):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/hello")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/lorem")
 public class GreetingResource {
-
-    @Inject
-    Vertx vertx;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("{name}")
-    public CompletionStage&lt;String&gt; greeting(@PathParam String name) {
-        // When complete, return the content to the client
-        CompletableFuture&lt;String&gt; future = new CompletableFuture&lt;&gt;();
-
-        long start = System.nanoTime();
-
-        // TODO: asynchronous greeting
-
-        return future;
+    public Uni&lt;String&gt; doSomethingAsync() {
+        // Mimic an asynchronous computation.
+        return Uni.createFrom()
+                .item(() -&gt; "Hello!")
+                .onItem().delayIt().by(Duration.ofMillis(10));
     }
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>So far so good.
-Now let&#8217;s use the Vert.x API to implement the artificially delayed reply with the <code>setTimer</code> provided by Vert.x:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Delay reply by 10ms
-vertx.setTimer(10, l -&gt; {
-    // Compute elapsed time in milliseconds
-    long duration = TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS);
-
-    // Format message
-    String message = String.format("Hello %s! (%d ms)%n", name, duration);
-
-    // Complete
-    future.complete(message);
-});</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>That&#8217;s it.
-Now start Quarkus in <code>dev</code> mode with:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -317,12 +448,53 @@ Now start Quarkus in <code>dev</code> mode with:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Eventually, open your browser and navigate to <a href="http://localhost:8080/hello/Quarkus" class="bare">http://localhost:8080/hello/Quarkus</a>, you should see:</p>
+<p>Then, open your browser to 'http://localhost:8080/lorem' and you should get the message.</p>
+</div>
+<div class="paragraph">
+<p>So far so good.
+Now let&#8217;s use the Vert.x API instead of this artificial delay:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">Hello Quarkus! (10 ms)</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
+
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.Vertx;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/lorem")
+public class GreetingResource {
+
+    @Inject
+    Vertx vertx;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Uni&lt;String&gt; doSomethingAsync() {
+        return vertx.fileSystem().readFile("/META-INF/resources/lorem.txt")
+                .onItem().apply(b -&gt; b.toString("UTF-8"));
+    }
+}</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>In this code, we inject the <code>vertx</code> instance (<code>io.vertx.mutiny.core.Vertx</code>) and read a file from the file system.</p>
+</div>
+<div class="paragraph">
+<p>Create the <code>src/main/resources/META_INF/resources/lorem.txt</code> file with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, refresh the page, you should see the <em>lorem ipsum</em> text.</p>
 </div>
 </div>
 <div class="sect2">
@@ -336,7 +508,7 @@ Now start Quarkus in <code>dev</code> mode with:</p>
 <p>declaring the <code>text/event-stream</code> response content type</p>
 </li>
 <li>
-<p>returning a <a href="https://www.reactive-streams.org/">Reactive Streams</a> <code>Publisher</code> or an RX Java 2 <code>Observable</code> or <code>Flowable</code></p>
+<p>returning a <a href="https://www.reactive-streams.org/">Reactive Streams</a> <code>Publisher</code> or Mutiny <code>Multi</code>  (requires the <code>quarkus-resteasy-mutiny</code> extension)</p>
 </li>
 </ul>
 </div>
@@ -350,60 +522,45 @@ public class StreamingResource {
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    @Path("{name}/streaming")
-    public Publisher&lt;String&gt; greeting(@PathParam String name) {
-        // TODO: create a Reactive Streams publisher
+    @Path("/{name}")
+    public Multi&lt;String&gt; greeting(@PathParam String name) {
+        // TODO: create a Reactive Streams publisher or a Mutiny Multi
         return publisher;
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>How to create a Reactive Streams publisher?
-There are a few ways to do this:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>If you use <code>io.vertx.axle.core.Vertx</code>, the API provides <code>toPublisher</code> methods (and then use RX Java 2 or Reactive Streams Operators to manipulate the stream)</p>
-</li>
-<li>
-<p>You can also use <code>io.vertx.reactivex.core.Vertx</code> which already provides RX Java 2 (RX Java 2 <code>Flowable</code> implement Reactive Streams <code>publisher</code>).</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>The first approach can be implemented as follows:</p>
+<p>Now we just need to return our <code>Publisher</code> or <code>Multi</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Use io.vertx.axle.core.Vertx;
-@Inject Vertx vertx;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
 
-@GET
-@Produces(MediaType.SERVER_SENT_EVENTS)
-@Path("{name}/streaming")
-public Publisher&lt;String&gt; greeting(@PathParam String name) {
-    return vertx.periodicStream(2000).toPublisherBuilder()
-            .map(l -&gt; String.format("Hello %s! (%s)%n", name, new Date()))
-            .buildRs();
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The second approach slightly differs:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Use io.vertx.reactivex.core.Vertx;
-@Inject Vertx vertx;
+import io.smallrye.mutiny.Multi;
+import io.vertx.mutiny.core.Vertx;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
-@GET
-@Produces(MediaType.SERVER_SENT_EVENTS)
-@Path("{name}/streaming")
-public Publisher&lt;String&gt; greeting(@PathParam String name) {
-    return vertx.periodicStream(2000).toFlowable()
-            .map(l -&gt; String.format("Hello %s! (%s)%n", name, new Date()));
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.Date;
+
+@Path("/stream")
+public class StreamingResource {
+
+    @Inject
+    Vertx vertx;
+
+    @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @Path("/{name}")
+    public Multi&lt;String&gt; greeting(@PathParam String name) {
+        return vertx.periodicStream(2000).toMulti()
+                .map(l -&gt; String.format("Hello %s! (%s)%n", name, new Date()));
+    }
 }</code></pre>
 </div>
 </div>
@@ -434,13 +591,17 @@ The magic, as always, lies in the Javascript code:</p>
 <div class="listingblock">
 <div class="title">META-INF/resources/streaming.js</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="javascript" class="language-javascript hljs">var eventSource = new EventSource("/hello/Quarkus/streaming");
-eventSource.onmessage = function (event) {
-    var container = document.getElementById("container");
-    var paragraph = document.createElement("p");
-    paragraph.innerHTML = event.data;
-    container.appendChild(paragraph);
-};</code></pre>
+<pre class="highlightjs highlight"><code data-lang="javascript" class="language-javascript hljs">if (!!window.EventSource) {
+    var eventSource = new EventSource("/stream/Quarkus");
+    eventSource.onmessage = function (event) {
+        var container = document.getElementById("container");
+        var paragraph = document.createElement("p");
+        paragraph.innerHTML = event.data;
+        container.appendChild(paragraph);
+    };
+} else {
+    window.alert("EventSource not available on this browser.")
+}</code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -462,11 +623,15 @@ A new greeting should show-up every 2 seconds.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">Hello Quarkus! (Thu Mar 21 17:26:12 CET 2019)
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">Hello Quarkus! (Wed Feb 12 17:13:55 CET 2020)
 
-Hello Quarkus! (Thu Mar 21 17:26:14 CET 2019)
+Hello Quarkus! (Wed Feb 12 17:13:57 CET 2020)
 
-Hello Quarkus! (Thu Mar 21 17:26:16 CET 2019)
+Hello Quarkus! (Wed Feb 12 17:13:59 CET 2020)
+
+Hello Quarkus! (Wed Feb 12 17:14:01 CET 2020)
+
+Hello Quarkus! (Wed Feb 12 17:14:03 CET 2020)
 
 ...</code></pre>
 </div>
@@ -518,7 +683,7 @@ public class VertxJsonResource {
 </div>
 </div>
 <div class="paragraph">
-<p>Needless to say, this works equally well when the JSON content is a request body or is wrapped in a <code>CompletionStage</code> or <code>Publisher</code>.</p>
+<p>Needless to say, this works equally well when the JSON content is a request body or is wrapped in a <code>Uni</code>, <code>Multi</code>, <code>CompletionStage</code> or <code>Publisher</code>.</p>
 </div>
 </div>
 </div>
@@ -541,6 +706,12 @@ This section gives an example with the <code>WebClient</code>.</p>
 &lt;dependency&gt;
   &lt;groupId&gt;io.vertx&lt;/groupId&gt;
   &lt;artifactId&gt;vertx-web-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Mutiny API --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.smallrye.reactive&lt;/groupId&gt;
+  &lt;artifactId&gt;smallrye-mutiny-vertx-web-client&lt;/artifactId&gt;
 &lt;/dependency&gt;
 
 &lt;!-- Axle API --&gt;
@@ -575,7 +746,7 @@ The <code>vertx-rx-java2</code> provides the RX Java 2 API for the whole Vert.x 
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
   &lt;groupId&gt;io.smallrye.reactive&lt;/groupId&gt;
-  &lt;artifactId&gt;smallrye-axle-web-client&lt;/artifactId&gt;
+  &lt;artifactId&gt;smallrye-mutiny-vertx-web-client&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -587,11 +758,6 @@ The <code>vertx-rx-java2</code> provides the RX Java 2 API for the whole Vert.x 
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
 
-import io.vertx.axle.core.Vertx;
-import io.vertx.axle.ext.web.client.WebClient;
-import io.vertx.axle.ext.web.codec.BodyCodec;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.client.WebClientOptions;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -599,12 +765,17 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.concurrent.CompletionStage;
+
+import io.smallrye.mutiny.Uni;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
-@Path("/swapi")
-public class ResourceUsingWebClient {
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.ext.web.client.WebClient;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.WebClientOptions;
 
+@Path("/fruit-data")
+public class ResourceUsingWebClient {
 
     @Inject
     Vertx vertx;
@@ -614,16 +785,17 @@ public class ResourceUsingWebClient {
     @PostConstruct
     void initialize() {
         this.client = WebClient.create(vertx,
-                new WebClientOptions().setDefaultHost("swapi.co").setDefaultPort(443).setSsl(true));
+                new WebClientOptions().setDefaultHost("fruityvice.com")
+                    .setDefaultPort(443).setSsl(true).setTrustAll(true));
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}")
-    public CompletionStage&lt;JsonObject&gt; getStarWarsCharacter(@PathParam int id) {
-        return client.get("/api/people/" + id)
+    @Path("/{name}")
+    public Uni&lt;JsonObject&gt; getFruitData(@PathParam("name") String name) {
+        return client.get("/api/fruit/" + name)
                 .send()
-                .thenApply(resp -&gt; {
+                .onItem().apply(resp -&gt; {
                     if (resp.statusCode() == 200) {
                         return resp.bodyAsJsonObject();
                     } else {
@@ -638,9 +810,9 @@ public class ResourceUsingWebClient {
 </div>
 </div>
 <div class="paragraph">
-<p>This resource creates a <code>WebClient</code> and upon request use this client to invoke the <a href="https://swapi.co/" class="bare">https://swapi.co/</a> API.
+<p>This resource creates a <code>WebClient</code> and upon request use this client to invoke the <em>fruityvice</em> API.
 Depending on the result the response is forwarded as it&#8217;s received, or a new JSON object is created with the status and body.
-The <code>WebClient</code> is obviously asynchronous (and non-blocking), to the endpoint returns a <code>CompletionStage</code>.</p>
+The <code>WebClient</code> is obviously asynchronous (and non-blocking), to the endpoint returns a <code>Uni</code>.</p>
 </div>
 <div class="paragraph">
 <p>Run the application with:</p>
@@ -651,7 +823,7 @@ The <code>WebClient</code> is obviously asynchronous (and non-blocking), to the 
 </div>
 </div>
 <div class="paragraph">
-<p>And then, open a browser to: <a href="http://localhost:8080/swapi/1" class="bare">http://localhost:8080/swapi/1</a>. You should get <em>Luke Skywalker</em>.</p>
+<p>And then, open a browser to: <code><a href="http://localhost:8080/fruit-data/pear" class="bare">http://localhost:8080/fruit-data/pear</a></code>. You should get some details about pears.</p>
 </div>
 <div class="paragraph">
 <p>The application can also run as a native executable.
@@ -671,6 +843,156 @@ Open the <code>src/main/resources/application.properties</code> and add:</p>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="deploying-verticles"><a class="anchor" href="#deploying-verticles"></a>Deploying verticles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://vertx.io/docs/vertx-core/java/#" class="bare">https://vertx.io/docs/vertx-core/java/#</a><em>verticles[Verticles] is "a simple, scalable, actor-like deployment and concurrency model" provided by _Vert.x</em>.
+This model does not claim to be a strict actor-model implementation, but it does share similarities especially with respect to concurrency, scaling and deployment.
+To use this model, you write and <em>deploy</em> verticles, communicating with each other by sending messages on the event bus.</p>
+</div>
+<div class="paragraph">
+<p>You can deploy <em>verticles</em> in Quarkus.
+It supports:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>bare</em> verticle - Java classes extending <code>io.vertx.core.AbstractVerticle</code></p>
+</li>
+<li>
+<p><em>Mutiny</em> verticle - Java classes extending <code>io.smallrye.mutiny.vertx.core.AbstractVerticle</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To deploy verticles, use the regular Vert.x API:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject Vertx vertx;
+
+// ...
+vertx.deployVerticle(MyVerticle.class.getName(), ar -&gt; { });
+vertx.deployVerticle(new MyVerticle(), ar -&gt; { });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also pass deployment options to configure the verticle as well as set the number of instances.</p>
+</div>
+<div class="paragraph">
+<p>Verticles are not <em>beans</em> by default.
+However, you can implement them as <em>ApplicationScoped</em> beans and get injection support:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package io.quarkus.vertx.verticles;
+
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.vertx.core.AbstractVerticle;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import javax.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class MyBeanVerticle extends AbstractVerticle {
+
+    @ConfigProperty(name = "address") String address;
+
+    @Override
+    public Uni&lt;Void&gt; asyncStart() {
+        return vertx.eventBus().consumer(address)
+                .handler(m -&gt; m.replyAndForget("hello"))
+                .completionHandler();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You don&#8217;t have to inject the <code>vertx</code> instance but instead leverage the instance stored in the protected field of <code>AbstractVerticle</code>.</p>
+</div>
+<div class="paragraph">
+<p>Then, deploy the verticle instance with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package io.quarkus.vertx.verticles;
+
+import io.quarkus.runtime.StartupEvent;
+import io.vertx.mutiny.core.Vertx;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+
+@ApplicationScoped
+public class VerticleDeployer {
+
+    public void init(@Observes StartupEvent e, Vertx vertx, MyBeanVerticle verticle) {
+         vertx.deployVerticle(verticle).await().indefinitely();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to deploy every exposed <code>AbstractVerticle</code>, you can use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public void init(@Observes StartupEvent e, Vertx vertx, Instance&lt;AbstractVerticle&gt; verticles) {
+    for (AbstractVerticle verticle : verticles) {
+        vertx.deployVerticle(verticle).await().indefinitely();
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="listening-to-a-unix-domain-socket"><a class="anchor" href="#listening-to-a-unix-domain-socket"></a>Listening to a Unix Domain Socket</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Listening on a unix domain socket allows us to dispense with the overhead of TCP
+if the connection to the quarkus service is established from the same host. This can happen
+if access to the service goes through a proxy which is often the case
+if you&#8217;re setting up a service mesh with a proxy like Envoy.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This will only work on platforms that support <a href="#native-transport">Native Transport</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To setup please enable the appropriate <a href="#native-transport">Native Transport</a> and set the following
+environment property:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.domain-socket=/var/run/io.quarkus.app.socket
+quarkus.http.domain-socket-enabled=true</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By itself this will not disable the tcp socket which by default will open on
+<code>0.0.0.0:8080</code>. It can be explicitly disabled:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>quarkus.http.host-enabled=false</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These properties can be set through Java&#8217;s <code>-D</code> command line parameter or
+on <code>application.properties</code>.</p>
 </div>
 </div>
 </div>

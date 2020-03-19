@@ -83,6 +83,7 @@
 <li><a href="#execute-your-rest-lambda-on-aws">Execute your REST Lambda on AWS</a></li>
 <li><a href="#examine-the-pom">Examine the POM</a></li>
 <li><a href="#examine-sam-yaml">Examine sam.yaml</a></li>
+<li><a href="#tracing-with-aws-xray-and-graalvm">Tracing with AWS XRay and GraalVM</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -189,7 +190,7 @@ for installing AWS SAM CLI.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean install</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean install</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -203,7 +204,7 @@ to the build</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mvn clean install -Dnative</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean install -Dnative</code></pre>
 </div>
 </div>
 </div>
@@ -435,6 +436,16 @@ you&#8217;ll see this:</p>
 </div>
 <div class="paragraph">
 <p>This environment variable resolves some incompatibilities between Quarkus and the Amazon Lambda Custom Runtime environment.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tracing-with-aws-xray-and-graalvm"><a class="anchor" href="#tracing-with-aws-xray-and-graalvm"></a>Tracing with AWS XRay and GraalVM</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are building native images, and want to use <a href="https://aws.amazon.com/xray">AWS X-Ray Tracing</a> with your lambda
+you will need to include <code>quarkus-amazon-lambda-xray</code> as a dependency in your pom.  The AWS X-Ray
+library is not fully compatible with GraalVM so we had to do some integration work to make this work.</p>
 </div>
 </div>
 </div>

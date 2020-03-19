@@ -242,11 +242,11 @@ This is a development cluster, do not use in production.
 <h2 id="the-price-generator"><a class="anchor" href="#the-price-generator"></a>The price generator</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Create the <code>src/main/java/org/acme/quarkus/sample/PriceGenerator.java</code> file, with the following content:</p>
+<p>Create the <code>src/main/java/org/acme/kafka/PriceGenerator.java</code> file, with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka;
 
 import io.reactivex.Flowable;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
@@ -296,11 +296,11 @@ This stream is mapped to Kafka using the <code>application.properties</code> fil
 <div class="sectionbody">
 <div class="paragraph">
 <p>The price converter reads the prices from Kafka, and transforms them.
-Create the <code>src/main/java/org/acme/quarkus/sample/PriceConverter.java</code> file with the following content:</p>
+Create the <code>src/main/java/org/acme/kafka/PriceConverter.java</code> file with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka;
 
 import io.smallrye.reactive.messaging.annotations.Broadcast;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -354,11 +354,11 @@ Every result is sent to the <code>my-data-stream</code> in-memory stream.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Finally, let&#8217;s bind our stream to a JAX-RS resource.
-Creates the <code>src/main/java/org/acme/quarkus/sample/PriceResource.java</code> file with the following content:</p>
+Creates the <code>src/main/java/org/acme/kafka/PriceResource.java</code> file with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quarkus.sample;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.kafka;
 
 import io.smallrye.reactive.messaging.annotations.Channel;
 import org.reactivestreams.Publisher;
@@ -518,7 +518,7 @@ Then, you just need to run the application using:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw quarkus:dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -566,8 +566,8 @@ In this case, you cannot use <code>@Output</code> because your method has parame
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.smallrye.reactive.messaging.annotations.Channel;
-import io.smallrye.reactive.messaging.annotations.Emitter;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.inject.Inject;
 import javax.ws.rs.POST;
@@ -601,6 +601,37 @@ In addition, you can use <code>@OnOverflow</code> to configure back-pressure str
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Deprecation</div>
+<div class="paragraph">
+<p>The <code>io.smallrye.reactive.messaging.annotations.Emitter</code>, <code>io.smallrye.reactive.messaging.annotations.Channel</code> and <code>io.smallrye.reactive.messaging.annotations.OnOverflow</code> classes are now deprecated and replaced by:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.eclipse.microprofile.reactive.messaging.Emitter</code></p>
+</li>
+<li>
+<p><code>org.eclipse.microprofile.reactive.messaging.Channel</code></p>
+</li>
+<li>
+<p><code>org.eclipse.microprofile.reactive.messaging.OnOverflow</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The new <code>Emitter.send</code> method returns a <code>CompletionStage</code> completed when the produced message is acknowledged.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -614,8 +645,7 @@ to validate the connection to the broker. This is disabled by default.</p>
 <p>If enabled, when you access the <code>/health/ready</code> endpoint of your application you will have information about the connection validation status.</p>
 </div>
 <div class="paragraph">
-<p>This behavior can be enabled by setting the <code>quarkus.kafka.health.enabled</code> property to <code>true</code> in your <code>application.properties</code>.
-You also need to point <code>quarkus.kafka.bootstrap-servers</code> to your Kafka cluster.</p>
+<p>This behavior can be enabled by setting the <code>quarkus.kafka.health.enabled</code> property to <code>true</code> in your <code>application.properties</code>.</p>
 </div>
 </div>
 </div>

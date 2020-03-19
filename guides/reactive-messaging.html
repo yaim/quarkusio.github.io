@@ -215,6 +215,52 @@ void consumeBlocking(String message) {
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Asynchronous processing is also possible by returning either an <code>io.smallrye.mutiny.Uni</code> or a <code>java.util.concurrent.CompletionStage</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
+
+import io.quarkus.vertx.ConsumeEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import io.smallrye.mutiny.Uni;
+
+@ApplicationScoped
+public class GreetingService {
+
+    @ConsumeEvent
+    public CompletionStage&lt;String&gt; consume(String name) {
+        // return a CompletionStage completed when the processing is finished.
+        // You can also fail the CompletionStage explicitly
+    }
+
+    @ConsumeEvent
+    public Uni&lt;String&gt; process(String name) {
+        // return an Uni completed when the processing is finished.
+        // You can also fail the Uni explicitly
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Mutiny</div>
+<div class="paragraph">
+<p>The previous example uses Mutiny reactive types, if you&#8217;re not familiar with them, we recommend reading the <a href="getting-started-reactive#mutiny">Getting Started with Reactive guide</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
 <h3 id="configuring-the-address"><a class="anchor" href="#configuring-the-address"></a>Configuring the address</h3>
 <div class="paragraph">
@@ -252,15 +298,34 @@ public String consume(String name) {
 </div>
 </div>
 <div class="paragraph">
-<p>You can also return a <code>CompletionStage&lt;T&gt;</code> to handle asynchronous reply:</p>
+<p>You can also return a <code>Uni&lt;T&gt;</code> or a <code>CompletionStage&lt;T&gt;</code> to handle asynchronous reply:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ConsumeEvent("greeting")
-public CompletionStage&lt;String&gt; consume2(String name) {
-    return CompletableFuture.supplyAsync(name::toUpperCase, executor);
+public Uni&lt;String&gt; consume2(String name) {
+    return Uni.createFrom().item(() -&gt; name.toUpperCase()).emitOn(executor);
 }</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can inject an <code>executor</code> if you use the Context Propagation extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="code" class="language-code hljs">@Inject Executor executor;</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -305,29 +370,32 @@ Sending and publishing messages use the Vert.x event bus:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
 
-import io.vertx.axle.core.eventbus.EventBus;
-import io.vertx.axle.core.eventbus.Message;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.eventbus.EventBus;
+import io.vertx.mutiny.core.eventbus.Message;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import java.util.concurrent.CompletionStage;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 @Path("/async")
 public class EventResource {
 
-  @Inject
-  EventBus bus;                                                        <i class="conum" data-value="1"></i><b>(1)</b>
+    @Inject
+    EventBus bus;                                       <i class="conum" data-value="1"></i><b>(1)</b>
 
-  @GET
-  @Path("/{name}")
-  public CompletionStage&lt;String&gt; hello(String name) {
-      return bus.&lt;String&gt;send("greeting", name)                             <i class="conum" data-value="2"></i><b>(2)</b>
-              .thenApply(Message::body);
-  }
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("{name}")
+    public Uni&lt;String&gt; greeting(@PathParam String name) {
+        return bus.&lt;String&gt;request("greeting", name)        <i class="conum" data-value="2"></i><b>(2)</b>
+                .onItem().apply(Message::body);
+    }
 }</code></pre>
 </div>
 </div>
@@ -362,13 +430,12 @@ public class EventResource {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// Case 1
-bus.send("address", "hello");
+bus.sendAndForget("greeting", name)
 // Case 2
-bus.publish("address", "hello");
+bus.publish("greeting", name)
 // Case 3
-bus.send("address", "hello, how are you?").thenAccept(message -&gt; {
-    // response
-});</code></pre>
+Uni&lt;String&gt; response = bus.&lt;String&gt;request("address", "hello, how are you?")
+        .onItem().apply(Message::body);</code></pre>
 </div>
 </div>
 </div>
@@ -405,25 +472,29 @@ cd vertx-http-quickstart</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.vertx;
 
-import io.vertx.axle.core.eventbus.EventBus;
-import io.vertx.axle.core.eventbus.Message;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.eventbus.EventBus;
+import io.vertx.mutiny.core.eventbus.Message;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import java.util.concurrent.CompletionStage;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-@Path("/hello")
+@Path("/async")
 public class EventResource {
 
-    @Inject EventBus bus;
+    @Inject
+    EventBus bus;
 
     @GET
-    @Path("/async/{name}")
-    public CompletionStage&lt;String&gt; hello(@PathParam("name") String name) {
-        return bus.&lt;String&gt;send("greeting", name)                           <i class="conum" data-value="1"></i><b>(1)</b>
-                .thenApply(Message::body);                                  <i class="conum" data-value="2"></i><b>(2)</b>
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("{name}")
+    public Uni&lt;String&gt; greeting(@PathParam String name) {
+        return bus.&lt;String&gt;request("greeting", name)            <i class="conum" data-value="1"></i><b>(1)</b>
+                .onItem().apply(Message::body);            <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>
@@ -432,11 +503,11 @@ public class EventResource {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>send the <code>name</code> to the <code>greeting</code> address</td>
+<td>send the <code>name</code> to the <code>greeting</code> address and request a response</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>when we get the reply, extract the body and send this as response to the user</td>
+<td>when we get the response, extract the body and send it to the user</td>
 </tr>
 </table>
 </div>

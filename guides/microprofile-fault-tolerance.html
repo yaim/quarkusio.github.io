@@ -155,7 +155,7 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=microprofile-fault-tolerance-quickstart \
-    -DclassName="org.acme.faulttolerance.CoffeeResource" \
+    -DclassName="org.acme.microprofile.faulttolerance.CoffeeResource" \
     -Dpath="/coffee" \
     -Dextensions="smallrye-fault-tolerance, resteasy-jsonb"
 cd microprofile-fault-tolerance-quickstart</code></pre>
@@ -179,7 +179,7 @@ we can add fault tolerance features later on.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.faulttolerance;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.microprofile.faulttolerance;
 
 public class Coffee {
 
@@ -205,7 +205,7 @@ public class Coffee {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.faulttolerance;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.microprofile.faulttolerance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -247,11 +247,11 @@ public class CoffeeRepositoryService {
 </div>
 </div>
 <div class="paragraph">
-<p>Finally, edit the <code>org.acme.faulttolerance.CoffeeResource</code> class as follows:</p>
+<p>Finally, edit the <code>org.acme.microprofile.faulttolerance.CoffeeResource</code> class as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.faulttolerance;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.microprofile.faulttolerance;
 
 import java.util.List;
 import java.util.Random;

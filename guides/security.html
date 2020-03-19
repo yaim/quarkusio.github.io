@@ -90,6 +90,8 @@
 <li><a href="#registering-security-providers">Registering Security Providers</a></li>
 </ul>
 </li>
+<li><a href="#security-identity-customization">Security Identity Customization</a></li>
+<li><a href="#reactive-security">Reactive Security</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -123,6 +125,10 @@ in order for Quarkus to know how to find the authentication information to check
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="security-properties">quarkus-elytron-security-properties-file</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Provides support for simple properties files that can be used for testing security. This supports both embedding user info in <code>application.properties</code> and standalone properties files.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="security-jpa">quarkus-security-jpa</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provides support for authenticating via JPA.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="security-jdbc">quarkus-elytron-security-jdbc</a></p></td>
@@ -184,7 +190,7 @@ is in use.</p>
 <p>The following properties can be used to configure form based auth:</p>
 </div>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
@@ -200,7 +206,7 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.enabled"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.enabled">quarkus.http.auth.form.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.enabled"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.enabled">quarkus.http.auth.form.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -214,7 +220,7 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.login-page"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.login-page">quarkus.http.auth.form.login-page</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.login-page"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.login-page">quarkus.http.auth.form.login-page</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -228,7 +234,7 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.error-page"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.error-page">quarkus.http.auth.form.error-page</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.error-page"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.error-page">quarkus.http.auth.form.error-page</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -242,7 +248,7 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.landing-page"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.landing-page">quarkus.http.auth.form.landing-page</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.landing-page"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.landing-page">quarkus.http.auth.form.landing-page</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -256,7 +262,7 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.redirect-after-login"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.redirect-after-login">quarkus.http.auth.form.redirect-after-login</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.redirect-after-login"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.redirect-after-login">quarkus.http.auth.form.redirect-after-login</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -270,12 +276,12 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.timeout"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.timeout">quarkus.http.auth.form.timeout</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.timeout"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.timeout">quarkus.http.auth.form.timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The inactivity timeout</p>
+<p>The inactivity (idle) timeout When inactivity timeout is reached, cookie is not renewed and a new login is enforced.</p>
 </div>
 </div>
 </div></div></td>
@@ -285,12 +291,12 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.new-cookie-interval"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.new-cookie-interval">quarkus.http.auth.form.new-cookie-interval</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.new-cookie-interval"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.new-cookie-interval">quarkus.http.auth.form.new-cookie-interval</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>How old a cookie can get before it will be replaced with a new cookie with an updated timeout. Not that smaller values will result in slightly more server load (as new encrypted cookies will be generated more often), however larger values affect the inactivity timeout as the timeout is set when a cookie is generated. For example if this is set to 10 minutes, and the inactivity timeout is 30m, if a users last request is when the cookie is 9m old then the actual timeout will happen 21m after the last request, as the timeout is only refreshed when a new cookie is generated.</p>
+<p>How old a cookie can get before it will be replaced with a new cookie with an updated timeout, also referred to as "renewal-timeout". Note that smaller values will result in slightly more server load (as new encrypted cookies will be generated more often), however larger values affect the inactivity timeout as the timeout is set when a cookie is generated. For example if this is set to 10 minutes, and the inactivity timeout is 30m, if a users last request is when the cookie is 9m old then the actual timeout will happen 21m after the last request, as the timeout is only refreshed when a new cookie is generated. In other words no timeout is tracked on the server side; the timestamp is encoded and encrypted in the cookie itself and it is decrypted and parsed with each request.</p>
 </div>
 </div>
 </div></div></td>
@@ -300,7 +306,7 @@ is in use.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.cookie-name"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.cookie-name">quarkus.http.auth.form.cookie-name</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.cookie-name"></a><code><a href="#quarkus-vertx-http-config-group-form-auth-config_quarkus.http.auth.form.cookie-name">quarkus.http.auth.form.cookie-name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -667,6 +673,80 @@ configuration to register the "SunRsaSign" and "SunJCE" security providers:</p>
 ...</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="security-identity-customization"><a class="anchor" href="#security-identity-customization"></a>Security Identity Customization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Internally, the identity providers create and update an istance of the <code>io.quarkus.security.identity.SecurityIdentity</code> class which holds the principal, roles, credentials which were used to authenticate the client (user) and other security attributes. An easy option to customize <code>SecurityIdentity</code> is to register a custom <code>SecurityIdentityAugmentor</code>, for example, the augmentor below adds an addition role:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import javax.enterprise.context.ApplicationScoped;
+
+import io.quarkus.security.identity.AuthenticationRequestContext;
+import io.quarkus.security.identity.SecurityIdentity;
+import io.quarkus.security.identity.SecurityIdentityAugmentor;
+import io.quarkus.security.runtime.QuarkusSecurityIdentity;
+
+@ApplicationScoped
+public class RolesAugmentor implements SecurityIdentityAugmentor {
+
+    @Override
+    public int priority() {
+        return 0;
+    }
+
+    @Override
+    public CompletionStage&lt;SecurityIdentity&gt; augment(SecurityIdentity identity, AuthenticationRequestContext context) {
+
+        CompletableFuture&lt;SecurityIdentity&gt; cs = new CompletableFuture&lt;&gt;();
+        if (identity.isAnonymous()) {
+            cs.complete(identity);
+        } else {
+            // create a new builder and copy principal, attributes, credentials and roles from the original
+            QuarkusSecurityIdentity.Builder builder = QuarkusSecurityIdentity.builder()
+                .setPrincipal(identity.getPrincipal())
+                .addAttributes(identity.getAttributes())
+                .addCredentials(identity.getCredentials())
+                .addRoles(identity.getRoles());
+
+            // add custom role source here
+            builder.addRole("dummy");
+
+            cs.complete(builder.build());
+        }
+
+        return cs;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reactive-security"><a class="anchor" href="#reactive-security"></a>Reactive Security</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are going to use security in a reactive environment, you will likely need SmallRye Context Propagation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+  &lt;artifactId&gt;quarkus-smallrye-context-propagation&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will allow you to propagate the identity throughout the reactive callbacks. You also need to make sure you
+are using an executor that is capable of propagating the identity (e.g. no <code>CompletableFuture.supplyAsync</code>),
+to make sure that quarkus can propagate it. For more information see the
+<a href="context-propagation">Context Propagation Guide</a>.</p>
 </div>
 </div>
 </div>

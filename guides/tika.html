@@ -194,7 +194,7 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme.example \
     -DprojectArtifactId=tika-quickstart \
-    -DclassName="org.acme.quickstart.tika.TikaParserResource" \
+    -DclassName="org.acme.tika.TikaParserResource" \
     -Dpath="/parse" \
     -Dextensions="tika,resteasy"
 cd tika-quickstart</code></pre>
@@ -230,11 +230,11 @@ to your project by running the following command in your project base directory.
 <div class="sect2">
 <h3 id="examine-the-generated-jax-rs-resource"><a class="anchor" href="#examine-the-generated-jax-rs-resource"></a>Examine the generated JAX-RS resource</h3>
 <div class="paragraph">
-<p>Open the <code>src/main/java/org/acme/quickstart/tika/TikaParserResource.java</code> file and see the following content:</p>
+<p>Open the <code>src/main/java/org/acme/tika/TikaParserResource.java</code> file and see the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart.tika;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.tika;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -260,7 +260,7 @@ public class TikaParserResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart.tika;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.tika;
 
 import java.io.InputStream;
 import java.time.Duration;
@@ -374,7 +374,7 @@ Running it is as simple as executing <code>./target/tika-quickstart-1.0-SNAPSHOT
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -390,7 +390,7 @@ Running it is as simple as executing <code>./target/tika-quickstart-1.0-SNAPSHOT
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.tika-config-path"></a><code><a href="#quarkus-tika_quarkus.tika.tika-config-path">quarkus.tika.tika-config-path</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.tika-config-path"></a><code><a href="#quarkus-tika_quarkus.tika.tika-config-path">quarkus.tika.tika-config-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -404,7 +404,7 @@ Running it is as simple as executing <code>./target/tika-quickstart-1.0-SNAPSHOT
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parsers"></a><code><a href="#quarkus-tika_quarkus.tika.parsers">quarkus.tika.parsers</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parsers"></a><code><a href="#quarkus-tika_quarkus.tika.parsers">quarkus.tika.parsers</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -420,7 +420,7 @@ Running it is as simple as executing <code>./target/tika-quickstart-1.0-SNAPSHOT
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.append-embedded-content"></a><code><a href="#quarkus-tika_quarkus.tika.append-embedded-content">quarkus.tika.append-embedded-content</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.append-embedded-content"></a><code><a href="#quarkus-tika_quarkus.tika.append-embedded-content">quarkus.tika.append-embedded-content</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -434,7 +434,7 @@ Running it is as simple as executing <code>./target/tika-quickstart-1.0-SNAPSHOT
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parser-options-parser-options"></a><code><a href="#quarkus-tika_quarkus.tika.parser-options-parser-options">quarkus.tika.parser-options</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parser-options-parser-options"></a><code><a href="#quarkus-tika_quarkus.tika.parser-options-parser-options">quarkus.tika.parser-options</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -448,7 +448,7 @@ Running it is as simple as executing <code>./target/tika-quickstart-1.0-SNAPSHOT
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parser-parser"></a><code><a href="#quarkus-tika_quarkus.tika.parser-parser">quarkus.tika.parser</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-tika_quarkus.tika.parser-parser"></a><code><a href="#quarkus-tika_quarkus.tika.parser-parser">quarkus.tika.parser</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

@@ -69,7 +69,7 @@
     <div class="hide-mobile toc"></div>
     <div>
       <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -85,7 +85,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-metrics_quarkus.smallrye-metrics.path"></a><code><a href="#quarkus-smallrye-metrics_quarkus.smallrye-metrics.path">quarkus.smallrye-metrics.path</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-metrics_quarkus.smallrye-metrics.path"></a><code><a href="#quarkus-smallrye-metrics_quarkus.smallrye-metrics.path">quarkus.smallrye-metrics.path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -99,7 +99,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-metrics_quarkus.smallrye-metrics.extensions.enabled"></a><code><a href="#quarkus-smallrye-metrics_quarkus.smallrye-metrics.extensions.enabled">quarkus.smallrye-metrics.extensions.enabled</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-metrics_quarkus.smallrye-metrics.extensions.enabled"></a><code><a href="#quarkus-smallrye-metrics_quarkus.smallrye-metrics.extensions.enabled">quarkus.smallrye-metrics.extensions.enabled</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -110,6 +110,20 @@
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-metrics_quarkus.smallrye-metrics.micrometer.compatibility"></a><code><a href="#quarkus-smallrye-metrics_quarkus.smallrye-metrics.micrometer.compatibility">quarkus.smallrye-metrics.micrometer.compatibility</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Apply Micrometer compatibility mode, where instead of regular 'base' and 'vendor' metrics, Quarkus exposes the same 'jvm' metrics that Micrometer does. Application metrics are unaffected by this mode. The use case is to facilitate migration from Micrometer-based metrics, because original dashboards for JVM metrics will continue working without having to rewrite them.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 </tbody>
 </table>

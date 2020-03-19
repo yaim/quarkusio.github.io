@@ -192,7 +192,12 @@ public class Fruit {
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.openapi.swaggerui;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -583,6 +588,9 @@ The UI is automatically generated from your OpenAPI specification.</p>
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.swagger-ui.always-include=true</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This is a build time property, it cannot be changed at runtime after your application is built.</p>
+</div>
 </td>
 </tr>
 </table>
@@ -650,7 +658,7 @@ The UI is automatically generated from your OpenAPI specification.</p>
 <div class="sect2">
 <h3 id="openapi"><a class="anchor" href="#openapi"></a>OpenAPI</h3>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -666,7 +674,7 @@ The UI is automatically generated from your OpenAPI specification.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-openapi_quarkus.smallrye-openapi.path"></a><code><a href="#quarkus-smallrye-openapi_quarkus.smallrye-openapi.path">quarkus.smallrye-openapi.path</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-openapi_quarkus.smallrye-openapi.path"></a><code><a href="#quarkus-smallrye-openapi_quarkus.smallrye-openapi.path">quarkus.smallrye-openapi.path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -684,7 +692,7 @@ The UI is automatically generated from your OpenAPI specification.</p>
 <div class="sect2">
 <h3 id="swagger-ui"><a class="anchor" href="#swagger-ui"></a>Swagger UI</h3>
 <div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> Configuration property fixed at build time - <span class="icon"><i class="fa fa-cogs" title="Overridable at runtime"></i></span>️ Configuration property overridable at runtime</p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
 <table class="tableblock frame-all grid-all stretch configuration-reference searchable">
 <colgroup>
@@ -700,7 +708,7 @@ The UI is automatically generated from your OpenAPI specification.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-swaggerui_quarkus.swagger-ui.path"></a><code><a href="#quarkus-swaggerui_quarkus.swagger-ui.path">quarkus.swagger-ui.path</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-swaggerui_quarkus.swagger-ui.path"></a><code><a href="#quarkus-swaggerui_quarkus.swagger-ui.path">quarkus.swagger-ui.path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -715,7 +723,7 @@ The UI is automatically generated from your OpenAPI specification.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-swaggerui_quarkus.swagger-ui.always-include"></a><code><a href="#quarkus-swaggerui_quarkus.swagger-ui.always-include">quarkus.swagger-ui.always-include</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-swaggerui_quarkus.swagger-ui.always-include"></a><code><a href="#quarkus-swaggerui_quarkus.swagger-ui.always-include">quarkus.swagger-ui.always-include</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -729,7 +737,7 @@ The UI is automatically generated from your OpenAPI specification.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-archive" title="Fixed at build time"></i></span> <a id="quarkus-swaggerui_quarkus.swagger-ui.enable"></a><code><a href="#quarkus-swaggerui_quarkus.swagger-ui.enable">quarkus.swagger-ui.enable</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-swaggerui_quarkus.swagger-ui.enable"></a><code><a href="#quarkus-swaggerui_quarkus.swagger-ui.enable">quarkus.swagger-ui.enable</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">

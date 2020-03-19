@@ -80,8 +80,7 @@
 <li><a href="#development-mode">7. Development Mode</a></li>
 <li><a href="#testing">8. Testing</a></li>
 <li><a href="#packaging-and-run-the-application">9. Packaging and run the application</a></li>
-<li><a href="#async">10. Async</a></li>
-<li><a href="#whats-next">11. What&#8217;s next?</a></li>
+<li><a href="#whats-next">10. What&#8217;s next?</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -205,7 +204,7 @@ dependency injection, this endpoint uses a <code>greeting</code> bean.</p>
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
-    -DclassName="org.acme.quickstart.GreetingResource" \
+    -DclassName="org.acme.getting.started.GreetingResource" \
     -Dpath="/hello"
 cd getting-started</code></pre>
 </div>
@@ -222,7 +221,7 @@ cd getting-started</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create -DprojectGroupId=org.acme -DprojectArtifactId=getting-started -DclassName="org.acme.quickstart.GreetingResource" -Dpath="/hello"</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create -DprojectGroupId=org.acme -DprojectArtifactId=getting-started -DclassName="org.acme.getting.started.GreetingResource" -Dpath="/hello"</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -234,7 +233,7 @@ cd getting-started</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create "-DprojectGroupId=org.acme" "-DprojectArtifactId=getting-started" "-DclassName=org.acme.quickstart.GreetingResource" "-Dpath=/hello"</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.2.1.Final:create "-DprojectGroupId=org.acme" "-DprojectArtifactId=getting-started" "-DclassName=org.acme.getting.started.GreetingResource" "-Dpath=/hello"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -246,7 +245,7 @@ cd getting-started</code></pre>
 <p>the Maven structure</p>
 </li>
 <li>
-<p>an <code>org.acme.quickstart.GreetingResource</code> resource exposed on <code>/hello</code></p>
+<p>an <code>org.acme.getting.started.GreetingResource</code> resource exposed on <code>/hello</code></p>
 </li>
 <li>
 <p>an associated unit test</p>
@@ -313,11 +312,11 @@ In addition, you can see the <code>quarkus-maven-plugin</code> responsible of th
 <div class="sect2">
 <h3 id="the-jax-rs-resources"><a class="anchor" href="#the-jax-rs-resources"></a>4.1. The JAX-RS resources</h3>
 <div class="paragraph">
-<p>During the project creation, the <code>src/main/java/org/acme/quickstart/GreetingResource.java</code> file has been created with the following content:</p>
+<p>During the project creation, the <code>src/main/java/org/acme/getting/started/GreetingResource.java</code> file has been created with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -428,11 +427,11 @@ You can learn more about it in the <a href="cdi-reference">Contexts and Dependen
 </div>
 <div class="paragraph">
 <p>Let&#8217;s modify the application and add a companion bean.
-Create the <code>src/main/java/org/acme/quickstart/GreetingService.java</code> file with the following content:</p>
+Create the <code>src/main/java/org/acme/getting/started/GreetingService.java</code> file with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -451,7 +450,7 @@ public class GreetingService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -557,11 +556,11 @@ be set, as the default version does not support Junit 5:</p>
 </div>
 <div class="paragraph">
 <p>The generated project contains a simple test.
-Edit the <code>src/test/java/org/acme/quickstart/GreetingResourceTest.java</code> to match the following content:</p>
+Edit the <code>src/test/java/org/acme/getting/started/GreetingResourceTest.java</code> to match the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.quickstart;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -692,34 +691,13 @@ Before running the application, don&#8217;t forget to stop the hot reload mode (
 </div>
 </div>
 <div class="sect1">
-<h2 id="async"><a class="anchor" href="#async"></a>10. Async</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The resource can also use <code>CompletionStage</code> as return type to handle asynchronous actions:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@GET
-@Produces(MediaType.TEXT_PLAIN)
-public CompletionStage&lt;String&gt; hello() {
-    return CompletableFuture.supplyAsync(() -&gt; {
-        return "hello";
-    });
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The async version of the code is available in the <a href="https://github.com/quarkusio/quarkus-quickstarts">GitHub</a> repository, in the <code>getting-started-async</code> directory.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="whats-next"><a class="anchor" href="#whats-next"></a>11. What&#8217;s next?</h2>
+<h2 id="whats-next"><a class="anchor" href="#whats-next"></a>10. What&#8217;s next?</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide covered the creation of an application using Quarkus.
 However, there is much more.
-We recommend continuing the journey with the <a href="building-native-image">building a native executable guide</a>, where you learn about creating a native executable and packaging it in a container.</p>
+We recommend continuing the journey with the <a href="building-native-image">building a native executable guide</a>, where you learn about creating a native executable and packaging it in a container.
+If you are interested in reactive, we recommend the <a href="getting-started-reactive">Getting started with reactive guide</a>, where you can see how to implement reactive applications with Quarkus.</p>
 </div>
 <div class="paragraph">
 <p>In addition, the <a href="tooling">tooling guide</a> document explains how to:</p>
