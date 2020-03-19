@@ -137,6 +137,8 @@
       
         <li><a href="/guides/flyway">Schema Migration with Flyway</a></li>
       
+        <li><a href="/guides/liquibase">Schema Migration with Liquibase</a></li>
+      
         <li><a href="/guides/infinispan-client">Using Infinispan Client</a></li>
       
         <li><a href="/guides/reactive-sql-clients">Reactive SQL Clients</a></li>
@@ -175,6 +177,8 @@
       
         <li><a href="/guides/security-openid-connect-web-authentication">Protecting Web Applications Using OpenID Connect</a></li>
       
+        <li><a href="/guides/security-openid-connect-multitenancy">Supporting Multi-Tenancy in OpenID Connect Applications</a></li>
+      
         <li><a href="/guides/security-keycloak-authorization">Using Keycloak to centralize your authorizations</a></li>
       
         <li><a href="/guides/security">Using Security</a></li>
@@ -187,6 +191,8 @@
       
         <li><a href="/guides/security-oauth2">Using OAuth2 RBAC</a></li>
       
+        <li><a href="/guides/security-jpa">Using Security from JPA</a></li>
+      
         <li><a href="/guides/security-jdbc">Using Security with JDBC Realm</a></li>
       
       </ul>
@@ -195,6 +201,8 @@
       <ul>
       
         <li><a href="/guides/kogito">Using Kogito to add business automation capabilities to an application</a></li>
+      
+        <li><a href="/guides/optaplanner">Using AI to optimize a schedule with OptaPlanner</a></li>
       
       </ul>
     
@@ -208,7 +216,11 @@
       <h3 id="#cloud">Cloud</h3>
       <ul>
       
-        <li><a href="/guides/deploying-to-kubernetes">Deploying Native Applications on Kubernetes or OpenShift</a></li>
+        <li><a href="/guides/container-image">Build Container Images</a></li>
+      
+        <li><a href="/guides/deploying-to-openshift">Deploying Quarkus Applications on OpenShift</a></li>
+      
+        <li><a href="/guides/deploying-to-kubernetes">Deploying Native Applications on Kubernetes</a></li>
       
         <li><a href="/guides/getting-started-knative">Deploying Native Applications on Knative Kubernetes or OpenShift</a></li>
       
@@ -274,6 +286,8 @@
       
         <li><a href="/guides/spring-security">Using the Quarkus Extension for Spring Security API</a></li>
       
+        <li><a href="/guides/spring-cloud-config-client">Using the Quarkus Extension for Spring Cloud Config</a></li>
+      
       </ul>
     
       <h3 id="#writing-extensions">Writing Extensions</h3>
@@ -282,6 +296,8 @@
         <li><a href="/guides/writing-extensions">Writing Your Own Extension</a></li>
       
         <li><a href="/guides/writing-native-applications-tips">Writing Native Applications</a></li>
+      
+        <li><a href="/guides/class-loading-reference">Class Loading Reference</a></li>
       
       </ul>
     
@@ -601,6 +617,15 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
+            <h2>Schema Migration with Liquibase</h2>
+
+            <p>This guide covers how to use the Liquibase extension to manage your schema migrations.</p>
+
+
+            <p><a href="/guides/liquibase" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
             <h2>Using Infinispan Client</h2>
 
             <p>Infinispan is an in memory data grid that allows running in a server outside of application processes. This extension provides functionality to allow the client that can connect to said server when running in Quarkus.</p>
@@ -747,6 +772,15 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
+            <h2>Supporting Multi-Tenancy in OpenID Connect Applications</h2>
+
+            <p>This guide demonstrates how your OpenID Connect application can support multi-tenancy so that you can serve multiple tenants from a single application.</p>
+
+
+            <p><a href="/guides/security-openid-connect-multitenancy" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
             <h2>Using Keycloak to centralize your authorizations</h2>
 
             <p>This guide demonstrates how your Quarkus application can authorize access to protected resources using Keycloak Authorization Services.</p>
@@ -801,6 +835,15 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
+            <h2>Using Security from JPA</h2>
+
+            <p>This guide demonstrates how your Quarkus application can use a database to store your user identities with Hibernate ORM.</p>
+
+
+            <p><a href="/guides/security-jpa" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
             <h2>Using Security with JDBC Realm</h2>
 
             <p>This guide demonstrates how your Quarkus application can use a database to store your user identities.</p>
@@ -826,6 +869,15 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/kogito" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using AI to optimize a schedule with OptaPlanner</h2>
+
+            <p>This guide walks you through the process of creating a Quarkus application with OptaPlanner’s constraint solving Artificial Intelligence (AI).</p>
+
+
+            <p><a href="/guides/optaplanner" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
@@ -858,9 +910,27 @@ This guide will walk you through all that.</p>
       <div class="grid__item width-8-12 width-12-12-m guides-content">
         
           <div class="guide-item" markdown="1">
-            <h2>Deploying Native Applications on Kubernetes or OpenShift</h2>
+            <h2>Build Container Images</h2>
 
-            <p>This guide covers how to deploy a native application on Kubernetes or OpenShift.</p>
+            <p>Learn how to build and push container images with Jib, S2I or Docker as part of the Quarkus build.</p>
+
+
+            <p><a href="/guides/container-image" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Deploying Quarkus Applications on OpenShift</h2>
+
+            <p>This guide covers how to deploy a native application on OpenShift.</p>
+
+
+            <p><a href="/guides/deploying-to-openshift" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Deploying Native Applications on Kubernetes</h2>
+
+            <p>This guide covers how to deploy a native application on Kubernetes.</p>
 
 
             <p><a href="/guides/deploying-to-kubernetes" class="button-cta secondary">READ THE GUIDE</a></p>
@@ -1126,6 +1196,15 @@ This guide will walk you through all that.</p>
             <p><a href="/guides/spring-security" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
+          <div class="guide-item" markdown="1">
+            <h2>Using the Quarkus Extension for Spring Cloud Config</h2>
+
+            <p>Quarkus provides a compatibility layer for Spring Cloud Config in the form of the spring-cloud-config-client extension.</p>
+
+
+            <p><a href="/guides/spring-cloud-config-client" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
       </div>
     
   
@@ -1154,6 +1233,15 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/writing-native-applications-tips" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Class Loading Reference</h2>
+
+            <p>Learn more about Quarkus class loading infrastructure.</p>
+
+
+            <p><a href="/guides/class-loading-reference" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
