@@ -173,27 +173,29 @@
       <h3 id="#security">Security</h3>
       <ul>
       
-        <li><a href="/guides/security-openid-connect">Using OpenID Connect to Protect JAX-RS Applications</a></li>
-      
-        <li><a href="/guides/security-openid-connect-web-authentication">Protecting Web Applications Using OpenID Connect</a></li>
-      
-        <li><a href="/guides/security-openid-connect-multitenancy">Supporting Multi-Tenancy in OpenID Connect Applications</a></li>
-      
-        <li><a href="/guides/security-keycloak-authorization">Using Keycloak to centralize your authorizations</a></li>
-      
         <li><a href="/guides/security">Using Security</a></li>
       
-        <li><a href="/guides/vault">Using Vault</a></li>
+        <li><a href="/guides/security-properties">Using Security with .properties File</a></li>
       
-        <li><a href="/guides/vault-transit">Using Vault Transit Secret Engine</a></li>
+        <li><a href="/guides/security-jpa">Using Security with JPA</a></li>
+      
+        <li><a href="/guides/security-jdbc">Using Security with JDBC</a></li>
+      
+        <li><a href="/guides/security-openid-connect">Using OpenID Connect to Protect Service Applications</a></li>
+      
+        <li><a href="/guides/security-openid-connect-web-authentication">Using OpenID Connect to Protect Web Applications</a></li>
+      
+        <li><a href="/guides/security-openid-connect-multitenancy">Using OpenID Connect Multi-Tenancy</a></li>
+      
+        <li><a href="/guides/security-keycloak-authorization">Using OpenID Connect and Keycloak to Centralize Authorizations</a></li>
       
         <li><a href="/guides/security-jwt">Using JWT RBAC</a></li>
       
         <li><a href="/guides/security-oauth2">Using OAuth2 RBAC</a></li>
       
-        <li><a href="/guides/security-jpa">Using Security from JPA</a></li>
+        <li><a href="/guides/vault">Using Vault</a></li>
       
-        <li><a href="/guides/security-jdbc">Using Security with JDBC Realm</a></li>
+        <li><a href="/guides/vault-transit">Using Vault Transit Secret Engine</a></li>
       
       </ul>
     
@@ -752,42 +754,6 @@ This guide will walk you through all that.</p>
       <div class="grid__item width-8-12 width-12-12-m guides-content">
         
           <div class="guide-item" markdown="1">
-            <h2>Using OpenID Connect to Protect JAX-RS Applications</h2>
-
-            <p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token authorization, where these tokens are issued by a Keycloak server.</p>
-
-
-            <p><a href="/guides/security-openid-connect" class="button-cta secondary">READ THE GUIDE</a></p>
-          </div>
-        
-          <div class="guide-item" markdown="1">
-            <h2>Protecting Web Applications Using OpenID Connect</h2>
-
-            <p>This guide demonstrates how to use the OpenID Connect Extension to protect your web application based on the Authorization Code Flow using Quarkus.</p>
-
-
-            <p><a href="/guides/security-openid-connect-web-authentication" class="button-cta secondary">READ THE GUIDE</a></p>
-          </div>
-        
-          <div class="guide-item" markdown="1">
-            <h2>Supporting Multi-Tenancy in OpenID Connect Applications</h2>
-
-            <p>This guide demonstrates how your OpenID Connect application can support multi-tenancy so that you can serve multiple tenants from a single application.</p>
-
-
-            <p><a href="/guides/security-openid-connect-multitenancy" class="button-cta secondary">READ THE GUIDE</a></p>
-          </div>
-        
-          <div class="guide-item" markdown="1">
-            <h2>Using Keycloak to centralize your authorizations</h2>
-
-            <p>This guide demonstrates how your Quarkus application can authorize access to protected resources using Keycloak Authorization Services.</p>
-
-
-            <p><a href="/guides/security-keycloak-authorization" class="button-cta secondary">READ THE GUIDE</a></p>
-          </div>
-        
-          <div class="guide-item" markdown="1">
             <h2>Using Security</h2>
 
             <p>This quide demonstrates integration with the Elytron security subsystem to allow for RBAC based on the common security annotations <code class="highlighter-rouge">@RolesAllowed</code>, <code class="highlighter-rouge">@DenyAll</code>, <code class="highlighter-rouge">@PermitAll</code> on REST endpoints.</p>
@@ -797,21 +763,66 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
-            <h2>Using Vault</h2>
+            <h2>Using Security with .properties File</h2>
 
-            <p>This quide explains how you can use HashiCorp Vault to securely store your credentials in Quarkus.</p>
+            <p>This guide demonstrates how your Quarkus application can use a .properties file to store your user identities.</p>
 
 
-            <p><a href="/guides/vault" class="button-cta secondary">READ THE GUIDE</a></p>
+            <p><a href="/guides/security-properties" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
-            <h2>Using Vault Transit Secret Engine</h2>
+            <h2>Using Security with JPA</h2>
 
-            <p>This quide explains how you can use HashiCorp Vault for “encryption as a service”.</p>
+            <p>This guide demonstrates how your Quarkus application can use a database to store your user identities with Hibernate ORM.</p>
 
 
-            <p><a href="/guides/vault-transit" class="button-cta secondary">READ THE GUIDE</a></p>
+            <p><a href="/guides/security-jpa" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using Security with JDBC</h2>
+
+            <p>This guide demonstrates how your Quarkus application can use a database to store your user identities.</p>
+
+
+            <p><a href="/guides/security-jdbc" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using OpenID Connect to Protect Service Applications</h2>
+
+            <p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token authorization, where these tokens are issued by a Keycloak server.</p>
+
+
+            <p><a href="/guides/security-openid-connect" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using OpenID Connect to Protect Web Applications</h2>
+
+            <p>This guide demonstrates how to use the OpenID Connect Extension to protect your web application based on the Authorization Code Flow using Quarkus.</p>
+
+
+            <p><a href="/guides/security-openid-connect-web-authentication" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using OpenID Connect Multi-Tenancy</h2>
+
+            <p>This guide demonstrates how your OpenID Connect application can support multi-tenancy so that you can serve multiple tenants from a single application.</p>
+
+
+            <p><a href="/guides/security-openid-connect-multitenancy" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using OpenID Connect and Keycloak to Centralize Authorizations</h2>
+
+            <p>This guide demonstrates how your Quarkus application can authorize access to protected resources using Keycloak Authorization Services.</p>
+
+
+            <p><a href="/guides/security-keycloak-authorization" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
@@ -833,21 +844,21 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
-            <h2>Using Security from JPA</h2>
+            <h2>Using Vault</h2>
 
-            <p>This guide demonstrates how your Quarkus application can use a database to store your user identities with Hibernate ORM.</p>
+            <p>This quide explains how you can use HashiCorp Vault to securely store your credentials in Quarkus.</p>
 
 
-            <p><a href="/guides/security-jpa" class="button-cta secondary">READ THE GUIDE</a></p>
+            <p><a href="/guides/vault" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
-            <h2>Using Security with JDBC Realm</h2>
+            <h2>Using Vault Transit Secret Engine</h2>
 
-            <p>This guide demonstrates how your Quarkus application can use a database to store your user identities.</p>
+            <p>This quide explains how you can use HashiCorp Vault for “encryption as a service”.</p>
 
 
-            <p><a href="/guides/security-jdbc" class="button-cta secondary">READ THE GUIDE</a></p>
+            <p><a href="/guides/vault-transit" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
