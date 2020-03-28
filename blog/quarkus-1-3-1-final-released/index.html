@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Supersonic Subatomic Java</title>
+  <title>Quarkus 1.3.1.Final released - Bugfixes, JDK 11 by default</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlight.pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -12,7 +12,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
-  <link rel="canonical" href="https://quarkus.io/">
+  <link rel="canonical" href="https://quarkus.io/blog/quarkus-1-3-1-final-released/">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="https://quarkus.io/guides/stylesheet/config.css" />
   <link rel="stylesheet" href="/assets/css/main.css" />
@@ -22,7 +22,7 @@
   <script src="https://quarkus.io/assets/javascript/hl.js" type="text/javascript"></script>
 </head>
 
-<body class="homepage">
+<body class="post">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -33,7 +33,7 @@
     <div class="header navigation">
       <div class="logo-wrapper">
         
-          <a href="/"><img src="/assets/images/quarkus_logo_white.png" class="project-logo" title="Quarkus"></a>
+          <a href="/"><img src="/assets/images/quarkus_logo_horizontal_rgb_600px_reverse.png" class="project-logo" title="Quarkus"></a>
         
       </div>
       <div class="nav-container">
@@ -50,7 +50,7 @@
               <a href="/community/" class="">Community</a>
             </li>
             <li>
-              <a href="/blog/" class="">Blog</a>
+              <a href="/blog/" class="active">Blog</a>
             </li>
             <li>
               <a href="https://code.quarkus.io" class="button-cta secondary white">Start Coding</a>
@@ -63,161 +63,124 @@
 </div>
 
   <div class="content">
-    <div class="quarkus-homepage">
-  <div class="grid-wrapper homepage-hero-band">
-  <div class="grid__item width-12-12 title-band">
-    <h1>Supersonic Subatomic Java</h1>
-    <p>
-      A Kubernetes Native Java stack tailored for OpenJDK HotSpot and GraalVM, crafted from the best of breed Java libraries and standards.
-      <br/><br/>
-      <a href="/get-started/" class="button-cta">Get Started with Quarkus</a>
-    </p>
-  </div>
-  <div class="grid__item width-6-12 homepage-hero-band-lcontent">
-    <div class="img-wrapper">
-      <a href="/blog/quarkus-wins-devies-award/">
-        <img src="/assets/images/devies_herographic.svg" class="" title="2020 Devies Awards">
-      </a>
-    </div>
-  </div>
-  <div class="grid__item width-6-12 homepage-hero-band-rcontent">
-    <p>Now Available</p>
-    <h3>Quarkus 1.3.1</h3>
-    <a href="/blog/quarkus-1-3-1-final-released/">More Information</a>
-  </div>
-  <div class="grid__item width-12-12 homepage-hero-band-scroll">
-    <a href="#" class="scroll-down" address="true"></a>   
-  </div>
-</div>
-
-  <div class="full-width-bg component homepage-content-band">
-  <div class="grid-wrapper">
-    <div id="container-first" class="width-12-12">
-      <h2>Container First</h2>
-    </div>
-    <div class="width-12-12 block-content">
-      <p>Quarkus tailors your application for GraalVM and HotSpot. Amazingly fast boot time, incredibly low RSS memory (not just heap size!) offering near instant scale up and high density memory utilization in container orchestration platforms like Kubernetes. We use a technique we call compile time boot. <a href="/vision/container-first">Learn more.</a></p>
-      <pre class="highlightjs highlight"><code class="bash">$ ./my-native-java-rest-app
-Quarkus started in 0.008s</code></pre>
-      <img src="/assets/images/quarkus_metrics_graphic_bootmem_wide.png">
-    </div>
-  </div>
-</div>
-
-  <div class="full-width-bg component homepage-content-band alt-background">
-  <div class="grid-wrapper">
-    <div class="width-12-12 block-content">
-      <h2>Unifies Imperative and Reactive</h2>
-    </div>
-    <div class="width-12-12 width-12-12-m">
-      <p>Combine both the familiar imperative code and the non-blocking reactive style when developing applications.
-      <a href="/vision/continuum">Learn more</a>.</p>
-    </div>
-    <div class="width-12-12 width-12-12-m">
-      <div class="grid-wrapper">
-        <div class="width-6-12 code-item">
-          <div class="code-label">Imperative</div>
-          <div class="code-wrapper">
-            <pre class="highlight"><code>@Inject
-SayService say;
-
-@GET
-@Produces(MediaType.TEXT_PLAIN)
-public String hello() {
-    return say.hello();
-}</code></pre>
-          </div>
-        </div>
-        <div class="width-6-12 code-item">
-          <div class="code-label">Reactive</div>
-          <div class="code-wrapper">
-            <pre class="highlight"><code>@Inject @Channel("kafka")
-Publisher&lt;String&gt; reactiveSay;
-
-@GET
-@Produces(MediaType.SERVER_SENT_EVENTS)
-public Publisher&lt;String&gt; stream() {
-    return reactiveSay;
-}</code></pre>
-          </div>
-        </div>
+    <div class="post-page grid-wrapper">
+  <div class="grid__item width-10-12 width-12-12-m doc-content">
+    <div class="post-date">February 28, 2020</div>
+    <h1>Quarkus 1.3.1.Final released - Bugfixes, JDK 11 by default</h1>
+    <div class="grid-wrapper">
+      <div class="grid__item width-8-12 width-12-12-m byline-wrapper">
+        
+        
+          <img class="headshot" src="https://www.gravatar.com/avatar/ec96387a1a8295b6fd6dffb68f80c352">
+        
+        <p class="byline">By Guillaume Smet</p>
       </div>
+      <div class="grid__item width-12-12">
+          <div class="paragraph">
+<p>Today, we released 1.3.1.Final which is a bugfix version on top of 1.3.0.Final.
+This version contains bugfixes and documentation improvements and makes Java 11 our default target for newly generated projects.</p>
+</div>
+<div class="paragraph">
+<p>This is a safe upgrade for everyone using 1.3.0.Final.</p>
+</div>
+<div class="sect1">
+<h2 id="whats-new"><a class="anchor" href="#whats-new"></a>What&#8217;s new?</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="java-11-by-default"><a class="anchor" href="#java-11-by-default"></a>Java 11 by default</h3>
+<div class="paragraph">
+<p>This was an oversight in 1.3.0.Final and we decided to fix it now rather than waiting for 1.4.</p>
+</div>
+<div class="paragraph">
+<p>From now on, newly generated projects target Java 11 by default, including the ones generated by <a href="https://code.quarkus.io/" class="bare">https://code.quarkus.io/</a>. This also means that all the default container images have been upgraded to Java 11.</p>
+</div>
+<div class="paragraph">
+<p>If you use Java 8 to create a project locally, the project still targets Java 8 though.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>We will deprecate the Java 8 support in 1.4. You will have a nice warning if you are using Java 8 with Quarkus.</p>
+</div>
+<div class="paragraph">
+<p>We plan to drop Java 8 support in a few releases, probably around 1.6.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mongodb-client-socket-timeout-renamed-to-read-timeout"><a class="anchor" href="#mongodb-client-socket-timeout-renamed-to-read-timeout"></a>MongoDB client socket-timeout renamed to read-timeout</h3>
+<div class="paragraph">
+<p>The <code>quarkus.mongodb.socket-timeout</code> configuration property was previously ignored. We fixed that and in passing, we renamed it to <code>quarkus.mongodb.read-timeout</code> to be more accurate.</p>
+</div>
+<div class="paragraph">
+<p>If you used it, you will now get a warning about having an unapplied property but the behavior will be the same as before i.e. the property not being applied. If you want to configure it, just replace the old name with the new one.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bugfixes-and-documentation-improvements"><a class="anchor" href="#bugfixes-and-documentation-improvements"></a>Bugfixes and documentation improvements</h3>
+<div class="paragraph">
+<p>You can get <a href="https://github.com/quarkusio/quarkus/releases/tag/1.3.1.Final">the full changelog of 1.3.1.Final on GitHub</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="come-join-us"><a class="anchor" href="#come-join-us"></a>Come Join Us</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We value your feedback a lot so please report bugs, ask for improvements&#8230;&#8203; Let&#8217;s build something great together!</p>
+</div>
+<div class="paragraph">
+<p>If you are a Quarkus user or just curious, don&#8217;t be shy and join our welcoming community:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>provide feedback on <a href="https://github.com/quarkusio/quarkus/issues">GitHub</a>;</p>
+</li>
+<li>
+<p>craft some code and <a href="https://github.com/quarkusio/quarkus/pulls">push a PR</a>;</p>
+</li>
+<li>
+<p>discuss with us on <a href="https://quarkusio.zulipchat.com/">Zulip</a> and on the <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a>;</p>
+</li>
+<li>
+<p>ask your questions on <a href="https://stackoverflow.com/questions/tagged/quarkus">Stack Overflow</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+          
+      </div>
+      <div class="grid__item width-12-12"><div class="share-page">
+  <a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https://quarkus.io/blog/quarkus-1-3-1-final-released/&title=Quarkus 1.3.1.Final released - Bugfixes, JDK 11 by default" rel="nofollow" target="_blank" title="Share on LinkedIn">
+    <img src="/assets/images/share-page/icons_social-linkedin.png"/>
+  </a>
+  <a class="share-twitter" href="https://twitter.com/intent/tweet?text=Quarkus 1.3.1.Final released - Bugfixes, JDK 11 by default&url=https://quarkus.io/blog/quarkus-1-3-1-final-released/&via=quarkusio&related=quarkusio" rel="nofollow" target="_blank" title="Share on Twitter">
+    <img src="/assets/images/share-page/icons_social-twitter.png"/>
+  </a>
+  <a class="share-facebook" href="https://facebook.com/sharer.php?u=https://quarkus.io/blog/quarkus-1-3-1-final-released/" rel="nofollow" target="_blank" title="Share on Facebook">
+    <img src="/assets/images/share-page/icons_social-facebook.png"/>
+  </a>
+  <a class="share-reddit" href="http://www.reddit.com/submit?url=https://quarkus.io/blog/quarkus-1-3-1-final-released/" onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;" title="Share on Reddit" >
+    <img src="/assets/images/share-page/icons_social-reddit.png"/>
+  </a>
+  <a class="share-email" href="mailto:?subject=Quarkus 1.3.1.Final released - Bugfixes, JDK 11 by default&amp;body=Quarkus 1.3.1.Final released - Bugfixes, JDK 11 by default https://quarkus.io/blog/quarkus-1-3-1-final-released/" title="Share via Email" >
+    <img src="/assets/images/share-page/icons_social-email.png"/>
+  </a>
+</div>
+</div>
     </div>
   </div>
-</div>
-
-  <div class="full-width-bg component homepage-content-band">
-  <div class="grid-wrapper">
-    <div class="width-12-12 block-content">
-      <h2>Developer Joy</h2>
-    </div>
-    <div class="width-7-12 width-12-12-m block-content">
-      
-      <p>A cohesive platform for optimized developer joy:
-        <ul>
-            <li>Unified configuration</li>
-            <li>Zero config, live reload in the blink of an eye</li>
-            <li>Streamlined code for the 80% common usages, flexible for the 20%</li>
-            <li>No hassle native executable generation</li>
-        </ul>
-      </p>
-    </div>
-    <div class="width-5-12 width-12-12-m block-content">
-        <div class="listingblock">
-          <div class="content">
-            <pre class="highlight"><code class="bash">$ mvn package -Pnative
-
-  # Or
-
-$ ./gradlew buildNative</code></pre>
-          </div>
-        </div>
-        <a href="/vision/developer-joy">Learn more</a>
-    </div>
-    <div class="width-6-12 width-12-12-m block-image justify-self-start align-self-end">
-      <img src="/assets/images/homepage_comic_1.png"/ class="img-md">
-    </div>
-    <div class="width-6-12 width-12-12-m block-image justify-self-end align-self-end">
-      <img src="/assets/images/homepage_comic_2.png"/ class="img-md">
-    </div>
-  </div>
-</div>
-
-  <div class="full-width-bg component homepage-content-band alt-background">
-  <div class="grid-wrapper">
-    <div class="grid__item width-12-12">
-      <h2>Best of Breed Libraries and Standards</h2>
-    </div>
-    <div class="grid__item width-5-12 width-12-12-m">
-      <p>Quarkus provides a cohesive, fun to use, full-stack framework by leveraging a growing list of over fifty best-of-breed libraries that you love and use. All wired on a standard backbone. <a href="/vision/standards">Learn more about Quarkus Extensions</a>.</p>
-    </div>
-    <div class="width-7-12 width-12-12-m block-image justify-self-center">
-      <img src="/assets/images/homepage_extensions_graphic.png"/ class="img-md">
-    </div>
-  </div>
-</div>
-
-  <div class="full-width-bg component alt-background">
-  <div class="grid-wrapper">
-    <div class="grid__item width-6-12 width-12-12-m">
-      <h3>Feedback and Help</h3>
-      <p>You can contact the Quarkus project team using:</p>
-      <ul>
-        <li>Chat using <a href="https://quarkusio.zulipchat.com" target="_blank">Zulip</a></li>
-        <li>The <a href="https://groups.google.com/d/forum/quarkus-dev" target="_blank">quarkus-dev Google Groups</a></li>
-      </ul>
-      <p>Your help is more than welcome! Don’t hesitate to join the crowd.</p>
-    </div>
-    <div class="grid__item width-6-12 width-12-12-m">
-      <h3>Join the Quarkus Community</h3>
-      <p>
-        Check out our <a href="https://github.com/quarkusio/quarkus" target="_blank">GitHub</a> for details on reporting issues and the process for submitting pull requests.<br /><br />
-        Every contribution is valuable. It can be a bug report, an example application, a feature request, a fix in the documentation or just feedback.
-      </p>
-    </div>
-  </div>
-</div>
-
 </div>
 
   </div>
