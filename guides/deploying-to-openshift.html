@@ -106,7 +106,7 @@
 <p>Apache Maven 3.6.2+</p>
 </li>
 <li>
-<p>access to an OpenShift or cluster (Minishift is a viable options)</p>
+<p>access to an OpenShift cluster (Minishift is a viable option)</p>
 </li>
 </ul>
 </div>
@@ -134,11 +134,11 @@ cd openshift-quickstart</code></pre>
 <h3 id="openshift"><a class="anchor" href="#openshift"></a>OpenShift</h3>
 <div class="paragraph">
 <p>Quarkus offers the ability to automatically generate OpenShift resources based on sane default and user supplied configuration.
-The OpenShift extension is actually a wrapper extension that brings together the <a href="kubernetes">kubernetes</a> and <a href="container-image-s2i">container-image-s2i</a>
+The OpenShift extension is actually a wrapper extension that brings together the <a href="deploying-to-kubernetes">kubernetes</a> and <a href="container-image#s2i">container-image-s2i</a>
 extensions with sensible defaults so that it&#8217;s easier for the user to get started with Quarkus on OpenShift.</p>
 </div>
 <div class="paragraph">
-<p>When we added the <code>openshift</code> extension to the command line invocation above, the following dependency was added to the <code>pom.xml</code></p>
+<p>When we added the OpenShift extension to the command line invocation above, the following dependency was added to the <code>pom.xml</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -181,13 +181,13 @@ Furthermore, the items provided by <code>io.quarkus.deployment.ApplicationConfig
 <div class="paragraph">
 <p>The command above will trigger a container image build and will apply the generated OpenShift resources, right after.
 The generated resources are using OpenShift&#8217;s <code>DeploymentConfig</code> that is configured to automatically trigger a redeployment when a change in the <code>ImageStream</code> is noticed.
-In other words, any container image build after the inital deployment will automatically trigger redeployment, without the need to delete, update or re-apply the generated resources.</p>
+In other words, any container image build after the initial deployment will automatically trigger redeployment, without the need to delete, update or re-apply the generated resources.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="customizing"><a class="anchor" href="#customizing"></a>Customizing</h3>
 <div class="paragraph">
-<p>All available customization options are available in the <a href="kubenretes#openshift">OpenShift configuration options</a>.</p>
+<p>All available customization options are available in the <a href="deploying-to-kubernetes#openshift">OpenShift configuration options</a>.</p>
 </div>
 <div class="paragraph">
 <p>Some examples are provided in the sections below:</p>
@@ -203,7 +203,7 @@ In other words, any container image build after the inital deployment will autom
 </div>
 </div>
 <div class="paragraph">
-<p>Tip: You don&#8217;t necesserily need to add this property in the <code>application.properties</code>. You can pass it as a command line argument:</p>
+<p>Tip: You don&#8217;t necessarily need to add this property in the <code>application.properties</code>. You can pass it as a command line argument:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -291,7 +291,7 @@ That is because for environment variables there are additional options rather th
 </div>
 </div>
 <div class="paragraph">
-<p>This will add a mount to my pod for volume <code>my-voume</code> to path <code>/where/to/mount</code></p>
+<p>This will add a mount to my pod for volume <code>my-volume</code> to path <code>/where/to/mount</code></p>
 </div>
 <div class="paragraph">
 <p>The volumes themselves can be configured as shown in the sections below:</p>

@@ -80,7 +80,8 @@
 </li>
 <li><a href="#examples">Examples</a></li>
 <li><a href="#supported-logging-apis">Supported Logging APIs</a></li>
-<li><a href="#centralized-log-management">Centralized log management</a></li>
+<li><a href="#centralized-log-management">Centralized Log Management</a></li>
+<li><a href="#how-to-configure-logging-for-quarkustest">How to Configure Logging for <code>@QuarkusTest</code></a></li>
 <li><a href="#loggingConfigurationReference">Logging configuration reference</a></li>
 </ul></div>
     <div>
@@ -619,10 +620,50 @@ quarkus.log.category."io.quarkus.category".handlers=STRUCTURED_LOGGING,STRUCTURE
 </div>
 </div>
 <div class="sect1">
-<h2 id="centralized-log-management"><a class="anchor" href="#centralized-log-management"></a>Centralized log management</h2>
+<h2 id="centralized-log-management"><a class="anchor" href="#centralized-log-management"></a>Centralized Log Management</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you want to send your logs to a centralized tool like Graylog, Logstash or Fluentd, you can follow the <a href="centralized-log-management">Centralized log management guide</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="how-to-configure-logging-for-quarkustest"><a class="anchor" href="#how-to-configure-logging-for-quarkustest"></a>How to Configure Logging for <code>@QuarkusTest</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want to configure logging for your <code>@QuarkusTest</code>, don&#8217;t forget to set up the <code>maven-surefire-plugin</code> accordingly.
+In particular, you need to set the appropriate <code>LogManager</code> using the <code>java.util.logging.manager</code> system property.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example Configuration</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+      &lt;version&gt;${surefire-plugin.version}&lt;/version&gt;
+      &lt;configuration&gt;
+        &lt;systemProperties&gt;
+          &lt;java.util.logging.manager&gt;org.jboss.logmanager.LogManager&lt;/java.util.logging.manager&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+          &lt;quarkus.log.level&gt;DEBUG&lt;/quarkus.log.level&gt;  <i class="conum" data-value="2"></i><b>(2)</b>
+        &lt;/systemProperties&gt;
+      &lt;/configuration&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Make sure the <code>org.jboss.logmanager.LogManager</code> is used.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Enable debug logging for all logging categories.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

@@ -101,6 +101,7 @@
 <li><a href="#build_metadata">6.12. Available Build Time Metadata</a></li>
 </ul>
 </li>
+<li><a href="#arc-configuration-reference">7. ArC Configuration Reference</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -1378,6 +1379,106 @@ Here is a summary of which extensions can access which metadata:</p>
 </ul>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="arc-configuration-reference"><a class="anchor" href="#arc-configuration-reference"></a>7. ArC Configuration Reference</h2>
+<div class="sectionbody">
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-arc_configuration"></a><a href="#quarkus-arc_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.remove-unused-beans"></a><code><a href="#quarkus-arc_quarkus.arc.remove-unused-beans">quarkus.arc.remove-unused-beans</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>If set to <code>all</code> (or <code>true</code>) the container will attempt to remove all unused beans.</p>
+</li>
+<li>
+<p>If set to none (or <code>false</code>) no beans will ever be removed even if they are unused (according to the criteria set out below)</p>
+</li>
+<li>
+<p>If set to <code>fwk</code>, then all unused beans will be removed, except the unused beans whose classes are declared in the application code</p>
+<div class="literalblock">
+<div class="content">
+<pre>An unused bean:
+- is not a built-in bean or interceptor,
+- is not eligible for injection to any injection point,
+- is not excluded by any extension,
+- does not have a name,
+- does not declare an observer,
+- does not declare any producer which is eligible for injection to any injection point,
+- is not directly eligible for injection into any `javax.enterprise.inject.Instance` injection point</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>all</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.auto-inject-fields"></a><code><a href="#quarkus-arc_quarkus.arc.auto-inject-fields">quarkus.arc.auto-inject-fields</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true <code>@Inject</code> is automatically added to all non-static fields that are annotated with one of the annotations defined by <code>AutoInjectAnnotationBuildItem</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods"></a><code><a href="#quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods">quarkus.arc.remove-final-for-proxyable-methods</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true, Arc will transform the bytecode of beans containing methods that need to be proxyable but have been declared as final. The transformation is simply a matter of removing final. This ensures that a proxy can be created properly. If the value is set to false, then an exception is thrown at build time indicating that a proxy could not be created because a method was final.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.config-properties-default-naming-strategy"></a><code><a href="#quarkus-arc_quarkus.arc.config-properties-default-naming-strategy">quarkus.arc.config-properties-default-naming-strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The default naming strategy for <code>ConfigProperties.NamingStrategy</code>. The allowed values are determined by that enum</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>from-config</code>, <code>verbatim</code>, <code>kebab-case</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>kebab-case</code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
     </div>

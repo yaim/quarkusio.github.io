@@ -352,7 +352,7 @@ Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a stan
 based on the common security annotations <code>@RolesAllowed</code>, <code>@DenyAll</code>, <code>@PermitAll</code> on REST endpoints and CDI beans.
 An example of an endpoint that makes use of both JAX-RS and Common Security annotations to describe and secure its endpoints is given in <a href="#subject-example">SubjectExposingResource Example</a>. Quarkus also provides
 the <code>io.quarkus.security.Authenticated</code> annotation that will permit any authenticated user to access the resource
-(equivalent to <code>@RolesAllowed("*")</code>).</p>
+(equivalent to <code>@RolesAllowed("**")</code>).</p>
 </div>
 <div id="subject-example" class="listingblock">
 <div class="title">SubjectExposingResource Example</div>

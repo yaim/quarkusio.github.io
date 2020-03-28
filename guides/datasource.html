@@ -265,10 +265,11 @@ It all depends on how you configure it and which extensions you added to your pr
 </ul>
 </div>
 <div class="paragraph">
-<p>Note that these database kinds only facilitate things.
-For instance, when we have a JDBC driver extension for a given kind,
-we resolve the JDBC driver to be used automatically, so you don&#8217;t need to configure it yourself.
-If you want to use a database kind that is not part of this list, just use <code>other</code> or whatever name you prefer.</p>
+<p>Giving Quarkus the database kind you are targeting will facilitate configuration.
+By using a JDBC driver extension and setting the kind in the configuration,
+Quarkus resolves the JDBC driver automatically,
+so you don&#8217;t need to configure it yourself.
+If you want to use a database kind that is not part of the built-in ones, use <code>other</code> and define the JDBC driver explicitly.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -278,10 +279,11 @@ If you want to use a database kind that is not part of this list, just use <code
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Although it is possible to use any JDBC driver in JVM mode, it is unlikely that it will work when compiling your application to a native executable.</p>
+<p>You can use any JDBC driver in a Quarkus app in JVM mode (see <a href="#other-databases">Using other databases</a>).
+It is unlikely that it will work when compiling your application to a native executable though.</p>
 </div>
 <div class="paragraph">
-<p>If you plan to do the latter, we recommend you to use the existing JDBC Quarkus extensions (or contribute one for your driver).</p>
+<p>If you plan to make a native executable, we recommend you use the existing JDBC Quarkus extensions (or contribute one for your driver).</p>
 </div>
 </td>
 </tr>
@@ -367,6 +369,9 @@ you don&#8217;t need to add the Agroal extension dependency explicitly.</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>See <a href="#other-databases">Use a database with no built-in extension or with a different driver</a> if you want to use a JDBC driver for another database.</p>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -389,7 +394,7 @@ the extension does not support compiling the embedded database engine into nativ
 <p>As usual, you can install the extension using <code>add-extension</code>.</p>
 </div>
 <div class="paragraph">
-<p>To install the PostgreSQL driver dependency for instance, just run the following command:</p>
+<p>To install the PostgreSQL driver dependency for instance, run the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -501,16 +506,36 @@ you won&#8217;t need to configure the driver.</p>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect3">
+<h4 id="other-databases"><a class="anchor" href="#other-databases"></a>Use a database with no built-in extension or with a different driver</h4>
 <div class="paragraph">
-<p>Note that you can still define a specific driver if you need to (for instance for using the OpenTracing driver)
-or if you want to use a database for which we don&#8217;t have a built-in JDBC driver extension.</p>
+<p>You can use a specific driver if you need to (for instance for using the OpenTracing driver)
+or if you want to use a database for which Quarkus does not have a built-in JDBC driver extension.</p>
 </div>
 <div class="paragraph">
-<p>Defining a specific JDBC driver is as simple as:</p>
+<p>Without an extension, the driver will work fine in any Quarkus app running in JVM mode.
+It is unlikely that it will work when compiling your application to a native executable though.
+If you plan to make a native executable, we recommend you use the existing JDBC Quarkus extensions (or contribute one for your driver).</p>
+</div>
+<div class="paragraph">
+<p>Here is how you would use the OpenTracing driver:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.jdbc.driver=io.opentracing.contrib.jdbc.TracingDriver</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is how you would define access to a database with no built-in support (in JVM mode):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.db-kind=other
+quarkus.datasource.jdbc.driver=oracle.jdbc.driver.OracleDriver
+quarkus.datasource.jdbc.url=jdbc:oracle:thin:@192.168.1.12:1521/ORCL_SVC
+quarkus.datasource.username=scott
+quarkus.datasource.password=tiger</code></pre>
 </div>
 </div>
 </div>

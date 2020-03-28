@@ -69,7 +69,7 @@
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#container-image-extensions">Container Image extensions</a>
 <ul class="sectlevel2">
-<li><a href="#jib">JIB</a></li>
+<li><a href="#jib">Jib</a></li>
 <li><a href="#docker">Docker</a></li>
 <li><a href="#s2i">S2I</a></li>
 </ul>
@@ -79,7 +79,7 @@
 <li><a href="#customizing">Customizing</a>
 <ul class="sectlevel2">
 <li><a href="#container-image-options">Container Image Options</a></li>
-<li><a href="#jib-options">JIB Options</a></li>
+<li><a href="#jib-options">Jib Options</a></li>
 <li><a href="#docker-options">Docker Options</a></li>
 <li><a href="#s2i-options">S2I  Options</a></li>
 </ul>
@@ -94,7 +94,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p><a href="#jib">JIB</a></p>
+<p><a href="#jib">Jib</a></p>
 </li>
 <li>
 <p><a href="#docker">Docker</a></p>
@@ -110,7 +110,7 @@
 <h2 id="container-image-extensions"><a class="anchor" href="#container-image-extensions"></a>Container Image extensions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="jib"><a class="anchor" href="#jib"></a>JIB</h3>
+<h3 id="jib"><a class="anchor" href="#jib"></a>Jib</h3>
 <div class="paragraph">
 <p>The extension <code>quarkus-container-image-jib</code> is powered by <a href="https://github.com/GoogleContainerTools/jib">Jib</a> for performing container image builds.
 The major benefit of using Jib with Quarkus is that all the dependencies (everything found under <code>target/lib</code>) are cached in a different layer than the actual application making rebuilds really fast and small (when it comes to pushing).
@@ -161,7 +161,7 @@ show up when executing <code>docker images</code>.
 The idea behind the binary build is that you just upload the artifact and its dependencies to the cluster and during the build they will be merged to a builder image (defaults to <code>fabric8/s2i-java</code>).</p>
 </div>
 <div class="paragraph">
-<p>The benefit of this approach, is that it can be combined with OpenShift&#8217;s <code>DeploymentConfig</code> that makes it easy to rollout changes to the cluster.</p>
+<p>The benefit of this approach, is that it can be combined with OpenShift&#8217;s <code>DeploymentConfig</code> that makes it easy to roll out changes to the cluster.</p>
 </div>
 <div class="paragraph">
 <p>To use this feature, add the following extension to your project.</p>
@@ -369,7 +369,7 @@ If no registry is set (using <code>quarkus.container-image.registry</code>) then
 </table>
 </div>
 <div class="sect2">
-<h3 id="jib-options"><a class="anchor" href="#jib-options"></a>JIB Options</h3>
+<h3 id="jib-options"><a class="anchor" href="#jib-options"></a>Jib Options</h3>
 <div class="paragraph">
 <p>In addition to the generic container image options, the <code>container-image-jib</code> also provides the following options:</p>
 </div>

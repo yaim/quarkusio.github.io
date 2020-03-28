@@ -67,6 +67,7 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Class Loading Reference</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
+<li><a href="#reading-class-bytecode">Reading Class Bytecode</a></li>
 <li><a href="#bootstrapping-quarkus">Bootstrapping Quarkus</a>
 <ul class="sectlevel2">
 <li><a href="#current-run-modes">Current Run Modes</a></li>
@@ -98,6 +99,33 @@ a normal production Quarkus application.</p>
 <div class="paragraph">
 <p>For all other use cases (e.g. tests, dev mode, and building the application) Quarkus
 uses the class loading architecture outlined here.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reading-class-bytecode"><a class="anchor" href="#reading-class-bytecode"></a>Reading Class Bytecode</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Whenever class bytecode needs to be read, a <code>@BuildStep</code> where class reading is done must have the <code>loadsApplicationClasses</code> parameter set to <code>true</code>. Otherwise the class will not be found.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s also important to use the correct <code>ClassLoader</code>. The recommended approach is to get it by calling the
+<code>Thread.currentThread().getContextClassLoader()</code> method.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep(loadsApplicationClasses = true)
+GeneratedClassBuildItem instrument(final CombinedIndexBuildItem index) {
+    final String classname = "com.example.SomeClass";
+    final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+    final byte[] originalBytecode = IoUtil.readClassAsBytes(cl, classname);
+    final byte[] enhancedBytecode = ... // class instrumentation from originalBytecode
+    return new GeneratedClassBuildItem(true, classname, enhancedBytecode));
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
