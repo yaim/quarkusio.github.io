@@ -2115,6 +2115,20 @@ This configuration section is optional</p></th>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-container-image-jib_quarkus.jib.labels-labels"></a><code><a href="#quarkus-container-image-jib_quarkus.jib.labels-labels">quarkus.jib.labels</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Custom labels to add to the generated image</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-container-image-s2i_quarkus-container-image-s2i"></a><a href="#quarkus-container-image-s2i_quarkus-container-image-s2i">Container Image S2I</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -3645,7 +3659,7 @@ This configuration section is optional</p></th>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The the maximum length of all headers.</p>
+<p>The maximum length of all headers.</p>
 </div>
 </div>
 </div></div></td>
@@ -3660,6 +3674,20 @@ This configuration section is optional</p></th>
 <div class="content">
 <div class="paragraph">
 <p>The maximum size of a request body. Default: no limit.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http_quarkus.http.limits.max-chunk-size"></a><code><a href="#quarkus-vertx-http_quarkus.http.limits.max-chunk-size">quarkus.http.limits.max-chunk-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The max HTTP chunk size</p>
 </div>
 </div>
 </div></div></td>
@@ -8355,6 +8383,20 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes_quarkus.kubernetes.replicas"></a><code><a href="#quarkus-kubernetes_quarkus.kubernetes.replicas">quarkus.kubernetes.replicas</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The number of desired pods</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes_quarkus.kubernetes.service-type"></a><code><a href="#quarkus-kubernetes_quarkus.kubernetes.service-type">quarkus.kubernetes.service-type</a></code></p>
 </div>
 <div class="openblock description">
@@ -9926,6 +9968,20 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes_quarkus.openshift.replicas"></a><code><a href="#quarkus-kubernetes_quarkus.openshift.replicas">quarkus.openshift.replicas</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The number of desired pods</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -16554,6 +16610,20 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>prod</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.test.profile"></a><code><a href="#quarkus-core_quarkus.test.profile">quarkus.test.profile</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The profile to use when testing using @QuarkusTest</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>test</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
