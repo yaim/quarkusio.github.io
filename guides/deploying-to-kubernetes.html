@@ -233,7 +233,7 @@ For example, following the execution of <code>./mvnw package</code> you will not
               }
             } ],
             "image" : "yourDockerUsername/test-quarkus-app:1.0-SNAPSHOT",
-            "imagePullPolicy" : "IfNotPresent",
+            "imagePullPolicy" : "Always",
             "name" : "test-quarkus-app"
           } ]
         }
@@ -268,6 +268,16 @@ For example, following the execution of <code>./mvnw package</code> you will not
   }
  }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The generated manifest can be applied to kubernetes from the project root using <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">---
+kubectl apply -f target/kubernetes/kubernetes.json
+---</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -706,7 +716,7 @@ Here are some examples:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.kubernetes.image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.kubernetes.image-pull-secrets</p></td>
@@ -958,7 +968,7 @@ Below you will find tables describing all available types.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">liveness-probe</p></td>
@@ -1297,6 +1307,30 @@ Below you will find tables describing all available types.</p>
 <pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.deployment-target=kubernetes, openshift</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Following the execution of <code>./mvnw package</code> you will notice amongst the other files that are created, two files named
+<code>openshift.json</code> and <code>openshift.yml</code> in the <code>target/kubernetes/</code> directory.</p>
+</div>
+<div class="paragraph">
+<p>These manifests can be deployed as is to a running cluster, using kubectl:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">---
+kubectl apply -f target/kubernetes/openshift.json
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Openshift users might want to use <code>oc</code> instead of <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">---
+oc apply -f target/kubernetes/openshift.json
+---</code></pre>
+</div>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1470,7 +1504,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.openshift.image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.openshift.image-pull-secrets</p></td>
@@ -1557,7 +1591,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
             "spec" : {
               "container" : {
                 "image" : "dev.local/yourDockerUsername/test-quarkus-app:1.0-SNAPSHOT",
-                "imagePullPolicy" : "IfNotPresent"
+                "imagePullPolicy" : "Always"
               }
             }
           }
@@ -1566,6 +1600,16 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
     }
   }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The generated manifest can be deployed as is to a running cluster, using <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">---
+kubectl apply -f target/kubernetes/knative.json
+---</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1728,7 +1772,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.knative.image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.knative.image-pull-secrets</p></td>

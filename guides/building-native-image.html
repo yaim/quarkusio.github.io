@@ -619,6 +619,39 @@ EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Ubi?</div>
+<div class="paragraph">
+<p>The provided <code>Dockerfiles</code> use <a href="https://access.redhat.com/containers/?tab=overview#/registry.access.redhat.com/ubi8/ubi">UBI</a> (Universal Base Image) as parent image.
+This base image has been tailored to work perfectly in containers.
+The <code>Dockerfiles</code> use the <a href="https://access.redhat.com/containers/#/registry.access.redhat.com/ubi8/ubi-minimal"><em>minimal</em> version</a> of the base image to reduce the size of the produced image.</p>
+</div>
+<div class="paragraph">
+<p>You can read more about UBI on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://access.redhat.com/containers/?tab=overview#/registry.access.redhat.com/ubi8/ubi">the UBI image page</a></p>
+</li>
+<li>
+<p><a href="https://access.redhat.com/containers/#/registry.access.redhat.com/ubi8/ubi-minimal">the <em>UBI-minimal</em> image page</a></p>
+</li>
+<li>
+<p><a href="https://access.redhat.com/containers/?tab=tags#/registry.access.redhat.com/ubi8/ubi-minimal">the list of <em>UBI-minimal</em> tags</a></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Then, if you didn&#8217;t delete the generated native executable, you can build the docker image with:</p>
 </div>

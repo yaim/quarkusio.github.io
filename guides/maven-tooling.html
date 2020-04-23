@@ -833,12 +833,12 @@ These are provided in <code>application.properties</code> the same as any other 
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The entry point of the application. In most cases this should not be modified.</p>
+<p>The entry point of the application. This can either be a a fully qualified name of a standard Java class with a main method, or <code>io.quarkus.runtime.QuarkusApplication</code>. If your application has main classes annotated with <code>io.quarkus.runtime.annotations.QuarkusMain</code> then this can also reference the name given in the annotation, to avoid the need to specify fully qualified names in the config.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>io.quarkus.runner.GeneratedMain</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -895,6 +895,20 @@ These are provided in <code>application.properties</code> the same as any other 
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-package-pkg-package-config_quarkus.package.manifest.manifest-sections-manifest-sections"></a><code><a href="#quarkus-package-pkg-package-config_quarkus.package.manifest.manifest-sections-manifest-sections">quarkus.package.manifest.manifest-sections</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Custom manifest sections to be added to the MANIFEST.MF file. An example of the user defined property: quarkus.package.manifest.manifest-sections.{Section-Name}.{Entry-Key1}={Value1} quarkus.package.manifest.manifest-sections.{Section-Name}.{Entry-Key2}={Value2}</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,Map&lt;String,String&gt;&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 </tbody>
 </table>

@@ -78,7 +78,12 @@
 </li>
 <li><a href="#injection-into-tests">5. Injection into tests</a></li>
 <li><a href="#applying-interceptors-to-tests">6. Applying Interceptors to Tests</a></li>
-<li><a href="#mock-support">7. Mock Support</a></li>
+<li><a href="#mock-support">7. Mock Support</a>
+<ul class="sectlevel2">
+<li><a href="#cdi-alternative-mechanism">7.1. CDI <code>@Alternative</code> mechanism.</a></li>
+<li><a href="#mocking-using-quarkusmock">7.2. Mocking using QuarkusMock</a></li>
+</ul>
+</li>
 <li><a href="#test-bootstrap-configuration-options">8. Test Bootstrap Configuration Options</a></li>
 <li><a href="#native-executable-testing">9. Native Executable Testing</a></li>
 </ul></div>
@@ -274,6 +279,9 @@ tests while having the application running in parallel.</p>
 <pre class="highlightjs highlight"><code class="language-none hljs">quarkus.http.test-port=8083</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><code>0</code> will result in the use of a random port (assigned by the operating system).</p>
+</div>
 </td>
 </tr>
 </table>
@@ -459,8 +467,13 @@ public class TestStereotypeTestCase {
 <h2 id="mock-support"><a class="anchor" href="#mock-support"></a>7. Mock Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus supports the use of mock objects using the CDI <code>@Alternative</code> mechanism.
-To use this simply override the bean you wish to mock with a class in the <code>src/test/java</code> directory, and put the <code>@Alternative</code> and <code>@Priority(1)</code> annotations on the bean.
+<p>Quarkus supports the use of mock objects using two different approaches. You can either use CDI alternatives to
+mock out a bean for all test classes, or use <code>QuarkusMock</code> to mock out beans on a per test basis.</p>
+</div>
+<div class="sect2">
+<h3 id="cdi-alternative-mechanism"><a class="anchor" href="#cdi-alternative-mechanism"></a>7.1. CDI <code>@Alternative</code> mechanism.</h3>
+<div class="paragraph">
+<p>To use this simply override the bean you wish to mock with a class in the <code>src/test/java</code> directory, and put the <code>@Alternative</code> and <code>@Priority(1)</code> annotations on the bean.
 Alternatively, a convenient <code>io.quarkus.test.Mock</code> stereotype annotation could be used.
 This built-in stereotype declares <code>@Alternative</code>, <code>@Priority(1)</code> and <code>@Dependent</code>.
 For example if I have the following service:</p>
@@ -508,6 +521,281 @@ it will take effect all the time, not just when testing.</p>
 <div class="paragraph">
 <p>Note that at present this approach does not work with native image testing, as this would required the test alternatives
 to be baked into the native image.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mocking-using-quarkusmock"><a class="anchor" href="#mocking-using-quarkusmock"></a>7.2. Mocking using QuarkusMock</h3>
+<div class="paragraph">
+<p>The <code>io.quarkus.test.junit.QuarkusMock</code> class can be used to temporarily mock out any normal scoped
+bean. If you use this method in a <code>@BeforeAll</code> method the mock will take effect for all tests on the current class,
+while if you use this in a test method the mock will only take effect for the duration of the current test.</p>
+</div>
+<div class="paragraph">
+<p>This method can be used for any normal scoped CDI bean (e.g. <code>@ApplicationScoped</code>, <code>@RequestScoped</code> etc, basically
+every scope except <code>@Singleton</code> and <code>@Dependent</code>).</p>
+</div>
+<div class="paragraph">
+<p>An example usage could look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class MockTestCase {
+
+    @Inject
+    MockableBean1 mockableBean1;
+
+    @Inject
+    MockableBean2 mockableBean2;
+
+    @BeforeAll
+    public static void setup() {
+        MockableBean1 mock = Mockito.mock(MockableBean1.class);
+        Mockito.when(mock.greet("Stuart")).thenReturn("A mock for Stuart");
+        QuarkusMock.installMockForType(mock, MockableBean1.class);  <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    @Test
+    public void testBeforeAll() {
+        Assertions.assertEquals("A mock for Stuart", mockableBean1.greet("Stuart"));
+        Assertions.assertEquals("Hello Stuart", mockableBean2.greet("Stuart"));
+    }
+
+    @Test
+    public void testPerTestMock() {
+        QuarkusMock.installMockForInstance(new BonourGreeter(), mockableBean2); <i class="conum" data-value="2"></i><b>(2)</b>
+        Assertions.assertEquals("A mock for Stuart", mockableBean1.greet("Stuart"));
+        Assertions.assertEquals("Bonjour Stuart", mockableBean2.greet("Stuart"));
+    }
+
+    @ApplicationScoped
+    public static class MockableBean1 {
+
+        public String greet(String name) {
+            return "Hello " + name;
+        }
+    }
+
+    @ApplicationScoped
+    public static class MockableBean2 {
+
+        public String greet(String name) {
+            return "Hello " + name;
+        }
+    }
+
+    public static class BonourGreeter extends MockableBean2 {
+        @Override
+        public String greet(String name) {
+            return "Bonjour " + name;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>As the injected instance is not available here we use <code>installMockForType</code>, this mock is used for both test methods</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We use <code>installMockForInstance</code> to replace the injected bean, this takes effect for the duration of the test method.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note that there is no dependency on Mockito, you can use any mocking library you like, or even manually override the
+objects to provide the behaviour you require.</p>
+</div>
+<div class="sect3">
+<h4 id="further-simplification-with-injectmock"><a class="anchor" href="#further-simplification-with-injectmock"></a>7.2.1. Further simplification with <code>@InjectMock</code></h4>
+<div class="paragraph">
+<p>Building on the features provided by <code>QuarkusMock</code>, Quarkus also allows users to effortlessly take advantage of <a href="https://site.mockito.org/">Mockito</a> for mocking the beans supported by <code>QuarkusMock</code>.
+This functionality is available via the <code>@io.quarkus.test.junit.mockito.InjectMock</code> annotation which is available in the <code>quarkus-junit5-mockito</code> dependency.</p>
+</div>
+<div class="paragraph">
+<p>Using <code>@InjectMock</code>, the previous example could be written as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class MockTestCase {
+
+    @InjectMock
+    MockableBean1 mockableBean1; <i class="conum" data-value="1"></i><b>(1)</b>
+
+    @InjectMock
+    MockableBean2 mockableBean2;
+
+    @BeforeEach
+    public void setup() {
+        Mockito.when(mockableBean1.greet("Stuart")).thenReturn("A mock for Stuart"); <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+
+    @Test
+    public void firstTest() {
+        Assertions.assertEquals("A mock for Stuart", mockableBean1.greet("Stuart"));
+        Assertions.assertEquals(null, mockableBean2.greet("Stuart")); <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+
+    @Test
+    public void secondTest() {
+        Mockito.when(mockableBean2.greet("Stuart")).thenReturn("Bonjour Stuart"); <i class="conum" data-value="4"></i><b>(4)</b>
+        Assertions.assertEquals("A mock for Stuart", mockableBean1.greet("Stuart"));
+        Assertions.assertEquals("Bonjour Stuart", mockableBean2.greet("Stuart"));
+    }
+
+    @ApplicationScoped
+    public static class MockableBean1 {
+
+        public String greet(String name) {
+            return "Hello " + name;
+        }
+    }
+
+    @ApplicationScoped
+    public static class MockableBean2 {
+
+        public String greet(String name) {
+            return "Hello " + name;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>@InjectMock</code> results in a mock being and is available in test methods of the test class (other test classes are <strong>not</strong> affected by this)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>mockableBean1</code> is configured here for every test method of the class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Since the <code>mockableBean2</code> mock has not been configured, it will return the default Mockito response.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>In this test the <code>mockableBean2</code> is configured, so it returns the configured response.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Although the test above is good for showing the capabilities of <code>@InjectMock</code>, it is not a good representation of a real test. In a real test
+we would most likely configure a mock, but then test a bean that uses the mocked bean.
+Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class MockGreetingServiceTest {
+
+    @InjectMock
+    GreetingService greetingService;
+
+    @Test
+    public void testGreeting() {
+        when(greetingService.greet()).thenReturn("hi");
+        given()
+                .when().get("/greeting")
+                .then()
+                .statusCode(200)
+                .body(is("hi")); <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    @Path("greeting")
+    public static class GreetingResource {
+
+        final GreetingService greetingService;
+
+        public GreetingResource(GreetingService greetingService) {
+            this.greetingService = greetingService;
+        }
+
+        @GET
+        @Produces("text/plain")
+        public String greet() {
+            return greetingService.greet();
+        }
+    }
+
+    @ApplicationScoped
+    public static class GreetingService {
+        public String greet(){
+            return "hello";
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Since we configured <code>greetingService</code> as a mock, the <code>GreetingResource</code> which uses the <code>GreetingService</code> bean, we get the mocked response instead of the response of the regular <code>GreetingService</code> bean</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-injectmock-with-restclient"><a class="anchor" href="#using-injectmock-with-restclient"></a>7.2.2. Using <code>@InjectMock</code> with <code>@RestClient</code></h4>
+<div class="paragraph">
+<p>The <code>@RegisterRestClient</code> registers the implementation of the rest-client at runtime, and because the bean needs to be a regular scope, you have to annotate your interface with <code>@ApplicationScoped</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/")
+@ApplicationScoped
+@RegisterRestClient
+public interface GreetingService {
+
+    @GET
+    @Path("/hello")
+    @Produces(MediaType.TEXT_PLAIN)
+    String hello();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the test class here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class GreetingResourceTest {
+
+    @InjectMock
+    @RestClient <i class="conum" data-value="1"></i><b>(1)</b>
+    GreetingService greetingService;
+
+    @Test
+    public void testHelloEndpoint() {
+        Mockito.when(greetingService.hello()).thenReturn("hello from mockito");
+
+        given()
+          .when().get("/hello")
+          .then()
+             .statusCode(200)
+             .body(is("hello from mockito"));
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Indicate that this injection point is meant to use an instance of <code>RestClient</code>.</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>

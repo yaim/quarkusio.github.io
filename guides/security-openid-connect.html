@@ -553,7 +553,7 @@ public class AdminResource {
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -586,6 +586,91 @@ public class AdminResource {
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.secret">quarkus.oidc.credentials.jwt.secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan">quarkus.oidc.credentials.jwt.lifespan</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.host">quarkus.oidc.proxy.host</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The host (name or IP address) of the Proxy.
+ Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.port">quarkus.oidc.proxy.port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The port number of the Proxy. Default value is 80.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.username">quarkus.oidc.proxy.username</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The username, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.password">quarkus.oidc.proxy.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The password, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -643,6 +728,20 @@ public class AdminResource {
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.tls.verification">quarkus.oidc.tls.verification</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -881,7 +980,7 @@ public class AdminResource {
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -914,6 +1013,91 @@ public class AdminResource {
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret">quarkus.oidc."tenant".credentials.jwt.secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan">quarkus.oidc."tenant".credentials.jwt.lifespan</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.host">quarkus.oidc."tenant".proxy.host</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The host (name or IP address) of the Proxy.
+ Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.port">quarkus.oidc."tenant".proxy.port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The port number of the Proxy. Default value is 80.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.username">quarkus.oidc."tenant".proxy.username</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The username, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.password">quarkus.oidc."tenant".proxy.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The password, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -986,6 +1170,20 @@ public class AdminResource {
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.tls.verification">quarkus.oidc."tenant".tls.verification</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
+</tr>
 </tbody>
 </table>
 <div id="duration-note-anchor" class="admonitionblock note">
@@ -1046,6 +1244,19 @@ quarkus.oidc.client-id=backend-service</code></pre>
 </div>
 <div class="paragraph">
 <p>Import the <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/security-openid-connect-quickstart/config/quarkus-realm.json">realm configuration file</a> to create a new realm. For more details, see the Keycloak documentation about how to <a href="https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm">create a new realm</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you want to use the Keycloak Admin Client to configure your server from your application you need to include the
+<code>quarkus-keycloak-admin-client</code> extension.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

@@ -235,11 +235,23 @@ cd hibernate-search-elasticsearch-quickstart</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This command generates a Maven structure importing the following extensions:
- * Hibernate ORM with Panache,
- * the PostgreSQL JDBC driver,
- * Hibernate Search + Elasticsearch,
- * RESTEasy and JSON-B.</p>
+<p>This command generates a Maven structure importing the following extensions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Hibernate ORM with Panache,</p>
+</li>
+<li>
+<p>the PostgreSQL JDBC driver,</p>
+</li>
+<li>
+<p>Hibernate Search + Elasticsearch,</p>
+</li>
+<li>
+<p>RESTEasy and JSON-B.</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -837,7 +849,7 @@ Feel free to explore the DSL using autocompletion.</p>
 </div>
 <div class="paragraph">
 <p>When that&#8217;s not enough, you can always fall back to
-[defining a predicate using JSON directly](<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json" class="bare">https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json</a>).</p>
+<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json">defining a predicate using JSON directly</a>.</p>
 </div>
 </td>
 </tr>
@@ -868,8 +880,8 @@ quarkus.hibernate-orm.sql-load-script=import.sql <i class="conum" data-value="4"
 
 quarkus.hibernate-search.elasticsearch.version=7 <i class="conum" data-value="5"></i><b>(5)</b>
 quarkus.hibernate-search.elasticsearch.analysis.configurer=org.acme.hibernate.search.elasticsearch.config.AnalysisConfigurer <i class="conum" data-value="6"></i><b>(6)</b>
-quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy=drop-and-create <i class="conum" data-value="7"></i><b>(7)</b>
-quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status=yellow <i class="conum" data-value="8"></i><b>(8)</b>
+quarkus.hibernate-search.schema-management.strategy=drop-and-create <i class="conum" data-value="7"></i><b>(7)</b>
+quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status=yellow <i class="conum" data-value="8"></i><b>(8)</b>
 quarkus.hibernate-search.automatic-indexing.synchronization.strategy=sync <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
 </div>
 </div>
@@ -907,7 +919,7 @@ Since the mapping is created at build time to reduce startup time, Hibernate Sea
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>We consider the <code>yellow</code> status is sufficient to connect to the Elasticsearch cluster.
+<td>We consider the <code>yellow</code> status is sufficient to proceed after an index is created.
 This is for testing purposes with the Elasticsearch Docker container.
 It should not be used in production.</td>
 </tr>
@@ -955,8 +967,8 @@ In the <code>src/main/resources/META-INF/resources</code> directory, overwrite t
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="sql" class="language-sql hljs">INSERT INTO author(id, firstname, lastname) VALUES (nextval('hibernate_sequence'), 'John', 'Irving')
-INSERT INTO author(id, firstname, lastname) VALUES (nextval('hibernate_sequence'), 'Paul', 'Auster')
+<pre class="highlightjs highlight"><code data-lang="sql" class="language-sql hljs">INSERT INTO author(id, firstname, lastname) VALUES (nextval('hibernate_sequence'), 'John', 'Irving');
+INSERT INTO author(id, firstname, lastname) VALUES (nextval('hibernate_sequence'), 'Paul', 'Auster');
 
 INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), 'The World According to Garp', 1);
 INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), 'The Hotel New Hampshire', 1);
@@ -986,7 +998,7 @@ INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), '4
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.5.0</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.6.1</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1155,6 +1167,20 @@ Thus we focused our efforts on it.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">class name</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.schema-management.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.schema-management.strategy">quarkus.hibernate-search.schema-management.strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The strategy used for index lifecycle.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>create</code>, <code>create-or-validate</code>, <code>create-or-update</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create-or-validate</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1424,21 +1450,24 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.thread-pool.size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.thread-pool.size">quarkus.hibernate-search.elasticsearch.thread-pool.size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The strategy used for index lifecycle.</p>
+<p>The size of the thread pool assigned to the backend.
+ Note that number is <strong>per backend</strong>, not per index. Adding more indexes will not add more threads.
+ As all operations happening in this thread-pool are non-blocking, raising its size above the number of processor cores available to the JVM will not bring noticeable performance benefit. The only reason to alter this setting would be to reduce the number of threads; for example, in an application with a single index with a single indexing queue, running on a machine with 64 processor cores, you might want to bring down the number of threads.
+ Defaults to the number of processor cores available to the JVM on startup.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status">quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1452,7 +1481,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1467,21 +1496,53 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-count">quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-count</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The strategy used for index lifecycle.</p>
+<p>The number of indexing queues assigned to each index.
+ Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-size">quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The size of indexing queues.
+ Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.index-defaults.indexing.max-bulk-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum size of bulk requests created when processing indexing queues.
+ Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
+ Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status">quarkus.hibernate-search.elasticsearch.indexes."index-name".schema-management.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1495,7 +1556,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.indexes."index-name".schema-management.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1507,6 +1568,52 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-count">quarkus.hibernate-search.elasticsearch.indexes."index-name".indexing.queue-count</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The number of indexing queues assigned to each index.
+ Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-size">quarkus.hibernate-search.elasticsearch.indexes."index-name".indexing.queue-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The size of indexing queues.
+ Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.indexes."index-name".indexing.max-bulk-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum size of bulk requests created when processing indexing queues.
+ Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
+ Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.additional-backends"></a><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.additional-backends">Additional backends</a></p></th>
@@ -1688,21 +1795,24 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.thread-pool.size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.thread-pool.size">quarkus.hibernate-search.elasticsearch.backends."backend-name".thread-pool.size</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The strategy used for index lifecycle.</p>
+<p>The size of the thread pool assigned to the backend.
+ Note that number is <strong>per backend</strong>, not per index. Adding more indexes will not add more threads.
+ As all operations happening in this thread-pool are non-blocking, raising its size above the number of processor cores available to the JVM will not bring noticeable performance benefit. The only reason to alter this setting would be to reduce the number of threads; for example, in an application with a single index with a single indexing queue, running on a machine with 64 processor cores, you might want to bring down the number of threads.
+ Defaults to the number of processor cores available to the JVM on startup.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.schema-management.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1716,7 +1826,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.schema-management.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1731,21 +1841,53 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.strategy</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-count">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.indexing.queue-count</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The strategy used for index lifecycle.</p>
+<p>The number of indexing queues assigned to each index.
+ Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.indexing.queue-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The size of indexing queues.
+ Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.indexing.max-bulk-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum size of bulk requests created when processing indexing queues.
+ Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
+ Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".schema-management.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1759,7 +1901,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".schema-management.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -1771,6 +1913,52 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-count">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".indexing.queue-count</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The number of indexing queues assigned to each index.
+ Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".indexing.queue-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The size of indexing queues.
+ Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".indexing.max-bulk-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum size of bulk requests created when processing indexing queues.
+ Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
+ Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
 </tr>
 </tbody>
 </table>

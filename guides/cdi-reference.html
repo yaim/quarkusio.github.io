@@ -83,6 +83,9 @@
 <li><a href="#simplified-constructor-injection">5.4. Simplified Constructor Injection</a></li>
 <li><a href="#remove_unused_beans">5.5. Removing Unused Beans</a></li>
 <li><a href="#default_beans">5.6. Default Beans</a></li>
+<li><a href="#enabling-beans-for-quarkus-build-profile">5.7. Enabling Beans for Quarkus Build Profile</a></li>
+<li><a href="#declaring-selected-alternatives">5.8. Declaring Selected Alternatives</a></li>
+<li><a href="#simplified-producer-method-declaration">5.9. Simplified Producer Method Declaration</a></li>
 </ul>
 </li>
 <li><a href="#build-time-extension-points">6. Build Time Extension Points</a>
@@ -552,6 +555,33 @@ class MyBeanStarter {
 </table>
 </div>
 </li>
+<li>
+<p>Annotate the bean with <code>@io.quarkus.runtime.Startup</code> as described in <a href="lifecycle#startup_annotation">Startup annotation</a>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Startup <i class="conum" data-value="1"></i><b>(1)</b>
+@ApplicationScoped
+public class EagerAppBean {
+
+   private final String name;
+
+   EagerAppBean(NameGenerator generator) { <i class="conum" data-value="2"></i><b>(2)</b>
+     this.name = generator.createName();
+   }
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>For each bean annotated with <code>@Startup</code> a synthetic observer of <code>StartupEvent</code> is generated. The default priority is used.</p>
+</li>
+<li>
+<p>The bean constructor is called when the application starts and the resulting contextual instance is stored in the application context.</p>
+</li>
+</ol>
+</div>
+</li>
 </ul>
 </div>
 <div class="admonitionblock note">
@@ -606,7 +636,7 @@ An event with qualifier <code>@Initialized(RequestScoped.class)</code> is fired 
 <div class="sect2">
 <h3 id="qualified-injected-fields"><a class="anchor" href="#qualified-injected-fields"></a>5.3. Qualified Injected Fields</h3>
 <div class="paragraph">
-<p>In CDI, if you declare a field injection point you need to use <code>@Inject</code> and optionally a set of qualifiers:</p>
+<p>In CDI, if you declare a field injection point you need to use <code>@Inject</code> and optionally a set of qualifiers.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -616,7 +646,7 @@ An event with qualifier <code>@Initialized(RequestScoped.class)</code> is fired 
 </div>
 </div>
 <div class="paragraph">
-<p>In Quarkus, you can skip the <code>@Inject</code> annotation completely if an injected field declares at least one qualifier:</p>
+<p>In Quarkus, you can skip the <code>@Inject</code> annotation completely if the injected field declares at least one qualifier.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -801,6 +831,164 @@ public class CustomTracerConfiguration {
 <div class="paragraph">
 <p><code>@DefaultBean</code> allows extensions (or any other code for that matter) to provide defaults while backing off if beans of that type are supplied in any
 way Quarkus supports.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="enabling-beans-for-quarkus-build-profile"><a class="anchor" href="#enabling-beans-for-quarkus-build-profile"></a>5.7. Enabling Beans for Quarkus Build Profile</h3>
+<div class="paragraph">
+<p>Quarkus adds a capability that CDI currently does not support which is to conditionally enable a bean when a Quarkus build time profile is enabled,
+via the <code>@io.quarkus.arc.profile.IfBuildProfile</code> and <code>@io.quarkus.arc.profile.UnlessBuildProfile</code> annotations.
+When used in conjunction with <code>@io.quarkus.arc.DefaultBean</code>, these annotations allow for the creation of different bean configurations for different build profiles.</p>
+</div>
+<div class="paragraph">
+<p>Imagine for instance that an application contains a bean named <code>Tracer</code>, which needs to be do nothing when in tests or dev-mode, but work in its normal capacity for the production artifact.
+An elegant way to create such beans is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Dependent
+public class TracerConfiguration {
+
+    @Produces
+    @IfBuildProfile("prod")
+    public Tracer realTracer(Reporter reporter, Configuration configuration) {
+        return new RealTracer(reporter, configuration);
+    }
+
+    @Produces
+    @DefaultBean
+    public Tracer noopTracer() {
+        return new NoopTracer();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If instead, it is required that the <code>Tracer</code> bean also work in dev-mode and only default to doing nothing for tests, then <code>@UnlessBuildProfile</code> would be ideal. The code would look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Dependent
+public class TracerConfiguration {
+
+    @Produces
+    @DefaultBean
+    public Tracer realTracer(Reporter reporter, Configuration configuration) {
+        return new RealTracer(reporter, configuration);
+    }
+
+    @Produces
+    @UnlessBuildProfile("prod") // this will be enabled for both test and dev build time profiles
+    public Tracer noopTracer() {
+        return new NoopTracer();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The runtime profile has absolutely no effect on the bean resolution using <code>@IfBuildProfile</code> and <code>@UnlessBuildProfile</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="declaring-selected-alternatives"><a class="anchor" href="#declaring-selected-alternatives"></a>5.8. Declaring Selected Alternatives</h3>
+<div class="paragraph">
+<p>In CDI, an alternative bean may be selected either globally for an application by means of <code>@Priority</code>, or for a bean archive using a <code>beans.xml</code> descriptor.
+Quarkus has a simplified bean discovery and the content of <code>beans.xml</code> is ignored.</p>
+</div>
+<div class="paragraph">
+<p>The disadvantage of <code>@Priority</code> is that it has <code>@Target({ TYPE, PARAMETER })</code> and so it cannot be used for producer methods and fields.
+To address this problem and to simplify the code Quarkus provides the <code>io.quarkus.arc.AlternativePriority</code> annotation.
+It&#8217;s basically a shortcut for <code>@Alternative</code> plus <code>@Priority</code>.
+Additionally, it can be used for producers.</p>
+</div>
+<div class="paragraph">
+<p>However, it is also possible to select alternatives for an application using the unified configuration.
+The <code>quarkus.arc.selected-alternatives</code> property accepts a list of string values that are used to match alternative beans.
+If any value matches then the priority of <code>Integer#MAX_VALUE</code> is used for the relevant bean.
+The priority declared via <code>@Priority</code> or <code>@AlternativePriority</code> is overridden.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Value Examples</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.Foo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match the fully qualified name of the bean class or the bean class of the bean that declares the producer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match beans where the package of the bean class is <code>org.acme</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.**</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match beans where the package of the bean class starts with <code>org.acme</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Bar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match the simple name of the bean class or the bean class of the bean that declares the producer</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">Example application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.arc.selected-alternatives=org.acme.Foo,org.acme.*,Bar</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="simplified-producer-method-declaration"><a class="anchor" href="#simplified-producer-method-declaration"></a>5.9. Simplified Producer Method Declaration</h3>
+<div class="paragraph">
+<p>In CDI, a producer method must be always annotated with <code>@Produces</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">class Producers {
+
+  @Inject
+  @ConfigProperty(name = "cool")
+  String coolProperty;
+
+  @Produces
+  @ApplicationScoped
+  MyService produceService() {
+    return new MyService(coolProperty);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Quarkus, you can skip the <code>@Produces</code> annotation completely if the producer method is annotated with a scope annotation, a stereotype or a qualifier.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">class Producers {
+
+  @ConfigProperty(name = "cool")
+  String coolProperty;
+
+  @ApplicationScoped
+  MyService produceService() {
+    return new MyService(coolProperty);
+  }
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1411,22 +1599,32 @@ Here is a summary of which extensions can access which metadata:</p>
 <p>If set to <code>all</code> (or <code>true</code>) the container will attempt to remove all unused beans.</p>
 </li>
 <li>
-<p>If set to none (or <code>false</code>) no beans will ever be removed even if they are unused (according to the criteria set out below)</p>
+<p>If set to <code>none</code> (or <code>false</code>) no beans will ever be removed even if they are unused (according to the criteria set out below)</p>
 </li>
 <li>
-<p>If set to <code>fwk</code>, then all unused beans will be removed, except the unused beans whose classes are declared in the application code</p>
-<div class="literalblock">
-<div class="content">
-<pre>An unused bean:
-- is not a built-in bean or interceptor,
-- is not eligible for injection to any injection point,
-- is not excluded by any extension,
-- does not have a name,
-- does not declare an observer,
-- does not declare any producer which is eligible for injection to any injection point,
-- is not directly eligible for injection into any `javax.enterprise.inject.Instance` injection point</pre>
-</div>
-</div>
+<p>If set to <code>fwk</code>, then all unused beans will be removed, except the unused beans whose classes are declared in the application code
+An unused bean:</p>
+</li>
+<li>
+<p>is not a built-in bean or interceptor,</p>
+</li>
+<li>
+<p>is not eligible for injection to any injection point,</p>
+</li>
+<li>
+<p>is not excluded by any extension,</p>
+</li>
+<li>
+<p>does not have a name,</p>
+</li>
+<li>
+<p>does not declare an observer,</p>
+</li>
+<li>
+<p>does not declare any producer which is eligible for injection to any injection point,</p>
+</li>
+<li>
+<p>is not directly eligible for injection into any <code>javax.enterprise.inject.Instance</code> injection point</p>
 </li>
 </ul>
 </div>
@@ -1451,12 +1649,12 @@ Here is a summary of which extensions can access which metadata:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods"></a><code><a href="#quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods">quarkus.arc.remove-final-for-proxyable-methods</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.transform-unproxyable-classes"></a><code><a href="#quarkus-arc_quarkus.arc.transform-unproxyable-classes">quarkus.arc.transform-unproxyable-classes</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If set to true, Arc will transform the bytecode of beans containing methods that need to be proxyable but have been declared as final. The transformation is simply a matter of removing final. This ensures that a proxy can be created properly. If the value is set to false, then an exception is thrown at build time indicating that a proxy could not be created because a method was final.</p>
+<p>If set to true, the bytecode of unproxyable beans will be transformed. This ensures that a proxy/subclass can be created properly. If the value is set to false, then an exception is thrown at build time indicating that a subclass/proxy could not be created.</p>
 </div>
 </div>
 </div></div></td>
@@ -1476,6 +1674,39 @@ Here is a summary of which extensions can access which metadata:</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>from-config</code>, <code>verbatim</code>, <code>kebab-case</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>kebab-case</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.selected-alternatives"></a><code><a href="#quarkus-arc_quarkus.arc.selected-alternatives">quarkus.arc.selected-alternatives</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The list of selected alternatives for an application.
+ An element value can be:
+ - a fully qualified class name, i.e. <code>org.acme.Foo</code>
+ - a simple class name as defined by <code>Class#getSimpleName()</code>, i.e. <code>Foo</code>
+ - a package name with suffix <code>.<strong></code>, i.e. <code>org.acme.</strong></code>, matches a package
+ - a package name with suffix <code>.<strong></code>, i.e. <code>org.acme.</strong></code>, matches a package that starts with the value  Each element value is used to match an alternative bean class, an alternative stereotype annotation type or a bean class that declares an alternative producer. If any value matches then the priority of <code>Integer#MAX_VALUE</code> is used for the relevant bean. The priority declared via <code>javax.annotation.Priority</code> or <code>io.quarkus.arc.AlternativePriority</code> is overriden.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.auto-producer-methods"></a><code><a href="#quarkus-arc_quarkus.arc.auto-producer-methods">quarkus.arc.auto-producer-methods</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true then <code>javax.enterprise.inject.Produces</code> is automatically added to all methods that are annotated with a scope annotation, a stereotype or a qualifier, and are not annotated with <code>Inject</code> or <code>Produces</code>, and no parameter is annotated with <code>Disposes</code>, <code>Observes</code> or <code>ObservesAsync</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 </tbody>
 </table>

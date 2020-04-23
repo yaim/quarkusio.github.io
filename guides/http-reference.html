@@ -77,13 +77,14 @@
 <li><a href="#disable-the-http-port">3.4. Disable the HTTP port</a></li>
 </ul>
 </li>
-<li><a href="#cors-filter">4. CORS filter</a></li>
-<li><a href="#http-limits-configuration">5. HTTP Limits Configuration</a></li>
-<li><a href="#servlet-config">6. Servlet Config</a>
+<li><a href="#http2-support">4. HTTP/2 Support</a></li>
+<li><a href="#cors-filter">5. CORS filter</a></li>
+<li><a href="#http-limits-configuration">6. HTTP Limits Configuration</a></li>
+<li><a href="#servlet-config">7. Servlet Config</a>
 <ul class="sectlevel2">
-<li><a href="#undertow-handlers-conf">6.1. undertow-handlers.conf</a></li>
-<li><a href="#configuring-http-access-logs">6.2. Configuring HTTP Access Logs</a></li>
-<li><a href="#web-xml">6.3. web.xml</a></li>
+<li><a href="#undertow-handlers-conf">7.1. undertow-handlers.conf</a></li>
+<li><a href="#configuring-http-access-logs">7.2. Configuring HTTP Access Logs</a></li>
+<li><a href="#web-xml">7.3. web.xml</a></li>
 </ul>
 </li>
 </ul></div>
@@ -259,7 +260,25 @@ if you use <code>redirect</code> or <code>disabled</code> and have not added a S
 </div>
 </div>
 <div class="sect1">
-<h2 id="cors-filter"><a class="anchor" href="#cors-filter"></a>4. CORS filter</h2>
+<h2 id="http2-support"><a class="anchor" href="#http2-support"></a>4. HTTP/2 Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>HTTP/2 is enabled by default, and will be used by browsers if SSL is in use on JDK11 or higher. JDK8 does not support
+ALPN so cannot be used to run HTTP/2 over SSL. Even if SSL is not in use HTTP/2 via cleartext upgrade is supported,
+and may be used by non-browser clients.</p>
+</div>
+<div class="paragraph">
+<p>If you want to disable HTTP/2 you can set:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.http2=false</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cors-filter"><a class="anchor" href="#cors-filter"></a>5. CORS filter</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> (CORS) is a mechanism that
@@ -360,7 +379,7 @@ quarkus.http.cors.access-control-max-age=24H</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="http-limits-configuration"><a class="anchor" href="#http-limits-configuration"></a>5. HTTP Limits Configuration</h2>
+<h2 id="http-limits-configuration"><a class="anchor" href="#http-limits-configuration"></a>6. HTTP Limits Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The following properties are supported.</p>
@@ -419,7 +438,7 @@ If no unit suffix is given, bytes are assumed.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="servlet-config"><a class="anchor" href="#servlet-config"></a>6. Servlet Config</h2>
+<h2 id="servlet-config"><a class="anchor" href="#servlet-config"></a>7. Servlet Config</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To use Servlet you need to explicitly include <code>quarkus-undertow</code>:</p>
@@ -433,7 +452,7 @@ If no unit suffix is given, bytes are assumed.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="undertow-handlers-conf"><a class="anchor" href="#undertow-handlers-conf"></a>6.1. undertow-handlers.conf</h3>
+<h3 id="undertow-handlers-conf"><a class="anchor" href="#undertow-handlers-conf"></a>7.1. undertow-handlers.conf</h3>
 <div class="paragraph">
 <p>You can make use of the Undertow predicate language using an <code>undertow-handlers.conf</code> file. This file should be placed
 in the <code>META-INF</code> directory of your application jar. This file contains handlers defined using the
@@ -441,40 +460,173 @@ in the <code>META-INF</code> directory of your application jar. This file contai
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuring-http-access-logs"><a class="anchor" href="#configuring-http-access-logs"></a>6.2. Configuring HTTP Access Logs</h3>
+<h3 id="configuring-http-access-logs"><a class="anchor" href="#configuring-http-access-logs"></a>7.2. Configuring HTTP Access Logs</h3>
 <div class="paragraph">
-<p>You can add HTTP request logging by configuring the <code>AccessHandler</code> in the <code>undertow-handlers.conf</code> file.</p>
-</div>
-<div class="paragraph">
-<p>The simplest possible configuration can be a standard Apache <code>common</code> Log Format:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">access-log('common')</code></pre>
-</div>
+<p>You can add HTTP request logging by configuring it in <code>application.properties</code>. There are two options for logging,
+either logging to the standard JBoss logging output, or logging to a dedicated file.</p>
 </div>
 <div class="paragraph">
-<p>This will log every request using the standard Quarkus logging infrastructure under the <code>io.undertow.accesslog</code> category.</p>
+<p>include: quarkus-vertx-http-config-group-access-log-config.adoc</p>
 </div>
-<div class="paragraph">
-<p>You can customize the category like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">access-log(format='common', category='my.own.category')</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Finally the logging format can be customized:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">access-log(format='%h %l %u %t "%r" %s %b %D "%{i,Referer}" "%{i,User-Agent}" "%{i,X-Request-ID}"', category='my.own.category')</code></pre>
-</div>
-</div>
+<table class="tableblock frame-topbot grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Short Form</th>
+<th class="tableblock halign-left valign-top">Long Form</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remote IP address</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{REMOTE_IP}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local IP address</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%A</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{LOCAL_IP}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bytes sent, excluding HTTP headers, or '-' if no bytes were sent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%b</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bytes sent, excluding HTTP headers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%B</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{BYTES_SENT}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remote host name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%h</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{REMOTE_HOST}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request protocol</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%H</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{PROTOCOL}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request method</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%m</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{METHOD}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%p</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{LOCAL_PORT}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query string (prepended with a '?' if it exists, otherwise an empty string)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%q</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{QUERY_STRING}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">First line of the request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%r</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{REQUEST_LINE}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP status code of the response</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%s</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{RESPONSE_CODE}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date and time, in Common Log Format format</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%t</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{DATE_TIME}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remote user that was authenticated</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%u</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{REMOTE_USER}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Requested URL path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%U</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{REQUEST_URL}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request relative path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%R</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{RELATIVE_PATH}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local server name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%v</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{LOCAL_SERVER_NAME}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time taken to process the request, in millis</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%D</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{RESPONSE_TIME}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time taken to process the request, in seconds</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%T</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time taken to process the request, in micros</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{RESPONSE_TIME_MICROS}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time taken to process the request, in nanos</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{RESPONSE_TIME_NANOS}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Current request thread name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%I</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{THREAD_NAME}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSL cypher</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{SSL_CIPHER}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSL client certificate</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{SSL_CLIENT_CERT}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSL session id</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{SSL_SESSION_ID}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cookie value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{c,cookie_name}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query parameter</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{q,query_param_name}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request header</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{i,request_header_name}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response header</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{o,response_header_name}</code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
-<h3 id="web-xml"><a class="anchor" href="#web-xml"></a>6.3. web.xml</h3>
+<h3 id="web-xml"><a class="anchor" href="#web-xml"></a>7.3. web.xml</h3>
 <div class="paragraph">
 <p>If you are using a <code>web.xml</code> file as your configuration file, you can place it in the <code>src/main/resources/META-INF</code> directory.</p>
 </div>
