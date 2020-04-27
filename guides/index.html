@@ -85,6 +85,8 @@
       
         <li><a href="/guides/logging">Configuring Logging</a></li>
       
+        <li><a href="/guides/command-mode-reference">Command Mode Reference</a></li>
+      
         <li><a href="/guides/native-and-ssl">Using SSL With Native Images</a></li>
       
         <li><a href="/guides/context-propagation">Context Propagation</a></li>
@@ -181,6 +183,8 @@
       
         <li><a href="/guides/security-jdbc">Using Security with JDBC</a></li>
       
+        <li><a href="/guides/security-ldap">Using Security with LDAP</a></li>
+      
         <li><a href="/guides/security-openid-connect">Using OpenID Connect to Protect Service Applications</a></li>
       
         <li><a href="/guides/security-openid-connect-web-authentication">Using OpenID Connect to Protect Web Applications</a></li>
@@ -196,6 +200,10 @@
         <li><a href="/guides/vault">Using Vault</a></li>
       
         <li><a href="/guides/vault-transit">Using Vault Transit Secret Engine</a></li>
+      
+        <li><a href="/guides/vault-datasource">Using HashiCorp Vault with Databases</a></li>
+      
+        <li><a href="/guides/vault-auth">Working with HashiCorp Vault’s Authentication</a></li>
       
       </ul>
     
@@ -227,6 +235,10 @@
         <li><a href="/guides/deploying-to-openshift-s2i">Deploying to OpenShift using S2I</a></li>
       
         <li><a href="/guides/getting-started-knative">Deploying Native Applications on Knative Kubernetes or OpenShift</a></li>
+      
+        <li><a href="/guides/kubernetes-config">Consuming Kubernetes ConfigMaps</a></li>
+      
+        <li><a href="/guides/kubernetes-client">Using the Kubernetes Client to Interact with a Kubernetes Cluster</a></li>
       
         <li><a href="/guides/kubernetes-client">Using the Kubernetes Client to Interact with a Kubernetes Cluster</a></li>
       
@@ -286,12 +298,16 @@
       
         <li><a href="/guides/spring-security">Using the Quarkus Extension for Spring Security API</a></li>
       
+        <li><a href="/guides/spring-boot-properties">Using Spring Boot's ConfigurationProperties</a></li>
+      
         <li><a href="/guides/spring-cloud-config-client">Using the Quarkus Extension for Spring Cloud Config</a></li>
       
       </ul>
     
       <h3 id="#writing-extensions">Writing Extensions</h3>
       <ul>
+      
+        <li><a href="building-my-first-extension">Building My First Extension</a></li>
       
         <li><a href="/guides/writing-extensions">Writing Your Own Extension</a></li>
       
@@ -398,6 +414,15 @@
 
 
             <p><a href="/guides/logging" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Command Mode Reference</h2>
+
+            <p>This reference guide explains how to develop command line applications with Quarkus.</p>
+
+
+            <p><a href="/guides/command-mode-reference" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
@@ -790,6 +815,15 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
+            <h2>Using Security with LDAP</h2>
+
+            <p>This guide demonstrates how your Quarkus application can use a LDAP directory to store your user identities.</p>
+
+
+            <p><a href="/guides/security-ldap" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
             <h2>Using OpenID Connect to Protect Service Applications</h2>
 
             <p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token authorization, where these tokens are issued by a Keycloak server.</p>
@@ -859,6 +893,24 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/vault-transit" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using HashiCorp Vault with Databases</h2>
+
+            <p>Keep confidential your database credentials by storing them in Vault.</p>
+
+
+            <p><a href="/guides/vault-datasource" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Working with HashiCorp Vault’s Authentication</h2>
+
+            <p>This guide explains the various methods supported by Quarkus to authenticate to your Vault.</p>
+
+
+            <p><a href="/guides/vault-auth" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
@@ -961,6 +1013,24 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/getting-started-knative" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Consuming Kubernetes ConfigMaps</h2>
+
+            <p>Use ConfigMaps as a configuration source for your Quarkus applications.</p>
+
+
+            <p><a href="/guides/kubernetes-config" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using the Kubernetes Client to Interact with a Kubernetes Cluster</h2>
+
+            <p>This guide demonstrates how to use the Fabric8 Kubernetes client to interact with your Kubernetes cluster.</p>
+
+
+            <p><a href="/guides/kubernetes-client" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
@@ -1197,6 +1267,15 @@ This guide will walk you through all that.</p>
           </div>
         
           <div class="guide-item" markdown="1">
+            <h2>Using Spring Boot's ConfigurationProperties</h2>
+
+            <p>Use Spring Boot’s <code class="highlighter-rouge">@ConfigurationProperties</code> in place of MicroProfile Config annotations</p>
+
+
+            <p><a href="/guides/spring-boot-properties" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
             <h2>Using the Quarkus Extension for Spring Cloud Config</h2>
 
             <p>Quarkus provides a compatibility layer for Spring Cloud Config in the form of the spring-cloud-config-client extension.</p>
@@ -1214,6 +1293,15 @@ This guide will walk you through all that.</p>
         <h2 id="web-1">Writing Extensions</h2>
       </div>
       <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Building My First Extension</h2>
+
+            <p>Learn step by step how to build a simple extension.</p>
+
+
+            <p><a href="building-my-first-extension" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
         
           <div class="guide-item" markdown="1">
             <h2>Writing Your Own Extension</h2>
