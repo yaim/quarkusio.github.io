@@ -68,7 +68,6 @@
     <h1 class="text-caps">Quarkus - Kubernetes extension</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
 <li><a href="#kubernetes">Kubernetes</a>
 <ul class="sectlevel2">
 <li><a href="#defining-a-docker-registry">Defining a Docker registry</a></li>
@@ -94,7 +93,7 @@
 </li>
 <li><a href="#deployment">Deployment</a>
 <ul class="sectlevel2">
-<li><a href="#building">Building</a></li>
+<li><a href="#building-a-container-image">Building a container image</a></li>
 <li><a href="#deploying">Deploying</a></li>
 </ul>
 </li>
@@ -103,8 +102,10 @@
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide covers generating and deploying Kubernetes resources based on sane defaults and user supplied configuration.
-In detail, it supports generating resources for <a href="#kubernetes">Kubernetes</a>, <a href="#openshift">OpenShift</a> and <a href="#knative">Knative</a>. Also it supports automatic deployment of these resources to the target platform.</p>
+<p>Quarkus offers the ability to automatically generate Kubernetes resources based on sane defaults and user-supplied configuration using <a href="https://github.com/dekorateio/dekorate/">dekorate</a>.
+It currently supports generating resources for vanilla <a href="#kubernetes">Kubernetes</a>, <a href="#openshift">OpenShift</a> and <a href="#knative">Knative</a>.
+Furthermore, Quarkus can deploy the application to a target Kubernetes cluster by applying the generated manifests to the target cluster&#8217;s API Server.
+Finally, when either one of container image extensions is present (see the <a href="container-image">container image guide</a> for more details), Quarkus has the ability to create a container image and push it to a registry <strong>before</strong> deploying the application to the target platform.</p>
 </div>
 </div>
 </div>
@@ -129,17 +130,17 @@ In detail, it supports generating resources for <a href="#kubernetes">Kubernetes
 <p>Apache Maven 3.6.2+</p>
 </li>
 <li>
-<p>access to a Kubernetes or cluster (Minikube is a viable options)</p>
+<p>access to a Kubernetes cluster (Minikube is a viable option)</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
+<h2 id="kubernetes"><a class="anchor" href="#kubernetes"></a>Kubernetes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>First, we need a new project that contains the Kubernetes extension and the Jib extension. This can be done using the following command:</p>
+<p>Let&#8217;s create a new project that contains both the Kubernetes and Jib extensions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -152,20 +153,8 @@ In detail, it supports generating resources for <a href="#kubernetes">Kubernetes
 cd kubernetes-quickstart</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="kubernetes"><a class="anchor" href="#kubernetes"></a>Kubernetes</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus offers the ability to automatically generate Kubernetes resources based on sane defaults and user supplied configuration. The implementation that takes care
-of generating the actual Kubernetes resources is provided by <a href="https://github.com/dekorateio/dekorate/">dekorate</a>. Currently it supports the generation of resources for
-vanilla Kubernetes and OpenShift. Furthermore, Quarkus can deploy the application to a target Kubernetes cluster by applying the generated manifests to the target cluster&#8217;s API Server.
-Finally, when either the <code>quarkus-container-image-jib</code> or <code>quarkus-container-image-docker</code> extensions are present (see the <a href="container-image">container image guide</a> for more details),
-Quarkus has the ability to create a container image and push it to a registry <strong>before</strong> deploying the application to the Kubernetes cluster.</p>
-</div>
-<div class="paragraph">
-<p>When we executed the previous command, the following dependencies were added to the <code>pom.xml</code></p>
+<p>This added the following dependencies to the <code>pom.xml</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -180,8 +169,8 @@ Quarkus has the ability to create a container image and push it to a registry <s
 </div>
 </div>
 <div class="paragraph">
-<p>By adding these dependencies, we enable the generation of Kubernetes manifests each time we perform a build while also enabling the build of a container image.
-For example, following the execution of <code>./mvnw package</code> you will notice amongst the other files that are created, two files named
+<p>By adding these dependencies, we enable the generation of Kubernetes manifests each time we perform a build while also enabling the build of a container image using Jib.
+For example, following the execution of <code>./mvnw package</code>, you will notice amongst the other files that are created, two files named
 <code>kubernetes.json</code> and <code>kubernetes.yml</code> in the <code>target/kubernetes/</code> directory.</p>
 </div>
 <div class="paragraph">
@@ -271,13 +260,11 @@ For example, following the execution of <code>./mvnw package</code> you will not
 </div>
 </div>
 <div class="paragraph">
-<p>The generated manifest can be applied to kubernetes from the project root using <code>kubectl</code>:</p>
+<p>The generated manifest can be applied to the cluster from the project root using <code>kubectl</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">---
-kubectl apply -f target/kubernetes/kubernetes.json
----</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f target/kubernetes/kubernetes.json</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -410,6 +397,8 @@ When using the <code>quarkus-container-image-jib</code> extension to build a con
 </li>
 </ul>
 </div>
+<div class="sect4">
+<h5 id="environment-variables-from-keyvalue-pairs"><a class="anchor" href="#environment-variables-from-keyvalue-pairs"></a>Environment variables from key/value pairs</h5>
 <div class="paragraph">
 <p>To add a key/value pair as an environment variable in the generated resources:</p>
 </div>
@@ -426,6 +415,7 @@ Please note that the key <code>my-env-var</code> will be converted to uppercase 
 <p>You may also have noticed that in contrast to labels and annotations for environment variables you don&#8217;t just use a <code>key=value</code> approach.
 That is because for environment variables there are additional options rather than just setting a value.</p>
 </div>
+</div>
 <div class="sect4">
 <h5 id="environment-variables-from-secret"><a class="anchor" href="#environment-variables-from-secret"></a>Environment variables from Secret</h5>
 <div class="paragraph">
@@ -435,6 +425,21 @@ That is because for environment variables there are additional options rather th
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env-vars.my-env-var.secret=my-secret</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+you might be wondering why you need to have a <code>my-env-var</code> part to your property even though this property triggers the
+injection of multiple values as defined in the specified secret. In fact, you can use any valid name for that property that is
+not already used to inject a variable as this name will be disregarded. This is currently required for the
+property processor to properly identify a secret whose values need to be injected.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect4">
@@ -446,6 +451,20 @@ That is because for environment variables there are additional options rather th
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env-vars.my-env-var.configmap=my-secret</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+you might be wondering why you need to have a <code>my-env-var</code> part to your property even though this property triggers the injection of multiple values as defined in the specified ConfigMap.
+In fact, you can use any valid name for that property that is not already used to inject a variable as this name will be disregarded.
+This is currently required for the property processor to properly identify a ConfigMap whose values need to be injected.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -496,7 +515,7 @@ The volumes themselves can be configured as shown in the sections below.</p>
 <div class="sect2">
 <h3 id="add-readiness-and-liveness-probes"><a class="anchor" href="#add-readiness-and-liveness-probes"></a>Add readiness and liveness probes</h3>
 <div class="paragraph">
-<p>By default the Kubernetes resources do not contain readiness and liveness probes in the generated <code>Deployment</code>. Adding them however is just a matter of adding the SmallRye Health extension like so:</p>
+<p>By default, the Kubernetes resources do not contain readiness and liveness probes in the generated <code>Deployment</code>. Adding them however is just a matter of adding the SmallRye Health extension like so:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -757,7 +776,7 @@ Here are some examples:</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Properties that use non standard types, can be referenced by expanding the property.
+<p>Properties that use non-standard types, can be referenced by expanding the property.
 For example to define a <code>kubernetes-readiness-probe</code> which is of type <code>Probe</code>:</p>
 </div>
 <div class="listingblock">
@@ -1304,7 +1323,7 @@ Below you will find tables describing all available types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.deployment-target=kubernetes, openshift</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.deployment-target=kubernetes,openshift</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1312,13 +1331,11 @@ Below you will find tables describing all available types.</p>
 <code>openshift.json</code> and <code>openshift.yml</code> in the <code>target/kubernetes/</code> directory.</p>
 </div>
 <div class="paragraph">
-<p>These manifests can be deployed as is to a running cluster, using kubectl:</p>
+<p>These manifests can be deployed as is to a running cluster, using <code>kubectl</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">---
-kubectl apply -f target/kubernetes/openshift.json
----</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f target/kubernetes/openshift.json</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1326,9 +1343,7 @@ kubectl apply -f target/kubernetes/openshift.json
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">---
-oc apply -f target/kubernetes/openshift.json
----</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f target/kubernetes/openshift.json</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1550,7 +1565,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 <h2 id="knative"><a class="anchor" href="#knative"></a>Knative</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To enable the generation of Quarkus.Knative.resources, you need to include Knative in the target platforms:</p>
+<p>To enable the generation of Knative resources, you need to include Knative in the target platforms:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1559,13 +1574,13 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 </div>
 <div class="paragraph">
 <p>Following the execution of <code>./mvnw package</code> you will notice amongst the other files that are created, two files named
-<code>quarkus.knative.json</code> and <code>knative.yml</code> in the <code>target/kubernetes/</code> directory.</p>
+<code>knative.json</code> and <code>knative.yml</code> in the <code>target/kubernetes/</code> directory.</p>
 </div>
 <div class="paragraph">
-<p>If you look at either file you will see that it contains a Quarkus.Knative.<code>Service</code>.</p>
+<p>If you look at either file you will see that it contains a Knative <code>Service</code>.</p>
 </div>
 <div class="paragraph">
-<p>The full source of the <code>quarkus.knative.json</code> file looks something like this:</p>
+<p>The full source of the <code>knative.json</code> file looks something like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1582,7 +1597,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
         "app.kubernetes.io/name" : "test-quarkus-app",
         "app.kubernetes.io/version" : "1.0-SNAPSHOT"
       },
-      "name" : "quarkus.knative.
+      "name" : "knative.
     },
     "spec" : {
       "runLatest" : {
@@ -1607,9 +1622,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">---
-kubectl apply -f target/kubernetes/knative.json
----</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f target/kubernetes/knative.json</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1865,9 +1878,9 @@ This can be easily done with the command line:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="building"><a class="anchor" href="#building"></a>Building</h3>
+<h3 id="building-a-container-image"><a class="anchor" href="#building-a-container-image"></a>Building a container image</h3>
 <div class="paragraph">
-<p>Building is possible, using any of the 3 available <code>container-image</code> extensions:</p>
+<p>Building a container image is possible, using any of the 3 available <code>container-image</code> extensions:</p>
 </div>
 <div class="ulist">
 <ul>

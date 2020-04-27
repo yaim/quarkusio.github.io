@@ -969,33 +969,15 @@ This could be useful to simplify the template structure:</p>
 </table>
 </div>
 <div class="paragraph">
-<p>It&#8217;s also possible to specify an alias for the context object:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.parent as myParent} <i class="conum" data-value="1"></i><b>(1)</b>
-  &lt;h1&gt;{myParent.name}&lt;/h1&gt;
-{/with}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>myParent</code> is the alias that can be used inside the tag.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
 <p>This section might also come in handy when we&#8217;d like to avoid multiple expensive invocations:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.callExpensiveLogicToGetTheValue(true) as it}
-  {#if it is "fun"} <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.callExpensiveLogicToGetTheValue(1,'foo',bazinga)}
+  {#if this is "fun"} <i class="conum" data-value="1"></i><b>(1)</b>
     &lt;h1&gt;Yay!&lt;/h1&gt;
   {#else}
-    &lt;h1&gt;{it} is not fun at all!&lt;/h1&gt;
+    &lt;h1&gt;{this} is not fun at all!&lt;/h1&gt;
   {/if}
 {/with}</code></pre>
 </div>
@@ -1004,13 +986,37 @@ This could be useful to simplify the template structure:</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>it</code> is the result of <code>item.callExpensiveLogicToGetTheValue(1,'foo',bazinga)</code>. The method is only invoked once even though the result may be used in multiple expressions.</td>
+<td><code>this</code> is the result of <code>item.callExpensiveLogicToGetTheValue(1,'foo',bazinga)</code>. The method is only invoked once even though the result may be used in multiple expressions.</td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect4">
-<h5 id="include_helper"><a class="anchor" href="#include_helper"></a>2.2.2.4. Include/Insert Sections</h5>
+<h5 id="letset-section"><a class="anchor" href="#letset-section"></a>2.2.2.4. Let/Set Section</h5>
+<div class="paragraph">
+<p>This section allows you to define named local variables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#let myParent=order.item.parent}
+  &lt;h1&gt;{myParent.name}&lt;/h1&gt;
+{/let}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The section tag is also registered under the <code>set</code> alias:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#set myParent=item.parent price=item.price}
+  &lt;h1&gt;{myParent.name}&lt;/h1&gt;
+  &lt;p&gt;Price: {price}
+{/set}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="include_helper"><a class="anchor" href="#include_helper"></a>2.2.2.5. Include/Insert Sections</h5>
 <div class="paragraph">
 <p>These sections can be used to include another template and possibly override some parts of the template (template inheritance).</p>
 </div>
@@ -1079,10 +1085,10 @@ Section blocks can also define an optional end tag - <code>{/title}</code>.
 </div>
 </div>
 <div class="sect4">
-<h5 id="user_tags"><a class="anchor" href="#user_tags"></a>2.2.2.5. User-defined Tags</h5>
+<h5 id="user_tags"><a class="anchor" href="#user_tags"></a>2.2.2.6. User-defined Tags</h5>
 <div class="paragraph">
 <p>User-defined tags can be used to include a template and optionally pass some parameters.
-Let&#8217;s suppose we have a template called <code>item.html</code>:</p>
+Let&#8217;s suppose we have a template called <code>itemDetail.html</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1104,12 +1110,12 @@ Let&#8217;s suppose we have a template called <code>item.html</code>:</p>
 </table>
 </div>
 <div class="paragraph">
-<p>Now if we register this template under the name <code>item</code> and if we add a <code>UserTagSectionHelper</code> to the engine:</p>
+<p>Now if we register this template under the name <code>itemDetail.html</code> and if we add a <code>UserTagSectionHelper</code> to the engine:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Engine engine = Engine.builder()
-                   .addSectionHelper(new UserTagSectionHelper.Factory("item"))
+                   .addSectionHelper(new UserTagSectionHelper.Factory("itemDetail","itemDetail.html"))
                    .build();</code></pre>
 </div>
 </div>
@@ -1120,7 +1126,7 @@ Let&#8217;s suppose we have a template called <code>item.html</code>:</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In Quarkus, all files from the <code>src/main/resources/templates/tags</code> are registered and monitored automatically.
+In Quarkus, all files from the <code>src/main/resources/templates/tags</code> are registered and monitored automatically!
 </td>
 </tr>
 </table>
@@ -1131,11 +1137,11 @@ In Quarkus, all files from the <code>src/main/resources/templates/tags</code> ar
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;ul&gt;
-{#each items}
+{#for item in items}
   &lt;li&gt;
-  {#item this showImage=true /} <i class="conum" data-value="1"></i><b>(1)</b>
+  {#itemDetail item showImage=true /} <i class="conum" data-value="1"></i><b>(1)</b>
   &lt;/li&gt;
-{/each}
+{/for}
 &lt;/ul&gt;</code></pre>
 </div>
 </div>
@@ -1143,7 +1149,7 @@ In Quarkus, all files from the <code>src/main/resources/templates/tags</code> ar
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>this</code> is resolved to an iteration element and can be referenced using the <code>it</code> key in the tag template.</td>
+<td><code>item</code> is resolved to an iteration element and can be referenced using the <code>it</code> key in the tag template.</td>
 </tr>
 </table>
 </div>
@@ -1741,8 +1747,8 @@ class DetailResource {
 
     @GET
     @Produces({ MediaType.TEXT_HTML, MediaType.TEXT_PLAIN })
-    public Rendering item() {
-        return item.data(new Item("Alpha", 1000)); <i class="conum" data-value="2"></i><b>(2)</b>
+    public TemplateInstance item() {
+        return item.data("myItem", new Item("Alpha", 1000)); <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>

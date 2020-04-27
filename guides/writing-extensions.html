@@ -2109,9 +2109,9 @@ The metric name of all metrics should start with a short name of the extension t
 <div class="paragraph">
 <p>An example build step for build-time registration of metrics:</p>
 </div>
-<div class="listingblock java">
+<div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">@BuildStep
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
 void registerMetrics(BuildProducer&lt;MetricBuildItem&gt; metrics) {
     Metadata activeCountMetadata = Metadata.builder()
             .withName("agroal.active.count")
@@ -2134,9 +2134,9 @@ void registerMetrics(BuildProducer&lt;MetricBuildItem&gt; metrics) {
 In this example, we provide an object that implements the logic of the metric, in the case of a gauge,
 it needs to implement <code>org.eclipse.microprofile.metrics.Gauge</code>. Example:</p>
 </div>
-<div class="listingblock java">
+<div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">public class ActiveCountGauge implements Gauge&lt;Long&gt; {
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class ActiveCountGauge implements Gauge&lt;Long&gt; {
 
     private String dataSourceName;
 
@@ -2173,9 +2173,9 @@ and call the methods specific to each metric type.</p>
 <p>In this case, the dependency setup and build-time registration is the same as in case 2. The difference will be that instead of introducing
 custom metric objects that bridge between library-specific metrics and MP Metrics, the extension&#8217;s code will contain metric collection code like this:</p>
 </div>
-<div class="listingblock java">
+<div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">public void methodThatShouldBeCounted() {
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public void methodThatShouldBeCounted() {
     if(metricsEnabled) {
         Counter counter = MetricRegistries.get(MetricRegistry.Type.VENDOR).counter("name");
         counter.inc();
@@ -2205,13 +2205,13 @@ to evaluate these two conditions, and then check back to this system property at
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>@BuildStep
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
 SystemPropertyBuildItem produceMetricsEnabledProperty(AgroalBuildTimeConfig extensionSpecificConfig,
         Capabilities capabilities) {
     return new SystemPropertyBuildItem("metrics.enabled",
             String.valueOf(capabilities.isCapabilityPresent(Capabilities.METRICS) &amp;&amp;
                             extensionSpecificConfig.metricsEnabled));
-}</pre>
+}</code></pre>
 </div>
 </div>
 </div>
