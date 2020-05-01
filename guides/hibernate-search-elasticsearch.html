@@ -1217,52 +1217,69 @@ Thus we focused our efforts on it.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The synchronization strategy to use when indexing automatically.
- Defines how complete indexing should be before resuming the application thread after a database transaction is committed.
- Available values:
- Strategy
- Guarantees when the application thread resumes
- Throughput
- Changes applied
- Changes safe from crash/power loss
- Changes visible on search
- <code>``AutomaticIndexingSynchronizationStrategyNames#ASYNC</code></p>
+<p>The synchronization strategy to use when indexing automatically.</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>No guarantee
-No guarantee
-No guarantee
-Best
-```AutomaticIndexingSynchronizationStrategyNames#WRITE_SYNC` (default)</pre>
+<div class="paragraph">
+<p>Defines how complete indexing should be before resuming the application thread
+after a database transaction is committed.</p>
 </div>
+<div class="paragraph">
+<p>Available values:</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>Guaranteed
-Guaranteed
-No guarantee
-Medium
-```AutomaticIndexingSynchronizationStrategyNames#READ_SYNC`</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Guaranteed
-No guarantee
-Guaranteed
-Medium to worst
-```AutomaticIndexingSynchronizationStrategyNames#SYNC`</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Guaranteed
-Guaranteed
-Guaranteed
-Worst
-See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization[this section of the reference documentation] for more information.</pre>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Strategy</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Throughput</p></th>
+<th class="tableblock halign-center valign-top" colspan="3"><p class="tableblock">Guarantees when the application thread resumes</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Changes applied</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Changes safe from crash/power loss</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Changes visible on search</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Best</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">write-sync (<strong>default</strong>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Medium</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">read-sync</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Medium to worst</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sync</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Worst</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>See
+<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization">this
+section of the reference documentation</a>
+for more information.</p>
 </div>
 </div>
 </div></div></td>

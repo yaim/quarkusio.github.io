@@ -3721,7 +3721,7 @@ An unused bean:</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>request</code>, <code>required</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>NONE</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4293,7 +4293,7 @@ An unused bean:</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4321,7 +4321,7 @@ An unused bean:</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4489,7 +4489,7 @@ An unused bean:</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -4517,7 +4517,7 @@ An unused bean:</p>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code>, <code>hex</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>BASE64</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>base64</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -5873,52 +5873,69 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The synchronization strategy to use when indexing automatically.
- Defines how complete indexing should be before resuming the application thread after a database transaction is committed.
- Available values:
- Strategy
- Guarantees when the application thread resumes
- Throughput
- Changes applied
- Changes safe from crash/power loss
- Changes visible on search
- <code>``AutomaticIndexingSynchronizationStrategyNames#ASYNC</code></p>
+<p>The synchronization strategy to use when indexing automatically.</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>No guarantee
-No guarantee
-No guarantee
-Best
-```AutomaticIndexingSynchronizationStrategyNames#WRITE_SYNC` (default)</pre>
+<div class="paragraph">
+<p>Defines how complete indexing should be before resuming the application thread
+after a database transaction is committed.</p>
 </div>
+<div class="paragraph">
+<p>Available values:</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>Guaranteed
-Guaranteed
-No guarantee
-Medium
-```AutomaticIndexingSynchronizationStrategyNames#READ_SYNC`</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Guaranteed
-No guarantee
-Guaranteed
-Medium to worst
-```AutomaticIndexingSynchronizationStrategyNames#SYNC`</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Guaranteed
-Guaranteed
-Guaranteed
-Worst
-See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization[this section of the reference documentation] for more information.</pre>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Strategy</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Throughput</p></th>
+<th class="tableblock halign-center valign-top" colspan="3"><p class="tableblock">Guarantees when the application thread resumes</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Changes applied</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Changes safe from crash/power loss</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Changes visible on search</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Best</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">write-sync (<strong>default</strong>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Medium</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">read-sync</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Medium to worst</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sync</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Worst</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>See
+<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization">this
+section of the reference documentation</a>
+for more information.</p>
 </div>
 </div>
 </div></div></td>
@@ -6884,6 +6901,20 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-jaeger_quarkus.jaeger.metrics.enabled"></a><code><a href="#quarkus-jaeger_quarkus.jaeger.metrics.enabled">quarkus.jaeger.metrics.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not metrics are published in case the smallrye-metrics extension is present.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-jaeger_quarkus.jaeger.endpoint"></a><code><a href="#quarkus-jaeger_quarkus.jaeger.endpoint">quarkus.jaeger.endpoint</a></code></p>
 </div>
 <div class="openblock description">
@@ -7277,7 +7308,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>all</code>, <code>any</code>, <code>disabled</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code>, <code>ANY</code>, <code>DISABLED</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
 </tr>
 <tr>
@@ -7291,7 +7322,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>permissive</code>, <code>enforcing</code>, <code>disabled</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>PERMISSIVE</code>, <code>ENFORCING</code>, <code>DISABLED</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ENFORCING</code></p></td>
 </tr>
 <tr>
@@ -7485,7 +7516,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cluster-ip</code>, <code>node-port</code>, <code>load-balancer</code>, <code>external-name</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ClusterIP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cluster-ip</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7499,7 +7530,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7897,7 +7928,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8261,7 +8292,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>managed</code>, <code>shared</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Managed</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>managed</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8275,7 +8306,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>read-write</code>, <code>read-only</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ReadWrite</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>read-write</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8513,7 +8544,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8527,7 +8558,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8807,7 +8838,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -8821,7 +8852,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -9045,7 +9076,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cluster-ip</code>, <code>node-port</code>, <code>load-balancer</code>, <code>external-name</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ClusterIP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cluster-ip</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -9059,7 +9090,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -9485,7 +9516,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -9849,7 +9880,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>managed</code>, <code>shared</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Managed</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>managed</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -9863,7 +9894,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>read-write</code>, <code>read-only</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ReadWrite</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>read-write</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -10101,7 +10132,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -10115,7 +10146,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -10395,7 +10426,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -10409,7 +10440,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -10633,7 +10664,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cluster-ip</code>, <code>node-port</code>, <code>load-balancer</code>, <code>external-name</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ClusterIP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cluster-ip</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -10647,7 +10678,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -11059,7 +11090,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -11423,7 +11454,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>managed</code>, <code>shared</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Managed</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>managed</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -11437,7 +11468,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>read-write</code>, <code>read-only</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ReadWrite</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>read-write</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -11675,7 +11706,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -11689,7 +11720,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -11969,7 +12000,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code>, <code>udp</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TCP</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>tcp</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -11983,7 +12014,7 @@ See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code>, <code>if-not-present</code>, <code>never</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Always</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>always</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -15804,6 +15835,20 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.end-session-path">quarkus.oidc.end-session-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC end_session_endpoint.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.public-key"></a><code><a href="#quarkus-oidc_quarkus.oidc.public-key">quarkus.oidc.public-key</a></code></p>
 </div>
 <div class="openblock description">
@@ -15888,12 +15933,12 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.token.expiration-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.expiration-grace">quarkus.oidc.token.expiration-grace</a></code></p>
+<p><a id="quarkus-oidc_quarkus.oidc.token.lifespan-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.lifespan-grace">quarkus.oidc.token.lifespan-grace</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+<p>Life span grace period in seconds. When checking token expiry, current time is allowed to be later than token expiration time by at most the configured number of seconds. When checking token issuance, current time is allowed to be sooner than token issue time by at most the configured number of seconds.</p>
 </div>
 </div>
 </div></div></td>
@@ -15913,6 +15958,20 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.token.refresh-expired"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.refresh-expired">quarkus.oidc.token.refresh-expired</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Refresh expired ID tokens. If this property is enabled then a refresh token request is performed and, if successful, the local session is updated with the new set of tokens. Otherwise, the local session is invalidated as an indication that the session at the OpenID Provider no longer exists. This option is only valid when the application is of type <code>ApplicationType#WEB_APP</code>}.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -16071,6 +16130,20 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.authentication.remove-redirect-parameters"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.remove-redirect-parameters">quarkus.oidc.authentication.remove-redirect-parameters</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Remove the query parameters such as 'code' and 'state' set by the OIDC server on the redirect URI after the user has authenticated by redirecting a user to the same URI but without the query parameters.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.authentication.scopes"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.scopes">quarkus.oidc.authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
@@ -16109,7 +16182,35 @@ This configuration section is optional</p></th>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.logout.path"></a><code><a href="#quarkus-oidc_quarkus.oidc.logout.path">quarkus.oidc.logout.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The relative path of the logout endpoint at the application. If provided, the application is able to initiate the logout through this endpoint in conformance with the OpenID Connect RP-Initiated Logout specification.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.logout.post-logout-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.logout.post-logout-path">quarkus.oidc.logout.post-logout-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the application endpoint where the user should be redirected to after logging out from the OpenID Connect Provider. This endpoint URI must be properly registered at the OpenID Connect Provider as a valid redirect URI.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -16231,6 +16332,20 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.end-session-path">quarkus.oidc."tenant".end-session-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC end_session_endpoint.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.public-key"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.public-key">quarkus.oidc."tenant".public-key</a></code></p>
 </div>
 <div class="openblock description">
@@ -16315,12 +16430,12 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.expiration-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.expiration-grace">quarkus.oidc."tenant".token.expiration-grace</a></code></p>
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.lifespan-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.lifespan-grace">quarkus.oidc."tenant".token.lifespan-grace</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+<p>Life span grace period in seconds. When checking token expiry, current time is allowed to be later than token expiration time by at most the configured number of seconds. When checking token issuance, current time is allowed to be sooner than token issue time by at most the configured number of seconds.</p>
 </div>
 </div>
 </div></div></td>
@@ -16340,6 +16455,20 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.refresh-expired"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.refresh-expired">quarkus.oidc."tenant".token.refresh-expired</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Refresh expired ID tokens. If this property is enabled then a refresh token request is performed and, if successful, the local session is updated with the new set of tokens. Otherwise, the local session is invalidated as an indication that the session at the OpenID Provider no longer exists. This option is only valid when the application is of type <code>ApplicationType#WEB_APP</code>}.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -16498,6 +16627,20 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.remove-redirect-parameters"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.remove-redirect-parameters">quarkus.oidc."tenant".authentication.remove-redirect-parameters</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Remove the query parameters such as 'code' and 'state' set by the OIDC server on the redirect URI after the user has authenticated by redirecting a user to the same URI but without the query parameters.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.scopes"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.scopes">quarkus.oidc."tenant".authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
@@ -16550,7 +16693,35 @@ This configuration section is optional</p></th>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.logout.path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.logout.path">quarkus.oidc."tenant".logout.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The relative path of the logout endpoint at the application. If provided, the application is able to initiate the logout through this endpoint in conformance with the OpenID Connect RP-Initiated Logout specification.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.logout.post-logout-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.logout.post-logout-path">quarkus.oidc."tenant".logout.post-logout-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the application endpoint where the user should be redirected to after logging out from the OpenID Connect Provider. This endpoint URI must be properly registered at the OpenID Connect Provider as a valid redirect URI.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-optaplanner_quarkus-optaplanner"></a><a href="#quarkus-optaplanner_quarkus-optaplanner">OptaPlanner constraint solver AI</a></p></th>
@@ -17318,6 +17489,29 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.native.resources.includes"></a><code><a href="#quarkus-core_quarkus.native.resources.includes">quarkus.native.resources.includes</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>A comma separated list of globs to match resource paths that should be added to the native image.
+ Use slash (<code>/</code>) as a path separator on all platforms. Globs must not start with slash.
+ By default, no resources are included.
+ Example: Given that you have <code>src/main/resources/ignored.png</code> and <code>src/main/resources/foo/selected.png</code> in your source tree and one of your dependency JARs contains <code>bar/some.txt</code> file, with the following configuration quarkus.native.resources.includes = foo/<strong>,bar/</strong>/<strong>.txt  the files <code>src/main/resources/foo/selected.png</code> and <code>bar/some.txt</code> will be included in the native image, while <code>src/main/resources/ignored.png</code> will not be included.
+ Supported glob features   Feature Description   <code></strong></code> Matches a (possibly empty) sequence of characters that does not contain slash (<code>/</code>)   <code>**</code> Matches a (possibly empty) sequence of characters that may contain slash (<code>/</code>)   <code>?</code> Matches one character, but not slash   <code>[abc]</code> Matches one character given in the bracket, but not slash   <code>[a-z]</code> Matches one character from the range given in the bracket, but not slash   <code>[!abc]</code> Matches one character not named in the bracket; does not match slash   <code>[a-z]</code> Matches one character outside the range given in the bracket; does not match slash   <code>{one,two,three}</code> Matches any of the alternating tokens separated by comma; the tokens may contain wildcards, nested alternations and ranges   <code>\</code> The escape character
+ Note that there are three levels of escaping when passing this option via <code>application.properties</code>:
+ . <code>application.properties</code> parser
+ - MicroProfile Config list converter that splits the comma separated list
+ - Glob parser  All three levels use backslash (<code>\</code>) as the escaping character. So you need to use an appropriate number of backslashes depending on which level you want to escape.
+ Note that Quarkus extensions typically include the resources they require by themselves. This option is useful in situations when the built-in functionality is not sufficient.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.package.type"></a><code><a href="#quarkus-core_quarkus.package.type">quarkus.package.type</a></code></p>
 </div>
 <div class="openblock description">
@@ -17624,7 +17818,7 @@ This configuration section is optional</p></th>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">float</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0f</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
