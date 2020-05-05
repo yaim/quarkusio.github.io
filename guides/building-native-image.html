@@ -382,7 +382,8 @@ this allows native image tests to also be run.</p>
 <div class="title">Issues with packaging on Windows</div>
 <div class="paragraph">
 <p>The Microsoft Native Tools for Visual Studio must first be initialized before packaging. You can do this by starting
-the <code>x64 Native Tools Command Prompt</code> that was installed with the Visual Studio Build Tools.</p>
+the <code>x64 Native Tools Command Prompt</code> that was installed with the Visual Studio Build Tools. At
+<code>x64 Native Tools Command Prompt</code> you can navigate to your project folder and run <code>mvnw package -Pnative</code>.</p>
 </div>
 <div class="paragraph">
 <p>Another solution is to write a script to do this for you:</p>
@@ -556,7 +557,8 @@ target directory you can specify the executable with the <code>-Dnative.image.pa
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Before going further, be sure to have a working container runtime (Docker, podman) environment.
+Before going further, be sure to have a working container runtime (Docker, podman) environment. If you use Docker
+on Windows you should share your project&#8217;s drive at Docker Desktop file share settings.
 </td>
 </tr>
 </table>
