@@ -92,7 +92,7 @@
 <p>Quarkus has thus far been used to write applications that runs via an endpoint i.e. long running webserver via http or short-lived function in a serverless environment.</p>
 </div>
 <div class="paragraph">
-<p>In Quarkus 1.4 command mode let you write apps that runs without an endpoint and optionally exits immediatly.</p>
+<p>In Quarkus 1.4 command mode lets you write apps that run without an endpoint and optionally exits immediately.</p>
 </div>
 <div class="paragraph">
 <p>This enables you to use Quarkus for writing a whole new style of applications - think command line clients (CLI), batch scripts, console apps, etc.</p>
@@ -116,10 +116,10 @@ public class GreetingMain implements QuarkusApplication {
   @Override
   public int run(String... args) throws Exception {   <i class="conum" data-value="3"></i><b>(3)</b>
 
-    if(arg.length&gt;0) {
-      System.out.println(service(arg[0]);
-    } else P{
-      System.out.println(service(""));
+    if (args.length&gt;0) {
+      System.out.println(service.greeting(arg[0]));
+    } else {
+      System.out.println(service.greeting(""));
     }
 
     return 0;
@@ -135,7 +135,7 @@ public class GreetingMain implements QuarkusApplication {
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The <code>run</code> method is invoked once Quarkus starts, and the application stops when it finishes. If you would like to access request scoped beans you can annotate the <code>run</code> method with <code>@ActivateRequestContext</code>. This is useful to write or reuse your exsiting business logic using i.e. Hibernate Panache Entity beans query methods.</td>
+<td>The <code>run</code> method is invoked once Quarkus starts, and the application stops when it finishes. If you would like to access request scoped beans you can annotate the <code>run</code> method with <code>@ActivateRequestContext</code>. This is useful to write or reuse your existing business logic using i.e. Hibernate Panache Entity beans query methods.</td>
 </tr>
 </table>
 </div>
@@ -231,7 +231,7 @@ Press Enter to restart or Ctrl + C to quit</code></pre>
 <div class="sect2">
 <h3 id="minimal-cli-app"><a class="anchor" href="#minimal-cli-app"></a>Minimal CLI App</h3>
 <div class="paragraph">
-<p>It is worth noticing that your cli app can still be serving out a endpoint - in fact, in the default app as we just made the rest endpoint is still starting and running. You just don&#8217;t notice it. Quarkus is that fast.</p>
+<p>It is worth noticing that your cli app can still be serving out an endpoint - in fact, in the default app as we just made the rest endpoint is still starting and running. You just don&#8217;t notice it. Quarkus is that fast.</p>
 </div>
 <div class="paragraph">
 <p>In case you truly want a minimal extension you remove the <code>quarkus-resteasy</code> extension in your <code>pom.xml</code> and put <code>arc</code> instead.</p>
