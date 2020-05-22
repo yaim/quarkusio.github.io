@@ -50,6 +50,9 @@
               <a href="/community/" class="">Community</a>
             </li>
             <li>
+              <a href="/support/" class="">Support</a>
+            </li>
+            <li>
               <a href="/blog/" class="active">Blog</a>
             </li>
             <li>
@@ -222,7 +225,7 @@ public class HelloMain implements QuarkusApplication {
 
     @Override
     public int run(String... args) throws Exception {
-        URI webappUri = new URI("http://localhost:" + assignedPort + "/index.html");
+        URI webappUri = new URI("http://localhost:" + assignedPort + "/index.html"); <i class="conum" data-value="2"></i><b>(2)</b>
 
         Desktop.getDesktop().browse(webappUri);
         Quarkus.waitForExit(); <i class="conum" data-value="3"></i><b>(3)</b>
