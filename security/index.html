@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus 0.23.2 released - Back on track</title>
+  <title>Security</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlight.pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -12,7 +12,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Quarkus: Supersonic Subatomic Java">
-  <link rel="canonical" href="https://quarkus.io/blog/quarkus-0-23-2-released/">
+  <link rel="canonical" href="https://quarkus.io/security/">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="https://quarkus.io/guides/stylesheet/config.css" />
   <link rel="stylesheet" href="/assets/css/main.css" />
@@ -22,7 +22,7 @@
   <script src="https://quarkus.io/assets/javascript/hl.js" type="text/javascript"></script>
 </head>
 
-<body class="post">
+<body class="security">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJWS5L"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -53,7 +53,7 @@
               <a href="/support/" class="">Support</a>
             </li>
             <li>
-              <a href="/blog/" class="active">Blog</a>
+              <a href="/blog/" class="">Blog</a>
             </li>
             <li>
               <a href="https://code.quarkus.io" class="button-cta secondary white">Start Coding</a>
@@ -66,131 +66,74 @@
 </div>
 
   <div class="content">
-    <div class="post-page grid-wrapper">
-  <div class="grid__item width-10-12 width-12-12-m doc-content">
-    <p> < <a href="/blog">Back to all posts</a></p>
-    <div class="post-date">October 02, 2019
-      <a href="/blog/tag/release">#release</a> 
-    </div>
-    <h1>Quarkus 0.23.2 released - Back on track</h1>
-    <div class="grid-wrapper">
-      <div class="grid__item width-8-12 width-12-12-m byline-wrapper">
-        
-        
-          <img class="headshot" src="https://www.gravatar.com/avatar/ec96387a1a8295b6fd6dffb68f80c352">
-        
-        <p class="byline">By Guillaume Smet</p>
-      </div>
-      <div class="grid__item width-12-12">
-          <div class="paragraph">
-<p>Last week, we released <a href="/blog/quarkus-0-23-1-released/">Quarkus 0.23.1</a> which paved the way towards our new Vert.x based HTTP layer and brought a lot of new features (see <a href="/blog/quarkus-0-23-1-released/">the original announcement post</a> for all the details).
-We discovered a memory usage regression shortly after the release: it was not a memory leak or anything that bad but an increased memory usage due to Netty getting a bit too comfortable.</p>
-</div>
-<div class="paragraph">
-<p>Today, we release 0.23.2, which contains all the great features of 0.23 and has better intentions on the memory side.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>The recommended version of GraalVM is now 19.2.0.1 so <a href="https://www.graalvm.org/downloads/">please upgrade</a>!</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="sect1">
-<h2 id="whats-new"><a class="anchor" href="#whats-new"></a>What&#8217;s new?</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="better-netty-tuning"><a class="anchor" href="#better-netty-tuning"></a>Better Netty tuning</h3>
-<div class="paragraph">
-<p>0.23 comes with the foundations of a brand new HTTP layer based on Vert.x and Netty.
-By default, Netty has a tendency to initialize a significant amount of memory at startup for performance reasons.
-This is obviously not ideal in highly constrained environments.</p>
-</div>
-<div class="paragraph">
-<p>Another issue we had is that some Netty classes were initialized at build time and the hardware on which you built your application was used as the reference for Netty autotuning.
-This doesn&#8217;t fly in a container world.</p>
-</div>
-<div class="paragraph">
-<p>Both issues were fixed in 0.23.2.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="full-changelog"><a class="anchor" href="#full-changelog"></a>Full changelog</h3>
-<div class="paragraph">
-<p>We also fixed a few bugs and usability issues: get <a href="https://github.com/quarkusio/quarkus/releases/tag/0.23.2">the full changelog of 0.23.2 on GitHub</a>.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="contributors"><a class="anchor" href="#contributors"></a>Contributors</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Quarkus has now <a href="https://github.com/quarkusio/quarkus/graphs/contributors">152 contributors</a>.
-Many many thanks to each and everyone of them.</p>
-</div>
-<div class="paragraph">
-<p>In particular for this release, thanks to Adam Bien, Andrej Petras, Clement Escoffier, George Gastaldi, Guillaume Smet, Jaikiran Pai, Jason T. Greene, Radim Vansa and Stuart Douglas.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="come-join-us"><a class="anchor" href="#come-join-us"></a>Come Join Us</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>We value your feedback a lot so please report bugs, ask for improvements&#8230;&#8203; Let&#8217;s build something great together!</p>
-</div>
-<div class="paragraph">
-<p>If you are a Quarkus user or just curious, don&#8217;t be shy and join our welcoming community:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>provide feedback on <a href="https://github.com/quarkusio/quarkus/issues">GitHub</a>;</p>
-</li>
-<li>
-<p>craft some code and <a href="https://github.com/quarkusio/quarkus/pulls">push a PR</a>;</p>
-</li>
-<li>
-<p>discuss with us on <a href="https://quarkusio.zulipchat.com/">Zulip</a> and on the <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a>;</p>
-</li>
-<li>
-<p>ask your questions on <a href="https://stackoverflow.com/questions/tagged/quarkus">Stack Overflow</a>.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-          
-      </div>
-      <div class="grid__item width-12-12"><div class="share-page">
-  <a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https://quarkus.io/blog/quarkus-0-23-2-released/&title=Quarkus 0.23.2 released - Back on track" rel="nofollow" target="_blank" title="Share on LinkedIn">
-    <img src="/assets/images/share-page/icons_social-linkedin.png"/>
-  </a>
-  <a class="share-twitter" href="https://twitter.com/intent/tweet?text=Quarkus 0.23.2 released - Back on track&url=https://quarkus.io/blog/quarkus-0-23-2-released/&via=quarkusio&related=quarkusio" rel="nofollow" target="_blank" title="Share on Twitter">
-    <img src="/assets/images/share-page/icons_social-twitter.png"/>
-  </a>
-  <a class="share-facebook" href="https://facebook.com/sharer.php?u=https://quarkus.io/blog/quarkus-0-23-2-released/" rel="nofollow" target="_blank" title="Share on Facebook">
-    <img src="/assets/images/share-page/icons_social-facebook.png"/>
-  </a>
-  <a class="share-reddit" href="http://www.reddit.com/submit?url=https://quarkus.io/blog/quarkus-0-23-2-released/" onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;" title="Share on Reddit" >
-    <img src="/assets/images/share-page/icons_social-reddit.png"/>
-  </a>
-  <a class="share-email" href="mailto:?subject=Quarkus 0.23.2 released - Back on track&amp;body=Quarkus 0.23.2 released - Back on track https://quarkus.io/blog/quarkus-0-23-2-released/" title="Share via Email" >
-    <img src="/assets/images/share-page/icons_social-email.png"/>
-  </a>
-</div>
-</div>
-    </div>
+    <div class="grid-wrapper gs-header">
+  <div class="grid__item width-12-12">
+    <h1 class="text-caps">Security</h1>
   </div>
 </div>
+<!-- content copied from https://github.com/quarkusio/quarkus/blob/master/SECURITY.md
+     edit there too -->
+
+<p>The Quarkus team and community take all security bugs very seriously.
+You can find our guidelines here regarding our policy and security disclosure.</p>
+
+<h2 id="reporting-security-issues">Reporting security issues</h2>
+
+<p>Please report any security issues you find in Quarkus to:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>security at quarkus.io
+</code></pre></div></div>
+
+<p>Anyone can post to this list. The subscribers are only trusted individuals from the Quarkus community who will handle the resolution of any reported security issues in confidence. In your report, please note how you would like to be credited for discovering the issue and the details of any embargo you would like to impose. Currently the security response teams for the following distributions are subscribed to this list and will respond to your report:</p>
+
+<ul>
+  <li><a href="https://access.redhat.com/security/team/contact/">Red Hat</a></li>
+</ul>
+
+<h3 id="ecosystem">Ecosystem</h3>
+
+<p>Quarkus is an ecosystem made from many extensions and many libraries (like Eclipse Vert.x, Hibernate, Apache Camel and more), most of them not under the direct responsibility of the Quarkus team.
+If you find a security bug possibly rooted in one of these libraries, you can either disclose to them directly or disclose them to the Quarkus team (following this process) and we will responsibly disclose the issue to the respective extension or library maintainer.</p>
+
+<h3 id="why-follow-this-process">Why follow this process</h3>
+
+<p>Due to the sensitive nature of security bugs, the disclosure process is more constrained than a regular bug.
+We appreciate you following these industry accepted guidelines, which gives time for a proper fix and limit the time window of attack.</p>
+
+<h2 id="supported-versions">Supported Versions</h2>
+
+<p>The community will fix security bugs for the latest major.minor version published at <a href="https://quarkus.io/get-started/">https://quarkus.io/get-started/</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>Supported</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>latest 1.x</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>older 1.x</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td>&lt; 1.0</td>
+      <td>❌</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We may fix the vulnerability to older versions depending on the severity of the issue and the age of the release, but we are only committing to the latest version released.</p>
+
+<h2 id="handling-security-issues">Handling security issues</h2>
+
+<p>If you represent a Quarkus extension or a Quarkus platform, you are welcome to subscribe to the security at quarkus.io mailing list. Your subscription will only be approved if you can demonstrate that you will handle issues in confidence and properly credit reporters for discovering issues (e.g. experience with embargoe process).</p>
+
+
 
   </div>
 
