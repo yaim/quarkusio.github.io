@@ -75,6 +75,7 @@
 <ul class="sectlevel2">
 <li><a href="#basic-authentication">Basic Authentication</a></li>
 <li><a href="#form-based-authentication">Form Based Authentication</a></li>
+<li><a href="#proactive-authentication">Proactive Authentication</a></li>
 </ul>
 </li>
 <li><a href="#standard-security-annotations">Authorization in REST endpoints and CDI beans using annotations</a></li>
@@ -343,6 +344,17 @@ Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a stan
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="proactive-authentication"><a class="anchor" href="#proactive-authentication"></a>Proactive Authentication</h3>
+<div class="paragraph">
+<p>By default Quarkus does what we call proactive authentication. This means that if an incoming request has a
+credential then that request will always be authenticated (even if the target page does not require authentication).</p>
+</div>
+<div class="paragraph">
+<p>This means that requests with an invalid credential will always be rejected, even for public pages. You can change
+this behaviour and only authenticate when required by setting <code>quarkus.http.auth.proactive=false</code>.</p>
 </div>
 </div>
 </div>

@@ -78,9 +78,9 @@
 <ul class="sectlevel2">
 <li><a href="#defining-your-entity">Defining your entity</a></li>
 <li><a href="#most-useful-operations">Most useful operations</a></li>
+<li><a href="#adding-entity-methods">Adding entity methods</a></li>
 </ul>
 </li>
-<li><a href="#adding-entity-methods">Adding entity methods</a></li>
 <li><a href="#solution-2-using-the-repository-pattern">Solution 2: using the repository pattern</a>
 <ul class="sectlevel2">
 <li><a href="#defining-your-entity-2">Defining your entity</a></li>
@@ -91,15 +91,24 @@
 <li><a href="#advanced-query">Advanced Query</a>
 <ul class="sectlevel2">
 <li><a href="#paging">Paging</a></li>
+<li><a href="#using-a-range-instead-of-pages">Using a range instead of pages</a></li>
 <li><a href="#sorting">Sorting</a></li>
 <li><a href="#simplified-queries">Simplified queries</a></li>
 <li><a href="#query-parameters">Query parameters</a></li>
 <li><a href="#query-projection">Query projection</a></li>
 </ul>
 </li>
+<li><a href="#query-debugging">Query debugging</a></li>
 <li><a href="#transactions">Transactions</a></li>
 <li><a href="#custom-ids">Custom IDs</a></li>
 <li><a href="#working-with-kotlin-data-classes">Working with Kotlin Data classes</a></li>
+<li><a href="#reactive">Reactive Entities and Repositories</a></li>
+<li><a href="#mocking">Mocking</a>
+<ul class="sectlevel2">
+<li><a href="#using-the-active-record-pattern">Using the active-record pattern</a></li>
+<li><a href="#using-the-repository-pattern">Using the repository pattern</a></li>
+</ul>
+</li>
 <li><a href="#how-and-why-we-simplify-mongodb-api">How and why we simplify MongoDB API</a></li>
 <li><a href="#defining-entities-in-external-projects-or-jars">Defining entities in external projects or jars</a></li>
 </ul></div>
@@ -236,16 +245,14 @@ cd mongodb-panache-quickstart</code></pre>
 After this, the <code>quarkus-mongodb-panache</code> extension has been added to your <code>pom.xml</code>.</p>
 </div>
 <div class="paragraph">
-<p>If you don&#8217;t want to generate a new project you can add the dependency in your <code>pom.xml</code>:</p>
+<p>If you don&#8217;t want to generate a new project, add the dependency in your <code>pom.xml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-        &lt;artifactId&gt;quarkus-mongodb-panache&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-mongodb-panache&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -265,7 +272,7 @@ After this, the <code>quarkus-mongodb-panache</code> extension has been added to
 <p>Make your entities extend <code>PanacheMongoEntity</code> (optional if you are using the repository pattern)</p>
 </li>
 <li>
-<p>Use the <code>@MongoEntity</code> annotation to specify the name of the database and the name of the collection (it will default to the name of your entity).</p>
+<p>Optionally, use the <code>@MongoEntity</code> annotation to specify the name of the collection, the name of the database or the name of the client.</p>
 </li>
 </ul>
 </div>
@@ -281,7 +288,23 @@ quarkus.mongodb.database = person</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>quarkus.mongodb.database</code> property will be used by MongoDB with Panache to determine the name of the database where your entities will be persisted.</p>
+<p>The <code>quarkus.mongodb.database</code> property will be used by MongoDB with Panache to determine the name of the database where your entities will be persisted (if not overridden by <code>@MongoEntity</code>).</p>
+</div>
+<div class="paragraph">
+<p>The <code>@MongoEntity</code> annotation allows configuring:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the name of the client for multi-tenant application, see <a href="mongodb#multiple-mongodb-clients">Multiple MongoDB Clients</a>. Otherwise, the default client will be used.</p>
+</li>
+<li>
+<p>the name of the database, otherwise, the <code>quarkus.mongodb.database</code> property will be used.</p>
+</li>
+<li>
+<p>the name of the collection, otherwise the simple name of the class will be used.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>For advanced configuration of the MongoDB client, you can follow the <a href="mongodb#configuring-the-mongodb-database">Configuring the MongoDB database guide</a>.</p>
@@ -295,7 +318,7 @@ quarkus.mongodb.database = person</code></pre>
 <h3 id="defining-your-entity"><a class="anchor" href="#defining-your-entity"></a>Defining your entity</h3>
 <div class="paragraph">
 <p>To define a Panache entity, simply extend <code>PanacheMongoEntity</code> and add your columns as public fields.
-You can add the <code>@MongoEntity</code> annotation to your entity if you need to customize the name of the collection and/or the database.</p>
+You can add the <code>@MongoEntity</code> annotation to your entity if you need to customize the name of the collection, the database, or the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -318,8 +341,7 @@ public class Person extends PanacheMongoEntity {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-annotating with <code>@MongoEntity</code> is optional, it allows you to configure the name of the collection and the name of the database.
-Here the entity will be stored in the <code>ThePerson</code> collection instead of the default <code>Person</code> collection.
+Annotating with <code>@MongoEntity</code> is optional. Here the entity will be stored in the <code>ThePerson</code> collection instead of the default <code>Person</code> collection.
 </td>
 </tr>
 </table>
@@ -417,7 +439,13 @@ long countAlive = Person.count("status", Status.Alive);
 Person.delete("status", Status.Alive);
 
 // delete all persons
-Person.deleteAll();</code></pre>
+Person.deleteAll();
+
+// delete by id
+boolean deleted = Person.deleteById(personId);
+
+// set the name of all living persons to 'Mortal'
+long updated = Person.update("name", "Mortal").where("status", Status.Alive);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -445,11 +473,8 @@ A <code>persistOrUpdate()</code> method exist that persist or update an entity i
 </table>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="adding-entity-methods"><a class="anchor" href="#adding-entity-methods"></a>Adding entity methods</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="adding-entity-methods"><a class="anchor" href="#adding-entity-methods"></a>Adding entity methods</h3>
 <div class="paragraph">
 <p>Add custom queries on your entities inside the entities themselves.
 That way, you and your co-workers can find them easily, and queries are co-located with the object they operate on.
@@ -478,6 +503,7 @@ Adding them as static methods in your entity class is the Panache Active Record 
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
 <h2 id="solution-2-using-the-repository-pattern"><a class="anchor" href="#solution-2-using-the-repository-pattern"></a>Solution 2: using the repository pattern</h2>
 <div class="sectionbody">
@@ -485,7 +511,7 @@ Adding them as static methods in your entity class is the Panache Active Record 
 <h3 id="defining-your-entity-2"><a class="anchor" href="#defining-your-entity-2"></a>Defining your entity</h3>
 <div class="paragraph">
 <p>You can define your entity as regular POJO.
-You can add the <code>@MongoEntity</code> annotation to your entity if you need to customize the name of the collection and/or the database.</p>
+You can add the <code>@MongoEntity</code> annotation to your entity if you need to customize the name of the collection, the database, or the client.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -505,8 +531,7 @@ public class Person  {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-annotating with <code>@MongoEntity</code> is optional, it allows you to configure the name of the collection and the name of the database.
-Here the entity will be stored in the <code>ThePerson</code> collection instead of the default <code>Person</code> collection.
+Annotating with <code>@MongoEntity</code> is optional. Here the entity will be stored in the <code>ThePerson</code> collection instead of the default <code>Person</code> collection.
 </td>
 </tr>
 </table>
@@ -634,7 +659,13 @@ long countAlive = personRepository.count("status", Status.Alive);
 personRepository.delete("status", Status.Alive);
 
 // delete all persons
-personRepository.deleteAll();</code></pre>
+personRepository.deleteAll();
+
+// delete by id
+boolean deleted = personRepository.deleteById(personId);
+
+// set the name of all living persons to 'Mortal'
+long updated = personRepository.update("name", "Mortal").where("status", Status.Alive);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -722,6 +753,42 @@ return Person.find("status", Status.Alive)
 </div>
 </div>
 <div class="sect2">
+<h3 id="using-a-range-instead-of-pages"><a class="anchor" href="#using-a-range-instead-of-pages"></a>Using a range instead of pages</h3>
+<div class="paragraph">
+<p><code>PanacheQuery</code> also allows range-based queries.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// create a query for all living persons
+PanacheQuery&lt;Person&gt; livingPersons = Person.find("status", Status.Alive);
+
+// make it use a range: start at index 0 until index 24 (inclusive).
+livingPersons.range(0, 24);
+
+// get the range
+List&lt;Person&gt; firstRange = livingPersons.list();
+
+// to get the next range, you need to call range again
+List&lt;Person&gt; secondRange = livingPersons.range(25, 49).list();</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You cannot mix ranges and pages: if you use a range, all methods that depend on having a current page will throw an <code>UnsupportedOperationException</code>;
+you can switch back to paging using <code>page(Page)</code> or <code>page(int, int)</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
 <h3 id="sorting"><a class="anchor" href="#sorting"></a>Sorting</h3>
 <div class="paragraph">
 <p>All methods accepting a query string also accept an optional <code>Sort</code> parameter, which allows you to abstract your sorting:</p>
@@ -753,10 +820,10 @@ MongoDB with Panache will then map it to a MongoDB native query.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>&lt;singlePropertyName&gt;</code> (and single parameter) which will expand to <code>{'singleColumnName': '?'}</code></p>
+<p><code>&lt;singlePropertyName&gt;</code> (and single parameter) which will expand to <code>{'singleColumnName': '?1'}</code></p>
 </li>
 <li>
-<p><code>&lt;query&gt;</code> will expand to <code>{&lt;query&gt;}</code> where we will map the PanacheQL query to MongoDB native query form. We support the following operators that will be mapped to the corresponding MongoDB operators: 'and', 'or' ( mixing 'and' and 'or' is not currently supported), '=', '&gt;', '&gt;=', '&lt;', '&#8656;', '!=', 'is null', 'is not null', and 'like' that is mapped to the MongoDB <code>$regex</code> operator.</p>
+<p><code>&lt;query&gt;</code> will expand to <code>{&lt;query&gt;}</code> where we will map the PanacheQL query to MongoDB native query form. We support the following operators that will be mapped to the corresponding MongoDB operators: 'and', 'or' ( mixing 'and' and 'or' is not currently supported), '=', '&gt;', '&gt;=', '&lt;', '&#8656;', '!=', 'is null', 'is not null', and 'like' that is mapped to the MongoDB <code>$regex</code> operator (both String and JavaScript patterns are supported).</p>
 </li>
 </ul>
 </div>
@@ -777,6 +844,9 @@ MongoDB with Panache will then map it to a MongoDB native query.</p>
 <li>
 <p><code>lastname is not null</code> will be mapped to <code>{'lastname':{'$exists': true}}</code></p>
 </li>
+<li>
+<p><code>status in ?1</code> will be mapped to <code>{'status':{$in: [?1]}}</code></p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -786,6 +856,32 @@ The MongoDB POJO codec doesn&#8217;t support <code>ZonedDateTime</code> and <cod
 </div>
 <div class="paragraph">
 <p>MongoDB with Panache also supports extended MongoDB queries by providing a <code>Document</code> query, this is supported by the find/list/stream/count/delete methods.</p>
+</div>
+<div class="paragraph">
+<p>MongoDB with Panache offers operations to update multiple documents based on an update document and a query :
+<code>Person.update("foo = ?1, bar = ?2", fooName, barName).where("name = ?1", name)</code>.</p>
+</div>
+<div class="paragraph">
+<p>For these operations, you can express the update document the same way you express your queries, here are some examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;singlePropertyName&gt;</code> (and single parameter) which will expand to the update document <code>{'$set' : {'singleColumnName': '?1'}}</code></p>
+</li>
+<li>
+<p><code>firstname = ?1, status = ?2</code> will be mapped to the update document <code>{'$set' : {'firstname': ?1, 'status': ?2}}</code></p>
+</li>
+<li>
+<p><code>firstname = :firstname, status = :status</code> will be mapped to the update document <code>{'$set' : {'firstname': :firstname, 'status': :status}}</code></p>
+</li>
+<li>
+<p><code>{'firstname' : ?1, 'status' : ?2}</code> will be mapped to the update document <code>{'$set' : {'firstname': ?1, 'status': ?2}}</code></p>
+</li>
+<li>
+<p><code>{'firstname' : firstname, 'status' : :status}</code> ` will be mapped to the update document <code>{'$set' : {'firstname': :firstname, 'status': :status}}</code></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -928,6 +1024,22 @@ You can have your projection class extends from another class. In this case, the
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="query-debugging"><a class="anchor" href="#query-debugging"></a>Query debugging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As MongoDB with Panache allows writing simplified queries, it is sometimes handy to log the generated native queries for debugging purpose.</p>
+</div>
+<div class="paragraph">
+<p>This can be achieved by setting to DEBUG the following log category inside your <code>application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.log.category."io.quarkus.mongodb.panache.runtime".level=DEBUG</code></pre>
 </div>
 </div>
 </div>
@@ -1088,10 +1200,11 @@ data class Person (
 ): PanacheMongoEntity()</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><a id="reactive"></a>]]
-== Reactive Entities and Repositories</p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="reactive"><a class="anchor" href="#reactive"></a>Reactive Entities and Repositories</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>MongoDB with Panache allows using reactive style implementation for both entities and repositories.
 For this, you need to use the Reactive variants when defining your entities : <code>ReactivePanacheMongoEntity</code> or <code>ReactivePanacheMongoEntityBase</code>,
@@ -1183,7 +1296,13 @@ Uni&lt;Long&gt; countAlive = ReactivePerson.count("status", Status.Alive);
 Uni&lt;Long&gt;  deleteCount = ReactivePerson.delete("status", Status.Alive);
 
 // delete all persons
-deleteCount = ReactivePerson.deleteAll();</code></pre>
+deleteCount = ReactivePerson.deleteAll();
+
+// delete by id
+Uni&lt;Boolean&gt; deleted = ReactivePerson.deleteById(personId);
+
+// set the name of all living persons to 'Mortal'
+Uni&lt;Long&gt; updated = ReactivePerson.update("name", "Mortal").where("status", Status.Alive);</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -1232,6 +1351,200 @@ public Multi&lt;ReactivePerson&gt; streamPersons() {
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mocking"><a class="anchor" href="#mocking"></a>Mocking</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="using-the-active-record-pattern"><a class="anchor" href="#using-the-active-record-pattern"></a>Using the active-record pattern</h3>
+<div class="paragraph">
+<p>If you are using the active-record pattern you cannot use Mockito directly as it does not support mocking static methods,
+but you can use the <code>quarkus-panache-mock</code> module which allows you to use Mockito to mock all provided static
+methods, including your own.</p>
+</div>
+<div class="paragraph">
+<p>Add this dependency to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-panache-mock&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Given this simple entity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Person extends PanacheMongoEntity {
+
+    public String name;
+
+    public static List&lt;Person&gt; findOrdered() {
+        return findAll(Sort.by("lastname", "firstname")).list();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can write your mocking test like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class PanacheFunctionalityTest {
+
+    @Test
+    public void testPanacheMocking() {
+        PanacheMock.mock(Person.class);
+
+        // Mocked classes always return a default value
+        Assertions.assertEquals(0, Person.count());
+
+        // Now let's specify the return value
+        Mockito.when(Person.count()).thenReturn(23l);
+        Assertions.assertEquals(23, Person.count());
+
+        // Now let's change the return value
+        Mockito.when(Person.count()).thenReturn(42l);
+        Assertions.assertEquals(42, Person.count());
+
+        // Now let's call the original method
+        Mockito.when(Person.count()).thenCallRealMethod();
+        Assertions.assertEquals(0, Person.count());
+
+        // Check that we called it 4 times
+        PanacheMock.verify(Person.class, Mockito.times(4)).count();<i class="conum" data-value="1"></i><b>(1)</b>
+
+        // Mock only with specific parameters
+        Person p = new Person();
+        Mockito.when(Person.findById(12l)).thenReturn(p);
+        Assertions.assertSame(p, Person.findById(12l));
+        Assertions.assertNull(Person.findById(42l));
+
+        // Mock throwing
+        Mockito.when(Person.findById(12l)).thenThrow(new WebApplicationException());
+        Assertions.assertThrows(WebApplicationException.class, () -&gt; Person.findById(12l));
+
+        // We can even mock your custom methods
+        Mockito.when(Person.findOrdered()).thenReturn(Collections.emptyList());
+        Assertions.assertTrue(Person.findOrdered().isEmpty());
+
+        PanacheMock.verify(Person.class).findOrdered();
+        PanacheMock.verify(Person.class, Mockito.atLeastOnce()).findById(Mockito.any());
+        PanacheMock.verifyNoMoreInteractions(Person.class);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Be sure to call your <code>verify</code> methods on <code>PanacheMock</code> rather than <code>Mockito</code>, otherwise you won&#8217;t know
+what mock object to pass.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-the-repository-pattern"><a class="anchor" href="#using-the-repository-pattern"></a>Using the repository pattern</h3>
+<div class="paragraph">
+<p>If you are using the repository pattern you can use Mockito directly, using the <code>quarkus-junit5-mockito</code> module,
+which makes mocking beans much easier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-junit5-mockito&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Given this simple entity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Person {
+
+    @BsonId
+    public Long id;
+
+    public String name;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And this repository:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class PersonRepository implements PanacheMongoRepository&lt;Person&gt; {
+    public List&lt;Person&gt; findOrdered() {
+        return findAll(Sort.by("lastname", "firstname")).list();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can write your mocking test like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class PanacheFunctionalityTest {
+    @InjectMock
+    PersonRepository personRepository;
+
+    @Test
+    public void testPanacheRepositoryMocking() throws Throwable {
+        // Mocked classes always return a default value
+        Assertions.assertEquals(0, personRepository.count());
+
+        // Now let's specify the return value
+        Mockito.when(personRepository.count()).thenReturn(23l);
+        Assertions.assertEquals(23, personRepository.count());
+
+        // Now let's change the return value
+        Mockito.when(personRepository.count()).thenReturn(42l);
+        Assertions.assertEquals(42, personRepository.count());
+
+        // Now let's call the original method
+        Mockito.when(personRepository.count()).thenCallRealMethod();
+        Assertions.assertEquals(0, personRepository.count());
+
+        // Check that we called it 4 times
+        Mockito.verify(personRepository, Mockito.times(4)).count();
+
+        // Mock only with specific parameters
+        Person p = new Person();
+        Mockito.when(personRepository.findById(12l)).thenReturn(p);
+        Assertions.assertSame(p, personRepository.findById(12l));
+        Assertions.assertNull(personRepository.findById(42l));
+
+        // Mock throwing
+        Mockito.when(personRepository.findById(12l)).thenThrow(new WebApplicationException());
+        Assertions.assertThrows(WebApplicationException.class, () -&gt; personRepository.findById(12l));
+
+        Mockito.when(personRepository.findOrdered()).thenReturn(Collections.emptyList());
+        Assertions.assertTrue(personRepository.findOrdered().isEmpty());
+
+        // We can even mock your custom methods
+        Mockito.verify(personRepository).findOrdered();
+        Mockito.verify(personRepository, Mockito.atLeastOnce()).findById(Mockito.any());
+        Mockito.verifyNoMoreInteractions(personRepository);
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1301,11 +1614,14 @@ Users can just start using your entity <code>Person</code> by typing <code>Perso
 <h2 id="defining-entities-in-external-projects-or-jars"><a class="anchor" href="#defining-entities-in-external-projects-or-jars"></a>Defining entities in external projects or jars</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>MongoDB with Panache relies on compile-time bytecode enhancements to your entities.
-If you define your entities in the same project where you build your Quarkus application, everything will work fine.
-If the entities come from external projects or jars, you can make sure that your jar is treated like a Quarkus application library
-by indexing it via Jandex, see <a href="cdi-reference#how-to-generate-a-jandex-index">How to Generate a Jandex Index</a> in the CDI guide.
-This will allow Quarkus to index and enhance your entities as if they were inside the current project.</p>
+<p>MongoDB with Panache relies on compile-time bytecode enhancements to your entities.</p>
+</div>
+<div class="paragraph">
+<p>It attempts to identity archives with Panache entities (and consumers of Panache entities)
+by the presence of the marker file <code>META-INF/panache-archive.marker</code>. Panache includes an
+annotation processor that will automatically create this file in archives that depend on
+Panache (even indirectly). If you have disabled annotation processors you may need to create
+this file manually in some cases.</p>
 </div>
 </div>
 </div>

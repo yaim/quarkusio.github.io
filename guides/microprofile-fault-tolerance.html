@@ -166,7 +166,27 @@ cd microprofile-fault-tolerance-quickstart</code></pre>
 </div>
 <div class="paragraph">
 <p>This command generates a Maven structure, importing the extensions for RESTEasy/JAX-RS
-and Smallrye Fault Tolerance, which is an implementation of the MicroProfile Fault Tolerance spec that Quarkus uses.</p>
+and SmallRye Fault Tolerance, which is an implementation of the MicroProfile Fault Tolerance spec that Quarkus uses.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>smallrye-fault-tolerance</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="smallrye-fault-tolerance"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-smallrye-fault-tolerance&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>

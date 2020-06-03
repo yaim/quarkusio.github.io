@@ -71,7 +71,6 @@
     <h1 class="text-caps">Quarkus - Kubernetes extension</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
 <li><a href="#kubernetes">Kubernetes</a>
 <ul class="sectlevel2">
 <li><a href="#defining-a-docker-registry">Defining a Docker registry</a></li>
@@ -80,34 +79,34 @@
 <li><a href="#add-readiness-and-liveness-probes">Add readiness and liveness probes</a></li>
 <li><a href="#customizing-the-readiness-probe">Customizing the readiness probe:</a></li>
 <li><a href="#using-the-kubernetes-client">Using the Kubernetes client</a></li>
+<li><a href="#deploying-to-minikube">Deploying to Minikube</a></li>
 </ul>
 </li>
-<li><a href="#tuning-the-generated-resources-using-application-properties">Tuning the generated resources using application.properties</a></li>
-<li><a href="#configuration-options">Configuration options</a>
+<li><a href="#tuning-the-generated-resources-using-application-properties">Tuning the generated resources using application.properties</a>
 <ul class="sectlevel2">
-<li><a href="#basic-types">Basic Types</a></li>
-<li><a href="#mounts-and-volumes">Mounts and Volumes</a></li>
-</ul>
-</li>
+<li><a href="#configuration-options">Configuration options</a></li>
 <li><a href="#openshift">OpenShift</a></li>
-<li><a href="#knative">Knative</a>
-<ul class="sectlevel2">
+<li><a href="#knative">Knative</a></li>
+<li><a href="#deployment-targets">Deployment targets</a></li>
 <li><a href="#deprecated-configuration">Deprecated configuration</a></li>
 </ul>
 </li>
 <li><a href="#deployment">Deployment</a>
 <ul class="sectlevel2">
-<li><a href="#building">Building</a></li>
+<li><a href="#building-a-container-image">Building a container image</a></li>
 <li><a href="#deploying">Deploying</a></li>
 </ul>
 </li>
+<li><a href="#using-existing-resources">Using existing resources</a></li>
 </ul></div>
     <div>
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide covers generating and deploying Kubernetes resources based on sane defaults and user supplied configuration.
-In detail, it supports generating resources for <a href="#kubernetes">Kubernetes</a>, <a href="#openshift">OpenShift</a> and <a href="#knative">Knative</a>. Also it supports automatic deployment of these resources to the target platform.</p>
+<p>Quarkus offers the ability to automatically generate Kubernetes resources based on sane defaults and user-supplied configuration using <a href="https://github.com/dekorateio/dekorate/">dekorate</a>.
+It currently supports generating resources for vanilla <a href="#kubernetes">Kubernetes</a>, <a href="#openshift">OpenShift</a> and <a href="#knative">Knative</a>.
+Furthermore, Quarkus can deploy the application to a target Kubernetes cluster by applying the generated manifests to the target cluster&#8217;s API Server.
+Finally, when either one of container image extensions is present (see the <a href="container-image">container image guide</a> for more details), Quarkus has the ability to create a container image and push it to a registry <strong>before</strong> deploying the application to the target platform.</p>
 </div>
 </div>
 </div>
@@ -132,17 +131,17 @@ In detail, it supports generating resources for <a href="#kubernetes">Kubernetes
 <p>Apache Maven 3.6.2+</p>
 </li>
 <li>
-<p>access to a Kubernetes or cluster (Minikube is a viable options)</p>
+<p>access to a Kubernetes cluster (Minikube is a viable option)</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-the-maven-project"><a class="anchor" href="#creating-the-maven-project"></a>Creating the Maven project</h2>
+<h2 id="kubernetes"><a class="anchor" href="#kubernetes"></a>Kubernetes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>First, we need a new project that contains the Kubernetes extension and the Jib extension. This can be done using the following command:</p>
+<p>Let&#8217;s create a new project that contains both the Kubernetes and Jib extensions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -155,20 +154,8 @@ In detail, it supports generating resources for <a href="#kubernetes">Kubernetes
 cd kubernetes-quickstart</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="kubernetes"><a class="anchor" href="#kubernetes"></a>Kubernetes</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus offers the ability to automatically generate Kubernetes resources based on sane defaults and user supplied configuration. The implementation that takes care
-of generating the actual Kubernetes resources is provided by <a href="https://github.com/dekorateio/dekorate/">dekorate</a>. Currently it supports the generation of resources for
-vanilla Kubernetes and OpenShift. Furthermore, Quarkus can deploy the application to a target Kubernetes cluster by applying the generated manifests to the target cluster&#8217;s API Server.
-Finally, when either the <code>quarkus-container-image-jib</code> or <code>quarkus-container-image-docker</code> extensions are present (see the <a href="container-image">container image guide</a> for more details),
-Quarkus has the ability to create a container image and push it to a registry <strong>before</strong> deploying the application to the Kubernetes cluster.</p>
-</div>
-<div class="paragraph">
-<p>When we executed the previous command, the following dependencies were added to the <code>pom.xml</code></p>
+<p>This added the following dependencies to the <code>pom.xml</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -183,8 +170,8 @@ Quarkus has the ability to create a container image and push it to a registry <s
 </div>
 </div>
 <div class="paragraph">
-<p>By adding these dependencies, we enable the generation of Kubernetes manifests each time we perform a build while also enabling the build of a container image.
-For example, following the execution of <code>./mvnw package</code> you will notice amongst the other files that are created, two files named
+<p>By adding these dependencies, we enable the generation of Kubernetes manifests each time we perform a build while also enabling the build of a container image using Jib.
+For example, following the execution of <code>./mvnw package</code>, you will notice amongst the other files that are created, two files named
 <code>kubernetes.json</code> and <code>kubernetes.yml</code> in the <code>target/kubernetes/</code> directory.</p>
 </div>
 <div class="paragraph">
@@ -236,7 +223,7 @@ For example, following the execution of <code>./mvnw package</code> you will not
               }
             } ],
             "image" : "yourDockerUsername/test-quarkus-app:1.0-SNAPSHOT",
-            "imagePullPolicy" : "IfNotPresent",
+            "imagePullPolicy" : "Always",
             "name" : "test-quarkus-app"
           } ]
         }
@@ -271,6 +258,14 @@ For example, following the execution of <code>./mvnw package</code> you will not
   }
  }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The generated manifest can be applied to the cluster from the project root using <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f target/kubernetes/kubernetes.json</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -374,11 +369,12 @@ When using the <code>quarkus-container-image-jib</code> extension to build a con
 <div class="sect3">
 <h4 id="custom-annotations"><a class="anchor" href="#custom-annotations"></a>Custom Annotations</h4>
 <div class="paragraph">
-<p>Custom annotations can be added in a way similar to labels. For example to add the annotation <code>foo=bar</code> just apply the following configuration:</p>
+<p>Custom annotations can be added in a way similar to labels. For example to add the annotation <code>foo=bar</code> and <code>app.quarkus/id=42</code> just apply the following configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.annotations.foo=bar</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.annotations.foo=bar
+quarkus."app.quarkus/id"=42</code></pre>
 </div>
 </div>
 </div>
@@ -403,42 +399,130 @@ When using the <code>quarkus-container-image-jib</code> extension to build a con
 </li>
 </ul>
 </div>
+<div class="sect4">
+<h5 id="environment-variables-from-keyvalue-pairs"><a class="anchor" href="#environment-variables-from-keyvalue-pairs"></a>Environment variables from key/value pairs</h5>
 <div class="paragraph">
 <p>To add a key/value pair as an environment variable in the generated resources:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env-vars.my-env-var.value=foobar</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env.vars.my-env-var=foobar</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The command above will add <code>MY_ENV_VAR=foobar</code> as an environment variable.
 Please note that the key <code>my-env-var</code> will be converted to uppercase and dashes will be replaced by underscores resulting in <code>MY_ENV_VAR</code>.</p>
 </div>
-<div class="paragraph">
-<p>You may also have noticed that in contrast to labels and annotations for environment variables you don&#8217;t just use a <code>key=value</code> approach.
-That is because for environment variables there are additional options rather than just setting a value.</p>
 </div>
 <div class="sect4">
 <h5 id="environment-variables-from-secret"><a class="anchor" href="#environment-variables-from-secret"></a>Environment variables from Secret</h5>
 <div class="paragraph">
-<p>To add all key/value pairs of a <code>Secret</code> as environment variables just apply the following configuration:</p>
+<p>To add all key/value pairs of <code>Secret</code> as environment variables just apply the following configuration, separating each <code>Secret</code>
+to be used as source by a comma (<code>,</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env-vars.my-env-var.secret=my-secret</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env.secrets=my-secret,my-other-secret</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="environment-variables-from-configmap"><a class="anchor" href="#environment-variables-from-configmap"></a>Environment variables from ConfigMap</h5>
 <div class="paragraph">
-<p>To add all key/value pairs of a <code>ConfigMap</code> as environment variables just apply the following configuration:</p>
+<p>To add all key/value pairs from <code>ConfigMap</code> as environment variables just apply the following configuration, separating each
+<code>ConfigMap</code> to be used as source by a comma (<code>,</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env-vars.my-env-var.configmap=my-secret</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env.configmaps=my-config-map,another-config-map</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="environment-variables-from-fields"><a class="anchor" href="#environment-variables-from-fields"></a>Environment variables from fields</h5>
+<div class="paragraph">
+<p>It&#8217;s also possible to use the value from another field to add a new environment variable by specifying the path of the field to
+be used as a source, as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env.fields.foo=metadata.name</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="validation"><a class="anchor" href="#validation"></a>Validation</h5>
+<div class="paragraph">
+<p>A conflict between two definitions, e.g. mistakenly assigning both a value and specifying that a variable is derived
+from a field, will result in an error being thrown at build time so that you get the opportunity to fix the issue before you
+deploy your application to your cluster where it might be more difficult to diagnose the source of the issue.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, two redundant definitions, e.g. defining an injection from the same secret twice, will not cause an issue but will
+indeed report a warning to let you know that you might not have intended to duplicate that definition.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="backwards-compatibility"><a class="anchor" href="#backwards-compatibility"></a>Backwards compatibility</h5>
+<div class="paragraph">
+<p>Previous versions of the Kubernetes extension supported a different syntax to add environment variables. The older syntax is
+still supported but is deprecated and it&#8217;s advised that you migrate to the new syntax.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Old vs. new syntax</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Old</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">New</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plain variable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.my-env-var.value=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.vars.my-env-var=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">From field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.my-env-var.field=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.fields.my-env-var=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All from <code>ConfigMap</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.xxx.configmap=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.configmaps=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All from <code>Secret</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.xxx.secret=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.secrets=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you redefine the same variable using the new syntax while keeping the old syntax, <strong>ONLY</strong> the new version will be kept
+and a warning will be issued to alert you of the problem. For example, if you define both
+<code>quarkus.kubernetes.env-vars.my-env-var.value=foobar</code> and <code>quarkus.kubernetes.env.vars.my-env-var=newValue</code>, the extension will
+only generate an environment variable <code>MY_ENV_VAR=newValue</code> and issue a warning.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -489,7 +573,7 @@ The volumes themselves can be configured as shown in the sections below.</p>
 <div class="sect2">
 <h3 id="add-readiness-and-liveness-probes"><a class="anchor" href="#add-readiness-and-liveness-probes"></a>Add readiness and liveness probes</h3>
 <div class="paragraph">
-<p>By default the Kubernetes resources do not contain readiness and liveness probes in the generated <code>Deployment</code>. Adding them however is just a matter of adding the SmallRye Health extension like so:</p>
+<p>By default, the Kubernetes resources do not contain readiness and liveness probes in the generated <code>Deployment</code>. Adding them however is just a matter of adding the SmallRye Health extension like so:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -535,6 +619,77 @@ So, when the <code>kubernetes-client</code> extension is present, the <code>kube
 If more roles are required, they will have to be added manually.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="deploying-to-minikube"><a class="anchor" href="#deploying-to-minikube"></a>Deploying to Minikube</h3>
+<div class="paragraph">
+<p><a href="https://github.com/kubernetes/minikube">Minikube</a> is quite popular when a Kubernetes cluster is needed for development purposes. To make the deployment to Minikube
+experience as frictionless as possible, Quarkus provides the <code>quarkus-minikube</code> extension. This extension can be added to a project like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-minikube&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The purpose of this extension is to generate Kubernetes manifests (<code>minikube.yaml</code> and <code>minikube.json</code>) that are tailored to Minikube.
+This extension assumes a couple things:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Users won&#8217;t be using an image registry and will instead make their container image accessible to the Kubernetes cluster by building it directly
+into Minikube&#8217;s Docker daemon. To use Minikube&#8217;s Docker daemon you must first execute:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">eval $(minikube -p minikube docker-env)</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Applications deployed to Kubernetes won&#8217;t be accessed via a Kubernetes <code>Ingress</code>, but rather as a <code>NodePort</code> <code>Service</code>.
+The advantage of doing this is that the URL of an application can be retrieved trivially by executing:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">minikube service list</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To control the <a href="https://kubernetes.io/docs/concepts/services-networking/service/#nodeport">nodePort</a> that is used in this case, users can set <code>quarkus.kubernetes.node-port</code>.
+Note however that this configuration is entirely optional because Quarkus will automatically use a proper (and non-changing) value if none is set.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+It is highly discouraged to use the manifests generated by the Minikube extension when deploying to production as these manifests are intended for development purposes
+only. When deploying to production, consider using the vanilla Kubernetes manifests (or the OpenShift ones when targeting OpenShift).
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If the assumptions the Minikube extension makes don&#8217;t fit your workflow, nothing prevents you from using the regular Kubernetes extension to generate Kubernetes manifests
+and apply those to your Minikube cluster.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -544,16 +699,13 @@ If more roles are required, they will have to be added manually.</p>
 <p>The Kubernetes extension allows tuning the generated manifest, using the <code>application.properties</code> file.
 Here are some examples:</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="configuration-options"><a class="anchor" href="#configuration-options"></a>Configuration options</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="configuration-options"><a class="anchor" href="#configuration-options"></a>Configuration options</h3>
 <div class="paragraph">
 <p>The table below describe all the available configuration options.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Kubernetes</caption>
+<caption class="title">Table 2. Kubernetes</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -709,7 +861,7 @@ Here are some examples:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.kubernetes.image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.kubernetes.image-pull-secrets</p></td>
@@ -750,7 +902,7 @@ Here are some examples:</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Properties that use non standard types, can be referenced by expanding the property.
+<p>Properties that use non-standard types, can be referenced by expanding the property.
 For example to define a <code>kubernetes-readiness-probe</code> which is of type <code>Probe</code>:</p>
 </div>
 <div class="listingblock">
@@ -763,10 +915,14 @@ quarkus.kubernetes.readiness-probe.period=45s</code></pre>
 <p>In this example <code>initial-delay</code> and <code>period</code> are fields of the type <code>Probe</code>.
 Below you will find tables describing all available types.</p>
 </div>
-<div class="sect2">
-<h3 id="basic-types"><a class="anchor" href="#basic-types"></a>Basic Types</h3>
+<div class="sect3">
+<h4 id="basic-types"><a class="anchor" href="#basic-types"></a>Basic Types</h4>
+<div class="paragraph">
+<div class="title">ServiceType</div>
+<p>Allowed values: <code>cluster-ip</code>, <code>node-port</code>, <code>load-balancer</code>, <code>external-name</code></p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Env</caption>
+<caption class="title">Table 3. Env</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -807,7 +963,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Probe</caption>
+<caption class="title">Table 4. Probe</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -860,7 +1016,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Port</caption>
+<caption class="title">Table 5. Port</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -901,7 +1057,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Container</caption>
+<caption class="title">Table 6. Container</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -961,7 +1117,7 @@ Below you will find tables describing all available types.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">liveness-probe</p></td>
@@ -978,10 +1134,10 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="mounts-and-volumes"><a class="anchor" href="#mounts-and-volumes"></a>Mounts and Volumes</h3>
+<div class="sect3">
+<h4 id="mounts-and-volumes"><a class="anchor" href="#mounts-and-volumes"></a>Mounts and Volumes</h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Mount</caption>
+<caption class="title">Table 7. Mount</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1016,7 +1172,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. ConfigMapVolume</caption>
+<caption class="title">Table 8. ConfigMapVolume</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1051,7 +1207,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. SecretVolume</caption>
+<caption class="title">Table 9. SecretVolume</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1086,7 +1242,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. AzureDiskVolume</caption>
+<caption class="title">Table 10. AzureDiskVolume</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1139,7 +1295,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. AwsElasticBlockStoreVolume</caption>
+<caption class="title">Table 11. AwsElasticBlockStoreVolume</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1180,7 +1336,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. GitRepoVolume</caption>
+<caption class="title">Table 12. GitRepoVolume</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1215,7 +1371,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. PersistentVolumeClaimVolume</caption>
+<caption class="title">Table 13. PersistentVolumeClaimVolume</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1244,7 +1400,7 @@ Below you will find tables describing all available types.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. AzureFileVolume</caption>
+<caption class="title">Table 14. AzureFileVolume</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1280,10 +1436,8 @@ Below you will find tables describing all available types.</p>
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="openshift"><a class="anchor" href="#openshift"></a>OpenShift</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="openshift"><a class="anchor" href="#openshift"></a>OpenShift</h3>
 <div class="paragraph">
 <p>To enable the generation of OpenShift resources, you need to include OpenShift in the target platforms:</p>
 </div>
@@ -1297,7 +1451,27 @@ Below you will find tables describing all available types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.deployment-target=kubernetes, openshift</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.deployment-target=kubernetes,openshift</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Following the execution of <code>./mvnw package</code> you will notice amongst the other files that are created, two files named
+<code>openshift.json</code> and <code>openshift.yml</code> in the <code>target/kubernetes/</code> directory.</p>
+</div>
+<div class="paragraph">
+<p>These manifests can be deployed as is to a running cluster, using <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f target/kubernetes/openshift.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Openshift users might want to use <code>oc</code> instead of <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f target/kubernetes/openshift.json</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1317,7 +1491,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 <p>The OpenShift resources can be customized in a similar approach with Kubernetes.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. OpenShift</caption>
+<caption class="title">Table 15. OpenShift</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1473,7 +1647,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.openshift.image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.openshift.image-pull-secrets</p></td>
@@ -1514,12 +1688,10 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 </tbody>
 </table>
 </div>
-</div>
-<div class="sect1">
-<h2 id="knative"><a class="anchor" href="#knative"></a>Knative</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="knative"><a class="anchor" href="#knative"></a>Knative</h3>
 <div class="paragraph">
-<p>To enable the generation of Quarkus.Knative.resources, you need to include Knative in the target platforms:</p>
+<p>To enable the generation of Knative resources, you need to include Knative in the target platforms:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1528,13 +1700,13 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 </div>
 <div class="paragraph">
 <p>Following the execution of <code>./mvnw package</code> you will notice amongst the other files that are created, two files named
-<code>quarkus.knative.json</code> and <code>knative.yml</code> in the <code>target/kubernetes/</code> directory.</p>
+<code>knative.json</code> and <code>knative.yml</code> in the <code>target/kubernetes/</code> directory.</p>
 </div>
 <div class="paragraph">
-<p>If you look at either file you will see that it contains a Quarkus.Knative.<code>Service</code>.</p>
+<p>If you look at either file you will see that it contains a Knative <code>Service</code>.</p>
 </div>
 <div class="paragraph">
-<p>The full source of the <code>quarkus.knative.json</code> file looks something like this:</p>
+<p>The full source of the <code>knative.json</code> file looks something like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1551,7 +1723,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
         "app.kubernetes.io/name" : "test-quarkus-app",
         "app.kubernetes.io/version" : "1.0-SNAPSHOT"
       },
-      "name" : "quarkus.knative.
+      "name" : "knative.
     },
     "spec" : {
       "runLatest" : {
@@ -1560,7 +1732,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
             "spec" : {
               "container" : {
                 "image" : "dev.local/yourDockerUsername/test-quarkus-app:1.0-SNAPSHOT",
-                "imagePullPolicy" : "IfNotPresent"
+                "imagePullPolicy" : "Always"
               }
             }
           }
@@ -1572,10 +1744,18 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 </div>
 </div>
 <div class="paragraph">
+<p>The generated manifest can be deployed as is to a running cluster, using <code>kubectl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kubectl apply -f target/kubernetes/knative.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>The generated service can be customized using the following properties:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. Knative</caption>
+<caption class="title">Table 16. Knative</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1731,7 +1911,7 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.knative.image-pull-policy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ImagePullPolicy</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IfNotPresent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">quarkus.knative.image-pull-secrets</p></td>
@@ -1759,6 +1939,25 @@ relieves OpenShift users of the necessity of setting the <code>deployment-target
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="deployment-targets"><a class="anchor" href="#deployment-targets"></a>Deployment targets</h3>
+<div class="paragraph">
+<p>Mentioned in the previous sections was the concept of <code>deployment-target</code>. This concept allows users to control which Kubernetes manifests will be generated
+and deployed to a cluster (if <code>quarkus.kubernetes.deploy</code> has been set to <code>true</code>).</p>
+</div>
+<div class="paragraph">
+<p>By default, when no <code>deployment-target</code> is set, then only vanilla Kubernetes resources are generated and deployed. When multiple values are set (for example
+<code>quarkus.kubernetes.deployment-target=kubernetes,openshift</code>) then the resources for all targets are generated, but only the resources
+that correspond to the <strong>first</strong> target are applied to the cluster (if deployment is enabled).</p>
+</div>
+<div class="paragraph">
+<p>In the case of wrapper extensions like OpenShift and Minikube, when these extensions have been explicitly added to the project, the default <code>deployment-target</code>
+is set by those extensions. For example if <code>quarkus-minikube</code> has been added to a project, then <code>minikube</code> becomes the default deployment target and its
+resources will be applied to the Kubernetes cluster when deployment via <code>quarkus.kubernetes.deploy</code> has been set.
+Users can still override the deployment-targets manually using <code>quarkus.kubernetes.deployment-target</code>.</p>
+</div>
+</div>
 <div class="sect2">
 <h3 id="deprecated-configuration"><a class="anchor" href="#deprecated-configuration"></a>Deprecated configuration</h3>
 <div class="paragraph">
@@ -1824,9 +2023,9 @@ This can be easily done with the command line:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="building"><a class="anchor" href="#building"></a>Building</h3>
+<h3 id="building-a-container-image"><a class="anchor" href="#building-a-container-image"></a>Building a container image</h3>
 <div class="paragraph">
-<p>Building is possible, using any of the 3 available <code>container-image</code> extensions:</p>
+<p>Building a container image is possible, using any of the 3 available <code>container-image</code> extensions:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1855,6 +2054,111 @@ In other words the extension will use whatever cluster <code>kubectl</code> uses
 <div class="paragraph">
 <p>At the moment no additional options are provided for further customization.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-existing-resources"><a class="anchor" href="#using-existing-resources"></a>Using existing resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes it&#8217;s desirable to either provide additional resources (e.g. a ConfigMap, a Secret, a Deployment for a database etc) or provide custom ones that will be used as a <code>base</code> for the generation process.
+Those resources can be added under <code>src/main/kubernetes</code> directory and can be named after the target environment (e.g. kubernetes.json, openshift.json, knative.json, or the yml equivalents). Each of these files may contain one or more Kubernetes resources.</p>
+</div>
+<div class="paragraph">
+<p>Any resource found will be added in the generated manifests. Global modifications (e.g. labels, annotations etc) will also be applied to those resources.
+If one of the provided resources has the same name as one of the generated ones, then the generated resource will be created on top of the provided resource, respecting existing content when possible (e.g. existing labels, annotations, environment variables, mounts, replicas etc).</p>
+</div>
+<div class="paragraph">
+<p>The name of the resource is determined by the application name and may be overridden by <code>quarkus.kubernetes.name</code>, <code>quarkus.openshift.name</code> and <code>quarkus.knative.name</code>.</p>
+</div>
+<div class="paragraph">
+<p>For example, in the <code>kubernetes-quickstart</code> application, we can add a <code>kubernetes.yml</code> file in the <code>src/main/kubernetes</code> that looks like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-quickstart
+  labels:
+    app: quickstart
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: quickstart
+  template:
+    metadata:
+      labels:
+        app: quickstart
+    spec:
+      containers:
+      - name: kubernetes-quickstart
+        image: someimage:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: FOO
+          value: BAR</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The generated <code>kubernetes.yml</code> will look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  annotations:
+    app.quarkus.io/build-timestamp: "2020-04-10 - 12:54:37 +0000"
+  labels:
+    app: "quickstart"
+  name: "kubernetes-quickstart"
+spec:
+  replicas: 3 <i class="conum" data-value="1"></i><b>(1)</b>
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "kubernetes-quickstart"
+      app.kubernetes.io/version: "1.0-SNAPSHOT"
+  template:
+    metadata:
+      annotations:
+        app.quarkus.io/build-timestamp: "2020-04-10 - 12:54:37 +0000"
+      labels:
+        app: "quickstart" <i class="conum" data-value="2"></i><b>(2)</b>
+    spec:
+      containers:
+      - env:
+        - name: "FOO" <i class="conum" data-value="3"></i><b>(3)</b>
+          value: "BAR"
+        image: "&lt;&lt;yourDockerUsernmae&gt;&gt;/kubernetes-quickstart:1.0-SNAPSHOT" <i class="conum" data-value="4"></i><b>(4)</b>
+        imagePullPolicy: "Always"
+        name: "kubernetes-quickstart"
+        ports:
+        - containerPort: 8080 <i class="conum" data-value="5"></i><b>(5)</b>
+          name: "http"
+          protocol: "TCP"
+      serviceAccount: "kubernetes-quickstart"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The provided replicas &lt;1&gt;, labels &lt;2&gt; and environment variables &lt;3&gt;  were retained. However, the image &lt;4&gt; and container port &lt;5&gt; were modified. Moreover, the default annotations have been added.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If the resource name does not match the application name (or the overridden name) instead of reusing the resource a new one will be added. Same goes for the container.
+If the name of the container does not match the application name (or the overridden name), container specific configuration will be ignored.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

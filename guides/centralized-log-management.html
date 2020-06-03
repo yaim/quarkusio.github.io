@@ -98,14 +98,10 @@ By default, it is disabled, if you enable it but still use another handler (by d
 <h2 id="example-application"><a class="anchor" href="#example-application"></a>Example application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following examples will all be based on the same example application that you can create with the following steps:</p>
+<p>The following examples will all be based on the same example application that you can create with the following steps.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
+<div class="paragraph">
 <p>Create an application with the <code>quarkus-logging-gelf</code> extension. You can use the following Maven command to create it:</p>
-</li>
-</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -117,12 +113,28 @@ By default, it is disabled, if you enable it but still use another handler (by d
     -Dextensions="logging-gelf"</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>logging-gelf</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="logging-gelf"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-logging-gelf&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>For demonstration purposes, we create an endpoint that does nothing but log a sentence. You don&#8217;t need to do this inside your application.</p>
-</li>
-</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -145,12 +157,8 @@ public class GelfLoggingResource {
 }</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
+<div class="paragraph">
 <p>Configure the GELF log handler to send logs to an external UDP endpoint on the port 12201:</p>
-</li>
-</ul>
 </div>
 <div class="listingblock">
 <div class="content">

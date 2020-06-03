@@ -77,7 +77,7 @@
 </ul>
 </li>
 <li><a href="#run-the-application">Run the application</a></li>
-<li><a href="#configuring-the-smallrye-jwt-extension-security-information">Configuring the Smallrye JWT Extension Security Information</a>
+<li><a href="#configuring-the-smallrye-jwt-extension-security-information">Configuring the SmallRye JWT Extension Security Information</a>
 <ul class="sectlevel2">
 <li><a href="#setting-up-application-properties">Setting up application.properties</a></li>
 <li><a href="#adding-a-public-key">Adding a Public Key</a></li>
@@ -97,15 +97,17 @@
 <li><a href="#quarkus-configuration">Quarkus configuration</a></li>
 <li><a href="#microprofile-jwt-configuration">MicroProfile JWT configuration</a></li>
 <li><a href="#supported-public-key-formats">Supported Public Key Formats</a></li>
-<li><a href="#additional-smallrye-jwt-configuration">Additional Smallrye JWT configuration</a></li>
+<li><a href="#additional-smallrye-jwt-configuration">Additional SmallRye JWT configuration</a></li>
 </ul>
 </li>
-<li><a href="#generate-jwt-tokens">Generate JWT tokens with Smallrye JWT</a>
+<li><a href="#create-jsonwebtoken-with-jwtparser">Create JsonWebToken with JWTParser</a></li>
+<li><a href="#generate-jwt-tokens">Generate JWT tokens with SmallRye JWT</a>
 <ul class="sectlevel2">
 <li><a href="#create-jwtclaimsbuilder-and-set-the-claims">Create JwtClaimsBuilder and set the claims</a></li>
 <li><a href="#sign-the-claims">Sign the claims</a></li>
 <li><a href="#encrypt-the-claims">Encrypt the claims</a></li>
 <li><a href="#sign-the-claims-and-encrypt-the-nested-jwt-token">Sign the claims and encrypt the nested JWT token</a></li>
+<li><a href="#smallrye-jwt-builder-configuration">SmallRye JWT Builder configuration</a></li>
 </ul>
 </li>
 <li><a href="#references">References</a></li>
@@ -155,6 +157,26 @@ cd security-jwt-quickstart</code></pre>
 <div class="paragraph">
 <p>This command generates the Maven project with a REST endpoint and imports the <code>smallrye-jwt</code> extension, which includes the MicroProfile JWT RBAC support.</p>
 </div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>smallrye-jwt</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="smallrye-jwt"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-smallrye-jwt&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
 <div class="sect2">
 <h3 id="examine-the-jax-rs-resource"><a class="anchor" href="#examine-the-jax-rs-resource"></a>Examine the JAX-RS resource</h3>
 <div class="paragraph">
@@ -182,7 +204,7 @@ public class TokenSecuredResource {
 </div>
 </div>
 <div class="paragraph">
-<p>This is a basic REST endpoint that does not have any of the Smallrye JWT specific features, so let&#8217;s add some.</p>
+<p>This is a basic REST endpoint that does not have any of the SmallRye JWT specific features, so let&#8217;s add some.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -434,15 +456,15 @@ Not authorized</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Excellent, we have not provided any JWT in the request, so we should not be able to access the endpoint, and we were not. Instead we received an HTTP 401 Unauthorized error. We need to obtain and pass in a valid JWT to access that endpoint. There are two steps to this, 1) configuring our Smallrye JWT extension with information on how to validate a JWT, and 2) generating a matching JWT with the appropriate claims.</p>
+<p>Excellent, we have not provided any JWT in the request, so we should not be able to access the endpoint, and we were not. Instead we received an HTTP 401 Unauthorized error. We need to obtain and pass in a valid JWT to access that endpoint. There are two steps to this, 1) configuring our SmallRye JWT extension with information on how to validate a JWT, and 2) generating a matching JWT with the appropriate claims.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-the-smallrye-jwt-extension-security-information"><a class="anchor" href="#configuring-the-smallrye-jwt-extension-security-information"></a>Configuring the Smallrye JWT Extension Security Information</h2>
+<h2 id="configuring-the-smallrye-jwt-extension-security-information"><a class="anchor" href="#configuring-the-smallrye-jwt-extension-security-information"></a>Configuring the SmallRye JWT Extension Security Information</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the <a href="#configuration-reference">Configuration Reference</a> section we introduce the <code>application.properties</code> file that affect the Smallrye JWT extension.</p>
+<p>In the <a href="#configuration-reference">Configuration Reference</a> section we introduce the <code>application.properties</code> file that affect the SmallRye JWT extension.</p>
 </div>
 <div class="sect2">
 <h3 id="setting-up-application-properties"><a class="anchor" href="#setting-up-application-properties"></a>Setting up application.properties</h3>
@@ -469,7 +491,7 @@ quarkus.smallrye-jwt.enabled=true <i class="conum" data-value="3"></i><b>(3)</b>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>We are enabling the Smallrye JWT. Also not required since this is the default,
+<td>We are enabling the SmallRye JWT. Also not required since this is the default,
 but we are making it explicit.</td>
 </tr>
 </table>
@@ -503,7 +525,7 @@ nQIDAQAB
 <div class="sect2">
 <h3 id="generating-a-jwt"><a class="anchor" href="#generating-a-jwt"></a>Generating a JWT</h3>
 <div class="paragraph">
-<p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the JWT generation API provided by <code>smallrye-jwt</code> (see <a href="#generate-jwt-tokens">Generate JWT tokens with Smallrye JWT</a> for more infomation) and the TokenUtils class shown in the following listing. Take this source and place it into <code>security-jwt-quickstart/src/test/java/org/acme/security/jwt/TokenUtils.java</code>.</p>
+<p>Often one obtains a JWT from an identity manager like <a href="https://www.keycloak.org/">Keycloak</a>, but for this quickstart we will generate our own using the JWT generation API provided by <code>smallrye-jwt</code> (see <a href="#generate-jwt-tokens">Generate JWT tokens with SmallRye JWT</a> for more infomation) and the TokenUtils class shown in the following listing. Take this source and place it into <code>security-jwt-quickstart/src/test/java/org/acme/security/jwt/TokenUtils.java</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">JWT utility class</div>
@@ -1216,7 +1238,7 @@ Scotts-iMacPro:security-jwt-quickstart starksm$ ./target/security-jwt-quickstart
 <p>The solution repository located in the <code>security-jwt-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/security-jwt-quickstart">directory</a> contains all of the versions we have
 worked through in this quickstart guide as well as some additional endpoints that illustrate subresources with injection
 of <code>JsonWebToken</code>s and their claims into those using the CDI APIs. We suggest that you check out the quickstart solutions and
-explore the <code>security-jwt-quickstart</code> directory to learn more about the Smallrye JWT extension features.</p>
+explore the <code>security-jwt-quickstart</code> directory to learn more about the SmallRye JWT extension features.</p>
 </div>
 </div>
 </div>
@@ -1333,9 +1355,9 @@ precedence:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="additional-smallrye-jwt-configuration"><a class="anchor" href="#additional-smallrye-jwt-configuration"></a>Additional Smallrye JWT configuration</h3>
+<h3 id="additional-smallrye-jwt-configuration"><a class="anchor" href="#additional-smallrye-jwt-configuration"></a>Additional SmallRye JWT configuration</h3>
 <div class="paragraph">
-<p>Smallrye JWT provides more properties which can be used to customize the token processing:</p>
+<p>SmallRye JWT provides more properties which can be used to customize the token processing:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1389,7 +1411,7 @@ precedence:</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.require.named-principal</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>false</code></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If an application relies on <code>java.security.Principal</code> returning a name then a token must have a <code>upn</code> or <code>preferred_username</code> or <code>sub</code> claim set. Setting this property will result in Smallrye JWT throwing an exception if none of these claims is available for the application code to reliably deal with a non-null <code>Principal</code> name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If an application relies on <code>java.security.Principal</code> returning a name then a token must have a <code>upn</code> or <code>preferred_username</code> or <code>sub</code> claim set. Setting this property will result in SmallRye JWT throwing an exception if none of these claims is available for the application code to reliably deal with a non-null <code>Principal</code> name.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.path.sub</code></p></td>
@@ -1422,6 +1444,11 @@ precedence:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JWK cache refresh interval in minutes. It will be ignored unless the <code>mp.jwt.verify.publickey.location</code> points to the HTTPS URL based JWK set and no HTTP <code>Cache-Control</code> response header with a positive <code>max-age</code> parameter value is returned from a JWK HTTPS endpoint.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.jwks.forced-refresh-interval</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>30</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Forced JWK cache refresh interval in minutes which is used to restrict the frequency of the forced refresh attempts which may happen when the token verification fails due to the cache having no JWK key with a kid property matching the current token&#8217;s kid header. It will be ignored unless the mp.jwt.verify.publickey.location points to the HTTPS URL based JWK set.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.expiration.grace</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>60</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Expiration grace in seconds. By default an expired token will still be accepted if the current time is no more than 1 min after the token expiry time.</p></td>
@@ -1437,7 +1464,28 @@ precedence:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="generate-jwt-tokens"><a class="anchor" href="#generate-jwt-tokens"></a>Generate JWT tokens with Smallrye JWT</h2>
+<h2 id="create-jsonwebtoken-with-jwtparser"><a class="anchor" href="#create-jsonwebtoken-with-jwtparser"></a>Create JsonWebToken with JWTParser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If the JWT token can not be injected, for example, if it is embedded in the service request payload or the service endpoint acquires it out of band, then one can use <code>JWTParser</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">import io.smallrye.jwt.auth.principal.JWTParser;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+...
+@Inject JWTParser parser;
+
+String token = getTokenFromOidcServer();
+
+// Parse and verify the token
+JsonWebToken jwt = parser.parse(token);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="generate-jwt-tokens"><a class="anchor" href="#generate-jwt-tokens"></a>Generate JWT tokens with SmallRye JWT</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>JWT claims can be signed or encrypted or signed first and the nested JWT token encrypted.
@@ -1456,8 +1504,11 @@ Finally both the confidentiality and integrity of the claims can be further enfo
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import java.util.Collections;
+import javax.json.Json;
+import javax.json.JsonObject;
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 ...
 // Create an empty builder and add some claims
 JwtClaimsBuilder builder1 = Jwt.claims();
@@ -1467,7 +1518,17 @@ builder1.claim("customClaim", "custom-value").issuer("https://issuer.org");
 JwtClaimsBuilder builder2 = Jwt.claims("/tokenClaims.json");
 
 // Builder created from a map of claims
-JwtClaimsBuilder builder3 = Jwt.claims(Collections.singletonMap("customClaim", "custom-value"));</code></pre>
+JwtClaimsBuilder builder3 = Jwt.claims(Collections.singletonMap("customClaim", "custom-value"));
+
+// Builder created from JsonObject
+JsonObject userName = Json.createObjectBuilder().add("username", "Alice").build();
+JsonObject userAddress = Json.createObjectBuilder().add("city", "someCity").add("street", "someStreet").build();
+JsonObject json = Json.createObjectBuilder(userName).add("address", userAddress).build();
+JwtClaimsBuilder builder4 = Jwt.claims(json);
+
+// Builder created from JsonWebToken
+@Inject JsonWebToken token;
+JwtClaimsBuilder builder5 = Jwt.claims(token);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1536,6 +1597,38 @@ String jwt = Jwt.claims("/tokenClaims.json").innerSign().encrypt();</code></pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="smallrye-jwt-builder-configuration"><a class="anchor" href="#smallrye-jwt-builder-configuration"></a>SmallRye JWT Builder configuration</h3>
+<div class="paragraph">
+<p>Smallrye JWT supports the following properties which can be used to customize the way claims are signed and encrypted:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.sign.key-location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>none</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Location of a private key which will be used to sign the claims when either a no-argument <code>sign()</code> or <code>innerSign()</code> method is called.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smallrye.jwt.encrypt.key-location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>none</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Location of a public key which will be used to encrypt the claims or inner JWT when a no-argument <code>encrypt()</code> method is called.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1547,7 +1640,7 @@ String jwt = Jwt.claims("/tokenClaims.json").innerSign().encrypt();</code></pre>
 <p><a href="https://github.com/eclipse/microprofile-jwt-auth/releases/download/1.1.1/microprofile-jwt-auth-spec.html">MP JWT 1.1.1</a></p>
 </li>
 <li>
-<p><a href="https://github.com/smallrye/smallrye-jwt">Smallrye JWT</a></p>
+<p><a href="https://github.com/smallrye/smallrye-jwt">SmallRye JWT</a></p>
 </li>
 <li>
 <p><a href="https://tools.ietf.org/html/rfc7519">JSON Web Token</a></p>

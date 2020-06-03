@@ -120,21 +120,23 @@ Sentry&#8217;s Java SDK is open source, but recently sentry.io <a href="https://
 <p>To start with, you need to get a Sentry DSN either by <a href="https://sentry.io/signup/">creating a Sentry account</a> or <a href="https://docs.sentry.io/server/">installing your own self-hosted Sentry</a>.</p>
 </div>
 <div class="paragraph">
-<p>In order to configure Sentry logging, add the <code>quarkus-logging-sentry</code> extension to your
-application <code>pom.xml</code> as illustrated in the following snippet:</p>
+<p>In order to configure Sentry logging, add the <code>logging-sentry</code> extension
+to your project by running the following command in your project base directory:</p>
 </div>
 <div class="listingblock">
-<div class="title">Add the Sentry logging extension to your pom.xml</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
-  &lt;dependencies&gt;
-    &lt;!-- ... your other dependencies are here ... --&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-      &lt;artifactId&gt;quarkus-logging-sentry&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
-&lt;/build&gt;</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="logging-sentry"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-logging-sentry&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="sect2">

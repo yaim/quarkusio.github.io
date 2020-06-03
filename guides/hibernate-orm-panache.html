@@ -90,9 +90,12 @@
 <li><a href="#advanced-query">Advanced Query</a>
 <ul class="sectlevel2">
 <li><a href="#paging">Paging</a></li>
+<li><a href="#using-a-range-instead-of-pages">Using a range instead of pages</a></li>
 <li><a href="#sorting">Sorting</a></li>
 <li><a href="#simplified-queries">Simplified queries</a></li>
+<li><a href="#named-queries">Named queries</a></li>
 <li><a href="#query-parameters">Query parameters</a></li>
+<li><a href="#query-projection">Query projection</a></li>
 </ul>
 </li>
 <li><a href="#transactions">Transactions</a></li>
@@ -103,6 +106,12 @@
 </ul>
 </li>
 <li><a href="#custom-ids">Custom IDs</a></li>
+<li><a href="#mocking">Mocking</a>
+<ul class="sectlevel2">
+<li><a href="#using-the-active-record-pattern">Using the active record pattern</a></li>
+<li><a href="#using-the-repository-pattern">Using the repository pattern</a></li>
+</ul>
+</li>
 <li><a href="#how-and-why-we-simplify-hibernate-orm-mappings">How and why we simplify Hibernate ORM mappings</a></li>
 <li><a href="#defining-entities-in-external-projects-or-jars">Defining entities in external projects or jars</a></li>
 </ul></div>
@@ -358,8 +367,11 @@ Person.delete("status", Status.Alive);
 // delete all persons
 Person.deleteAll();
 
-// update all living persons
-Person.update("name = 'Moral' where status = ?1", Status.Alive);</code></pre>
+// delete by id
+boolean deleted = Person.deleteById(personId);
+
+// set the name of all living persons to 'Mortal'
+Person.update("name = 'Mortal' where status = ?1", Status.Alive);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -573,8 +585,11 @@ personRepository.delete("status", Status.Alive);
 // delete all persons
 personRepository.deleteAll();
 
-// update all living persons
-personRepository.update("name = 'Moral' where status = ?1", Status.Alive);</code></pre>
+// delete by id
+boolean deleted = personRepository.deleteById(personId);
+
+// set the name of all living persons to 'Mortal'
+personRepository.update("name = 'Mortal' where status = ?1", Status.Alive);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -662,6 +677,42 @@ return Person.find("status", Status.Alive)
 </div>
 </div>
 <div class="sect2">
+<h3 id="using-a-range-instead-of-pages"><a class="anchor" href="#using-a-range-instead-of-pages"></a>Using a range instead of pages</h3>
+<div class="paragraph">
+<p><code>PanacheQuery</code> also allows range-based queries.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// create a query for all living persons
+PanacheQuery&lt;Person&gt; livingPersons = Person.find("status", Status.Alive);
+
+// make it use a range: start at index 0 until index 24 (inclusive).
+livingPersons.range(0, 24);
+
+// get the range
+List&lt;Person&gt; firstRange = livingPersons.list();
+
+// to get the next range, you need to call range again
+List&lt;Person&gt; secondRange = livingPersons.range(25, 49).list();</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You cannot mix ranges and pages: if you use a range, all methods that depend on having a current page will throw an <code>UnsupportedOperationException</code>;
+you can switch back to paging using <code>page(Page)</code> or <code>page(int, int)</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
 <h3 id="sorting"><a class="anchor" href="#sorting"></a>Sorting</h3>
 <div class="paragraph">
 <p>All methods accepting a query string also accept the following simplified query form:</p>
@@ -740,8 +791,44 @@ You can also write your queries in plain
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Order.find("select distinct o from Order o left join fetch o.lineItems");
-Order.update("update from Person set name = 'Moral' where status = ?", Status.Alive);</code></pre>
+Order.update("update from Person set name = 'Mortal' where status = ?", Status.Alive);</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="named-queries"><a class="anchor" href="#named-queries"></a>Named queries</h3>
+<div class="paragraph">
+<p>You can reference a named query instead of a (simplified) HQL query by prefixing its name with the '#' character.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
+@NamedQuery(name = "Person.getByName", query = "from Person where name = :name")
+public class Person extends PanacheEntity {
+    public String name;
+    public LocalDate birth;
+    public Status status;
+
+    public static Person findByName(String name){
+        return find("#Person.getByName", name).firstResult();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Named queries can only be defined inside your JPA entity classes (being the Panache entity class, or the repository parameterized type),
+or on one of its super classes.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -781,6 +868,70 @@ Person.find("name = :name and status = :status",
 </div>
 <div class="paragraph">
 <p>Every query operation accepts passing parameters by index (<code>Object&#8230;&#8203;</code>), or by name (<code>Map&lt;String,Object&gt;</code> or <code>Parameters</code>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="query-projection"><a class="anchor" href="#query-projection"></a>Query projection</h3>
+<div class="paragraph">
+<p>Query projection can be done with the <code>project(Class)</code> method on the <code>PanacheQuery</code> object that is returned by the <code>find()</code> methods.</p>
+</div>
+<div class="paragraph">
+<p>You can use it to restrict which fields will be returned by the database.</p>
+</div>
+<div class="paragraph">
+<p>Hibernate will use <strong>DTO projection</strong> and generate a SELECT clause with the attributes from the projection class.
+This is also called <strong>dynamic instantiation</strong> or <strong>constructor expression</strong>, more info can be found on the Hibernate guide:
+<a href="https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#hql-select-clause">hql select clause</a></p>
+</div>
+<div class="paragraph">
+<p>The projection class needs to be a valid Java Bean and have a constructor that contains all its attributes, this constructor will be used to
+instantiate the projection DTO instead of using the entity class. This must be the only constructor of the class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection <i class="conum" data-value="1"></i><b>(1)</b>
+public class PersonName {
+    public final String name; <i class="conum" data-value="2"></i><b>(2)</b>
+
+    public PersonName(String name){ <i class="conum" data-value="3"></i><b>(3)</b>
+        this.name = name;
+    }
+}
+
+// only 'name' will be loaded from the database
+PanacheQuery&lt;PersonName&gt; query = Person.find("status", Status.Alive).project(PersonName.class);</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you plan to deploy your application as a native executable, you must register manually the projection class for reflection.</p>
+</li>
+<li>
+<p>We use public fields here, but you can use private fields and getters/setters if you prefer.</p>
+</li>
+<li>
+<p>This constructor will be used by Hibernate, it must be the only constructor in your class and have all the class attributes as parameters.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The implementation of the <code>project(Class)</code> method uses the constructor&#8217;s parameter names to build the select clause of the query,
+so the compiler must be configured to store parameter names inside the compiled class.
+This is enabled by default if you are using the Quarkus Maven archetype. If you are not using it, add the property <code>&lt;maven.compiler.parameters&gt;true&lt;/maven.compiler.parameters&gt;</code> to your pom.xml.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -828,7 +979,7 @@ public void create(Parameter parameter){
 <p>Panache provides direct support for database locking with your entity/repository, using <code>findById(Object, LockModeType)</code> or <code>find().withLock(LockModeType)</code>.</p>
 </div>
 <div class="paragraph">
-<p>The following examples are for the entity pattern, but the same can be used with repositories.</p>
+<p>The following examples are for the active record pattern, but the same can be used with repositories.</p>
 </div>
 <div class="sect2">
 <h3 id="first-locking-using-findbyid"><a class="anchor" href="#first-locking-using-findbyid"></a>First: Locking using findById().</h3>
@@ -915,6 +1066,203 @@ public class PersonRepository implements PanacheRepositoryBase&lt;Person,Integer
 </div>
 </div>
 <div class="sect1">
+<h2 id="mocking"><a class="anchor" href="#mocking"></a>Mocking</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="using-the-active-record-pattern"><a class="anchor" href="#using-the-active-record-pattern"></a>Using the active record pattern</h3>
+<div class="paragraph">
+<p>If you are using the active record pattern you cannot use Mockito directly as it does not support mocking static methods,
+but you can use the <code>quarkus-panache-mock</code> module which allows you to use Mockito to mock all provided static
+methods, including your own.</p>
+</div>
+<div class="paragraph">
+<p>Add this dependency to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-panache-mock&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Given this simple entity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
+public class Person extends PanacheEntity {
+
+    public String name;
+
+    public static List&lt;Person&gt; findOrdered() {
+        return find("ORDER BY name").list();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can write your mocking test like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class PanacheFunctionalityTest {
+
+    @Test
+    public void testPanacheMocking() {
+        PanacheMock.mock(Person.class);
+
+        // Mocked classes always return a default value
+        Assertions.assertEquals(0, Person.count());
+
+        // Now let's specify the return value
+        Mockito.when(Person.count()).thenReturn(23l);
+        Assertions.assertEquals(23, Person.count());
+
+        // Now let's change the return value
+        Mockito.when(Person.count()).thenReturn(42l);
+        Assertions.assertEquals(42, Person.count());
+
+        // Now let's call the original method
+        Mockito.when(Person.count()).thenCallRealMethod();
+        Assertions.assertEquals(0, Person.count());
+
+        // Check that we called it 4 times
+        PanacheMock.verify(Person.class, Mockito.times(4)).count();<i class="conum" data-value="1"></i><b>(1)</b>
+
+        // Mock only with specific parameters
+        Person p = new Person();
+        Mockito.when(Person.findById(12l)).thenReturn(p);
+        Assertions.assertSame(p, Person.findById(12l));
+        Assertions.assertNull(Person.findById(42l));
+
+        // Mock throwing
+        Mockito.when(Person.findById(12l)).thenThrow(new WebApplicationException());
+        Assertions.assertThrows(WebApplicationException.class, () -&gt; Person.findById(12l));
+
+        // We can even mock your custom methods
+        Mockito.when(Person.findOrdered()).thenReturn(Collections.emptyList());
+        Assertions.assertTrue(Person.findOrdered().isEmpty());
+
+        PanacheMock.verify(Person.class).findOrdered();
+        PanacheMock.verify(Person.class, Mockito.atLeastOnce()).findById(Mockito.any());
+        PanacheMock.verifyNoMoreInteractions(Person.class);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Be sure to call your <code>verify</code> methods on <code>PanacheMock</code> rather than <code>Mockito</code>, otherwise you won&#8217;t know
+what mock object to pass.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-the-repository-pattern"><a class="anchor" href="#using-the-repository-pattern"></a>Using the repository pattern</h3>
+<div class="paragraph">
+<p>If you are using the repository pattern you can use Mockito directly, using the <code>quarkus-junit5-mockito</code> module,
+which makes mocking beans much easier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-junit5-mockito&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Given this simple entity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
+public class Person {
+
+    @Id
+    @GeneratedValue
+    public Long id;
+
+    public String name;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And this repository:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class PersonRepository implements PanacheRepository&lt;Person&gt; {
+    public List&lt;Person&gt; findOrdered() {
+        return find("ORDER BY name").list();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can write your mocking test like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+public class PanacheFunctionalityTest {
+    @InjectMock
+    PersonRepository personRepository;
+
+    @Test
+    public void testPanacheRepositoryMocking() throws Throwable {
+        // Mocked classes always return a default value
+        Assertions.assertEquals(0, personRepository.count());
+
+        // Now let's specify the return value
+        Mockito.when(personRepository.count()).thenReturn(23l);
+        Assertions.assertEquals(23, personRepository.count());
+
+        // Now let's change the return value
+        Mockito.when(personRepository.count()).thenReturn(42l);
+        Assertions.assertEquals(42, personRepository.count());
+
+        // Now let's call the original method
+        Mockito.when(personRepository.count()).thenCallRealMethod();
+        Assertions.assertEquals(0, personRepository.count());
+
+        // Check that we called it 4 times
+        Mockito.verify(personRepository, Mockito.times(4)).count();
+
+        // Mock only with specific parameters
+        Person p = new Person();
+        Mockito.when(personRepository.findById(12l)).thenReturn(p);
+        Assertions.assertSame(p, personRepository.findById(12l));
+        Assertions.assertNull(personRepository.findById(42l));
+
+        // Mock throwing
+        Mockito.when(personRepository.findById(12l)).thenThrow(new WebApplicationException());
+        Assertions.assertThrows(WebApplicationException.class, () -&gt; personRepository.findById(12l));
+
+        Mockito.when(personRepository.findOrdered()).thenReturn(Collections.emptyList());
+        Assertions.assertTrue(personRepository.findOrdered().isEmpty());
+
+        // We can even mock your custom methods
+        Mockito.verify(personRepository).findOrdered();
+        Mockito.verify(personRepository, Mockito.atLeastOnce()).findById(Mockito.any());
+        Mockito.verifyNoMoreInteractions(personRepository);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="how-and-why-we-simplify-hibernate-orm-mappings"><a class="anchor" href="#how-and-why-we-simplify-hibernate-orm-mappings"></a>How and why we simplify Hibernate ORM mappings</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -985,11 +1333,14 @@ Users can just start using your entity <code>Person</code> by typing <code>Perso
 <h2 id="defining-entities-in-external-projects-or-jars"><a class="anchor" href="#defining-entities-in-external-projects-or-jars"></a>Defining entities in external projects or jars</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Hibernate ORM with Panache relies on compile-time bytecode enhancements to your entities.
-If you define your entities in the same project where you build your Quarkus application, everything will work fine.
-If the entities come from external projects or jars, you can make sure that your jar is treated like a Quarkus application library
-by indexing it via Jandex, see <a href="cdi-reference#how-to-generate-a-jandex-index">How to Generate a Jandex Index</a> in the CDI guide.
-This will allow Quarkus to index and enhance your entities as if they were inside the current project.</p>
+<p>Hibernate ORM with Panache relies on compile-time bytecode enhancements to your entities.</p>
+</div>
+<div class="paragraph">
+<p>It attempts to identity archives with Panache entities (and consumers of Panache entities)
+by the presence of the marker file <code>META-INF/panache-archive.marker</code>. Panache includes an
+annotation processor that will automatically create this file in archives that depend on
+Panache (even indirectly). If you have disabled annotation processors you may need to create
+this file manually in some cases.</p>
 </div>
 </div>
 </div>

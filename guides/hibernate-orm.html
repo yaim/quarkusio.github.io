@@ -99,6 +99,13 @@
 </li>
 <li><a href="#simplifying-hibernate-orm-with-panache">Simplifying Hibernate ORM with Panache</a></li>
 <li><a href="#configure-your-datasource">Configure your datasource</a></li>
+<li><a href="#multitenancy">Multitenancy</a>
+<ul class="sectlevel2">
+<li><a href="#writing-the-application">Writing the application</a></li>
+<li><a href="#configuring-the-application">Configuring the application</a></li>
+<li><a href="#programmatically-resolving-tenants-connections">Programmatically Resolving Tenants Connections</a></li>
+</ul>
+</li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -1381,6 +1388,238 @@ it&#8217;s implemented by the Agroal connection pool extension for Quarkus.</p>
 </div>
 <div class="paragraph">
 <p>Jump over to <a href="datasource">Quarkus - Datasources</a> for all details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="multitenancy"><a class="anchor" href="#multitenancy"></a>Multitenancy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>"The term multitenancy, in general, is applied to software development to indicate an architecture in which a single running instance of an application simultaneously serves multiple clients (tenants). This is highly common in SaaS solutions. Isolating information (data, customizations, etc.) pertaining to the various tenants is a particular challenge in these systems. This includes the data owned by each tenant stored in the database" (<a href="https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#multitenacy">Hibernate User Guide</a>).</p>
+</div>
+<div class="paragraph">
+<p>Quarkus currently supports the <a href="https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#multitenacy-separate-database">separate database</a> and the <a href="https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#multitenacy-separate-schema">separate schema</a> approach.</p>
+</div>
+<div class="sect2">
+<h3 id="writing-the-application"><a class="anchor" href="#writing-the-application"></a>Writing the application</h3>
+<div class="paragraph">
+<p>Let&#8217;s start by implementing the <code>/{tenant}</code> endpoint. As you can see from the source code below it is just a regular JAX-RS resource:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+@ApplicationScoped
+@Produces("application/json")
+@Consumes("application/json")
+@Path("/{tenant}")
+public class FruitResource {
+
+    @Inject
+    EntityManager entityManager;
+
+    @GET
+    @Path("fruits")
+    public Fruit[] getFruits() {
+        return entityManager.createNamedQuery("Fruits.findAll", Fruit.class)
+                .getResultList().toArray(new Fruit[0]);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to resolve the tenant from incoming requests and map it to a specific tenant configuration, you need to create an implementation for the <code>io.quarkus.hibernate.orm.runtime.tenant.TenantResolver</code> interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import javax.enterprise.context.ApplicationScoped;
+
+import io.quarkus.arc.Arc;
+import io.quarkus.arc.Unremovable;
+import io.quarkus.hibernate.orm.runtime.tenant.TenantResolver;
+import io.vertx.ext.web.RoutingContext;
+
+@RequestScoped
+@Unremovable
+public class CustomTenantResolver implements TenantResolver {
+
+    @Inject
+    RoutingContext context;
+
+    @Override
+    public String getDefaultTenantId() {
+        return "base";
+    }
+
+    @Override
+    public String resolveTenantId() {
+        String path = context.request().path();
+        String[] parts = path.split("/");
+
+        if (parts.length == 0) {
+            // resolve to default tenant config
+            return getDefaultTenantId();
+        }
+
+        return parts[1];
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From the implementation above, tenants are resolved from the request path so that in case no tenant could be inferred, the default tenant identifier is returned.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuring-the-application"><a class="anchor" href="#configuring-the-application"></a>Configuring the application</h3>
+<div class="paragraph">
+<p>In general it is not possible to use the Hibernate ORM database generation feature in conjunction with a multitenancy setup.
+Therefore you have to disable it and you need to make sure that the tables are created per schema.
+The following setup will use the <a href="https://quarkus.io/guides/flyway">Flyway</a> extension to achieve this goal.</p>
+</div>
+<div class="sect3">
+<h4 id="schema-approach"><a class="anchor" href="#schema-approach"></a>SCHEMA approach</h4>
+<div class="paragraph">
+<p>The same data source will be used for all tenants and a schema has to be created for every tenant inside that data source.
+CAUTION: Some databases like MariaDB/MySQL do not support database schemas. In these cases you have to use the DATABASE approach below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># Disable generation
+quarkus.hibernate-orm.database.generation=none
+
+# Enable SCHEMA approach and use default schema
+quarkus.hibernate-orm.multitenant=SCHEMA
+# You could use a non-default schema by using the following setting
+# quarkus.hibernate-orm.multitenant-schema-datasource=other
+
+# The default data source used for all tenant schemas
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.username=quarkus_test
+quarkus.datasource.password=quarkus_test
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/quarkus_test
+
+# Enable Flyway configuration to create schemas
+quarkus.flyway.schemas=base,mycompany
+quarkus.flyway.locations=classpath:schema
+quarkus.flyway.migrate-at-start=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is an example of the Flyway SQL (<code>V1.0.0__create_fruits.sql</code>) to be created in the configured folder <code>src/main/resources/schema</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="sql" class="language-sql hljs">CREATE SEQUENCE base.known_fruits_id_seq;
+SELECT setval('base."known_fruits_id_seq"', 3);
+CREATE TABLE base.known_fruits
+(
+  id   INT,
+  name VARCHAR(40)
+);
+INSERT INTO base.known_fruits(id, name) VALUES (1, 'Cherry');
+INSERT INTO base.known_fruits(id, name) VALUES (2, 'Apple');
+INSERT INTO base.known_fruits(id, name) VALUES (3, 'Banana');
+
+CREATE SEQUENCE mycompany.known_fruits_id_seq;
+SELECT setval('mycompany."known_fruits_id_seq"', 3);
+CREATE TABLE mycompany.known_fruits
+(
+  id   INT,
+  name VARCHAR(40)
+);
+INSERT INTO mycompany.known_fruits(id, name) VALUES (1, 'Avocado');
+INSERT INTO mycompany.known_fruits(id, name) VALUES (2, 'Apricots');
+INSERT INTO mycompany.known_fruits(id, name) VALUES (3, 'Blackberries');</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="database-approach"><a class="anchor" href="#database-approach"></a>DATABASE approach</h4>
+<div class="paragraph">
+<p>For every tenant you need to create a named data source with the same identifier that is returned by the <code>TenantResolver</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># Disable generation
+quarkus.hibernate-orm.database.generation=none
+
+# Enable DATABASE approach
+quarkus.hibernate-orm.multitenant=DATABASE
+
+# Default tenant 'base'
+quarkus.datasource.base.db-kind=postgresql
+quarkus.datasource.base.username=quarkus_test
+quarkus.datasource.base.password=quarkus_test
+quarkus.datasource.base.jdbc.url=jdbc:postgresql://localhost:5432/quarkus_test
+
+# Tenant 'mycompany'
+quarkus.datasource.mycompany.db-kind=postgresql
+quarkus.datasource.mycompany.username=mycompany
+quarkus.datasource.mycompany.password=mycompany
+quarkus.datasource.mycompany.jdbc.url=jdbc:postgresql://localhost:5433/mycompany
+
+# Flyway configuration for the default datasource
+quarkus.flyway.locations=classpath:database/default
+quarkus.flyway.migrate-at-start=true
+
+# Flyway configuration for the mycompany datasource
+quarkus.flyway.mycompany.locations=classpath:database/mycompany
+quarkus.flyway.mycompany.migrate-at-start=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Following are examples of the Flyway SQL files to be created in the configured folder <code>src/main/resources/database</code>.</p>
+</div>
+<div class="paragraph">
+<p>Default schema (<code>src/main/resources/database/default/V1.0.0__create_fruits.sql</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="sql" class="language-sql hljs">CREATE SEQUENCE known_fruits_id_seq;
+SELECT setval('known_fruits_id_seq', 3);
+CREATE TABLE known_fruits
+(
+  id   INT,
+  name VARCHAR(40)
+);
+INSERT INTO known_fruits(id, name) VALUES (1, 'Cherry');
+INSERT INTO known_fruits(id, name) VALUES (2, 'Apple');
+INSERT INTO known_fruits(id, name) VALUES (3, 'Banana');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mycompany schema (<code>src/main/resources/database/mycompany/V1.0.0__create_fruits.sql</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="sql" class="language-sql hljs">CREATE SEQUENCE known_fruits_id_seq;
+SELECT setval('known_fruits_id_seq', 3);
+CREATE TABLE known_fruits
+(
+  id   INT,
+  name VARCHAR(40)
+);
+INSERT INTO known_fruits(id, name) VALUES (1, 'Avocado');
+INSERT INTO known_fruits(id, name) VALUES (2, 'Apricots');
+INSERT INTO known_fruits(id, name) VALUES (3, 'Blackberries');</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="programmatically-resolving-tenants-connections"><a class="anchor" href="#programmatically-resolving-tenants-connections"></a>Programmatically Resolving Tenants Connections</h3>
+<div class="paragraph">
+<p>If you need a more dynamic configuration for the different tenants you want to support and don&#8217;t want to end up with multiple entries in your configuration file, you can use the <code>io.quarkus.hibernate.orm.runtime.tenant.TenantConnectionResolver</code> interface to implement your own logic for retrieving a connection. Creating an application scoped bean that implements this interface will replace the current Quarkus default implementation <code>io.quarkus.hibernate.orm.runtime.tenant.DataSourceTenantConnectionResolver</code>. Your custom connection resolver would allow for example to read tenant information from a database and create a connection per tenant at runtime based on it.</p>
+</div>
 </div>
 </div>
 </div>

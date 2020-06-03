@@ -228,6 +228,26 @@ cd quartz-quickstart</code></pre>
 <div class="paragraph">
 <p>The Maven project also imports the Quarkus Quartz extension.</p>
 </div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>quartz</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="quartz"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-quartz&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -513,8 +533,8 @@ public class TaskResourceTest {
 <h2 id="creating-quartz-tables"><a class="anchor" href="#creating-quartz-tables"></a>Creating Quartz Tables</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add a SQL migration file named <code>src/main/resources/db/migration/V2.0.0<em>QuarkusQuartzTasks.sql</code> with the content copied from
-file with the content from <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/quartz-quickstart/src/main/resources/db/migration/V2.0.0" class="bare">https://github.com/quarkusio/quarkus-quickstarts/blob/master/quartz-quickstart/src/main/resources/db/migration/V2.0.0</a></em>QuarkusQuartzTasks.sql[V2.0.0__QuarkusQuartzTasks.sql].</p>
+<p>Add a SQL migration file named <code>src/main/resources/db/migration/V2.0.0__QuarkusQuartzTasks.sql</code> with the content copied from
+file with the content from <a href="https://github.com/quarkusio/quarkus-quickstarts/blob/master/quartz-quickstart/src/main/resources/db/migration/V2.0.0__QuarkusQuartzTasks.sql">V2.0.0__QuarkusQuartzTasks.sql</a>.</p>
 </div>
 </div>
 </div>

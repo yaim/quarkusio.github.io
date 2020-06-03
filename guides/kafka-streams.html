@@ -240,16 +240,35 @@ Create a new project with the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mkdir producer &amp;&amp; cd producer &amp;&amp; \
-mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=kafka-streams-quickstart-producer \
     -Dextensions="kafka" \
-    &amp;&amp; cd ..</code></pre>
+    &amp;&amp; mv kafka-streams-quickstart-producer producer</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This command generates a Maven project, importing the Reactive Messaging and Kafka connector extensions.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>smallrye-reactive-messaging-kafka</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="kafka"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-smallrye-reactive-messaging-kafka&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 <div class="sect2">
 <h3 id="the-temperature-value-producer"><a class="anchor" href="#the-temperature-value-producer"></a>The Temperature Value Producer</h3>
@@ -317,7 +336,7 @@ public class ValuesGenerator {
                             .setScale(1, RoundingMode.HALF_UP)
                             .doubleValue();
 
-                    LOG.info("station: {}, temperature: {}", station.name, temperature);
+                    LOG.infov("station: {0}, temperature: {1}", station.name, temperature);
                     return KafkaRecord.of(station.id, Instant.now() + ";" + temperature);
                 });
     }
@@ -325,7 +344,7 @@ public class ValuesGenerator {
     @Outgoing("weather-stations")                               <i class="conum" data-value="3"></i><b>(3)</b>
     public Flowable&lt;KafkaRecord&lt;Integer, String&gt;&gt; weatherStations() {
         List&lt;KafkaRecord&lt;Integer, String&gt;&gt; stationsAsJson = stations.stream()
-            .map(s -&gt; KafkaMessage.of(
+            .map(s -&gt; KafkaRecord.of(
                     s.id,
                     "{ \"id\" : " + s.id +
                     ", \"name\" : \"" + s.name + "\" }"))
@@ -406,16 +425,35 @@ Create another project like so:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">mkdir aggregator &amp;&amp; cd aggregator &amp;&amp; \
-mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=kafka-streams-quickstart-aggregator \
     -Dextensions="kafka-streams,resteasy-jsonb" \
-    &amp;&amp; cd ..</code></pre>
+    &amp;&amp; mv kafka-streams-quickstart-aggregator aggregator</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This creates the <code>aggregator</code> project with the Quarkus extension for Kafka Streams and with RESTEasy support for JSON-B.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>kafka-streams</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="kafka-streams"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-kafka-streams&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 <div class="sect2">
 <h3 id="the-pipeline-implementation"><a class="anchor" href="#the-pipeline-implementation"></a>The Pipeline Implementation</h3>
@@ -489,6 +527,7 @@ import java.math.RoundingMode;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public class Aggregation {
 
     public int stationId;

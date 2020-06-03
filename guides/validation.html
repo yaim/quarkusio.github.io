@@ -87,6 +87,7 @@
 <li><a href="#validation-and-localization">Validation and localization</a></li>
 </ul>
 </li>
+<li><a href="#configuration-reference">Hibernate Validator Configuration Reference</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -177,6 +178,26 @@ cd validation-quickstart</code></pre>
 </div>
 <div class="paragraph">
 <p>This command generates a Maven structure importing the RESTEasy/JAX-RS, JSON-B and Hibernate Validator/Bean Validation extensions.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>hibernate-validator</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="hibernate-validator"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-hibernate-validator&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -576,6 +597,12 @@ quarkus.locales=en-US,es-ES,fr-FR</code></pre>
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Hibernate Validator Configuration Reference</h2>
+<div class="sectionbody">
+
 </div>
 </div>
     </div>

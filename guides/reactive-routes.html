@@ -73,6 +73,7 @@
 <li><a href="#quarkus-http">Quarkus HTTP</a></li>
 <li><a href="#declaring-reactive-routes">Declaring reactive routes</a>
 <ul class="sectlevel2">
+<li><a href="#handling-conflicting-routes">Handling conflicting routes</a></li>
 <li><a href="#routebase"><code>@RouteBase</code></a></li>
 </ul>
 </li>
@@ -231,6 +232,47 @@ public void route(RoutingContext rc) {
 </div>
 <div class="paragraph">
 <p>Each route can use different paths, methods&#8230;&#8203;</p>
+</div>
+<div class="sect2">
+<h3 id="handling-conflicting-routes"><a class="anchor" href="#handling-conflicting-routes"></a>Handling conflicting routes</h3>
+<div class="paragraph">
+<p>You may end up with multiple routes matching a given path.
+In the following example, both route matches <code>/accounts/me</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/accounts/:id", methods = HttpMethod.GET)
+void getAccount(RoutingContext ctx) {
+  ...
+}
+
+@Route(path = "/accounts/me", methods = HttpMethod.GET)
+void getCurrentUserAccount(RoutingContext ctx) {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As a consequence, the result is not the expected one as the first route is called with the path parameter <code>id</code> set to <code>me</code>.
+To avoid the conflict, use the <code>order</code> attribute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/accounts/:id", methods = HttpMethod.GET, order = 2)
+void getAccount(RoutingContext ctx) {
+  ...
+}
+
+@Route(path = "/accounts/me", methods = HttpMethod.GET, order = 1)
+void getCurrentUserAccount(RoutingContext ctx) {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By giving a lower order to the second route, it gets evaluated first.
+If the request path matches, it is invoked, otherwise the other routes are evaluated.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="routebase"><a class="anchor" href="#routebase"></a><code>@RouteBase</code></h3>

@@ -89,6 +89,7 @@
 <li><a href="#caffeine-configuration-properties">Caffeine configuration properties</a></li>
 </ul>
 </li>
+<li><a href="#context-propagation">Context propagation</a></li>
 <li><a href="#annotated-beans-examples">Annotated beans examples</a>
 <ul class="sectlevel2">
 <li><a href="#implicit-simple-cache-key">Implicit simple cache key</a></li>
@@ -198,6 +199,26 @@ However, you can go right to the completed example.</p>
 </div>
 <div class="paragraph">
 <p>This command generates the Maven project with a REST endpoint and imports the <code>cache</code> and <code>resteasy-jsonb</code> extensions.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>cache</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="cache"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-cache&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -672,6 +693,24 @@ quarkus.cache.caffeine."bar".maximum-size=1000 <i class="conum" data-value="2"><
 </tr>
 </table>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="context-propagation"><a class="anchor" href="#context-propagation"></a>Context propagation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This extension relies on non-blocking calls internally for cache values computations.
+By default, there&#8217;s no context propagation between the calling thread (from your application) and a thread that performs such a computation.</p>
+</div>
+<div class="paragraph">
+<p>The context propagation can be enabled for this extension by simply adding the <code>quarkus-smallrye-context-propagation</code> extension to your project.</p>
+</div>
+<div class="paragraph">
+<p>If you see a <code>javax.enterprise.context.ContextNotActiveException</code> in your application log during a cache computation, then you probably need to enable the context propagation.</p>
+</div>
+<div class="paragraph">
+<p>You can find more information about context propagation in Quarkus in the <a href="context-propagation">dedicated guide</a>.</p>
 </div>
 </div>
 </div>

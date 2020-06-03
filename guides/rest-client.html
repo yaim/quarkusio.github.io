@@ -162,6 +162,26 @@ cd rest-client-quickstart</code></pre>
 <div class="paragraph">
 <p>This command generates the Maven project with a REST endpoint and imports the <code>rest-client</code> and <code>resteasy-jsonb</code> extensions.</p>
 </div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>rest-client</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="rest-client"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-rest-client&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

@@ -191,6 +191,16 @@ install from Market place Eclipse BPMN2 Modeller plugin (with jBPM Runtime Exten
 <div class="paragraph">
 <p>Download and install the VSCode Extension from <a href="https://github.com/kiegroup/kogito-tooling/releases">Kogito Tooling release page</a> to edit and model process definitions from VSCode IDE.</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Online</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To avoid any modeler installation you can use directly use <a href="https://bpmn.new">BPMN.new</a> to design and model your process through your favorite web browser.</p>
+</div>
 </div>
 </div>
 </div>
@@ -264,6 +274,26 @@ cd kogito-quickstart</code></pre>
 <p>This command generates a Maven project, importing the <code>kogito</code> extension
 that comes with all needed dependencies and configuration to equip your application
 with business automation.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>kogito</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="kogito"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.kie.kogito&lt;/groupId&gt;
+    &lt;artifactId&gt;kogito-quarkus&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -741,10 +771,10 @@ To be able to use such assets in your application, an additional dependency is r
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://kogito.kie.org">Kogito website</a></p>
+<p><a href="https://kogito.kie.org">Kogito Website</a></p>
 </li>
 <li>
-<p><a href="https://github.com/kiegroup/kogito-runtimes/wiki">Kogito wiki</a></p>
+<p><a href="https://docs.jboss.org/kogito/release/latest/html_single">Kogito Documentation</a></p>
 </li>
 </ul>
 </div>

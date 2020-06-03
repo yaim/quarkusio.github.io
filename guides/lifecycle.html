@@ -73,10 +73,15 @@
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#solution">Solution</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
+<li><a href="#the-main-method">The main method</a>
+<ul class="sectlevel2">
+<li><a href="#injecting-the-command-line-arguments">Injecting the command line arguments</a></li>
+</ul>
+</li>
 <li><a href="#listening-for-startup-and-shutdown-events">Listening for startup and shutdown events</a>
 <ul class="sectlevel2">
 <li><a href="#what-is-the-difference-from-initializedapplicationscoped-class-and-destroyedapplicationscoped-class">What is the difference from <code>@Initialized(ApplicationScoped.class)</code> and <code>@Destroyed(ApplicationScoped.class)</code></a></li>
-<li><a href="#using-startup-to-initialize-a-cdi-bean-at-application-startup">Using <code>@Startup</code> to initialize a CDI bean at application startup</a></li>
+<li><a href="#startup_annotation">Using <code>@Startup</code> to initialize a CDI bean at application startup</a></li>
 </ul>
 </li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
@@ -93,10 +98,16 @@ This guide explains how to:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>be notified when the application starts</p>
+<p>Write a Quarkus application with a main method</p>
 </li>
 <li>
-<p>be notified when the application stops</p>
+<p>Write command mode applications that run a task and then terminate</p>
+</li>
+<li>
+<p>Be notified when the application starts</p>
+</li>
+<li>
+<p>Be notified when the application stops</p>
 </li>
 </ul>
 </div>
@@ -181,6 +192,114 @@ cd lifecycle-quickstart</code></pre>
 <p>an associated test</p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-main-method"><a class="anchor" href="#the-main-method"></a>The main method</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default Quarkus will automatically generate a main method, that will boostrap Quarkus and then just wait for
+shutdown to be initiated. Let&#8217;s provide our own main method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package om.acme;
+
+import io.quarkus.runtime.annotations.QuarkusMain;
+import io.quarkus.runtime.Quarkus;
+
+@QuarkusMain  <i class="conum" data-value="1"></i><b>(1)</b>
+public class Main {
+
+    public static void main(String ... args) {
+        System.out.println("Running main method");
+        Quarkus.run(args); <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This annotation tells Quarkus to use this as the main method, unless it is overridden in the config</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This launches Quarkus</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This main class will bootstrap Quarkus and run it until it stops. This is no different to the automatically
+generated main class, but has the advantage that you can just launch it directly from the IDE without needing
+to run a Maven or Gradle command.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+It is not recommenced to do any business logic in this main method, as Quarkus has not been set up yet,
+and Quarkus may run in a different ClassLoader. If you want to perform logic on startup use an <code>io.quarkus.runtime.QuarkusApplication</code>
+as described below.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If we want to actually perform business logic on startup (or write applications that complete a task and then exit)
+we need to supply a <code>io.quarkus.runtime.QuarkusApplication</code> class to the run method. After Quarkus has been started
+the <code>run</code> method of the application will be invoked. When this method returns the Quarkus application will exit.</p>
+</div>
+<div class="paragraph">
+<p>If you want to perform logic on startup you should call <code>Quarkus.waitForExit()</code>, this method will wait until a shutdown
+is requested (either from an external signal like when you press <code>Ctrl+C</code> or because a thread has called <code>Quarkus.asyncExit()</code>).</p>
+</div>
+<div class="paragraph">
+<p>An example of what this looks like is below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme;
+
+import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.QuarkusApplication;
+import io.quarkus.runtime.annotations.QuarkusMain;
+
+@QuarkusMain
+public class Main {
+    public static void main(String... args) {
+        Quarkus.run(MyApp.class, args);
+    }
+
+    public static class MyApp implements QuarkusApplication {
+
+        @Override
+        public int run(String... args) throws Exception {
+            System.out.println("Do startup logic here");
+            Quarkus.waitForExit();
+            return 0;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="injecting-the-command-line-arguments"><a class="anchor" href="#injecting-the-command-line-arguments"></a>Injecting the command line arguments</h3>
+<div class="paragraph">
+<p>It is possible to inject the arguments that were passed in on the command line:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+@CommandLineArguments
+String[] args;</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -273,7 +392,7 @@ In CDI applications, an event with qualifier <code>@Initialized(ApplicationScope
 </div>
 </div>
 <div class="sect2">
-<h3 id="using-startup-to-initialize-a-cdi-bean-at-application-startup"><a class="anchor" href="#using-startup-to-initialize-a-cdi-bean-at-application-startup"></a>Using <code>@Startup</code> to initialize a CDI bean at application startup</h3>
+<h3 id="startup_annotation"><a class="anchor" href="#startup_annotation"></a>Using <code>@Startup</code> to initialize a CDI bean at application startup</h3>
 <div class="paragraph">
 <p>A bean represented by a class, producer method or field annotated with <code>@Startup</code> is initialized at application startup:</p>
 </div>

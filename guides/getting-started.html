@@ -82,9 +82,10 @@
 <li><a href="#using-injection">6. Using injection</a></li>
 <li><a href="#development-mode">7. Development Mode</a></li>
 <li><a href="#testing">8. Testing</a></li>
-<li><a href="#packaging-and-run-the-application">9. Packaging and run the application</a></li>
-<li><a href="#banner">10. Configuring the banner</a></li>
-<li><a href="#whats-next">11. What&#8217;s next?</a></li>
+<li><a href="#working-with-multi-module-project-or-external-modules">9. Working with multi-module project or external modules</a></li>
+<li><a href="#packaging-and-run-the-application">10. Packaging and run the application</a></li>
+<li><a href="#banner">11. Configuring the banner</a></li>
+<li><a href="#whats-next">12. What&#8217;s next?</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -548,9 +549,9 @@ be set, as the default version does not support Junit 5:</p>
     &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
     &lt;version&gt;${surefire-plugin.version}&lt;/version&gt;
     &lt;configuration&gt;
-       &lt;systemProperties&gt;
+       &lt;systemPropertyVariables&gt;
           &lt;java.util.logging.manager&gt;org.jboss.logmanager.LogManager&lt;/java.util.logging.manager&gt;
-       &lt;/systemProperties&gt;
+       &lt;/systemPropertyVariables&gt;
     &lt;/configuration&gt;
 &lt;/plugin&gt;</code></pre>
 </div>
@@ -646,7 +647,31 @@ property called <code>test.url</code> that is set to the base test URL for situa
 </div>
 </div>
 <div class="sect1">
-<h2 id="packaging-and-run-the-application"><a class="anchor" href="#packaging-and-run-the-application"></a>9. Packaging and run the application</h2>
+<h2 id="working-with-multi-module-project-or-external-modules"><a class="anchor" href="#working-with-multi-module-project-or-external-modules"></a>9. Working with multi-module project or external modules</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus heavily utilizes <a href="https://github.com/wildfly/jandex">Jandex</a> at build time, to discover various classes or annotations. One immediately recongizable application of this, is CDI bean discovery.
+As a result, most of the Quarkus extensions will not work properly if this build time discovery isn&#8217;t properly setup.</p>
+</div>
+<div class="paragraph">
+<p>This index is created by default on the project on which Quarkus is configured for, thanks to our Maven and Gradle plugins.</p>
+</div>
+<div class="paragraph">
+<p>However, when working with a multi-module project, be sure to read the <code>Working with multi-module projects</code> section of the
+<a href="maven-tooling#multi-module-maven">Maven</a> or <a href="gradle-tooling#multi-module-maven">Gradle</a> guides.</p>
+</div>
+<div class="paragraph">
+<p>If you plan to use external modules (for example, an external library for all your domain objects),
+you will need to make these modules known to the indexing process either by adding the Jandex plugin (if you can modify them)
+or via the <code>quarkus.index-dependency</code> property inside your <code>application.properties</code> (useful in cases where you can&#8217;t modify the module).</p>
+</div>
+<div class="paragraph">
+<p>Be sure to read the <a href="cdi-reference#bean_discovery">Bean Discovery</a> section of the CDI guide for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="packaging-and-run-the-application"><a class="anchor" href="#packaging-and-run-the-application"></a>10. Packaging and run the application</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The application is packaged using <code>./mvnw package</code>.
@@ -695,7 +720,7 @@ Before running the application, don&#8217;t forget to stop the hot reload mode (
 </div>
 </div>
 <div class="sect1">
-<h2 id="banner"><a class="anchor" href="#banner"></a>10. Configuring the banner</h2>
+<h2 id="banner"><a class="anchor" href="#banner"></a>11. Configuring the banner</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>By default when a Quarkus application starts (in regular or dev mode), it will display an ASCII art banner. The banner can be disabled by setting <code>quarkus.banner.enabled=false</code> in <code>application.properties</code>,
@@ -705,7 +730,7 @@ Furthermore, users can supply a custom banner by placing the banner file in <cod
 </div>
 </div>
 <div class="sect1">
-<h2 id="whats-next"><a class="anchor" href="#whats-next"></a>11. What&#8217;s next?</h2>
+<h2 id="whats-next"><a class="anchor" href="#whats-next"></a>12. What&#8217;s next?</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide covered the creation of an application using Quarkus.

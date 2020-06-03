@@ -238,11 +238,43 @@ cd hibernate-search-elasticsearch-quickstart</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This command generates a Maven structure importing the following extensions:
- * Hibernate ORM with Panache,
- * the PostgreSQL JDBC driver,
- * Hibernate Search + Elasticsearch,
- * RESTEasy and JSON-B.</p>
+<p>This command generates a Maven structure importing the following extensions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Hibernate ORM with Panache,</p>
+</li>
+<li>
+<p>the PostgreSQL JDBC driver,</p>
+</li>
+<li>
+<p>Hibernate Search + Elasticsearch,</p>
+</li>
+<li>
+<p>RESTEasy and JSON-B.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>hibernate-search-elasticsearch</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="hibernate-search-elasticsearch"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-hibernate-search-elasticsearch&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -840,7 +872,7 @@ Feel free to explore the DSL using autocompletion.</p>
 </div>
 <div class="paragraph">
 <p>When that&#8217;s not enough, you can always fall back to
-[defining a predicate using JSON directly](<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json" class="bare">https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json</a>).</p>
+<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#search-dsl-predicate-extensions-elasticsearch-from-json">defining a predicate using JSON directly</a>.</p>
 </div>
 </td>
 </tr>
@@ -871,8 +903,8 @@ quarkus.hibernate-orm.sql-load-script=import.sql <i class="conum" data-value="4"
 
 quarkus.hibernate-search.elasticsearch.version=7 <i class="conum" data-value="5"></i><b>(5)</b>
 quarkus.hibernate-search.elasticsearch.analysis.configurer=org.acme.hibernate.search.elasticsearch.config.AnalysisConfigurer <i class="conum" data-value="6"></i><b>(6)</b>
-quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy=drop-and-create <i class="conum" data-value="7"></i><b>(7)</b>
-quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status=yellow <i class="conum" data-value="8"></i><b>(8)</b>
+quarkus.hibernate-search.schema-management.strategy=drop-and-create <i class="conum" data-value="7"></i><b>(7)</b>
+quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status=yellow <i class="conum" data-value="8"></i><b>(8)</b>
 quarkus.hibernate-search.automatic-indexing.synchronization.strategy=sync <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
 </div>
 </div>
@@ -910,7 +942,7 @@ Since the mapping is created at build time to reduce startup time, Hibernate Sea
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>We consider the <code>yellow</code> status is sufficient to connect to the Elasticsearch cluster.
+<td>We consider the <code>yellow</code> status is sufficient to proceed after an index is created.
 This is for testing purposes with the Elasticsearch Docker container.
 It should not be used in production.</td>
 </tr>
@@ -989,7 +1021,7 @@ INSERT INTO book(id, title, author_id) VALUES (nextval('hibernate_sequence'), '4
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.5.0</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it --rm=true --name elasticsearch_quarkus_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.6.2</code></pre>
 </div>
 </div>
 <div class="listingblock">

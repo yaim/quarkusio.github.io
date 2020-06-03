@@ -670,7 +670,7 @@ public class Fruit {
     }
 
     public static Multi&lt;Fruit&gt; findAll(PgPool client) {
-        return client.query("SELECT id, name FROM fruits ORDER BY name ASC")
+        return client.query("SELECT id, name FROM fruits ORDER BY name ASC").execute()
                 // Create a Multi from the set of rows:
                 .onItem().produceMulti(set -&gt; Multi.createFrom().items(() -&gt; StreamSupport.stream(set.spliterator(), false)))
                 // For each row create a fruit instance
@@ -678,23 +678,23 @@ public class Fruit {
     }
 
     public static Uni&lt;Fruit&gt; findById(PgPool client, Long id) {
-        return client.preparedQuery("SELECT id, name FROM fruits WHERE id = $1", Tuple.of(id))
+        return client.preparedQuery("SELECT id, name FROM fruits WHERE id = $1", Tuple.of(id)).execute()
                 .onItem().apply(RowSet::iterator)
                 .onItem().apply(iterator -&gt; iterator.hasNext() ? from(iterator.next()) : null);
     }
 
     public Uni&lt;Long&gt; save(PgPool client) {
-        return client.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)", Tuple.of(name))
+        return client.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)", Tuple.of(name)).execute()
                 .onItem().apply(pgRowSet -&gt; pgRowSet.iterator().next().getLong("id"));
     }
 
     public Uni&lt;Boolean&gt; update(PgPool client) {
-        return client.preparedQuery("UPDATE fruits SET name = $1 WHERE id = $2", Tuple.of(name, id))
+        return client.preparedQuery("UPDATE fruits SET name = $1 WHERE id = $2", Tuple.of(name, id)).execute()
                 .onItem().apply(pgRowSet -&gt; pgRowSet.rowCount() == 1);
     }
 
     public static Uni&lt;Boolean&gt; delete(PgPool client, Long id) {
-        return client.preparedQuery("DELETE FROM fruits WHERE id = $1", Tuple.of(id))
+        return client.preparedQuery("DELETE FROM fruits WHERE id = $1", Tuple.of(id)).execute()
                 .onItem().apply(pgRowSet -&gt; pgRowSet.rowCount() == 1);
     }
 
@@ -759,12 +759,12 @@ public class FruitResource {
     }
 
     private void initdb() {
-        client.query("DROP TABLE IF EXISTS fruits")
-                .flatMap(r -&gt; client.query("CREATE TABLE fruits (id SERIAL PRIMARY KEY, name TEXT NOT NULL)"))
-                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Kiwi')"))
-                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Durian')"))
-                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Pomelo')"))
-                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Lychee')"))
+        client.query("DROP TABLE IF EXISTS fruits").execute()
+                .flatMap(r -&gt; client.query("CREATE TABLE fruits (id SERIAL PRIMARY KEY, name TEXT NOT NULL)").execute())
+                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Kiwi')").execute())
+                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Durian')").execute())
+                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Pomelo')").execute())
+                .flatMap(r -&gt; client.query("INSERT INTO fruits (name) VALUES ('Lychee')").execute())
                 .await().indefinitely();
     }
 
@@ -1114,6 +1114,9 @@ The following list gives you a few examples:</p>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p><a href="rest-json#reactive">Using Mutiny with RestEasy</a></p>
+</li>
 <li>
 <p><a href="mailer">Sending email</a></p>
 </li>

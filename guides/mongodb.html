@@ -204,6 +204,26 @@ cd mongodb-quickstart</code></pre>
 <p>This command generates a Maven structure importing the RESTEasy/JAX-RS, JSON-B, Mutiny, Context Propagation and MongoDB Client extensions.
 After this, the quarkus-mongodb-client extension has been added to your <code>pom.xml</code>.</p>
 </div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>mongodb-client</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="mongodb-client"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-mongodb-client&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -403,6 +423,23 @@ quarkus.mongodb.inventory.connection-string = mongodb://mongo3:27017/invdb,mongo
 The syntax is as follows: <code>quarkus.mongodb.[optional name.][mongo connection property]</code>.
 If the name is omitted, it configures the default client.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The use of multiple MongoDB clients enables multi-tenancy for MongoDB by allowing to connect to multiple MongoDB clusters.<br>
+If you want to connect to multiple databases inside the same cluster,
+multiple clients are <strong>not</strong> necessary as a single client is able to access all databases in the same cluster
+(like a JDBC connection is able to access to multiple schemas inside the same database).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
 <h3 id="named-mongo-client-injection"><a class="anchor" href="#named-mongo-client-injection"></a>Named Mongo client Injection</h3>
 <div class="paragraph">
@@ -540,7 +577,8 @@ public class ReactiveFruitService {
         Document document = new Document()
                 .append("name", fruit.getName())
                 .append("description", fruit.getDescription());
-        return getCollection().insertOne(document);
+        return getCollection().insertOne(document)
+                .onItem().ignore().andContinueWithNull();
     }
 
     private ReactiveMongoCollection&lt;Document&gt; getCollection() {
@@ -854,6 +892,22 @@ quarkus.mongodb.tls-insecure=true # only if TLS certificate cannot be validated<
 </div>
 <div class="paragraph">
 <p><a href="https://docs.mongodb.com/manual/core/security-client-side-encryption/">Client-Side Field Level Encryption</a> is also not supported in native mode.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you encounter the following error when running your application in native mode:<br>
+<code>Failed to encode 'MyObject'. Encoding 'myVariable' errored with: Can&#8217;t find a codec for class org.acme.MyVariable.</code><br>
+This means that the <code>org.acme.MyVariable</code> class is not known to GraalVM, the remedy is to add the <code>@RegisterForReflection</code> annotation to your <code>MyVariable class</code>.</p>
 </div>
 </td>
 </tr>

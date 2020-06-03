@@ -84,10 +84,10 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>The <code>quarkus-azure-functions-http</code> extension allows you to write microservices with RESTEasy (JAX-RS),
-Undertow (servlet), or Vert.x Web and make these microservices deployable to the Azure Functions runtime.</p>
+Undertow (servlet), Vert.x Web, or <a href="funqy-http">Funqy HTTP</a> and make these microservices deployable to the Azure Functions runtime.</p>
 </div>
 <div class="paragraph">
-<p>One azure function deployment can represent any number of JAX-RS, servlet, or Vert.x Web endpoints.</p>
+<p>One azure function deployment can represent any number of JAX-RS, servlet, Vert.x Web, or <a href="funqy-http">Funqy HTTP</a> endpoints.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -145,7 +145,7 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
 <div class="sectionbody">
 <div class="paragraph">
 <p>This guide walks you through running a Maven Archetype to generate a sample project that contains three http endpoints
-written with JAX-RS APIs, Servlet APIs, and Vert.x Web APIs.  After building, you will then be able to deploy
+written with JAX-RS APIs, Servlet APIs, Vert.x Web, or <a href="funqy-http">Funqy HTTP</a> APIs.  After building, you will then be able to deploy
 to Azure.</p>
 </div>
 </div>
@@ -247,7 +247,8 @@ at Azure, and deploy it.</p>
 <div class="paragraph">
 <p><a href="https://{appName}.azurewebsites.net/api/hello" class="bare">https://{appName}.azurewebsites.net/api/hello</a>
 <a href="https://{appName}.azurewebsites.net/api/servlet/hello" class="bare">https://{appName}.azurewebsites.net/api/servlet/hello</a>
-<a href="https://{appName}.azurewebsites.net/api/vertx/hello" class="bare">https://{appName}.azurewebsites.net/api/vertx/hello</a></p>
+<a href="https://{appName}.azurewebsites.net/api/vertx/hello" class="bare">https://{appName}.azurewebsites.net/api/vertx/hello</a>
+<a href="https://{appName}.azurewebsites.net/api/funqyHello" class="bare">https://{appName}.azurewebsites.net/api/funqyHello</a></p>
 </div>
 </div>
 </div>
@@ -255,8 +256,8 @@ at Azure, and deploy it.</p>
 <h2 id="extension-maven-dependencies"><a class="anchor" href="#extension-maven-dependencies"></a>Extension maven dependencies</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The sample project includes the RESTEasy, Undertow, and Vert.x Web extensions.  If you are only using one of those
-APIs (i.e. jax-rs only), respectively remove the maven dependency <code>quarkus-resteasy</code>, <code>quarkus-undertow</code>, and/or
+<p>The sample project includes the RESTEasy, Undertow, Vert.x Web, <a href="funqy-http">Funqy HTTP</a> extensions.  If you are only using one of those
+APIs (i.e. jax-rs only), respectively remove the maven dependency <code>quarkus-resteasy</code>, <code>quarkus-undertow</code>, <code>quarkus-funqy-http</code>, and/or
 <code>quarkus-vertx-web</code>.</p>
 </div>
 <div class="paragraph">
@@ -282,12 +283,13 @@ your jax-rs endpoints won&#8217;t route correctly.  See <a href="#config-azure-p
 <h2 id="config-azure-paths"><a class="anchor" href="#config-azure-paths"></a>Configuring Root Paths</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The default route prefix for an Azure Function is <code>/api</code>.  All of your JAX-RS, Servlet, and Vert.x Web endpoints must
-explicitly take this into account.</p>
+<p>The default route prefix for an Azure Function is <code>/api</code>.  All of your JAX-RS, Servlet, Vert.x Web, and <a href="funqy-http">Funqy HTTP</a> endpoints must
+explicitly take this into account.  In the generated project this is handled by the
+<code>quarkus.http.root-path</code> switch in <code>application.properties</code></p>
 </div>
 <div class="paragraph">
 <p>If you modify the <code>path</code> or add a <code>routePrefix</code> within the <code>azure-config/function.json</code>
-deployment descriptor, your code must also reflect any prefixes you specify for your path.</p>
+deployment descriptor, your code or configuration must also reflect any prefixes you specify for your path.</p>
 </div>
 </div>
 </div>

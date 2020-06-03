@@ -166,12 +166,32 @@ However, you can go right to the completed example.</p>
 <pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=microprofile-metrics-quickstart \
-    -Dextensions="metrics"
+    -Dextensions="smallrye-metrics"
 cd microprofile-metrics-quickstart</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This command generates a Maven project, importing the <code>smallrye-metrics</code> extension which is an implementation of the MicroProfile Metrics specification used in Quarkus.</p>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>smallrye-metrics</code> extension
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="smallrye-metrics"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-smallrye-metrics&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -271,9 +291,9 @@ public class PrimeNumberChecker {
 <div class="paragraph">
 <p>First, ask the endpoint whether some numbers are prime numbers.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>curl localhost:8080/350</pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">curl localhost:8080/350</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -282,9 +302,9 @@ public class PrimeNumberChecker {
 <div class="paragraph">
 <p>Now for some large prime number so that the test takes a bit more time:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>curl localhost:8080/629521085409773</pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">curl localhost:8080/629521085409773</code></pre>
 </div>
 </div>
 <div class="paragraph">

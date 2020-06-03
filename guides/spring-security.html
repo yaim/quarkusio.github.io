@@ -185,6 +185,34 @@ cd spring-security-quickstart</code></pre>
 <p>This command generates a Maven project with a REST endpoint and imports the <code>spring-web</code>, <code>spring-security</code> and <code>security-properties-file</code> extensions.</p>
 </div>
 <div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>spring-web</code>, <code>spring-security</code> and <code>security-properties-file</code> extensions
+to your project by running the following command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="spring-web, spring-security, quarkus-elytron-security-properties-file"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-spring-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-spring-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-elytron-security-properties-file&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>For more information about <code>security-properties-file</code>, you can check out the guide of the <a href="security-properties">quarkus-elytron-security-properties-file</a> extension.</p>
 </div>
 </div>
@@ -680,6 +708,12 @@ classes (like <code>org.springframework.beans.factory.config.BeanPostProcessor</
 </li>
 <li>
 <p><a href="spring-cloud-config-client">Quarkus - Reading properties from Spring Cloud Config Server</a></p>
+</li>
+<li>
+<p><a href="spring-boot-properties">Quarkus - Extension for Spring Boot properties</a></p>
+</li>
+<li>
+<p><a href="spring-cache">Quarkus - Extension for Spring Cache</a></p>
 </li>
 </ul>
 </div>

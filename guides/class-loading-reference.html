@@ -109,10 +109,7 @@ uses the class loading architecture outlined here.</p>
 <h2 id="reading-class-bytecode"><a class="anchor" href="#reading-class-bytecode"></a>Reading Class Bytecode</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Whenever class bytecode needs to be read, a <code>@BuildStep</code> where class reading is done must have the <code>loadsApplicationClasses</code> parameter set to <code>true</code>. Otherwise the class will not be found.</p>
-</div>
-<div class="paragraph">
-<p>It&#8217;s also important to use the correct <code>ClassLoader</code>. The recommended approach is to get it by calling the
+<p>It is important to use the correct <code>ClassLoader</code>. The recommended approach is to get it by calling the
 <code>Thread.currentThread().getContextClassLoader()</code> method.</p>
 </div>
 <div class="paragraph">
@@ -120,7 +117,7 @@ uses the class loading architecture outlined here.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep(loadsApplicationClasses = true)
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@BuildStep
 GeneratedClassBuildItem instrument(final CombinedIndexBuildItem index) {
     final String classname = "com.example.SomeClass";
     final ClassLoader cl = Thread.currentThread().getContextClassLoader();

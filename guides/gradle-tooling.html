@@ -76,7 +76,11 @@
 </ul>
 </li>
 <li><a href="#dealing-with-extensions">Dealing with extensions</a></li>
-<li><a href="#development-mode">Development mode</a></li>
+<li><a href="#development-mode">Development mode</a>
+<ul class="sectlevel2">
+<li><a href="#remote-development-mode">Remote Development Mode</a></li>
+</ul>
+</li>
 <li><a href="#debugging">Debugging</a></li>
 <li><a href="#import-in-your-ide">Import in your IDE</a></li>
 <li><a href="#building-a-native-executable">Building a native executable</a>
@@ -85,7 +89,11 @@
 </ul>
 </li>
 <li><a href="#running-native-tests">Running native tests</a></li>
-<li><a href="#building-uber-jars">Building Uber-Jars</a></li>
+<li><a href="#building-uber-jars">Building Uber-Jars</a>
+<ul class="sectlevel2">
+<li><a href="#multi-module-gradle">Working with multi-module projects</a></li>
+</ul>
+</li>
 <li><a href="#building-with-gradlew-build">Building with <code>./gradlew build</code></a></li>
 </ul></div>
     <div>
@@ -361,6 +369,65 @@ redeployed application. If there are any issues with compilation or deployment a
 }</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="remote-development-mode"><a class="anchor" href="#remote-development-mode"></a>Remote Development Mode</h3>
+<div class="paragraph">
+<p>It is possible to use development mode remotely, so that you can run Quarkus in a container environment (such as OpenShift)
+and have changes made to your local files become immediately visible.</p>
+</div>
+<div class="paragraph">
+<p>This allows you to develop in the same environment you will actually run your app in, and with access to the same services.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Do not use this in production. This should only be used in a development environment. You should not run production applications in dev mode.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To do this you must have the <code>quarkus-undertow-websockets</code> extension installed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew addExtension --extensions="undertow-websockets"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You must also have the following config properties set:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>quarkus.live-reload.password</code></p>
+</li>
+<li>
+<p><code>quarkus.live-reload.url</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These can be set via <code>application.properties</code>, or any other way (e.g. system properties, environment vars etc). The
+password must be set on both the local and remote processes, while the url only needs to be set on the local host.</p>
+</div>
+<div class="paragraph">
+<p>Start Quarkus in dev mode on the remote host. Now you need to connect your local agent to the remote host:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew quarkusRemoteDev -Dquarkus.live-reload.url=http://my-remote-host:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now every time you refresh the browser you should see any changes you have made locally immediately visible in the remote
+app.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -507,8 +574,24 @@ The next screen list the found modules; select the generated project and click o
 <p>Make sure to have <code>GRAALVM_HOME</code> configured and pointing to GraalVM version 19.3.1.</p>
 </div>
 <div class="paragraph">
-<p>Create a native executable using: <code>./gradlew buildNative</code>.
+<p>Create a native executable using: <code>./gradlew build -Dquarkus.package.type=native</code>.
 A native executable will be present in <code>build/</code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The <code>buildNative</code> task has been deprecated in favor of
+<code>build -Dquarkus.package.type=native</code>.
+Native related properties can either be added in <code>application.properties</code> file or as command line arguments.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="build-a-container-friendly-executable"><a class="anchor" href="#build-a-container-friendly-executable"></a>Build a container friendly executable</h3>
@@ -518,20 +601,7 @@ To create an executable that will run in a container, use the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew buildNative</code></pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="customize-the-build-native-task"><a class="anchor" href="#customize-the-build-native-task"></a>Customize the build native task</h4>
-<div class="paragraph">
-<p>There are situations where it may be required to alter the default values of the <code>buildNative</code> task (whose implementation can be found <a href="https://github.com/quarkusio/quarkus/blob/master/devtools/gradle/src/main/java/io/quarkus/gradle/tasks/QuarkusNative.java">here</a>).</p>
-</div>
-<div class="paragraph">
-<p>The easiest way to supply custom configuration is via the command line. For example to use docker to build the native image, simply add the <code>--docker-build=true</code> flag like so:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew buildNative --docker-build=true</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -561,37 +631,6 @@ Be aware that a given Quarkus version might not be compatible with all the image
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>Another way of customizing the native build image build process is to configure the task inside the Gradle build script. If for example it is required to set the <code>enableHttpUrlHandler</code>, it can be done like so:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">buildNative {
-    enableHttpUrlHandler = true
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>or, if you use the Gradle Kotlin DSL:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="kotlin" class="language-kotlin hljs">tasks {
-    named&lt;QuarkusNative&gt;("buildNative") {
-        setEnableHttpUrlHandler(true)
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The native executable would then be produced by executing:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./gradlew buildNative</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -607,7 +646,7 @@ Be aware that a given Quarkus version might not be compatible with all the image
 </div>
 </div>
 <div class="paragraph">
-<p>This task depends on <code>buildNative</code>, so it will generate the native image before running the tests.</p>
+<p>This task depends on <code>quarkusBuild</code>, so it will generate the native image before running the tests.</p>
 </div>
 </div>
 </div>
@@ -633,13 +672,29 @@ Be aware that a given Quarkus version might not be compatible with all the image
 <div class="paragraph">
 <p>The entries are relative to the root of the generated Uber-Jar. You can specify multiple entries by adding extra <code>--ignored-entry</code> arguments.</p>
 </div>
+<div class="sect2">
+<h3 id="multi-module-gradle"><a class="anchor" href="#multi-module-gradle"></a>Working with multi-module projects</h3>
+<div class="paragraph">
+<p>By default, Quarkus will not discover CDI beans inside another module.</p>
+</div>
+<div class="paragraph">
+<p>The best way to enable CDI bean discovery for a module in a multi-module project would be to include a <code>META-INF/beans.xml</code> file,
+unless it is the main application module already configured with the quarkus-maven-plugin, in which case it will indexed automatically.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, there is some unofficial <a href="https://plugins.gradle.org/search?term=jandex">Gradle Jandex plugins</a>) that can be used instead of the <code>META-INF/beans.xml</code> file.</p>
+</div>
+<div class="paragraph">
+<p>More information on this topic can be found on the <a href="cdi-reference#bean_discovery">Bean Discovery</a> section of the CDI guide.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="building-with-gradlew-build"><a class="anchor" href="#building-with-gradlew-build"></a>Building with <code>./gradlew build</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Starting from 1.1.0.Final, <code>./gradlew build</code> will no longer build the native image. Use the <code>buildNative</code> task explicitly as explained above if needed.</p>
+<p>Starting from 1.1.0.Final, <code>./gradlew build</code> will no longer build the native image. Add <code>-Dquarkus.package.type=native</code> build argument explicitly as explained above if needed.</p>
 </div>
 </div>
 </div>
