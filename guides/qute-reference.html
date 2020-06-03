@@ -81,9 +81,9 @@
 <li><a href="#quarkus_integration">3. Quarkus Integration</a>
 <ul class="sectlevel2">
 <li><a href="#injecting-beans-directly-in-templates">3.1. Injecting Beans Directly In Templates</a></li>
-<li><a href="#parameter_declarations">3.2. Parameter Declarations</a></li>
+<li><a href="#parameter-declarations">3.2. Parameter Declarations</a></li>
 <li><a href="#template_extension_methods">3.3. Template Extension Methods</a></li>
-<li><a href="#template_data">3.4. @TemplateData</a></li>
+<li><a href="#templatedata">3.4. @TemplateData</a></li>
 <li><a href="#resteasy-integration">3.5. RESTEasy Integration</a></li>
 <li><a href="#development-mode">3.6. Development Mode</a></li>
 <li><a href="#configuration-reference">3.7. Configuration Reference</a></li>
@@ -546,18 +546,6 @@ This could be useful to access data for which the key is overriden:</p>
 </tr>
 </tbody>
 </table>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-The condition in a ternary operator evaluates to <code>true</code> if the value is not considered <code>falsy</code> as described in the <a href="#if_section">If Section</a>.
-</td>
-</tr>
-</table>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -604,90 +592,6 @@ If you need to render the unescaped value:</p>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td><code>paragraph</code> that resolves to <code>&lt;p&gt;My text!&lt;/p&gt;</code> will be rendered as <code>&lt;p&gt;My text!&lt;/p&gt;</code></td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect4">
-<h5 id="virtual-methods"><a class="anchor" href="#virtual-methods"></a>2.2.1.4. Virtual Methods</h5>
-<div class="paragraph">
-<p>A virtual method is a <strong>part of an expression</strong> that looks like a regular Java method invocation.
-It&#8217;s called "virtual" because it does not have to match the actual method of a Java class.
-In fact, like normal properties a virtual method is also handled by a value resolver.
-The only difference is that for virtual methods a value resolver consumes parameters that are also expressions.</p>
-</div>
-<div class="listingblock">
-<div class="title">Virtual Method Example</div>
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;html&gt;
-&lt;h1&gt;{item.buildName(item.name,5)}&lt;/h1&gt; <i class="conum" data-value="1"></i><b>(1)</b>
-&lt;/html&gt;</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>buildName(item.name,5)</code> represents a virtual method with name <code>buildName</code> and two parameters: <code>item.name</code> and <code>5</code> . The virtual method could be evaluated by a value resolver generated for the following Java class:
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">class Item {
-   String buildName(String name, int age) {
-      return name + ":" + age;
-   }
-}</code></pre>
-</div>
-</div></td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Virtual methods are usually evaluated by value resolvers generated for <a href="#template_extension_methods">@TemplateExtension methods</a>, <a href="#template_data">@TemplateData</a> or classes used in <a href="#parameter_declarations">parameter declarations</a>. However, a custom value resolver that is not backed by any Java class/method can be registered as well.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>A virtual method with single parameter can be called using the infix notation:</p>
-</div>
-<div class="listingblock">
-<div class="title">Infix Notation Example</div>
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;html&gt;
-&lt;p&gt;{item.price or 5}&lt;/p&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
-&lt;/html&gt;</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>item.price or 5</code> is translated to <code>item.price.or(5)</code>.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Virtual method parameters can be "nested" virtual method invocations.</p>
-</div>
-<div class="listingblock">
-<div class="title">Nested Virtual Method Example</div>
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;html&gt;
-&lt;p&gt;{item.subtractPrice(item.calculateDiscount(10))}&lt;/p&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
-&lt;/html&gt;</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>item.calculateDiscount(10)</code> is evaluated first and then passed as an argument to <code>item.subtractPrice()</code>.</td>
 </tr>
 </table>
 </div>
@@ -823,9 +727,8 @@ The first one is using the <code>each</code> name alias.</p>
 <div class="sect4">
 <h5 id="if_section"><a class="anchor" href="#if_section"></a>2.2.2.2. If Section</h5>
 <div class="paragraph">
-<p>The <code>if</code> section represents a basic control flow section.
-The simplest possible version accepts a single parameter and renders the content if the condition is evaluated to <code>true</code>.
-A condition without an operator evaluates to <code>true</code> if the value is not considered <code>falsy</code>, i.e. if the value is not <code>null</code>, <code>false</code>, an empty collection, an empty map, an empty array, an empty string/char sequence or a number equal to zero.</p>
+<p>A basic control flow section.
+The simplest possible version accepts a single parameter and renders the content if it&#8217;s evaluated to <code>true</code> (or <code>Boolean.TRUE</code>).</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -835,7 +738,7 @@ A condition without an operator evaluates to <code>true</code> if the value is n
 </div>
 </div>
 <div class="paragraph">
-<p>You can also use the following operators in a condition:</p>
+<p>You can also use the following operators:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -929,7 +832,7 @@ A condition without an operator evaluates to <code>true</code> if the value is n
 </div>
 </div>
 <div class="paragraph">
-<p>You can also add any number of <code>else</code> blocks:</p>
+<p>You can add any number of <code>else</code> blocks:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -972,15 +875,33 @@ This could be useful to simplify the template structure:</p>
 </table>
 </div>
 <div class="paragraph">
+<p>It&#8217;s also possible to specify an alias for the context object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.parent as myParent} <i class="conum" data-value="1"></i><b>(1)</b>
+  &lt;h1&gt;{myParent.name}&lt;/h1&gt;
+{/with}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>myParent</code> is the alias that can be used inside the tag.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
 <p>This section might also come in handy when we&#8217;d like to avoid multiple expensive invocations:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.callExpensiveLogicToGetTheValue(1,'foo',bazinga)}
-  {#if this is "fun"} <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#with item.callExpensiveLogicToGetTheValue(true) as it}
+  {#if it is "fun"} <i class="conum" data-value="1"></i><b>(1)</b>
     &lt;h1&gt;Yay!&lt;/h1&gt;
   {#else}
-    &lt;h1&gt;{this} is not fun at all!&lt;/h1&gt;
+    &lt;h1&gt;{it} is not fun at all!&lt;/h1&gt;
   {/if}
 {/with}</code></pre>
 </div>
@@ -989,37 +910,13 @@ This could be useful to simplify the template structure:</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>this</code> is the result of <code>item.callExpensiveLogicToGetTheValue(1,'foo',bazinga)</code>. The method is only invoked once even though the result may be used in multiple expressions.</td>
+<td><code>it</code> is the result of <code>item.callExpensiveLogicToGetTheValue(1,'foo',bazinga)</code>. The method is only invoked once even though the result may be used in multiple expressions.</td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect4">
-<h5 id="letset-section"><a class="anchor" href="#letset-section"></a>2.2.2.4. Let/Set Section</h5>
-<div class="paragraph">
-<p>This section allows you to define named local variables:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#let myParent=order.item.parent}
-  &lt;h1&gt;{myParent.name}&lt;/h1&gt;
-{/let}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The section tag is also registered under the <code>set</code> alias:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">{#set myParent=item.parent price=item.price}
-  &lt;h1&gt;{myParent.name}&lt;/h1&gt;
-  &lt;p&gt;Price: {price}
-{/set}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="include_helper"><a class="anchor" href="#include_helper"></a>2.2.2.5. Include/Insert Sections</h5>
+<h5 id="include_helper"><a class="anchor" href="#include_helper"></a>2.2.2.4. Include/Insert Sections</h5>
 <div class="paragraph">
 <p>These sections can be used to include another template and possibly override some parts of the template (template inheritance).</p>
 </div>
@@ -1088,10 +985,10 @@ Section blocks can also define an optional end tag - <code>{/title}</code>.
 </div>
 </div>
 <div class="sect4">
-<h5 id="user_tags"><a class="anchor" href="#user_tags"></a>2.2.2.6. User-defined Tags</h5>
+<h5 id="user_tags"><a class="anchor" href="#user_tags"></a>2.2.2.5. User-defined Tags</h5>
 <div class="paragraph">
 <p>User-defined tags can be used to include a template and optionally pass some parameters.
-Let&#8217;s suppose we have a template called <code>itemDetail.html</code>:</p>
+Let&#8217;s suppose we have a template called <code>item.html</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1113,12 +1010,12 @@ Let&#8217;s suppose we have a template called <code>itemDetail.html</code>:</p>
 </table>
 </div>
 <div class="paragraph">
-<p>Now if we register this template under the name <code>itemDetail.html</code> and if we add a <code>UserTagSectionHelper</code> to the engine:</p>
+<p>Now if we register this template under the name <code>item</code> and if we add a <code>UserTagSectionHelper</code> to the engine:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Engine engine = Engine.builder()
-                   .addSectionHelper(new UserTagSectionHelper.Factory("itemDetail","itemDetail.html"))
+                   .addSectionHelper(new UserTagSectionHelper.Factory("item"))
                    .build();</code></pre>
 </div>
 </div>
@@ -1129,7 +1026,7 @@ Let&#8217;s suppose we have a template called <code>itemDetail.html</code>:</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In Quarkus, all files from the <code>src/main/resources/templates/tags</code> are registered and monitored automatically!
+In Quarkus, all files from the <code>src/main/resources/templates/tags</code> are registered and monitored automatically.
 </td>
 </tr>
 </table>
@@ -1140,11 +1037,11 @@ In Quarkus, all files from the <code>src/main/resources/templates/tags</code> ar
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;ul&gt;
-{#for item in items}
+{#each items}
   &lt;li&gt;
-  {#itemDetail item showImage=true /} <i class="conum" data-value="1"></i><b>(1)</b>
+  {#item this showImage=true /} <i class="conum" data-value="1"></i><b>(1)</b>
   &lt;/li&gt;
-{/for}
+{/each}
 &lt;/ul&gt;</code></pre>
 </div>
 </div>
@@ -1152,7 +1049,7 @@ In Quarkus, all files from the <code>src/main/resources/templates/tags</code> ar
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>item</code> is resolved to an iteration element and can be referenced using the <code>it</code> key in the tag template.</td>
+<td><code>this</code> is resolved to an iteration element and can be referenced using the <code>it</code> key in the tag template.</td>
 </tr>
 </table>
 </div>
@@ -1272,7 +1169,7 @@ A <code>ValueResolver</code> is also generated for all beans annotated with <cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="parameter_declarations"><a class="anchor" href="#parameter_declarations"></a>3.2. Parameter Declarations</h3>
+<h3 id="parameter-declarations"><a class="anchor" href="#parameter-declarations"></a>3.2. Parameter Declarations</h3>
 <div class="paragraph">
 <p>It is possible to specify optional parameter declarations in a template.
 Quarkus attempts to validate all expressions that reference such parameters.
@@ -1585,7 +1482,7 @@ class MyExtensions {
 </div>
 </div>
 <div class="sect2">
-<h3 id="template_data"><a class="anchor" href="#template_data"></a>3.4. @TemplateData</h3>
+<h3 id="templatedata"><a class="anchor" href="#templatedata"></a>3.4. @TemplateData</h3>
 <div class="paragraph">
 <p>A value resolver is automatically generated for a type annotated with <code>@TemplateData</code>.
 This allows Quarkus to avoid using reflection to access the data at runtime.</p>
@@ -1750,8 +1647,8 @@ class DetailResource {
 
     @GET
     @Produces({ MediaType.TEXT_HTML, MediaType.TEXT_PLAIN })
-    public TemplateInstance item() {
-        return item.data("myItem", new Item("Alpha", 1000)); <i class="conum" data-value="2"></i><b>(2)</b>
+    public Rendering item() {
+        return item.data(new Item("Alpha", 1000)); <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>

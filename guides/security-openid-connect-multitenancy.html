@@ -90,7 +90,6 @@
 </li>
 <li><a href="#testing-the-application">Testing the Application</a></li>
 <li><a href="#programmatically-resolving-tenants-configuration">Programmatically Resolving Tenants Configuration</a></li>
-<li><a href="#disabling-tenant-configurations">Disabling Tenant Configurations</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a></li>
 <li><a href="#references">References</a></li>
 </ul></div>
@@ -254,7 +253,7 @@ public class HomeResource {
 </div>
 </div>
 <div class="paragraph">
-<p>In order to resolve the tenant from incoming requests and map it to a specific <code>quarkus-oidc</code> tenant configuration in application.properties, you need to create an implementation for the <code>io.quarkus.oidc.TenantResolver</code> interface.</p>
+<p>In order to resolve the tenant from incoming requests and map it to a specific <code>quarkus-oidc</code> configuration, you need to create an implementation for the <code>io.quarkus.oidc.TenantResolver</code> interface.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -274,7 +273,7 @@ public class CustomTenantResolver implements TenantResolver {
         String[] parts = path.split("/");
 
         if (parts.length == 0) {
-            // resolve to default tenant configuration
+            // resolve to default tenant config
             return null;
         }
 
@@ -284,7 +283,7 @@ public class CustomTenantResolver implements TenantResolver {
 </div>
 </div>
 <div class="paragraph">
-<p>From the implementation above, tenants are resolved from the request path so that in case no tenant could be inferred, <code>null</code> is returned to indicate that the default tenant configuration should be used.</p>
+<p>From the implementation above, tenants are resolved from the request path so that in case no tenant could be inferred, <code>null</code> is returned to indicate that the default configuration should be used.</p>
 </div>
 </div>
 </div>
@@ -309,7 +308,7 @@ quarkus.http.auth.permission.authenticated.policy=authenticated</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The first configuration is the default tenant configuration that should be used when the tenant can not be inferred from the request. This configuration is using a Keycloak instance to authenticate users.</p>
+<p>The first configuration is the configuration that should be used when the tenant can not be inferred from the request. This configuration is using a Keycloak instance to authenticate users.</p>
 </div>
 <div class="paragraph">
 <p>The second configuration is the configuration that will be used when an incoming request is mapped to the tenant <code>tenant-a</code>.</p>
@@ -432,7 +431,7 @@ let&#8217;s build again by enabling the <code>native</code> profile:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./target/security-openid-connect-multi-tenancy-quickstart-runner</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./target/security-openid-connect-web-authentication-quickstart-runner</code></pre>
 </div>
 </div>
 </div>
@@ -519,7 +518,7 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
         String[] parts = path.split("/");
 
         if (parts.length == 0) {
-            // resolve to default tenant configuration
+            // resolve to default tenant config
             return null;
         }
 
@@ -539,8 +538,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 
             return config;
         }
-
-        // resolve to default tenant configuration
         return null;
     }
 }</code></pre>
@@ -548,20 +545,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div>
 <div class="paragraph">
 <p>The <code>OidcTenantConfig</code> returned from this method is the same used to parse the <code>oidc</code> namespace configuration from the <code>application.properties</code>. You can populate it using any of the settings supported by the <code>quarkus-oidc</code> extension.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="disabling-tenant-configurations"><a class="anchor" href="#disabling-tenant-configurations"></a>Disabling Tenant Configurations</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Custom <code>TenantResolver</code> and <code>TenantConfigResolver</code> implementations may return <code>null</code> if no tenant can be inferred from the current request and a fallback to the default tenant configuration is required.</p>
-</div>
-<div class="paragraph">
-<p>If it is expected that the custom resolvers will always infer a tenant then the default tenant configuration is not needed. One can disable it with the <code>quarkus.oidc.tenant-enabled=false</code> setting.</p>
-</div>
-<div class="paragraph">
-<p>Note that tenant specific configurations can also be disabled, for example: <code>quarkus.oidc.tenant-a.tenant-enabled=false</code>.</p>
 </div>
 </div>
 </div>
@@ -815,7 +798,7 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -848,91 +831,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.secret">quarkus.oidc.credentials.jwt.secret</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan">quarkus.oidc.credentials.jwt.lifespan</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.host">quarkus.oidc.proxy.host</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The host (name or IP address) of the Proxy.
- Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.port">quarkus.oidc.proxy.port</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The port number of the Proxy. Default value is 80.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.username">quarkus.oidc.proxy.username</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The username, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.password">quarkus.oidc.proxy.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The password, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -990,20 +888,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.tls.verification">quarkus.oidc.tls.verification</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1242,7 +1126,7 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -1275,91 +1159,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret">quarkus.oidc."tenant".credentials.jwt.secret</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan">quarkus.oidc."tenant".credentials.jwt.lifespan</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.host">quarkus.oidc."tenant".proxy.host</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The host (name or IP address) of the Proxy.
- Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.port">quarkus.oidc."tenant".proxy.port</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The port number of the Proxy. Default value is 80.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.username">quarkus.oidc."tenant".proxy.username</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The username, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.password">quarkus.oidc."tenant".proxy.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The password, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -1431,20 +1230,6 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.tls.verification">quarkus.oidc."tenant".tls.verification</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
 </tr>
 </tbody>
 </table>

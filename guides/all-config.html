@@ -87,6 +87,20 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-amazon-lambda_quarkus.lambda.enable-polling-jvm-mode"></a><code><a href="#quarkus-amazon-lambda_quarkus.lambda.enable-polling-jvm-mode">quarkus.lambda.enable-polling-jvm-mode</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If true, this will enable the aws event poll loop within a Quarkus test run. This loop normally only runs in native image. This option is strictly for testing purposes.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-amazon-lambda_quarkus.lambda.handler"></a><code><a href="#quarkus-amazon-lambda_quarkus.lambda.handler">quarkus.lambda.handler</a></code></p>
 </div>
 <div class="openblock description">
@@ -1791,32 +1805,22 @@ This configuration section is optional</p></th>
 <p>If set to <code>all</code> (or <code>true</code>) the container will attempt to remove all unused beans.</p>
 </li>
 <li>
-<p>If set to <code>none</code> (or <code>false</code>) no beans will ever be removed even if they are unused (according to the criteria set out below)</p>
+<p>If set to none (or <code>false</code>) no beans will ever be removed even if they are unused (according to the criteria set out below)</p>
 </li>
 <li>
-<p>If set to <code>fwk</code>, then all unused beans will be removed, except the unused beans whose classes are declared in the application code
-An unused bean:</p>
-</li>
-<li>
-<p>is not a built-in bean or interceptor,</p>
-</li>
-<li>
-<p>is not eligible for injection to any injection point,</p>
-</li>
-<li>
-<p>is not excluded by any extension,</p>
-</li>
-<li>
-<p>does not have a name,</p>
-</li>
-<li>
-<p>does not declare an observer,</p>
-</li>
-<li>
-<p>does not declare any producer which is eligible for injection to any injection point,</p>
-</li>
-<li>
-<p>is not directly eligible for injection into any <code>javax.enterprise.inject.Instance</code> injection point</p>
+<p>If set to <code>fwk</code>, then all unused beans will be removed, except the unused beans whose classes are declared in the application code</p>
+<div class="literalblock">
+<div class="content">
+<pre>An unused bean:
+- is not a built-in bean or interceptor,
+- is not eligible for injection to any injection point,
+- is not excluded by any extension,
+- does not have a name,
+- does not declare an observer,
+- does not declare any producer which is eligible for injection to any injection point,
+- is not directly eligible for injection into any `javax.enterprise.inject.Instance` injection point</pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
@@ -1841,12 +1845,12 @@ An unused bean:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.transform-unproxyable-classes"></a><code><a href="#quarkus-arc_quarkus.arc.transform-unproxyable-classes">quarkus.arc.transform-unproxyable-classes</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods"></a><code><a href="#quarkus-arc_quarkus.arc.remove-final-for-proxyable-methods">quarkus.arc.remove-final-for-proxyable-methods</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>If set to true, the bytecode of unproxyable beans will be transformed. This ensures that a proxy/subclass can be created properly. If the value is set to false, then an exception is thrown at build time indicating that a subclass/proxy could not be created.</p>
+<p>If set to true, Arc will transform the bytecode of beans containing methods that need to be proxyable but have been declared as final. The transformation is simply a matter of removing final. This ensures that a proxy can be created properly. If the value is set to false, then an exception is thrown at build time indicating that a proxy could not be created because a method was final.</p>
 </div>
 </div>
 </div></div></td>
@@ -1866,39 +1870,6 @@ An unused bean:</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>from-config</code>, <code>verbatim</code>, <code>kebab-case</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>kebab-case</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.selected-alternatives"></a><code><a href="#quarkus-arc_quarkus.arc.selected-alternatives">quarkus.arc.selected-alternatives</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The list of selected alternatives for an application.
- An element value can be:
- - a fully qualified class name, i.e. <code>org.acme.Foo</code>
- - a simple class name as defined by <code>Class#getSimpleName()</code>, i.e. <code>Foo</code>
- - a package name with suffix <code>.<strong></code>, i.e. <code>org.acme.</strong></code>, matches a package
- - a package name with suffix <code>.<strong></code>, i.e. <code>org.acme.</strong></code>, matches a package that starts with the value  Each element value is used to match an alternative bean class, an alternative stereotype annotation type or a bean class that declares an alternative producer. If any value matches then the priority of <code>Integer#MAX_VALUE</code> is used for the relevant bean. The priority declared via <code>javax.annotation.Priority</code> or <code>io.quarkus.arc.AlternativePriority</code> is overriden.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.auto-producer-methods"></a><code><a href="#quarkus-arc_quarkus.arc.auto-producer-methods">quarkus.arc.auto-producer-methods</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If set to true then <code>javax.enterprise.inject.Produces</code> is automatically added to all methods that are annotated with a scope annotation, a stereotype or a qualifier, and are not annotated with <code>Inject</code> or <code>Produces</code>, and no parameter is annotated with <code>Disposes</code>, <code>Observes</code> or <code>ObservesAsync</code>.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-artemis-core_quarkus-artemis-core"></a><a href="#quarkus-artemis-core_quarkus-artemis-core">Artemis Core</a></p></th>
@@ -2131,34 +2102,6 @@ An unused bean:</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>-Dquarkus.http.host=0.0.0.0</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-container-image-jib_quarkus.jib.base-registry-username"></a><code><a href="#quarkus-container-image-jib_quarkus.jib.base-registry-username">quarkus.jib.base-registry-username</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The username to use to authenticate with the registry used to pull the base JVM image</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-container-image-jib_quarkus.jib.base-registry-password"></a><code><a href="#quarkus-container-image-jib_quarkus.jib.base-registry-password">quarkus.jib.base-registry-password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The password to use to authenticate with the registry used to pull the base JVM image</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3321,20 +3264,6 @@ An unused bean:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http_quarkus.http.auth.proactive"></a><code><a href="#quarkus-vertx-http_quarkus.http.auth.proactive">quarkus.http.auth.proactive</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If this is true and credentials are present then a user will always be authenticated before the request progresses. If this is false then an attempt will only be made to authenticate the user if a permission check is performed or the current user is required for some other reason.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http_quarkus.http.virtual"></a><code><a href="#quarkus-vertx-http_quarkus.http.virtual">quarkus.http.virtual</a></code></p>
 </div>
 <div class="openblock description">
@@ -3486,20 +3415,6 @@ An unused bean:</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>enabled</code>, <code>redirect</code>, <code>disabled</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>enabled</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.http2"></a><code><a href="#quarkus-vertx-http_quarkus.http.http2">quarkus.http.http2</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If this is true (the default) then HTTP/2 will be enabled. Note that for browsers to be able to use it HTTPS must be enabled, and you must be running on JDK11 or above, as JDK8 does not support ALPN.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3987,132 +3902,6 @@ An unused bean:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.record-request-start-time"></a><code><a href="#quarkus-vertx-http_quarkus.http.record-request-start-time">quarkus.http.record-request-start-time</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If this is true then the request start time will be recorded to enable logging of total request time. This has a small performance penalty, so is disabled by default.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.enabled"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.enabled">quarkus.http.access-log.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If access logging is enabled. By default this will log via the standard logging facility</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.pattern"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.pattern">quarkus.http.access-log.pattern</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The access log pattern: If this is the string 'common' or 'combined' then this will use one of the specified named formats: common: %h %l %u %t "%r" %s %b combined: %h %l %u %t "%r" %s %b "%{i,Referer}" "%{i,User-Agent}" Otherwise consult the Quarkus documentation for the full list of variables that can be used.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>common</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.log-to-file"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.log-to-file">quarkus.http.access-log.log-to-file</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If logging should be done to a separate file.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.base-file-name"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.base-file-name">quarkus.http.access-log.base-file-name</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The access log file base name, defaults to 'quarkus' which will give a log file name of 'quarkus.log'.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quarkus</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.log-directory"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.log-directory">quarkus.http.access-log.log-directory</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The log directory to use when logging access to a file If this is not set then the current working directory is used.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.log-suffix"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.log-suffix">quarkus.http.access-log.log-suffix</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The log file suffix</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>.log</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.category"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.category">quarkus.http.access-log.category</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The log category to use if logging is being done via the standard log mechanism (i.e. if base-file-name is empty).</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>io.quarkus.http.access-log</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vertx-http_quarkus.http.access-log.rotate"></a><code><a href="#quarkus-vertx-http_quarkus.http.access-log.rotate">quarkus.http.access-log.rotate</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If the log should be rotated daily</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vertx-http_quarkus.http.auth.permission.-permissions-.policy"></a><code><a href="#quarkus-vertx-http_quarkus.http.auth.permission.-permissions-.policy">quarkus.http.auth.permission."permissions".policy</a></code></p>
 </div>
 <div class="openblock description">
@@ -4535,179 +4324,6 @@ An unused bean:</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-ldap_quarkus-elytron-security-ldap"></a><a href="#quarkus-elytron-security-ldap_quarkus-elytron-security-ldap">Elytron Security LDAP Realm</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.enabled"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.enabled">quarkus.security.ldap.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The option to enable the ldap elytron module</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.realm-name"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.realm-name">quarkus.security.ldap.realm-name</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The elytron realm name</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Quarkus</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.direct-verification"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.direct-verification">quarkus.security.ldap.direct-verification</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Provided credentials are verified against ldap?</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.dir-context.url"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.dir-context.url">quarkus.security.ldap.dir-context.url</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The url of the ldap server</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.dir-context.principal"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.dir-context.principal">quarkus.security.ldap.dir-context.principal</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The principal: user which is used to connect to ldap server (also named "bindDn")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.dir-context.password"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.dir-context.password">quarkus.security.ldap.dir-context.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The password which belongs to the principal (also named "bindCredential")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.rdn-identifier"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.rdn-identifier">quarkus.security.ldap.identity-mapping.rdn-identifier</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The identifier which correlates to the provided user (also named "baseFilter")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>uid</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.search-base-dn"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.search-base-dn">quarkus.security.ldap.identity-mapping.search-base-dn</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The dn where we look for users</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.from"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.from">quarkus.security.ldap.identity-mapping.attribute-mappings."attribute-mappings".from</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The roleAttributeId from which is mapped (e.g. "cn")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.to"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.to">quarkus.security.ldap.identity-mapping.attribute-mappings."attribute-mappings".to</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The identifier whom the attribute is mapped to (in Quarkus: "groups", in WildFly this is "Roles")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>groups</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.filter"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.filter">quarkus.security.ldap.identity-mapping.attribute-mappings."attribute-mappings".filter</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The filter (also named "roleFilter")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.filter-base-dn"></a><code><a href="#quarkus-elytron-security-ldap_quarkus.security.ldap.identity-mapping.attribute-mappings.-attribute-mappings-.filter-base-dn">quarkus.security.ldap.identity-mapping.attribute-mappings."attribute-mappings".filter-base-dn</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The filter base dn (also named "rolesContextDn")</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-oauth2_quarkus-elytron-security-oauth2"></a><a href="#quarkus-elytron-security-oauth2_quarkus-elytron-security-oauth2">Elytron Security OAuth 2.0</a></p></th>
@@ -5746,21 +5362,6 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.log.bind-param"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.log.bind-param">quarkus.hibernate-orm.log.bind-param</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Logs SQL bind parameter.
- Setting it to true is obviously not recommended in production.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-orm_quarkus.hibernate-orm.log.jdbc-warnings"></a><code><a href="#quarkus-hibernate-orm_quarkus.hibernate-orm.log.jdbc-warnings">quarkus.hibernate-orm.log.jdbc-warnings</a></code></p>
 </div>
 <div class="openblock description">
@@ -5829,20 +5430,6 @@ Each SQL statement must be terminated by a semicolon.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.schema-management.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.schema-management.strategy">quarkus.hibernate-search.schema-management.strategy</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The strategy used for index lifecycle.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>create</code>, <code>create-or-validate</code>, <code>create-or-update</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create-or-validate</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.query.loading.cache-lookup.strategy">quarkus.hibernate-search.query.loading.cache-lookup.strategy</a></code></p>
 </div>
 <div class="openblock description">
@@ -5876,69 +5463,52 @@ Each SQL statement must be terminated by a semicolon.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The synchronization strategy to use when indexing automatically.</p>
+<p>The synchronization strategy to use when indexing automatically.
+ Defines how complete indexing should be before resuming the application thread after a database transaction is committed.
+ Available values:
+ Strategy
+ Guarantees when the application thread resumes
+ Throughput
+ Changes applied
+ Changes safe from crash/power loss
+ Changes visible on search
+ <code>``AutomaticIndexingSynchronizationStrategyNames#ASYNC</code></p>
 </div>
-<div class="paragraph">
-<p>Defines how complete indexing should be before resuming the application thread
-after a database transaction is committed.</p>
+<div class="literalblock">
+<div class="content">
+<pre>No guarantee
+No guarantee
+No guarantee
+Best
+```AutomaticIndexingSynchronizationStrategyNames#WRITE_SYNC` (default)</pre>
 </div>
-<div class="paragraph">
-<p>Available values:</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<tbody>
-<tr>
-<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Strategy</p></th>
-<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Throughput</p></th>
-<th class="tableblock halign-center valign-top" colspan="3"><p class="tableblock">Guarantees when the application thread resumes</p></th>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Changes applied</p></th>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Changes safe from crash/power loss</p></th>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Changes visible on search</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Best</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">write-sync (<strong>default</strong>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Medium</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">read-sync</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Medium to worst</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon red"><i class="fa fa-times"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">sync</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Worst</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="icon lime"><i class="fa fa-check"></i></span></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>See
-<a href="https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization">this
-section of the reference documentation</a>
-for more information.</p>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+Guaranteed
+No guarantee
+Medium
+```AutomaticIndexingSynchronizationStrategyNames#READ_SYNC`</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+No guarantee
+Guaranteed
+Medium to worst
+```AutomaticIndexingSynchronizationStrategyNames#SYNC`</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Guaranteed
+Guaranteed
+Guaranteed
+Worst
+See link:https://docs.jboss.org/hibernate/search/6.0/reference/en-US/html_single/#mapper-orm-indexing-automatic-synchronization[this section of the reference documentation] for more information.</pre>
+</div>
 </div>
 </div>
 </div></div></td>
@@ -6126,24 +5696,21 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.thread-pool.size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.thread-pool.size">quarkus.hibernate-search.elasticsearch.thread-pool.size</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The size of the thread pool assigned to the backend.
- Note that number is <strong>per backend</strong>, not per index. Adding more indexes will not add more threads.
- As all operations happening in this thread-pool are non-blocking, raising its size above the number of processor cores available to the JVM will not bring noticeable performance benefit. The only reason to alter this setting would be to reduce the number of threads; for example, in an application with a single index with a single indexing queue, running on a machine with 64 processor cores, you might want to bring down the number of threads.
- Defaults to the number of processor cores available to the JVM on startup.</p>
+<p>The strategy used for index lifecycle.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status">quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6157,7 +5724,7 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.index-defaults.schema-management.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6172,53 +5739,21 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-count">quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-count</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The number of indexing queues assigned to each index.
- Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
+<p>The strategy used for index lifecycle.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-size">quarkus.hibernate-search.elasticsearch.index-defaults.indexing.queue-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The size of indexing queues.
- Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.index-defaults.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.index-defaults.indexing.max-bulk-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The maximum size of bulk requests created when processing indexing queues.
- Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
- Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status">quarkus.hibernate-search.elasticsearch.indexes."index-name".schema-management.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6232,7 +5767,7 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.indexes."index-name".schema-management.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6244,52 +5779,6 @@ for more information.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-count">quarkus.hibernate-search.elasticsearch.indexes."index-name".indexing.queue-count</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The number of indexing queues assigned to each index.
- Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.queue-size">quarkus.hibernate-search.elasticsearch.indexes."index-name".indexing.queue-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The size of indexing queues.
- Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.indexes.-index-name-.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.indexes."index-name".indexing.max-bulk-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The maximum size of bulk requests created when processing indexing queues.
- Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
- Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.additional-backends"></a><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.additional-backends">Additional backends</a></p></th>
@@ -6471,24 +5960,21 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.thread-pool.size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.thread-pool.size">quarkus.hibernate-search.elasticsearch.backends."backend-name".thread-pool.size</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The size of the thread pool assigned to the backend.
- Note that number is <strong>per backend</strong>, not per index. Adding more indexes will not add more threads.
- As all operations happening in this thread-pool are non-blocking, raising its size above the number of processor cores available to the JVM will not bring noticeable performance benefit. The only reason to alter this setting would be to reduce the number of threads; for example, in an application with a single index with a single indexing queue, running on a machine with 64 processor cores, you might want to bring down the number of threads.
- Defaults to the number of processor cores available to the JVM on startup.</p>
+<p>The strategy used for index lifecycle.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.schema-management.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6502,7 +5988,7 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.schema-management.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6517,53 +6003,21 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-count">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.indexing.queue-count</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.strategy">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.strategy</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The number of indexing queues assigned to each index.
- Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
+<p>The strategy used for index lifecycle.</p>
 </div>
 </div>
 </div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-and-create-and-drop</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>create</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.queue-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.indexing.queue-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The size of indexing queues.
- Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.index-defaults.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".index-defaults.indexing.max-bulk-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The maximum size of bulk requests created when processing indexing queues.
- Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
- Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".schema-management.required-status</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6577,7 +6031,7 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.schema-management.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".schema-management.required-status-wait-timeout</a></code></p>
+<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.lifecycle.required-status-wait-timeout">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".lifecycle.required-status-wait-timeout</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -6589,121 +6043,6 @@ for more information.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
   <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10S</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-count"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-count">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".indexing.queue-count</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The number of indexing queues assigned to each index.
- Higher values will lead to more connections being used in parallel, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.queue-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".indexing.queue-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The size of indexing queues.
- Lower values may lead to lower memory usage, especially if there are many queues, but values that are too low will reduce the likeliness of reaching the max bulk size and increase the likeliness of application threads blocking because the queue is full, which may lead to lower indexing throughput.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.max-bulk-size"></a><code><a href="#quarkus-hibernate-search-elasticsearch_quarkus.hibernate-search.elasticsearch.backends.-backend-name-.indexes.-index-name-.indexing.max-bulk-size">quarkus.hibernate-search.elasticsearch.backends."backend-name".indexes."index-name".indexing.max-bulk-size</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The maximum size of bulk requests created when processing indexing queues.
- Higher values will lead to more documents being sent in each HTTP request sent to Elasticsearch, which may lead to higher indexing throughput, but incurs a risk of overloading Elasticsearch, i.e. of overflowing its HTTP request buffers and tripping <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/circuit-breaker.html">circuit breakers</a>, leading to Elasticsearch giving up on some request and resulting in indexing failures.
- Note that raising this number above the queue size has no effect, as bulks cannot include more requests than are contained in the queue.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>100</code></p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-validator_quarkus-hibernate-validator"></a><a href="#quarkus-hibernate-validator_quarkus-hibernate-validator">Hibernate Validator</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-validator_quarkus.hibernate-validator.fail-fast"></a><code><a href="#quarkus-hibernate-validator_quarkus.hibernate-validator.fail-fast">quarkus.hibernate-validator.fail-fast</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Enable the fail fast mode. When fail fast is enabled the validation will stop on the first constraint violation detected.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation"></a><a href="#quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation">Method validation</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation.allow-overriding-parameter-constraints"></a><code><a href="#quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation.allow-overriding-parameter-constraints">quarkus.hibernate-validator.method-validation.allow-overriding-parameter-constraints</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Define whether overriding methods that override constraints should throw a <code>ConstraintDefinitionException</code>. The default value is <code>false</code>, i.e. do not allow.
- See Section 4.5.5 of the JSR 380 specification, specifically "In sub types (be it sub classes/interfaces or interface implementations), no parameter constraints may be declared on overridden or implemented methods, nor may parameters be marked for cascaded validation. This would pose a strengthening of preconditions to be fulfilled by the caller."</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation.allow-parameter-constraints-on-parallel-methods"></a><code><a href="#quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation.allow-parameter-constraints-on-parallel-methods">quarkus.hibernate-validator.method-validation.allow-parameter-constraints-on-parallel-methods</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Define whether parallel methods that define constraints should throw a <code>ConstraintDefinitionException</code>. The default value is <code>false</code>, i.e. do not allow.
- See Section 4.5.5 of the JSR 380 specification, specifically "If a sub type overrides/implements a method originally defined in several parallel types of the hierarchy (e.g. two interfaces not extending each other, or a class and an interface not implemented by said class), no parameter constraints may be declared for that method at all nor parameters be marked for cascaded validation. This again is to avoid an unexpected strengthening of preconditions to be fulfilled by the caller."</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation.allow-multiple-cascaded-validation-on-return-values"></a><code><a href="#quarkus-hibernate-validator_quarkus.hibernate-validator.method-validation.allow-multiple-cascaded-validation-on-return-values">quarkus.hibernate-validator.method-validation.allow-multiple-cascaded-validation-on-return-values</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Define whether more than one constraint on a return value may be marked for cascading validation are allowed. The default value is <code>false</code>, i.e. do not allow.
- See Section 4.5.5 of the JSR 380 specification, specifically "One must not mark a method return value for cascaded validation more than once in a line of a class hierarchy. In other words, overriding methods on sub types (be it sub classes/interfaces or interface implementations) cannot mark the return value for cascaded validation if the return value has already been marked on the overridden method of the super type or interface."</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-infinispan-client_quarkus-infinispan-client"></a><a href="#quarkus-infinispan-client_quarkus-infinispan-client">Infinispan Client</a></p></th>
@@ -7176,34 +6515,6 @@ for more information.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.max-entries"></a><code><a href="#quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.max-entries">quarkus.keycloak.policy-enforcer.path-cache.max-entries</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Defines the limit of entries that should be kept in the cache</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.lifespan"></a><code><a href="#quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.lifespan">quarkus.keycloak.policy-enforcer.path-cache.lifespan</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Defines the time in milliseconds when the entry should be expired</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>30000</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.lazy-load-paths"></a><code><a href="#quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.lazy-load-paths">quarkus.keycloak.policy-enforcer.lazy-load-paths</a></code></p>
 </div>
 <div class="openblock description">
@@ -7361,6 +6672,40 @@ for more information.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,Map&lt;String,String&gt;&gt;</code></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache"></a><a href="#quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache">Defines how the policy enforcer should track associations between paths in your application and resources defined in Keycloak</a>
+This configuration section is optional</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.max-entries"></a><code><a href="#quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.max-entries">quarkus.keycloak.policy-enforcer.path-cache.max-entries</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Defines the limit of entries that should be kept in the cache</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.lifespan"></a><code><a href="#quarkus-keycloak-authorization_quarkus.keycloak.policy-enforcer.path-cache.lifespan">quarkus.keycloak.policy-enforcer.path-cache.lifespan</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Defines the time in milliseconds when the entry should be expired</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>30000</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kubernetes_quarkus-kubernetes"></a><a href="#quarkus-kubernetes_quarkus-kubernetes">Kubernetes</a></p></th>
@@ -13480,53 +12825,6 @@ This configuration section is optional</p></th>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>3</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kubernetes-config_quarkus-kubernetes-config"></a><a href="#quarkus-kubernetes-config_quarkus-kubernetes-config">Kubernetes Config</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-kubernetes-config_quarkus.kubernetes-config.enabled"></a><code><a href="#quarkus-kubernetes-config_quarkus.kubernetes-config.enabled">quarkus.kubernetes-config.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If set to true, the application will attempt to look up the configuration from the API server</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-kubernetes-config_quarkus.kubernetes-config.fail-on-missing-config"></a><code><a href="#quarkus-kubernetes-config_quarkus.kubernetes-config.fail-on-missing-config">quarkus.kubernetes-config.fail-on-missing-config</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If set to true, the application will not start if any of the configured config sources cannot be located</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-kubernetes-config_quarkus.kubernetes-config.config-maps"></a><code><a href="#quarkus-kubernetes-config_quarkus.kubernetes-config.config-maps">quarkus.kubernetes-config.config-maps</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>ConfigMaps to look for in the namespace that the Kubernetes Client has been configured for</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-liquibase_quarkus-liquibase"></a><a href="#quarkus-liquibase_quarkus-liquibase">Liquibase</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -14253,34 +13551,6 @@ This configuration section is optional</p></th>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-logging-sentry_quarkus.log.sentry.environment"></a><code><a href="#quarkus-logging-sentry_quarkus.log.sentry.environment">quarkus.log.sentry.environment</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Environment With Sentry you can easily filter issues, releases, and user feedback by environment. The environment filter on sentry affects all issue-related metrics like count of users affected, times series graphs, and event count. By setting the environment option, an environment tag will be added to each new issue sent to Sentry. There are a few restrictions: &#8594; the environment name cannot contain newlines or spaces, cannot be the string “None” or exceed 64 characters.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-logging-sentry_quarkus.log.sentry.release"></a><code><a href="#quarkus-logging-sentry_quarkus.log.sentry.release">quarkus.log.sentry.release</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Release A release is a version of your code that is deployed to an environment. When you give Sentry information about your releases, you unlock a number of new features: - Determine the issues and regressions introduced in a new release - Predict which commit caused an issue and who is likely responsible - Resolve issues by including the issue number in your commit message - Receive email notifications when your code gets deployed</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-mailer_quarkus-mailer"></a><a href="#quarkus-mailer_quarkus-mailer">Mailer</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -14890,6 +14160,20 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-mongodb-client_quarkus.mongodb.max-wait-queue-size"></a><code><a href="#quarkus-mongodb-client_quarkus.mongodb.max-wait-queue-size">quarkus.mongodb.max-wait-queue-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Configures the maximum number of concurrent operations allowed to wait for a server to become available. All further operations will get an exception immediately.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-mongodb-client_quarkus.mongodb.-mongo-client-configs-.connection-string"></a><code><a href="#quarkus-mongodb-client_quarkus.mongodb.-mongo-client-configs-.connection-string">quarkus.mongodb."mongo-client-configs".connection-string</a></code></p>
 </div>
 <div class="openblock description">
@@ -15202,6 +14486,20 @@ This configuration section is optional</p></th>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-mongodb-client_quarkus.mongodb.-mongo-client-configs-.max-wait-queue-size"></a><code><a href="#quarkus-mongodb-client_quarkus.mongodb.-mongo-client-configs-.max-wait-queue-size">quarkus.mongodb."mongo-client-configs".max-wait-queue-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Configures the maximum number of concurrent operations allowed to wait for a server to become available. All further operations will get an exception immediately.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -15941,7 +15239,7 @@ This configuration section is optional</p></th>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -15974,91 +15272,6 @@ This configuration section is optional</p></th>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.secret">quarkus.oidc.credentials.jwt.secret</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan">quarkus.oidc.credentials.jwt.lifespan</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.host">quarkus.oidc.proxy.host</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The host (name or IP address) of the Proxy.
- Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.port">quarkus.oidc.proxy.port</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The port number of the Proxy. Default value is 80.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.username">quarkus.oidc.proxy.username</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The username, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.password">quarkus.oidc.proxy.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The password, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -16116,20 +15329,6 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.tls.verification">quarkus.oidc.tls.verification</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -16368,7 +15567,7 @@ This configuration section is optional</p></th>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -16401,91 +15600,6 @@ This configuration section is optional</p></th>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>basic</code>, <code>post</code></p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret">quarkus.oidc."tenant".credentials.jwt.secret</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan">quarkus.oidc."tenant".credentials.jwt.lifespan</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.host">quarkus.oidc."tenant".proxy.host</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The host (name or IP address) of the Proxy.
- Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.port">quarkus.oidc."tenant".proxy.port</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The port number of the Proxy. Default value is 80.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.username">quarkus.oidc."tenant".proxy.username</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The username, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.password">quarkus.oidc."tenant".proxy.password</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The password, if Proxy needs authentication.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -16557,20 +15671,6 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.tls.verification">quarkus.oidc."tenant".tls.verification</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>REQUIRED</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-optaplanner_quarkus-optaplanner"></a><a href="#quarkus-optaplanner_quarkus-optaplanner">OptaPlanner constraint solver AI</a></p></th>
@@ -16678,89 +15778,9 @@ This configuration section is optional</p></th>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-amazon-lambda-common_quarkus-amazon-lambda-common"></a><a href="#quarkus-amazon-lambda-common_quarkus-amazon-lambda-common">Quarkus - Amazon Lambda - Common Runtime</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-amazon-lambda-common_quarkus.lambda.enable-polling-jvm-mode"></a><code><a href="#quarkus-amazon-lambda-common_quarkus.lambda.enable-polling-jvm-mode">quarkus.lambda.enable-polling-jvm-mode</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If true, this will enable the aws event poll loop within a Quarkus test run. This loop normally only runs in native image. This option is strictly for testing purposes.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-core_quarkus-core"></a><a href="#quarkus-core_quarkus-core">Quarkus - Core</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.locales"></a><code><a href="#quarkus-core_quarkus.locales">quarkus.locales</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The set of supported locales that can be consumed by the extensions.
- The locales must be specified in the IETF BCP 47 format e.g. en-US or fr-FR.
- For instance, the Hibernate Validator extension makes use of it.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html">Locale</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${user.language:en}-${user.country:}</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.default-locale"></a><code><a href="#quarkus-core_quarkus.default-locale">quarkus.default-locale</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Default locale that can be consumed by the extensions.
- The locales must be specified in the IETF BCP 47 format e.g. en-US or fr-FR.
- For instance, the Hibernate Validator extension makes use of it.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html">Locale</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${user.language:en}-${user.country:}</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-core_quarkus.profile"></a><code><a href="#quarkus-core_quarkus.profile">quarkus.profile</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Profile that will be active when Quarkus launches</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>prod</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-core_quarkus.args"></a><code><a href="#quarkus-core_quarkus.args">quarkus.args</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The arguments passed to the command line.
- We don&#8217;t make it a list as the args are separated by a space, not a comma.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -16848,6 +15868,22 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.default-locale"></a><code><a href="#quarkus-core_quarkus.default-locale">quarkus.default-locale</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Default locale that can be consumed by the extensions.
+ The locales must be specified in the IETF BCP 47 format e.g. en-US or fr-FR.
+ For instance, the Hibernate Validator extension makes use of it.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html">Locale</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${user.language:en}-${user.country:}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.index-dependency.-index-dependency-.group-id"></a><code><a href="#quarkus-core_quarkus.index-dependency.-index-dependency-.group-id">quarkus.index-dependency."index-dependency".group-id</a></code></p>
 </div>
 <div class="openblock description">
@@ -16932,12 +15968,28 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.locales"></a><code><a href="#quarkus-core_quarkus.locales">quarkus.locales</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The set of supported locales that can be consumed by the extensions.
+ The locales must be specified in the IETF BCP 47 format e.g. en-US or fr-FR.
+ For instance, the Hibernate Validator extension makes use of it.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html">Locale</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>${user.language:en}-${user.country:}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-core_quarkus.log.level"></a><code><a href="#quarkus-core_quarkus.log.level">quarkus.log.level</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The log level of the root category, which is used as the default log level for all categories. In addition to the standard JDK log level JBoss Logging also adds the following: <code>org.jboss.logmanager.Level#FATAL</code> <code>org.jboss.logmanager.Level#ERROR</code> <code>org.jboss.logmanager.Level#WARN</code> <code>org.jboss.logmanager.Level#INFO</code> <code>org.jboss.logmanager.Level#DEBUG</code> <code>org.jboss.logmanager.Level#TRACE</code></p>
+<p>The log level of the root category, which is used as the default log level for all categories.</p>
 </div>
 </div>
 </div></div></td>
@@ -17385,12 +16437,12 @@ This configuration section is optional</p></th>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The entry point of the application. This can either be a a fully qualified name of a standard Java class with a main method, or <code>io.quarkus.runtime.QuarkusApplication</code>. If your application has main classes annotated with <code>io.quarkus.runtime.annotations.QuarkusMain</code> then this can also reference the name given in the annotation, to avoid the need to specify fully qualified names in the config.</p>
+<p>The entry point of the application. In most cases this should not be modified.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>io.quarkus.runner.GeneratedMain</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -17450,20 +16502,6 @@ This configuration section is optional</p></th>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.package.manifest.manifest-sections-manifest-sections"></a><code><a href="#quarkus-core_quarkus.package.manifest.manifest-sections-manifest-sections">quarkus.package.manifest.manifest-sections</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Custom manifest sections to be added to the MANIFEST.MF file. An example of the user defined property: quarkus.package.manifest.manifest-sections.{Section-Name}.{Entry-Key1}={Value1} quarkus.package.manifest.manifest-sections.{Section-Name}.{Entry-Key2}={Value2}</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,Map&lt;String,String&gt;&gt;</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-core_quarkus.platform.group-id"></a><code><a href="#quarkus-core_quarkus.platform.group-id">quarkus.platform.group-id</a></code></p>
 </div>
 <div class="openblock description">
@@ -17503,6 +16541,20 @@ This configuration section is optional</p></th>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>999-SNAPSHOT</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-core_quarkus.profile"></a><code><a href="#quarkus-core_quarkus.profile">quarkus.profile</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Profile that will be active when Quarkus launches</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>prod</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -18757,25 +17809,6 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>inherit</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-funqy-server-common_quarkus-funqy-server-common"></a><a href="#quarkus-funqy-server-common_quarkus-funqy-server-common">Quarkus - Funqy Server Common - Runtime</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-funqy-server-common_quarkus.funqy.export"></a><code><a href="#quarkus-funqy-server-common_quarkus.funqy.export">quarkus.funqy.export</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The function to export. If there is more than one function defined for this deployment, then you must set this variable. If there is only a single function, you do not have to set this config item.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-graphql_quarkus-vertx-graphql"></a><a href="#quarkus-vertx-graphql_quarkus-vertx-graphql">Quarkus - Quarkus - Vert.x GraphQL - Runtime</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -19339,7 +18372,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Root path for health-checking endpoints.</p>
+<p>Root path for health-checking servlets.</p>
 </div>
 </div>
 </div></div></td>
@@ -19353,7 +18386,7 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The relative path of the liveness health-checking endpoint.</p>
+<p>The relative path of the liveness health-checking servlet.</p>
 </div>
 </div>
 </div></div></td>
@@ -19367,26 +18400,12 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The relative path of the readiness health-checking endpoint.</p>
+<p>The relative path of the readiness health-checking servlet.</p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/ready</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.group-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.group-path">quarkus.smallrye-health.group-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The relative path of the health group endpoint.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/group</code></p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-jwt_quarkus-smallrye-jwt"></a><a href="#quarkus-smallrye-jwt_quarkus-smallrye-jwt">SmallRye JWT</a></p></th>
@@ -19491,6 +18510,20 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-reactive-messaging_quarkus-smallrye-reactive-messaging"></a><a href="#quarkus-smallrye-reactive-messaging_quarkus-smallrye-reactive-messaging">SmallRye Reactive Messaging</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-reactive-messaging_quarkus.reactive-messaging.strict"></a><code><a href="#quarkus-smallrye-reactive-messaging_quarkus.reactive-messaging.strict">quarkus.reactive-messaging.strict</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enables or disables the <strong>strict</strong> mode.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -19670,12 +18703,10 @@ TCP</code> or <code>org.jboss.logmanager.handlers.SyslogHandler.Protocol#SSL_TCP
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault server url.
-&lt;p&gt;
-Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a>
-&lt;p&gt;
-See also the documentation for the <code>kv-secret-engine-mount-path</code> property for some insights on how
-the full Vault url gets built.</p>
+<p>Vault server url.</p>
+</div>
+<div class="paragraph">
+<p>Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
 </div>
 </div>
 </div></div></td>
@@ -19689,9 +18720,10 @@ the full Vault url gets built.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Renew grace period duration.
-&lt;p&gt;
-This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current
+<p>Renew grace period duration.</p>
+</div>
+<div class="paragraph">
+<p>This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current
 lease reaches its max_ttl.
 By default Vault leaseDuration is equal to 7 days (ie: 168h or 604800s).
 If a connection pool maxLifetime is set, it is reasonable to set the renewGracePeriod to be greater
@@ -19716,9 +18748,10 @@ leases all the time.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault config source cache period.
-&lt;p&gt;
-Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault
+<p>Vault config source cache period.</p>
+</div>
+<div class="paragraph">
+<p>Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault
 again until the expiration of that period.
 This property is ignored if <code>secret-config-kv-path</code> is not set.</p>
 </div>
@@ -19736,23 +18769,31 @@ This property is ignored if <code>secret-config-kv-path</code> is not set.</p>
 <div class="content">
 <div class="paragraph">
 <p>List of comma separated vault paths in kv store,
-where all properties will be available as MP config properties <strong>as-is</strong>, with no prefix.
-&lt;p&gt;
-For instance, if vault contains property <code>foo</code>, it will be made available to the
-quarkus application as <code>@ConfigProperty(name = "foo") String foo;</code>
-&lt;p&gt;
-If 2 paths contain the same property, the last path will win.
-&lt;p&gt;
-For instance if
-&lt;p&gt;
-* <code>secret/base-config</code> contains <code>foo=bar</code> and
-* <code>secret/myapp/config</code> contains <code>foo=myappbar</code>, then
-&lt;p&gt;
-<code>@ConfigProperty(name = "foo") String foo</code> will have value <code>myappbar</code>
-with application properties <code>quarkus.vault.secret-config-kv-path=base-config,myapp/config</code>
-&lt;p&gt;
-See also the documentation for the <code>kv-secret-engine-mount-path</code> property for some insights on how
-the full Vault url gets built.</p>
+where all properties will be available as MP config properties <strong>as-is</strong>, with no prefix.</p>
+</div>
+<div class="paragraph">
+<p>For instance, if vault contains property <code>foo</code>, it will be made available to the
+quarkus application as <code>@ConfigProperty(name = "foo") String foo;</code></p>
+</div>
+<div class="paragraph">
+<p>If 2 paths contain the same property, the last path will win.</p>
+</div>
+<div class="paragraph">
+<p>For instance if</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>secret/base-config</code> contains <code>foo=bar</code> and</p>
+</li>
+<li>
+<p><code>secret/myapp/config</code> contains <code>foo=myappbar</code>, then</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>@ConfigProperty(name = "foo") String foo</code> will have value <code>myappbar</code>
+with application properties <code>quarkus.vault.secret-config-kv-path=base-config,myapp/config</code></p>
 </div>
 </div>
 </div></div></td>
@@ -19767,11 +18808,20 @@ the full Vault url gets built.</p>
 <div class="content">
 <div class="paragraph">
 <p>Used to hide confidential infos, for logging in particular.
-Possible values are:
-&lt;p&gt;
-* low: display all secrets.
-* medium: display only usernames and lease ids (ie: passwords and tokens are masked).
-* high: hide lease ids and dynamic credentials username.</p>
+Possible values are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>low: display all secrets.</p>
+</li>
+<li>
+<p>medium: display only usernames and lease ids (ie: passwords and tokens are masked).</p>
+</li>
+<li>
+<p>high: hide lease ids and dynamic credentials username.</p>
+</li>
+</ul>
 </div>
 </div>
 </div></div></td>
@@ -19785,14 +18835,15 @@ Possible values are:
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Kv secret engine version.
-&lt;p&gt;
-see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Kv secret engine version.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>2</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -19801,26 +18852,10 @@ see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>KV secret engine path.
-&lt;p&gt;
-This value is used when building the url path in the KV secret engine programmatic access
-(i.e. <code>VaultKVSecretEngine</code>) and the vault config source (i.e. fetching configuration properties from Vault).
-&lt;p&gt;
-For a v2 KV secret engine (default - see <code>kv-secret-engine-version property</code>)
-the full url is built from the expression <code>&lt;url&gt;/v1/&lt;/kv-secret-engine-mount-path&gt;/data/&#8230;&#8203;</code>.
-&lt;p&gt;
-With property <code>quarkus.vault.url=https://localhost:8200</code>, the following call
-<code>vaultKVSecretEngine.readSecret("foo/bar")</code> would lead eventually to a <code>GET</code> on Vault with the following
-url: <code><a href="https://localhost:8200/v1/secret/data/foo/bar" class="bare">https://localhost:8200/v1/secret/data/foo/bar</a></code>.
-&lt;p&gt;
-With a KV secret engine v1, the url changes to: <code>&lt;url&gt;/v1/&lt;/kv-secret-engine-mount-path&gt;/&#8230;&#8203;</code>.
-&lt;p&gt;
-The same logic is applied to the Vault config source. With <code>quarkus.vault.secret-config-kv-path=config/myapp</code>
-The secret properties would be fetched from Vault using a <code>GET</code> on
-<code><a href="https://localhost:8200/v1/secret/data/config/myapp" class="bare">https://localhost:8200/v1/secret/data/config/myapp</a></code> for a KV secret engine v2 (or
-<code><a href="https://localhost:8200/v1/secret/config/myapp" class="bare">https://localhost:8200/v1/secret/config/myapp</a></code> for a KV secret engine v1).
-&lt;p&gt;
-see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Kv secret engine path.</p>
+</div>
+<div class="paragraph">
+<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
 </div>
 </div>
 </div></div></td>
@@ -19865,18 +18900,17 @@ see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare
 <div class="content">
 <div class="paragraph">
 <p>List of comma separated vault paths in kv store,
-where all properties will be available as <strong>prefixed</strong> MP config properties.
-&lt;p&gt;
-For instance if the application properties contains
+where all properties will be available as <strong>prefixed</strong> MP config properties.</p>
+</div>
+<div class="paragraph">
+<p>For instance if the application properties contains
 <code>quarkus.vault.secret-config-kv-path.myprefix=config</code>, and
 vault path <code>secret/config</code> contains <code>foo=bar</code>, then <code>myprefix.foo</code>
-will be available in the MP config.
-&lt;p&gt;
-If the same property is available in 2 different paths for the same prefix, the last one
-will win.
-&lt;p&gt;
-See also the documentation for the <code>kv-secret-engine-mount-path</code> property for some insights on how
-the full Vault url gets built.</p>
+will be available in the MP config.</p>
+</div>
+<div class="paragraph">
+<p>If the same property is available in 2 different paths for the same prefix, the last one
+will win.</p>
 </div>
 </div>
 </div></div></td>
@@ -19941,53 +18975,6 @@ the full Vault url gets built.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.health"></a><a href="#quarkus-vault_quarkus.vault.health">Health check configuration</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vault_quarkus.vault.health.enabled"></a><code><a href="#quarkus-vault_quarkus.vault.health.enabled">quarkus.vault.health.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Whether or not an health check is published in case the smallrye-health extension is present.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vault_quarkus.vault.health.stand-by-ok"></a><code><a href="#quarkus-vault_quarkus.vault.health.stand-by-ok">quarkus.vault.health.stand-by-ok</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Specifies if being a standby should still return the active status code instead of the standby status code.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vault_quarkus.vault.health.performance-stand-by-ok"></a><code><a href="#quarkus-vault_quarkus.vault.health.performance-stand-by-ok">quarkus.vault.health.performance-stand-by-ok</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Specifies if being a performance standby should still return the active status code instead of the performance standby status code.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.authentication"></a><a href="#quarkus-vault_quarkus.vault.authentication">Authentication</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -19999,23 +18986,7 @@ the full Vault url gets built.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault token, bypassing Vault authentication (kubernetes, userpass or approle). This is useful in development where an authentication mode might not have been set up. In production we will usually prefer some authentication such as userpass, or preferably kubernetes, where Vault tokens get generated with a TTL and some ability to revoke them. Lease renewal does not apply.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vault_quarkus.vault.authentication.client-token-wrapping-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.client-token-wrapping-token">quarkus.vault.authentication.client-token-wrapping-token</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Client token wrapped in a wrapping token, such as what is returned by:
- vault token create -wrap-ttl=60s -policy=myapp
- client-token and client-token-wrapping-token are exclusive. Lease renewal does not apply.</p>
+<p>Vault token, bypassing Vault authentication (kubernetes, userpass or approle). This is useful in development where an authentication mode might not have been set up. In production we will usually prefer some authentication such as userpass, or preferably kubernetes, where Vault tokens get generated with a TTL and some ability to revoke them.</p>
 </div>
 </div>
 </div></div></td>
@@ -20052,22 +19023,6 @@ the full Vault url gets built.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vault_quarkus.vault.authentication.app-role.secret-id-wrapping-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.app-role.secret-id-wrapping-token">quarkus.vault.authentication.app-role.secret-id-wrapping-token</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Wrapping token containing a Secret Id, obtained from:
- vault write -wrap-ttl=60s -f auth/approle/role/myapp/secret-id
- secret-id and secret-id-wrapping-token are exclusive</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-vault_quarkus.vault.authentication.userpass.username"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.username">quarkus.vault.authentication.userpass.username</a></code></p>
 </div>
 <div class="openblock description">
@@ -20088,24 +19043,6 @@ the full Vault url gets built.</p>
 <div class="content">
 <div class="paragraph">
 <p>Password for userpass auth method. This property is required when selecting the userpass authentication type.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-vault_quarkus.vault.authentication.userpass.password-wrapping-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.password-wrapping-token">quarkus.vault.authentication.userpass.password-wrapping-token</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Wrapping token containing a Password, obtained from:
- vault kv get -wrap-ttl=60s secret/
- The key has to be 'password', meaning the password has initially been provisioned with:
- vault kv put secret/ password=
- password and password-wrapping-token are exclusive</p>
 </div>
 </div>
 </div></div></td>

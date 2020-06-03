@@ -86,7 +86,6 @@
 </ul>
 </li>
 <li><a href="#database-clients-details">Database Clients details</a></li>
-<li><a href="#transactions">Transactions</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a>
 <ul class="sectlevel2">
 <li><a href="#common-datasource">Common Datasource</a></li>
@@ -776,72 +775,6 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="transactions"><a class="anchor" href="#transactions"></a>Transactions</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The reactive SQL clients support transactions.
-A transaction is started with <code>client.begin()</code> and terminated with either <code>tx.commit()</code> or <code>tx.rollback()</code>.
-All these operations are asynchronous:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>client.begin()</code> returns a <code>Uni&lt;Transaction&gt;</code></p>
-</li>
-<li>
-<p><code>client.commit()</code> and <code>client.rollback()</code> return <code>Uni&lt;Void&gt;</code></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The following snippet shows how to run 2 insertions in the same transaction:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public static Uni&lt;Void&gt; insertTwoFruits(PgPool client, Fruit fruit1, Fruit fruit2) {
-    return client.begin()
-            .flatMap(tx -&gt; {
-                Uni&lt;RowSet&lt;Row&gt;&gt; insertOne = tx.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)")
-                        .execute(Tuple.of(fruit1.name));
-                Uni&lt;RowSet&lt;Row&gt;&gt; insertTwo = tx.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)")
-                        .execute(Tuple.of(fruit2.name));
-
-                return insertOne.and(insertTwo)
-                        // Ignore the results (the two ids)
-                        .onItem().ignore().andContinueWithNull()
-                        // on success, commit
-                        .onItem().produceUni(x -&gt; tx.commit())
-                        // on failure rollback
-                        .onFailure().recoverWithUni(tx::rollback);
-            });
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this example, the two insertions are not dependant on each other and are executed concurrently (but in the same transaction).
-This transaction is committed on success and rolled back on failure.</p>
-</div>
-<div class="paragraph">
-<p>You can also create dependant actions as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">return this.client.begin()
-       .flatMap(tx -&gt; tx
-               .preparedQuery("INSERT INTO person (firstname,lastname) VALUES ($1,$2) RETURNING (id)",
-                       Tuple.of(person.getFirstName(),person.getLastName()))
-
-               .onItem().produceUni(id-&gt; tx.preparedQuery("INSERT INTO addr (person_id,addrline1) VALUES ($1,$2)",
-                       Tuple.of(id.iterator().next().getLong("id"),person.getLastName())))
-
-               .onItem().produceUni(res -&gt; tx.commit())
-               .onFailure().recoverWithUni(ex-&gt; tx.rollback())
-       );</code></pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">

@@ -90,10 +90,8 @@
 <li><a href="#advanced-query">Advanced Query</a>
 <ul class="sectlevel2">
 <li><a href="#paging">Paging</a></li>
-<li><a href="#using-a-range-instead-of-pages">Using a range instead of pages</a></li>
 <li><a href="#sorting">Sorting</a></li>
 <li><a href="#simplified-queries">Simplified queries</a></li>
-<li><a href="#named-queries">Named queries</a></li>
 <li><a href="#query-parameters">Query parameters</a></li>
 </ul>
 </li>
@@ -360,11 +358,8 @@ Person.delete("status", Status.Alive);
 // delete all persons
 Person.deleteAll();
 
-// delete by id
-boolean deleted = Person.deleteById(personId);
-
-// set the name of all living persons to 'Mortal'
-Person.update("name = 'Mortal' where status = ?1", Status.Alive);</code></pre>
+// update all living persons
+Person.update("name = 'Moral' where status = ?1", Status.Alive);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -578,11 +573,8 @@ personRepository.delete("status", Status.Alive);
 // delete all persons
 personRepository.deleteAll();
 
-// delete by id
-boolean deleted = personRepository.deleteById(personId);
-
-// set the name of all living persons to 'Mortal'
-personRepository.update("name = 'Mortal' where status = ?1", Status.Alive);</code></pre>
+// update all living persons
+personRepository.update("name = 'Moral' where status = ?1", Status.Alive);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -670,42 +662,6 @@ return Person.find("status", Status.Alive)
 </div>
 </div>
 <div class="sect2">
-<h3 id="using-a-range-instead-of-pages"><a class="anchor" href="#using-a-range-instead-of-pages"></a>Using a range instead of pages</h3>
-<div class="paragraph">
-<p><code>PanacheQuery</code> also allows range-based queries.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">// create a query for all living persons
-PanacheQuery&lt;Person&gt; livingPersons = Person.find("status", Status.Alive);
-
-// make it use a range: start at index 0 until index 24 (inclusive).
-livingPersons.range(0, 24);
-
-// get the range
-List&lt;Person&gt; firstRange = livingPersons.list();
-
-// to get the next range, you need to call range again
-List&lt;Person&gt; secondRange = livingPersons.range(25, 49).list();</code></pre>
-</div>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>You cannot mix ranges and pages: if you use a range, all methods that depend on having a current page will throw an <code>UnsupportedOperationException</code>;
-you can switch back to paging using <code>page(Page)</code> or <code>page(int, int)</code>.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
 <h3 id="sorting"><a class="anchor" href="#sorting"></a>Sorting</h3>
 <div class="paragraph">
 <p>All methods accepting a query string also accept the following simplified query form:</p>
@@ -784,44 +740,8 @@ You can also write your queries in plain
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Order.find("select distinct o from Order o left join fetch o.lineItems");
-Order.update("update from Person set name = 'Mortal' where status = ?", Status.Alive);</code></pre>
+Order.update("update from Person set name = 'Moral' where status = ?", Status.Alive);</code></pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="named-queries"><a class="anchor" href="#named-queries"></a>Named queries</h3>
-<div class="paragraph">
-<p>You can reference a named query instead of a (simplified) HQL query by prefixing its name with the '#' character.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
-@NamedQuery(name = "Person.getByName", query = "from Person where name = :name")
-public class Person extends PanacheEntity {
-    public String name;
-    public LocalDate birth;
-    public Status status;
-
-    public static Person findByName(String name){
-        return find("#Person.getByName", name).firstResult();
-    }
-}</code></pre>
-</div>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Named queries can only be defined inside your JPA entity classes (being the Panache entity class, or the repository parameterized type),
-or on one of its super classes.</p>
-</div>
-</td>
-</tr>
-</table>
 </div>
 </div>
 <div class="sect2">

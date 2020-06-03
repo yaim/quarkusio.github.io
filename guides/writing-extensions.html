@@ -1285,72 +1285,10 @@ file will be indexed.</p>
 <div class="sect3">
 <h4 id="using-threads-context-class-loader"><a class="anchor" href="#using-threads-context-class-loader"></a>2.3.8. Using Thread&#8217;s Context Class Loader</h4>
 <div class="paragraph">
-<p>The build step will be run with a TCCL that can load user classes from the deployment in a transformer-safe way.
+<p>If <code>@BuildStep.loadsApplicationClasses()</code> is set to <code>true</code> the build step will be run with a TCCL that can load user classes from the deployment in a transformer-safe way.
 This class loader only lasts for the life of the augmentation, and is discarded afterwards.
 The classes will be loaded again in a different class loader at runtime.
 This means that loading a class during augmentation does not stop it from being transformed when running in the development/test mode.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="adding-external-jars-to-the-indexer-with-indexdependencybuilditem"><a class="anchor" href="#adding-external-jars-to-the-indexer-with-indexdependencybuilditem"></a>2.3.9. Adding external JARs to the indexer with IndexDependencyBuildItem</h4>
-<div class="paragraph">
-<p>The index of scanned classes will not automatically include your external class dependencies.
-To add dependencies, create a <code>@BuildStep</code> that produces <code>IndexDependencyBuildItem</code> objects, for a <code>groupId</code> and <code>artifactId</code>.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-It is important to specify all the required artifacts to be added to the indexer. No artifacts are implicitly added transitively.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The <code>Amazon Alexa</code> extension adds dependent libraries from the Alexa SDK that are used in Jackson JSON transformations, in order for the reflective classes to identified and included at <code>BUILD_TIME</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">   @BuildStep
-    void addDependencies(BuildProducer&lt;IndexDependencyBuildItem&gt; indexDependency) {
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk"));
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk-runtime"));
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk-model"));
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk-lambda-support"));
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk-servlet-support"));
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk-dynamodb-persistence-adapter"));
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk-apache-client"));
-        indexDependency.produce(new IndexDependencyBuildItem("com.amazon.alexa", "ask-sdk-model-runtime"));
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>With the artifacts added to the <code>Jandex</code> indexer, you can now search the index to identify classes implementing an interface, sub-classes of a specific class, or classes with a target annotation.</p>
-</div>
-<div class="paragraph">
-<p>For example, the <code>Jackson</code> extension uses code like below to search for annotations used in JSON deserialization,
-and add them to the reflective hierarchy for <code>BUILD_TIME</code> analysis.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">    DotName JSON_DESERIALIZE = DotName.createSimple(JsonDeserialize.class.getName());
-
-    IndexView index = combinedIndexBuildItem.getIndex();
-
-    // handle the various @JsonDeserialize cases
-    for (AnnotationInstance deserializeInstance : index.getAnnotations(JSON_DESERIALIZE)) {
-        AnnotationTarget annotationTarget = deserializeInstance.target();
-        if (CLASS.equals(annotationTarget.kind())) {
-            DotName dotName = annotationTarget.asClass().name();
-            Type jandexType = Type.create(dotName, Type.Kind.CLASS);
-            reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem(jandexType));
-        }
-
-    }</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -2112,9 +2050,9 @@ The metric name of all metrics should start with a short name of the extension t
 <div class="paragraph">
 <p>An example build step for build-time registration of metrics:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock java">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">@BuildStep
 void registerMetrics(BuildProducer&lt;MetricBuildItem&gt; metrics) {
     Metadata activeCountMetadata = Metadata.builder()
             .withName("agroal.active.count")
@@ -2137,9 +2075,9 @@ void registerMetrics(BuildProducer&lt;MetricBuildItem&gt; metrics) {
 In this example, we provide an object that implements the logic of the metric, in the case of a gauge,
 it needs to implement <code>org.eclipse.microprofile.metrics.Gauge</code>. Example:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock java">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class ActiveCountGauge implements Gauge&lt;Long&gt; {
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">public class ActiveCountGauge implements Gauge&lt;Long&gt; {
 
     private String dataSourceName;
 
@@ -2176,9 +2114,9 @@ and call the methods specific to each metric type.</p>
 <p>In this case, the dependency setup and build-time registration is the same as in case 2. The difference will be that instead of introducing
 custom metric objects that bridge between library-specific metrics and MP Metrics, the extension&#8217;s code will contain metric collection code like this:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock java">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public void methodThatShouldBeCounted() {
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">public void methodThatShouldBeCounted() {
     if(metricsEnabled) {
         Counter counter = MetricRegistries.get(MetricRegistry.Type.VENDOR).counter("name");
         counter.inc();
@@ -2208,13 +2146,13 @@ to evaluate these two conditions, and then check back to this system property at
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+<pre>@BuildStep
 SystemPropertyBuildItem produceMetricsEnabledProperty(AgroalBuildTimeConfig extensionSpecificConfig,
         Capabilities capabilities) {
     return new SystemPropertyBuildItem("metrics.enabled",
             String.valueOf(capabilities.isCapabilityPresent(Capabilities.METRICS) &amp;&amp;
                             extensionSpecificConfig.metricsEnabled));
-}</code></pre>
+}</pre>
 </div>
 </div>
 </div>
@@ -2746,12 +2684,6 @@ Otherwise, Quarkus attempts to monitor the extension classes and this may result
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw compile quarkus:dev -DnoDeps</code></pre>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="indexer-does-not-include-your-external-dependency"><a class="anchor" href="#indexer-does-not-include-your-external-dependency"></a>2.15.3. Indexer does not include your external dependency</h4>
-<div class="paragraph">
-<p>Remember to add <code>IndexDependencyBuildItem</code> artifacts to your <code>@BuildStep</code>.</p>
 </div>
 </div>
 </div>
