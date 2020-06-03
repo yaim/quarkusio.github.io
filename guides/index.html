@@ -103,11 +103,13 @@
       
         <li><a href="/guides/rest-json">Writing REST JSON Services</a></li>
       
+        <li><a href="/guides/rest-data-panache">Writing Simple REST CRUD Services</a></li>
+      
         <li><a href="/guides/validation">Validation with Hibernate Validator</a></li>
       
         <li><a href="/guides/rest-client">Using the REST Client (including JSON)</a></li>
       
-        <li><a href="/guides/rest-client-multipart">Using the REST Client with multipart</a></li>
+        <li><a href="/guides/rest-client-multipart">Using the REST Client with Multipart</a></li>
       
         <li><a href="/guides/security-jwt">Using JWT RBAC</a></li>
       
@@ -120,6 +122,8 @@
         <li><a href="/guides/microprofile-fault-tolerance">Using Fault Tolerance</a></li>
       
         <li><a href="/guides/reactive-routes">Using Reactive Routes</a></li>
+      
+        <li><a href="/guides/microprofile-graphql">Consuming and Implementing GraphQL Services</a></li>
       
       </ul>
     
@@ -210,6 +214,8 @@
       
         <li><a href="/guides/vault-auth">Working with HashiCorp Vault’s Authentication</a></li>
       
+        <li><a href="/guides/credentials-provider">Credentials Provider</a></li>
+      
       </ul>
     
       <h3 id="#business-automation">Business Automation</h3>
@@ -225,6 +231,15 @@
       <ul>
       
         <li><a href="/guides/camel">Apache Camel</a></li>
+      
+      </ul>
+    
+      <h3 id="#command-line">Command Line Applications</h3>
+      <ul>
+      
+        <li><a href="/guides/command-mode-reference">Command Mode Reference</a></li>
+      
+        <li><a href="/guides/picocli">Picocli</a></li>
       
       </ul>
     
@@ -265,6 +280,18 @@
       
         <li><a href="/guides/funqy-azure-functions-http">Quarkus Funqy Azure Functions HTTP</a></li>
       
+        <li><a href="/guides/amazon-dynamodb">Amazon DynamoDB</a></li>
+      
+        <li><a href="/guides/amazon-kms">Amazon KMS</a></li>
+      
+        <li><a href="/guides/amazon-s3">Amazon S3</a></li>
+      
+        <li><a href="/guides/amazon-ses">Amazon SES</a></li>
+      
+        <li><a href="/guides/amazon-sns">Amazon SNS</a></li>
+      
+        <li><a href="/guides/amazon-sqs">Amazon SQS</a></li>
+      
       </ul>
     
       <h3 id="#observability">Observability</h3>
@@ -289,6 +316,12 @@
       
         <li><a href="/guides/rest-json">Writing REST JSON Services</a></li>
       
+        <li><a href="/guides/grpc-getting-started">Getting Started with gRPC</a></li>
+      
+        <li><a href="/guides/grpc-service-implementation">Implementing gRPC Services</a></li>
+      
+        <li><a href="/guides/grpc-service-consumption">Consuming gRPC Services</a></li>
+      
       </ul>
     
       <h3 id="#tooling">Tooling</h3>
@@ -312,6 +345,8 @@
         <li><a href="/guides/spring-data-jpa">Using the Quarkus Extension for Spring Data JPA API</a></li>
       
         <li><a href="/guides/spring-security">Using the Quarkus Extension for Spring Security API</a></li>
+      
+        <li><a href="/guides/spring-cache">Using the Quarkus Extension for Spring Cache</a></li>
       
         <li><a href="/guides/spring-boot-properties">Using Spring Boot's ConfigurationProperties</a></li>
       
@@ -357,6 +392,8 @@
         <li><a href="/guides/vertx">Using Vert.x</a></li>
       
         <li><a href="/guides/jgit">Access Git repositories with JGit</a></li>
+      
+        <li><a href="/guides/consul-config">Consume Configuration from Consul</a></li>
       
         <li><a href="/guides/performance-measure">Measuring Performance</a></li>
       
@@ -487,6 +524,15 @@
           </div>
         
           <div class="guide-item" markdown="1">
+            <h2>Writing Simple REST CRUD Services</h2>
+
+            <p>Hibernate ORM REST Data with Panache simplifies the creation of CRUD applications based on JAX-RS and Hibernate ORM.</p>
+
+
+            <p><a href="/guides/rest-data-panache" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
             <h2>Validation with Hibernate Validator</h2>
 
             <p>This guide covers how to use Hibernate Validator/Bean Validation in your REST services.</p>
@@ -505,7 +551,7 @@
           </div>
         
           <div class="guide-item" markdown="1">
-            <h2>Using the REST Client with multipart</h2>
+            <h2>Using the REST Client with Multipart</h2>
 
             <p>This guide explains how to use the MicroProfile REST Client to send multipart REST requests, typically to upload documents.</p>
 
@@ -565,6 +611,15 @@
 
 
             <p><a href="/guides/reactive-routes" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Consuming and Implementing GraphQL Services</h2>
+
+            <p>This guide explains how to leverage Eclipse MicroProfile GraphQL to consume and implement GraphQL services.</p>
+
+
+            <p><a href="/guides/microprofile-graphql" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
@@ -937,6 +992,15 @@ This guide will walk you through all that.</p>
             <p><a href="/guides/vault-auth" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
+          <div class="guide-item" markdown="1">
+            <h2>Credentials Provider</h2>
+
+            <p>This guides explains how to use the Vault credentials provider or implement your own custom one.</p>
+
+
+            <p><a href="/guides/credentials-provider" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
       </div>
     
   
@@ -982,6 +1046,34 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/camel" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+      </div>
+    
+  
+    
+      <div class="grid__item width-12-12"><hr /></div>
+      <div class="grid__item width-4-12 width-12-12-m toc">
+        <h2 id="web-1">Command Line Applications</h2>
+      </div>
+      <div class="grid__item width-8-12 width-12-12-m guides-content">
+        
+          <div class="guide-item" markdown="1">
+            <h2>Command Mode Reference</h2>
+
+            <p>This reference guide explains how to develop command line applications with Quarkus.</p>
+
+
+            <p><a href="/guides/command-mode-reference" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Picocli</h2>
+
+            <p>Simplify command line applications creation with the Picocli extension.</p>
+
+
+            <p><a href="/guides/picocli" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
@@ -1147,6 +1239,60 @@ This guide will walk you through all that.</p>
             <p><a href="/guides/funqy-azure-functions-http" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
+          <div class="guide-item" markdown="1">
+            <h2>Amazon DynamoDB</h2>
+
+            <p>This guide covers how to use the Amazon DynamoDB database in Quarkus.</p>
+
+
+            <p><a href="/guides/amazon-dynamodb" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Amazon KMS</h2>
+
+            <p>This guide covers how to use the Amazon Key Management Service in Quarkus.</p>
+
+
+            <p><a href="/guides/amazon-kms" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Amazon S3</h2>
+
+            <p>This guide covers how to use the Amazon S3 cloud storage in Quarkus.</p>
+
+
+            <p><a href="/guides/amazon-s3" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Amazon SES</h2>
+
+            <p>This guide covers how to use the Amazon Simple Email Service in Quarkus.</p>
+
+
+            <p><a href="/guides/amazon-ses" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Amazon SNS</h2>
+
+            <p>This guide covers how to use the Amazon Simple Notification Service in Quarkus.</p>
+
+
+            <p><a href="/guides/amazon-sns" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Amazon SQS</h2>
+
+            <p>This guide covers how to use the Amazon Simple Queue Service in Quarkus.</p>
+
+
+            <p><a href="/guides/amazon-sqs" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
       </div>
     
   
@@ -1228,6 +1374,33 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/rest-json" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Getting Started with gRPC</h2>
+
+            <p>This guide explains how to start using gRPC in your Quarkus application.</p>
+
+
+            <p><a href="/guides/grpc-getting-started" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Implementing gRPC Services</h2>
+
+            <p>This guide explains how to implement gRPC services in your Quarkus application.</p>
+
+
+            <p><a href="/guides/grpc-service-implementation" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Consuming gRPC Services</h2>
+
+            <p>This guide explains how to consume gRPC services in your Quarkus application.</p>
+
+
+            <p><a href="/guides/grpc-service-consumption" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
       </div>
@@ -1333,6 +1506,15 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/spring-security" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Using the Quarkus Extension for Spring Cache</h2>
+
+            <p>While you are encouraged to use the Cache extension for your application-level caching, Quarkus provides a compatibility layer for Spring Cache in the form of the spring-cache extension.</p>
+
+
+            <p><a href="/guides/spring-cache" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
@@ -1500,6 +1682,15 @@ This guide will walk you through all that.</p>
 
 
             <p><a href="/guides/jgit" class="button-cta secondary">READ THE GUIDE</a></p>
+          </div>
+        
+          <div class="guide-item" markdown="1">
+            <h2>Consume Configuration from Consul</h2>
+
+            <p>This guide explains how your Quarkus application can read configuration properties at runtime from Consul.</p>
+
+
+            <p><a href="/guides/consul-config" class="button-cta secondary">READ THE GUIDE</a></p>
           </div>
         
           <div class="guide-item" markdown="1">
