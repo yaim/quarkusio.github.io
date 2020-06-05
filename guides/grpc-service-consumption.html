@@ -267,6 +267,355 @@ public class StreamingEndpoint {
 <div class="paragraph">
 <p>For each gRPC service you inject in your application, you can configure the following attributes:</p>
 </div>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients"></a><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients">Configures the gRPC clients</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.port"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.port">quarkus.grpc.clients."service-name".port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The gRPC service port.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>9000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.host"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.host">quarkus.grpc.clients."service-name".host</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The host name / IP on which the service is exposed.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.ssl.certificate"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.ssl.certificate">quarkus.grpc.clients."service-name".ssl.certificate</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The file path to a server certificate or certificate chain in PEM format.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.ssl.key"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.ssl.key">quarkus.grpc.clients."service-name".ssl.key</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The file path to the corresponding certificate private key file in PEM format.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.ssl.trust-store"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.ssl.trust-store">quarkus.grpc.clients."service-name".ssl.trust-store</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>An optional trust store which holds the certificate information of the certificates to trust</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.plain-text"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.plain-text">quarkus.grpc.clients."service-name".plain-text</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether <code>plain-text</code> should be used instead of <code>TLS</code>. Enables by default, except it TLS/SSL is configured. In this case, <code>plain-text</code> is disabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.keep-alive-time"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.keep-alive-time">quarkus.grpc.clients."service-name".keep-alive-time</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The duration after which a keep alive ping is sent.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.flow-control-window"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.flow-control-window">quarkus.grpc.clients."service-name".flow-control-window</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The flow control window in bytes. Default is 1MiB.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.idle-timeout"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.idle-timeout">quarkus.grpc.clients."service-name".idle-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The duration without ongoing RPCs before going to idle mode.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.keep-alive-timeout"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.keep-alive-timeout">quarkus.grpc.clients."service-name".keep-alive-timeout</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The amount of time the sender of of a keep alive ping waits for an acknowledgement.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html">Duration</a>
+  <a href="#duration-note-anchor" title="More information about the Duration format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.keep-alive-without-calls"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.keep-alive-without-calls">quarkus.grpc.clients."service-name".keep-alive-without-calls</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether keep-alive will be performed when there are no outstanding RPC on a connection.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-hedged-attempts"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-hedged-attempts">quarkus.grpc.clients."service-name".max-hedged-attempts</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The max number of hedged attempts.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-retry-attempts"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-retry-attempts">quarkus.grpc.clients."service-name".max-retry-attempts</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The max number of retry attempts. Retry must be explicitly enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>5</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-trace-events"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-trace-events">quarkus.grpc.clients."service-name".max-trace-events</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum number of channel trace events to keep in the tracer for each channel or sub-channel.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-inbound-message-size"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-inbound-message-size">quarkus.grpc.clients."service-name".max-inbound-message-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum message size allowed for a single gRPC frame (in bytes). Default is 4 MiB.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-inbound-metadata-size"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.max-inbound-metadata-size">quarkus.grpc.clients."service-name".max-inbound-metadata-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum size of metadata allowed to be received (in bytes). Default is 8192B.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.negotiation-type"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.negotiation-type">quarkus.grpc.clients."service-name".negotiation-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The negotiation type for the HTTP/2 connection. Accepted values are: <code>TLS</code>, <code>PLAINTEXT_UPGRADE</code>, <code>PLAINTEXT</code></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>TLS</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.override-authority"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.override-authority">quarkus.grpc.clients."service-name".override-authority</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Overrides the authority used with TLS and HTTP virtual hosting.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.per-rpc-buffer-limit"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.per-rpc-buffer-limit">quarkus.grpc.clients."service-name".per-rpc-buffer-limit</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The per RPC buffer limit in bytes used for retry.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.retry"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.retry">quarkus.grpc.clients."service-name".retry</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether retry is enabled. Note that retry is disabled by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.retry-buffer-size"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.retry-buffer-size">quarkus.grpc.clients."service-name".retry-buffer-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The retry buffer size in bytes.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.user-agent"></a><code><a href="#quarkus-grpc-config-group-config-grpc-client-configuration_quarkus.grpc.clients.-service-name-.user-agent">quarkus.grpc.clients."service-name".user-agent</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Use a custom user-agent.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
+<div id="duration-note-anchor" class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">About the Duration format</div>
+<div class="paragraph">
+<p>The format for durations uses the standard <code>java.time.Duration</code> format.
+You can learn more about it in the <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse() javadoc</a>.</p>
+</div>
+<div class="paragraph">
+<p>You can also provide duration values starting with a number.
+In this case, if the value consists only of a number, the converter treats the value as seconds.
+Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a standard <code>java.time.Duration</code> format.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The <code>service-name</code> is the name set in the <code>@GrpcService</code>.</p>
 </div>

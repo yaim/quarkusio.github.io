@@ -952,12 +952,12 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-datasource_quarkus.datasource.credentials-provider-type"></a><code><a href="#quarkus-datasource_quarkus.datasource.credentials-provider-type">quarkus.datasource.credentials-provider-type</a></code></p>
+<p><a id="quarkus-datasource_quarkus.datasource.credentials-provider-name"></a><code><a href="#quarkus-datasource_quarkus.datasource.credentials-provider-name">quarkus.datasource.credentials-provider-name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The credentials provider type.
+<p>The credentials provider bean name.
  It is the <code>&#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
  For Vault it is: vault-credentials-provider. Not necessary if there is only one credentials provider available.</p>
 </div>
@@ -1041,12 +1041,12 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-datasource_quarkus.datasource.-datasource-name-.credentials-provider-type"></a><code><a href="#quarkus-datasource_quarkus.datasource.-datasource-name-.credentials-provider-type">quarkus.datasource."datasource-name".credentials-provider-type</a></code></p>
+<p><a id="quarkus-datasource_quarkus.datasource.-datasource-name-.credentials-provider-name"></a><code><a href="#quarkus-datasource_quarkus.datasource.-datasource-name-.credentials-provider-name">quarkus.datasource."datasource-name".credentials-provider-name</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The credentials provider type.
+<p>The credentials provider bean name.
  It is the <code>&#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
  For Vault it is: vault-credentials-provider. Not necessary if there is only one credentials provider available.</p>
 </div>
@@ -1335,6 +1335,20 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-agroal_quarkus.datasource.jdbc.pooling-enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.jdbc.pooling-enabled">quarkus.datasource.jdbc.pooling-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Disable pooling to prevent reuse of Connections. Use this with when an external pool manages the life-cycle of Connections.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-agroal_quarkus.datasource.named-data-sources"></a><a href="#quarkus-agroal_quarkus.datasource.named-data-sources">Additional named datasources</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -1583,6 +1597,20 @@ quarkus.datasource.driver=org.h2.Driver</code></pre>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.pooling-enabled"></a><code><a href="#quarkus-agroal_quarkus.datasource.-datasource-name-.jdbc.pooling-enabled">quarkus.datasource."datasource-name".jdbc.pooling-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Disable pooling to prevent reuse of Connections. Use this with when an external pool manages the life-cycle of Connections.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 </tbody>
 </table>

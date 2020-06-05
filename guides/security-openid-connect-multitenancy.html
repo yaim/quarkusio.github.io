@@ -681,7 +681,7 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. All the other OIDC server page and service URLs are derived from this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
+<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. OIDC discovery endpoint will be called by appending a '/.well-known/openid-configuration' path segment to this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
 </div>
 </div>
 </div></div></td>
@@ -710,6 +710,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="content">
 <div class="paragraph">
 <p>Relative path of the OIDC service returning a JWK set.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.end-session-path">quarkus.oidc.end-session-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC end_session_endpoint.</p>
 </div>
 </div>
 </div></div></td>
@@ -802,12 +816,12 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.token.expiration-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.expiration-grace">quarkus.oidc.token.expiration-grace</a></code></p>
+<p><a id="quarkus-oidc_quarkus.oidc.token.lifespan-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.lifespan-grace">quarkus.oidc.token.lifespan-grace</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+<p>Life span grace period in seconds. When checking token expiry, current time is allowed to be later than token expiration time by at most the configured number of seconds. When checking token issuance, current time is allowed to be sooner than token issue time by at most the configured number of seconds.</p>
 </div>
 </div>
 </div></div></td>
@@ -830,12 +844,26 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.token.refresh-expired"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.refresh-expired">quarkus.oidc.token.refresh-expired</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Refresh expired ID tokens. If this property is enabled then a refresh token request is performed and, if successful, the local session is updated with the new set of tokens. Otherwise, the local session is invalidated as an indication that the session at the OpenID Provider no longer exists. This option is only valid when the application is of type <code>ApplicationType#WEB_APP</code>}.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.credentials.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.secret">quarkus.oidc.credentials.secret</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -872,6 +900,91 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.secret">quarkus.oidc.credentials.jwt.secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.credentials.jwt.lifespan">quarkus.oidc.credentials.jwt.lifespan</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.host">quarkus.oidc.proxy.host</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The host (name or IP address) of the Proxy.
+ Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.port">quarkus.oidc.proxy.port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The port number of the Proxy. Default value is 80.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.username">quarkus.oidc.proxy.username</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The username, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.proxy.password">quarkus.oidc.proxy.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The password, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.authentication.redirect-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.redirect-path">quarkus.oidc.authentication.redirect-path</a></code></p>
 </div>
 <div class="openblock description">
@@ -900,6 +1013,34 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.authentication.remove-redirect-parameters"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.remove-redirect-parameters">quarkus.oidc.authentication.remove-redirect-parameters</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Remove the query parameters such as 'code' and 'state' set by the OIDC server on the redirect URI after the user has authenticated by redirecting a user to the same URI but without the query parameters.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.authentication.force-redirect-https-scheme"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.force-redirect-https-scheme">quarkus.oidc.authentication.force-redirect-https-scheme</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Force 'https' as the 'redirect_uri' parameter scheme when running behind an SSL terminating reverse proxy. This property, if enabled, will also affect the logout <code>post_logout_redirect_uri</code> and the local redirect requests.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.authentication.scopes"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.scopes">quarkus.oidc.authentication.scopes</a></code></p>
 </div>
 <div class="openblock description">
@@ -920,6 +1061,48 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="content">
 <div class="paragraph">
 <p>Cookie path parameter value which, if set, will be used for the session and state cookies. It may need to be set when the redirect path has a root different to that of the original request URL.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.tls.verification">quarkus.oidc.tls.verification</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.logout.path"></a><code><a href="#quarkus-oidc_quarkus.oidc.logout.path">quarkus.oidc.logout.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The relative path of the logout endpoint at the application. If provided, the application is able to initiate the logout through this endpoint in conformance with the OpenID Connect RP-Initiated Logout specification.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.logout.post-logout-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.logout.post-logout-path">quarkus.oidc.logout.post-logout-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the application endpoint where the user should be redirected to after logging out from the OpenID Connect Provider. This endpoint URI must be properly registered at the OpenID Connect Provider as a valid redirect URI.</p>
 </div>
 </div>
 </div></div></td>
@@ -1009,7 +1192,7 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. All the other OIDC server page and service URLs are derived from this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
+<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. OIDC discovery endpoint will be called by appending a '/.well-known/openid-configuration' path segment to this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
 </div>
 </div>
 </div></div></td>
@@ -1038,6 +1221,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="content">
 <div class="paragraph">
 <p>Relative path of the OIDC service returning a JWK set.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.end-session-path">quarkus.oidc."tenant".end-session-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC end_session_endpoint.</p>
 </div>
 </div>
 </div></div></td>
@@ -1130,12 +1327,12 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.expiration-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.expiration-grace">quarkus.oidc."tenant".token.expiration-grace</a></code></p>
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.lifespan-grace"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.lifespan-grace">quarkus.oidc."tenant".token.lifespan-grace</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Expiration grace period in seconds. A token expiration time will be reduced by the value of this property before being compared to the current time.</p>
+<p>Life span grace period in seconds. When checking token expiry, current time is allowed to be later than token expiration time by at most the configured number of seconds. When checking token issuance, current time is allowed to be sooner than token issue time by at most the configured number of seconds.</p>
 </div>
 </div>
 </div></div></td>
@@ -1158,12 +1355,26 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.refresh-expired"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.refresh-expired">quarkus.oidc."tenant".token.refresh-expired</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Refresh expired ID tokens. If this property is enabled then a refresh token request is performed and, if successful, the local session is updated with the new set of tokens. Otherwise, the local session is invalidated as an indication that the session at the OpenID Provider no longer exists. This option is only valid when the application is of type <code>ApplicationType#WEB_APP</code>}.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.secret">quarkus.oidc."tenant".credentials.secret</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret' can be used instead but both properties are mutually exclusive.</p>
+<p>Client secret which is used for a 'client_secret_basic' authentication method. Note that a 'client-secret.value' can be used instead but both properties are mutually exclusive.</p>
 </div>
 </div>
 </div></div></td>
@@ -1200,6 +1411,91 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.secret">quarkus.oidc."tenant".credentials.jwt.secret</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>client_secret_jwt: JWT which includes client id as one of its claims is signed by the client secret and is submitted as a 'client_assertion' form parameter, while 'client_assertion_type' parameter is set to "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.credentials.jwt.lifespan">quarkus.oidc."tenant".credentials.jwt.lifespan</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>JWT life-span in seconds. It will be added to the time it was issued at to calculate the expiration time.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.host"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.host">quarkus.oidc."tenant".proxy.host</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The host (name or IP address) of the Proxy.
+ Note: If OIDC adapter needs to use a Proxy to talk with OIDC server (Provider), then at least the "host" config item must be configured to enable the usage of a Proxy.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.port"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.port">quarkus.oidc."tenant".proxy.port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The port number of the Proxy. Default value is 80.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>80</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.username"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.username">quarkus.oidc."tenant".proxy.username</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The username, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.proxy.password"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.proxy.password">quarkus.oidc."tenant".proxy.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The password, if Proxy needs authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.redirect-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.redirect-path">quarkus.oidc."tenant".authentication.redirect-path</a></code></p>
 </div>
 <div class="openblock description">
@@ -1225,6 +1521,34 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.remove-redirect-parameters"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.remove-redirect-parameters">quarkus.oidc."tenant".authentication.remove-redirect-parameters</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Remove the query parameters such as 'code' and 'state' set by the OIDC server on the redirect URI after the user has authenticated by redirecting a user to the same URI but without the query parameters.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.force-redirect-https-scheme"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.force-redirect-https-scheme">quarkus.oidc."tenant".authentication.force-redirect-https-scheme</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Force 'https' as the 'redirect_uri' parameter scheme when running behind an SSL terminating reverse proxy. This property, if enabled, will also affect the logout <code>post_logout_redirect_uri</code> and the local redirect requests.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1262,6 +1586,48 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 <div class="content">
 <div class="paragraph">
 <p>Cookie path parameter value which, if set, will be used for the session and state cookies. It may need to be set when the redirect path has a root different to that of the original request URL.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.tls.verification"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.tls.verification">quarkus.oidc."tenant".tls.verification</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Certificate validation and hostname verification, which can be one of the following values from enum <code>Verification</code>. Default is required.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code>, <code>none</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>required</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.logout.path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.logout.path">quarkus.oidc."tenant".logout.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The relative path of the logout endpoint at the application. If provided, the application is able to initiate the logout through this endpoint in conformance with the OpenID Connect RP-Initiated Logout specification.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.logout.post-logout-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.logout.post-logout-path">quarkus.oidc."tenant".logout.post-logout-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the application endpoint where the user should be redirected to after logging out from the OpenID Connect Provider. This endpoint URI must be properly registered at the OpenID Connect Provider as a valid redirect URI.</p>
 </div>
 </div>
 </div></div></td>

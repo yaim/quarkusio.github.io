@@ -751,10 +751,12 @@ credentials), which goes a long way towards creating secured applications.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault server url.</p>
-</div>
-<div class="paragraph">
-<p>Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a></p>
+<p>Vault server url.
+&lt;p&gt;
+Example: <a href="https://localhost:8200" class="bare">https://localhost:8200</a>
+&lt;p&gt;
+See also the documentation for the <code>kv-secret-engine-mount-path</code> property for some insights on how
+the full Vault url gets built.</p>
 </div>
 </div>
 </div></div></td>
@@ -768,10 +770,9 @@ credentials), which goes a long way towards creating secured applications.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Renew grace period duration.</p>
-</div>
-<div class="paragraph">
-<p>This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current
+<p>Renew grace period duration.
+&lt;p&gt;
+This value if used to extend a lease before it expires its ttl, or recreate a new lease before the current
 lease reaches its max_ttl.
 By default Vault leaseDuration is equal to 7 days (ie: 168h or 604800s).
 If a connection pool maxLifetime is set, it is reasonable to set the renewGracePeriod to be greater
@@ -796,10 +797,9 @@ leases all the time.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault config source cache period.</p>
-</div>
-<div class="paragraph">
-<p>Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault
+<p>Vault config source cache period.
+&lt;p&gt;
+Properties fetched from vault as MP config will be kept in a cache, and will not be fetched from vault
 again until the expiration of that period.
 This property is ignored if <code>secret-config-kv-path</code> is not set.</p>
 </div>
@@ -817,31 +817,23 @@ This property is ignored if <code>secret-config-kv-path</code> is not set.</p>
 <div class="content">
 <div class="paragraph">
 <p>List of comma separated vault paths in kv store,
-where all properties will be available as MP config properties <strong>as-is</strong>, with no prefix.</p>
-</div>
-<div class="paragraph">
-<p>For instance, if vault contains property <code>foo</code>, it will be made available to the
-quarkus application as <code>@ConfigProperty(name = "foo") String foo;</code></p>
-</div>
-<div class="paragraph">
-<p>If 2 paths contain the same property, the last path will win.</p>
-</div>
-<div class="paragraph">
-<p>For instance if</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>secret/base-config</code> contains <code>foo=bar</code> and</p>
-</li>
-<li>
-<p><code>secret/myapp/config</code> contains <code>foo=myappbar</code>, then</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><code>@ConfigProperty(name = "foo") String foo</code> will have value <code>myappbar</code>
-with application properties <code>quarkus.vault.secret-config-kv-path=base-config,myapp/config</code></p>
+where all properties will be available as MP config properties <strong>as-is</strong>, with no prefix.
+&lt;p&gt;
+For instance, if vault contains property <code>foo</code>, it will be made available to the
+quarkus application as <code>@ConfigProperty(name = "foo") String foo;</code>
+&lt;p&gt;
+If 2 paths contain the same property, the last path will win.
+&lt;p&gt;
+For instance if
+&lt;p&gt;
+* <code>secret/base-config</code> contains <code>foo=bar</code> and
+* <code>secret/myapp/config</code> contains <code>foo=myappbar</code>, then
+&lt;p&gt;
+<code>@ConfigProperty(name = "foo") String foo</code> will have value <code>myappbar</code>
+with application properties <code>quarkus.vault.secret-config-kv-path=base-config,myapp/config</code>
+&lt;p&gt;
+See also the documentation for the <code>kv-secret-engine-mount-path</code> property for some insights on how
+the full Vault url gets built.</p>
 </div>
 </div>
 </div></div></td>
@@ -856,20 +848,11 @@ with application properties <code>quarkus.vault.secret-config-kv-path=base-confi
 <div class="content">
 <div class="paragraph">
 <p>Used to hide confidential infos, for logging in particular.
-Possible values are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>low: display all secrets.</p>
-</li>
-<li>
-<p>medium: display only usernames and lease ids (ie: passwords and tokens are masked).</p>
-</li>
-<li>
-<p>high: hide lease ids and dynamic credentials username.</p>
-</li>
-</ul>
+Possible values are:
+&lt;p&gt;
+* low: display all secrets.
+* medium: display only usernames and lease ids (ie: passwords and tokens are masked).
+* high: hide lease ids and dynamic credentials username.</p>
 </div>
 </div>
 </div></div></td>
@@ -883,15 +866,14 @@ Possible values are:</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Kv secret engine version.</p>
-</div>
-<div class="paragraph">
-<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>Kv secret engine version.
+&lt;p&gt;
+see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
 </div>
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>2</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -900,10 +882,26 @@ Possible values are:</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Kv secret engine path.</p>
-</div>
-<div class="paragraph">
-<p>see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
+<p>KV secret engine path.
+&lt;p&gt;
+This value is used when building the url path in the KV secret engine programmatic access
+(i.e. <code>VaultKVSecretEngine</code>) and the vault config source (i.e. fetching configuration properties from Vault).
+&lt;p&gt;
+For a v2 KV secret engine (default - see <code>kv-secret-engine-version property</code>)
+the full url is built from the expression <code>&lt;url&gt;/v1/&lt;/kv-secret-engine-mount-path&gt;/data/&#8230;&#8203;</code>.
+&lt;p&gt;
+With property <code>quarkus.vault.url=https://localhost:8200</code>, the following call
+<code>vaultKVSecretEngine.readSecret("foo/bar")</code> would lead eventually to a <code>GET</code> on Vault with the following
+url: <code><a href="https://localhost:8200/v1/secret/data/foo/bar" class="bare">https://localhost:8200/v1/secret/data/foo/bar</a></code>.
+&lt;p&gt;
+With a KV secret engine v1, the url changes to: <code>&lt;url&gt;/v1/&lt;/kv-secret-engine-mount-path&gt;/&#8230;&#8203;</code>.
+&lt;p&gt;
+The same logic is applied to the Vault config source. With <code>quarkus.vault.secret-config-kv-path=config/myapp</code>
+The secret properties would be fetched from Vault using a <code>GET</code> on
+<code><a href="https://localhost:8200/v1/secret/data/config/myapp" class="bare">https://localhost:8200/v1/secret/data/config/myapp</a></code> for a KV secret engine v2 (or
+<code><a href="https://localhost:8200/v1/secret/config/myapp" class="bare">https://localhost:8200/v1/secret/config/myapp</a></code> for a KV secret engine v1).
+&lt;p&gt;
+see <a href="https://www.vaultproject.io/docs/secrets/kv/index.html" class="bare">https://www.vaultproject.io/docs/secrets/kv/index.html</a></p>
 </div>
 </div>
 </div></div></td>
@@ -948,17 +946,18 @@ Possible values are:</p>
 <div class="content">
 <div class="paragraph">
 <p>List of comma separated vault paths in kv store,
-where all properties will be available as <strong>prefixed</strong> MP config properties.</p>
-</div>
-<div class="paragraph">
-<p>For instance if the application properties contains
+where all properties will be available as <strong>prefixed</strong> MP config properties.
+&lt;p&gt;
+For instance if the application properties contains
 <code>quarkus.vault.secret-config-kv-path.myprefix=config</code>, and
 vault path <code>secret/config</code> contains <code>foo=bar</code>, then <code>myprefix.foo</code>
-will be available in the MP config.</p>
-</div>
-<div class="paragraph">
-<p>If the same property is available in 2 different paths for the same prefix, the last one
-will win.</p>
+will be available in the MP config.
+&lt;p&gt;
+If the same property is available in 2 different paths for the same prefix, the last one
+will win.
+&lt;p&gt;
+See also the documentation for the <code>kv-secret-engine-mount-path</code> property for some insights on how
+the full Vault url gets built.</p>
 </div>
 </div>
 </div></div></td>
@@ -1023,6 +1022,53 @@ will win.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>password</code></p></td>
 </tr>
 <tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.health"></a><a href="#quarkus-vault_quarkus.vault.health">Health check configuration</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vault_quarkus.vault.health.enabled"></a><code><a href="#quarkus-vault_quarkus.vault.health.enabled">quarkus.vault.health.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not an health check is published in case the smallrye-health extension is present.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vault_quarkus.vault.health.stand-by-ok"></a><code><a href="#quarkus-vault_quarkus.vault.health.stand-by-ok">quarkus.vault.health.stand-by-ok</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specifies if being a standby should still return the active status code instead of the standby status code.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-vault_quarkus.vault.health.performance-stand-by-ok"></a><code><a href="#quarkus-vault_quarkus.vault.health.performance-stand-by-ok">quarkus.vault.health.performance-stand-by-ok</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Specifies if being a performance standby should still return the active status code instead of the performance standby status code.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vault_quarkus.vault.authentication"></a><a href="#quarkus-vault_quarkus.vault.authentication">Authentication</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -1034,7 +1080,23 @@ will win.</p>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Vault token, bypassing Vault authentication (kubernetes, userpass or approle). This is useful in development where an authentication mode might not have been set up. In production we will usually prefer some authentication such as userpass, or preferably kubernetes, where Vault tokens get generated with a TTL and some ability to revoke them.</p>
+<p>Vault token, bypassing Vault authentication (kubernetes, userpass or approle). This is useful in development where an authentication mode might not have been set up. In production we will usually prefer some authentication such as userpass, or preferably kubernetes, where Vault tokens get generated with a TTL and some ability to revoke them. Lease renewal does not apply.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vault_quarkus.vault.authentication.client-token-wrapping-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.client-token-wrapping-token">quarkus.vault.authentication.client-token-wrapping-token</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Client token wrapped in a wrapping token, such as what is returned by:
+ vault token create -wrap-ttl=60s -policy=myapp
+ client-token and client-token-wrapping-token are exclusive. Lease renewal does not apply.</p>
 </div>
 </div>
 </div></div></td>
@@ -1071,6 +1133,22 @@ will win.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vault_quarkus.vault.authentication.app-role.secret-id-wrapping-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.app-role.secret-id-wrapping-token">quarkus.vault.authentication.app-role.secret-id-wrapping-token</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Wrapping token containing a Secret Id, obtained from:
+ vault write -wrap-ttl=60s -f auth/approle/role/myapp/secret-id
+ secret-id and secret-id-wrapping-token are exclusive</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-vault_quarkus.vault.authentication.userpass.username"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.username">quarkus.vault.authentication.userpass.username</a></code></p>
 </div>
 <div class="openblock description">
@@ -1091,6 +1169,24 @@ will win.</p>
 <div class="content">
 <div class="paragraph">
 <p>Password for userpass auth method. This property is required when selecting the userpass authentication type.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vault_quarkus.vault.authentication.userpass.password-wrapping-token"></a><code><a href="#quarkus-vault_quarkus.vault.authentication.userpass.password-wrapping-token">quarkus.vault.authentication.userpass.password-wrapping-token</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Wrapping token containing a Password, obtained from:
+ vault kv get -wrap-ttl=60s secret/
+ The key has to be 'password', meaning the password has initially been provisioned with:
+ vault kv put secret/ password=
+ password and password-wrapping-token are exclusive</p>
 </div>
 </div>
 </div></div></td>

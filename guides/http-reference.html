@@ -468,6 +468,135 @@ in the <code>META-INF</code> directory of your application jar. This file contai
 <p>You can add HTTP request logging by configuring it in <code>application.properties</code>. There are two options for logging,
 either logging to the standard JBoss logging output, or logging to a dedicated file.</p>
 </div>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-http-config-group-access-log-config_configuration"></a><a href="#quarkus-vertx-http-config-group-access-log-config_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.enabled"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.enabled">quarkus.http.access-log.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If access logging is enabled. By default this will log via the standard logging facility</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.pattern"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.pattern">quarkus.http.access-log.pattern</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The access log pattern: If this is the string 'common' or 'combined' then this will use one of the specified named formats: common: %h %l %u %t "%r" %s %b combined: %h %l %u %t "%r" %s %b "%{i,Referer}" "%{i,User-Agent}" Otherwise consult the Quarkus documentation for the full list of variables that can be used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>common</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.log-to-file"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.log-to-file">quarkus.http.access-log.log-to-file</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If logging should be done to a separate file.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.base-file-name"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.base-file-name">quarkus.http.access-log.base-file-name</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The access log file base name, defaults to 'quarkus' which will give a log file name of 'quarkus.log'.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quarkus</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.log-directory"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.log-directory">quarkus.http.access-log.log-directory</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log directory to use when logging access to a file If this is not set then the current working directory is used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.log-suffix"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.log-suffix">quarkus.http.access-log.log-suffix</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log file suffix</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>.log</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.category"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.category">quarkus.http.access-log.category</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The log category to use if logging is being done via the standard log mechanism (i.e. if base-file-name is empty).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>io.quarkus.http.access-log</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.rotate"></a><code><a href="#quarkus-vertx-http-config-group-access-log-config_quarkus.http.access-log.rotate">quarkus.http.access-log.rotate</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the log should be rotated daily</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
 <table class="tableblock frame-topbot grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">

@@ -156,7 +156,65 @@ that is used to run the application needs to have the proper permissions for suc
 <div class="sect1">
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
-
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kubernetes-config-kubernetes-config-source-config_configuration"></a><a href="#quarkus-kubernetes-config-kubernetes-config-source-config_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.enabled"></a><code><a href="#quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.enabled">quarkus.kubernetes-config.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true, the application will attempt to look up the configuration from the API server</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.fail-on-missing-config"></a><code><a href="#quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.fail-on-missing-config">quarkus.kubernetes-config.fail-on-missing-config</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If set to true, the application will not start if any of the configured config sources cannot be located</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.config-maps"></a><code><a href="#quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.config-maps">quarkus.kubernetes-config.config-maps</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>ConfigMaps to look for in the namespace that the Kubernetes Client has been configured for</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
     </div>
