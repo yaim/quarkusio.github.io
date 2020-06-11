@@ -280,10 +280,20 @@ public class FormData {
 </div>
 </div>
 <div class="paragraph">
-<p>The class defines three fields:
-* <code>data</code> that fill capture stream of uploaded bytes from the client
-* <code>fileName</code> that captures a filename as provided by the submited form
-* <code>mimeType</code> content type of the uploaded file</p>
+<p>The class defines three fields:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code> that fill capture stream of uploaded bytes from the client</p>
+</li>
+<li>
+<p><code>fileName</code> that captures a filename as provided by the submited form</p>
+</li>
+<li>
+<p><code>mimeType</code> content type of the uploaded file</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>In the second step let&#8217;s create a bean that will represent a file in a Amazon S3 bucket as follows:</p>
@@ -594,7 +604,7 @@ quarkus.s3.aws.credentials.type=default</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Java System Properties - <code>aws.accessKeyId</code> and <code>aws.secretKey</code></p>
+<p>Java System Properties - <code>aws.accessKeyId</code> and <code>aws.secretAccessKey</code></p>
 </li>
 <li>
 <p>Environment Variables - <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code></p>
@@ -603,7 +613,7 @@ quarkus.s3.aws.credentials.type=default</code></pre>
 <p>Credential profiles file at the default location (<code>~/.aws/credentials</code>) shared by all AWS SDKs and the AWS CLI</p>
 </li>
 <li>
-<p>Credentials delivered through the Amazon EC2 container service if the <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> environment variable is set and the security manager has permission to access the variable,</p>
+<p>Credentials delivered through the Amazon ECS if the <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> environment variable is set and the security manager has permission to access the variable,</p>
 </li>
 <li>
 <p>Instance profile credentials delivered through the Amazon EC2 metadata service</p>

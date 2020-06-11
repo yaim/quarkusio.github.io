@@ -188,7 +188,8 @@ of the Cloud Event type.</p>
 </div>
 <div class="paragraph">
 <p>Currently, Funqy can only consume JSON-based data.  It supports both Binary and Structured mode of execution,
-but the data component of the Cloud Event message must be JSON.</p>
+but the data component of the Cloud Event message must be JSON.  This JSON must also be marshallable to and from the
+Java parameters and return types of your functions.</p>
 </div>
 </div>
 </div>
@@ -251,8 +252,8 @@ quarkus.funqy.knative-events.mapping.configChain.response-source=configChain</co
 </div>
 </div>
 <div class="paragraph">
-<p>In this case, the configuration maps the Cloud Event type <code>defaultChain.outout</code> to the <code>configChain</code> function.
-The <code>configChain</code> function response Cloud Event type is mapped to annotated`annotated` and the Cloud Event source of the response event is <code>configChain</code></p>
+<p>In this case, the configuration maps the incoming Cloud Event type <code>defaultChain.output</code> to the <code>configChain</code> function.
+The <code>configChain</code> function maps its response to the <code>annotated</code> Cloud Event type, and the Cloud Event source <code>configChain</code>.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -274,11 +275,11 @@ The <code>configChain</code> function response Cloud Event type is mapped to ann
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.quarkus.funqy.Funq;
-import io.quarkus.funqy.knative.events.CloudEvent;
+import io.quarkus.funqy.knative.events.CloudEventMapping;
 
 public class SimpleFunctionChain {
     @Funq
-    @CloudEvent(trigger = "annotated", responseSource = "annotated", responseType = "lastChainLink")
+    @CloudEventMapping(trigger = "annotated", responseSource = "annotated", responseType = "lastChainLink")
     public String annotatedChain(String input) {
         log.info("*** annotatedChain ***");
         return input + "::" + "annotatedChain";
@@ -286,7 +287,7 @@ public class SimpleFunctionChain {
 </div>
 </div>
 <div class="paragraph">
-<p>If you use the <code>@CloudEvent</code> annotation on your function you can map the Cloud Event type trigger
+<p>If you use the <code>@CloudEventMapping</code> annotation on your function you can map the Cloud Event type trigger
 and the Cloud Event response.  In this example the <code>annotatedChain</code> function will be triggered
 by the <code>annotated</code> Cloud Event type and the response will be mapped to a <code>lastChainLink</code> type
 and <code>annotated</code> Cloud Event source.</p>
@@ -504,7 +505,7 @@ kubectl apply -n knativetutorial -f src/main/k8s/lastChainLink-trigger.yaml</cod
 files so you can see the messages flowing through the Funqy function event chain.</p>
 </div>
 <div class="paragraph">
-<p>Make sure you have the <code>stern</code> tool installed.  See the Knative Tutoriall setup for information on that.  Run stern
+<p>Make sure you have the <code>stern</code> tool installed.  See the Knative Tutorial setup for information on that.  Run stern
 to look for logs outputed by our Funqy deployment</p>
 </div>
 <div class="listingblock">
@@ -549,8 +550,8 @@ Remember this URL.</p>
 </div>
 <div class="paragraph">
 <p>This posts a Knative Event to the broker, which will trigger the <code>defaultChain</code> function.  As discussed earlier, the output
-of <code>defaultChain</code> triggers an event that is posted to <code>configChain</code> which triggers an event posted to <code>annoatedChain</code> then
-finally to the <code>lastChainLink</code> function.  You can see this flow in your stern window.  Something like this should
+of <code>defaultChain</code> triggers an event that is posted to <code>configChain</code> which triggers an event posted to <code>annotatedChain</code> then
+finally to the <code>lastChainLink</code> function.  You can see this flow in your <code>stern</code> window.  Something like this should
 be outputted.</p>
 </div>
 <div class="listingblock">

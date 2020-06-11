@@ -251,7 +251,7 @@ We are going to create an OpenShift <code>build</code> executing it:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># To build the image on OpenShift
-oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started --name=quarkus-quickstart
+oc new-app registry.access.redhat.com/ubi8/openjdk-11:latest~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started --name=quarkus-quickstart
 oc logs -f bc/quarkus-quickstart
 
 # To create the route

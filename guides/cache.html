@@ -487,6 +487,7 @@ The following sections will show you everything there is to know about it.</p>
 <div class="paragraph">
 <p>When a method annotated with <code>@CacheResult</code> is invoked, Quarkus will compute a cache key and use it to check in the cache whether the method has been already invoked.
 If the method has one or more arguments, the key computation is done from all the method arguments if none of them is annotated with <code>@CacheKey</code>, or all the arguments annotated with <code>@CacheKey</code> otherwise.
+Each non-primitive method argument that is part of the key must implement <code>equals()</code> and <code>hashCode()</code> correctly for the cache to work as expected.
 This annotation can also be used on a method with no arguments, a default key derived from the cache name is generated in that case.
 If a value is found in the cache, it is returned and the annotated method is never actually executed.
 If no value is found, the annotated method is invoked and the returned value is stored in the cache using the computed or generated key.</p>
@@ -558,7 +559,7 @@ Caffeine is a high performance, near optimal caching library.</p>
 <h3 id="caffeine-configuration-properties"><a class="anchor" href="#caffeine-configuration-properties"></a>Caffeine configuration properties</h3>
 <div class="paragraph">
 <p>Each of the Caffeine caches backing up the Quarkus application data caching extension can be configured using the following
-properties in the <code>application.properties</code> file.</p>
+properties in the <code>application.properties</code> file. By default caches do not perform any type of eviction if not configured.</p>
 </div>
 <div class="admonitionblock tip">
 <table>

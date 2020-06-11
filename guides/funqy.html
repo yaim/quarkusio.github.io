@@ -71,6 +71,7 @@
     <h1 class="text-caps">Quarkus - Funqy</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#funqy-basics">Funqy Basics</a></li>
+<li><a href="#async-reactive-types">Async Reactive Types</a></li>
 <li><a href="#function-names">Function Names</a></li>
 <li><a href="#funqy-di">Funqy DI</a></li>
 <li><a href="#context-injection">Context injection</a></li>
@@ -80,12 +81,12 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus Funqy is part of Quarkus&#8217;s serverless strategy and aims to provide a portable Java API to write functions
-deployable to various FaaS environments like AWS Lambda, Azure Functions, Knative, and Knative events.  It is also
-usable outside of FaaS in more traditional environments.</p>
+deployable to various FaaS environments like AWS Lambda, Azure Functions, Knative, and Knative Events (Cloud Events).  It is also
+usable as a standalone service.</p>
 </div>
 <div class="paragraph">
-<p>Another goal of Funqy is to create a remoting, RPC framework that is as small and optimized as possible for the
-Quarkus runtime.  This means sacrificing on flexibility to provide a runtime that has little to no overhead.  Funqy
+<p>Another goal of Funqy is to create an RPC framework that is as small and as optimized as possible for the
+Quarkus runtime.  This means sacrificing a little bit on flexibility to provide a runtime that has little to no overhead.  Funqy
 should never become more complicated than you see in this initial doc.</p>
 </div>
 </div>
@@ -111,7 +112,12 @@ public class GreetingFunction {
 </div>
 <div class="paragraph">
 <p>Java classes can also be used as input and output and must follow the Java bean convention and have
-a default constructor.</p>
+a default constructor.  The Java type that is declared as the parameter or return type is the type that will be
+expected by the Funqy runtime.  Funqy does type introspection at build time to speed up boot time, so any derived types
+will not be noticed by the Funqy marshalling layer at runtime.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of using a POJO as input and output types.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -136,6 +142,29 @@ a default constructor.</p>
     @Funq
     public Greeting greet(Friend friend) {
        return new Greeting("Hello " + friend.getName());
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="async-reactive-types"><a class="anchor" href="#async-reactive-types"></a>Async Reactive Types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Funqy supports the <a href="https://smallrye.io/smallrye-mutiny">Smallrye Mutiny</a> <code>Uni</code> reactive type as a return type.  The only requirement is that
+the <code>Uni</code> must fill out the generic type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.quarkus.funqy.Funq;
+import io.smallrye.mutiny.Uni;
+
+public class GreetingFunction {
+
+    @Funq
+    public Uni&lt;Greeting&gt; reactiveGreeting(String name) {
+       ...
     }
 }</code></pre>
 </div>
@@ -202,8 +231,8 @@ public class GreetingFunction {
 <h2 id="context-injection"><a class="anchor" href="#context-injection"></a>Context injection</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can inject contextual information that is specific to the Funqy runtime (lambda, azure, etc.)
-you are deploying.</p>
+<p>You can inject contextual information that is specific to the Funqy runtime or specific to the
+Funqy binding you are using (lambda, azure, cloud events, etc.).</p>
 </div>
 <div class="admonitionblock note">
 <table>

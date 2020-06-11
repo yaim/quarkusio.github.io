@@ -644,7 +644,7 @@ In such a case, <code>PersonRepository</code> would look like so:</p>
 
 import org.springframework.data.repository.Repository;
 
-public class PersonRepository extends Repository&lt;Person, Long&gt; {
+public interface PersonRepository extends Repository&lt;Person, Long&gt; {
 
     Person save(Person entity);
 

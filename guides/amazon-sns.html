@@ -859,11 +859,11 @@ quarkus.sns.aws.credentials.type=default</code></pre>
 </li>
 <li>
 <p><code>quarkus.sns.aws.credentials.type</code> - use the <code>default</code> credentials provider chain that looks for credentials in this order:</p>
-</li>
-<li>
-<p>Java System Properties - <code>aws.accessKeyId</code> and <code>aws.secretKey</code></p>
 <div class="ulist">
 <ul>
+<li>
+<p>Java System Properties - <code>aws.accessKeyId</code> and <code>aws.secretAccessKey</code></p>
+</li>
 <li>
 <p>Environment Variables - <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code></p>
 </li>
@@ -871,7 +871,7 @@ quarkus.sns.aws.credentials.type=default</code></pre>
 <p>Credential profiles file at the default location (<code>~/.aws/credentials</code>) shared by all AWS SDKs and the AWS CLI</p>
 </li>
 <li>
-<p>Credentials delivered through the Amazon EC2 container service if the <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> environment variable is set and the security manager has permission to access the variable,</p>
+<p>Credentials delivered through the Amazon ECS if the <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> environment variable is set and the security manager has permission to access the variable,</p>
 </li>
 <li>
 <p>Instance profile credentials delivered through the Amazon EC2 metadata service</p>

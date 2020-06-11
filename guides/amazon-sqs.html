@@ -507,12 +507,26 @@ quarkus.sqs.aws.credentials.static-provider.secret-access-key=test-secret</code>
 </div>
 <div class="paragraph">
 <p>If you want to work with an AWS account, you can simply remove or comment out all SQS related properties. By default, the SQS client extension
-will use the <code>default</code> credentials provider chain that looks for credentials in this order:
-- Java System Properties - <code>aws.accessKeyId</code> and <code>aws.secretKey</code>
-* Environment Variables - <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>
-* Credential profiles file at the default location (<code>~/.aws/credentials</code>) shared by all AWS SDKs and the AWS CLI
-* Credentials delivered through the Amazon EC2 container service if the <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> environment variable is set and the security manager has permission to access the variable,
-* Instance profile credentials delivered through the Amazon EC2 metadata service</p>
+will use the <code>default</code> credentials provider chain that looks for credentials in this order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Java System Properties - <code>aws.accessKeyId</code> and <code>aws.secretAccessKey</code></p>
+</li>
+<li>
+<p>Environment Variables - <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code></p>
+</li>
+<li>
+<p>Credential profiles file at the default location (<code>~/.aws/credentials</code>) shared by all AWS SDKs and the AWS CLI</p>
+</li>
+<li>
+<p>Credentials delivered through the Amazon ECS if the <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> environment variable is set and the security manager has permission to access the variable,</p>
+</li>
+<li>
+<p>Instance profile credentials delivered through the Amazon EC2 metadata service</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>And the region from your AWS CLI profile will be used.</p>

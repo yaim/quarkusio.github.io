@@ -814,8 +814,30 @@ public class FruitResource {
 <h3 id="using-vert-x-clients"><a class="anchor" href="#using-vert-x-clients"></a>Using Vert.x clients</h3>
 <div class="paragraph">
 <p>The previous example uses a <em>service</em> provided by Quarkus.
-Also, you can use Vert.x clients directly.
-There is a Mutiny version of the Vert.x APIs.
+Also, you can use Vert.x clients directly.</p>
+</div>
+<div class="paragraph">
+<p>First of all, make sure the <code>quarkus-vertx</code> extension is present. If not, activate the extension by executing the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.5.0.Final:add-extensions \
+    -Dextensions=vertx</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or add <code>quarkus-vertx</code> into your dependencies manually.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+	&lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+	&lt;artifactId&gt;quarkus-vertx&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is a Mutiny version of the Vert.x APIs.
 This API is divided into several artifacts you can import independently:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
