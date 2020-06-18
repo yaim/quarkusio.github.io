@@ -699,14 +699,14 @@ configuration to register the "SunRsaSign" and "SunJCE" security providers:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import javax.enterprise.context.ApplicationScoped;
-
-import io.quarkus.security.identity.AuthenticationRequestContext;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.identity.SecurityIdentityAugmentor;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
+import io.smallrye.mutiny.Uni;
+
+import javax.enterprise.context.ApplicationScoped;
+import java.util.function.Supplier;
 
 @ApplicationScoped
 public class RolesAugmentor implements SecurityIdentityAugmentor {
@@ -717,26 +717,25 @@ public class RolesAugmentor implements SecurityIdentityAugmentor {
     }
 
     @Override
-    public CompletionStage&lt;SecurityIdentity&gt; augment(SecurityIdentity identity, AuthenticationRequestContext context) {
+    public Uni&lt;SecurityIdentity&gt; augment(SecurityIdentity identity, AuthenticationRequestContext context) {
+        return context.runBlocking(build(identity));
+    }
 
-        CompletableFuture&lt;SecurityIdentity&gt; cs = new CompletableFuture&lt;&gt;();
-        if (identity.isAnonymous()) {
-            cs.complete(identity);
+    private Supplier&lt;SecurityIdentity&gt; build(SecurityIdentity identity) {
+        if(identity.isAnonymous()) {
+            return () -&gt; identity;
         } else {
             // create a new builder and copy principal, attributes, credentials and roles from the original
             QuarkusSecurityIdentity.Builder builder = QuarkusSecurityIdentity.builder()
-                .setPrincipal(identity.getPrincipal())
-                .addAttributes(identity.getAttributes())
-                .addCredentials(identity.getCredentials())
-                .addRoles(identity.getRoles());
+                    .setPrincipal(identity.getPrincipal())
+                    .addAttributes(identity.getAttributes())
+                    .addCredentials(identity.getCredentials())
+                    .addRoles(identity.getRoles());
 
             // add custom role source here
             builder.addRole("dummy");
-
-            cs.complete(builder.build());
+            return builder::build;
         }
-
-        return cs;
     }
 }</code></pre>
 </div>
