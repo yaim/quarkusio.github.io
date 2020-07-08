@@ -379,7 +379,7 @@ When using the <code>quarkus-container-image-jib</code> extension to build a con
 <div class="sect3">
 <h4 id="custom-annotations"><a class="anchor" href="#custom-annotations"></a>Custom Annotations</h4>
 <div class="paragraph">
-<p>Custom annotations can be added in a way similar to labels. For example to add the annotation <code>foo=bar</code> and <code>app.quarkus/id=42</code> just apply the following configuration:</p>
+<p>Custom annotations can be added in a way similar to labels.For example to add the annotation <code>foo=bar</code> and <code>app.quarkus/id=42</code> just apply the following configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -389,7 +389,7 @@ quarkus."app.quarkus/id"=42</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="environment-variables"><a class="anchor" href="#environment-variables"></a>Environment variables</h4>
+<h4 id="env-vars"><a class="anchor" href="#env-vars"></a>Environment variables</h4>
 <div class="paragraph">
 <p>Kubernetes provides multiple ways of defining environment variables:</p>
 </div>
@@ -399,13 +399,13 @@ quarkus."app.quarkus/id"=42</code></pre>
 <p>key/value pairs</p>
 </li>
 <li>
-<p>from a Secret</p>
+<p>import all values from a Secret or ConfigMap</p>
 </li>
 <li>
-<p>from a ConfigMap</p>
+<p>interpolate a single value identified by a given field in a Secret or ConfigMap</p>
 </li>
 <li>
-<p>from fields</p>
+<p>interpolate a value from a field within the same resource</p>
 </li>
 </ul>
 </div>
@@ -416,7 +416,7 @@ quarkus."app.quarkus/id"=42</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env.vars.my-env-var=foobar</code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.kubernetes.env.vars.my-env-var=foobar</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -432,7 +432,44 @@ to be used as source by a comma (<code>,</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env.secrets=my-secret,my-other-secret</code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.kubernetes.env.secrets=my-secret,my-other-secret</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which would generate the following in the container definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">envFrom:
+  - secretRef:
+      name: my-secret
+      optional: false
+  - secretRef:
+      name: my-other-secret
+      optional: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following extracts a value identified by the <code>keyName</code> field from the <code>my-secret</code> Secret into a <code>foo</code> environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.kubernetes.env.mapping.foo.from-secret=my-secret
+quarkus.kubernetes.env.mapping.foo.with-key=keyName</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This would generate the following in the <code>env</code> section of your container:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">- env:
+  - name: FOO
+    valueFrom:
+      secretKeyRef:
+        key: keyName
+        name: my-secret
+        optional: false</code></pre>
 </div>
 </div>
 </div>
@@ -444,15 +481,52 @@ to be used as source by a comma (<code>,</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kubernetes.env.configmaps=my-config-map,another-config-map</code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.kubernetes.env.configmaps=my-config-map,another-config-map</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which would generate the following in the container definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">envFrom:
+  - configMapRef:
+      name: my-config-map
+      optional: false
+  - configMapRef:
+      name: another-config-map
+      optional: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following extracts a value identified by the <code>keyName</code> field from the <code>my-config-map</code> ConfigMap into a <code>foo</code>
+environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.kubernetes.env.mapping.foo.from-configmap=my-configmap
+quarkus.kubernetes.env.mapping.foo.with-key=keyName</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This would generate the following in the <code>env</code> section of your container:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">- env:
+  - name: FOO
+    valueFrom:
+      configMapRefKey:
+        key: keyName
+        name: my-configmap
+        optional: false</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="environment-variables-from-fields"><a class="anchor" href="#environment-variables-from-fields"></a>Environment variables from fields</h5>
 <div class="paragraph">
-<p>It&#8217;s also possible to use the value from another field to add a new environment variable by specifying the path of the field to
-be used as a source, as follows:</p>
+<p>It&#8217;s also possible to use the value from another field to add a new environment variable by specifying the path of the field to be used as a source, as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -463,20 +537,16 @@ be used as a source, as follows:</p>
 <div class="sect4">
 <h5 id="validation"><a class="anchor" href="#validation"></a>Validation</h5>
 <div class="paragraph">
-<p>A conflict between two definitions, e.g. mistakenly assigning both a value and specifying that a variable is derived
-from a field, will result in an error being thrown at build time so that you get the opportunity to fix the issue before you
-deploy your application to your cluster where it might be more difficult to diagnose the source of the issue.</p>
+<p>A conflict between two definitions, e.g. mistakenly assigning both a value and specifying that a variable is derived from a field, will result in an error being thrown at build time so that you get the opportunity to fix the issue before you deploy your application to your cluster where it might be more difficult to diagnose the source of the issue.</p>
 </div>
 <div class="paragraph">
-<p>Similarly, two redundant definitions, e.g. defining an injection from the same secret twice, will not cause an issue but will
-indeed report a warning to let you know that you might not have intended to duplicate that definition.</p>
+<p>Similarly, two redundant definitions, e.g. defining an injection from the same secret twice, will not cause an issue but will indeed report a warning to let you know that you might not have intended to duplicate that definition.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="backwards-compatibility"><a class="anchor" href="#backwards-compatibility"></a>Backwards compatibility</h5>
+<h5 id="env-vars-backwards"><a class="anchor" href="#env-vars-backwards"></a>Backwards compatibility</h5>
 <div class="paragraph">
-<p>Previous versions of the Kubernetes extension supported a different syntax to add environment variables. The older syntax is
-still supported but is deprecated and it&#8217;s advised that you migrate to the new syntax.</p>
+<p>Previous versions of the Kubernetes extension supported a different syntax to add environment variables.The older syntax is still supported but is deprecated and it&#8217;s advised that you migrate to the new syntax.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Old vs. new syntax</caption>
@@ -517,6 +587,30 @@ still supported but is deprecated and it&#8217;s advised that you migrate to the
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.secrets=foobar</code></p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">From one <code>Secret</code> field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.foo.secret=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.mapping.foo.from-secret=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.foo.value=field</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.mapping.foo.with-key=field</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">From one <code>ConfigMap</code> field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.foo.configmap=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.mapping.foo.from-configmap=foobar</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env-vars.foo.value=field</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.kubernetes.env.mapping.foo.with-key=field</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
 </tbody>
 </table>
 <div class="admonitionblock note">
@@ -527,7 +621,7 @@ still supported but is deprecated and it&#8217;s advised that you migrate to the
 </td>
 <td class="content">
 If you redefine the same variable using the new syntax while keeping the old syntax, <strong>ONLY</strong> the new version will be kept
-and a warning will be issued to alert you of the problem. For example, if you define both
+and a warning will be issued to alert you of the problem.For example, if you define both
 <code>quarkus.kubernetes.env-vars.my-env-var.value=foobar</code> and <code>quarkus.kubernetes.env.vars.my-env-var=newValue</code>, the extension will
 only generate an environment variable <code>MY_ENV_VAR=newValue</code> and issue a warning.
 </td>
@@ -2015,6 +2109,13 @@ kubernetes.env-vars[0].configmap=my-configmap
 # New env-vars
 quarkus.kubernetes.env-vars.foo.configmap=myconfigmap</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="env-vars-properties"><a class="anchor" href="#env-vars-properties"></a><code>env-vars</code> properties</h4>
+<div class="paragraph">
+<p><code>quarkus.kubernetes.env-vars</code> are deprecated (though still currently supported as of this writing) and the new declaration style should be used instead.
+See <a href="#env-vars">Environment variables</a> and more specifically <a href="#env-vars-backwards">Backwards compatibility</a> for more details.</p>
 </div>
 </div>
 </div>

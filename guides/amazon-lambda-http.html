@@ -224,6 +224,25 @@ to the build</p>
 <pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean install -Dnative</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you are building on a non-Linux system, you will need to also pass in a property instructing quarkus to use a docker build as Amazon
+Lambda requires linux binaries.  You can do this by passing this property to your Maven build:
+<code>-Dnative-image.docker-build=true</code>, or for Gradle: <code>--docker-build=true</code>.  This requires you to have docker installed locally, however.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw clean install -Dnative -Dnative-image.docker-build=true</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

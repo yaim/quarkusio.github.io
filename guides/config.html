@@ -549,7 +549,7 @@ public class GreetingConfiguration {
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">greeting.message = hello
 greeting.name = quarkus
-greeting.hidden.prizeAmount=10
+greeting.hidden.prize-amount=10
 greeting.hidden.recipients=Jane,John</code></pre>
 </div>
 </div>
@@ -1286,10 +1286,39 @@ any level for disambiguating configuration keys.</p>
 <h2 id="more-info-on-how-to-configure"><a class="anchor" href="#more-info-on-how-to-configure"></a>More info on how to configure</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus relies on Eclipse MicroProfile and inherits its features.</p>
+<p>Quarkus relies on SmallRye Config and inherits its features.</p>
 </div>
 <div class="paragraph">
-<p>There are converters that convert your property file content from <code>String</code> to typed Java types. See the list <a href="https://github.com/eclipse/microprofile-config/blob/master/spec/src/main/asciidoc/converters.asciidoc">in the specification</a>.</p>
+<p>SmallRye Config provides:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Additional Config Sources</p>
+</li>
+<li>
+<p>Additional Converters</p>
+</li>
+<li>
+<p>Interceptors for configuration value resolution</p>
+</li>
+<li>
+<p>Relocate Configuration Properties</p>
+</li>
+<li>
+<p>Fallback Configuration Properties</p>
+</li>
+<li>
+<p>Logging</p>
+</li>
+<li>
+<p>Hide Secrets</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For more information, please check the
+<a href="https://smallrye.io/docs/smallrye-config/index.html">SmallRye Config documentation</a>.</p>
 </div>
 </div>
 </div>

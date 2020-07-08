@@ -96,7 +96,7 @@
 <li><a href="#response-body-examples">Response body examples</a>
 <ul class="sectlevel2">
 <li><a href="#get-people1">GET /people/1</a></li>
-<li><a href="#get-people">GET /people</a></li>
+<li><a href="#get-peoplepage0size2">GET /people?page=0&amp;size=2</a></li>
 </ul>
 </li>
 </ul></div>
@@ -245,7 +245,7 @@ public class PeopleResourceImpl implements PeopleResource { // The actual class 
 
     @GET
     @Produces("application/json")
-    public List&lt;Person&gt; list(){
+    public Response list(){
         // ...
     }
 
@@ -290,7 +290,7 @@ It can be used in your resource interface:</p>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ResourceProperties(hal = true, path = "my-people")
 public interface PeopleResource extends PanacheEntityResource&lt;Person, Long&gt; {
     @MethodProperties(path = "all")
-    List&lt;Person&gt; list();
+    Response list();
 
     @MethodProperties(exposed = false)
     void delete(Long id);
@@ -310,6 +310,12 @@ Default is <code>false</code>.</p>
 </li>
 <li>
 <p><code>path</code> - resource base path. Default path is a hyphenated lowercase resource name without a suffix of <code>resource</code> or <code>controller</code>.</p>
+</li>
+<li>
+<p><code>paged</code> - whether collection responses should be paged or not.
+First, last, previous and next page URIs are included in the response headers if they exist.
+Request page index and size are taken from the <code>page</code> and <code>size</code> query parameters that default to <code>0</code> and <code>20</code> respectively.
+Default is <code>true</code>.</p>
 </li>
 </ul>
 </div>
@@ -334,7 +340,7 @@ Default is <code>false</code>.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>As mentioned above REST Data with Panache supports the <code>application/json</code> and <code>application/hal+json</code> response content types.
-Here are a couple of examples of how a response body would look like for the <code>get</code> and <code>list</code> operations assuming there are two <code>Person</code> records in a database.</p>
+Here are a couple of examples of how a response body would look like for the <code>get</code> and <code>list</code> operations assuming there are five <code>Person</code> records in a database.</p>
 </div>
 <div class="sect2">
 <h3 id="get-people1"><a class="anchor" href="#get-people1"></a>GET /people/1</h3>
@@ -371,7 +377,7 @@ Here are a couple of examples of how a response body would look like for the <co
 </div>
 </div>
 <div class="sect2">
-<h3 id="get-people"><a class="anchor" href="#get-people"></a>GET /people</h3>
+<h3 id="get-peoplepage0size2"><a class="anchor" href="#get-peoplepage0size2"></a>GET /people?page=0&amp;size=2</h3>
 <div class="paragraph">
 <p><code>Accept: application/json</code></p>
 </div>
@@ -425,10 +431,32 @@ Here are a couple of examples of how a response body would look like for the <co
   ],
   "_links": {
     "add": "http://example.com/people",
-    "list": "http://example.com/people"
+    "list": "http://example.com/people",
+    "first": "http://example.com/people?page=0&amp;size=2",
+    "last": "http://example.com/people?page=2&amp;size=2",
+    "next": "http://example.com/people?page=1&amp;size=2"
   }
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Both responses would also contain these headers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Link: &lt; <a href="http://example.com/people?page=0&amp;size=2" class="bare">http://example.com/people?page=0&amp;size=2</a> &gt;; rel="first"</p>
+</li>
+<li>
+<p>Link: &lt; <a href="http://example.com/people?page=2&amp;size=2" class="bare">http://example.com/people?page=2&amp;size=2</a> &gt;; rel="last"</p>
+</li>
+<li>
+<p>Link: &lt; <a href="http://example.com/people?page=1&amp;size=2" class="bare">http://example.com/people?page=1&amp;size=2</a> &gt;; rel="next"</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A <code>previous</code> link header (and hal link) would not be included, because the previous page does not exist.</p>
 </div>
 </div>
 </div>

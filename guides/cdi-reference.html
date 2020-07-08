@@ -83,6 +83,7 @@
 <li><a href="#bean_discovery">1. Bean Discovery</a>
 <ul class="sectlevel2">
 <li><a href="#how-to-generate-a-jandex-index">1.1. How to Generate a Jandex Index</a></li>
+<li><a href="#how-to-exclude-types-and-dependencies-from-discovery">1.2. How To Exclude Types and Dependencies from Discovery</a></li>
 </ul>
 </li>
 <li><a href="#native-executables-and-private-members">2. Native Executables and Private Members</a></li>
@@ -100,6 +101,7 @@
 <li><a href="#enabling-beans-for-quarkus-build-properties">5.8. Enabling Beans for Quarkus Build Properties</a></li>
 <li><a href="#declaring-selected-alternatives">5.9. Declaring Selected Alternatives</a></li>
 <li><a href="#simplified-producer-method-declaration">5.10. Simplified Producer Method Declaration</a></li>
+<li><a href="#interception-of-static-methods">5.11. Interception of Static Methods</a></li>
 </ul>
 </li>
 <li><a href="#build-time-extension-points">6. Build Time Extension Points</a>
@@ -118,7 +120,8 @@
 <li><a href="#build_metadata">6.12. Available Build Time Metadata</a></li>
 </ul>
 </li>
-<li><a href="#arc-configuration-reference">7. ArC Configuration Reference</a></li>
+<li><a href="#dev-mode">7. Development Mode</a></li>
+<li><a href="#arc-configuration-reference">8. ArC Configuration Reference</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -230,10 +233,75 @@ quarkus.index-dependency.&lt;name&gt;.classifier=(this one is optional)</code></
 <div class="paragraph">
 <p>For example, the following entries ensure that the <code>org.acme:acme-api</code> dependency is indexed:</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="how-to-exclude-types-and-dependencies-from-discovery"><a class="anchor" href="#how-to-exclude-types-and-dependencies-from-discovery"></a>1.2. How To Exclude Types and Dependencies from Discovery</h3>
+<div class="paragraph">
+<p>It may happen that some beans from third-party libraries do not work correctly in Quarkus.
+A typical example is a bean injecting a portable extension.
+In such case, it&#8217;s possible to exclude types and dependencies from the bean discovery.
+The <code>quarkus.arc.exclude-types</code> property accepts a list of string values that are used to match classes that should be excluded.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Value Examples</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.Foo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match the fully qualified name of the class</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match classes with package <code>org.acme</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.**</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match classes where the package starts with <code>org.acme</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Bar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match the simple name of the class</p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
+<div class="title">Example application.properties</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.index-dependency.acme.group-id=org.acme <i class="conum" data-value="1"></i><b>(1)</b>
-quarkus.index-dependency.acme.artifact-id=acme-api <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.arc.exclude-types=org.acme.Foo,org.acme.*,Bar <i class="conum" data-value="1"></i><b>(1)</b><i class="conum" data-value="2"></i><b>(2)</b><i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Exclude the type <code>org.acme.Foo</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Exclude all types from the <code>org.acme</code> package.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Exclude all types whose simple name is <code>Bar</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is also possible to exclude a dependency artifact that would be otherwise scanned for beans.
+For example, because it contains a <code>beans.xml</code> descriptor.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.arc.exclude-dependency.acme.group-id=org.acme <i class="conum" data-value="1"></i><b>(1)</b>
+quarkus.arc.exclude-dependency.acme.artifact-id=acme-services <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -776,6 +844,45 @@ This optimization can be disabled by setting <code>quarkus.arc.remove-unused-bea
 This annotation can be placed on the types, producer methods, and producer fields.</p>
 </div>
 <div class="paragraph">
+<p>Since this is not always possible, there is an option to achieve the same via <code>application.properties</code>.
+The <code>quarkus.arc.unremovable-types</code> property accepts a list of string values that are used to match beans based on their name or package.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Value Examples</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.Foo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match the fully qualified name of the bean class</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match beans where the package of the bean class is <code>org.acme</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.acme.**</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match beans where the package of the bean class starts with <code>org.acme</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Bar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Match the simple name of the bean class</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">Example application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.arc.unremovable-types=org.acme.Foo,org.acme.*,Bar</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Furthermore, extensions can eliminate possible false positives by producing <code>UnremovableBeanBuildItem</code>.</p>
 </div>
 <div class="paragraph">
@@ -973,7 +1080,7 @@ If any value matches then the priority of <code>Integer#MAX_VALUE</code> is used
 The priority declared via <code>@Priority</code> or <code>@AlternativePriority</code> is overridden.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Value Examples</caption>
+<caption class="title">Table 3. Value Examples</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1044,6 +1151,68 @@ The priority declared via <code>@Priority</code> or <code>@AlternativePriority</
     return new MyService(coolProperty);
   }
 }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="interception-of-static-methods"><a class="anchor" href="#interception-of-static-methods"></a>5.11. Interception of Static Methods</h3>
+<div class="paragraph">
+<p>The Interceptors specification is clear that <em>around-invoke</em> methods must not be declared static.
+However, this restriction was driven mostly by technical limitations.
+And since Quarkus is a build-time oriented stack that allows for additional class transformations, those limitations don&#8217;t apply anymore.
+It&#8217;s possible to annotate a non-private static method with an interceptor binding:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">class Services {
+
+  @Logged <i class="conum" data-value="1"></i><b>(1)</b>
+  static BigDecimal computePrice(long amout) { <i class="conum" data-value="2"></i><b>(2)</b>
+    BigDecimal price;
+    // Perform computations...
+    return price;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>Logged</code> is an interceptor binding.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Each method invocation is intercepted if there is an interceptor associated with <code>Logged</code>.</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="limitations-2"><a class="anchor" href="#limitations-2"></a>5.11.1. Limitations</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Only <strong>method-level bindings</strong> are considered for backward compatibility reasons (otherwise static methods of bean classes that declare class-level bindings would be suddenly intercepted)</p>
+</li>
+<li>
+<p>Private static methods are never intercepted</p>
+</li>
+<li>
+<p><code>InvocationContext#getTarget()</code> returns <code>null</code> for obvious reasons; therefore not all existing interceptors may behave correctly when intercepting static methods</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Interceptors can use <code>InvocationContext.getMethod()</code> to detect static methods and adjust the behavior accordingly.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1626,7 +1795,57 @@ Here is a summary of which extensions can access which metadata:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="arc-configuration-reference"><a class="anchor" href="#arc-configuration-reference"></a>7. ArC Configuration Reference</h2>
+<h2 id="dev-mode"><a class="anchor" href="#dev-mode"></a>7. Development Mode</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the development mode, two special endpoints are registered automatically to provide some basic debug info in the JSON format:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP GET <code>/quarkus/arc/beans</code> - returns the list of all beans</p>
+<div class="ulist">
+<ul>
+<li>
+<p>You can use query params to filter the output:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>scope</code> - include beans with scope that ends with the given value, i.e. <code><a href="http://localhost:8080/quarkus/arc/beans?scope=ApplicationScoped" class="bare">http://localhost:8080/quarkus/arc/beans?scope=ApplicationScoped</a></code></p>
+</li>
+<li>
+<p><code>beanClass</code> - include beans with bean class that starts with the given value, i.e. <code><a href="http://localhost:8080/quarkus/arc/beans?beanClass=org.acme.Foo" class="bare">http://localhost:8080/quarkus/arc/beans?beanClass=org.acme.Foo</a></code></p>
+</li>
+<li>
+<p><code>kind</code> - include beans of the specified kind (<code>CLASS</code>, <code>PRODUCER_FIELD</code>, <code>PRODUCER_METHOD</code>, <code>INTERCEPTOR</code> or <code>SYNTHETIC</code>), i.e. <code><a href="http://localhost:8080/quarkus/arc/beans?kind=PRODUCER_METHOD" class="bare">http://localhost:8080/quarkus/arc/beans?kind=PRODUCER_METHOD</a></code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>HTTP GET <code>/quarkus/arc/observers</code> - returns the list of all observer methods</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+These endpoints are only available in the development mode, i.e. when you run your application via <code>mvn quarkus:dev</code> (or <code>./gradlew quarkusDev</code>).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="arc-configuration-reference"><a class="anchor" href="#arc-configuration-reference"></a>8. ArC Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
@@ -1742,8 +1961,8 @@ An unused bean:</p>
  An element value can be:
  - a fully qualified class name, i.e. <code>org.acme.Foo</code>
  - a simple class name as defined by <code>Class#getSimpleName()</code>, i.e. <code>Foo</code>
- - a package name with suffix <code>.<strong></code>, i.e. <code>org.acme.</strong></code>, matches a package
- - a package name with suffix <code>.<strong></code>, i.e. <code>org.acme.</strong></code>, matches a package that starts with the value  Each element value is used to match an alternative bean class, an alternative stereotype annotation type or a bean class that declares an alternative producer. If any value matches then the priority of <code>Integer#MAX_VALUE</code> is used for the relevant bean. The priority declared via <code>javax.annotation.Priority</code> or <code>io.quarkus.arc.AlternativePriority</code> is overriden.</p>
+ - a package name with suffix <code>.*</code>, i.e. <code>org.acme.*</code>, matches a package
+ - a package name with suffix <code>.**</code>, i.e. <code>org.acme.**</code>, matches a package that starts with the value  Each element value is used to match an alternative bean class, an alternative stereotype annotation type or a bean class that declares an alternative producer. If any value matches then the priority of <code>Integer#MAX_VALUE</code> is used for the relevant bean. The priority declared via <code>javax.annotation.Priority</code> or <code>io.quarkus.arc.AlternativePriority</code> is overriden.</p>
 </div>
 </div>
 </div></div></td>
@@ -1763,6 +1982,86 @@ An unused bean:</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.exclude-types"></a><code><a href="#quarkus-arc_quarkus.arc.exclude-types">quarkus.arc.exclude-types</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The list of types that should be excluded from discovery.
+ An element value can be:
+ - a fully qualified class name, i.e. <code>org.acme.Foo</code>
+ - a simple class name as defined by <code>Class#getSimpleName()</code>, i.e. <code>Foo</code>
+ - a package name with suffix <code>.*</code>, i.e. <code>org.acme.*</code>, matches a package
+ - a package name with suffix <code>.**</code>, i.e. <code>org.acme.**</code>, matches a package that starts with the value  If any element value matches a discovered type then the type is excluded from discovery, i.e. no beans and observer methods are created from this type.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.unremovable-types"></a><code><a href="#quarkus-arc_quarkus.arc.unremovable-types">quarkus.arc.unremovable-types</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>List of types that should be considered unremovable regardless of whether they are directly used or not. This is a configuration option equivalent to using <code>io.quarkus.arc.Unremovable</code> annotation.
+ An element value can be:
+ - a fully qualified class name, i.e. <code>org.acme.Foo</code>
+ - a simple class name as defined by <code>Class#getSimpleName()</code>, i.e. <code>Foo</code>
+ - a package name with suffix <code>.*</code>, i.e. <code>org.acme.*</code>, matches a package
+ - a package name with suffix <code>.**</code>, i.e. <code>org.acme.**</code>, matches a package that starts with the value  If any element value matches a discovered bean, then such a bean is considered unremovable.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.exclude-dependency.-exclude-dependency-.group-id"></a><code><a href="#quarkus-arc_quarkus.arc.exclude-dependency.-exclude-dependency-.group-id">quarkus.arc.exclude-dependency."exclude-dependency".group-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maven groupId of the artifact to index</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.exclude-dependency.-exclude-dependency-.artifact-id"></a><code><a href="#quarkus-arc_quarkus.arc.exclude-dependency.-exclude-dependency-.artifact-id">quarkus.arc.exclude-dependency."exclude-dependency".artifact-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maven artifactId of the artifact to index</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-arc_quarkus.arc.exclude-dependency.-exclude-dependency-.classifier"></a><code><a href="#quarkus-arc_quarkus.arc.exclude-dependency.-exclude-dependency-.classifier">quarkus.arc.exclude-dependency."exclude-dependency".classifier</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maven classifier of the artifact to index</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>

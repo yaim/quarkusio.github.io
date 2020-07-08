@@ -82,7 +82,8 @@
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#writing-command-mode-applications">Writing Command Mode Applications</a>
 <ul class="sectlevel2">
-<li><a href="#multiple-main-methods">Multiple Main Methods</a></li>
+<li><a href="#contexts">Contexts</a></li>
+<li><a href="#main-method">Main method</a></li>
 <li><a href="#the-command-mode-lifecycle">The command mode lifecycle</a></li>
 <li><a href="#dev-mode">Dev mode</a></li>
 </ul>
@@ -118,7 +119,7 @@ that exit.</p>
 and a class with a Java main method is the Java main.</p>
 </div>
 <div class="paragraph">
-<p>The simplest possible command mode application might appear as follows:</p>
+<p>The simplest possible command mode application with access to Quarkus API&#8217;s might appear as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -147,6 +148,18 @@ public class HelloWorldMain implements QuarkusApplication {
 </tr>
 </table>
 </div>
+<div class="sect2">
+<h3 id="contexts"><a class="anchor" href="#contexts"></a>Contexts</h3>
+<div class="paragraph">
+<p>To get access to your application beans and services, be aware that
+a <code>@QuarkusMain</code> instance is an application scoped bean by default. It has access to singletons, application and dependent scoped beans. If you want to interact with beans that requires a request scope put a <code>@ActivateRequestContext</code> on your <code>run()</code> method.</p>
+</div>
+<div class="paragraph">
+<p>This let <code>run()</code> have access to methods like <code>listAll()</code> and <code>query*</code> methods on a Panache Entity. Without it you will eventually get a <code>ContextNotActiveException</code> when accessing such classes/beans.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="main-method"><a class="anchor" href="#main-method"></a>Main method</h3>
 <div class="paragraph">
 <p>If we want to use a Java main to run the application main it would look like:</p>
 </div>
@@ -168,6 +181,18 @@ public class JavaMain {
 <p>This is effectively the same as running the <code>HelloWorldMain</code> application main directly, but has the advantage it can
 be run from the IDE.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If a class that implements <code>QuarkusApplication</code> and has a Java main then the Java main will be run.
+</td>
+</tr>
+</table>
+</div>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -183,8 +208,8 @@ expect.
 </tr>
 </table>
 </div>
-<div class="sect2">
-<h3 id="multiple-main-methods"><a class="anchor" href="#multiple-main-methods"></a>Multiple Main Methods</h3>
+<div class="sect3">
+<h4 id="multiple-main-methods"><a class="anchor" href="#multiple-main-methods"></a>Multiple Main Methods</h4>
 <div class="paragraph">
 <p>It is possible to have multiple main methods in an application, and select between them at build time.
 The <code>@QuarkusMain</code> annotation takes an optional 'name' parameter, and this can be used to select the
@@ -209,6 +234,7 @@ unique.
 </td>
 </tr>
 </table>
+</div>
 </div>
 </div>
 <div class="sect2">

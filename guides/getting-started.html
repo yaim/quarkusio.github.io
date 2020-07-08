@@ -561,13 +561,15 @@ be set, as the default version does not support Junit 5:</p>
     &lt;configuration&gt;
        &lt;systemPropertyVariables&gt;
           &lt;java.util.logging.manager&gt;org.jboss.logmanager.LogManager&lt;/java.util.logging.manager&gt;
+          &lt;maven.home&gt;${maven.home}&lt;/maven.home&gt;
        &lt;/systemPropertyVariables&gt;
     &lt;/configuration&gt;
 &lt;/plugin&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>We also set the <code>java.util.logging</code> system property to make sure tests will use the correct logmanager.</p>
+<p>We also set the <code>java.util.logging</code> system property to make sure tests will use the correct logmanager and <code>maven.home</code> to ensure that custom configuration
+from <code>${maven.home}/conf/settings.xml</code> is applied (if any).</p>
 </div>
 <div class="paragraph">
 <p>The generated project contains a simple test.

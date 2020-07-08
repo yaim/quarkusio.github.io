@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Scheduling Periodic Tasks</title>
+  <title>Quarkus - Quarkus Extension for Spring Scheduling API</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlight.pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -15,11 +15,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@QuarkusIO"> 
   <meta name="twitter:creator" content="@QuarkusIO">
-  <meta property="og:url" content="https://quarkus.io/guides/scheduler" />
-  <meta property="og:title" content="Quarkus - Scheduling Periodic Tasks" />
+  <meta property="og:url" content="https://quarkus.io/guides/spring-scheduled" />
+  <meta property="og:title" content="Quarkus - Quarkus Extension for Spring Scheduling API" />
   <meta property="og:description" content="Quarkus: Supersonic Subatomic Java" />
   <meta property="og:image" content="/assets/images/quarkus_card.png" />
-  <link rel="canonical" href="https://quarkus.io/guides/scheduler">
+  <link rel="canonical" href="https://quarkus.io/guides/spring-scheduled">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="https://quarkus.io/guides/stylesheet/config.css" />
   <link rel="stylesheet" href="/assets/css/main.css" />
@@ -78,33 +78,47 @@
   <div class="content">
     <div class="guide">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Scheduling Periodic Tasks</h1>
+    <h1 class="text-caps">Quarkus - Quarkus Extension for Spring Scheduling API</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#architecture">Architecture</a></li>
 <li><a href="#solution">Solution</a></li>
 <li><a href="#creating-the-maven-project">Creating the Maven project</a></li>
-<li><a href="#standard-scheduling">Creating a scheduled job</a></li>
+<li><a href="#creating-a-scheduled-job">Creating a scheduled job</a></li>
 <li><a href="#updating-the-application-configuration-file">Updating the application configuration file</a></li>
 <li><a href="#updating-the-resource-and-the-test">Updating the resource and the test</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
-<li><a href="#scheduler-configuration-reference">Scheduler Configuration Reference</a></li>
+<li><a href="#using-property-expressions">Using Property Expressions</a></li>
+<li><a href="#unsupported-spring-scheduled-functionalities">Unsupported Spring Scheduled functionalities</a></li>
+<li><a href="#important-technical-note">Important Technical Note</a></li>
+<li><a href="#more-spring-guides">More Spring guides</a></li>
 </ul></div>
     <div>
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Modern applications often need to run specific tasks periodically.
-In this guide, you learn how to schedule periodic tasks.</p>
+<p>While users are encouraged to use <a href="scheduler#standard-scheduling">regular Quarkus scheduler</a>, Quarkus provides a compatibility layer for Spring Scheduled in the form of the <code>spring-scheduled</code> extension.</p>
 </div>
-<div class="admonitionblock tip">
+<div class="paragraph">
+<p>This guide explains how a Quarkus application can leverage the well known Spring Scheduled annotation to configure and schedule tasks.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you need a clustered scheduler use the <a href="quartz">Quartz extension</a>.
+<div class="paragraph">
+<p>This technology is considered preview.</p>
+</div>
+<div class="paragraph">
+<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
+Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
+Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
+</div>
 </td>
 </tr>
 </table>
@@ -120,7 +134,7 @@ If you need a clustered scheduler use the <a href="quartz">Quartz extension</a>.
 <div class="ulist">
 <ul>
 <li>
-<p>less than 10 minutes</p>
+<p>less than 15 minutes</p>
 </li>
 <li>
 <p>an IDE</p>
@@ -131,19 +145,10 @@ If you need a clustered scheduler use the <a href="quartz">Quartz extension</a>.
 <li>
 <p>Apache Maven 3.6.2+</p>
 </li>
+<li>
+<p>Some familiarity with the Spring Web extension</p>
+</li>
 </ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In this guide, we create a straightforward application accessible using HTTP to get the current value of a counter.
-This counter is periodically (every 10 seconds) incremented.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="/guides/images/scheduling-task-architecture.png" alt="Architecture"></span></p>
 </div>
 </div>
 </div>
@@ -158,7 +163,7 @@ However, you can go right to the completed example.</p>
 <p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
 </div>
 <div class="paragraph">
-<p>The solution is located in the <code>scheduler-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/scheduler-quickstart">directory</a>.</p>
+<p>The solution is located in the <code>spring-scheduled-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/spring-scheduled-quickstart">directory</a>.</p>
 </div>
 </div>
 </div>
@@ -172,48 +177,23 @@ However, you can go right to the completed example.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.5.2.Final:create \
     -DprojectGroupId=org.acme \
-    -DprojectArtifactId=scheduler-quickstart \
-    -DclassName="org.acme.scheduler.CountResource" \
+    -DprojectArtifactId=spring-scheduler-quickstart \
+    -DclassName="org.acme.spring.scheduler.CountResource" \
     -Dpath="/count" \
-    -Dextensions="scheduler"
-cd scheduler-quickstart</code></pre>
+    -Dextensions="spring-scheduled"
+cd spring-scheduler-quickstart</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>It generates:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>the Maven structure</p>
-</li>
-<li>
-<p>a landing page accessible on <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code></p>
-</li>
-<li>
-<p>example <code>Dockerfile</code> files for both <code>native</code> and <code>jvm</code> modes</p>
-</li>
-<li>
-<p>the application configuration file</p>
-</li>
-<li>
-<p>an <code>org.acme.scheduler.CountResource</code> resource</p>
-</li>
-<li>
-<p>an associated test</p>
-</li>
-</ul>
+<p>This command generates a Maven project with a REST endpoint and adds the <code>spring-scheduled</code> extension.</p>
 </div>
 <div class="paragraph">
-<p>The Maven project also imports the Quarkus scheduler extension.</p>
-</div>
-<div class="paragraph">
-<p>If you already have your Quarkus project configured, you can add the <code>scheduler</code> extension
+<p>If you already have your Quarkus project configured, you can add the <code>spring-scheduled</code> extension
 to your project by running the following command in your project base directory:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="scheduler"</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="spring-scheduled"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -223,51 +203,58 @@ to your project by running the following command in your project base directory:
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-    &lt;artifactId&gt;quarkus-scheduler&lt;/artifactId&gt;
+    &lt;artifactId&gt;quarkus-spring-scheduled&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="standard-scheduling"><a class="anchor" href="#standard-scheduling"></a>Creating a scheduled job</h2>
+<h2 id="creating-a-scheduled-job"><a class="anchor" href="#creating-a-scheduled-job"></a>Creating a scheduled job</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the <code>org.acme.scheduler</code> package, create the <code>CounterBean</code> class, with the following content:</p>
+<p>In the <code>org.acme.spring.scheduler</code> package, create the <code>CounterBean</code> class, with the following content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduler;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.spring.scheduler;
+
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
-import io.quarkus.scheduler.Scheduled;
-import io.quarkus.scheduler.ScheduledExecution;
 
 @ApplicationScoped              <i class="conum" data-value="1"></i><b>(1)</b>
 public class CounterBean {
 
     private AtomicInteger counter = new AtomicInteger();
 
-    public int get() {  <i class="conum" data-value="2"></i><b>(2)</b>
+    public int get() {   <i class="conum" data-value="2"></i><b>(2)</b>
         return counter.get();
     }
 
-    @Scheduled(every="10s")     <i class="conum" data-value="3"></i><b>(3)</b>
-    void increment() {
-        counter.incrementAndGet(); <i class="conum" data-value="4"></i><b>(4)</b>
+    @Scheduled(cron="*/5 * * * * ?")   <i class="conum" data-value="3"></i><b>(3)</b>
+    void cronJob() {
+        counter.incrementAndGet();      <i class="conum" data-value="4"></i><b>(4)</b>
+        System.out.println("Cron expression hardcoded");
     }
 
-    @Scheduled(cron="0 15 10 * * ?") <i class="conum" data-value="5"></i><b>(5)</b>
-    void cronJob(ScheduledExecution execution) {
-        counter.incrementAndGet();
-        System.out.println(execution.getScheduledFireTime());
-    }
-
-    @Scheduled(cron = "{cron.expr}") <i class="conum" data-value="6"></i><b>(6)</b>
+    @Scheduled(cron = "{cron.expr}")   <i class="conum" data-value="5"></i><b>(5)</b>
     void cronJobWithExpressionInConfig() {
-       counter.incrementAndGet();
-       System.out.println("Cron expression configured in application.properties");
+        counter.incrementAndGet();
+        System.out.println("Cron expression configured in application.properties");
+    }
+
+    @Scheduled(fixedRate = 1000)    <i class="conum" data-value="6"></i><b>(6)</b>
+    void jobAtFixedRate() {
+        counter.incrementAndGet();
+        System.out.println("Fixed Rate expression");
+    }
+
+    @Scheduled(fixedRateString = "${fixedRate.expr}")      <i class="conum" data-value="7"></i><b>(7)</b>
+    void jobAtFixedRateInConfig() {
+        counter.incrementAndGet();
+        System.out.println("Fixed Rate expression configured in application.properties");
     }
 }</code></pre>
 </div>
@@ -275,24 +262,25 @@ public class CounterBean {
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Declare the bean in the <em>application</em> scope</p>
+<p>Declare the bean in the <em>application</em> scope. Spring only detects @Scheduled annotations in beans.</p>
 </li>
 <li>
 <p>The <code>get()</code> method allows retrieving the current value.</p>
 </li>
 <li>
-<p>Use the <code>@Scheduled</code> annotation to instruct Quarkus to run this method every 10 seconds provided a worker thread is available
-(Quarkus is using 10 worker threads for the scheduler). If it is not available the method invocation should be re-scheduled by default i.e
-it should be invoked as soon as possible. The invocation of the scheduled method does not depend on the status or result of the previous invocation.</p>
+<p>Use the Spring <code>@Scheduled</code> annotation with a cron-like expression to instruct Quarkus to schedule this method run.  In this example we&#8217;re scheduling a task to be executed at 10:15am every day.</p>
 </li>
 <li>
-<p>The code is pretty straightforward. Every 10 seconds, the counter is incremented.</p>
-</li>
-<li>
-<p>Define a job with a cron-like expression. The annotated method is executed at 10:15am every day.</p>
+<p>The code is pretty straightforward. Every day at 10:15am, the counter is incremented.</p>
 </li>
 <li>
 <p>Define a job with a cron-like expression <code>cron.expr</code> which is configurable in <code>application.properties</code>.</p>
+</li>
+<li>
+<p>Define a method to be executed at a fixed interval of time. The period is expressed in milliseconds.</p>
+</li>
+<li>
+<p>Define a job to be executed at a fixed interval of time <code>fixedRate.expr</code> which is configurable in <code>application.properties</code>.</p>
 </li>
 </ol>
 </div>
@@ -302,14 +290,13 @@ it should be invoked as soon as possible. The invocation of the scheduled method
 <h2 id="updating-the-application-configuration-file"><a class="anchor" href="#updating-the-application-configuration-file"></a>Updating the application configuration file</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Edit the <code>application.properties</code> file and add the <code>cron.expr</code> configuration:</p>
+<p>Edit the <code>application.properties</code> file and add the <code>cron.expr</code> and the <code>fixedRate.expr</code> configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># By default, the syntax used for cron expressions is based on Quartz - http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html
-# You can change the syntax using the following property:
-# quarkus.scheduler.cron-type=unix
-cron.expr=*/5 * * * * ?</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs"># The syntax used by Spring for cron expressions is the same as which is used by regular Quarkus scheduler.
+cron.expr=*/5 * * * * ?
+fixedRate.expr=1000</code></pre>
 </div>
 </div>
 </div>
@@ -322,7 +309,7 @@ cron.expr=*/5 * * * * ?</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduler;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.spring.scheduler;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -334,13 +321,13 @@ import javax.ws.rs.core.MediaType;
 public class CountResource {
 
     @Inject
-    CounterBean counter;            <i class="conum" data-value="1"></i><b>(1)</b>
+    CounterBean counter;    <i class="conum" data-value="1"></i><b>(1)</b>
 
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "count: " + counter.get();  <i class="conum" data-value="2"></i><b>(2)</b>
+        return "count: " + counter.get();   <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }</code></pre>
 </div>
@@ -360,13 +347,14 @@ public class CountResource {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.scheduler;
-
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Test;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.spring.scheduler;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
+
+import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 public class CountResourceTest {
@@ -374,10 +362,10 @@ public class CountResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/count")
-          .then()
-             .statusCode(200)
-             .body(containsString("count")); <i class="conum" data-value="1"></i><b>(1)</b>
+                .when().get("/count")
+                .then()
+                .statusCode(200)
+                .body(containsString("count"));  <i class="conum" data-value="1"></i><b>(1)</b>
     }
 
 }</code></pre>
@@ -401,8 +389,12 @@ In another terminal, run <code>curl localhost:8080/count</code> to check the cou
 After a few seconds, re-run <code>curl localhost:8080/count</code> to verify the counter has been incremented.</p>
 </div>
 <div class="paragraph">
-<p>Observe the console to verify that the message <code>Cron expression configured in application.properties</code> has been displayed indicating
-that the cron job using an expression configured in <code>application.properties</code> has been triggered.</p>
+<p>Observe the console to verify that the following messages has been displayed:
+- <code>Cron expression hardcoded</code>
+- <code>Cron expression configured in application.properties</code>
+- <code>Fixed Rate expression</code>
+- <code>Fixed Rate expression configured in application.properties</code>
+These messages indicate that the executions of methods annotated with <code>@Scheduled</code> have been triggered.</p>
 </div>
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
@@ -411,53 +403,68 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </div>
 </div>
 <div class="sect1">
-<h2 id="scheduler-configuration-reference"><a class="anchor" href="#scheduler-configuration-reference"></a>Scheduler Configuration Reference</h2>
+<h2 id="using-property-expressions"><a class="anchor" href="#using-property-expressions"></a>Using Property Expressions</h2>
 <div class="sectionbody">
-<div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
-</div>
-<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
-<colgroup>
-<col style="width: 80%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-</colgroup>
-<tbody>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-scheduler_configuration"></a><a href="#quarkus-scheduler_configuration">Configuration property</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-scheduler_quarkus.scheduler.cron-type"></a><code><a href="#quarkus-scheduler_quarkus.scheduler.cron-type">quarkus.scheduler.cron-type</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
 <div class="paragraph">
-<p>The syntax used in CRON expressions.</p>
+<p>Quarkus supports the use of property expressions in the <code>application.properties</code> file so to externalize the configuration of the tasks you should store the properties in the <code>application.properties</code> file and use the
+<code>fixedRateString</code>, <code>initialDelayString</code> params respectively.</p>
 </div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>cron4j</code>, <code>quartz</code>, <code>unix</code>, <code>spring</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quartz</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-scheduler_quarkus.scheduler.enabled"></a><code><a href="#quarkus-scheduler_quarkus.scheduler.enabled">quarkus.scheduler.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
 <div class="paragraph">
-<p>If schedulers are enabled.</p>
+<p>Note that this configuration is a build time configuration, the property expression will be resolved at build time.</p>
 </div>
 </div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-</tbody>
-</table>
+</div>
+<div class="sect1">
+<h2 id="unsupported-spring-scheduled-functionalities"><a class="anchor" href="#unsupported-spring-scheduled-functionalities"></a>Unsupported Spring Scheduled functionalities</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus currently only supports a subset of the functionalities that Spring @Scheduled provides with more features being planned.
+Currently, the <code>fixedDelay</code> and <code>fixedDelayString</code> parameters are not supported, in other words, <code>@Scheduled</code> methods are always executed independently.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="important-technical-note"><a class="anchor" href="#important-technical-note"></a>Important Technical Note</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Please note that the Spring support in Quarkus does not start a Spring Application Context nor are any Spring infrastructure classes run.
+Spring classes and annotations are only used for reading metadata and / or are used as user code method return types or parameter types.
+What that means for end users, is that adding arbitrary Spring libraries will not have any effect. Moreover Spring infrastructure
+classes (like <code>org.springframework.beans.factory.config.BeanPostProcessor</code> for example) will not be executed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more-spring-guides"><a class="anchor" href="#more-spring-guides"></a>More Spring guides</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus has more Spring compatibility features. See the following guides for more details:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="spring-di">Quarkus - Extension for Spring DI</a></p>
+</li>
+<li>
+<p><a href="spring-web">Quarkus - Extension for Spring Web</a></p>
+</li>
+<li>
+<p><a href="spring-data-jpa">Quarkus - Extension for Spring Data JPA</a></p>
+</li>
+<li>
+<p><a href="spring-cloud-config-client">Quarkus - Reading properties from Spring Cloud Config Server</a></p>
+</li>
+<li>
+<p><a href="spring-boot-properties">Quarkus - Extension for Spring Boot properties</a></p>
+</li>
+<li>
+<p><a href="spring-cache">Quarkus - Extension for Spring Cache</a></p>
+</li>
+<li>
+<p><a href="spring-security">Quarkus - Extension for Spring Security</a></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
     </div>

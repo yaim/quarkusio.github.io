@@ -90,6 +90,7 @@
 <li><a href="#update-the-test">Update the test</a></li>
 <li><a href="#async-support">Async Support</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
+<li><a href="#using-a-mock-http-server-for-tests">Using a Mock HTTP Server for tests</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul></div>
     <div>
@@ -172,13 +173,27 @@ cd rest-client-quickstart</code></pre>
 <div class="paragraph">
 <p>This command generates the Maven project with a REST endpoint and imports the <code>rest-client</code> and <code>resteasy-jsonb</code> extensions.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>If you already have your Quarkus project configured, you can add the <code>rest-client</code> extension
+<p>If your application does not expose any JAX-RS endpoints (eg. a <a href="command-mode-reference">command mode application</a>), use the <code>rest-client-jsonb</code> or the <code>rest-client-jackson</code> extension instead.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you already have your Quarkus project configured, you can add the <code>rest-client</code> and the <code>rest-client-jsonb</code> extensions
 to your project by running the following command in your project base directory:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="rest-client"</code></pre>
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="rest-client,resteasy-jsonb"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -189,6 +204,10 @@ to your project by running the following command in your project base directory:
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
     &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
     &lt;artifactId&gt;quarkus-rest-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-resteasy-jsonb&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -627,6 +646,163 @@ Open your browser to <a href="http://localhost:8080/country/name/greece" class="
 <div class="paragraph">
 <p>As usual, the application can be packaged using <code>./mvnw clean package</code> and executed using the <code>-runner.jar</code> file.
 You can also generate the native executable with <code>./mvnw clean package -Pnative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-a-mock-http-server-for-tests"><a class="anchor" href="#using-a-mock-http-server-for-tests"></a>Using a Mock HTTP Server for tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Setting up a mock HTTP server, against which tests are run, is a common testing pattern.
+Examples of such servers are <a href="http://wiremock.org/">Wiremock</a> and <a href="https://docs.hoverfly.io/projects/hoverfly-java/en/latest/index.html">Hoverfly</a>.
+In this section we&#8217;ll demonstrate how Wiremock can be leveraged for testing the <code>CountriesService</code> which was developed above.</p>
+</div>
+<div class="paragraph">
+<p>First of all, Wiremock needs to be added as a test dependency. For a Maven project that would happen like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;com.github.tomakehurst&lt;/groupId&gt;
+    &lt;artifactId&gt;wiremock-jre8&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+    &lt;version&gt;${wiremock.version}&lt;/version&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use a proper Wiremock version. All available versions can be found <a href="https://search.maven.org/artifact/com.github.tomakehurst/wiremock-jre8">here</a>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In Quarkus tests when some service needs to be started before the Quarkus tests are ran, we utilize the <code>@io.quarkus.test.common.QuarkusTestResource</code>
+annotation to specify a <code>io.quarkus.test.common.QuarkusTestResourceLifecycleManager</code> which can start the service and supply configuration
+values that Quarkus will use.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For more details about <code>@QuarkusTestResource</code> refer to  <a href="getting-started-testing#quarkus-test-resource">this part of the documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s create an implementation of <code>QuarkusTestResourceLifecycleManager</code> called <code>WiremockCountries</code> like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest.client;
+
+import java.util.Collections;
+import java.util.Map;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*; <i class="conum" data-value="1"></i><b>(1)</b>
+
+public class WiremockCountries implements QuarkusTestResourceLifecycleManager {  <i class="conum" data-value="2"></i><b>(2)</b>
+
+	private WireMockServer wireMockServer;
+
+	@Override
+	public Map&lt;String, String&gt; start() {
+		wireMockServer = new WireMockServer();
+		wireMockServer.start(); <i class="conum" data-value="3"></i><b>(3)</b>
+
+		stubFor(get(urlEqualTo("/v2/name/GR"))   <i class="conum" data-value="4"></i><b>(4)</b>
+				.willReturn(aResponse()
+						.withHeader("Content-Type", "application/json")
+						.withBody(
+                        "[{" +
+                        "\"name\": \"Ελλάδα\"," +
+                        "\"capital\": \"Αθήνα\"" +
+                        "}]"
+						)));
+
+		stubFor(get(urlMatching(".*")).atPriority(10).willReturn(aResponse().proxiedFrom("https://restcountries.eu/rest")));   <i class="conum" data-value="5"></i><b>(5)</b>
+
+		return Collections.singletonMap("org.acme.getting.started.country.CountriesService/mp-rest/url", wireMockServer.baseUrl()); <i class="conum" data-value="6"></i><b>(6)</b>
+	}
+
+	@Override
+	public void stop() {
+		if (null != wireMockServer) {
+			wireMockServer.stop();  <i class="conum" data-value="7"></i><b>(7)</b>
+		}
+	}
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Statically importing the methods in the Wiremock package makes it easier to read the test.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>start</code> method is invoked by Quarkus before any test is run and returns a <code>Map</code> of configuration properties that apply during the test execution.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Launch Wiremock.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Configure Wiremock to stub the calls to <code>/v2/name/GR</code> by returning a specific canned response.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>All HTTP calls that have not been stubbed are handled by calling the real service. This is done for demonstration purposes, as it is not something that would usually happen in a real test.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>As the <code>start</code> method returns configuration that applies for tests, we set the rest-client property that controls the base URL which is used by the implementation
+of <code>CountriesService</code> to the base URL where Wiremock is listening for incoming requests.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>When all tests have finished, shutdown Wiremock.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>CountriesResourceTest</code> test class needs to be annotated like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+@QuarkusTestResource(WiremockCountries.class)
+public class CountriesResourceTest {
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>@QuarkusTestResource</code> applies to all tests, not just <code>CountriesResourceTest</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

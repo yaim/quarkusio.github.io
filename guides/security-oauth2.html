@@ -96,6 +96,7 @@
 <li><a href="#finally-secured-access-to-securedroles-allowed">Finally, Secured Access to /secured/roles-allowed</a></li>
 <li><a href="#roles-mapping">Roles mapping</a></li>
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
+<li><a href="#integration-testing">Integration testing</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -419,107 +420,6 @@ Not authorized</code></pre>
 <div class="sect1">
 <h2 id="configuring-the-elytron-security-oauth2-extension-security-information"><a class="anchor" href="#configuring-the-elytron-security-oauth2-extension-security-information"></a>Configuring the Elytron Security OAuth2 Extension Security Information</h2>
 <div class="sectionbody">
-<div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
-</div>
-<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
-<colgroup>
-<col style="width: 80%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-</colgroup>
-<tbody>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security-oauth2_configuration"></a><a href="#quarkus-elytron-security-oauth2_configuration">Configuration property</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.enabled"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.enabled">quarkus.oauth2.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Determine if the OAuth2 extension is enabled. Enabled by default if you include the <code>elytron-security-oauth2</code> dependency, so this would be used to disable it.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.client-id"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.client-id">quarkus.oauth2.client-id</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The OAuth2 client id used to validate the token. Mandatory if the extension is enabled.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.client-secret"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.client-secret">quarkus.oauth2.client-secret</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The OAuth2 client secret used to validate the token. Mandatory if the extension is enabled.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.introspection-url"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.introspection-url">quarkus.oauth2.introspection-url</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The OAuth2 introspection endpoint URL used to validate the token and gather the authentication claims. Mandatory if the extension is enabled.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.ca-cert-file"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.ca-cert-file">quarkus.oauth2.ca-cert-file</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The OAuth2 server certificate file. <strong>Warning</strong>: this is not supported in native mode where the certificate must be included in the truststore used during the native image generation, see <a href="native-and-ssl.html">Using SSL With Native Executables</a>.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security-oauth2_quarkus.oauth2.role-claim"></a><code><a href="#quarkus-elytron-security-oauth2_quarkus.oauth2.role-claim">quarkus.oauth2.role-claim</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The claim that is used in the introspection endpoint response to load the roles.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>scope</code></p></td>
-</tr>
-</tbody>
-</table>
 <div class="sect2">
 <h3 id="setting-up-application-properties"><a class="anchor" href="#setting-up-application-properties"></a>Setting up application.properties</h3>
 <div class="paragraph">
@@ -649,6 +549,186 @@ $ ./target/security-oauth2-quickstart-runner
 2019-03-28 14:31:37,315 INFO  [io.quarkus] (main) Quarkus 0.20.0 started in 0.006s. Listening on: http://[::]:8080
 2019-03-28 14:31:37,316 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy, resteasy-jsonb, security, security-oauth2]</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="integration-testing"><a class="anchor" href="#integration-testing"></a>Integration testing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you don&#8217;t want to use a real OAuth2 authorization server for your integration tests, you can use the
+<a href="security-properties">Properties based security</a> extension for your test, or mock an authorization server using Wiremock.</p>
+</div>
+<div class="paragraph">
+<p>First of all, Wiremock needs to be added as a test dependency. For a Maven project that would happen like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;com.github.tomakehurst&lt;/groupId&gt;
+    &lt;artifactId&gt;wiremock-jre8&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+    &lt;version&gt;${wiremock.version}&lt;/version&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use a proper Wiremock version. All available versions can be found <a href="https://search.maven.org/artifact/com.github.tomakehurst/wiremock-jre8">here</a>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In Quarkus tests when some service needs to be started before the Quarkus tests are ran, we utilize the <code>@io.quarkus.test.common.QuarkusTestResource</code>
+annotation to specify a <code>io.quarkus.test.common.QuarkusTestResourceLifecycleManager</code> which can start the service and supply configuration
+values that Quarkus will use.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For more details about <code>@QuarkusTestResource</code> refer to  <a href="getting-started-testing#quarkus-test-resource">this part of the documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s create an implementation of <code>QuarkusTestResourceLifecycleManager</code> called <code>MockAuthorizationServerTestResource</code> like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+
+import java.util.Collections;
+import java.util.Map;
+
+public class MockAuthorizationServerTestResource implements QuarkusTestResourceLifecycleManager {  <i class="conum" data-value="1"></i><b>(1)</b>
+
+    private WireMockServer wireMockServer;
+
+    @Override
+    public Map&lt;String, String&gt; start() {
+        wireMockServer = new WireMockServer();
+        wireMockServer.start(); <i class="conum" data-value="2"></i><b>(2)</b>
+
+        // define the mock for the introspect endpoint
+        WireMock.stubFor(WireMock.post("/introspect").willReturn(WireMock.aResponse() <i class="conum" data-value="3"></i><b>(3)</b>
+                .withBody(
+                        "{\"active\":true,\"scope\":\"Echoer\",\"username\":null,\"iat\":1562315654,\"exp\":1562317454,\"expires_in\":1458,\"client_id\":\"my_client_id\"}")));
+
+
+        return Collections.singletonMap("quarkus.oauth2.introspection-url", wireMockServer.baseUrl() + "/introspect"); <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+
+    @Override
+    public void stop() {
+        if (null != wireMockServer) {
+            wireMockServer.stop();  <i class="conum" data-value="5"></i><b>(5)</b>
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>start</code> method is invoked by Quarkus before any test is run and returns a <code>Map</code> of configuration properties that apply during the test execution.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Launch Wiremock.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Configure Wiremock to stub the calls to <code>/introspect</code> by returning an OAuth2 introspect response. You need to customize this line to return what&#8217;s needed for your application (at least the scope property as roles are derived from the scope).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>As the <code>start</code> method returns configuration that applies for tests, we set the <code>quarkus.oauth2.introspection-url</code> property that controls the URL of the introspect endpoint used by the OAuth2 extension.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>When all tests have finished, shutdown Wiremock.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Your test class needs to be annotated like with <code>@QuarkusTestResource(MockAuthorizationServerTestResource.class)</code> to use this <code>QuarkusTestResourceLifecycleManager</code>.</p>
+</div>
+<div class="paragraph">
+<p>Below is an example of a test that uses the <code>MockAuthorizationServerTestResource</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@QuarkusTest
+@QuarkusTestResource(MockAuthorizationServerTestResource.class) <i class="conum" data-value="1"></i><b>(1)</b>
+class TokenSecuredResourceTest {
+    // use whatever token you want as the mock OAuth server will accept all tokens
+    private static final String BEARER_TOKEN = "337aab0f-b547-489b-9dbd-a54dc7bdf20d"; <i class="conum" data-value="2"></i><b>(2)</b>
+
+    @Test
+    void testPermitAll() {
+        RestAssured.given()
+                .when()
+                .header("Authorization", "Bearer: " + BEARER_TOKEN) <i class="conum" data-value="3"></i><b>(3)</b>
+                .get("/secured/permit-all")
+                .then()
+                .statusCode(200)
+                .body(containsString("hello"));
+    }
+
+    @Test
+    void testRolesAllowed() {
+        RestAssured.given()
+                .when()
+                .header("Authorization", "Bearer: " + BEARER_TOKEN)
+                .get("/secured/roles-allowed")
+                .then()
+                .statusCode(200)
+                .body(containsString("hello"));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use the previously created <code>MockAuthorizationServerTestResource</code> as a Quarkus test resource.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Define whatever token you want, it will not be validated by the OAuth2 mock authorization server.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Use this token inside the <code>Authorization</code> header to trigger OAuth2 authentication.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>@QuarkusTestResource</code> applies to all tests, not just <code>TokenSecuredResourceTest</code>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

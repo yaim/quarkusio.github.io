@@ -267,7 +267,7 @@ In Quarkus, the caching is done automatically.
 <div class="ulist">
 <ul>
 <li>
-<p><code>{! This is a comment !}</code>,</p>
+<p>Starts with <code>{!</code> and ends with <code>!}</code>:  <code>{! This is a comment !}</code>,</p>
 </li>
 <li>
 <p>Could be multi-line,</p>
@@ -312,6 +312,22 @@ In Quarkus, the caching is done automatically.
 </li>
 <li>
 <p>May declare nested section blocks: <code>{#if item.valid} Valid. {#else} Invalid. {/if}</code> and decide which block to render.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Unparsed Character Data</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Starts with <code>{[</code> and ends with <code>]}</code>: <code>{[ &lt;script&gt;if(true){alert('Qute is cute!')};&lt;/script&gt; ]}</code>,</p>
+</li>
+<li>
+<p>Could be multi-line,</p>
+</li>
+<li>
+<p>Used to mark the content that should be rendered but not parsed.</p>
 </li>
 </ul>
 </div>

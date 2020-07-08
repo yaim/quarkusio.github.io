@@ -91,16 +91,28 @@
 </li>
 <li><a href="#injection-into-tests">5. Injection into tests</a></li>
 <li><a href="#applying-interceptors-to-tests">6. Applying Interceptors to Tests</a></li>
-<li><a href="#mock-support">7. Mock Support</a>
+<li><a href="#testing-different-profiles">7. Testing Different Profiles</a>
 <ul class="sectlevel2">
-<li><a href="#cdi-alternative-mechanism">7.1. CDI <code>@Alternative</code> mechanism.</a></li>
-<li><a href="#mocking-using-quarkusmock">7.2. Mocking using QuarkusMock</a></li>
-<li><a href="#mocking-with-panache">7.3. Mocking with Panache</a></li>
+<li><a href="#writing-a-profile">7.1. Writing a Profile</a></li>
 </ul>
 </li>
-<li><a href="#starting-services-before-the-quarkus-application-starts">8. Starting services before the Quarkus application starts</a></li>
-<li><a href="#test-bootstrap-configuration-options">9. Test Bootstrap Configuration Options</a></li>
-<li><a href="#native-executable-testing">10. Native Executable Testing</a></li>
+<li><a href="#mock-support">8. Mock Support</a>
+<ul class="sectlevel2">
+<li><a href="#cdi-alternative-mechanism">8.1. CDI <code>@Alternative</code> mechanism.</a></li>
+<li><a href="#mocking-using-quarkusmock">8.2. Mocking using QuarkusMock</a></li>
+<li><a href="#mocking-with-panache">8.3. Mocking with Panache</a></li>
+</ul>
+</li>
+<li><a href="#quarkus-test-resource">9. Starting services before the Quarkus application starts</a></li>
+<li><a href="#test-bootstrap-configuration-options">10. Test Bootstrap Configuration Options</a></li>
+<li><a href="#native-executable-testing">11. Native Executable Testing</a></li>
+<li><a href="#test-from-ide">12. Running <code>@QuarkusTest</code> from an IDE</a>
+<ul class="sectlevel2">
+<li><a href="#eclipse-separate-jre-definition">12.1. Eclipse separate JRE definition</a></li>
+<li><a href="#vscode-run-with-configuration">12.2. VSCode "run with" configuration</a></li>
+<li><a href="#intellij-junit-template">12.3. IntelliJ JUnit template</a></li>
+</ul>
+</li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -219,13 +231,15 @@ must be set, as the default version does not support Junit 5:</p>
     &lt;configuration&gt;
        &lt;systemPropertyVariables&gt;
           &lt;java.util.logging.manager&gt;org.jboss.logmanager.LogManager&lt;/java.util.logging.manager&gt;
+          &lt;maven.home&gt;${maven.home}&lt;/maven.home&gt;
        &lt;/systemPropertyVariables&gt;
     &lt;/configuration&gt;
 &lt;/plugin&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>We also set the <code>java.util.logging</code> system property to make sure tests will use the correct logmanager.</p>
+<p>We also set the <code>java.util.logging</code> system property to make sure tests will use the correct logmanager and <code>maven.home</code> to ensure that custom configuration
+from <code>${maven.home}/conf/settings.xml</code> is applied (if any).</p>
 </div>
 <div class="paragraph">
 <p>The project should also contain a simple test:</p>
@@ -287,11 +301,12 @@ tests while having the application running in parallel.</p>
 <td class="content">
 <div class="title">Changing the test port</div>
 <div class="paragraph">
-<p>You can configure the port used by tests by configuring <code>quarkus.http.test-port</code> in your <code>application.properties</code>:</p>
+<p>You can configure the ports used by tests by configuring <code>quarkus.http.test-port</code> for HTTP and <code>quarkus.http.test-ssl-port</code> for HTTPS in your <code>application.properties</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.http.test-port=8083</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.http.test-port=8083
+quarkus.http.test-ssl-port=8446</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -479,14 +494,101 @@ public class TestStereotypeTestCase {
 </div>
 </div>
 <div class="sect1">
-<h2 id="mock-support"><a class="anchor" href="#mock-support"></a>7. Mock Support</h2>
+<h2 id="testing-different-profiles"><a class="anchor" href="#testing-different-profiles"></a>7. Testing Different Profiles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>So far in all our examples we only start Quarkus once for all tests. Before the first test is run Quarkus will boot,
+then all tests will run, then Quarkus will shutdown at the end. This makes for a very fast testing experience however
+it is a bit limited as you can&#8217;t test different configurations.</p>
+</div>
+<div class="paragraph">
+<p>To get around this Quarkus supports the idea of a test profile. If a test has a different profile to the previously
+run test then Quarkus will be shut down and started with the new profile before running the tests. This is obviously
+a bit slower, as it adds a shutdown/startup cycle to the test time, but gives a great deal of flexibility.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In order to reduce the amount of times Quarkus needs to restart it is recommended that you place all tests
+that need a specific profile into their own package, and then run tests alphabetically.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="writing-a-profile"><a class="anchor" href="#writing-a-profile"></a>7.1. Writing a Profile</h3>
+<div class="paragraph">
+<p>To implement a test profile we need to implement <code>io.quarkus.test.junit.QuarkusTestProfile</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started.testing;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+
+import io.quarkus.test.junit.QuarkusTestProfile;
+
+public class MockGreetingProfile implements QuarkusTestProfile {
+
+    @Override
+    public Map&lt;String, String&gt; getConfigOverrides() { <i class="conum" data-value="1"></i><b>(1)</b>
+        return Collections.singletonMap("quarkus.resteasy.path","/api");
+    }
+
+    @Override
+    public Set&lt;Class&lt;?&gt;&gt; getEnabledAlternatives() { <i class="conum" data-value="2"></i><b>(2)</b>
+        return Collections.singleton(MockGreetingService.class);
+    }
+
+
+    @Override
+    public String getConfigProfile() { <i class="conum" data-value="3"></i><b>(3)</b>
+        return "test";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This method allows us to override configuration properties. Here we are changing the JAX-RS root path.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This method allows us to enable CDI <code>@Alternative</code> beans. This makes it easy to mock out certain beans functionality.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This can be used to change the config profile. As this default is <code>test</code> this does nothing, but is included for completeness.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now we have defined our profile we need to include it on our test class. We do this with <code>@TestProfile(MockGreetingProfile.class)</code>.</p>
+</div>
+<div class="paragraph">
+<p>All the test profile config is stored in a single class, which makes it easy to tell if the previous test ran with the
+same configuration.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mock-support"><a class="anchor" href="#mock-support"></a>8. Mock Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus supports the use of mock objects using two different approaches. You can either use CDI alternatives to
 mock out a bean for all test classes, or use <code>QuarkusMock</code> to mock out beans on a per test basis.</p>
 </div>
 <div class="sect2">
-<h3 id="cdi-alternative-mechanism"><a class="anchor" href="#cdi-alternative-mechanism"></a>7.1. CDI <code>@Alternative</code> mechanism.</h3>
+<h3 id="cdi-alternative-mechanism"><a class="anchor" href="#cdi-alternative-mechanism"></a>8.1. CDI <code>@Alternative</code> mechanism.</h3>
 <div class="paragraph">
 <p>To use this simply override the bean you wish to mock with a class in the <code>src/test/java</code> directory, and put the <code>@Alternative</code> and <code>@Priority(1)</code> annotations on the bean.
 Alternatively, a convenient <code>io.quarkus.test.Mock</code> stereotype annotation could be used.
@@ -539,7 +641,7 @@ to be baked into the native image.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="mocking-using-quarkusmock"><a class="anchor" href="#mocking-using-quarkusmock"></a>7.2. Mocking using QuarkusMock</h3>
+<h3 id="mocking-using-quarkusmock"><a class="anchor" href="#mocking-using-quarkusmock"></a>8.2. Mocking using QuarkusMock</h3>
 <div class="paragraph">
 <p>The <code>io.quarkus.test.junit.QuarkusMock</code> class can be used to temporarily mock out any normal scoped
 bean. If you use this method in a <code>@BeforeAll</code> method the mock will take effect for all tests on the current class,
@@ -625,7 +727,7 @@ public class MockTestCase {
 objects to provide the behaviour you require.</p>
 </div>
 <div class="sect3">
-<h4 id="further-simplification-with-injectmock"><a class="anchor" href="#further-simplification-with-injectmock"></a>7.2.1. Further simplification with <code>@InjectMock</code></h4>
+<h4 id="further-simplification-with-injectmock"><a class="anchor" href="#further-simplification-with-injectmock"></a>8.2.1. Further simplification with <code>@InjectMock</code></h4>
 <div class="paragraph">
 <p>Building on the features provided by <code>QuarkusMock</code>, Quarkus also allows users to effortlessly take advantage of <a href="https://site.mockito.org/">Mockito</a> for mocking the beans supported by <code>QuarkusMock</code>.
 This functionality is available via the <code>@io.quarkus.test.junit.mockito.InjectMock</code> annotation which is available in the <code>quarkus-junit5-mockito</code> dependency.</p>
@@ -758,7 +860,7 @@ public class MockGreetingServiceTest {
 </div>
 </div>
 <div class="sect3">
-<h4 id="using-spies-instead-of-mocks-with-injectspy"><a class="anchor" href="#using-spies-instead-of-mocks-with-injectspy"></a>7.2.2. Using Spies instead of Mocks with <code>@InjectSpy</code></h4>
+<h4 id="using-spies-instead-of-mocks-with-injectspy"><a class="anchor" href="#using-spies-instead-of-mocks-with-injectspy"></a>8.2.2. Using Spies instead of Mocks with <code>@InjectSpy</code></h4>
 <div class="paragraph">
 <p>Building on the features provided by <code>InjectMock</code>, Quarkus also allows users to effortlessly take advantage of <a href="https://site.mockito.org/">Mockito</a> for spying on the beans supported by <code>QuarkusMock</code>.
 This functionality is available via the <code>@io.quarkus.test.junit.mockito.InjectSpy</code> annotation which is available in the <code>quarkus-junit5-mockito</code> dependency.</p>
@@ -840,7 +942,7 @@ public class SpyGreetingServiceTest {
 </div>
 </div>
 <div class="sect3">
-<h4 id="using-injectmock-with-restclient"><a class="anchor" href="#using-injectmock-with-restclient"></a>7.2.3. Using <code>@InjectMock</code> with <code>@RestClient</code></h4>
+<h4 id="using-injectmock-with-restclient"><a class="anchor" href="#using-injectmock-with-restclient"></a>8.2.3. Using <code>@InjectMock</code> with <code>@RestClient</code></h4>
 <div class="paragraph">
 <p>The <code>@RegisterRestClient</code> registers the implementation of the rest-client at runtime, and because the bean needs to be a regular scope, you have to annotate your interface with <code>@ApplicationScoped</code>.</p>
 </div>
@@ -895,7 +997,7 @@ public class GreetingResourceTest {
 </div>
 </div>
 <div class="sect2">
-<h3 id="mocking-with-panache"><a class="anchor" href="#mocking-with-panache"></a>7.3. Mocking with Panache</h3>
+<h3 id="mocking-with-panache"><a class="anchor" href="#mocking-with-panache"></a>8.3. Mocking with Panache</h3>
 <div class="paragraph">
 <p>If you are using the <code>quarkus-hibernate-orm-panache</code> or <code>quarkus-mongodb-panache</code> extensions, check out the <a href="hibernate-orm-panache#mocking">Hibernate ORM with Panache Mocking</a> and <a href="mongodb-panache#mocking">MongoDB with Panache Mocking</a> documentation for the easiest way to mock your data access.</p>
 </div>
@@ -903,7 +1005,7 @@ public class GreetingResourceTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="starting-services-before-the-quarkus-application-starts"><a class="anchor" href="#starting-services-before-the-quarkus-application-starts"></a>8. Starting services before the Quarkus application starts</h2>
+<h2 id="quarkus-test-resource"><a class="anchor" href="#quarkus-test-resource"></a>9. Starting services before the Quarkus application starts</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>A very common need is to start some services on which your Quarkus application depends, before the Quarkus application starts for testing. To address this need, Quarkus provides <code>@io.quarkus.test.common.QuarkusTestResource</code> and <code>io.quarkus.test.common.QuarkusTestResourceLifecycleManager</code>.</p>
@@ -921,7 +1023,7 @@ or starting a mock HTTP server using <a href="http://wiremock.org/">Wiremock</a>
 </div>
 </div>
 <div class="sect1">
-<h2 id="test-bootstrap-configuration-options"><a class="anchor" href="#test-bootstrap-configuration-options"></a>9. Test Bootstrap Configuration Options</h2>
+<h2 id="test-bootstrap-configuration-options"><a class="anchor" href="#test-bootstrap-configuration-options"></a>10. Test Bootstrap Configuration Options</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>There are a few system properties that can be used to tune the bootstrap of the test, specifically its classpath.</p>
@@ -942,7 +1044,7 @@ or starting a mock HTTP server using <a href="http://wiremock.org/">Wiremock</a>
 </div>
 </div>
 <div class="sect1">
-<h2 id="native-executable-testing"><a class="anchor" href="#native-executable-testing"></a>10. Native Executable Testing</h2>
+<h2 id="native-executable-testing"><a class="anchor" href="#native-executable-testing"></a>11. Native Executable Testing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>It is also possible to test native executables using <code>@NativeImageTest</code>. This supports all the features mentioned in this
@@ -950,6 +1052,67 @@ guide except injecting into tests (and the native executable runs in a separate 
 </div>
 <div class="paragraph">
 <p>This is covered in the <a href="building-native-image">Native Executable Guide</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="test-from-ide"><a class="anchor" href="#test-from-ide"></a>12. Running <code>@QuarkusTest</code> from an IDE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Most IDEs offer the possibility to run a selected class as JUnit test directly. For this you should set a few properties in the settings of your chosen IDE:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>java.util.logging.manager</code> (see <a href="logging">Logging Guide</a>)</p>
+</li>
+<li>
+<p><code>maven.home</code> (only if there are any custom settings in <code>${maven.home}/conf/settings.mxl</code>, see <a href="maven-tooling">Maven Guide</a>)</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="eclipse-separate-jre-definition"><a class="anchor" href="#eclipse-separate-jre-definition"></a>12.1. Eclipse separate JRE definition</h3>
+<div class="paragraph">
+<p>Copy your current "Installed JRE" definition into a new one, where you will add the properties as a new VM arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>-Djava.util.logging.manager=org.jboss.logmanager.LogManager</code></p>
+</li>
+<li>
+<p><code>-Dmaven.home=&lt;path-to-your-maven-installation&gt;</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Use this JRE definition as your Quarkus project targeted runtime and the workaround will be applied to any "Run as JUnit" configuration.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="vscode-run-with-configuration"><a class="anchor" href="#vscode-run-with-configuration"></a>12.2. VSCode "run with" configuration</h3>
+<div class="paragraph">
+<p>The <code>settings.json</code> placed in the root of your project directory or in the workspace will need the workaround in your test configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">"java.test.config": [
+    {
+        "name": "quarkusConfiguration",
+        "vmargs": [ "-Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dmaven.home=&lt;path-to-your-maven-installation&gt; ..." ],
+        ...
+    },
+  ...
+]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="intellij-junit-template"><a class="anchor" href="#intellij-junit-template"></a>12.3. IntelliJ JUnit template</h3>
+<div class="paragraph">
+<p>Nothing needed in IntelliJ because the IDE will pick the <code>systemPropertyVariables</code> from the surefire plugin configuration in <code>pom.xml</code>.</p>
+</div>
 </div>
 </div>
 </div>

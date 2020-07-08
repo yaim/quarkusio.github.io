@@ -685,7 +685,6 @@ Create the file <code>aggregator/src/main/resources/application.properties</code
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">quarkus.kafka-streams.bootstrap-servers=localhost:9092
-quarkus.kafka-streams.application-id=temperature-aggregator
 quarkus.kafka-streams.application-server=${hostname}:8080
 quarkus.kafka-streams.topics=weather-stations,temperature-values
 
@@ -700,7 +699,7 @@ kafka-streams.metrics.recording.level=DEBUG</code></pre>
 <div class="paragraph">
 <p>The options with the <code>quarkus.kafka-streams</code> prefix can be changed dynamically at application startup,
 e.g. via environment variables or system properties.
-<code>bootstrap-servers</code>, <code>application-id</code> and <code>application-server</code> are mapped to the Kafka Streams properties <code>bootstrap.servers</code>, <code>application.id</code> and <code>application.server</code>, respectively.
+<code>bootstrap-servers</code> and <code>application-server</code> are mapped to the Kafka Streams properties <code>bootstrap.servers</code> and <code>application.server</code>, respectively.
 <code>topics</code> is specific to Quarkus: the application will wait for all the given topics to exist before launching the Kafka Streams engine.
 This is to done to gracefully await the creation of topics that don&#8217;t yet exist at application startup time.</p>
 </div>
@@ -1634,93 +1633,7 @@ Refer to the Quarkus guides on <a href="microprofile-metrics">metrics</a> and <a
 <div class="sect1">
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
-<div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
-</div>
-<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
-<colgroup>
-<col style="width: 80%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-</colgroup>
-<tbody>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-kafka-streams_configuration"></a><a href="#quarkus-kafka-streams_configuration">Configuration property</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-kafka-streams_quarkus.kafka-streams.health.enabled"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.health.enabled">quarkus.kafka-streams.health.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Whether or not a health check is published in case the smallrye-health extension is present (defaults to true).</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.application-id"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.application-id">quarkus.kafka-streams.application-id</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>A unique identifier for this Kafka Streams application.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.bootstrap-servers"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.bootstrap-servers">quarkus.kafka-streams.bootstrap-servers</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>A comma-separated list of host:port pairs identifying the Kafka bootstrap server(s)</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of host:port</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost:9012</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.application-server"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.application-server">quarkus.kafka-streams.application-server</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>A unique identifier of this application instance, typically in the form host:port.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-kafka-streams_quarkus.kafka-streams.topics"></a><code><a href="#quarkus-kafka-streams_quarkus.kafka-streams.topics">quarkus.kafka-streams.topics</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>A comma-separated list of topic names. The pipeline will only be started once all these topics are present in the Kafka cluster.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
-</tr>
-</tbody>
-</table>
+
 </div>
 </div>
     </div>

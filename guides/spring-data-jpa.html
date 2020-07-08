@@ -840,20 +840,31 @@ quarkus.hibernate-orm.implicit-naming-strategy=org.springframework.boot.orm.jpa.
 </li>
 <li>
 <p>Customizing the base repository for all repository interfaces in the code base.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>In Spring Data JPA this is done by registering a class that extends <code>org.springframework.data.jpa.repository.support.SimpleJpaRepository</code> however in Quarkus this class
+is not used at all (since all the necessary plumbing is done at build time). Similar support might be added to Quarkus in the future.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>In Spring Data JPA this is done by registering a class that extends <code>org.springframework.data.jpa.repository.support.SimpleJpaRepository</code> however in Quarkus this class
-is not used at all (since all the necessary plumbing is done at build time). Similar support might be added to Quarkus in the future.</p>
-</div>
-<div class="ulist">
-<ul>
+</li>
 <li>
 <p>Using <code>java.util.concurrent.Future</code> and classes that extend it as return types of repository methods.</p>
 </li>
 <li>
 <p>Native and named queries when using <code>@Query</code></p>
+</li>
+<li>
+<p><a href="https://github.com/spring-projects/spring-data-jpa/blob/master/src/main/asciidoc/jpa.adoc#entity-state-detection-strategies">Entity State-detection Strategies</a>
+via <code>Persistable.isNew(&#8230;&#8203;)</code> or <code>EntityInformation</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>As of Quarkus 1.6.0, only "Version-Property and Id-Property inspection" is implemented (which should cover most cases).</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -897,6 +908,9 @@ Spring classes and annotations are only used for reading metadata and / or are u
 </li>
 <li>
 <p><a href="spring-cache">Quarkus - Extension for Spring Cache</a></p>
+</li>
+<li>
+<p><a href="spring-scheduled">Quarkus - Extension for Spring Scheduled</a></p>
 </li>
 </ul>
 </div>

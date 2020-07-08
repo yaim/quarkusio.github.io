@@ -127,6 +127,53 @@ detail the specific configuration properties.</p>
 </colgroup>
 <tbody>
 <tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security_configuration"></a><a href="#quarkus-elytron-security_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security_quarkus.security.users.embedded.plain-text"></a><code><a href="#quarkus-elytron-security_quarkus.security.users.embedded.plain-text">quarkus.security.users.embedded.plain-text</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the properties are stored in plain text. If this is false (the default) then it is expected that the passwords are of the form HEX( MD5( username ":" realm ":" password ) )</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security_quarkus.security.users.embedded.users-users"></a><code><a href="#quarkus-elytron-security_quarkus.security.users.embedded.users-users">quarkus.security.users.embedded.users</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The realm users user1=password\nuser2=password2&#8230;&#8203; mapping. See <a href="#embedded-users">Embedded Users</a>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security_quarkus.security.users.embedded.roles-roles"></a><code><a href="#quarkus-elytron-security_quarkus.security.users.embedded.roles-roles">quarkus.security.users.embedded.roles</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The realm roles user1=role1,role2,&#8230;&#8203;\nuser2=role1,role2,&#8230;&#8203; mapping See <a href="#embedded-roles">Embedded Roles</a>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-elytron-security_quarkus.security.users.file"></a><a href="#quarkus-elytron-security_quarkus.security.users.file">Property Files Realm Configuration</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -222,20 +269,6 @@ detail the specific configuration properties.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security_quarkus.security.users.embedded.plain-text"></a><code><a href="#quarkus-elytron-security_quarkus.security.users.embedded.plain-text">quarkus.security.users.embedded.plain-text</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If the properties are stored in plain text. If this is false (the default) then it is expected that the passwords are of the form HEX( MD5( username ":" realm ":" password ) )</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security_quarkus.security.users.embedded.enabled"></a><code><a href="#quarkus-elytron-security_quarkus.security.users.embedded.enabled">quarkus.security.users.embedded.enabled</a></code></p>
 </div>
 <div class="openblock description">
@@ -247,34 +280,6 @@ detail the specific configuration properties.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security_quarkus.security.users.embedded.users-users"></a><code><a href="#quarkus-elytron-security_quarkus.security.users.embedded.users-users">quarkus.security.users.embedded.users</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The realm users user1=password\nuser2=password2&#8230;&#8203; mapping. See <a href="#embedded-users">Embedded Users</a>.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-elytron-security_quarkus.security.users.embedded.roles-roles"></a><code><a href="#quarkus-elytron-security_quarkus.security.users.embedded.roles-roles">quarkus.security.users.embedded.roles</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The realm roles user1=role1,role2,&#8230;&#8203;\nuser2=role1,role2,&#8230;&#8203; mapping See <a href="#embedded-roles">Embedded Roles</a>.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>none</code></p></td>
 </tr>
 </tbody>
 </table>

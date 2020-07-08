@@ -221,10 +221,10 @@ with the following extensions, for Maven or Gradle:</p>
 <p>RESTEasy Jackson (<code>quarkus-resteasy-jackson</code>)</p>
 </li>
 <li>
-<p>OptaPlanner (<code>quarkus-optaplanner</code>)</p>
+<p>OptaPlanner (<code>optaplanner-quarkus</code>)</p>
 </li>
 <li>
-<p>OptaPlanner Jackson (<code>quarkus-optaplanner-jackson</code>)</p>
+<p>OptaPlanner Jackson (<code>optaplanner-quarkus-jackson</code>)</p>
 </li>
 </ul>
 </div>
@@ -266,12 +266,12 @@ cd optaplanner-quickstart</code></pre>
       &lt;artifactId&gt;quarkus-resteasy-jackson&lt;/artifactId&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
-      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-      &lt;artifactId&gt;quarkus-optaplanner&lt;/artifactId&gt;
+      &lt;groupId&gt;org.optaplanner&lt;/groupId&gt;
+      &lt;artifactId&gt;optaplanner-quarkus&lt;/artifactId&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
-      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-      &lt;artifactId&gt;quarkus-optaplanner-jackson&lt;/artifactId&gt;
+      &lt;groupId&gt;org.optaplanner&lt;/groupId&gt;
+      &lt;artifactId&gt;optaplanner-quarkus-jackson&lt;/artifactId&gt;
     &lt;/dependency&gt;
 
     &lt;dependency&gt;
@@ -309,11 +309,11 @@ and there are no time slots during lunch or other breaks.</p>
 So there is no need for <a href="https://docs.optaplanner.org/latestFinal/optaplanner-docs/html_single/index.html#continuousPlanning">continuous planning</a>.</p>
 </div>
 <div class="paragraph">
-<p>Create the <code>src/main/java/org/acme/domain/Timeslot.java</code> class:</p>
+<p>Create the <code>src/main/java/org/acme/optaplanner/domain/Timeslot.java</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.domain;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.optaplanner.domain;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -347,7 +347,7 @@ public class Timeslot {
 
     @Override
     public String toString() {
-        return dayOfWeek + " " + startTime.toString();
+        return dayOfWeek + " " + startTime;
     }
 
 }</code></pre>
@@ -371,11 +371,11 @@ For simplicity&#8217;s sake, all rooms are without capacity limits
 and they can accommodate all lessons.</p>
 </div>
 <div class="paragraph">
-<p>Create the <code>src/main/java/org/acme/domain/Room.java</code> class:</p>
+<p>Create the <code>src/main/java/org/acme/optaplanner/domain/Room.java</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.domain;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.optaplanner.domain;
 
 public class Room {
 
@@ -435,11 +435,11 @@ both the <code>timeslot</code> and <code>room</code> fields require an <code>@Pl
 Their containing class, <code>Lesson</code>, requires an <code>@PlanningEntity</code> annotation.</p>
 </div>
 <div class="paragraph">
-<p>Create the <code>src/main/java/org/acme/domain/Lesson.java</code> class:</p>
+<p>Create the <code>src/main/java/org/acme/optaplanner/domain/Lesson.java</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.domain;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.optaplanner.domain;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
@@ -617,15 +617,15 @@ every time a lesson is assigned to a different time slot or room,
 all lessons are re-evaluated to calculate the new score.</p>
 </div>
 <div class="paragraph">
-<p>Instead, create a <code>src/main/java/org/acme/solver/TimeTableConstraintProvider.java</code> class
+<p>Instead, create a <code>src/main/java/org/acme/optaplanner/solver/TimeTableConstraintProvider.java</code> class
 to perform incremental score calculation.
 It uses OptaPlanner&#8217;s ConstraintStream API which is inspired by Java 8 Streams and SQL:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.solver;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.optaplanner.solver;
 
-import org.acme.domain.Lesson;
+import org.acme.optaplanner.domain.Lesson;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
@@ -713,11 +713,11 @@ for example, a solution with the score <code>0hard/-7soft</code>.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Create the <code>src/main/java/org/acme/domain/TimeTable.java</code> class:</p>
+<p>Create the <code>src/main/java/org/acme/optaplanner/domain/TimeTable.java</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.domain;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.optaplanner.domain;
 
 import java.util.List;
 
@@ -882,11 +882,11 @@ which runs solvers in a separate thread pool
 and can solve multiple datasets in parallel.</p>
 </div>
 <div class="paragraph">
-<p>Create the <code>src/main/java/org/acme/solver/TimeTableResource.java</code> class:</p>
+<p>Create the <code>src/main/java/org/acme/optaplanner/rest/TimeTableResource.java</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.rest;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.optaplanner.rest;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -897,7 +897,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.acme.domain.TimeTable;
+import org.acme.optaplanner.domain.TimeTable;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
 
@@ -1015,11 +1015,11 @@ For example, M. Curie&#8217;s two lessons are in different time slots.</p>
 In a JUnit test, generate a test dataset and send it to the <code>TimeTableResource</code> to solve.</p>
 </div>
 <div class="paragraph">
-<p>Create the <code>src/test/java/org/acme/solver/TimeTableResourceTest.java</code> class:</p>
+<p>Create the <code>src/test/java/org/acme/optaplanner/rest/TimeTableResourceTest.java</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme;
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.optaplanner.rest;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -1029,11 +1029,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.quarkus.test.junit.QuarkusTest;
-import org.acme.domain.Room;
-import org.acme.domain.Timeslot;
-import org.acme.domain.Lesson;
-import org.acme.domain.TimeTable;
-import org.acme.rest.TimeTableResource;
+import org.acme.optaplanner.domain.Room;
+import org.acme.optaplanner.domain.Timeslot;
+import org.acme.optaplanner.domain.Lesson;
+import org.acme.optaplanner.domain.TimeTable;
+import org.acme.optaplanner.rest.TimeTableResource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 

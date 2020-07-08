@@ -531,6 +531,20 @@ class GreetingProcessor {
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>FeatureBuildItem</code> represents a functionality provided by an extension.
+The name of the feature gets displayed in the log during application bootstrap.
+An extension should provide at most one feature.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Be patient, we will explain the <code>Build Step Processor</code> concept and all the extension deployment API later on.
 At this point, you just need to understand that this class explains to Quarkus how to deploy a feature named <code>greeting</code> which is your extension.
@@ -916,6 +930,7 @@ That&#8217;s why the tests will be hosted in the <code>deployment</code> module.
                 &lt;configuration&gt;
                     &lt;systemPropertyVariables&gt;
                         &lt;java.util.logging.manager&gt;org.jboss.logmanager.LogManager&lt;/java.util.logging.manager&gt;
+                        &lt;maven.home&gt;${maven.home}&lt;/maven.home&gt;
                     &lt;/systemPropertyVariables&gt;
                 &lt;/configuration&gt;
             &lt;/plugin&gt;

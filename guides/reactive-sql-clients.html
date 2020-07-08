@@ -101,6 +101,7 @@
 <ul class="sectlevel2">
 <li><a href="#common-datasource">Common Datasource</a></li>
 <li><a href="#reactive-datasource">Reactive Datasource</a></li>
+<li><a href="#db2">DB2</a></li>
 <li><a href="#mariadbmysql">MariaDB/MySQL</a></li>
 <li><a href="#postgresql">PostgreSQL</a></li>
 </ul>
@@ -115,6 +116,9 @@ Currently, the following database servers are supported:</p>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p>DB2</p>
+</li>
 <li>
 <p>PostgreSQL</p>
 </li>
@@ -426,7 +430,7 @@ A <code>RowSet</code> is an <code>java.lang.Iterable&lt;Row&gt;</code> and thus 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">Multi&lt;Fruit&gt; fruits = rowSet
-  .onItem().produceMulti(set -&gt; Multi.createFrom().items(() -&gt; StreamSupport.stream(set.spliterator(), false)))
+  .onItem().produceMulti(set -&gt; Multi.createFrom().iterable(set))
   .onItem().apply(Fruit::from);</code></pre>
 </div>
 </div>
@@ -450,7 +454,7 @@ It is extracted as a convenience for the implementation of the other data manage
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public static Multi&lt;Fruit&gt; findAll(PgPool client) {
     return client.query("SELECT id, name FROM fruits ORDER BY name ASC").execute()
-            .onItem().produceMulti(set -&gt; Multi.createFrom().items(() -&gt; StreamSupport.stream(set.spliterator(), false)))
+            .onItem().produceMulti(set -&gt; Multi.createFrom().iterable(set))
             .onItem().apply(Fruit::from);
 }</code></pre>
 </div>
@@ -764,14 +768,19 @@ Navigate to <a href="http://localhost:8080/fruits.html" class="bare">http://loca
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PostgreSQL</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus-reactive-pg-client</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.mutiny.pgclient.PgPool</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DB2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus-reactive-db2-client</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.mutiny.db2client.DB2Pool</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">MariaDB/MySQL</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus-reactive-mysql-client</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.mutiny.mysqlclient.MySQLPool</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PostgreSQL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus-reactive-pg-client</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.mutiny.pgclient.PgPool</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -796,49 +805,45 @@ All these operations are asynchronous:</p>
 </ul>
 </div>
 <div class="paragraph">
+<p>Managing transactions in the reactive programming world can be cumbersome.
+Instead of writing repetitive and complex (thus error-prone!) code, you can use the <code>io.vertx.mutiny.sqlclient.SqlClientHelper</code>.</p>
+</div>
+<div class="paragraph">
 <p>The following snippet shows how to run 2 insertions in the same transaction:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public static Uni&lt;Void&gt; insertTwoFruits(PgPool client, Fruit fruit1, Fruit fruit2) {
-    return client.begin()
-            .flatMap(tx -&gt; {
-                Uni&lt;RowSet&lt;Row&gt;&gt; insertOne = tx.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)")
-                        .execute(Tuple.of(fruit1.name));
-                Uni&lt;RowSet&lt;Row&gt;&gt; insertTwo = tx.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)")
-                        .execute(Tuple.of(fruit2.name));
+    return SqlClientHelper.inTransactionUni(client, tx -&gt; {
+        Uni&lt;RowSet&lt;Row&gt;&gt; insertOne = tx.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)")
+                .execute(Tuple.of(fruit1.name));
+        Uni&lt;RowSet&lt;Row&gt;&gt; insertTwo = tx.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)")
+                .execute(Tuple.of(fruit2.name));
 
-                return insertOne.and(insertTwo)
-                        // Ignore the results (the two ids)
-                        .onItem().ignore().andContinueWithNull()
-                        // on success, commit
-                        .onItem().produceUni(x -&gt; tx.commit())
-                        // on failure rollback
-                        .onFailure().recoverWithUni(tx::rollback);
-            });
+        return insertOne.and(insertTwo)
+                // Ignore the results (the two ids)
+                .onItem().ignore().andContinueWithNull();
+    });
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this example, the two insertions are not dependent on each other and are executed concurrently (but in the same transaction).
-This transaction is committed on success and rolled back on failure.</p>
+<p>In this example, the transaction is automatically committed on success or rolled back on failure.</p>
 </div>
 <div class="paragraph">
 <p>You can also create dependent actions as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">return this.client.begin()
-       .flatMap(tx -&gt; tx
-               .preparedQuery("INSERT INTO person (firstname,lastname) VALUES ($1,$2) RETURNING (id)",
-                       Tuple.of(person.getFirstName(),person.getLastName()))
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">return SqlClientHelper.inTransactionUni(client, tx -&gt; tx
 
-               .onItem().produceUni(id-&gt; tx.preparedQuery("INSERT INTO addr (person_id,addrline1) VALUES ($1,$2)",
-                       Tuple.of(id.iterator().next().getLong("id"),person.getLastName())))
+        .preparedQuery("INSERT INTO person (firstname,lastname) VALUES ($1,$2) RETURNING (id)")
+                .execute(Tuple.of(person.getFirstName(), person.getLastName()))
 
-               .onItem().produceUni(res -&gt; tx.commit())
-               .onFailure().recoverWithUni(ex-&gt; tx.rollback())
-       );</code></pre>
+        .onItem().produceUni(id -&gt; tx.preparedQuery("INSERT INTO addr (person_id,addrline1) VALUES ($1,$2)")
+                .execute(Tuple.of(id.iterator().next().getLong("id"), person.getLastName())))
+
+        .onItem().ignore().andContinueWithNull());</code></pre>
 </div>
 </div>
 </div>
@@ -958,7 +963,7 @@ This transaction is committed on success and rolled back on failure.</p>
 <div class="content">
 <div class="paragraph">
 <p>The credentials provider bean name.
- It is the <code>&#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
+ It is the <code>&amp;#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
  For Vault it is: vault-credentials-provider. Not necessary if there is only one credentials provider available.</p>
 </div>
 </div>
@@ -1047,7 +1052,7 @@ This transaction is committed on success and rolled back on failure.</p>
 <div class="content">
 <div class="paragraph">
 <p>The credentials provider bean name.
- It is the <code>&#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
+ It is the <code>&amp;#64;Named</code> value of the credentials provider bean. It is used to discriminate if multiple CredentialsProvider beans are available.
  For Vault it is: vault-credentials-provider. Not necessary if there is only one credentials provider available.</p>
 </div>
 </div>
@@ -1103,6 +1108,20 @@ This transaction is committed on success and rolled back on failure.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.cache-prepared-statements"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.cache-prepared-statements">quarkus.datasource.reactive.cache-prepared-statements</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether prepared statements should be cached on the client side.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.url"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.url">quarkus.datasource.reactive.url</a></code></p>
 </div>
 <div class="openblock description">
@@ -1129,6 +1148,306 @@ This transaction is committed on success and rolled back on failure.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-all"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-all">quarkus.datasource.reactive.trust-all</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether all server certificates should be trusted.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pem"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pem">quarkus.datasource.reactive.trust-certificate-pem</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>PEM Trust config is disabled by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pem.certs"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pem.certs">quarkus.datasource.reactive.trust-certificate-pem.certs</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Comma-separated list of the trust certificate files (Pem format).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-jks"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-jks">quarkus.datasource.reactive.trust-certificate-jks</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>JKS config is disabled by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-jks.path"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-jks.path">quarkus.datasource.reactive.trust-certificate-jks.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path of the key file (JKS format).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-jks.password"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-jks.password">quarkus.datasource.reactive.trust-certificate-jks.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Password of the key file.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pfx"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pfx">quarkus.datasource.reactive.trust-certificate-pfx</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>PFX config is disabled by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pfx.path"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pfx.path">quarkus.datasource.reactive.trust-certificate-pfx.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path to the key file (PFX format).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pfx.password"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.trust-certificate-pfx.password">quarkus.datasource.reactive.trust-certificate-pfx.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Password of the key.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pem"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pem">quarkus.datasource.reactive.key-certificate-pem</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>PEM Key/cert config is disabled by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pem.keys"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pem.keys">quarkus.datasource.reactive.key-certificate-pem.keys</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Comma-separated list of the path to the key files (Pem format).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pem.certs"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pem.certs">quarkus.datasource.reactive.key-certificate-pem.certs</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Comma-separated list of the path to the certificate files (Pem format).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-jks"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-jks">quarkus.datasource.reactive.key-certificate-jks</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>JKS config is disabled by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-jks.path"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-jks.path">quarkus.datasource.reactive.key-certificate-jks.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path of the key file (JKS format).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-jks.password"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-jks.password">quarkus.datasource.reactive.key-certificate-jks.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Password of the key file.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pfx"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pfx">quarkus.datasource.reactive.key-certificate-pfx</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>PFX config is disabled by default.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pfx.path"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pfx.path">quarkus.datasource.reactive.key-certificate-pfx.path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Path to the key file (PFX format).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pfx.password"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.key-certificate-pfx.password">quarkus.datasource.reactive.key-certificate-pfx.password</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Password of the key.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-datasource_quarkus.datasource.reactive.thread-local"></a><code><a href="#quarkus-reactive-datasource_quarkus.datasource.reactive.thread-local">quarkus.datasource.reactive.thread-local</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Experimental: use one connection pool per thread.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="db2"><a class="anchor" href="#db2"></a>DB2</h3>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-db2-client_configuration"></a><a href="#quarkus-reactive-db2-client_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-db2-client_quarkus.datasource.reactive.db2.cache-prepared-statements"></a><code><a href="#quarkus-reactive-db2-client_quarkus.datasource.reactive.db2.cache-prepared-statements">quarkus.datasource.reactive.db2.cache-prepared-statements</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether prepared statements should be cached on the client side.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1148,20 +1467,6 @@ This transaction is committed on success and rolled back on failure.</p>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-reactive-mysql-client_configuration"></a><a href="#quarkus-reactive-mysql-client_configuration">Configuration property</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-reactive-mysql-client_quarkus.datasource.reactive.mysql.cache-prepared-statements"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.datasource.reactive.mysql.cache-prepared-statements">quarkus.datasource.reactive.mysql.cache-prepared-statements</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Whether prepared statements should be cached on the client side.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1191,6 +1496,21 @@ This transaction is committed on success and rolled back on failure.</p>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-mysql-client_quarkus.datasource.reactive.mysql.ssl-mode"></a><code><a href="#quarkus-reactive-mysql-client_quarkus.datasource.reactive.mysql.ssl-mode">quarkus.datasource.reactive.mysql.ssl-mode</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Desired security state of the connection to the server.
+ See <a href="https://dev.mysql.com/doc/refman/8.0/en/connection-options.html#option_general_ssl-mode">MySQL Reference Manual</a>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>disabled</code>, <code>preferred</code>, <code>required</code>, <code>verify-ca</code>, <code>verify-identity</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>disabled</code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1213,20 +1533,6 @@ This transaction is committed on success and rolled back on failure.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-reactive-pg-client_quarkus.datasource.reactive.postgresql.cache-prepared-statements"></a><code><a href="#quarkus-reactive-pg-client_quarkus.datasource.reactive.postgresql.cache-prepared-statements">quarkus.datasource.reactive.postgresql.cache-prepared-statements</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Whether prepared statements should be cached on the client side.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-reactive-pg-client_quarkus.datasource.reactive.postgresql.pipelining-limit"></a><code><a href="#quarkus-reactive-pg-client_quarkus.datasource.reactive.postgresql.pipelining-limit">quarkus.datasource.reactive.postgresql.pipelining-limit</a></code></p>
 </div>
 <div class="openblock description">
@@ -1238,6 +1544,21 @@ This transaction is committed on success and rolled back on failure.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-reactive-pg-client_quarkus.datasource.reactive.postgresql.ssl-mode"></a><code><a href="#quarkus-reactive-pg-client_quarkus.datasource.reactive.postgresql.ssl-mode">quarkus.datasource.reactive.postgresql.ssl-mode</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>SSL operating mode of the client.
+ See <a href="https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION">Protection Provided in Different Modes</a>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>disable</code>, <code>allow</code>, <code>prefer</code>, <code>require</code>, <code>verify-ca</code>, <code>verify-full</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>disable</code></p></td>
 </tr>
 </tbody>
 </table>

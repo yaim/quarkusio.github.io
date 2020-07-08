@@ -448,6 +448,66 @@ When you want to reference your attachment, for instance in the <code>src</code>
 </div>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("")
+public class MailingResource {
+
+    @CheckedTemplate
+    class Templates {
+        public static native MailTemplateInstance hello(String name); <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    @GET
+    @Path("/mail")
+    public CompletionStage&lt;Response&gt; send() {
+        // the template looks like: Hello {name}! <i class="conum" data-value="2"></i><b>(2)</b>
+        return Templates.hello("John")
+           .to("to@acme.org") <i class="conum" data-value="3"></i><b>(3)</b>
+           .subject("Hello from Qute template")
+           .send() <i class="conum" data-value="4"></i><b>(4)</b>
+           .subscribeAsCompletionStage()
+           .thenApply(x -&gt; Response.accepted().build());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>By convention, the enclosing class name and method names are used to locate the template. In this particular case,
+we will use the <code>MailingResource/hello.html</code> and <code>MailingResource/hello.txt</code> templates to create the message body.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Set the data used in the template.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Create a mail template instance and set the recipient.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>MailTemplate.send()</code> triggers the rendering and, once finished, sends the e-mail via a <code>Mailer</code> instance.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Injected mail templates are validated during build. If there is no matching template in <code>src/main/resources/templates</code> the build fails.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can also do this without type-safe templates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
 MailTemplate hello; <i class="conum" data-value="1"></i><b>(1)</b>
 

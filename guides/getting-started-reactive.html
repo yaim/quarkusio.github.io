@@ -688,23 +688,23 @@ public class Fruit {
     }
 
     public static Uni&lt;Fruit&gt; findById(PgPool client, Long id) {
-        return client.preparedQuery("SELECT id, name FROM fruits WHERE id = $1", Tuple.of(id)).execute()
+        return client.preparedQuery("SELECT id, name FROM fruits WHERE id = $1").execute(Tuple.of(id))
                 .onItem().apply(RowSet::iterator)
                 .onItem().apply(iterator -&gt; iterator.hasNext() ? from(iterator.next()) : null);
     }
 
     public Uni&lt;Long&gt; save(PgPool client) {
-        return client.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)", Tuple.of(name)).execute()
+        return client.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)").execute(Tuple.of(name))
                 .onItem().apply(pgRowSet -&gt; pgRowSet.iterator().next().getLong("id"));
     }
 
     public Uni&lt;Boolean&gt; update(PgPool client) {
-        return client.preparedQuery("UPDATE fruits SET name = $1 WHERE id = $2", Tuple.of(name, id)).execute()
+        return client.preparedQuery("UPDATE fruits SET name = $1 WHERE id = $2").execute(Tuple.of(name, id))
                 .onItem().apply(pgRowSet -&gt; pgRowSet.rowCount() == 1);
     }
 
     public static Uni&lt;Boolean&gt; delete(PgPool client, Long id) {
-        return client.preparedQuery("DELETE FROM fruits WHERE id = $1", Tuple.of(id)).execute()
+        return client.preparedQuery("DELETE FROM fruits WHERE id = $1").execute(Tuple.of(id))
                 .onItem().apply(pgRowSet -&gt; pgRowSet.rowCount() == 1);
     }
 

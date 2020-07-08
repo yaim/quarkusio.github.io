@@ -273,7 +273,7 @@ import org.eclipse.microprofile.health.Liveness;
 import javax.enterprise.context.ApplicationScoped;
 
 @Liveness
-@ApplicationScoped
+@ApplicationScoped <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
 public class SimpleHealthCheck implements HealthCheck {
 
     @Override
@@ -283,10 +283,20 @@ public class SimpleHealthCheck implements HealthCheck {
 }</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>It&#8217;s recommended to annotate the health check class with <code>@ApplicationScoped</code> or the <code>@Singleton</code> scope so that a single bean instance is used for all health check requests.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If a bean class annotated with one of the health check annotations declares no scope then the <code>@Singleton</code> scope is used automatically.</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>As you can see health check procedures are defined as implementations of the
-<code>HealthCheck</code> interface which are defined as CDI beans with the one of the
-following CDI qualifiers:</p>
+<p>As you can see, the health check procedures are defined as CDI beans that implement the <code>HealthCheck</code> interface and are annotated with one of the health check qualifiers, such as:</p>
 </div>
 <div class="ulist">
 <ul>

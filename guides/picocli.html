@@ -85,6 +85,7 @@
 <li><a href="#command-line-application-with-multiple-commands">Command line application with multiple Commands</a></li>
 <li><a href="#customizing-picocli-commandline-instance">Customizing Picocli CommandLine instance</a></li>
 <li><a href="#different-entry-command-for-each-profile">Different entry command for each profile</a></li>
+<li><a href="#configure-cdi-beans-with-parsed-arguments">Configure CDI Beans with parsed arguments</a></li>
 <li><a href="#providing-own-quarkusmain">Providing own QuarkusMain</a></li>
 <li><a href="#native-mode-support">Native mode support</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a></li>
@@ -211,6 +212,35 @@ class GreetingService {
 <td>All classes annotated with <code>picocli.CommandLine.Command</code> are registered as CDI beans.</td>
 </tr>
 </table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Beans with <code>@CommandLine.Command</code> should not use proxied scopes (e.g. do not use <code>@ApplicationScope</code>)
+because Picocli will not be able set field values in such beans. This extension will register classes with <code>@CommandLine.Command</code> annotation
+using <code>@Depended</code> scope. If you need to use proxied scope, then annotate setter and not field, for example:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@CommandLine.Command
+@ApplicationScoped
+public class EntryCommand {
+    private String name;
+
+    @CommandLine.Option(names = "-n")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -342,6 +372,58 @@ public class Config {
 </div>
 </div>
 <div class="sect1">
+<h2 id="configure-cdi-beans-with-parsed-arguments"><a class="anchor" href="#configure-cdi-beans-with-parsed-arguments"></a>Configure CDI Beans with parsed arguments</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use <code>Event&lt;CommandLine.ParseResult&gt;</code> or just <code>CommandLine.ParseResult</code> to configure CDI beans based on arguments parsed by Picocli.
+This event will be generated in <code>QuarkusApplication</code> class created by this extension. If you are providing your own <code>@QuarkusMain</code> this event will not be raised.
+<code>CommandLine.ParseResult</code> is created from default <code>CommandLine</code> bean.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@CommandLine.Command
+public class EntryCommand implements Runnable {
+
+    @CommandLine.Option(names = "-c", description = "JDBC connection string")
+    String connectionString;
+
+    @Inject
+    DataSource dataSource;
+
+    @Override
+    public void run() {
+        try (Connection c = dataSource.getConnection()) {
+            // Do something
+        } catch (SQLException throwables) {
+            // Handle error
+        }
+    }
+}
+
+@ApplicationScoped
+class DatasourceConfiguration {
+
+    @Produces
+    @ApplicationScoped <i class="conum" data-value="1"></i><b>(1)</b>
+    DataSource dataSource(CommandLine.ParseResult parseResult) {
+        PGSimpleDataSource ds = new PGSimpleDataSource();
+        ds.setURL(parseResult.matchedOption("c").getValue().toString());
+        return ds;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>@ApplicationScoped</code> used for lazy initialization</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="providing-own-quarkusmain"><a class="anchor" href="#providing-own-quarkusmain"></a>Providing own QuarkusMain</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -413,54 +495,7 @@ annotationProcessor 'info.picocli:picocli-codegen'</code></pre>
 <div class="sect1">
 <h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuration Reference</h2>
 <div class="sectionbody">
-<div class="paragraph configuration-legend">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
-</div>
-<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
-<colgroup>
-<col style="width: 80%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-</colgroup>
-<tbody>
-<tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-picocli_configuration"></a><a href="#quarkus-picocli_configuration">Configuration property</a></p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
-<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-picocli_quarkus.picocli.native-image.processing.enable"></a><code><a href="#quarkus-picocli_quarkus.picocli.native-image.processing.enable">quarkus.picocli.native-image.processing.enable</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Set this to false to use the <code>picocli-codegen</code> annotation processor instead of build steps.
- CAUTION: this will have serious build-time performance impact since this is run on every restart in devmode, use with care!
- This property is intended to be used only in cases where an incompatible change in the picocli library causes problems in the build steps used to support GraalVM Native images.
- In such cases this property allows users to make the trade-off between fast build cycles with the older version of picocli, and temporarily accept slower build cycles with the latest version of picocli until the updated extension is available.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-picocli_quarkus.picocli.top-command"></a><code><a href="#quarkus-picocli_quarkus.picocli.top-command">quarkus.picocli.top-command</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Name of bean annotated with <code>io.quarkus.picocli.runtime.annotations.TopCommand</code> or FQCN of class which will be used as entry point for Picocli CommandLine instance. This class needs to be annotated with <code>picocli.CommandLine.Command</code>.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-</tbody>
-</table>
+
 </div>
 </div>
     </div>

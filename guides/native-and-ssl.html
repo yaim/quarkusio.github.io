@@ -244,7 +244,13 @@ If you don&#8217;t plan on using native executables, you can pass your way as in
 <p>the OAuth2 extension (<code>quarkus-elytron-security-oauth2</code>),</p>
 </li>
 <li>
-<p>the REST client extension (<code>quarkus-rest-client</code>).</p>
+<p>the REST client extension (<code>quarkus-rest-client</code>),</p>
+</li>
+<li>
+<p>the Reactive client for PostgreSQL extension (<code>quarkus-reactive-pg-client</code>).</p>
+</li>
+<li>
+<p>the Reactive client for MySQL extension (<code>quarkus-reactive-mysql-client</code>).</p>
 </li>
 </ul>
 </div>
@@ -256,8 +262,8 @@ If you don&#8217;t plan on using native executables, you can pass your way as in
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ ls -lh target/rest-client-1.0-SNAPSHOT-runner
--rwxrwxr-x. 1 gsmet gsmet 34M Feb 22 15:27 target/rest-client-1.0-SNAPSHOT-runner</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">$ ls -lh target/rest-client-quickstart-1.0-SNAPSHOT-runner
+-rwxrwxr-x. 1 gandrian gandrian 46M Jun 11 13:01 target/rest-client-quickstart-1.0-SNAPSHOT-runner</code></pre>
 </div>
 </div>
 </div>
@@ -340,12 +346,12 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ ls -lh target/rest-client-1.0-SNAPSHOT-runner
--rwxrwxr-x. 1 gsmet gsmet 25M Feb 22 15:19 target/rest-client-1.0-SNAPSHOT-runner</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">$ ls -lh target/rest-client-quickstart-1.0-SNAPSHOT-runner
+-rwxrwxr-x. 1 gandrian gandrian 35M Jun 11 13:06 target/rest-client-quickstart-1.0-SNAPSHOT-runner</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Yes, it is now <strong>25 MB</strong> whereas it used to be <strong>34 MB</strong>. SSL comes with a 9 MB overhead in native executable size.</p>
+<p>Yes, it is now <strong>35 MB</strong> whereas it used to be <strong>46 MB</strong>. SSL comes with a 11 MB overhead in native executable size.</p>
 </div>
 <div class="paragraph">
 <p>And there&#8217;s more to it.</p>
@@ -376,78 +382,6 @@ Let&#8217;s check again with SSL support entirely disabled:</p>
 <div class="sect1">
 <h2 id="the-truststore-path"><a class="anchor" href="#the-truststore-path"></a>The TrustStore path</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>You haven&#8217;t noticed anything but, while building the image,
-Quarkus has automatically set <code>javax.net.ssl.trustStore</code> to point to the <code>cacerts</code> file bundled in the GraalVM distribution.
-This file contains the root certificates.</p>
-</div>
-<div class="paragraph">
-<p>This is useful when running tests but, obviously, it is not portable as this path is hardcoded.</p>
-</div>
-<div class="paragraph">
-<p>You can check that pretty easily:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>move your GraalVM directory to another place (let&#8217;s call it <code>&lt;new-graalvm-home&gt;</code>)</p>
-</li>
-<li>
-<p>run the native executable <code>./target/rest-client-1.0-SNAPSHOT-runner</code></p>
-</li>
-<li>
-<p>in a browser, go to <code><a href="http://localhost:8080/country/name/greece" class="bare">http://localhost:8080/country/name/greece</a></code></p>
-</li>
-<li>
-<p>you will have an Internal Server Error</p>
-</li>
-<li>
-<p>in your terminal, you should have an exception: <code>java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty</code></p>
-</li>
-<li>
-<p>hit <code>Ctrl+C</code> to stop the application</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>To make it work, you need to manually set <code>javax.net.ssl.trustStore</code> to point to the new GraalVM home:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">./target/rest-client-1.0-SNAPSHOT-runner -Djavax.net.ssl.trustStore=&lt;new-graalvm-home&gt;/jre/lib/security/cacerts</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, the application should work as expected:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>in a browser, go to <code><a href="http://localhost:8080/country/name/greece" class="bare">http://localhost:8080/country/name/greece</a></code></p>
-</li>
-<li>
-<p>you should see a JSON output with some information about Greece</p>
-</li>
-<li>
-<p>hit <code>Ctrl+C</code> to stop the application</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>The root certificates file of GraalVM might not be totally up to date.
-If you have issues with some certificates, your best bet is to include the <code>cacerts</code> file of a regular JDK instead.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -456,7 +390,41 @@ If you have issues with some certificates, your best bet is to include the <code
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Don&#8217;t forget to move your GraalVM directory back to where it was.</p>
+<p>This behavior is new to GraalVM 19.3+.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When creating a native binary, GraalVM embraces the principle of "immutable security" for the root certificates.
+This essentially means that the root certificates are fixed at image build time, based on the certificate configuration used at that build time
+(which for Quarkus means when you perform a build having <code>quarkus.package.type=native</code> set).
+This avoids shipping a <code>cacerts</code> file or requiring a system property be set in order to set up root
+certificates that are provided by the OS where the binary runs.</p>
+</div>
+<div class="paragraph">
+<p>As a consequence, system properties such as <code>javax.net.ssl.trustStore</code> do not have an effect at
+run time, so when the defaults need to be changed, these system properties must be provided at image build time.
+The easiest way to do so is by setting <code>quarkus.native.additional-build-args</code>. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.native.additional-build-args=-J-Djavax.net.ssl.trustStore=/tmp/mycerts,-J-Djavax.net.ssl.trustStorePassword=changeit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will ensure that the certificates of <code>/tmp/mycerts</code> are baked into the native binary and used <strong>in addition</strong> to the default cacerts.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The file containing the custom TrustStore does <strong>not</strong> have to be present at runtime as its content has been baked into the native binary.</p>
 </div>
 </td>
 </tr>
@@ -465,33 +433,8 @@ If you have issues with some certificates, your best bet is to include the <code
 <div class="sect2">
 <h3 id="working-with-containers"><a class="anchor" href="#working-with-containers"></a>Working with containers</h3>
 <div class="paragraph">
-<p>When working with containers, the idea is to bundle the certificates in the container and to point your binary to them using the system property mentioned above.</p>
-</div>
-<div class="paragraph">
-<p>You can for example modify your <code>Dockerfile.native</code> as follows to copy the required files to your final image:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">FROM quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11 as nativebuilder
-RUN mkdir -p /tmp/ssl \
-  &amp;&amp; cp /opt/graalvm/lib/security/cacerts /tmp/ssl/
-
-FROM registry.access.redhat.com/ubi8/ubi-minimal
-WORKDIR /work/
-COPY --from=nativebuilder /tmp/ssl/ /work/
-COPY target/*-runner /work/application
-
-# set up permissions for user `1001`
-RUN chmod 775 /work /work/application \
-  &amp;&amp; chown -R 1001 /work \
-  &amp;&amp; chmod -R "g+rwX" /work \
-  &amp;&amp; chown -R 1001:root /work
-
-EXPOSE 8080
-USER 1001
-
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Djavax.net.ssl.trustStore=/work/cacerts"]</code></pre>
-</div>
+<p>No special action needs to be taken when running the native binary in a container. If the native binary was properly built with the custom TrustStore
+as described in the previous section, it will work properly in container as well.</p>
 </div>
 </div>
 </div>

@@ -440,6 +440,8 @@ You can run it using: <code>./target/getting-started-1.0-SNAPSHOT-runner</code>.
             &lt;configuration&gt;
                 &lt;systemPropertyVariables&gt;
                     &lt;native.image.path&gt;${project.build.directory}/${project.build.finalName}-runner&lt;/native.image.path&gt;
+                    &lt;java.util.logging.manager&gt;org.jboss.logmanager.LogManager&lt;/java.util.logging.manager&gt;
+                    &lt;maven.home&gt;${maven.home}&lt;/maven.home&gt;
                 &lt;/systemPropertyVariables&gt;
             &lt;/configuration&gt;
         &lt;/execution&gt;
@@ -940,20 +942,6 @@ These are provided in <code>application.properties</code> the same as any other 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.debug-symbols"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.debug-symbols">quarkus.native.debug-symbols</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If debug symbols should be included</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.debug-build-process"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.debug-build-process">quarkus.native.debug-build-process</a></code></p>
 </div>
 <div class="openblock description">
@@ -1090,7 +1078,7 @@ These are provided in <code>application.properties</code> the same as any other 
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>quay.io/quarkus/ubi-quarkus-native-image:20.1.0-java11</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1200,8 +1188,8 @@ These are provided in <code>application.properties</code> the same as any other 
 <p>A comma separated list of globs to match resource paths that should be added to the native image.
  Use slash (<code>/</code>) as a path separator on all platforms. Globs must not start with slash.
  By default, no resources are included.
- Example: Given that you have <code>src/main/resources/ignored.png</code> and <code>src/main/resources/foo/selected.png</code> in your source tree and one of your dependency JARs contains <code>bar/some.txt</code> file, with the following configuration quarkus.native.resources.includes = foo/<strong>,bar/</strong>/<strong>.txt  the files <code>src/main/resources/foo/selected.png</code> and <code>bar/some.txt</code> will be included in the native image, while <code>src/main/resources/ignored.png</code> will not be included.
- Supported glob features   Feature Description   <code></strong></code> Matches a (possibly empty) sequence of characters that does not contain slash (<code>/</code>)   <code>**</code> Matches a (possibly empty) sequence of characters that may contain slash (<code>/</code>)   <code>?</code> Matches one character, but not slash   <code>[abc]</code> Matches one character given in the bracket, but not slash   <code>[a-z]</code> Matches one character from the range given in the bracket, but not slash   <code>[!abc]</code> Matches one character not named in the bracket; does not match slash   <code>[a-z]</code> Matches one character outside the range given in the bracket; does not match slash   <code>{one,two,three}</code> Matches any of the alternating tokens separated by comma; the tokens may contain wildcards, nested alternations and ranges   <code>\</code> The escape character
+ Example: Given that you have <code>src/main/resources/ignored.png</code> and <code>src/main/resources/foo/selected.png</code> in your source tree and one of your dependency JARs contains <code>bar/some.txt</code> file, with the following configuration quarkus.native.resources.includes = foo/**,bar/**/*.txt  the files <code>src/main/resources/foo/selected.png</code> and <code>bar/some.txt</code> will be included in the native image, while <code>src/main/resources/ignored.png</code> will not be included.
+ Supported glob features   Feature Description   <code>*</code> Matches a (possibly empty) sequence of characters that does not contain slash (<code>/</code>)   <code>**</code> Matches a (possibly empty) sequence of characters that may contain slash (<code>/</code>)   <code>?</code> Matches one character, but not slash   <code>[abc]</code> Matches one character given in the bracket, but not slash   <code>[a-z]</code> Matches one character from the range given in the bracket, but not slash   <code>[!abc]</code> Matches one character not named in the bracket; does not match slash   <code>[a-z]</code> Matches one character outside the range given in the bracket; does not match slash   <code>{one,two,three}</code> Matches any of the alternating tokens separated by comma; the tokens may contain wildcards, nested alternations and ranges   <code>\</code> The escape character
  Note that there are three levels of escaping when passing this option via <code>application.properties</code>:
  . <code>application.properties</code> parser
  - MicroProfile Config list converter that splits the comma separated list
@@ -1212,6 +1200,20 @@ These are provided in <code>application.properties</code> the same as any other 
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.debug.enabled"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.debug.enabled">quarkus.native.debug.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If debug is enabled and debug symbols are generated. The symbols will be generated in a separate .debug file.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 </tbody>
 </table>
