@@ -161,7 +161,7 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.5.2.Final:create \
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.6.0.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=rest-kotlin-quickstart \
     -DclassName="org.acme.rest.GreetingResource" \
@@ -368,7 +368,7 @@ for example, then <code>&lt;option&gt;all-open:annotation=javax.enterprise.conte
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs">plugins {
     id 'java'
-    id 'io.quarkus' version '1.5.2.Final' <i class="conum" data-value="1"></i><b>(1)</b>
+    id 'io.quarkus' version '1.6.0.Final' <i class="conum" data-value="1"></i><b>(1)</b>
 
     id "org.jetbrains.kotlin.jvm" version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
     id "org.jetbrains.kotlin.plugin.allopen" version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
@@ -385,7 +385,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:{kotlin-version}'
 
     <i class="conum" data-value="3"></i><b>(3)</b>
-    implementation enforcedPlatform('io.quarkus:quarkus-bom:1.5.2.Final')
+    implementation enforcedPlatform('io.quarkus:quarkus-bom:1.6.0.Final')
     implementation 'io.quarkus:quarkus-resteasy'
     implementation 'io.quarkus:quarkus-resteasy-jsonb'
     implementation 'io.quarkus:quarkus-kotlin'
@@ -446,7 +446,7 @@ version = "1.0.0-SNAPSHOT"
 
 plugins {
     java
-    id("io.quarkus") version "1.5.2.Final" <i class="conum" data-value="1"></i><b>(1)</b>
+    id("io.quarkus") version "1.6.0.Final" <i class="conum" data-value="1"></i><b>(1)</b>
 
     kotlin("jvm") version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
     id("org.jetbrains.kotlin.plugin.allopen") version "{kotlin-version}" <i class="conum" data-value="2"></i><b>(2)</b>
