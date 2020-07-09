@@ -576,6 +576,224 @@ quarkus.log.syslog.hostname=quarkus-test</code></pre>
 <div class="paragraph">
 <p>Configuration is done through the usual <code>application.properties</code> file.</p>
 </div>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-gelf_configuration"></a><a href="#quarkus-logging-gelf_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.enabled"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.enabled">quarkus.log.handler.gelf.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to enable the GELF logging handler</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.host"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.host">quarkus.log.handler.gelf.host</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Hostname/IP-Address of the Logstash/Graylog Host By default it uses UDP, prepend tcp: to the hostname to switch to TCP, example: "tcp:localhost"</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>localhost</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.port"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.port">quarkus.log.handler.gelf.port</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The port</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>12201</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.version"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.version">quarkus.log.handler.gelf.version</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>GELF version: 1.0 or 1.1</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1.1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.extract-stack-trace"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.extract-stack-trace">quarkus.log.handler.gelf.extract-stack-trace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to post Stack-Trace to StackTrace field.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.stack-trace-throwable-reference"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.stack-trace-throwable-reference">quarkus.log.handler.gelf.stack-trace-throwable-reference</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Only used when <code>extractStackTrace</code> is <code>true</code>. A value of 0 will extract the whole stack trace. Any positive value will walk the cause chain: 1 corresponds with exception.getCause(), 2 with exception.getCause().getCause(), &#8230;&#8203; Negative throwable reference walk the exception chain from the root cause side: -1 will extract the root cause, -2 the exception wrapping the root cause, &#8230;&#8203;</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.filter-stack-trace"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.filter-stack-trace">quarkus.log.handler.gelf.filter-stack-trace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to perform Stack-Trace filtering</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.timestamp-pattern"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.timestamp-pattern">quarkus.log.handler.gelf.timestamp-pattern</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Java date pattern, see <code>java.text.SimpleDateFormat</code></p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>yyyy-MM-dd HH:mm:ss,SSS</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.level"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.level">quarkus.log.handler.gelf.level</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The logging-gelf log level.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html">Level</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>ALL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.facility"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.facility">quarkus.log.handler.gelf.facility</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Name of the facility.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>jboss-logmanager</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.include-full-mdc"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.include-full-mdc">quarkus.log.handler.gelf.include-full-mdc</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether to include all fields from the MDC.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.maximum-message-size"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.maximum-message-size">quarkus.log.handler.gelf.maximum-message-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Maximum message size (in bytes). If the message size is exceeded, the appender will submit the message in multiple chunks.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>8192</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field"></a><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field">Post additional fields</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.value"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.value">quarkus.log.handler.gelf.additional-field."field-name".value</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Additional field value.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.type"></a><code><a href="#quarkus-logging-gelf_quarkus.log.handler.gelf.additional-field.-field-name-.type">quarkus.log.handler.gelf.additional-field."field-name".type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Additional field type specification. Supported types: String, long, Long, double, Double and discover. Discover is the default if not specified, it discovers field type based on parseability.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>discover</code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
 <p>This extension uses the <code>logstash-gelf</code> library that allow more configuration options via system properties,
 you can access its documentation here: <a href="https://logging.paluch.biz/" class="bare">https://logging.paluch.biz/</a> .</p>

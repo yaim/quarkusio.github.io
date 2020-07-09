@@ -449,6 +449,122 @@ This means that the format string and the color settings (if any) will be ignore
 <div class="paragraph">
 <p>The JSON logging extension can be configured in various ways.  The following properties are supported:</p>
 </div>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
+</div>
+<table class="tableblock frame-all grid-all stretch configuration-reference searchable">
+<colgroup>
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-logging-json_configuration"></a><a href="#quarkus-logging-json_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-json_quarkus.log.console.json"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json">quarkus.log.console.json</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Determine whether to enable the JSON console formatting extension, which disables "normal" console formatting.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-json_quarkus.log.console.json.pretty-print"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.pretty-print">quarkus.log.console.json.pretty-print</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable "pretty printing" of the JSON record. Note that some JSON parsers will fail to read pretty printed output.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-json_quarkus.log.console.json.date-format"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.date-format">quarkus.log.console.json.date-format</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The date format to use. The special string "default" indicates that the default format should be used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>default</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-json_quarkus.log.console.json.record-delimiter"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.record-delimiter">quarkus.log.console.json.record-delimiter</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The special end-of-record delimiter to be used. By default, no delimiter is used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-json_quarkus.log.console.json.zone-id"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.zone-id">quarkus.log.console.json.zone-id</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The zone ID to use. The special string "default" indicates that the default zone should be used.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>default</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-json_quarkus.log.console.json.exception-output-type"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.exception-output-type">quarkus.log.console.json.exception-output-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The exception output type to specify.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>detailed</code>, <code>formatted</code>, <code>detailed-and-formatted</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>detailed</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-logging-json_quarkus.log.console.json.print-details"></a><code><a href="#quarkus-logging-json_quarkus.log.console.json.print-details">quarkus.log.console.json.print-details</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable printing of more details in the log.
+ Printing the details can be expensive as the values are retrieved from the caller. The details include the source class name, source file name, source method name and source line number.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="admonitionblock warning">
 <table>
 <tr>
