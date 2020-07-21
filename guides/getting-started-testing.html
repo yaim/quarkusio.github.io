@@ -104,13 +104,12 @@
 </ul>
 </li>
 <li><a href="#quarkus-test-resource">9. Starting services before the Quarkus application starts</a></li>
-<li><a href="#test-bootstrap-configuration-options">10. Test Bootstrap Configuration Options</a></li>
-<li><a href="#native-executable-testing">11. Native Executable Testing</a></li>
-<li><a href="#test-from-ide">12. Running <code>@QuarkusTest</code> from an IDE</a>
+<li><a href="#native-executable-testing">10. Native Executable Testing</a></li>
+<li><a href="#test-from-ide">11. Running <code>@QuarkusTest</code> from an IDE</a>
 <ul class="sectlevel2">
-<li><a href="#eclipse-separate-jre-definition">12.1. Eclipse separate JRE definition</a></li>
-<li><a href="#vscode-run-with-configuration">12.2. VSCode "run with" configuration</a></li>
-<li><a href="#intellij-junit-template">12.3. IntelliJ JUnit template</a></li>
+<li><a href="#eclipse-separate-jre-definition">11.1. Eclipse separate JRE definition</a></li>
+<li><a href="#vscode-run-with-configuration">11.2. VSCode "run with" configuration</a></li>
+<li><a href="#intellij-junit-template">11.3. IntelliJ JUnit template</a></li>
 </ul>
 </li>
 </ul></div>
@@ -238,7 +237,7 @@ must be set, as the default version does not support Junit 5:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>We also set the <code>java.util.logging</code> system property to make sure tests will use the correct logmanager and <code>maven.home</code> to ensure that custom configuration
+<p>We also set the <code>java.util.logging.manager</code> system property to make sure tests will use the correct logmanager and <code>maven.home</code> to ensure that custom configuration
 from <code>${maven.home}/conf/settings.xml</code> is applied (if any).</p>
 </div>
 <div class="paragraph">
@@ -1023,28 +1022,7 @@ or starting a mock HTTP server using <a href="http://wiremock.org/">Wiremock</a>
 </div>
 </div>
 <div class="sect1">
-<h2 id="test-bootstrap-configuration-options"><a class="anchor" href="#test-bootstrap-configuration-options"></a>10. Test Bootstrap Configuration Options</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>There are a few system properties that can be used to tune the bootstrap of the test, specifically its classpath.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>quarkus-bootstrap-offline</strong> - <em>(boolean)</em> if set by the user, depending on the value, will enable or disable the offline mode for the Maven artifact resolver used by the bootstrap to resolve the deployment dependencies of the Quarkus extensions used in the test. If the property is not set to any value, the artifact resolver will use the system&#8217;s default (user&#8217;s <code>settings.xml</code>).</p>
-</li>
-<li>
-<p><strong>quarkus-workspace-discovery</strong> - <em>(boolean)</em> controls whether the bootstrap artifact resolver should look for the test dependencies among the projects in the current workspace and use their output (<code>classes</code>) directories when setting up the classpath for the test to run. <strong>The default value is true</strong>.</p>
-</li>
-<li>
-<p><strong>quarkus-classpath-cache</strong> - <em>(boolean)</em> enables or disables the bootstrap classpath cache. With the number of the project dependencies growing, the dependency resolution will take more time which could at some point become annoying. The Quarkus bootstrap allows to cache the resolved classpath and store it in the output directory of the project. The cached classpath will be recalculated only after any of the <code>pom.xml</code> file in the workspace has been changed. The cache directory is also removed each time the project&#8217;s output directory is cleaned, of course. <strong>The default value is true</strong>.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="native-executable-testing"><a class="anchor" href="#native-executable-testing"></a>11. Native Executable Testing</h2>
+<h2 id="native-executable-testing"><a class="anchor" href="#native-executable-testing"></a>10. Native Executable Testing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>It is also possible to test native executables using <code>@NativeImageTest</code>. This supports all the features mentioned in this
@@ -1056,7 +1034,7 @@ guide except injecting into tests (and the native executable runs in a separate 
 </div>
 </div>
 <div class="sect1">
-<h2 id="test-from-ide"><a class="anchor" href="#test-from-ide"></a>12. Running <code>@QuarkusTest</code> from an IDE</h2>
+<h2 id="test-from-ide"><a class="anchor" href="#test-from-ide"></a>11. Running <code>@QuarkusTest</code> from an IDE</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Most IDEs offer the possibility to run a selected class as JUnit test directly. For this you should set a few properties in the settings of your chosen IDE:</p>
@@ -1072,7 +1050,7 @@ guide except injecting into tests (and the native executable runs in a separate 
 </ul>
 </div>
 <div class="sect2">
-<h3 id="eclipse-separate-jre-definition"><a class="anchor" href="#eclipse-separate-jre-definition"></a>12.1. Eclipse separate JRE definition</h3>
+<h3 id="eclipse-separate-jre-definition"><a class="anchor" href="#eclipse-separate-jre-definition"></a>11.1. Eclipse separate JRE definition</h3>
 <div class="paragraph">
 <p>Copy your current "Installed JRE" definition into a new one, where you will add the properties as a new VM arguments:</p>
 </div>
@@ -1091,7 +1069,7 @@ guide except injecting into tests (and the native executable runs in a separate 
 </div>
 </div>
 <div class="sect2">
-<h3 id="vscode-run-with-configuration"><a class="anchor" href="#vscode-run-with-configuration"></a>12.2. VSCode "run with" configuration</h3>
+<h3 id="vscode-run-with-configuration"><a class="anchor" href="#vscode-run-with-configuration"></a>11.2. VSCode "run with" configuration</h3>
 <div class="paragraph">
 <p>The <code>settings.json</code> placed in the root of your project directory or in the workspace will need the workaround in your test configuration:</p>
 </div>
@@ -1109,7 +1087,7 @@ guide except injecting into tests (and the native executable runs in a separate 
 </div>
 </div>
 <div class="sect2">
-<h3 id="intellij-junit-template"><a class="anchor" href="#intellij-junit-template"></a>12.3. IntelliJ JUnit template</h3>
+<h3 id="intellij-junit-template"><a class="anchor" href="#intellij-junit-template"></a>11.3. IntelliJ JUnit template</h3>
 <div class="paragraph">
 <p>Nothing needed in IntelliJ because the IDE will pick the <code>systemPropertyVariables</code> from the surefire plugin configuration in <code>pom.xml</code>.</p>
 </div>

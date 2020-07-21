@@ -97,11 +97,11 @@
 <li><a href="#http2-support">4. HTTP/2 Support</a></li>
 <li><a href="#cors-filter">5. CORS filter</a></li>
 <li><a href="#http-limits-configuration">6. HTTP Limits Configuration</a></li>
-<li><a href="#servlet-config">7. Servlet Config</a>
+<li><a href="#configuring-http-access-logs">7. Configuring HTTP Access Logs</a></li>
+<li><a href="#servlet-config">8. Servlet Config</a>
 <ul class="sectlevel2">
-<li><a href="#undertow-handlers-conf">7.1. undertow-handlers.conf</a></li>
-<li><a href="#configuring-http-access-logs">7.2. Configuring HTTP Access Logs</a></li>
-<li><a href="#web-xml">7.3. web.xml</a></li>
+<li><a href="#undertow-handlers-conf">8.1. undertow-handlers.conf</a></li>
+<li><a href="#web-xml">8.2. web.xml</a></li>
 </ul>
 </li>
 </ul></div>
@@ -450,7 +450,7 @@ quarkus.http.cors.access-control-max-age=24H</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.limits.max-header-size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>2OK</code></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>20K</code></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The maximum length of all headers.</p></td>
 </tr>
 </tbody>
@@ -483,29 +483,8 @@ If no unit suffix is given, bytes are assumed.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="servlet-config"><a class="anchor" href="#servlet-config"></a>7. Servlet Config</h2>
+<h2 id="configuring-http-access-logs"><a class="anchor" href="#configuring-http-access-logs"></a>7. Configuring HTTP Access Logs</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>To use Servlet you need to explicitly include <code>quarkus-undertow</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
-  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-  &lt;artifactId&gt;quarkus-undertow&lt;/artifactId&gt;
-&lt;/dependency&gt;</code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="undertow-handlers-conf"><a class="anchor" href="#undertow-handlers-conf"></a>7.1. undertow-handlers.conf</h3>
-<div class="paragraph">
-<p>You can make use of the Undertow predicate language using an <code>undertow-handlers.conf</code> file. This file should be placed
-in the <code>META-INF</code> directory of your application jar. This file contains handlers defined using the
-<a href="http://undertow.io/undertow-docs/undertow-docs-2.0.0/index.html#predicates-attributes-and-handlers">Undertow predicate language</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="configuring-http-access-logs"><a class="anchor" href="#configuring-http-access-logs"></a>7.2. Configuring HTTP Access Logs</h3>
 <div class="paragraph">
 <p>You can add HTTP request logging by configuring it in <code>application.properties</code>. There are two options for logging,
 either logging to the standard JBoss logging output, or logging to a dedicated file.</p>
@@ -796,8 +775,31 @@ either logging to the standard JBoss logging output, or logging to a dedicated f
 </tbody>
 </table>
 </div>
+</div>
+<div class="sect1">
+<h2 id="servlet-config"><a class="anchor" href="#servlet-config"></a>8. Servlet Config</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To use Servlet you need to explicitly include <code>quarkus-undertow</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+  &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+  &lt;artifactId&gt;quarkus-undertow&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
 <div class="sect2">
-<h3 id="web-xml"><a class="anchor" href="#web-xml"></a>7.3. web.xml</h3>
+<h3 id="undertow-handlers-conf"><a class="anchor" href="#undertow-handlers-conf"></a>8.1. undertow-handlers.conf</h3>
+<div class="paragraph">
+<p>You can make use of the Undertow predicate language using an <code>undertow-handlers.conf</code> file. This file should be placed
+in the <code>META-INF</code> directory of your application jar. This file contains handlers defined using the
+<a href="http://undertow.io/undertow-docs/undertow-docs-2.0.0/index.html#predicates-attributes-and-handlers">Undertow predicate language</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="web-xml"><a class="anchor" href="#web-xml"></a>8.2. web.xml</h3>
 <div class="paragraph">
 <p>If you are using a <code>web.xml</code> file as your configuration file, you can place it in the <code>src/main/resources/META-INF</code> directory.</p>
 </div>

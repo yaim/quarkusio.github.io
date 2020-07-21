@@ -238,13 +238,24 @@ However, you can go right to the completed example.</p>
     -DprojectArtifactId=amazon-s3-quickstart \
     -DclassName="org.acme.s3.S3SyncClientResource" \
     -Dpath="/s3" \
-    -Dextensions="resteasy-jsonb,multipart-provider,amazon-s3"
+    -Dextensions="resteasy-jsonb,amazon-s3"
 cd amazon-s3-quickstart</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This command generates a Maven structure importing the RESTEasy/JAX-RS and S3 Client extensions.
 After this, the <code>amazon-s3</code> extension has been added to your <code>pom.xml</code>.</p>
+</div>
+<div class="paragraph">
+<p>Then, we&#8217;ll add the following dependency to support <code>multipart/form-data</code> requests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;resteasy-multipart-provider&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -773,6 +784,25 @@ public class S3AsyncClientResource extends CommonResource {
                 .map(FileObject::from).collect(Collectors.toList());
     }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You need the RESTEasy Mutiny support for asynchronous programming. Add the dependency to the <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-resteasy-mutiny&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or you can alternatively run this command in your project base directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="resteasy-mutiny"</code></pre>
 </div>
 </div>
 <div class="paragraph">

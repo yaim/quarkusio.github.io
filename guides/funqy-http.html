@@ -94,6 +94,23 @@
 <p>The guide walks through quickstart code to show you how you can deploy Funqy as a
 standalone service and invoke on Funqy functions using HTTP.</p>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The Funqy HTTP binding is not a replacement for REST over HTTP.  Because Funqy
+needs to be portable across a lot of different protocols and function providers its HTTP binding
+is very minimalistic and you will lose REST features like linking and the ability to leverage
+HTTP features like cache-control and conditional GETs.  You may want to consider using Quarkus&#8217;s
+JAX-RS, Spring MVC, or Vert.x Web Reactive Routes support instead, although Funqy will have less overhead
+than these alternatives (except Vert.x which is still super fast).
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">

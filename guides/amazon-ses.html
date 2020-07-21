@@ -195,7 +195,7 @@ However, local instance of SES is only mocks the SES APIs without the actual ema
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run --rm --name local-ses 8012:4579 -e SERVICES=ses -e START_WEB=0 -d localstack/localstack:0.11.1</code></pre>
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run --rm --name local-ses -p 8012:4579 -e SERVICES=ses -e START_WEB=0 -d localstack/localstack:0.11.1</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -244,7 +244,7 @@ aws ses verify-email-identity --email-address &lt;recipient@email.address&gt;</c
 <p>Now, you need to open a mailboxes of those email addresses in order to follow confirmation procedure. Once email is approved you can use it in your application.</p>
 </div>
 <div class="paragraph">
-<p>If you are using local SES you still need to verify email addresses, otherwise your send emaik in order to let local SES accepting your request.
+<p>If you are using local SES you still need to verify email addresses, otherwise your send email in order to let local SES accepting your request.
 However, no emails to be send as it only mocks the service APIs.</p>
 </div>
 <div class="listingblock">
@@ -305,7 +305,36 @@ After this, the <code>amazon-ses</code> extension has been added to your <code>p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{  }</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.ses;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.acme.ses.model.Email;
+import software.amazon.awssdk.services.ses.SesClient;
+
+@Path("/sync")
+@Produces(MediaType.TEXT_PLAIN)
+@Consumes(MediaType.APPLICATION_JSON)
+public class QuarkusSesSyncResource {
+
+    @Inject
+    SesClient ses;
+
+    @POST
+    @Path("/email")
+    public String encrypt(Email data) {
+        return ses.sendEmail(req -&gt; req
+            .source(data.getFrom())
+            .destination(d -&gt; d.toAddresses(data.getTo()))
+            .message(msg -&gt; msg
+                .subject(sub -&gt; sub.data(data.getSubject()))
+                .body(b -&gt; b.text(txt -&gt; txt.data(data.getBody()))))).messageId();
+    }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -423,7 +452,41 @@ Depending on your system, that will take some time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">{  }</code></pre>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.ses;
+
+import io.smallrye.mutiny.Uni;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.acme.ses.model.Email;
+import software.amazon.awssdk.services.ses.SesAsyncClient;
+import software.amazon.awssdk.services.ses.model.SendEmailResponse;
+
+@Path("/async")
+@Produces(MediaType.TEXT_PLAIN)
+@Consumes(MediaType.APPLICATION_JSON)
+public class QuarkusSesAsyncResource {
+
+    @Inject
+    SesAsyncClient ses;
+
+    @POST
+    @Path("/email")
+    public Uni&lt;String&gt; encrypt(Email data) {
+        return Uni.createFrom()
+            .completionStage(
+                ses.sendEmail(req -&gt; req
+                    .source(data.getFrom())
+                    .destination(d -&gt; d.toAddresses(data.getTo()))
+                    .message(msg -&gt; msg
+                        .subject(sub -&gt; sub.data(data.getSubject()))
+                        .body(b -&gt; b.text(txt -&gt; txt.data(data.getBody()))))))
+            .onItem().apply(SendEmailResponse::messageId);
+    }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">

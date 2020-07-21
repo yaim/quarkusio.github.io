@@ -88,8 +88,9 @@
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you like <a href="funqy-http">Funqy HTTP</a>, you can use it on AWS Lambda.  Quarkus allows you to expose multiple
-Funqy functions through HTTP deployed as one AWS Lambda.</p>
+<p>If you want to allow HTTP clients to invoke on your Funqy functions on AWS Lambda, Quarkus allows you to expose multiple
+Funqy functions through HTTP deployed as one AWS Lambda.  This approach does add overhead over the
+regular Funqy AWS Lambda integration and also requires you to use AWS API Gateway.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -116,6 +117,22 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
 <div class="paragraph">
 <p>Follow the <a href="amazon-lambda-http">Amazon Lambda Http Guide</a>.  It walks through using a variety of HTTP
 frameworks on Amazon Lambda, including Funqy.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The Funqy HTTP + AWS Lambda binding is not a replacement for REST over HTTP.  Because Funqy
+needs to be portable across a lot of different protocols and function providers its HTTP binding
+is very minimalistic and you will lose REST features like linking and the ability to leverage
+HTTP features like cache-control and conditional GETs.  You may want to consider using Quarkus&#8217;s
+JAX-RS, Spring MVC, or Vert.x Web Reactive Route <a href="amazon-lambda-http">support</a> instead.  They also work with Quarkus and AWS Lambda.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

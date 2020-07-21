@@ -88,6 +88,12 @@
 <li><a href="#package-and-run-the-application">Package and run the application</a></li>
 <li><a href="#run-the-application-as-a-native-executable">Run the application as a native executable</a></li>
 <li><a href="#going-further-with-an-endpoint-returning-json">Going further with an endpoint returning JSON</a></li>
+<li><a href="#adding-openapi-and-swagger-ui">Adding OpenAPI and Swagger-UI</a>
+<ul class="sectlevel2">
+<li><a href="#adding-microprofile-openapi-annotations">Adding MicroProfile OpenAPI Annotations</a></li>
+<li><a href="#using-swagger-ui">Using Swagger UI</a></li>
+</ul>
+</li>
 <li><a href="#supported-spring-web-functionalities">Supported Spring Web functionalities</a>
 <ul class="sectlevel2">
 <li><a href="#annotations">Annotations</a></li>
@@ -363,6 +369,202 @@ public class GreetingControllerTest {
 </div>
 <div class="paragraph">
 <p>It should be noted that when using the Spring Web support in Quarkus, <a href="https://github.com/FasterXML/jackson">Jackson</a> is automatically added to the classpath and properly setup.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adding-openapi-and-swagger-ui"><a class="anchor" href="#adding-openapi-and-swagger-ui"></a>Adding OpenAPI and Swagger-UI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can add support for <a href="https://www.openapis.org/">OpenAPI</a> and <a href="https://swagger.io/tools/swagger-ui/">Swagger-UI</a> by using the <code>quarkus-smallrye-openapi</code> extension.</p>
+</div>
+<div class="paragraph">
+<p>Add the extension by running this command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-openapi"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-smallrye-openapi&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is enough to generate a basic OpenAPI schema document from your REST Endpoints:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">curl http://localhost:8080/openapi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will see the generated OpenAPI schema document:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">---
+openapi: 3.0.1
+info:
+  title: Generated API
+  version: "1.0"
+paths:
+  /greeting:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /greeting/{name}:
+    get:
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Greeting'
+components:
+  schemas:
+    Greeting:
+      type: object
+      properties:
+        message:
+          type: string</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also see <a href="https://quarkus.io/guides/openapi-swaggerui">the OpenAPI Guide</a></p>
+</div>
+<div class="sect2">
+<h3 id="adding-microprofile-openapi-annotations"><a class="anchor" href="#adding-microprofile-openapi-annotations"></a>Adding MicroProfile OpenAPI Annotations</h3>
+<div class="paragraph">
+<p>You can use <a href="https://github.com/eclipse/microprofile-open-api">MicroProfile OpenAPI</a> to better document your schema,
+example, adding the following to the class level of the <code>GreetingController</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@OpenAPIDefinition(
+    info = @Info(
+        title="Greeting API",
+        version = "1.0.1",
+        contact = @Contact(
+            name = "Greeting API Support",
+            url = "http://exampleurl.com/contact",
+            email = "techsupport@example.com"),
+        license = @License(
+            name = "Apache 2.0",
+            url = "http://www.apache.org/licenses/LICENSE-2.0.html"))
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And describe your endpoints like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Tag(name = "Hello", description = "Just say hello")
+@GetMapping(produces=MediaType.TEXT_PLAIN_VALUE)
+public String hello() {
+    return "hello";
+}
+
+@GetMapping(value = "/{name}", produces=MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Hello to someone", description = "Just say hello to someone")
+public Greeting hello(@PathVariable(name = "name") String name) {
+    return new Greeting("hello " + name);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will generate this OpenAPI schema:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">---
+openapi: 3.0.1
+info:
+  title: Greeting API
+  contact:
+    name: Greeting API Support
+    url: http://exampleurl.com/contact
+    email: techsupport@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.1
+tags:
+- name: Hello
+  description: Just say hello
+- name: Hello to someone
+  description: Just say hello to someone
+paths:
+  /greeting:
+    get:
+      tags:
+      - Hello
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /greeting/{name}:
+    get:
+      tags:
+      - Hello to someone
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Greeting'
+components:
+  schemas:
+    Greeting:
+      type: object
+      properties:
+        message:
+          type: string</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-swagger-ui"><a class="anchor" href="#using-swagger-ui"></a>Using Swagger UI</h3>
+<div class="paragraph">
+<p>Swagger UI is included by default when running in <code>Dev</code> or <code>Test</code> mode, and can optionally added to <code>Prod</code> mode.
+See <a href="https://quarkus.io/guides/openapi-swaggerui#use-swagger-ui-for-development">the Swagger UI</a> Guide for more details.</p>
+</div>
+<div class="paragraph">
+<p>Navigate to <a href="http://localhost:8080/swagger-ui/">localhost:8080/swagger-ui/</a> and you will see the Swagger UI screen:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="/guides/images/spring-web-guide-screenshot01.png" alt="Swagger UI"></span></p>
+</div>
 </div>
 </div>
 </div>

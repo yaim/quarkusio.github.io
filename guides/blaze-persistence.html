@@ -97,6 +97,20 @@ queries which are then transformed to optimized queries that only fetch the data
 The same DTO definitions can further be used for applying database updates, leading to a great reduction in boilerplate
 code and removing the need for object mapping tools.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This extension is developed by a third party and is part of the Quarkus Platform.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -154,6 +168,25 @@ This is needed if you need to set custom <a href="https://persistence.blazebit.c
         &lt;artifactId&gt;blaze-persistence-integration-quarkus&lt;/artifactId&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The use in native images requires a dependency on the entity view annotation processor that may be extracted into a separate <code>native</code> profile:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;profiles&gt;
+    &lt;profile&gt;
+        &lt;id&gt;native&lt;/id&gt;
+        &lt;dependencies&gt;
+            &lt;dependency&gt;
+                &lt;groupId&gt;com.blazebit&lt;/groupId&gt;
+                &lt;artifactId&gt;blaze-persistence-entity-view-processor&lt;/artifactId&gt;
+                &lt;scope&gt;provided&lt;/scope&gt;
+            &lt;/dependency&gt;
+        &lt;/dependencies&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
