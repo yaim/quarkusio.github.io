@@ -209,7 +209,7 @@
           <li class="card">
               <a href="/guides/cdi-reference"></a>
               <p class="title">Contexts and Dependency Injection</p>
-              <div class="description"><p>Quarkus DI solution is based on the <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec">Contexts and Dependency Injection for Java 2.0</a> specification. However, it is not a full CDI implementation verified by the TCK. Only a subset of the CDI features is implemented - see also the list of supported features and the list of limitations.</p>
+              <div class="description"><p>Quarkus DI solution is based on the <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec">Contexts and Dependency Injection for Java 2.0</a> specification. However, it is not a full CDI implementation. Only a subset of the CDI features is implemented - see also the list of supported features and the list of limitations.</p>
 </div>
           </li>
         
@@ -1119,9 +1119,7 @@ This guide will walk you through all that.</p>
           <li class="card">
               <a href="/guides/writing-extensions"></a>
               <p class="title">Writing Your Own Extension</p>
-              <div class="description"><p>Quarkus extensions add a new developer focused behavior to the core offering, and consist of two distinct parts, buildtime augmentation and runtime container. The augmentation part is responsible for all metadata processing, such as reading annotations, XML descriptors etc. The output of this augmentation phase is recorded bytecode which is responsible for directly instantiating the relevant runtime services.</p>
-
-<p>This means that metadata is only processed once at build time, which both saves on startup time, and also on memory usage as the classes etc that are used for processing are not loaded (or even present) in the runtime JVM.</p>
+              <div class="description"><p>Quarkus extensions optimize your applications by pushing as much work as possible to the build operation. This guide explains the rationale of Quarkus extensions and guides you through authoring your own extensions.</p>
 </div>
           </li>
         
@@ -1233,7 +1231,7 @@ This guide will walk you through all that.</p>
           <li class="card">
               <a href="/guides/performance-measure"></a>
               <p class="title">Measuring Performance</p>
-              <div class="description"><p>When measuring the footprint of a Quarkus application, we measure Resident Set Size (RSS) and not the JVM heap size which is only a small part of the overall problem. The JVM not only allocates native memory for heap (<code class="highlighter-rouge">-Xms</code>, <code class="highlighter-rouge">-Xmx</code>) but also structures required by the jvm to run your application.</p>
+              <div class="description"><p>This guide explains how to best measure the footprint of a Quarkus application.</p>
 </div>
           </li>
         
