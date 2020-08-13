@@ -470,7 +470,10 @@ The keys are structured as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs"># Configure the Kafka sink (we write to it)
+<pre class="highlightjs highlight"><code class="language-none hljs"># Configure the SmallRye Kafka connector
+kafka.bootstrap.servers=localhost:9092
+
+# Configure the Kafka sink (we write to it)
 mp.messaging.outgoing.generated-price.connector=smallrye-kafka
 mp.messaging.outgoing.generated-price.topic=prices
 mp.messaging.outgoing.generated-price.value.serializer=org.apache.kafka.common.serialization.IntegerSerializer
@@ -481,7 +484,7 @@ mp.messaging.incoming.prices.value.deserializer=org.apache.kafka.common.serializ
 </div>
 </div>
 <div class="paragraph">
-<p>More details about this configuration is available on the <a href="https://kafka.apache.org/documentation/#producerconfigs">Producer configuration</a> and <a href="https://kafka.apache.org/documentation/#consumerconfigs">Consumer configuration</a> section from the Kafka documentation.</p>
+<p>More details about this configuration is available on the <a href="https://kafka.apache.org/documentation/#producerconfigs">Producer configuration</a> and <a href="https://kafka.apache.org/documentation/#consumerconfigs">Consumer configuration</a> section from the Kafka documentation. These properties are configured with the prefix <code>kafka</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>

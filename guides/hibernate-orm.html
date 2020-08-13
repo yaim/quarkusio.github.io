@@ -98,6 +98,7 @@
 <li><a href="#limitations-of-caching">Limitations of Caching</a></li>
 </ul>
 </li>
+<li><a href="#envers">Hibernate Envers</a></li>
 <li><a href="#metrics">Metrics</a></li>
 <li><a href="#limitations-and-other-things-you-should-know">Limitations and other things you should know</a>
 <ul class="sectlevel2">
@@ -164,6 +165,9 @@ so we&#8217;ll see first how Hibernate ORM can be configured without a <code>per
 <p>your JDBC driver extension; the following options are available:</p>
 <div class="ulist">
 <ul>
+<li>
+<p><code>quarkus-jdbc-db2</code> for <a href="https://www.ibm.com/products/db2-database">IBM DB2</a></p>
+</li>
 <li>
 <p><code>quarkus-jdbc-derby</code> for <a href="https://db.apache.org/derby/">Apache Derby</a></p>
 </li>
@@ -546,7 +550,7 @@ The type DISCRIMINATOR is currently not supported. The default value is NONE (no
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Whether or not metrics are published in case the smallrye-metrics extension is present (default to false).</p>
+<p>Whether or not metrics are published if a metrics extension is enabled.</p>
 </div>
 </div>
 </div></div></td>
@@ -1314,6 +1318,33 @@ Otherwise, <code>PT</code> is implicitly prepended to the value to obtain a stan
 </div>
 </div>
 <div class="sect1">
+<h2 id="envers"><a class="anchor" href="#envers"></a>Hibernate Envers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Envers extension to Hibernate ORM aims to provide an easy auditing / versioning solution for entity classes.</p>
+</div>
+<div class="paragraph">
+<p>In Quarkus, Envers has a dedicated Quarkus Extension <code>io.quarkus:quarkus-hibernate-envers</code>; you just need to add this to your project to start using it.</p>
+</div>
+<div class="listingblock">
+<div class="title">Additional dependency to enable Hibernate Envers</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;!-- Add the Hibernate Envers extension --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+        &lt;artifactId&gt;quarkus-hibernate-envers&lt;/artifactId&gt;
+    &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>At this point the extension does not expose additional configuration properties.</p>
+</div>
+<div class="paragraph">
+<p>For more information about Hibernate Envers, see <a href="https://hibernate.org/orm/envers/">hibernate.org/orm/envers/</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="metrics"><a class="anchor" href="#metrics"></a>Metrics</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1552,9 +1583,9 @@ CAUTION: Some databases like MariaDB/MySQL do not support database schemas. In t
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># Disable generation
 quarkus.hibernate-orm.database.generation=none
 
-# Enable SCHEMA approach and use default schema
+# Enable SCHEMA approach and use default datasource
 quarkus.hibernate-orm.multitenant=SCHEMA
-# You could use a non-default schema by using the following setting
+# You could use a non-default datasource by using the following setting
 # quarkus.hibernate-orm.multitenant-schema-datasource=other
 
 # The default data source used for all tenant schemas

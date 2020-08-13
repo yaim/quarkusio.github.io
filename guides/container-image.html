@@ -89,6 +89,7 @@
 </li>
 <li><a href="#building">Building</a></li>
 <li><a href="#pushing">Pushing</a></li>
+<li><a href="#selecting-among-multiple-extensions">Selecting among multiple extensions</a></li>
 <li><a href="#customizing">Customizing</a>
 <ul class="sectlevel2">
 <li><a href="#container-image-options">Container Image Options</a></li>
@@ -235,6 +236,22 @@ If no registry is set (using <code>quarkus.container-image.registry</code>) then
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="selecting-among-multiple-extensions"><a class="anchor" href="#selecting-among-multiple-extensions"></a>Selecting among multiple extensions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It does not make sense to use multiple extension as part of the same build. When multiple container image extensions are present, an error will be raised to inform the user. The user can either remove the uneeded extensions or select one using <code>application.properties</code>.</p>
+</div>
+<div class="paragraph">
+<p>For example, if both <code>container-image-docker</code> and <code>container-image-s2i</code> are present and the user needs to use <code>container-image-docker</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.container-image.builder=docker</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -400,6 +417,20 @@ If no registry is set (using <code>quarkus.container-image.registry</code>) then
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-container-image_quarkus.container-image.builder"></a><code><a href="#quarkus-container-image_quarkus.container-image.builder">quarkus.container-image.builder</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The name of the container image extension to use (e.g. docker, jib, s2i). The option will be used in case multiple extensions are present.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>
 </table>
@@ -622,6 +653,20 @@ If no registry is set (using <code>quarkus.container-image.registry</code>) then
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-container-image-docker_quarkus.docker.cache-from"></a><code><a href="#quarkus-container-image-docker_quarkus.docker.cache-from">quarkus.docker.cache-from</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Images to consider as cache sources. Values are passed to <code>docker build</code> via the <code>cache-from</code> option</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-container-image-docker_quarkus.docker.build-args-build-args"></a><code><a href="#quarkus-container-image-docker_quarkus.docker.build-args-build-args">quarkus.docker.build-args</a></code></p>
 </div>
 <div class="openblock description">
@@ -669,7 +714,7 @@ If no registry is set (using <code>quarkus.container-image.registry</code>) then
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>fabric8/s2i-java:2.3</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>registry.access.redhat.com/ubi8/openjdk-11</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

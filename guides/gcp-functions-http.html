@@ -93,16 +93,17 @@
 </li>
 <li><a href="#build-and-deploy-to-google-cloud">Build and Deploy to Google Cloud</a></li>
 <li><a href="#testing-locally">Testing locally</a></li>
+<li><a href="#whats-next">What&#8217;s next?</a></li>
 </ul></div>
     <div>
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>The <code>quarkus-google-cloud-functions-http</code> extension allows you to write microservices with RESTEasy (JAX-RS),
-Undertow (servlet) or Vert.x Web, and make these microservices deployable to the Google Cloud Functions runtime.</p>
+Undertow (Servlet) or Vert.x Web, and make these microservices deployable to the Google Cloud Functions runtime.</p>
 </div>
 <div class="paragraph">
-<p>One Google Cloud Functions deployment can represent any number of JAX-RS, servlet, or Vert.x Web endpoints.</p>
+<p>One Google Cloud Functions deployment can represent any number of JAX-RS, Servlet, or Vert.x Web endpoints.</p>
 </div>
 <div class="paragraph">
 <p>As the Google Cloud Function Java engine is a new Beta feature of Google Cloud, this extension is flagged as experimental.</p>
@@ -165,6 +166,15 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
 <p>This guide walks you through generating a sample project followed by creating three HTTP endpoints
 written with JAX-RS APIs, Servlet APIs or Vert.x Web APIs. Once built, you will be able to deploy
 the project to Google Cloud.</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want to follow all these steps, you can go right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+</div>
+<div class="paragraph">
+<p>The solution is located in the <code>google-cloud-functions-http-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/google-cloud-functions-http-quickstart">directory</a>.</p>
 </div>
 </div>
 </div>
@@ -406,6 +416,15 @@ The result of the previous command is a single JAR file inside the <code>target/
 </div>
 <div class="paragraph">
 <p>Your endpoints will be available on <a href="http://localhost:8080" class="bare">http://localhost:8080</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="whats-next"><a class="anchor" href="#whats-next"></a>What&#8217;s next?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use our <a href="funqy-gcp-functions">Google Cloud Functions Funqy binding</a> to use Funqy,
+a provider agnostic function as a service framework, that allow to deploy HTTP function or Background function to Google Cloud.</p>
 </div>
 </div>
 </div>

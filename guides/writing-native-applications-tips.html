@@ -98,6 +98,7 @@
 <li><a href="#delay-class-initialization">Delay class initialization</a>
 <ul class="sectlevel2">
 <li><a href="#managing-proxy-classes-2">Managing Proxy Classes</a></li>
+<li><a href="#logging-with-native-image">Logging with Native Image</a></li>
 </ul>
 </li>
 </ul></div>
@@ -660,6 +661,15 @@ You can find all the information about the format of this file in <a href="https
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="logging-with-native-image"><a class="anchor" href="#logging-with-native-image"></a>Logging with Native Image</h3>
+<div class="paragraph">
+<p>If you are using dependencies that require logging components such as Apache Commons Logging or Log4j and are experiencing a <code>ClassNotFoundException</code> when building the native executable, you can resolve this by excluding the logging library and adding the corresponding JBoss Logging adapter.</p>
+</div>
+<div class="paragraph">
+<p>For more details please refer to the <a href="logging#logging-adapters">Logging guide</a>.</p>
 </div>
 </div>
 </div>

@@ -103,6 +103,7 @@
 <li><a href="#deploying-verticles">Deploying verticles</a></li>
 <li><a href="#listening-to-a-unix-domain-socket">Listening to a Unix Domain Socket</a></li>
 <li><a href="#read-only-deployment-environments">Read only deployment environments</a></li>
+<li><a href="#running-behind-a-reverse-proxy">Running behind a reverse proxy</a></li>
 <li><a href="#going-further">Going further</a></li>
 </ul></div>
     <div>
@@ -385,7 +386,7 @@ vertx.fileSystem().readFile("lorem-ipsum.txt", ar -&gt; {
 
 // Mutiny Vert.x:
 vertx.fileSystem().readFile("lorem-ipsum.txt")
-    .onItem().apply(buffer -&gt; buffer.toString("UTF-8"))
+    .onItem().transform(buffer -&gt; buffer.toString("UTF-8"))
     .subscribe()
     .with(
             content -&gt; System.out.println("Content: " + content),
@@ -491,7 +492,7 @@ public class GreetingResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Uni&lt;String&gt; doSomethingAsync() {
         return vertx.fileSystem().readFile("/META-INF/resources/lorem.txt")
-                .onItem().apply(b -&gt; b.toString("UTF-8"));
+                .onItem().transform(b -&gt; b.toString("UTF-8"));
     }
 }</code></pre>
 </div>
@@ -809,7 +810,7 @@ public class ResourceUsingWebClient {
     public Uni&lt;JsonObject&gt; getFruitData(@PathParam("name") String name) {
         return client.get("/api/fruit/" + name)
                 .send()
-                .onItem().apply(resp -&gt; {
+                .onItem().transform(resp -&gt; {
                     if (resp.statusCode() == 200) {
                         return resp.bodyAsJsonObject();
                     } else {
@@ -1023,6 +1024,85 @@ on <code>application.properties</code>.</p>
 </div>
 <div class="paragraph">
 <p>Assuming <code>/tmp/</code> is writeable this can be fixed by setting the <code>vertx.cacheDirBase</code> property to point to a directory in <code>/tmp/</code> for instance in OpenShift by creating an environment variable <code>JAVA_OPTS</code> with the value <code>-Dvertx.cacheDirBase=/tmp/vertx</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="running-behind-a-reverse-proxy"><a class="anchor" href="#running-behind-a-reverse-proxy"></a>Running behind a reverse proxy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus could be accessed through proxies that additionally generate headers (e.g. <code>X-Forwarded-Host</code>) to keep
+information from the client-facing side of the proxy servers that is altered or lost when they are involved.
+In those scenarios, Quarkus can be configured to automatically update information like protocol, host, port and URI
+reflecting the values in these headers.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Activating this feature makes the server exposed to several security issues (i.e. information spoofing).
+Consider activate it only when running behind a reverse proxy.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To setup this feature, please include the following lines in <code>src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.http.proxy-address-forwarding=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To consider only de-facto standard header (<code>Forwarded</code> header), please include the following lines in <code>src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.http.allow-forwarded=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To consider only non-standard headers, please include the following lines instead in <code>src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus.http.proxy-address-forwarding=true
+quarkus.http.proxy.enable-forwarded-host=true
+quarkus.http.proxy.enable-forwarded-prefix=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Both configurations related with standard and non-standard headers can be combine.
+In this case, the <code>Forwarded</code> header will have precedence in presence of both set of headers.</p>
+</div>
+<div class="paragraph">
+<p>Supported forwarding address headers are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Forwarded</code></p>
+</li>
+<li>
+<p><code>X-Forwarded-Proto</code></p>
+</li>
+<li>
+<p><code>X-Forwarded-Host</code></p>
+</li>
+<li>
+<p><code>X-Forwarded-Port</code></p>
+</li>
+<li>
+<p><code>X-Forwarded-Ssl</code></p>
+</li>
+<li>
+<p><code>X-Forwarded-Prefix</code></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

@@ -87,8 +87,23 @@
 <li><a href="#routebase"><code>@RouteBase</code></a></li>
 </ul>
 </li>
+<li><a href="#reactive-route-methods">Reactive Route Methods</a>
+<ul class="sectlevel2">
+<li><a href="#returning-unis">Returning Unis</a></li>
+<li><a href="#returning-results">Returning results</a></li>
+<li><a href="#returning-multis">Returning Multis</a></li>
+<li><a href="#streaming-json-array-items">Streaming JSON Array items</a></li>
+<li><a href="#event-stream-and-server-sent-event-support">Event Stream and Server-Sent Event support</a></li>
+</ul>
+</li>
 <li><a href="#using-the-vert-x-web-router">Using the Vert.x Web Router</a></li>
 <li><a href="#intercepting-http-requests">Intercepting HTTP requests</a></li>
+<li><a href="#adding-openapi-and-swagger-ui">Adding OpenAPI and Swagger UI</a>
+<ul class="sectlevel2">
+<li><a href="#adding-microprofile-openapi-annotations">Adding MicroProfile OpenAPI Annotations</a></li>
+<li><a href="#using-swagger-ui">Using Swagger UI</a></li>
+</ul>
+</li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></div>
     <div>
@@ -161,8 +176,13 @@ public class MyDeclarativeRoutes {
         rc.response().end("hello");
     }
 
+    @Route(path = "/world")
+    String helloWorld() { <i class="conum" data-value="4"></i><b>(4)</b>
+        return "Hello world!";
+    }
+
     @Route(path = "/greetings", methods = HttpMethod.GET)
-    void greetings(RoutingExchange ex) { <i class="conum" data-value="4"></i><b>(4)</b>
+    void greetings(RoutingExchange ex) { <i class="conum" data-value="5"></i><b>(5)</b>
         ex.ok("hello " + ex.getParam("name").orElse("world"));
     }
 }</code></pre>
@@ -184,6 +204,10 @@ public class MyDeclarativeRoutes {
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>If the annotated method does not return <code>void</code> the arguments are optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td><code>RoutingExchange</code> is a convenient wrapper of <code>RoutingContext</code> which provides some useful methods.</td>
 </tr>
 </table>
@@ -192,7 +216,7 @@ public class MyDeclarativeRoutes {
 <p>More details about using the <code>RoutingContext</code> is available in the <a href="https://vertx.io/docs/vertx-web/java/">Vert.x Web documentation</a>.</p>
 </div>
 <div class="paragraph">
-<p>The <code>@Route</code> annotation allows to configure:</p>
+<p>The <code>@Route</code> annotation allows you to configure:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -229,19 +253,43 @@ public void blocking(RoutingContext rc) {
 </div>
 </div>
 <div class="paragraph">
-<p>You can also declare several routes for a single method using <code>@Routes</code>:</p>
+<p>The <code>@Route</code> annotation is repeatable and so you can declare several routes for a single method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/first")
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/first") <i class="conum" data-value="1"></i><b>(1)</b>
 @Route(path = "/second")
 public void route(RoutingContext rc) {
     // ...
 }</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Each route can use different paths, methods&#8230;&#8203;</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Each route can use different paths, methods&#8230;&#8203;</p>
+<p>If no content-type header is set then we will try to use the most acceptable content type as defined by <code>io.vertx.ext.web.RoutingContext.getAcceptableContentType()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/person", produces = "text/html") <i class="conum" data-value="1"></i><b>(1)</b>
+String person() {
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If the <code>accept</code> header matches <code>text/html</code> we set the content type automatically.</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="handling-conflicting-routes"><a class="anchor" href="#handling-conflicting-routes"></a>Handling conflicting routes</h3>
@@ -291,7 +339,7 @@ If the request path matches, it is invoked, otherwise the other routes are evalu
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RouteBase(path = "simple", produces = "text/plain") <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RouteBase(path = "simple", produces = "text/plain") <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
 public class SimpleRoutes {
 
     @Route(path = "ping") // the final path is /simple/ping
@@ -305,9 +353,444 @@ public class SimpleRoutes {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The <code>path</code> value is used as a prefix for any route method declared on the class where <code>Route#path()</code> is used. The <code>produces</code> value is used for content-based routing for all routes where <code>Route#produces()</code> is empty.</td>
+<td>The <code>path</code> value is used as a prefix for any route method declared on the class where <code>Route#path()</code> is used.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The value of <code>produces()</code> is used for content-based routing for all routes where <code>Route#produces()</code> is empty.</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reactive-route-methods"><a class="anchor" href="#reactive-route-methods"></a>Reactive Route Methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A route method must be a non-private non-static method of a CDI bean.
+If the annotated method returns <code>void</code> then it has to accept at least one argument - see the supported types below.
+If the annotated method does not return <code>void</code> then the arguments are optional.</p>
+</div>
+<div class="paragraph">
+<p>A route method can accept arguments of the following types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>io.vertx.ext.web.RoutingContext</code></p>
+</li>
+<li>
+<p><code>io.vertx.reactivex.ext.web.RoutingContext</code></p>
+</li>
+<li>
+<p><code>io.quarkus.vertx.web.RoutingExchange</code></p>
+</li>
+<li>
+<p><code>io.vertx.core.http.HttpServerRequest</code></p>
+</li>
+<li>
+<p><code>io.vertx.core.http.HttpServerResponse</code></p>
+</li>
+<li>
+<p><code>io.vertx.reactivex.core.http.HttpServerRequest</code></p>
+</li>
+<li>
+<p><code>io.vertx.reactivex.core.http.HttpServerResponse</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Furthermore, it is possible to inject the <code>HttpServerRequest</code> parameters into a method parameter annotated with <code>@io.quarkus.vertx.web.Param</code>:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter Type</th>
+<th class="tableblock halign-left valign-top">Obtained via</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.lang.String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.request().getParam()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.util.Optional&lt;String&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.request().getParam()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.util.List&lt;String&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.request().params().getAll()</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">Request Parameter Example</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route
+String hello(@Param Optional&lt;String&gt; name) {
+   return "Hello " + name.orElse("world");
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>HttpServerRequest</code> headers can be injected into a method parameter annotated with <code>@io.quarkus.vertx.web.Header</code>:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter Type</th>
+<th class="tableblock halign-left valign-top">Obtained via</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.lang.String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.request().getHeader()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.util.Optional&lt;String&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.request().getHeader()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.util.List&lt;String&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.request().headers().getAll()</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">Request Header Example</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route
+String helloFromHeader(@Header("My-Header") String header) {
+   return header;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The request body can be injected into a method parameter annotated with <code>@io.quarkus.vertx.web.Body</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter Type</th>
+<th class="tableblock halign-left valign-top">Obtained via</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.lang.String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.getBodyAsString()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.core.buffer.Buffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.getBody()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.core.json.JsonObject</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.getBodyAsJson()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>io.vertx.core.json.JsonArray</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.getBodyAsJsonArray()</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">any other type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>routingContext.getBodyAsJson().mapTo(MyPojo.class)</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">Request Body Example</div>
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(produces = "application/json")
+Person createPerson(@Body Person person, @Param("id") Optional&lt;String&gt; primaryKey) {
+  person.setId(primaryKey.map(Integer::valueOf).orElse(42));
+  return person;
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="returning-unis"><a class="anchor" href="#returning-unis"></a>Returning Unis</h3>
+<div class="paragraph">
+<p>In a reactive route, you can return a <code>Uni</code> directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/hello")
+Uni&lt;String&gt; hello(RoutingContext context) {
+    return Uni.createFrom().item("Hello world!");
+}
+
+@Route(path = "/person")
+Uni&lt;Person&gt; getPerson(RoutingContext context) {
+    return Uni.createFrom().item(() -&gt; new Person("neo", 12345));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returning <code>Unis</code> is convenient when using a reactive client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/mail")
+Uni&lt;Void&gt; sendEmail(RoutingContext context) {
+    return mailer.send(...);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The item produced by the returned <code>Uni</code> can be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a string - written into the HTTP response directly</p>
+</li>
+<li>
+<p>a buffer - written into the HTTP response directly</p>
+</li>
+<li>
+<p>an object - written into the HTTP response after having been encoded into JSON.
+The <code>content-type</code> header is set to <code>application/json</code> if not already set.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If the returned <code>Uni</code> produces a failure (or is <code>null</code>), an HTTP 500 response is written.</p>
+</div>
+<div class="paragraph">
+<p>Returning a <code>Uni&lt;Void&gt;</code> produces a 204 response (no content).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="returning-results"><a class="anchor" href="#returning-results"></a>Returning results</h3>
+<div class="paragraph">
+<p>You can also return a result directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/hello")
+String helloSync(RoutingContext context) {
+    return "Hello world";
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Be aware, the processing must be <strong>non-blocking</strong> as reactive routes are invoked on the IO Thread.
+Otherwise, use the <code>blocking</code> attribute of the <code>@Route</code> annotation.</p>
+</div>
+<div class="paragraph">
+<p>The method can return:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a string - written into the HTTP response directly</p>
+</li>
+<li>
+<p>a buffer - written into the HTTP response directly</p>
+</li>
+<li>
+<p>an object - written into the HTTP response after having been encoded into JSON.
+The <code>content-type</code> header is set to <code>application/json</code> if not already set.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="returning-multis"><a class="anchor" href="#returning-multis"></a>Returning Multis</h3>
+<div class="paragraph">
+<p>A reactive route can return a <code>Multi</code>.
+The items are written one by one, in the response.
+The response <code>Transfer-Encoding</code> header is set to <code>chunked</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/hello")
+Multi&lt;String&gt; hellos(RoutingContext context) {
+    return Multi.createFrom().items("hello", "world", "!");  <i class="conum" data-value="1"></i><b>(1)</b>
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Produces <code>helloworld!</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The method can return:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a <code>Multi&lt;String&gt;</code> - the items are written one by one (one per <em>chunk</em>) in the response.</p>
+</li>
+<li>
+<p>a <code>Multi&lt;Buffer&gt;</code> - the buffers are written one by one (one per <em>chunk</em>) without any processing.</p>
+</li>
+<li>
+<p>a <code>Multi&lt;Object&gt;</code> - the items are encoded to JSON written one by one in the response.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/people")
+Multi&lt;Person&gt; people(RoutingContext context) {
+    return Multi.createFrom().items(
+            new Person("superman", 1),
+            new Person("batman", 2),
+            new Person("spiderman", 3));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous snippet produces:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{"name":"superman", "id": 1} // chunk 1
+{"name":"batman", "id": 2} // chunk 2
+{"name":"spiderman", "id": 3} // chunk 3</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="streaming-json-array-items"><a class="anchor" href="#streaming-json-array-items"></a>Streaming JSON Array items</h3>
+<div class="paragraph">
+<p>You can return a <code>Multi</code> to produce a JSON Array, where every item is an item from this array.
+The response is written item by item to the client.
+The <code>content-type</code> is set to <code>application/json</code> if not set already.</p>
+</div>
+<div class="paragraph">
+<p>To use this feature, you need to wrap the returned <code>Multi</code> using <code>io.quarkus.vertx.web.ReactiveRoutes.asJsonArray</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/people")
+Multi&lt;Person&gt; people(RoutingContext context) {
+    return ReactiveRoutes.asJsonArray(Multi.createFrom().items(
+            new Person("superman", 1),
+            new Person("batman", 2),
+            new Person("spiderman", 3)));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous snippet produces:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">[
+  {"name":"superman", "id": 1} // chunk 1
+  ,{"name":"batman", "id": 2} // chunk 2
+  ,{"name":"spiderman", "id": 3} // chunk 3
+]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Only <code>Multi&lt;String&gt;</code>, <code>Multi&lt;Object&gt;</code> and <code>Multi&lt;Void&gt;</code> can be written into the JSON Array.
+Using a <code>Multi&lt;Void&gt;</code> produces an empty array.
+You cannot use <code>Multi&lt;Buffer&gt;</code>.
+If you need to use <code>Buffer</code>, transform the content into a JSON or String representation first.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="event-stream-and-server-sent-event-support"><a class="anchor" href="#event-stream-and-server-sent-event-support"></a>Event Stream and Server-Sent Event support</h3>
+<div class="paragraph">
+<p>You can return a <code>Multi</code> to produce an event source (stream of server sent events).
+To enable this feature, you need to wrap the returned <code>Multi</code> using <code>io.quarkus.vertx.web.ReactiveRoutes.asEventStream</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Route(path = "/people")
+Multi&lt;Person&gt; people(RoutingContext context) {
+    return ReactiveRoutes.asEventStream(Multi.createFrom().items(
+            new Person("superman", 1),
+            new Person("batman", 2),
+            new Person("spiderman", 3)));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This method would produce:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">data: {"name":"superman", "id": 1}
+id: 0
+
+data: {"name":"batman", "id": 2}
+id: 1
+
+data: {"name":"spiderman", "id": 3}
+id: 2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also implement the <code>io.quarkus.vertx.web.ReactiveRoutes.ServerSentEvent</code> interface to customize the <code>event</code> and <code>id</code> section of the server sent event:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">class PersonEvent implements ReactiveRoutes.ServerSentEvent&lt;Person&gt; {
+    public String name;
+    public int id;
+
+    public PersonEvent(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    @Override
+    public Person data() {
+        return new Person(name, id); // Will be JSON encoded
+    }
+
+    @Override
+    public long id() {
+        return id;
+    }
+
+    @Override
+    public String event() {
+        return "person";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using a <code>Multi&lt;PersonEvent&gt;</code> (wrapped using <code>io.quarkus.vertx.web.ReactiveRoutes.asEventStream</code>) would produce:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="text" class="language-text hljs">event: person
+data: {"name":"superman", "id": 1}
+id: 1
+
+event: person
+data: {"name":"batman", "id": 2}
+id: 2
+
+event: person
+data: {"name":"spiderman", "id": 3}
+id: 3</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -383,6 +866,196 @@ public class MyFilters {
 <td>The filter is likely required to call the <code>next()</code> method to continue the chain.</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adding-openapi-and-swagger-ui"><a class="anchor" href="#adding-openapi-and-swagger-ui"></a>Adding OpenAPI and Swagger UI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can add support for <a href="https://www.openapis.org/">OpenAPI</a> and <a href="https://swagger.io/tools/swagger-ui/">Swagger UI</a> by using the <code>quarkus-smallrye-openapi</code> extension.</p>
+</div>
+<div class="paragraph">
+<p>Add the extension by running this command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension -Dextensions="io.quarkus:quarkus-smallrye-openapi"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will add the following to your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-smallrye-openapi&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is enough to generate a basic OpenAPI schema document from your Vert.x Routes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">curl http://localhost:8080/openapi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will see the generated OpenAPI schema document:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">---
+openapi: 3.0.3
+info:
+  title: Generated API
+  version: "1.0"
+paths:
+  /greetings:
+    get:
+      responses:
+        "204":
+          description: No Content
+  /hello:
+    get:
+      responses:
+        "204":
+          description: No Content
+  /world:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also see <a href="openapi-swaggerui">the OpenAPI Guide</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="adding-microprofile-openapi-annotations"><a class="anchor" href="#adding-microprofile-openapi-annotations"></a>Adding MicroProfile OpenAPI Annotations</h3>
+<div class="paragraph">
+<p>You can use <a href="https://github.com/eclipse/microprofile-open-api">MicroProfile OpenAPI</a> to better document your schema,
+example, adding header info, or specifying the return type on <code>void</code> methods might be usefull :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@OpenAPIDefinition(<i class="conum" data-value="1"></i><b>(1)</b>
+    info = @Info(
+        title="Greeting API",
+        version = "1.0.1",
+        contact = @Contact(
+            name = "Greeting API Support",
+            url = "http://exampleurl.com/contact",
+            email = "techsupport@example.com"),
+        license = @License(
+            name = "Apache 2.0",
+            url = "http://www.apache.org/licenses/LICENSE-2.0.html"))
+)
+@ApplicationScoped
+public class MyDeclarativeRoutes {
+
+    // neither path nor regex is set - match a path derived from the method name
+    @Route(methods = HttpMethod.GET)
+    @APIResponse(responseCode="200",
+            description="Say hello",
+            content=@Content(mediaType="application/json", schema=@Schema(type=SchemaType.STRING)))<i class="conum" data-value="2"></i><b>(2)</b>
+    void hello(RoutingContext rc) {
+        rc.response().end("hello");
+    }
+
+    @Route(path = "/world")
+    String helloWorld() {
+        return "Hello world!";
+    }
+
+    @Route(path = "/greetings", methods = HttpMethod.GET)
+    @APIResponse(responseCode="200",
+            description="Greeting",
+            content=@Content(mediaType="application/json", schema=@Schema(type=SchemaType.STRING)))
+    void greetings(RoutingExchange ex) {
+        ex.ok("hello " + ex.getParam("name").orElse("world"));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Header information about your API.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Defining the response</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This will generate this OpenAPI schema:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs">---
+openapi: 3.0.3
+info:
+  title: Greeting API
+  contact:
+    name: Greeting API Support
+    url: http://exampleurl.com/contact
+    email: techsupport@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.1
+paths:
+  /greetings:
+    get:
+      responses:
+        "200":
+          description: Greeting
+          content:
+            application/json:
+              schema:
+                type: string
+  /hello:
+    get:
+      responses:
+        "200":
+          description: Say hello
+          content:
+            application/json:
+              schema:
+                type: string
+  /world:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-swagger-ui"><a class="anchor" href="#using-swagger-ui"></a>Using Swagger UI</h3>
+<div class="paragraph">
+<p>Swagger UI is included by default when running in <code>dev</code> or <code>test</code> mode, and can optionally added to <code>prod</code> mode.
+See <a href="openapi-swaggerui#use-swagger-ui-for-development">the Swagger UI</a> Guide for more details.</p>
+</div>
+<div class="paragraph">
+<p>Navigate to <a href="http://localhost:8080/swagger-ui/">localhost:8080/swagger-ui/</a> and you will see the Swagger UI screen:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="/guides/images/reactive-routes-guide-screenshot01.png" alt="Swagger UI"></span></p>
+</div>
 </div>
 </div>
 </div>

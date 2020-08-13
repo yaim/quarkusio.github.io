@@ -303,7 +303,7 @@ client = WebClient.create(vertx,
 Uni&lt;JsonObject&gt; uni =
     client.get("/api/fruit/" + name)
         .send()
-        .onItem().apply(resp -&gt; {
+        .onItem().transform(resp -&gt; {
             if (resp.statusCode() == 200) {
                 return resp.bodyAsJsonObject();
             } else {
@@ -443,7 +443,7 @@ public class ReactiveGreetingService {
 
     public Uni&lt;String&gt; greeting(String name) {
         return Uni.createFrom().item(name)
-                .onItem().apply(n -&gt; String.format("hello %s", name));
+                .onItem().transform(n -&gt; String.format("hello %s", name));
     }
 }</code></pre>
 </div>
@@ -492,6 +492,35 @@ public class ReactiveGreetingResource {
 <p>The <code>ReactiveGreetingService</code> class contains a straightforward method producing a <code>Uni</code>.
 While, in this example, the resulting item is emitted immediately, you can imagine any async API producing a <code>Uni</code>. We cover this later in this guide.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In order to get Mutiny working properly with JAX-RS resources, make sure the Mutiny support for RESTEasy extension (<code>io.quarkus:quarkus-resteasy-mutiny</code>) is present, otherwise add the extension by executing the following command:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">mvn io.quarkus:quarkus-maven-plugin:1.6.1.Final:add-extensions \
+    -Dextensions="io.quarkus:quarkus-resteasy-mutiny"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or add <code>quarkus-resteasy-mutiny</code> into your dependencies manually.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
+      &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+      &lt;artifactId&gt;quarkus-resteasy-mutiny&lt;/artifactId&gt;
+    &lt;/dependency&gt;</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Now, start the application using:</p>
 </div>
@@ -521,7 +550,7 @@ These streams could come from Kafka or any other source of data, but to keep thi
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public Multi&lt;String&gt; greetings(int count, String name) {
   return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
-        .onItem().apply(n -&gt; String.format("hello %s - %d", name, n))
+        .onItem().transform(n -&gt; String.format("hello %s - %d", name, n))
         .transform().byTakingFirstItems(count);
 }</code></pre>
 </div>
@@ -682,30 +711,30 @@ public class Fruit {
     public static Multi&lt;Fruit&gt; findAll(PgPool client) {
         return client.query("SELECT id, name FROM fruits ORDER BY name ASC").execute()
                 // Create a Multi from the set of rows:
-                .onItem().produceMulti(set -&gt; Multi.createFrom().items(() -&gt; StreamSupport.stream(set.spliterator(), false)))
+                .onItem().transformToMulti(set -&gt; Multi.createFrom().items(() -&gt; StreamSupport.stream(set.spliterator(), false)))
                 // For each row create a fruit instance
-                .onItem().apply(Fruit::from);
+                .onItem().transform(Fruit::from);
     }
 
     public static Uni&lt;Fruit&gt; findById(PgPool client, Long id) {
         return client.preparedQuery("SELECT id, name FROM fruits WHERE id = $1").execute(Tuple.of(id))
-                .onItem().apply(RowSet::iterator)
-                .onItem().apply(iterator -&gt; iterator.hasNext() ? from(iterator.next()) : null);
+                .onItem().transform(RowSet::iterator)
+                .onItem().transform(iterator -&gt; iterator.hasNext() ? from(iterator.next()) : null);
     }
 
     public Uni&lt;Long&gt; save(PgPool client) {
         return client.preparedQuery("INSERT INTO fruits (name) VALUES ($1) RETURNING (id)").execute(Tuple.of(name))
-                .onItem().apply(pgRowSet -&gt; pgRowSet.iterator().next().getLong("id"));
+                .onItem().transform(pgRowSet -&gt; pgRowSet.iterator().next().getLong("id"));
     }
 
     public Uni&lt;Boolean&gt; update(PgPool client) {
         return client.preparedQuery("UPDATE fruits SET name = $1 WHERE id = $2").execute(Tuple.of(name, id))
-                .onItem().apply(pgRowSet -&gt; pgRowSet.rowCount() == 1);
+                .onItem().transform(pgRowSet -&gt; pgRowSet.rowCount() == 1);
     }
 
     public static Uni&lt;Boolean&gt; delete(PgPool client, Long id) {
         return client.preparedQuery("DELETE FROM fruits WHERE id = $1").execute(Tuple.of(id))
-                .onItem().apply(pgRowSet -&gt; pgRowSet.rowCount() == 1);
+                .onItem().transform(pgRowSet -&gt; pgRowSet.rowCount() == 1);
     }
 
     private static Fruit from(Row row) {
@@ -787,31 +816,31 @@ public class FruitResource {
     @Path("{id}")
     public Uni&lt;Response&gt; getSingle(@PathParam Long id) {
         return Fruit.findById(client, id)
-                .onItem().apply(fruit -&gt; fruit != null ? Response.ok(fruit) : Response.status(Status.NOT_FOUND))
-                .onItem().apply(ResponseBuilder::build);
+                .onItem().transform(fruit -&gt; fruit != null ? Response.ok(fruit) : Response.status(Status.NOT_FOUND))
+                .onItem().transform(ResponseBuilder::build);
     }
 
     @POST
     public Uni&lt;Response&gt; create(Fruit fruit) {
         return fruit.save(client)
-                .onItem().apply(id -&gt; URI.create("/fruits/" + id))
-                .onItem().apply(uri -&gt; Response.created(uri).build());
+                .onItem().transform(id -&gt; URI.create("/fruits/" + id))
+                .onItem().transform(uri -&gt; Response.created(uri).build());
     }
 
     @PUT
     @Path("{id}")
     public Uni&lt;Response&gt; update(@PathParam Long id, Fruit fruit) {
         return fruit.update(client)
-                .onItem().apply(updated -&gt; updated ? Status.OK : Status.NOT_FOUND)
-                .onItem().apply(status -&gt; Response.status(status).build());
+                .onItem().transform(updated -&gt; updated ? Status.OK : Status.NOT_FOUND)
+                .onItem().transform(status -&gt; Response.status(status).build());
     }
 
     @DELETE
     @Path("{id}")
     public Uni&lt;Response&gt; delete(@PathParam Long id) {
         return Fruit.delete(client, id)
-                .onItem().apply(deleted -&gt; deleted ? Status.NO_CONTENT : Status.NOT_FOUND)
-                .onItem().apply(status -&gt; Response.status(status).build());
+                .onItem().transform(deleted -&gt; deleted ? Status.NO_CONTENT : Status.NOT_FOUND)
+                .onItem().transform(status -&gt; Response.status(status).build());
     }
 }</code></pre>
 </div>

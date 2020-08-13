@@ -190,7 +190,7 @@ public String helloBlocking(@PathParam("name") String name) {
 @Path("/mutiny/{name}")
 public Uni&lt;String&gt; helloMutiny(@PathParam("name") String name) {
     return mutinyHelloService.sayHello(HelloRequest.newBuilder().setName(name).build())
-            .onItem().apply(HelloReply::getMessage);
+            .onItem().transform(HelloReply::getMessage);
 }</code></pre>
 </div>
 </div>
@@ -242,7 +242,7 @@ public class StreamingEndpoint {
     public Multi&lt;String&gt; invokeSource() {
         // Retrieve a stream
         return client.source(Empty.newBuilder().build())
-                .onItem().apply(Item::getValue);
+                .onItem().transform(Item::getValue);
     }
 
     @GET
@@ -262,7 +262,7 @@ public class StreamingEndpoint {
         Multi&lt;Item&gt; inputs = Multi.createFrom().range(0, max)
                 .map(i -&gt; Integer.toString(i))
                 .map(i -&gt; Item.newBuilder().setValue(i).build());
-        return client.pipe(inputs).onItem().apply(Item::getValue);
+        return client.pipe(inputs).onItem().transform(Item::getValue);
     }
 
 }</code></pre>

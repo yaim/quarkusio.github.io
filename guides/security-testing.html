@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Funqy HTTP Binding with Azure Functions</title>
+  <title>Quarkus - Security Testing</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlight.pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -15,11 +15,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@QuarkusIO"> 
   <meta name="twitter:creator" content="@QuarkusIO">
-  <meta property="og:url" content="https://quarkus.io/guides/funqy-azure-functions-http" />
-  <meta property="og:title" content="Quarkus - Funqy HTTP Binding with Azure Functions" />
+  <meta property="og:url" content="https://quarkus.io/guides/security-testing" />
+  <meta property="og:title" content="Quarkus - Security Testing" />
   <meta property="og:description" content="Quarkus: Supersonic Subatomic Java" />
   <meta property="og:image" content="/assets/images/quarkus_card.png" />
-  <link rel="canonical" href="https://quarkus.io/guides/funqy-azure-functions-http">
+  <link rel="canonical" href="https://quarkus.io/guides/security-testing">
   <link rel="shortcut icon" type="image/png" href="/favicon.ico" >
   <link rel="stylesheet" href="https://quarkus.io/guides/stylesheet/config.css" />
   <link rel="stylesheet" href="/assets/css/main.css" />
@@ -78,12 +78,106 @@
   <div class="content">
     <div class="guide">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Funqy HTTP Binding with Azure Functions</h1>
-    <div class="hide-mobile toc"></div>
+    <h1 class="text-caps">Quarkus - Security Testing</h1>
+    <div class="hide-mobile toc"><ul class="sectlevel1">
+<li><a href="#configuring-user-information">Configuring User Information</a></li>
+<li><a href="#testing-security">Test Security Extension</a>
+<ul class="sectlevel2">
+<li><a href="#mixing-security-tests">Mixing security tests</a></li>
+</ul>
+</li>
+<li><a href="#use-wiremock-for-integration-testing">Use Wiremock for Integration Testing</a></li>
+</ul></div>
     <div>
-      <div class="paragraph">
-<p>You can use <a href="funqy-http">Funqy HTTP</a> on Azure Functions.  This allows you to invoke on multiple Funqy functions
-using HTTP deployed as one Azure Function.</p>
+      <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document describes how to test Quarkus Security.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-user-information"><a class="anchor" href="#configuring-user-information"></a>Configuring User Information</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use <a href="security-properties">quarkus-elytron-security-properties-file</a> for testing security. This supports both embedding user info in <code>application.properties</code> and standalone properties files.</p>
+</div>
+<div class="paragraph">
+<p>For example, the following configuration will allow for configuring the users in both the production where OAuth2 is required and development modes using <a href="https://quarkus.io/guides/config#configuration-profiles">Configuration Profiles</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs"># Configure embedded authentication
+%dev.quarkus.security.users.embedded.enabled=true
+%dev.quarkus.security.users.embedded.plain-text=true
+%dev.quarkus.security.users.embedded.users.scott=reader
+%dev.quarkus.security.users.embedded.users.stuart=writer
+%dev.quarkus.security.users.embedded.roles.scott=READER
+%dev.quarkus.security.users.embedded.roles.stuart=READER,WRITER
+
+# Configure OAuth2
+quarkus.oauth2.enabled=true
+%dev.quarkus.oauth2.enabled=false
+quarkus.oauth2.client-id=client-id
+quarkus.oauth2.client-secret=client-secret
+quarkus.oauth2.introspection-url=http://host:port/introspect</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing-security"><a class="anchor" href="#testing-security"></a>Test Security Extension</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus provides explicit support for testing with different users, and with the security subsystem disabled. To use
+this you must include the <code>quarkus-test-security</code> artifact:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+    &lt;artifactId&gt;quarkus-test-security&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This artifact provides the <code>io.quarkus.test.security.TestSecurity</code> annotation, that can be applied to test methods and
+test classes to control the security context that the test is run with. This allows you to do two things, you can disable
+authorization so tests can access secured endpoints without needing to be authenticated, and you can specify the identity
+that you want the tests to run under.</p>
+</div>
+<div class="paragraph">
+<p>A test that runs with authorization disabled can just set the enabled property to false:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Test
+@TestSecurity(authorizationEnabled = false)
+void someTestMethod() {
+...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will disable all access checks, which allows the test to access secured endpoints without needing to authenticate.</p>
+</div>
+<div class="paragraph">
+<p>You can also use this to configure the current user that the test will run as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Test
+@TestSecurity(user = "testUser", roles = {"admin", "user"})
+void someTestMethod() {
+...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will run the test with an identity with the given username and roles. Note that these can be combined, so you can
+disable authorization while also providing an identity to run the test under, which can be useful if the endpoint expects an
+identity to be present.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -92,40 +186,31 @@ using HTTP deployed as one Azure Function.</p>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-The Funqy HTTP + Azure Functions binding is not a replacement for REST over HTTP.  Because Funqy
-needs to be portable cross a lot of different protocols and function providers its HTTP binding
-is very minimalistic and you will lose REST features like linking and the ability to leverage
-HTTP features like cache-control and conditional GETs.  You may want to consider using Quarkus&#8217;s
-JAX-RS, Spring MVC, or Vert.x Web Reactive Route <a href="azure-functions-http">support</a> instead.  They also work with Quarkus and Azure Functions.
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
 <div class="paragraph">
-<p>This technology is considered preview.</p>
-</div>
-<div class="paragraph">
-<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
-Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
-Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
-</div>
-<div class="paragraph">
-<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
+<p>The feature is only available for <code>@QuarkusTest</code> and will <strong>not</strong> work on a <code>@NativeImageTest</code>.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
+<div class="sect2">
+<h3 id="mixing-security-tests"><a class="anchor" href="#mixing-security-tests"></a>Mixing security tests</h3>
 <div class="paragraph">
-<p>Follow the <a href="azure-functions-http">Azure Functions Http Guide</a>.  It walks through using a variety of HTTP
-frameworks on Azure Functions.  Including Funqy.</p>
+<p>If it becomes necessary to test security features using both <code>@TestSecurity</code> and Basic Auth (which is the fallback auth
+mechanism when none is defined), then Basic Auth needs to be enabled explicitly,
+for example by setting <code>quarkus.http.auth.basic=true</code> or <code>%test.quarkus.http.auth.basic=true</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="use-wiremock-for-integration-testing"><a class="anchor" href="#use-wiremock-for-integration-testing"></a>Use Wiremock for Integration Testing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can also use Wiremock to mock the authorization OAuth2 and OIDC services:
+See <a href="security-oauth#integration-testing">OAuth2 Integration testing</a> for more details.</p>
+</div>
+</div>
 </div>
     </div>
   </div>

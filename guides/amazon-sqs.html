@@ -608,8 +608,8 @@ public class QuarksCannonAsyncResource {
         return Uni.createFrom()
             .completionStage(sqs.sendMessage(m -&gt; m.queueUrl(queueUrl).messageBody(message)))
             .onItem().invoke(item -&gt; LOGGER.infov("Fired Quark[{0}, {1}}]", quark.getFlavor(), quark.getSpin()))
-            .onItem().apply(SendMessageResponse::messageId)
-            .onItem().apply(id -&gt; Response.ok().entity(id).build());
+            .onItem().transform(SendMessageResponse::messageId)
+            .onItem().transform(id -&gt; Response.ok().entity(id).build());
     }
 }</code></pre>
 </div>
@@ -661,8 +661,8 @@ public class QuarksShieldAsyncResource {
     public Uni&lt;List&lt;Quark&gt;&gt; receive() {
         return Uni.createFrom()
             .completionStage(sqs.receiveMessage(m -&gt; m.maxNumberOfMessages(10).queueUrl(queueUrl)))
-            .onItem().apply(ReceiveMessageResponse::messages)
-            .onItem().apply(m -&gt; m.stream().map(Message::body).map(this::toQuark).collect(Collectors.toList()));
+            .onItem().transform(ReceiveMessageResponse::messages)
+            .onItem().transform(m -&gt; m.stream().map(Message::body).map(this::toQuark).collect(Collectors.toList()));
     }
 
     private Quark toQuark(String message) {

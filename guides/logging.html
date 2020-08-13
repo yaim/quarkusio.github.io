@@ -80,22 +80,34 @@
   <div class="width-12-12">
     <h1 class="text-caps">Quarkus - Configuring Logging</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
+<li><a href="#supported-logging-apis">Supported Logging APIs</a>
+<ul class="sectlevel2">
+<li><a href="#what-about-apache-log4j">What about Apache Log4j ?</a></li>
+</ul>
+</li>
+<li><a href="#logging-levels">Logging levels</a></li>
 <li><a href="#runtime-configuration">Runtime configuration</a>
 <ul class="sectlevel2">
 <li><a href="#logging-categories">Logging categories</a></li>
 <li><a href="#root-logger-configuration">Root logger configuration</a></li>
-<li><a href="#log-levels">Log levels</a></li>
 </ul>
 </li>
-<li><a href="#format-string">Format String</a>
+<li><a href="#logging-format">Logging Format</a>
 <ul class="sectlevel2">
 <li><a href="#alt-console-format">Alternative Console Logging Formats</a></li>
 </ul>
 </li>
+<li><a href="#log-handlers">Log Handlers</a>
+<ul class="sectlevel2">
+<li><a href="#console-log-handler">Console log handler</a></li>
+<li><a href="#file-log-handler">File log handler</a></li>
+<li><a href="#syslog-log-handler">Syslog log handler</a></li>
+</ul>
+</li>
 <li><a href="#examples">Examples</a></li>
-<li><a href="#supported-logging-apis">Supported Logging APIs</a></li>
 <li><a href="#centralized-log-management">Centralized Log Management</a></li>
 <li><a href="#how-to-configure-logging-for-quarkustest">How to Configure Logging for <code>@QuarkusTest</code></a></li>
+<li><a href="#logging-adapters">Logging Adapters</a></li>
 <li><a href="#loggingConfigurationReference">Logging configuration reference</a></li>
 </ul></div>
     <div>
@@ -104,6 +116,245 @@
 <div class="paragraph">
 <p>This guide explains logging and how to configure it.</p>
 </div>
+<div class="paragraph">
+<p>Internally, Quarkus uses JBoss Log Manager and the JBoss Logging facade.<br>
+You can use the JBoss Logging facade inside your code as it&#8217;s already provided,
+or any of the supported Logging API listed in the next chapter as Quarkus will send them to JBoss Log Manager.</p>
+</div>
+<div class="paragraph">
+<p>All the logging configuration will then be done inside your <code>application.properties</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="supported-logging-apis"><a class="anchor" href="#supported-logging-apis"></a>Supported Logging APIs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Applications and components may use any of the following APIs for logging, and the logs will be merged:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK <code>java.util.logging</code> (also called JUL)</p>
+</li>
+<li>
+<p><a href="https://github.com/jboss-logging/jboss-logging">JBoss Logging</a></p>
+</li>
+<li>
+<p><a href="https://www.slf4j.org/">SLF4J</a></p>
+</li>
+<li>
+<p><a href="https://commons.apache.org/proper/commons-logging/">Apache Commons Logging</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Internally Quarkus uses JBoss Logging; you can also use it inside your application so that no other dependencies should be added for your logs.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">import org.jboss.logging.Logger;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/hello")
+public class ExampleResource {
+
+    private static final Logger LOG = Logger.getLogger(ExampleResource.class);
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        LOG.info("Hello");
+        return "hello";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you use JBoss Logging but one of your libraries uses a different logging API, you may need to configure a <a href="#logging-adapters">Logging Adapter</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="what-about-apache-log4j"><a class="anchor" href="#what-about-apache-log4j"></a>What about Apache Log4j ?</h3>
+<div class="paragraph">
+<p><a href="https://logging.apache.org/log4j/2.x/">Log4j</a> is a logging implementation: it contains a logging backend and a logging facade.
+Quarkus uses the JBoss Log Manager backend, so you will need to include the <code>log4j2-jboss-logmanager</code> library to route Log4j logs to JBoss Log Manager.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">    &lt;dependency&gt;
+      &lt;groupId&gt;org.jboss.logmanager&lt;/groupId&gt;
+      &lt;artifactId&gt;log4j2-jboss-logmanager&lt;/artifactId&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+    &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is the library needed for Log2J version 2; if you use the legacy Log4J version 1 you need to use <code>log4j-jboss-logmanager</code> instead.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can then use the Log4J API inside your application.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Do not include any Log4j dependencies. The <code>log4j2-jboss-logmanager</code> library includes what&#8217;s needed to use Log4j as a logging facade.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="logging-levels"><a class="anchor" href="#logging-levels"></a>Logging levels</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>These are the log levels used by Quarkus:</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+OFF
+</td>
+<td class="hdlist2">
+<p>Special level to turn off logging.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+FATAL
+</td>
+<td class="hdlist2">
+<p>A critical service failure/complete inability to service requests of any kind.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+ERROR
+</td>
+<td class="hdlist2">
+<p>A significant disruption in a request or the inability to service a request.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+WARN
+</td>
+<td class="hdlist2">
+<p>A non-critical service error or problem that may not require immediate correction.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+INFO
+</td>
+<td class="hdlist2">
+<p>Service lifecycle events or important related very-low-frequency information.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+DEBUG
+</td>
+<td class="hdlist2">
+<p>Messages that convey extra information regarding lifecycle or non-request-bound events which may be helpful for debugging.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+TRACE
+</td>
+<td class="hdlist2">
+<p>Messages that convey extra per-request debugging information that may be very high frequency.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+ALL
+</td>
+<td class="hdlist2">
+<p>Special level for all messages including custom levels.</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In addition, the following levels may be configured for applications and libraries using <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html"><code>java.util.logging</code></a>:</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+SEVERE
+</td>
+<td class="hdlist2">
+<p>Same as <strong>ERROR</strong>.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+WARNING
+</td>
+<td class="hdlist2">
+<p>Same as <strong>WARN</strong>.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+CONFIG
+</td>
+<td class="hdlist2">
+<p>Service configuration information.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+FINE
+</td>
+<td class="hdlist2">
+<p>Same as <strong>DEBUG</strong>.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+FINER
+</td>
+<td class="hdlist2">
+<p>Same as <strong>TRACE</strong>.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+FINEST
+</td>
+<td class="hdlist2">
+<p>Event more debugging information than <code>TRACE</code>, maybe with even higher frequency.</p>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -111,7 +362,7 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Run time logging is configured in the <code>application.properties</code> file,
-for example to set everything to <code>INFO</code> logging except Hibernate:</p>
+for example, to set the default log level to <code>INFO</code> logging and include Hibernate <code>DEBUG</code> logs:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -215,56 +466,22 @@ be escaped. An example is shown in <a href="#category-example">File TRACE Loggin
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect2">
-<h3 id="log-levels"><a class="anchor" href="#log-levels"></a>Log levels</h3>
 <div class="paragraph">
-<p>There are several log levels you can use:</p>
+<p>If no level configuration exists for a given logger category, the enclosing (parent) category is examined. If no categories are configured which enclose the category in question, then the root logger configuration is used.</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 16.6666%;">
-<col style="width: 83.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Level</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FATAL</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A critical service failure/complete inability to service requests of any kind</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ERROR</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A significant disruption in a request or the inability to service a request</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WARN</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A non-critical service error or problem that may not require immediate correction</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>INFO</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Service lifecycle events or important related very-low-frequency information</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DEBUG</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Messages that convey extra information regarding lifecycle or non-request-bound events which may be helpful for debugging</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TRACE</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Messages that convey extra per-request debugging information that may be very high frequency</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="format-string"><a class="anchor" href="#format-string"></a>Format String</h2>
+<h2 id="logging-format"><a class="anchor" href="#logging-format"></a>Logging Format</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>By default, Quarkus uses a pattern-based logging formatter that generates human-readable text logs.</p>
+</div>
+<div class="paragraph">
+<p>You can configure the format for each log handler via a dedicated property.
+For the console handler, the property is <code>quarkus.log.console.format</code>.</p>
+</div>
 <div class="paragraph">
 <p>The logging format string supports the following symbols:</p>
 </div>
@@ -412,9 +629,9 @@ of the Quarkus application is captured by a service which can, for example, proc
 later analysis.</p>
 </div>
 <div class="sect3">
-<h4 id="json-logging"><a class="anchor" href="#json-logging"></a>JSON Logging</h4>
+<h4 id="json-logging"><a class="anchor" href="#json-logging"></a>JSON Logging Format</h4>
 <div class="paragraph">
-<p>In order to configure JSON logging, the <code>quarkus-logging-json</code> extension may be employed.  Add this extension to your
+<p>In order to configure the JSON logging format, the <code>quarkus-logging-json</code> extension may be employed.  Add this extension to your
 application POM as the following snippet illustrates.</p>
 </div>
 <div class="listingblock">
@@ -596,17 +813,57 @@ source class name, source file name, source method name and source line number.
 </div>
 </div>
 <div class="sect1">
+<h2 id="log-handlers"><a class="anchor" href="#log-handlers"></a>Log Handlers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A log handler is a logging component responsible for the emission of log events to a recipient.
+Quarkus comes with three different log handlers: <strong>console</strong>, <strong>file</strong> and <strong>syslog</strong>.</p>
+</div>
+<div class="sect2">
+<h3 id="console-log-handler"><a class="anchor" href="#console-log-handler"></a>Console log handler</h3>
+<div class="paragraph">
+<p>The console log handler is enabled by default.  It outputs all log events to the console of your application (typically to the system&#8217;s <code>stdout</code>).</p>
+</div>
+<div class="paragraph">
+<p>For details of its configuration options, see <a href="#quarkus-log-logging-log-config_quarkus.log.console">the Console Logging configuration reference</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="file-log-handler"><a class="anchor" href="#file-log-handler"></a>File log handler</h3>
+<div class="paragraph">
+<p>The file log handler is disabled by default. It outputs all log events to a file on the application&#8217;s host.
+It supports log file rotation.</p>
+</div>
+<div class="paragraph">
+<p>For details of its configuration options, see <a href="#quarkus-log-logging-log-config_quarkus.log.file">the File Logging configuration reference</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="syslog-log-handler"><a class="anchor" href="#syslog-log-handler"></a>Syslog log handler</h3>
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Syslog">Syslog</a> is a protocol for sending log messages on Unix-like systems using a protocol defined by <a href="https://tools.ietf.org/html/rfc5424">RFC 5424</a>.</p>
+</div>
+<div class="paragraph">
+<p>The syslog handler sends all log events to a syslog server (by default, the syslog server that is local to the application).
+It is disabled by default.</p>
+</div>
+<div class="paragraph">
+<p>For details of its configuration options, see <a href="#quarkus-log-logging-log-config_quarkus.log.syslog">the Syslog Logging configuration reference</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
 <div class="sectionbody">
 <div class="listingblock">
-<div class="title">Console DEBUG Logging, No color, Shortened Time, Shortened Category Prefixes</div>
+<div class="title">Console DEBUG Logging except for Quarkus logs (INFO), No color, Shortened Time, Shortened Category Prefixes</div>
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.log.console.enable=true
-quarkus.log.console.format=%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.log.console.format=%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n
 quarkus.log.console.level=DEBUG
 quarkus.log.console.color=false
 
-quarkus.log.category."io.quarkus".level=DEBUG</code></pre>
+quarkus.log.category."io.quarkus".level=INFO</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -635,6 +892,18 @@ quarkus.log.category."io.quarkus.smallrye.jwt".level=TRACE
 quarkus.log.category."io.undertow.request.security".level=TRACE</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As we don&#8217;t change the root logger, console log will only contain <code>INFO</code> or higher order logs.
+</td>
+</tr>
+</table>
+</div>
 <div id="category-named-handlers-example" class="listingblock">
 <div class="title">Named handlers attached to a category</div>
 <div class="content">
@@ -650,30 +919,6 @@ quarkus.log.handler.file."STRUCTURED_LOGGING_FILE".format=%e%n
 quarkus.log.category."io.quarkus.category".level=INFO
 quarkus.log.category."io.quarkus.category".handlers=STRUCTURED_LOGGING,STRUCTURED_LOGGING_FILE</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="supported-logging-apis"><a class="anchor" href="#supported-logging-apis"></a>Supported Logging APIs</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Applications and components may use any of the following APIs for logging, and the logs will be merged:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>JDK <code>java.util.logging</code></p>
-</li>
-<li>
-<p><a href="https://github.com/jboss-logging/jboss-logging">JBoss Logging</a></p>
-</li>
-<li>
-<p><a href="https://www.slf4j.org/">SLF4J</a></p>
-</li>
-<li>
-<p><a href="https://commons.apache.org/proper/commons-logging/">Apache Commons Logging</a></p>
-</li>
-</ul>
 </div>
 </div>
 </div>
@@ -740,6 +985,96 @@ In particular, you need to set the appropriate <code>LogManager</code> using the
 </div>
 </div>
 <div class="sect1">
+<h2 id="logging-adapters"><a class="anchor" href="#logging-adapters"></a>Logging Adapters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus relies on the JBoss Logging library for all the logging requirements.</p>
+</div>
+<div class="paragraph">
+<p>If you are using libraries that have dependencies on other logging libraries such as Apache Commons Logging, Log4j or Slf4j, you need to exclude them from the dependencies and use one of the adapters provided by JBoss Logging.</p>
+</div>
+<div class="paragraph">
+<p>This is especially important when building native executables as you could encounter issues similar to the following when compiling the native executable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Caused by java.lang.ClassNotFoundException: org.apache.commons.logging.impl.LogFactoryImpl</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is due to the logging implementation not being included in the native executable.
+Using the JBoss Logging adapters will solve this problem.</p>
+</div>
+<div class="paragraph">
+<p>These adapters are available for most of the common Open Source logging components, such as Apache Commons Logging:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.logging&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-logging-jboss-logging&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>JDK Logging:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.logging&lt;/groupId&gt;
+    &lt;artifactId&gt;jboss-logging-jdk&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Log4j:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.logging&lt;/groupId&gt;
+    &lt;artifactId&gt;jboss-logging-log4j&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Log4j2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.logging&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j2-jboss-logmanager&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And Slf4j:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.slf4j&lt;/groupId&gt;
+    &lt;artifactId&gt;slf4j-jboss-logging&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This is not needed for libraries that are dependencies of a Quarkus extension as the extension will take care of this for you.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="loggingConfigurationReference"><a class="anchor" href="#loggingConfigurationReference"></a>Logging configuration reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
@@ -764,21 +1099,35 @@ In particular, you need to set the appropriate <code>LogManager</code> using the
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The log level of the root category, which is used as the default log level for all categories. In addition to the standard JDK log level JBoss Logging also adds the following: <code>org.jboss.logmanager.Level#FATAL</code> <code>org.jboss.logmanager.Level#ERROR</code> <code>org.jboss.logmanager.Level#WARN</code> <code>org.jboss.logmanager.Level#INFO</code> <code>org.jboss.logmanager.Level#DEBUG</code> <code>org.jboss.logmanager.Level#TRACE</code></p>
+<p>The log level of the root category, which is used as the default log level for all categories.</p>
 </div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="https://docs.jboss.org/jbossas/javadoc/7.1.2.Final/org/jboss/logmanager/Level.html">Level</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>INFO</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-log-logging-log-config_quarkus.log.min-level"></a><code><a href="#quarkus-log-logging-log-config_quarkus.log.min-level">quarkus.log.min-level</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
 <div class="paragraph">
-<p>The default minimum log level</p>
+<p>JBoss Logging supports Apache style log levels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>{@link org.jboss.logmanager.Level#FATAL}</p>
+</li>
+<li>
+<p>{@link org.jboss.logmanager.Level#ERROR}</p>
+</li>
+<li>
+<p>{@link org.jboss.logmanager.Level#WARN}</p>
+</li>
+<li>
+<p>{@link org.jboss.logmanager.Level#INFO}</p>
+</li>
+<li>
+<p>{@link org.jboss.logmanager.Level#DEBUG}</p>
+</li>
+<li>
+<p>{@link org.jboss.logmanager.Level#TRACE}</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In addition, it also supports the standard JDK log levels.</p>
 </div>
 </div>
 </div></div></td>

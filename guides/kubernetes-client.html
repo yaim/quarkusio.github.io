@@ -740,6 +740,20 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-kubernetes-client_quarkus.kubernetes-config.secrets.enabled"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-config.secrets.enabled">quarkus.kubernetes-config.secrets.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Whether or not configuration can be read from secrets. If set to <code>true</code>, Kubernetes resources allowing access to secrets (role and role binding) will be generated.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-kubernetes-client_quarkus.kubernetes-config.enabled"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-config.enabled">quarkus.kubernetes-config.enabled</a></code></p>
 </div>
 <div class="openblock description">
@@ -778,6 +792,34 @@ Have a look at <a href="https://kubernetes.io/docs/tasks/configure-pod-container
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-kubernetes-client_quarkus.kubernetes-config.secrets"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-config.secrets">quarkus.kubernetes-config.secrets</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Secrets to look for in the namespace that the Kubernetes Client has been configured for. If you use this, you probably want to enable <code>quarkus.kubernetes-config.secrets.enabled</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-kubernetes-client_quarkus.kubernetes-config.namespace"></a><code><a href="#quarkus-kubernetes-client_quarkus.kubernetes-config.namespace">quarkus.kubernetes-config.namespace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Namespace to look for config maps and secrets. If this is not specified, then the namespace configured in the kubectl config context is used. If the value is specified and the namespace doesn&#8217;t exist, the application will fail to start.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>

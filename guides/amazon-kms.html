@@ -489,17 +489,19 @@ public class QuarkusKmsAsyncResource {
     @Path("/encrypt")
     public Uni&lt;String&gt; encrypt(String data) {
         return Uni.createFrom().completionStage(kms.encrypt(req -&gt; req.keyId(keyArn).plaintext(SdkBytes.fromUtf8String(data))))
-            .onItem().apply(EncryptResponse::ciphertextBlob)
-            .onItem().apply(blob -&gt; Base64.encodeBase64String(blob.asByteArray()));
+            .onItem().transform(EncryptResponse::ciphertextBlob)
+            .onItem().transform(blob -&gt; Base64.encodeBase64String(blob.asByteArray()));
     }
 
     @POST
     @Path("/decrypt")
     public Uni&lt;String&gt; decrypt(String data) {
         return Uni.createFrom().item(SdkBytes.fromByteArray(Base64.decodeBase64(data.getBytes())))
-            .onItem().produceCompletionStage(msg -&gt; kms.decrypt(req -&gt; req.keyId(keyArn).ciphertextBlob(msg)))
-            .onItem().apply(DecryptResponse::plaintext)
-            .onItem().apply(SdkBytes::asUtf8String);
+            .onItem().transformToUni(msg -&gt;
+                Uni.createFrom().completionStage(kms.decrypt(req -&gt; req.keyId(keyArn).ciphertextBlob(msg)))
+            )
+            .onItem().transform(DecryptResponse::plaintext)
+            .onItem().transform(SdkBytes::asUtf8String);
     }
 }</code></pre>
 </div>

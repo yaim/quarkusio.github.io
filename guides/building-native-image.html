@@ -93,9 +93,15 @@
 <li><a href="#testing-an-existing-native-executable">Testing an existing native executable</a></li>
 </ul>
 </li>
-<li><a href="#creating-a-container">Creating a container</a></li>
-<li><a href="#creating-a-container-with-a-multi-stage-docker-build">Creating a container with a multi-stage Docker build</a></li>
-<li><a href="#configuration-reference">Configuring the Native Image</a></li>
+<li><a href="#container-runtime">Creating a Linux executable without GraalVM installed</a></li>
+<li><a href="#creating-a-container">Creating a container</a>
+<ul class="sectlevel2">
+<li><a href="#using-the-container-image-extensions">Using the container-image extensions</a></li>
+<li><a href="#manually">Manually</a></li>
+<li><a href="#using-a-multi-stage-docker-build">Using a multi-stage Docker build</a></li>
+</ul>
+</li>
+<li><a href="#configuration-reference">Configuring the Native Executable</a></li>
 <li><a href="#whats-next">What&#8217;s next?</a></li>
 </ul></div>
     <div>
@@ -371,7 +377,7 @@ Multiple options may be separated by a comma.</p>
 <p>Another possibility is to include the <code>quarkus.native.additional-build-args</code> configuration property in your <code>application.properties</code>.</p>
 </div>
 <div class="paragraph">
-<p>You can find more information about how to configure the native image building process in the <a href="#configuration-reference">Configuring the Native Image</a> section below.</p>
+<p>You can find more information about how to configure the native image building process in the <a href="#configuration-reference">Configuring the Native Executable</a> section below.</p>
 </div>
 </td>
 </tr>
@@ -563,7 +569,7 @@ target directory you can specify the executable with the <code>-Dnative.image.pa
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-a-container"><a class="anchor" href="#creating-a-container"></a>Creating a container</h2>
+<h2 id="container-runtime"><a class="anchor" href="#container-runtime"></a>Creating a Linux executable without GraalVM installed</h2>
 <div class="sectionbody">
 <div class="admonitionblock important">
 <table>
@@ -579,16 +585,13 @@ on Windows you should share your project&#8217;s drive at Docker Desktop file sh
 </table>
 </div>
 <div class="paragraph">
-<p>You can run the application in a container using the JAR produced by the Quarkus Maven Plugin.
-However, in this guide we focus on creating a container image using the produced native executable.</p>
+<p>Quite often one only needs to create a native Linux executable for their Quarkus application (for example in order to run in a containerized environment) and would like to avoid
+the trouble of installing the proper GraalVM version in order to accomplish this task (for example, in CI environments it&#8217;s common practice
+to install as little software as possible).</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="/guides/images/containerization-process.png" alt="Containerization Process"></span></p>
-</div>
-<div class="paragraph">
-<p>By default, the native executable is tailored for your operating system (Linux, macOS, Windows etc).
-Because the container may not use the same <em>executable</em> format as the one produced by your operating system,
-we will instruct the Maven build to produce an executable from inside a container:</p>
+<p>To this end, Quarkus provides a very convenient way of creating a native Linux executable by leveraging a container runtime such as Docker or podman.
+The easiest way of accomplishing this task is to execute:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -615,11 +618,57 @@ we will instruct the Maven build to produce an executable from inside a containe
 </div>
 <div class="paragraph">
 <p>These are normal Quarkus config properties, so if you always want to build in a container
-it is recommended you add these to your <code>application.properties</code> so you do not need to specify them every time.</p>
+it is recommended you add these to your <code>application.properties</code> in order to avoid specifying them every time.</p>
 </div>
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-a-container"><a class="anchor" href="#creating-a-container"></a>Creating a container</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="using-the-container-image-extensions"><a class="anchor" href="#using-the-container-image-extensions"></a>Using the container-image extensions</h3>
+<div class="paragraph">
+<p>By far the easiest way to create a container-image from your Quarkus application is to leverage one of the container-image extensions.</p>
+</div>
+<div class="paragraph">
+<p>If one of those extensions is present, then creating a container image for the native executable is essentially a matter of executing a single command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>quarkus.native.container-build=true</code> allows for creating a Linux executable without GraalVM being installed (and is only necessary if you don&#8217;t have GraalVM installed locally or your local operating system is not Linux)</p>
+</li>
+<li>
+<p><code>quarkus.container-image.build=true</code> instructs Quarkus to create a container-image using the final application artifact (which is the native executable in this case)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>See the <a href="container-image">Container Image guide</a> for more details.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="manually"><a class="anchor" href="#manually"></a>Manually</h3>
+<div class="paragraph">
+<p>You can run the application in a container using the JAR produced by the Quarkus Maven Plugin.
+However, in this section we focus on creating a container image using the produced native executable.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="/guides/images/containerization-process.png" alt="Containerization Process"></span></p>
+</div>
+<div class="paragraph">
+<p>When using a local GraalVM installation, the native executable targets your local operating system (Linux, macOS, Windows etc).
+However, as a container may not use the same <em>executable</em> format as the one produced by your operating system,
+we will instruct the Maven build to produce an executable by leveraging a container runtime (as described in <a href="#container-runtime">this section</a>):</p>
 </div>
 <div class="paragraph">
 <p>The produced executable will be a 64 bit Linux executable, so depending on your operating system it may no longer be runnable.
@@ -692,16 +741,14 @@ The <code>Dockerfiles</code> use the <a href="https://access.redhat.com/containe
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Interested by tiny Docker images, check the <a href="https://github.com/quarkusio/quarkus-images/tree/master/distroless">distroless</a> version.
+If you are interested in tiny Docker images, check the <a href="https://github.com/quarkusio/quarkus-images/tree/master/distroless">distroless</a> version.
 </td>
 </tr>
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="creating-a-container-with-a-multi-stage-docker-build"><a class="anchor" href="#creating-a-container-with-a-multi-stage-docker-build"></a>Creating a container with a multi-stage Docker build</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="using-a-multi-stage-docker-build"><a class="anchor" href="#using-a-multi-stage-docker-build"></a>Using a multi-stage Docker build</h3>
 <div class="paragraph">
 <p>The previous section showed you how to build a native executable using Maven, but implicitly required that the proper GraalVM version be installed on the building machine (be it your local machine or your CI/CD infrastructure).</p>
 </div>
@@ -789,11 +836,12 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuring the Native Image</h2>
+<h2 id="configuration-reference"><a class="anchor" href="#configuration-reference"></a>Configuring the Native Executable</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are a lot of different configuration options that can affect how the native image is generated.
+<p>There are a lot of different configuration options that can affect how the native executable is generated.
 These are provided in <code>application.properties</code> the same as any other config property.</p>
 </div>
 <div class="paragraph">
@@ -878,20 +926,6 @@ These are provided in <code>application.properties</code> the same as any other 
 <div class="content">
 <div class="paragraph">
 <p>If all character sets should be added to the native image. This increases image size</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-native-pkg-native-config_quarkus.native.include-all-time-zones"></a><code><a href="#quarkus-native-pkg-native-config_quarkus.native.include-all-time-zones">quarkus.native.include-all-time-zones</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>If all time zones should be added to the native image. This increases image size</p>
 </div>
 </div>
 </div></div></td>

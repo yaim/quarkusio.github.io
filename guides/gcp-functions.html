@@ -172,8 +172,17 @@ Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-de
 <h2 id="solution"><a class="anchor" href="#solution"></a>Solution</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide walks you through generating a sample project followed by creating multiple functions showing how to implements <code>HttpFunction</code>, <code>BackgroundFunction</code> and <code>RawBackgroundFunction</code> in Quarkus..
+<p>This guide walks you through generating a sample project followed by creating multiple functions showing how to implement <code>HttpFunction</code>, <code>BackgroundFunction</code> and <code>RawBackgroundFunction</code> in Quarkus.
 Once built, you will be able to deploy the project to Google Cloud.</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want to follow all these steps, you can go right to the completed example.</p>
+</div>
+<div class="paragraph">
+<p>Clone the Git repository: <code>git clone <a href="https://github.com/quarkusio/quarkus-quickstarts.git" class="bare">https://github.com/quarkusio/quarkus-quickstarts.git</a></code>, or download an <a href="https://github.com/quarkusio/quarkus-quickstarts/archive/master.zip">archive</a>.</p>
+</div>
+<div class="paragraph">
+<p>The solution is located in the <code>google-cloud-functions-quickstart</code> <a href="https://github.com/quarkusio/quarkus-quickstarts/tree/master/google-cloud-functions-quickstart">directory</a>.</p>
 </div>
 </div>
 </div>
@@ -193,6 +202,25 @@ You can use the following Maven command to create it:</p>
     -Dpath="/hello" \
     -Dextensions="google-cloud-functions"</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Now, let&#8217;s remove what&#8217;s not needed inside the generated application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Remove the dependency <code>io.quarkus:quarkus-reasteasy</code> from your <code>pom.xml</code> file.</p>
+</li>
+<li>
+<p>Remove the generated <code>org.acme.quickstart.GreetingResource</code> class.</p>
+</li>
+<li>
+<p>Remove the <code>index.html</code> from <code>resources/META-INF/resources</code> or it will be picked up instead of your Function.</p>
+</li>
+<li>
+<p>Remove the existing tests.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -231,7 +259,7 @@ You can use the following Maven command to create it:</p>
 <div class="paragraph">
 <p>The <code>quarkus-google-cloud-functions</code> extension scans your project for a class that directly implements the Google Cloud <code>HttpFunction</code>, <code>BackgroundFunction</code> or <code>RawBakgroundFunction</code> interface.
 It must find a class in your project that implements one of these interfaces or it will throw a build time failure.
-If it finds more than one function class, a build time exception will also be thrown.</p>
+If it finds more than one function classes, a build time exception will also be thrown.</p>
 </div>
 <div class="paragraph">
 <p>Sometimes, though, you might have a few related functions that share code and creating multiple maven modules is just
@@ -334,7 +362,7 @@ public class BackgroundFunctionStorageTest implements BackgroundFunction&lt;Back
     @Override
     public void accept(StorageEvent event, Context context) throws Exception { <i class="conum" data-value="5"></i><b>(5)</b>
         System.out.println("Receive event: " + event);
-        System.out.println("Be polite, say" + greetingService.hello());
+        System.out.println("Be polite, say " + greetingService.hello());
     }
 
     //
@@ -389,7 +417,7 @@ public class RawBackgroundFunctionPubSubTest implements RawBackgroundFunction { 
     @Override
     public void accept(String event, Context context) throws Exception { <i class="conum" data-value="5"></i><b>(5)</b>
         System.out.println("PubSub event: " + event);
-        System.out.println("Be polite, say" + greetingService.hello());
+        System.out.println("Be polite, say " + greetingService.hello());
     }
 }</code></pre>
 </div>
@@ -516,6 +544,26 @@ it needs to use <code>--trigger-event google.storage.object.finalize</code> and 
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>To trigger the event, you can send a file to the GCS <code>quarkus-hello</code> bucket or you can use gcloud to simulate one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">gcloud functions call quarkus-example-storage  --data '{"name":"test.txt"}'</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>--data</code> contains the GCS event, it is a JSON document with the name of the file added to the bucket.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="the-rawbackgroundfunction-2"><a class="anchor" href="#the-rawbackgroundfunction-2"></a>The RawBackgroundFunction</h3>
@@ -543,6 +591,14 @@ it needs to use <code>--trigger-event google.pubsub.topic.publish</code> and the
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>To trigger the event, you can send a file to the <code>hello_topic</code> topic of you can use gcloud to simulate one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">gcloud functions call quarkus-example-pubsub --data '{"data":{"greeting":"world"}}'</code></pre>
+</div>
 </div>
 </div>
 </div>

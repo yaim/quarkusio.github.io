@@ -86,6 +86,7 @@
 <li><a href="#handling-streams">Handling streams</a></li>
 <li><a href="#health-check">Health check</a></li>
 <li><a href="#reflection-service">Reflection Service</a></li>
+<li><a href="#scaling">Scaling</a></li>
 <li><a href="#server-configuration">Server configuration</a></li>
 <li><a href="#example-of-configuration">Example of configuration</a>
 <ul class="sectlevel2">
@@ -258,7 +259,7 @@ public class StreamingService extends MutinyStreamingGrpc.StreamingImplBase {
                 .map(Item::getValue)
                 .map(Long::parseLong)
                 .onItem().scan(() -&gt; 0L, Long::sum)
-                .onItem().apply(l -&gt; Item.newBuilder().setValue(Long.toString(l)).build());
+                .onItem().transform(l -&gt; Item.newBuilder().setValue(Long.toString(l)).build());
     }
 }</code></pre>
 </div>
@@ -321,6 +322,17 @@ This service allows tools like <a href="https://github.com/fullstorydev/grpcurl"
 <div class="paragraph">
 <p>The reflection service is enabled by default in <em>dev</em> mode.
 In test or production mode, you need to enable it explicitly by setting <code>quarkus.grpc-server.enable-reflection-service</code> to <code>true</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="scaling"><a class="anchor" href="#scaling"></a>Scaling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, quarkus-grpc starts a single gRPC server running on a single event loop.</p>
+</div>
+<div class="paragraph">
+<p>If you wish to scale your server, you can set the number of server instances by setting <code>quarkus.grpc.server.instances</code>.</p>
 </div>
 </div>
 </div>
@@ -622,6 +634,20 @@ In test or production mode, you need to enable it explicitly by setting <code>qu
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-grpc-config-group-config-grpc-server-configuration_quarkus.grpc.server.instances"></a><code><a href="#quarkus-grpc-config-group-config-grpc-server-configuration_quarkus.grpc.server.instances">quarkus.grpc.server.instances</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Number of gRPC server verticle instances. This is useful for scaling easily across multiple cores. The number should not exceed the amount of event loops.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>1</code></p></td>
 </tr>
 </tbody>
 </table>

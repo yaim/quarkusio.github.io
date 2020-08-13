@@ -1157,7 +1157,33 @@ public class PanacheFunctionalityTest {
         Mockito.when(Person.findOrdered()).thenReturn(Collections.emptyList());
         Assertions.assertTrue(Person.findOrdered().isEmpty());
 
+        // Mocking a void method
+        Person.voidMethod();
+
+        // Make it throw
+        PanacheMock.doThrow(new RuntimeException("Stef2")).when(Person.class).voidMethod();
+        try {
+            Person.voidMethod();
+            Assertions.fail();
+        } catch (RuntimeException x) {
+            Assertions.assertEquals("Stef2", x.getMessage());
+        }
+
+        // Back to doNothing
+        PanacheMock.doNothing().when(Person.class).voidMethod();
+        Person.voidMethod();
+
+        // Make it call the real method
+        PanacheMock.doCallRealMethod().when(Person.class).voidMethod();
+        try {
+            Person.voidMethod();
+            Assertions.fail();
+        } catch (RuntimeException x) {
+            Assertions.assertEquals("void", x.getMessage());
+        }
+
         PanacheMock.verify(Person.class).findOrdered();
+        PanacheMock.verify(Person.class, Mockito.atLeast(4)).voidMethod();
         PanacheMock.verify(Person.class, Mockito.atLeastOnce()).findById(Mockito.any());
         PanacheMock.verifyNoMoreInteractions(Person.class);
     }
@@ -1168,7 +1194,7 @@ public class PanacheFunctionalityTest {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Be sure to call your <code>verify</code> methods on <code>PanacheMock</code> rather than <code>Mockito</code>, otherwise you won&#8217;t know
+<td>Be sure to call your <code>verify</code> and <code>do*</code> methods on <code>PanacheMock</code> rather than <code>Mockito</code>, otherwise you won&#8217;t know
 what mock object to pass.</td>
 </tr>
 </table>

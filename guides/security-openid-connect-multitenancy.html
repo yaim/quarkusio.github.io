@@ -113,27 +113,11 @@
 <div class="paragraph">
 <p>When serving multiple customers from the same application (e.g.: SaaS), each customer is a tenant. By enabling multi-tenancy support to your applications you are allowed to also support distinct authentication policies for each tenant even though if that means authenticating against different OpenID Providers, such as Keycloak and Google.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
 <div class="paragraph">
-<p>This technology is considered preview.</p>
+<p>Please read the <a href="security-openid-connect">Using OpenID Connect to Protect Service Applications</a> guide if you need to authorize a tenant using Bearer Token Authorization.</p>
 </div>
 <div class="paragraph">
-<p>In <em>preview</em>, backward compatibility and presence in the ecosystem is not guaranteed.
-Specific improvements might require to change configuration or APIs and plans to become <em>stable</em> are under way.
-Feedback is welcome on our <a href="https://groups.google.com/d/forum/quarkus-dev">mailing list</a> or as issues in our <a href="https://github.com/quarkusio/quarkus/issues">GitHub issue tracker</a>.</p>
-</div>
-<div class="paragraph">
-<p>For a full list of possible extension statuses, check our <a href="https://quarkus.io/faq/#extension-status">FAQ entry</a>.</p>
-</div>
-</td>
-</tr>
-</table>
+<p>Please read the <a href="security-openid-connect-web-authentication">Using OpenID Connect to Protect Web Applications</a> guide if you need to authenticate and authorize a tenant using OpenId Connect Authorization Code Flow.</p>
 </div>
 </div>
 </div>
@@ -671,6 +655,119 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.auth-server-url"></a><code><a href="#quarkus-oidc_quarkus.oidc.auth-server-url">quarkus.oidc.auth-server-url</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. OIDC discovery endpoint will be called by default by appending a '.well-known/openid-configuration' path to this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.discovery-enabled"></a><code><a href="#quarkus-oidc_quarkus.oidc.discovery-enabled">quarkus.oidc.discovery-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enables OIDC discovery. If the discovery is disabled then the following properties must be configured: - 'authorization-path' and 'token-path' for the 'web-app' applications - 'jwks-path' or 'introspection-path' for both the 'web-app' and 'service' applications
+ 'web-app' applications may also have 'user-info-path' and 'end-session-path' properties configured.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.authorization-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.authorization-path">quarkus.oidc.authorization-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC authorization endpoint which authenticates the users. This property must be set for the 'web-app' applications if OIDC discovery is disabled. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.token-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.token-path">quarkus.oidc.token-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC token endpoint which issues ID, access and refresh tokens. This property must be set for the 'web-app' applications if OIDC discovery is disabled. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.user-info-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.user-info-path">quarkus.oidc.user-info-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC userinfo endpoint. This property must only be set for the 'web-app' applications if OIDC discovery is disabled and 'authentication.user-info-required' property is enabled. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.introspection-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.introspection-path">quarkus.oidc.introspection-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC RFC7662 introspection endpoint which can introspect both opaque and JWT tokens. This property must be set if OIDC discovery is disabled and 1) the opaque bearer access tokens have to be verified or 2) JWT tokens have to be verified while the cached JWK verification set with no matching JWK is being refreshed. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.jwks-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.jwks-path">quarkus.oidc.jwks-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC JWKS endpoint which returns a JSON Web Key Verification Set. This property should be set if OIDC discovery is disabled and the local JWT verification is required. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.end-session-path">quarkus.oidc.end-session-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC end_session_endpoint. This property must be set if OIDC discovery is disabled and RP Initiated Logout support for the 'web-app' applications is required. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.connection-delay"></a><code><a href="#quarkus-oidc_quarkus.oidc.connection-delay">quarkus.oidc.connection-delay</a></code></p>
 </div>
 <div class="openblock description">
@@ -686,68 +783,12 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.auth-server-url"></a><code><a href="#quarkus-oidc_quarkus.oidc.auth-server-url">quarkus.oidc.auth-server-url</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. OIDC discovery endpoint will be called by appending a '/.well-known/openid-configuration' path segment to this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.introspection-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.introspection-path">quarkus.oidc.introspection-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Relative path of the RFC7662 introspection service.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.jwks-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.jwks-path">quarkus.oidc.jwks-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Relative path of the OIDC service returning a JWK set.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.end-session-path">quarkus.oidc.end-session-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Relative path of the OIDC end_session_endpoint.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.public-key"></a><code><a href="#quarkus-oidc_quarkus.oidc.public-key">quarkus.oidc.public-key</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Public key for the local JWT token verification.</p>
+<p>Public key for the local JWT token verification. OIDC server connection will not be created when this property is set.</p>
 </div>
 </div>
 </div></div></td>
@@ -798,6 +839,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.roles.source"></a><code><a href="#quarkus-oidc_quarkus.oidc.roles.source">quarkus.oidc.roles.source</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Source of the principal roles.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>idtoken</code>, <code>accesstoken</code>, <code>userinfo</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.token.issuer"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.issuer">quarkus.oidc.token.issuer</a></code></p>
 </div>
 <div class="openblock description">
@@ -822,6 +877,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.token.token-type"></a><code><a href="#quarkus-oidc_quarkus.oidc.token.token-type">quarkus.oidc.token.token-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected token type</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -1052,6 +1121,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.authentication.verify-access-token"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.verify-access-token">quarkus.oidc.authentication.verify-access-token</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Both ID and access tokens are verified as part of the authorization code flow and every time these tokens are retrieved from the user session. One should disable the access token verification if it is only meant to be propagated to the downstream services. Note the ID token will always be verified.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.authentication.force-redirect-https-scheme"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.force-redirect-https-scheme">quarkus.oidc.authentication.force-redirect-https-scheme</a></code></p>
 </div>
 <div class="openblock description">
@@ -1091,6 +1174,34 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.authentication.user-info-required"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.user-info-required">quarkus.oidc.authentication.user-info-required</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this property is set to 'true' then an OIDC UserInfo endpoint will be called</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.authentication.xhr-auto-redirect"></a><code><a href="#quarkus-oidc_quarkus.oidc.authentication.xhr-auto-redirect">quarkus.oidc.authentication.xhr-auto-redirect</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this property is set to 'true' then a normal 302 redirect response will be returned if the request was initiated via XMLHttpRequest and the current user needs to be (re)authenticated which may not be desirable for Single Page Applications since XMLHttpRequest automatically following the redirect may not work given that OIDC authorization endpoints typically do not support CORS. If this property is set to <code>false</code> then a status code of '499' will be returned to allow the client to handle the redirect manually</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1197,6 +1308,119 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.auth-server-url"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.auth-server-url">quarkus.oidc."tenant".auth-server-url</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. OIDC discovery endpoint will be called by default by appending a '.well-known/openid-configuration' path to this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.discovery-enabled"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.discovery-enabled">quarkus.oidc."tenant".discovery-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enables OIDC discovery. If the discovery is disabled then the following properties must be configured: - 'authorization-path' and 'token-path' for the 'web-app' applications - 'jwks-path' or 'introspection-path' for both the 'web-app' and 'service' applications
+ 'web-app' applications may also have 'user-info-path' and 'end-session-path' properties configured.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authorization-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authorization-path">quarkus.oidc."tenant".authorization-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC authorization endpoint which authenticates the users. This property must be set for the 'web-app' applications if OIDC discovery is disabled. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token-path">quarkus.oidc."tenant".token-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC token endpoint which issues ID, access and refresh tokens. This property must be set for the 'web-app' applications if OIDC discovery is disabled. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.user-info-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.user-info-path">quarkus.oidc."tenant".user-info-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC userinfo endpoint. This property must only be set for the 'web-app' applications if OIDC discovery is disabled and 'authentication.user-info-required' property is enabled. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.introspection-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.introspection-path">quarkus.oidc."tenant".introspection-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC RFC7662 introspection endpoint which can introspect both opaque and JWT tokens. This property must be set if OIDC discovery is disabled and 1) the opaque bearer access tokens have to be verified or 2) JWT tokens have to be verified while the cached JWK verification set with no matching JWK is being refreshed. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.jwks-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.jwks-path">quarkus.oidc."tenant".jwks-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC JWKS endpoint which returns a JSON Web Key Verification Set. This property should be set if OIDC discovery is disabled and the local JWT verification is required. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.end-session-path">quarkus.oidc."tenant".end-session-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Relative path of the OIDC end_session_endpoint. This property must be set if OIDC discovery is disabled and RP Initiated Logout support for the 'web-app' applications is required. This property will be ignored if the discovery is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.connection-delay"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.connection-delay">quarkus.oidc."tenant".connection-delay</a></code></p>
 </div>
 <div class="openblock description">
@@ -1212,68 +1436,12 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.auth-server-url"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.auth-server-url">quarkus.oidc."tenant".auth-server-url</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>The base URL of the OpenID Connect (OIDC) server, for example, 'https://host:port/auth'. OIDC discovery endpoint will be called by appending a '/.well-known/openid-configuration' path segment to this URL. Note if you work with Keycloak OIDC server, make sure the base URL is in the following format: 'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.introspection-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.introspection-path">quarkus.oidc."tenant".introspection-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Relative path of the RFC7662 introspection service.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.jwks-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.jwks-path">quarkus.oidc."tenant".jwks-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Relative path of the OIDC service returning a JWK set.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.end-session-path"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.end-session-path">quarkus.oidc."tenant".end-session-path</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Relative path of the OIDC end_session_endpoint.</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-middle"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.public-key"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.public-key">quarkus.oidc."tenant".public-key</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>Public key for the local JWT token verification.</p>
+<p>Public key for the local JWT token verification. OIDC server connection will not be created when this property is set.</p>
 </div>
 </div>
 </div></div></td>
@@ -1324,6 +1492,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.roles.source"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.roles.source">quarkus.oidc."tenant".roles.source</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Source of the principal roles.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>idtoken</code>, <code>accesstoken</code>, <code>userinfo</code></p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.issuer"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.issuer">quarkus.oidc."tenant".token.issuer</a></code></p>
 </div>
 <div class="openblock description">
@@ -1348,6 +1530,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.token.token-type"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.token.token-type">quarkus.oidc."tenant".token.token-type</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Expected token type</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 <tr>
@@ -1578,6 +1774,20 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.verify-access-token"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.verify-access-token">quarkus.oidc."tenant".authentication.verify-access-token</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Both ID and access tokens are verified as part of the authorization code flow and every time these tokens are retrieved from the user session. One should disable the access token verification if it is only meant to be propagated to the downstream services. Note the ID token will always be verified.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.force-redirect-https-scheme"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.force-redirect-https-scheme">quarkus.oidc."tenant".authentication.force-redirect-https-scheme</a></code></p>
 </div>
 <div class="openblock description">
@@ -1631,6 +1841,34 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.user-info-required"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.user-info-required">quarkus.oidc."tenant".authentication.user-info-required</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this property is set to 'true' then an OIDC UserInfo endpoint will be called</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-oidc_quarkus.oidc.-tenant-.authentication.xhr-auto-redirect"></a><code><a href="#quarkus-oidc_quarkus.oidc.-tenant-.authentication.xhr-auto-redirect">quarkus.oidc."tenant".authentication.xhr-auto-redirect</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If this property is set to 'true' then a normal 302 redirect response will be returned if the request was initiated via XMLHttpRequest and the current user needs to be (re)authenticated which may not be desirable for Single Page Applications since XMLHttpRequest automatically following the redirect may not work given that OIDC authorization endpoints typically do not support CORS. If this property is set to <code>false</code> then a status code of '499' will be returned to allow the client to handle the redirect manually</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">

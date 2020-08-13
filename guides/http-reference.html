@@ -386,6 +386,12 @@ not set.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The duration (see note below) indicating how long the results of a pre-flight request can be cached.
 This value will be returned in a <code>Access-Control-Max-Age</code> response header.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.cors.access-control-allow-credentials</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean value to tell the browsers to expose the response to front-end JavaScript code
+when the request’s credentials mode Request.credentials is “include”</p></td>
+</tr>
 </tbody>
 </table>
 <div class="admonitionblock note">
@@ -418,7 +424,8 @@ quarkus.http.cors.origins=http://foo.com,http://www.bar.io
 quarkus.http.cors.methods=GET,PUT,POST
 quarkus.http.cors.headers=X-Custom
 quarkus.http.cors.exposed-headers=Content-Disposition
-quarkus.http.cors.access-control-max-age=24H</code></pre>
+quarkus.http.cors.access-control-max-age=24H
+quarkus.http.cors.access-control-allow-credentials=true</code></pre>
 </div>
 </div>
 </div>
@@ -426,55 +433,90 @@ quarkus.http.cors.access-control-max-age=24H</code></pre>
 <div class="sect1">
 <h2 id="http-limits-configuration"><a class="anchor" href="#http-limits-configuration"></a>6. HTTP Limits Configuration</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>The following properties are supported.</p>
+<div class="paragraph configuration-legend">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> Configuration property fixed at build time - All other configuration properties are overridable at runtime</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
+<table class="tableblock frame-all grid-all stretch configuration-reference">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 50%;">
+<col style="width: 80%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
 </colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Property Name</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.limits.max-body-size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>10240K</code></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum size of request body.</p></td>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-vertx-http-config-group-server-limits-config_configuration"></a><a href="#quarkus-vertx-http-config-group-server-limits-config_configuration">Configuration property</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quarkus.http.limits.max-header-size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><code>20K</code></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum length of all headers.</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-header-size"></a><code><a href="#quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-header-size">quarkus.http.limits.max-header-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum length of all headers.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>20K</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-body-size"></a><code><a href="#quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-body-size">quarkus.http.limits.max-body-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum size of a request body.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>10240K</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-chunk-size"></a><code><a href="#quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-chunk-size">quarkus.http.limits.max-chunk-size</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The max HTTP chunk size</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">MemorySize  <a href="#memory-size-note-anchor" title="More information about the MemorySize format"><span class="icon"><i class="fa fa-question-circle"></i></span></a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>8192</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-initial-line-length"></a><code><a href="#quarkus-vertx-http-config-group-server-limits-config_quarkus.http.limits.max-initial-line-length">quarkus.http.limits.max-initial-line-length</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The maximum length of the initial line (e.g. <code>"GET / HTTP/1.0"</code>).</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>4096</code></p></td>
 </tr>
 </tbody>
 </table>
-<div class="admonitionblock note">
+<div id="memory-size-note-anchor" class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
+<div class="title">About the MemorySize format</div>
 <div class="paragraph">
-<p>The following config options will recognize sizes expressed as strings in this format (shown as a regular expression): <code>[0-9]+[KkMmGgTtPpEeZzYy]?</code>.
-If no unit suffix is given, bytes are assumed.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>quarkus.http.limits.max-body-size</code>,</p>
-</li>
-<li>
-<p><code>quarkus.http.limits.max-header-size</code></p>
-</li>
-</ul>
+<p>A size configuration option recognises string in this format (shown as a regular expression): <code>[0-9]+[KkMmGgTtPpEeZzYy]?</code>.
+If no suffix is given, assume bytes.</p>
 </div>
 </td>
 </tr>
@@ -525,7 +567,15 @@ either logging to the standard JBoss logging output, or logging to a dedicated f
 <div class="openblock description">
 <div class="content">
 <div class="paragraph">
-<p>The access log pattern: If this is the string 'common' or 'combined' then this will use one of the specified named formats: common: %h %l %u %t "%r" %s %b combined: %h %l %u %t "%r" %s %b "%{i,Referer}" "%{i,User-Agent}" Otherwise consult the Quarkus documentation for the full list of variables that can be used.</p>
+<p>The access log pattern: If this is the string 'common', 'combined' or 'long' then this will use one of the specified named formats:
+ -  common:
+ %h %l %u %t "%r" %s %b
+ -  combined:
+ %h %l %u %t "%r" %s %b "%{i,Referer}" "%{i,User-Agent}"
+ -  long:
+ %r
+ %{ALL_REQUEST_HEADERS}
+   Otherwise consult the Quarkus documentation for the full list of variables that can be used.</p>
 </div>
 </div>
 </div></div></td>
@@ -751,6 +801,11 @@ either logging to the standard JBoss logging output, or logging to a dedicated f
 <td class="tableblock halign-left valign-top"><p class="tableblock">SSL session id</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{SSL_SESSION_ID}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All request headers</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%{ALL_REQUEST_HEADERS}</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cookie value</p></td>

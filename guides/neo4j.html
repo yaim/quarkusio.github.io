@@ -842,6 +842,20 @@ Typically, in the previous code, the session is closed when the stream completes
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>bolt://localhost:7687</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-neo4j_quarkus.neo4j.encrypted"></a><code><a href="#quarkus-neo4j_quarkus.neo4j.encrypted">quarkus.neo4j.encrypted</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If the driver should use encrypted traffic.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_quarkus.neo4j.authentication"></a><a href="#quarkus-neo4j_quarkus.neo4j.authentication">Authentication</a></p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
 <th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
@@ -882,6 +896,53 @@ Typically, in the previous code, the session is closed when the stream completes
 <div class="content">
 <div class="paragraph">
 <p>Set this to true to disable authentication.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-neo4j_quarkus.neo4j.trust-settings"></a><a href="#quarkus-neo4j_quarkus.neo4j.trust-settings">Configure trust settings for encrypted traffic</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-neo4j_quarkus.neo4j.trust-settings.strategy"></a><code><a href="#quarkus-neo4j_quarkus.neo4j.trust-settings.strategy">quarkus.neo4j.trust-settings.strategy</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Configures which trust strategy to apply when using encrypted traffic.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>trust-all-certificates</code>, <code>trust-custom-ca-signed-certificates</code>, <code>trust-system-ca-signed-certificates</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>trust-system-ca-signed-certificates</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-neo4j_quarkus.neo4j.trust-settings.cert-file"></a><code><a href="#quarkus-neo4j_quarkus.neo4j.trust-settings.cert-file">quarkus.neo4j.trust-settings.cert-file</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The file of the certificate to use.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-neo4j_quarkus.neo4j.trust-settings.hostname-verification-enabled"></a><code><a href="#quarkus-neo4j_quarkus.neo4j.trust-settings.hostname-verification-enabled">quarkus.neo4j.trust-settings.hostname-verification-enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If hostname verification is used.</p>
 </div>
 </div>
 </div></div></td>

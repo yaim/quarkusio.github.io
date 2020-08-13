@@ -93,7 +93,7 @@
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus includes the <code>kubernetes-config</code> extension which allows developers to use Kubernetes <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/configmap">ConfigMaps</a> as a configuration source, without having to mount the ConfigMaps into the <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">Pod</a> running the Quarkus application.</p>
+<p>Quarkus includes the <code>kubernetes-config</code> extension which allows developers to use Kubernetes <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/configmap">ConfigMaps</a> and <a href="https://cloud.google.com/kubernetes-engine/docs/concepts/secret">Secrets</a> as a configuration source, without having to mount them into the <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">Pod</a> running the Quarkus application.</p>
 </div>
 </div>
 </div>
@@ -126,29 +126,34 @@ by running the following command in your project base directory.</p>
 <h2 id="usage"><a class="anchor" href="#usage"></a>Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The extension works by reading ConfigMaps directly from the Kubernetes API server using the <a href="kubernetes-client">Kubernetes Client</a>.</p>
+<p>The extension works by reading ConfigMaps and Secrets directly from the Kubernetes API server using the <a href="kubernetes-client">Kubernetes Client</a>.</p>
 </div>
 <div class="paragraph">
-<p>The extension understands the following types of ConfigMaps as input sources:</p>
+<p>The extension understands the following types of ConfigMaps and Secrets as input sources:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>ConfigMaps that contain literal data (see <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-configmaps-from-literal-values">this</a> for an example on how to create one)</p>
+<p>ConfigMaps and Secrets that contain literal data (see <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-configmaps-from-literal-values">this</a> for an example on how to create one)</p>
 </li>
 <li>
-<p>ConfigMaps created from files named, <code>application.properties</code>, <code>application.yaml</code> or <code>application.yml</code> (see <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-configmaps-from-files">this</a> for an example on how to create one).</p>
+<p>ConfigMaps and Secrets created from files named <code>application.properties</code>, <code>application.yaml</code> or <code>application.yml</code> (see <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-configmaps-from-files">this</a> for an example on how to create one).</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>To configure which ConfigMaps (from the namespace that the application runs in, or the explicitly configured namespace via <code>quarkus.kubernetes-client.namespace</code>), you can set the <code>quarkus.kubernetes-config.config-maps</code> property (in any of the usual Quarkus ways).
-Keep in mind however that you will also have to explicitly enable the retrieval of ConfigMaps by setting <code>quarkus.kubernetes-config.enabled=true</code> (the default is <code>false</code> in order to make it easy to test the application locally).</p>
+<p>You have to explicitly enable the retrieval of ConfigMaps and Secrets by setting <code>quarkus.kubernetes-config.enabled=true</code>.
+The default is <code>false</code> in order to make it easy to test the application locally.</p>
+</div>
+<div class="paragraph">
+<p>Afterwards, set the <code>quarkus.kubernetes-config.configmaps</code> property to configure which ConfigMaps should be used.
+Set the <code>quarkus.kubernetes-config.secrets</code> property to configure which Secrets should be used.
+To access ConfigMaps and Secrets from a specific namespace, you can set the <code>quarkus.kubernetes-config.namespace</code> property.</p>
 </div>
 <div class="sect2">
 <h3 id="priority-of-obtained-properties"><a class="anchor" href="#priority-of-obtained-properties"></a>Priority of obtained properties</h3>
 <div class="paragraph">
-<p>The properties obtained from the ConfigMaps have a higher priority (i.e. they override) any properties of the same name that are found in <code>application.properties</code> (or the YAML equivalents), but they have lower priority than properties set via Environment Variables or Java System Properties.</p>
+<p>The properties obtained from the ConfigMaps and Secrets have a higher priority than (i.e. they override) any properties of the same name that are found in <code>application.properties</code> (or the YAML equivalents), but they have lower priority than properties set via Environment Variables or Java System Properties.</p>
 </div>
 </div>
 <div class="sect2">
@@ -159,6 +164,13 @@ that is used to run the application needs to have the proper permissions for suc
 </div>
 <div class="paragraph">
 <p>Thankfully, when using the <code>kubernetes-config</code> extension along with the <a href="deploying-to-kubernetes">Kubernetes</a> extension, all the necessary Kubernetes resources to make that happen are automatically generated.</p>
+</div>
+<div class="sect3">
+<h4 id="secrets"><a class="anchor" href="#secrets"></a>Secrets</h4>
+<div class="paragraph">
+<p>By default, the <a href="deploying-to-kubernetes">Kubernetes</a> extension doesn&#8217;t generate the necessary resources to allow accessing secrets.
+Set <code>quarkus.kubernetes-config.secrets.enabled=true</code> to generate the necessary role and corresponding role binding.</p>
+</div>
 </div>
 </div>
 </div>
@@ -221,6 +233,34 @@ that is used to run the application needs to have the proper permissions for suc
 </div>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.secrets"></a><code><a href="#quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.secrets">quarkus.kubernetes-config.secrets</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Secrets to look for in the namespace that the Kubernetes Client has been configured for. If you use this, you probably want to enable <code>quarkus.kubernetes-config.secrets.enabled</code>.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">list of string</p></td>
+<td class="tableblock halign-left valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.namespace"></a><code><a href="#quarkus-kubernetes-config-kubernetes-config-source-config_quarkus.kubernetes-config.namespace">quarkus.kubernetes-config.namespace</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Namespace to look for config maps and secrets. If this is not specified, then the namespace configured in the kubectl config context is used. If the value is specified and the namespace doesn&#8217;t exist, the application will fail to start.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 </tr>
 </tbody>

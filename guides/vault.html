@@ -87,6 +87,7 @@
 <li><a href="#totp">TOTP Secrets Engine</a></li>
 <li><a href="#vault-health-check">Vault Health Check</a></li>
 <li><a href="#tls">TLS</a></li>
+<li><a href="#vault-provisioning">Vault Provisioning</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a></li>
 </ul></div>
@@ -719,6 +720,84 @@ If you want to disable this behavior (for instance when using a trust store), yo
 <p>The last relevant property is <code>quarkus.vault.tls.skip-verify</code>, which allows to communicate with Vault using TLS,
 but without checking the certificate authenticity. This may be convenient in development, but is strongly
 discouraged in production as it is not more secure than talking to Vault in plain HTTP.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="vault-provisioning"><a class="anchor" href="#vault-provisioning"></a>Vault Provisioning</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Beside the typical client use cases, the Quarkus extension can be used to provision Vault as well,
+for instance as part of a CD pipeline. Specific CDI beans support this scenario:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>VaultSystemBackendEngine</code>: create Vault Policies. See the <a href="https://www.vaultproject.io/api-docs/system/policy">Vault documentation</a>.</p>
+</li>
+<li>
+<p><code>VaultKubernetesAuthService</code>. See the <a href="https://www.vaultproject.io/api-docs/auth/kubernetes">Vault documentation</a>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Configure the Kubernetes Auth Method (Kubernetes host, certificates, keys, &#8230;&#8203;)</p>
+</li>
+<li>
+<p>Create Kubernetes Auth Roles (association between Kubernetes service accounts, Kubernetes namespaces and Vault policies)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+VaultSystemBackendEngine vaultSystemBackendEngine;
+
+@Inject
+VaultKubernetesAuthService vaultKubernetesAuthService;
+
+...
+
+  String rules = "path \"transit/*\" {\n" +
+          "  capabilities = [ \"create\", \"read\", \"update\" ]\n" +
+          "}";
+  String policyName = "sys-test-policy";
+  vaultSystemBackendEngine.createUpdatePolicy(policyName, rules);
+
+  String roleName = "test-auth-k8s";
+  List&lt;String&gt; boundServiceAccountNames = asList("vault-auth");
+  List&lt;String&gt; boundServiceAccountNamespaces = asList("default");
+  List&lt;String&gt; tokenPolicies = asList(policyName);
+
+  vaultKubernetesAuthService.createRole(roleName, new VaultKubernetesAuthRole()
+          .setBoundServiceAccountNames(boundServiceAccountNames)
+          .setBoundServiceAccountNamespaces(boundServiceAccountNamespaces)
+          .setTokenPolicies(tokenPolicies));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Like any client, a provisioning program would have to authenticate using one of the supported Auth methods, and get the appropriate grants through one or more policies. Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># create Policies
+path "sys/policy/*" {
+  capabilities = ["read", "create", "update", "delete"]
+}
+
+# create Kubernetes Auth Roles
+path "auth/kubernetes/role/*" {
+  capabilities = ["read", "create", "update", "delete"]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should adjust to the minimal set of access rights depending on your specific use case.</p>
 </div>
 </div>
 </div>

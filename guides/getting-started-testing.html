@@ -89,27 +89,35 @@
 <li><a href="#injecting-a-uri">4.2. Injecting a URI</a></li>
 </ul>
 </li>
-<li><a href="#injection-into-tests">5. Injection into tests</a></li>
-<li><a href="#applying-interceptors-to-tests">6. Applying Interceptors to Tests</a></li>
-<li><a href="#testing-different-profiles">7. Testing Different Profiles</a>
+<li><a href="#testing-a-specific-endpoint">5. Testing a specific endpoint</a>
 <ul class="sectlevel2">
-<li><a href="#writing-a-profile">7.1. Writing a Profile</a></li>
+<li><a href="#testhttpresource">5.1. TestHTTPResource</a></li>
+<li><a href="#restassured">5.2. RESTassured</a></li>
 </ul>
 </li>
-<li><a href="#mock-support">8. Mock Support</a>
+<li><a href="#injection-into-tests">6. Injection into tests</a></li>
+<li><a href="#applying-interceptors-to-tests">7. Applying Interceptors to Tests</a></li>
+<li><a href="#enrichment-via-quarkustestcallback">8. Enrichment via QuarkusTest*Callback</a></li>
+<li><a href="#testing_different_profiles">9. Testing Different Profiles</a>
 <ul class="sectlevel2">
-<li><a href="#cdi-alternative-mechanism">8.1. CDI <code>@Alternative</code> mechanism.</a></li>
-<li><a href="#mocking-using-quarkusmock">8.2. Mocking using QuarkusMock</a></li>
-<li><a href="#mocking-with-panache">8.3. Mocking with Panache</a></li>
+<li><a href="#writing-a-profile">9.1. Writing a Profile</a></li>
 </ul>
 </li>
-<li><a href="#quarkus-test-resource">9. Starting services before the Quarkus application starts</a></li>
-<li><a href="#native-executable-testing">10. Native Executable Testing</a></li>
-<li><a href="#test-from-ide">11. Running <code>@QuarkusTest</code> from an IDE</a>
+<li><a href="#mock-support">10. Mock Support</a>
 <ul class="sectlevel2">
-<li><a href="#eclipse-separate-jre-definition">11.1. Eclipse separate JRE definition</a></li>
-<li><a href="#vscode-run-with-configuration">11.2. VSCode "run with" configuration</a></li>
-<li><a href="#intellij-junit-template">11.3. IntelliJ JUnit template</a></li>
+<li><a href="#cdi-alternative-mechanism">10.1. CDI <code>@Alternative</code> mechanism.</a></li>
+<li><a href="#mocking-using-quarkusmock">10.2. Mocking using QuarkusMock</a></li>
+<li><a href="#mocking-with-panache">10.3. Mocking with Panache</a></li>
+</ul>
+</li>
+<li><a href="#testing-security">11. Testing Security</a></li>
+<li><a href="#quarkus-test-resource">12. Starting services before the Quarkus application starts</a></li>
+<li><a href="#native-executable-testing">13. Native Executable Testing</a></li>
+<li><a href="#test-from-ide">14. Running <code>@QuarkusTest</code> from an IDE</a>
+<ul class="sectlevel2">
+<li><a href="#eclipse-separate-jre-definition">14.1. Eclipse separate JRE definition</a></li>
+<li><a href="#vscode-run-with-configuration">14.2. VSCode "run with" configuration</a></li>
+<li><a href="#intellij-junit-template">14.3. IntelliJ JUnit template</a></li>
 </ul>
 </li>
 </ul></div>
@@ -402,7 +410,155 @@ public class StaticContentTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="injection-into-tests"><a class="anchor" href="#injection-into-tests"></a>5. Injection into tests</h2>
+<h2 id="testing-a-specific-endpoint"><a class="anchor" href="#testing-a-specific-endpoint"></a>5. Testing a specific endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Both RESTassured and <code>@TestHTTPResource</code> allow you to specify the endpoint class you are testing rather than hard coding
+a path. This currently supports both JAX-RS endpoints, Servlets and Reactive Routes. This makes it a lot easier to see exactly which endpoints
+a given test is testing.</p>
+</div>
+<div class="paragraph">
+<p>For the purposes of these examples I am going to assume we have an endpoint that looks like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/hello")
+public class GreetingResource {
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return "hello";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This currently does not support the <code>@ApplicationPath()</code> annotation to set the JAX-RS context path. Use the
+<code>quarkus.resteasy.path</code> config value instead if you want a custom context path.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="testhttpresource"><a class="anchor" href="#testhttpresource"></a>5.1. TestHTTPResource</h3>
+<div class="paragraph">
+<p>You can the use the <code>io.quarkus.test.common.http.TestHTTPEndpoint</code> annotation to specify the endpoint path, and the path
+will be extracted from the provided endpoint. If you also specify a value for the <code>TestHTTPResource</code> endpoint it will
+be appended to the end of the endpoint path.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started.testing;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import io.quarkus.test.common.http.TestHTTPResource;
+import io.quarkus.test.junit.QuarkusTest;
+
+@QuarkusTest
+public class StaticContentTest {
+
+    @TestHTTPEndpoint(GreetingResource.class)  <i class="conum" data-value="1"></i><b>(1)</b>
+    @TestHTTPResource
+    URL url;
+
+    @Test
+    public void testIndexHtml() throws Exception {
+        try (InputStream in = url.openStream()) {
+            String contents = readStream(in);
+            Assertions.assertTrue(contents.equals("hello"));
+        }
+    }
+
+    private static String readStream(InputStream in) throws IOException {
+        byte[] data = new byte[1024];
+        int r;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        while ((r = in.read(data)) &gt; 0) {
+            out.write(data, 0, r);
+        }
+        return new String(out.toByteArray(), StandardCharsets.UTF_8);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Because <code>GreetingResource</code> is annotated with <code>@Path("/hello")</code> the injected URL
+will end with <code>/hello</code>.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restassured"><a class="anchor" href="#restassured"></a>5.2. RESTassured</h3>
+<div class="paragraph">
+<p>To control the RESTassured base path (i.e. the default path that serves as the root for every
+request) you can use the <code>io.quarkus.test.common.http.TestHTTPEndpoint</code> annotation. This can
+be applied at the class or method level. To test out greeting resource we would do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started.testing;
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+
+@QuarkusTest
+@TestHTTPEndpoint(GreetingResource.class) <i class="conum" data-value="1"></i><b>(1)</b>
+public class GreetingResourceTest {
+
+    @Test
+    public void testHelloEndpoint() {
+        given()
+          .when().get()    <i class="conum" data-value="2"></i><b>(2)</b>
+          .then()
+             .statusCode(200)
+             .body(is("hello"));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This tells RESTAssured to prefix all requests with <code>/hello</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Note we don&#8217;t need to specify a path here, as <code>/hello</code> is the default for this test</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="injection-into-tests"><a class="anchor" href="#injection-into-tests"></a>6. Injection into tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>So far we have only covered integration style tests that test the app via HTTP endpoints, but what if we want to do unit
@@ -448,7 +604,7 @@ public class GreetingServiceTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="applying-interceptors-to-tests"><a class="anchor" href="#applying-interceptors-to-tests"></a>6. Applying Interceptors to Tests</h2>
+<h2 id="applying-interceptors-to-tests"><a class="anchor" href="#applying-interceptors-to-tests"></a>7. Applying Interceptors to Tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>As mentioned above Quarkus tests are actually full CDI beans, and as such you can apply CDI interceptors as you would
@@ -493,7 +649,83 @@ public class TestStereotypeTestCase {
 </div>
 </div>
 <div class="sect1">
-<h2 id="testing-different-profiles"><a class="anchor" href="#testing-different-profiles"></a>7. Testing Different Profiles</h2>
+<h2 id="enrichment-via-quarkustestcallback"><a class="anchor" href="#enrichment-via-quarkustestcallback"></a>8. Enrichment via QuarkusTest*Callback</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alternatively or additionally to an interceptor, you can enrich <strong>all</strong> your <code>@QuarkusTest</code> classes by implementing the following callback interfaces:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>io.quarkus.test.junit.callback.QuarkusTestBeforeAllCallback</code></p>
+</li>
+<li>
+<p><code>io.quarkus.test.junit.callback.QuarkusTestBeforeEachCallback</code></p>
+</li>
+<li>
+<p><code>io.quarkus.test.junit.callback.QuarkusTestAfterEachCallback</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Such a callback implementation has to be registered as a "service provider" as defined by <code>java.util.ServiceLoader</code>.</p>
+</div>
+<div class="paragraph">
+<p>E.g. the following sample callback:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package org.acme.getting.started.testing;
+
+import io.quarkus.test.junit.callback.QuarkusTestBeforeEachCallback;
+import io.quarkus.test.junit.callback.QuarkusTestMethodContext;
+
+public class MyQuarkusTestBeforeEachCallback implements QuarkusTestBeforeEachCallback {
+
+    @Override
+    public void beforeEach(QuarkusTestMethodContext context) {
+        System.out.println("Executing " + context.getTestMethod());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>has to be registered via <code>src/main/resources/META-INF/services/io.quarkus.test.junit.callback.QuarkusTestBeforeEachCallback</code> as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">org.acme.getting.started.testing.MyQuarkusTestBeforeEachCallback</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+It is possible to read annotations from the test class or method to control what the callback shall be doing.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+While it is possible to use JUnit Jupiter callback interfaces like <code>BeforeEachCallback</code>, you might run into classloading issues because Quarkus has
+         to run tests in a custom classloader which JUnit is not aware of.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing_different_profiles"><a class="anchor" href="#testing_different_profiles"></a>9. Testing Different Profiles</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>So far in all our examples we only start Quarkus once for all tests. Before the first test is run Quarkus will boot,
@@ -519,7 +751,7 @@ that need a specific profile into their own package, and then run tests alphabet
 </table>
 </div>
 <div class="sect2">
-<h3 id="writing-a-profile"><a class="anchor" href="#writing-a-profile"></a>7.1. Writing a Profile</h3>
+<h3 id="writing-a-profile"><a class="anchor" href="#writing-a-profile"></a>9.1. Writing a Profile</h3>
 <div class="paragraph">
 <p>To implement a test profile we need to implement <code>io.quarkus.test.junit.QuarkusTestProfile</code>:</p>
 </div>
@@ -580,14 +812,14 @@ same configuration.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="mock-support"><a class="anchor" href="#mock-support"></a>8. Mock Support</h2>
+<h2 id="mock-support"><a class="anchor" href="#mock-support"></a>10. Mock Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Quarkus supports the use of mock objects using two different approaches. You can either use CDI alternatives to
 mock out a bean for all test classes, or use <code>QuarkusMock</code> to mock out beans on a per test basis.</p>
 </div>
 <div class="sect2">
-<h3 id="cdi-alternative-mechanism"><a class="anchor" href="#cdi-alternative-mechanism"></a>8.1. CDI <code>@Alternative</code> mechanism.</h3>
+<h3 id="cdi-alternative-mechanism"><a class="anchor" href="#cdi-alternative-mechanism"></a>10.1. CDI <code>@Alternative</code> mechanism.</h3>
 <div class="paragraph">
 <p>To use this simply override the bean you wish to mock with a class in the <code>src/test/java</code> directory, and put the <code>@Alternative</code> and <code>@Priority(1)</code> annotations on the bean.
 Alternatively, a convenient <code>io.quarkus.test.Mock</code> stereotype annotation could be used.
@@ -640,7 +872,7 @@ to be baked into the native image.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="mocking-using-quarkusmock"><a class="anchor" href="#mocking-using-quarkusmock"></a>8.2. Mocking using QuarkusMock</h3>
+<h3 id="mocking-using-quarkusmock"><a class="anchor" href="#mocking-using-quarkusmock"></a>10.2. Mocking using QuarkusMock</h3>
 <div class="paragraph">
 <p>The <code>io.quarkus.test.junit.QuarkusMock</code> class can be used to temporarily mock out any normal scoped
 bean. If you use this method in a <code>@BeforeAll</code> method the mock will take effect for all tests on the current class,
@@ -726,7 +958,7 @@ public class MockTestCase {
 objects to provide the behaviour you require.</p>
 </div>
 <div class="sect3">
-<h4 id="further-simplification-with-injectmock"><a class="anchor" href="#further-simplification-with-injectmock"></a>8.2.1. Further simplification with <code>@InjectMock</code></h4>
+<h4 id="further-simplification-with-injectmock"><a class="anchor" href="#further-simplification-with-injectmock"></a>10.2.1. Further simplification with <code>@InjectMock</code></h4>
 <div class="paragraph">
 <p>Building on the features provided by <code>QuarkusMock</code>, Quarkus also allows users to effortlessly take advantage of <a href="https://site.mockito.org/">Mockito</a> for mocking the beans supported by <code>QuarkusMock</code>.
 This functionality is available via the <code>@io.quarkus.test.junit.mockito.InjectMock</code> annotation which is available in the <code>quarkus-junit5-mockito</code> dependency.</p>
@@ -859,7 +1091,7 @@ public class MockGreetingServiceTest {
 </div>
 </div>
 <div class="sect3">
-<h4 id="using-spies-instead-of-mocks-with-injectspy"><a class="anchor" href="#using-spies-instead-of-mocks-with-injectspy"></a>8.2.2. Using Spies instead of Mocks with <code>@InjectSpy</code></h4>
+<h4 id="using-spies-instead-of-mocks-with-injectspy"><a class="anchor" href="#using-spies-instead-of-mocks-with-injectspy"></a>10.2.2. Using Spies instead of Mocks with <code>@InjectSpy</code></h4>
 <div class="paragraph">
 <p>Building on the features provided by <code>InjectMock</code>, Quarkus also allows users to effortlessly take advantage of <a href="https://site.mockito.org/">Mockito</a> for spying on the beans supported by <code>QuarkusMock</code>.
 This functionality is available via the <code>@io.quarkus.test.junit.mockito.InjectSpy</code> annotation which is available in the <code>quarkus-junit5-mockito</code> dependency.</p>
@@ -941,7 +1173,7 @@ public class SpyGreetingServiceTest {
 </div>
 </div>
 <div class="sect3">
-<h4 id="using-injectmock-with-restclient"><a class="anchor" href="#using-injectmock-with-restclient"></a>8.2.3. Using <code>@InjectMock</code> with <code>@RestClient</code></h4>
+<h4 id="using-injectmock-with-restclient"><a class="anchor" href="#using-injectmock-with-restclient"></a>10.2.3. Using <code>@InjectMock</code> with <code>@RestClient</code></h4>
 <div class="paragraph">
 <p>The <code>@RegisterRestClient</code> registers the implementation of the rest-client at runtime, and because the bean needs to be a regular scope, you have to annotate your interface with <code>@ApplicationScoped</code>.</p>
 </div>
@@ -996,7 +1228,7 @@ public class GreetingResourceTest {
 </div>
 </div>
 <div class="sect2">
-<h3 id="mocking-with-panache"><a class="anchor" href="#mocking-with-panache"></a>8.3. Mocking with Panache</h3>
+<h3 id="mocking-with-panache"><a class="anchor" href="#mocking-with-panache"></a>10.3. Mocking with Panache</h3>
 <div class="paragraph">
 <p>If you are using the <code>quarkus-hibernate-orm-panache</code> or <code>quarkus-mongodb-panache</code> extensions, check out the <a href="hibernate-orm-panache#mocking">Hibernate ORM with Panache Mocking</a> and <a href="mongodb-panache#mocking">MongoDB with Panache Mocking</a> documentation for the easiest way to mock your data access.</p>
 </div>
@@ -1004,7 +1236,15 @@ public class GreetingResourceTest {
 </div>
 </div>
 <div class="sect1">
-<h2 id="quarkus-test-resource"><a class="anchor" href="#quarkus-test-resource"></a>9. Starting services before the Quarkus application starts</h2>
+<h2 id="testing-security"><a class="anchor" href="#testing-security"></a>11. Testing Security</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using Quarkus Security, check out the <a href="security.adoc#testing-security">Testing Security</a> section for information on how to easily test security features of the application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="quarkus-test-resource"><a class="anchor" href="#quarkus-test-resource"></a>12. Starting services before the Quarkus application starts</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>A very common need is to start some services on which your Quarkus application depends, before the Quarkus application starts for testing. To address this need, Quarkus provides <code>@io.quarkus.test.common.QuarkusTestResource</code> and <code>io.quarkus.test.common.QuarkusTestResourceLifecycleManager</code>.</p>
@@ -1022,7 +1262,7 @@ or starting a mock HTTP server using <a href="http://wiremock.org/">Wiremock</a>
 </div>
 </div>
 <div class="sect1">
-<h2 id="native-executable-testing"><a class="anchor" href="#native-executable-testing"></a>10. Native Executable Testing</h2>
+<h2 id="native-executable-testing"><a class="anchor" href="#native-executable-testing"></a>13. Native Executable Testing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>It is also possible to test native executables using <code>@NativeImageTest</code>. This supports all the features mentioned in this
@@ -1034,7 +1274,7 @@ guide except injecting into tests (and the native executable runs in a separate 
 </div>
 </div>
 <div class="sect1">
-<h2 id="test-from-ide"><a class="anchor" href="#test-from-ide"></a>11. Running <code>@QuarkusTest</code> from an IDE</h2>
+<h2 id="test-from-ide"><a class="anchor" href="#test-from-ide"></a>14. Running <code>@QuarkusTest</code> from an IDE</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Most IDEs offer the possibility to run a selected class as JUnit test directly. For this you should set a few properties in the settings of your chosen IDE:</p>
@@ -1047,10 +1287,13 @@ guide except injecting into tests (and the native executable runs in a separate 
 <li>
 <p><code>maven.home</code> (only if there are any custom settings in <code>${maven.home}/conf/settings.mxl</code>, see <a href="maven-tooling">Maven Guide</a>)</p>
 </li>
+<li>
+<p><code>maven.settings</code> (in case a custom version of <code>settings.xml</code> file should be used for the tests)</p>
+</li>
 </ul>
 </div>
 <div class="sect2">
-<h3 id="eclipse-separate-jre-definition"><a class="anchor" href="#eclipse-separate-jre-definition"></a>11.1. Eclipse separate JRE definition</h3>
+<h3 id="eclipse-separate-jre-definition"><a class="anchor" href="#eclipse-separate-jre-definition"></a>14.1. Eclipse separate JRE definition</h3>
 <div class="paragraph">
 <p>Copy your current "Installed JRE" definition into a new one, where you will add the properties as a new VM arguments:</p>
 </div>
@@ -1069,7 +1312,7 @@ guide except injecting into tests (and the native executable runs in a separate 
 </div>
 </div>
 <div class="sect2">
-<h3 id="vscode-run-with-configuration"><a class="anchor" href="#vscode-run-with-configuration"></a>11.2. VSCode "run with" configuration</h3>
+<h3 id="vscode-run-with-configuration"><a class="anchor" href="#vscode-run-with-configuration"></a>14.2. VSCode "run with" configuration</h3>
 <div class="paragraph">
 <p>The <code>settings.json</code> placed in the root of your project directory or in the workspace will need the workaround in your test configuration:</p>
 </div>
@@ -1087,7 +1330,7 @@ guide except injecting into tests (and the native executable runs in a separate 
 </div>
 </div>
 <div class="sect2">
-<h3 id="intellij-junit-template"><a class="anchor" href="#intellij-junit-template"></a>11.3. IntelliJ JUnit template</h3>
+<h3 id="intellij-junit-template"><a class="anchor" href="#intellij-junit-template"></a>14.3. IntelliJ JUnit template</h3>
 <div class="paragraph">
 <p>Nothing needed in IntelliJ because the IDE will pick the <code>systemPropertyVariables</code> from the surefire plugin configuration in <code>pom.xml</code>.</p>
 </div>

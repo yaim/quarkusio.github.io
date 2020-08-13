@@ -994,7 +994,7 @@ which connects to AWS services over HTTPS, hence the inclusion of the SSL enable
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-if you are using GraalVM earlier than 19.3, or see <code>java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty</code> or similar SSL error, due to the current status of GraalVM,
+if you see <code>java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty</code> or similar SSL error, due to the current status of GraalVM,
 there is some additional work to bundle the <code>function.zip</code>, as below.  For more information, please see the <a href="native-and-ssl">Quarkus Native SSL Guide</a>.
 </td>
 </tr>
@@ -1079,7 +1079,7 @@ If you are using a Docker image to build, then you must extract these files from
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it -d --entrypoint bash quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java8
+<pre class="highlightjs highlight"><code data-lang="shell" class="language-shell hljs">docker run -it -d --entrypoint bash quay.io/quarkus/ubi-quarkus-native-image:20.1.0-java11
 
 # This will output a container id, like 6304eea6179522aff69acb38eca90bedfd4b970a5475aa37ccda3585bc2abdde
 # Note this value as we will need it for the commands below</code></pre>

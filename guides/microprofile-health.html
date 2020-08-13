@@ -90,6 +90,7 @@
 <li><a href="#negative-health-check-procedures">Negative health check procedures</a></li>
 <li><a href="#adding-user-specific-data-to-the-health-check-response">Adding user-specific data to the health check response</a></li>
 <li><a href="#extension-health-checks">Extension health checks</a></li>
+<li><a href="#health-ui">Health UI</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a></li>
 </ul></div>
@@ -556,6 +557,35 @@ that will validate each datasources: <a href="datasource#datasource-health-check
 </div>
 </div>
 <div class="sect1">
+<h2 id="health-ui"><a class="anchor" href="#health-ui"></a>Health UI</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Experimental - not included in the MicroProfile specification
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>health-ui</code> allows you to see your Health Checks in a Web GUI.</p>
+</div>
+<div class="paragraph">
+<p>The Quarkus <code>smallrye-health</code> extension ships with <code>health-ui</code> and enables it by default in dev and test modes, but it can also be explicitly configured for production mode as well.</p>
+</div>
+<div class="paragraph">
+<p><code>health-ui</code> can be accessed from <a href="http://localhost:8080/health-ui/" class="bare">http://localhost:8080/health-ui/</a> .</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="/guides/images/health-ui-screenshot01.png" alt="Health UI"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="conclusion"><a class="anchor" href="#conclusion"></a>Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -684,6 +714,53 @@ readiness checks are used to tell whether the application is able to process req
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/group</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-health_quarkus.smallrye-health.ui"></a><a href="#quarkus-smallrye-health_quarkus.smallrye-health.ui">UI configuration</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.ui.root-path"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.ui.root-path">quarkus.smallrye-health.ui.root-path</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The path where Health UI is available. The value <code>/</code> is not allowed as it blocks the application from serving anything else.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>/health-ui</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.ui.always-include"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.ui.always-include">quarkus.smallrye-health.ui.always-include</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Always include the UI. By default this will only be included in dev and test. Setting this to true will also include the UI in Prod</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-health_quarkus.smallrye-health.ui.enable"></a><code><a href="#quarkus-smallrye-health_quarkus.smallrye-health.ui.enable">quarkus.smallrye-health.ui.enable</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>If Health UI should be enabled. By default, Health UI is enabled.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
 </tr>
 </tbody>
 </table>

@@ -631,6 +631,25 @@ public class CountriesResource {
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>When returning a <code>Uni</code>, every <em>subscription</em> invokes the remote service.
+It means you can re-send the request by re-subscribing on the <code>Uni</code>, or use a <code>retry</code> as follow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @RestClient CountriesResource service;
+
+// ...
+
+service.nameAsync("Greece")
+   .onFailure().retry().atMost(10);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you use a <code>CompletionStage</code>, you would need to call the service&#8217;s method to retry.
+This difference comes from the laziness aspect of Mutiny and its subscription protocol.
+More details about this can be found in <a href="https://smallrye.io/smallrye-mutiny/#_uni_and_multi">the Mutiny documentation</a>.</p>
+</div>
 </div>
 </div>
 <div class="sect1">

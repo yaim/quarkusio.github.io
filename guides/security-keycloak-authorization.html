@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Quarkus - Using OpenID Connect and Keycloak to Centralize Authorizations</title>
+  <title>Quarkus - Using OpenID Connect and Keycloak to Centralize Authorization</title>
   <script id="adobe_dtm" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
   <script src="/assets/javascript/highlight.pack.js" type="text/javascript"></script>
   <META HTTP-EQUIV='Content-Security-Policy' CONTENT="default-src 'none'; script-src 'self' 'unsafe-eval' 'sha256-ANpuoVzuSex6VhqpYgsG25OHWVA1I+F6aGU04LoI+5s=' 'sha256-ipy9P/3rZZW06mTLAR0EnXvxSNcnfSDPLDuh3kzbB1w=' js.bizographics.com https://www.redhat.com assets.adobedtm.com jsonip.com https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://use.fontawesome.com; style-src 'self' https://fonts.googleapis.com https://use.fontawesome.com; img-src 'self' *; media-src 'self' ; frame-src https://www.googletagmanager.com https://www.youtube.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com;">
@@ -16,7 +16,7 @@
   <meta name="twitter:site" content="@QuarkusIO"> 
   <meta name="twitter:creator" content="@QuarkusIO">
   <meta property="og:url" content="https://quarkus.io/guides/security-keycloak-authorization" />
-  <meta property="og:title" content="Quarkus - Using OpenID Connect and Keycloak to Centralize Authorizations" />
+  <meta property="og:title" content="Quarkus - Using OpenID Connect and Keycloak to Centralize Authorization" />
   <meta property="og:description" content="Quarkus: Supersonic Subatomic Java" />
   <meta property="og:image" content="/assets/images/quarkus_card.png" />
   <link rel="canonical" href="https://quarkus.io/guides/security-keycloak-authorization">
@@ -78,7 +78,7 @@
   <div class="content">
     <div class="guide">
   <div class="width-12-12">
-    <h1 class="text-caps">Quarkus - Using OpenID Connect and Keycloak to Centralize Authorizations</h1>
+    <h1 class="text-caps">Quarkus - Using OpenID Connect and Keycloak to Centralize Authorization</h1>
     <div class="hide-mobile toc"><ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#architecture">Architecture</a></li>
@@ -107,12 +107,12 @@
       <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide demonstrates how your Quarkus application can authorize access to protected resources using <a href="https://www.keycloak.org/docs/latest/authorization_services/index.html">Keycloak Authorization Services</a>.</p>
+<p>This guide demonstrates how your Quarkus application can authorize a bearer token access to protected resources using <a href="https://www.keycloak.org/docs/latest/authorization_services/index.html">Keycloak Authorization Services</a>.</p>
 </div>
 <div class="paragraph">
-<p>The <code>quarkus-keycloak-authorization</code> extension is based on <code>quarkus-oidc</code> and provides a policy enforcer that enforces access to protected resources based on permissions managed by Keycloak.
+<p>The <code>quarkus-keycloak-authorization</code> extension is based on <code>quarkus-oidc</code> and provides a policy enforcer that enforces access to protected resources based on permissions managed by Keycloak and currently can only be used with the Quarkus <a href="security-openid-connect">OIDC service appications</a>.
 It provides a flexible and dynamic authorization capability based on Resource-Based Access Control.
-In other words, instead of explicitly enforce access based on some specific access control mechanism (e.g.: RBAC), you just check whether or not a request is allowed to access a resource based on its name, identifier or URI.</p>
+In other words, instead of explicitly enforcing access based on some specific access control mechanism (e.g.: RBAC), you just check whether or not a request is allowed to access a resource based on its name, identifier or URI.</p>
 </div>
 <div class="paragraph">
 <p>By externalizing authorization from your application, you are allowed to protect your applications using different access control mechanisms as well as avoid re-deploying your application every time your security requirements change, where Keycloak will be acting as a centralized authorization service from where your protected resources and their associated permissions are managed.</p>

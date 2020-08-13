@@ -92,6 +92,18 @@
 <li><a href="#expanding-the-api">Expanding the API</a></li>
 <li><a href="#mutations">Mutations</a></li>
 <li><a href="#creating-queries-by-fields">Creating Queries by fields</a></li>
+<li><a href="#context">Context</a>
+<ul class="sectlevel2">
+<li><a href="#graphql-java">GraphQL-Java</a></li>
+</ul>
+</li>
+<li><a href="#map-to-scalar">Map to Scalar</a>
+<ul class="sectlevel2">
+<li><a href="#mapping-an-existing-scalar-to-another-type">Mapping an existing Scalar to another type:</a></li>
+<li><a href="#mapping-a-complex-object-to-a-scalar-type">Mapping a complex object to a Scalar type:</a></li>
+</ul>
+</li>
+<li><a href="#error-code">Error code</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#configuration-reference">Configuration Reference</a></li>
 </ul></div>
@@ -550,6 +562,18 @@ be defaulted to the method name if absent.
 <div class="sect1">
 <h2 id="graphiql-ui"><a class="anchor" href="#graphiql-ui"></a>GraphiQL UI</h2>
 <div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Experimental - not included in the MicroProfile specification
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>GraphiQL UI is a great tool permitting easy interaction with your GraphQL APIs.</p>
 </div>
@@ -559,6 +583,9 @@ but it can also be explicitly configured for <code>production</code> mode as wel
 </div>
 <div class="paragraph">
 <p>GraphiQL can be accessed from <a href="http://localhost:8080/graphql-ui/" class="bare">http://localhost:8080/graphql-ui/</a> .</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="/guides/images/graphql-ui-screenshot01.png" alt="GraphQL UI"></span></p>
 </div>
 </div>
 </div>
@@ -874,6 +901,205 @@ query heroWithSurnames {
 </div>
 </div>
 <div class="sect1">
+<h2 id="context"><a class="anchor" href="#context"></a>Context</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can get information about the GraphQL request anywhere in your code, using this experimental, SmallRye specific feature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+Context context;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The context object allows you to get:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the original request (Query/Mutation)</p>
+</li>
+<li>
+<p>the arguments</p>
+</li>
+<li>
+<p>the path</p>
+</li>
+<li>
+<p>the selected fields</p>
+</li>
+<li>
+<p>any variables</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This allows you to optimize the downstream queries to the datastore.</p>
+</div>
+<div class="paragraph">
+<p>See the <a href="https://javadoc.io/doc/io.smallrye/smallrye-graphql-api/latest/io/smallrye/graphql/api/Context.html">JavaDoc</a> for more details.</p>
+</div>
+<div class="sect2">
+<h3 id="graphql-java"><a class="anchor" href="#graphql-java"></a>GraphQL-Java</h3>
+<div class="paragraph">
+<p>This context object also allows you to fall down to the underlying <a href="https://www.graphql-java.com/">graphql-java</a> features by using the leaky abstraction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">DataFetchingEnvironment dfe = context.unwrap(DataFetchingEnvironment.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also get access to the underlying <code>graphql-java</code> during schema generation, to add your own features directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public GraphQLSchema.Builder addMyOwnEnum(@Observes GraphQLSchema.Builder builder) {
+
+    // Here add your own features directly, example adding an Enum
+    GraphQLEnumType myOwnEnum = GraphQLEnumType.newEnum()
+            .name("SomeEnum")
+            .description("Adding some enum type")
+            .value("value1")
+            .value("value2").build();
+
+    return builder.additionalType(myOwnEnum);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By using the <code>@Observer</code> you can add anything to the Schema builder.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="map-to-scalar"><a class="anchor" href="#map-to-scalar"></a>Map to Scalar</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Another SmallRye specific experimental feature, allows you to map an existing scalar (that is mapped by the implementation to a certain Java type) to another type,
+or to map complex object, that would typically create a <code>Type</code> or <code>Input</code> in GraphQL, to an existing scalar.</p>
+</div>
+<div class="sect2">
+<h3 id="mapping-an-existing-scalar-to-another-type"><a class="anchor" href="#mapping-an-existing-scalar-to-another-type"></a>Mapping an existing Scalar to another type:</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Movie {
+
+    @ToScalar(Scalar.Int.class)
+    Long idLongThatShouldChangeToInt;
+
+    // ....
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Above will map the <code>Long</code> java type to an <code>Int</code> Scalar type, rather than the <a href="https://download.eclipse.org/microprofile/microprofile-graphql-1.0/microprofile-graphql.html#scalars">default</a> <code>BigInteger</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mapping-a-complex-object-to-a-scalar-type"><a class="anchor" href="#mapping-a-complex-object-to-a-scalar-type"></a>Mapping a complex object to a Scalar type:</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Person {
+
+    @ToScalar(Scalar.String.class)
+    Phone phone;
+
+    // ....
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will, rather than creating a <code>Type</code> or <code>Input</code> in GraphQL, map to a String scalar.</p>
+</div>
+<div class="paragraph">
+<p>To be able to do the above, the <code>Phone</code> object needs to have a constructor that takes a String (or <code>Int</code> / <code>Date</code> / etc.),
+or have a setter method for the String  (or <code>Int</code> / <code>Date</code> / etc.),
+or have a <code>fromString</code> (or <code>fromInt</code> / <code>fromDate</code> - depending on the Scalar type) static method.</p>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class Phone {
+
+    private String number;
+
+    // Getters and setters....
+
+    public static Phone fromString(String number) {
+        Phone phone = new Phone();
+        phone.setNumber(number);
+        return phone;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See more about the <code>@ToScalar</code> feature in the <a href="https://javadoc.io/static/io.smallrye/smallrye-graphql-api/1.0.6/index.html?io/smallrye/graphql/api/ToScalar.html">JavaDoc</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="error-code"><a class="anchor" href="#error-code"></a>Error code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can add an error code on the error output in the GraphQL response by using the (SmallRye specific) <code>@ErrorCode</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ErrorCode("some-business-error-code")
+public class SomeBusinessException extends RuntimeException {
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When <code>SomeBusinessException</code> occurs, the error output will contain the Error code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="graphql" class="language-graphql hljs">{
+    "errors": [
+        {
+            "message": "Unexpected failure in the system. Jarvis is working to fix it.",
+            "locations": [
+                {
+                    "line": 2,
+                    "column": 3
+                }
+            ],
+            "path": [
+                "annotatedCustomBusinessException"
+            ],
+            "extensions": {
+                "exception": "io.smallrye.graphql.test.apps.error.api.ErrorApi$AnnotatedCustomBusinessException",
+                "classification": "DataFetchingException",
+                "code": "some-business-error-code" <i class="conum" data-value="1"></i><b>(1)</b>
+            }
+        }
+    ],
+    "data": {
+        ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The error code</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="conclusion"><a class="anchor" href="#conclusion"></a>Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -920,7 +1146,26 @@ API <code>evolution</code>.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.root-path-ui"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.root-path-ui">quarkus.smallrye-graphql.root-path-ui</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.metrics.enabled"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.metrics.enabled">quarkus.smallrye-graphql.metrics.enabled</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Enable metrics</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui"></a><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui">UI configuration</a></p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Type</p></th>
+<th class="tableblock halign-left valign-middle"><p class="tableblock">Default</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui.root-path"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui.root-path">quarkus.smallrye-graphql.ui.root-path</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -934,7 +1179,7 @@ API <code>evolution</code>.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.always-include-ui"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.always-include-ui">quarkus.smallrye-graphql.always-include-ui</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui.always-include"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui.always-include">quarkus.smallrye-graphql.ui.always-include</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -948,7 +1193,7 @@ API <code>evolution</code>.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.enable-ui"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.enable-ui">quarkus.smallrye-graphql.enable-ui</a></code></p>
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui.enable"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.ui.enable">quarkus.smallrye-graphql.ui.enable</a></code></p>
 </div>
 <div class="openblock description">
 <div class="content">
@@ -959,20 +1204,6 @@ API <code>evolution</code>.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-smallrye-graphql_quarkus.smallrye-graphql.metrics.enabled"></a><code><a href="#quarkus-smallrye-graphql_quarkus.smallrye-graphql.metrics.enabled">quarkus.smallrye-graphql.metrics.enabled</a></code></p>
-</div>
-<div class="openblock description">
-<div class="content">
-<div class="paragraph">
-<p>Enable metrics</p>
-</div>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
 </tr>
 </tbody>
 </table>

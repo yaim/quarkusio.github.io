@@ -98,6 +98,7 @@
 <li><a href="#running-the-database">Running the database</a></li>
 <li><a href="#run-the-application-in-dev-mode">Run the application in Dev Mode</a></li>
 <li><a href="#packaging-the-application-and-run-several-instances">Packaging the application and run several instances</a></li>
+<li><a href="#quartz-register-plugin-listeners">Registering Plugin and Listeners</a></li>
 <li><a href="#quartz-configuration-reference">Quartz Configuration Reference</a></li>
 </ul></div>
     <div>
@@ -258,6 +259,20 @@ to your project by running the following command in your project base directory:
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>To use a JDBC store, the <code>quarkus-agroal</code> extension, which provides the datasource support, is also required.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -382,7 +397,7 @@ public class TaskBean {
     }
 
     // A new instance of MyJob is created by Quartz for every job execution
-    static class MyJob implements Job {
+    public static class MyJob implements Job {
 
        public void execute(JobExecutionContext context) throws JobExecutionException {
           Arc.container().instance(TaskBean.class).get(). performTask(); <i class="conum" data-value="3"></i><b>(3)</b>
@@ -707,6 +722,38 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </div>
 </div>
 <div class="sect1">
+<h2 id="quartz-register-plugin-listeners"><a class="anchor" href="#quartz-register-plugin-listeners"></a>Registering Plugin and Listeners</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can register a plugin, jobListener or triggerListener through Quarkus configuration.</p>
+</div>
+<div class="paragraph">
+<p>The example bellow registers the plugin <code>org.quartz.plugins.history.LoggingJobHistoryPlugin</code> named as <code>jobHistory</code> with the property <code>jobSuccessMessage</code> defined as <code>Job [{1}.{0}] execution complete and reports: {8}</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="conf" class="language-conf hljs">quarkus.quartz.plugin.jobHistory.class=org.quartz.plugins.history.LoggingJobHistoryPlugin
+quarkus.quartz.plugin.jobHistory.jobSuccessMessage=Job [{1}.{0}] execution complete and reports: {8}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also register a listener programmatically with an injected <code>org.quartz.Scheduler</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">---
+public class MyListenerManager {
+    void onStart(@Observes StartupEvent event, org.quartz.Scheduler scheduler) throws SchedulerException {
+        scheduler.getListenerManager().addJobListener(new MyJogListener());
+        scheduler.getListenerManager().addTriggerListener(new MyTriggerListener());
+    }
+}
+---</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="quartz-configuration-reference"><a class="anchor" href="#quartz-configuration-reference"></a>Quartz Configuration Reference</h2>
 <div class="sectionbody">
 <div class="paragraph configuration-legend">
@@ -772,6 +819,21 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.table-prefix"></a><code><a href="#quarkus-quartz_quarkus.quartz.table-prefix">quarkus.quartz.table-prefix</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The prefix for quartz job store tables.
+ Ignored if using a <code>ram</code> store.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>QRTZ_</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="quarkus-quartz_quarkus.quartz.thread-count"></a><code><a href="#quarkus-quartz_quarkus.quartz.thread-count">quarkus.quartz.thread-count</a></code></p>
 </div>
 <div class="openblock description">
@@ -811,6 +873,90 @@ You can also generate the native executable with <code>./mvnw clean package -Pna
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.triggerlistener.-namedtriggerlistener-.class"></a><code><a href="#quarkus-quartz_quarkus.quartz.triggerlistener.-namedtriggerlistener-.class">quarkus.quartz.triggerListener."namedTriggerListener".class</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Class name for the configuration.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.triggerlistener.-namedtriggerlistener-propsandvalue"></a><code><a href="#quarkus-quartz_quarkus.quartz.triggerlistener.-namedtriggerlistener-propsandvalue">quarkus.quartz.triggerListener."namedTriggerListener"</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The props name and the values for the props.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.joblistener.-namedjoblistener-.class"></a><code><a href="#quarkus-quartz_quarkus.quartz.joblistener.-namedjoblistener-.class">quarkus.quartz.jobListener."namedJobListener".class</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Class name for the configuration.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.joblistener.-namedjoblistener-propsandvalue"></a><code><a href="#quarkus-quartz_quarkus.quartz.joblistener.-namedjoblistener-propsandvalue">quarkus.quartz.jobListener."namedJobListener"</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The props name and the values for the props.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.plugin.-namedplugin-.class"></a><code><a href="#quarkus-quartz_quarkus.quartz.plugin.-namedplugin-.class">quarkus.quartz.plugin."namedPlugin".class</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>Class name for the configuration.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="icon"><i class="fa fa-lock" title="Fixed at build time"></i></span> <a id="quarkus-quartz_quarkus.quartz.plugin.-namedplugin-propsandvalue"></a><code><a href="#quarkus-quartz_quarkus.quartz.plugin.-namedplugin-propsandvalue">quarkus.quartz.plugin."namedPlugin"</a></code></p>
+</div>
+<div class="openblock description">
+<div class="content">
+<div class="paragraph">
+<p>The props name and the values for the props.</p>
+</div>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><code>Map&lt;String,String&gt;</code></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">required <span class="icon"><i class="fa fa-exclamation-circle" title="Configuration property is required"></i></span></p></td>
 </tr>
 </tbody>
 </table>

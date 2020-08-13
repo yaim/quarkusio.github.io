@@ -89,6 +89,7 @@
 </li>
 <li><a href="#consuming-a-grpc-service">Consuming a gRPC service</a></li>
 <li><a href="#packaging-the-application">Packaging the application</a></li>
+<li><a href="#generating-java-files-from-proto-with-protobuf-maven-plugin">Generating Java files from proto with protobuf-maven-plugin</a></li>
 </ul></div>
     <div>
       <div id="preamble">
@@ -107,7 +108,7 @@ The default configuration is enough, but you can also select some extensions if 
 <h2 id="configuring-your-project"><a class="anchor" href="#configuring-your-project"></a>Configuring your project</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Edit the <code>pom.xml</code> file to add the quarkus gRPC extension dependency and the JSR 305 (just under <code>&lt;dependencies&gt;</code>):</p>
+<p>Edit the <code>pom.xml</code> file to add the Quarkus gRPC extension dependency (just under <code>&lt;dependencies&gt;</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -118,99 +119,35 @@ The default configuration is enough, but you can also select some extensions if 
 </div>
 </div>
 <div class="paragraph">
-<p>In the <code>&lt;properties&gt;</code> section, define the 2 following properties:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;grpc.version&gt;{grpc-version}&lt;/grpc.version&gt;
-&lt;protoc.version&gt;{protoc-version}&lt;/protoc.version&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>They configure the gRPC version and the <code>protoc</code> version.</p>
-</div>
-<div class="paragraph">
-<p>Finally, add to the <code>build</code> section the <code>os-maven-plugin</code> extension and the <code>protobuf-maven-plugin</code> configuration.</p>
+<p>Make sure you have <code>prepare</code> goal of <code>quarkus-maven-plugin</code> enabled in your <code>pom.xml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
-    &lt;extensions&gt;
-        &lt;extension&gt;
-            &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;
-            &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;
-            &lt;version&gt;{os-maven-plugin-version}&lt;/version&gt;
-        &lt;/extension&gt;
-    &lt;/extensions&gt;
-
     &lt;plugins&gt;
         &lt;plugin&gt;
-            &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;
-            &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;      <i class="conum" data-value="1"></i><b>(1)</b>
-            &lt;version&gt;{protobuf-maven-plugin-version}&lt;/version&gt;
-            &lt;configuration&gt;
-                &lt;protocArtifact&gt;com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}&lt;/protocArtifact&gt; <i class="conum" data-value="2"></i><b>(2)</b>
-                &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;
-                &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}&lt;/pluginArtifact&gt;
-                &lt;protocPlugins&gt;
-                    &lt;protocPlugin&gt;
-                        &lt;id&gt;quarkus-grpc-protoc-plugin&lt;/id&gt;
-                        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
-                        &lt;artifactId&gt;quarkus-grpc-protoc-plugin&lt;/artifactId&gt;
-                        &lt;version&gt;1.6.1.Final&lt;/version&gt;
-                        &lt;mainClass&gt;io.quarkus.grpc.protoc.plugin.MutinyGrpcGenerator&lt;/mainClass&gt;
-                    &lt;/protocPlugin&gt;
-                &lt;/protocPlugins&gt;
-            &lt;/configuration&gt;
+            &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+            &lt;artifactId&gt;quarkus-maven-plugin&lt;/artifactId&gt;
             &lt;executions&gt;
                 &lt;execution&gt;
-                    &lt;id&gt;compile&lt;/id&gt;
                     &lt;goals&gt;
-                        &lt;goal&gt;compile&lt;/goal&gt;
-                        &lt;goal&gt;compile-custom&lt;/goal&gt;
-                    &lt;/goals&gt;
-                &lt;/execution&gt;
-                &lt;execution&gt;
-                    &lt;id&gt;test-compile&lt;/id&gt;
-                    &lt;goals&gt;
-                        &lt;goal&gt;test-compile&lt;/goal&gt;
-                        &lt;goal&gt;test-compile-custom&lt;/goal&gt;
+                        &lt;goal&gt;prepare&lt;/goal&gt;
+                        &lt;goal&gt;build&lt;/goal&gt;
                     &lt;/goals&gt;
                 &lt;/execution&gt;
             &lt;/executions&gt;
         &lt;/plugin&gt;
-
-        &lt;!-- ... --&gt;
     &lt;/plugins&gt;
 &lt;/build&gt;</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>The <code>protobuf-maven-plugin</code> that generates stub classes from your gRPC service definition (<code>proto</code> files).</p>
-</li>
-<li>
-<p>The class generation uses a tool named <code>protoc</code>, which is OS-specific.
-That&#8217;s why we use the <code>os-maven-plugin</code> to target the executable compatible with the operating system.</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-This configuration instructs the <code>protobuf-maven-plugin</code> to generate the default gRPC classes and classes using Mutiny to fit with the Quarkus development experience.
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>With this configuration, you can put your service and message definitions in the <code>src/main/proto</code> directory.
-Let&#8217;s start with a simple <em>Hello</em> service.
+<code>quarkus-maven-plugin</code> will generate Java files from your <code>proto</code> files.
+Alternatively to using the <code>prepare</code> goal of the <code>quarkus-maven-plugin</code>, you can use <code>protobuf-maven-plugin</code> to generate these files, more in <a href="#generating-java-files-from-proto-with-protobuf-maven-plugin">Generating Java files from proto with protobuf-maven-plugin</a></p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start with a simple <em>Hello</em> service.
 Create the <code>src/main/proto/helloworld.proto</code> file with the following content:</p>
 </div>
 <div class="listingblock">
@@ -467,7 +404,7 @@ public class ExampleResource {
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Inject the service and configure its name. This name is used in the application configuration</p>
+<p>Inject the service and configure its name.This name is used in the application configuration</p>
 </li>
 <li>
 <p>Use the <em>blocking</em> stub (also a generated class)</p>
@@ -501,6 +438,106 @@ In the <code>src/main/resources/application.properties</code> file, add the foll
 <div class="paragraph">
 <p>Like any other Quarkus applications, you can package it with: <code>mvn package</code>.
 You can also package the application into a native executable with: <code>mvn package -Pnative</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="generating-java-files-from-proto-with-protobuf-maven-plugin"><a class="anchor" href="#generating-java-files-from-proto-with-protobuf-maven-plugin"></a>Generating Java files from proto with protobuf-maven-plugin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alternatively to using Quarkus code generation to generate stubs for <code>proto</code> files, you can also use
+<code>protobuf-maven-plugin</code>.</p>
+</div>
+<div class="paragraph">
+<p>To do it, first define the 2 following properties in the <code>&lt;properties&gt;</code> section:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;grpc.version&gt;{grpc-version}&lt;/grpc.version&gt;
+&lt;protoc.version&gt;{protoc-version}&lt;/protoc.version&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>They configure the gRPC version and the <code>protoc</code> version.</p>
+</div>
+<div class="paragraph">
+<p>Then, add to the <code>build</code> section the <code>os-maven-plugin</code> extension and the <code>protobuf-maven-plugin</code> configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;build&gt;
+    &lt;extensions&gt;
+        &lt;extension&gt;
+            &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;
+            &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;${os-maven-plugin-version}&lt;/version&gt;
+        &lt;/extension&gt;
+    &lt;/extensions&gt;
+
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;      <i class="conum" data-value="1"></i><b>(1)</b>
+            &lt;version&gt;${protobuf-maven-plugin-version}&lt;/version&gt;
+            &lt;configuration&gt;
+                &lt;protocArtifact&gt;com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}&lt;/protocArtifact&gt; <i class="conum" data-value="2"></i><b>(2)</b>
+                &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;
+                &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}&lt;/pluginArtifact&gt;
+                &lt;protocPlugins&gt;
+                    &lt;protocPlugin&gt;
+                        &lt;id&gt;quarkus-grpc-protoc-plugin&lt;/id&gt;
+                        &lt;groupId&gt;io.quarkus&lt;/groupId&gt;
+                        &lt;artifactId&gt;quarkus-grpc-protoc-plugin&lt;/artifactId&gt;
+                        &lt;version&gt;1.6.1.Final&lt;/version&gt;
+                        &lt;mainClass&gt;io.quarkus.grpc.protoc.plugin.MutinyGrpcGenerator&lt;/mainClass&gt;
+                    &lt;/protocPlugin&gt;
+                &lt;/protocPlugins&gt;
+            &lt;/configuration&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;compile&lt;/id&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;compile&lt;/goal&gt;
+                        &lt;goal&gt;compile-custom&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;test-compile&lt;/id&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;test-compile&lt;/goal&gt;
+                        &lt;goal&gt;test-compile-custom&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+
+        &lt;!-- ... --&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The <code>protobuf-maven-plugin</code> that generates stub classes from your gRPC service definition (<code>proto</code> files).</p>
+</li>
+<li>
+<p>The class generation uses a tool named <code>protoc</code>, which is OS-specific.
+That&#8217;s why we use the <code>os-maven-plugin</code> to target the executable compatible with the operating system.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This configuration instructs the <code>protobuf-maven-plugin</code> to generate the default gRPC classes and classes using Mutiny to fit with the Quarkus development experience.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>

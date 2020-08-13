@@ -241,16 +241,149 @@ But many properties like enable caching or setting the JDBC driver can safely re
 <div class="sect2">
 <h3 id="expose-your-components-via-cdi"><a class="anchor" href="#expose-your-components-via-cdi"></a>1.4. Expose your components via CDI</h3>
 <div class="paragraph">
-<p>Since CDI is the central programming model when it comes to component composition, frameworks should expose producers that are easily consumable by user applications.<br>
+<p>Since CDI is the central programming model when it comes to component composition, frameworks and extensions should expose their components as beans that are easily consumable by user applications.
 For example, Hibernate ORM exposes <code>EntityManagerFactory</code> and <code>EntityManager</code> beans, the connection pool exposes <code>DataSource</code> beans etc.
-An extension must generate these bean definitions at build time.</p>
-</div>
-<div class="paragraph">
-<p>A very useful pattern of creating such beans but also giving application code the ability to easily override some of the beans with custom implementations, is to use
-the <code>@DefaultBean</code> that Quarkus provides. This is best explained with an example.</p>
+Extensions must register these bean definitions at build time.</p>
 </div>
 <div class="sect3">
-<h4 id="example-cdi-configuration-using-defaultbean"><a class="anchor" href="#example-cdi-configuration-using-defaultbean"></a>1.4.1. Example CDI configuration using @DefaultBean</h4>
+<h4 id="beans-backed-by-classes"><a class="anchor" href="#beans-backed-by-classes"></a>1.4.1. Beans backed by classes</h4>
+<div class="paragraph">
+<p>An extension can produce an <a href="cdi-reference#additional_beans"><code>AdditionalBeanBuildItem</code></a> to instruct the container to read a bean definition from a class as if it was part of the original application:</p>
+</div>
+<div class="listingblock">
+<div class="title">Bean Class Registered by <code>AdditionalBeanBuildItem</code></div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@ApplicationScoped <i class="conum" data-value="1"></i><b>(1)</b>
+public class Echo {
+
+   public String echo(String val) {
+      return val;
+   }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If a bean registered by an <code>AdditionalBeanBuildItem</code> does not specify a scope then <code>@Dependent</code> is assumed.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All other beans can inject such a bean:</p>
+</div>
+<div class="listingblock">
+<div class="title">Bean Injecting a Bean Produced by an <code>AdditionalBeanBuildItem</code></div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@Path("/hello")
+public class ExampleResource {
+
+    @Inject
+    Echo echo;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(String foo) {
+        return echo.echo(foo);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And vice versa - the extension bean can inject application beans and beans provided by other extensions:</p>
+</div>
+<div class="listingblock">
+<div class="title">Extension Bean Injection Example</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class Echo {
+
+    @Inject
+    DataSource dataSource;  <i class="conum" data-value="1"></i><b>(1)</b>
+
+    @Inject
+    Instance&lt;List&lt;String&gt;&gt; listsOfStrings; <i class="conum" data-value="2"></i><b>(2)</b>
+
+    //...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Inject a bean provided by other extension.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Inject all beans matching the type <code>List&lt;String&gt;</code>.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bean_init"><a class="anchor" href="#bean_init"></a>1.4.2. Bean initialization</h4>
+<div class="paragraph">
+<p>Some components may require additional initialization based on information collected during augmentation.
+The most straightforward solution is to obtain a bean instance and call a method directly from a build step.
+However, it is <em>illegal</em> to obtain a bean instance during the augmentation phase.
+The reason is that the CDI container is not started yet.
+It&#8217;s started during the <a href="#bootstrap-three-phases">Static init bootstrap phase</a>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<code>BUILD_AND_RUN_TIME_FIXED</code> and <code>RUN_TIME</code> config roots can be injected in any bean. <code>RUN_TIME</code> config roots should only be injected after the bootstrap though.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is possible to invoke a bean method from a <a href="#bytecode-recording">recorder method</a> though.
+If you need to access a bean in a <code>@Record(STATIC_INIT)</code> build step then is must either depend on the <code>BeanContainerBuildItem</code> or wrap the logic in a <code>BeanContainerListenerBuildItem</code>.
+The reason is simple - we need to make sure the CDI container is fully initialized and started.
+However, it is safe to expect that the CDI container is fully initialized and running in a <code>@Record(RUNTIME_INIT)</code> build step.
+You can obtain a reference to the container via <code>CDI.current()</code> or Quarkus-specific <code>Arc.container()</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Don&#8217;t forget to make sure the bean state guarantees the visibility, e.g. via the <code>volatile</code> keyword.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There is one significant drawback of this "late initialization" approach.
+An <em>uninitialized</em> bean may be accessed by other extensions or application components that are instantiated during bootstrap.
+We&#8217;ll cover a more robust solution in the <a href="#synthetic_beans">Synthetic beans</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="default-beans"><a class="anchor" href="#default-beans"></a>1.4.3. Default beans</h4>
+<div class="paragraph">
+<p>A very useful pattern of creating such beans but also giving application code the ability to easily override some of the beans with custom implementations, is to use
+the <code>@DefaultBean</code> that Quarkus provides.
+This is best explained with an example.</p>
+</div>
 <div class="paragraph">
 <p>Let us assume that the Quarkus extension needs to provide a <code>Tracer</code> bean which application code is meant to inject into its own beans.</p>
 </div>
@@ -295,7 +428,7 @@ public class CustomTracerConfiguration {
 </div>
 </div>
 <div class="sect3">
-<h4 id="how-to-override-a-bean-defined-by-a-libraryquarkus-extension-that-doesnt-use-defaultbean"><a class="anchor" href="#how-to-override-a-bean-defined-by-a-libraryquarkus-extension-that-doesnt-use-defaultbean"></a>1.4.2. How to Override a Bean Defined by a Library/Quarkus Extension that doesn&#8217;t use @DefaultBean</h4>
+<h4 id="how-to-override-a-bean-defined-by-a-libraryquarkus-extension-that-doesnt-use-defaultbean"><a class="anchor" href="#how-to-override-a-bean-defined-by-a-libraryquarkus-extension-that-doesnt-use-defaultbean"></a>1.4.4. How to Override a Bean Defined by a Library/Quarkus Extension that doesn&#8217;t use @DefaultBean</h4>
 <div class="paragraph">
 <p>Although <code>@DefaultBean</code> is the recommended approach, it is also possible for application code to override beans provided by an extension by marking beans as a CDI <code>@Alternative</code> and including <code>@Priority</code> annotation.
 Let&#8217;s show a simple example.
@@ -364,6 +497,84 @@ class MyParser extends Parser {
 <td class="content">
 CDI alternatives are only considered during injection and type-safe resolution. For example the default implementation would still receive observer notifications.
 </td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="synthetic_beans"><a class="anchor" href="#synthetic_beans"></a>1.4.5. Synthetic beans</h4>
+<div class="paragraph">
+<p>Sometimes it is very useful to be able to register a synthetic bean.
+Bean attributes of a synthetic bean are not derived from a java class, method or field.
+Instead, the attributes are specified by an extension.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Since the CDI container does not control the instantiation of a synthetic bean the dependency injection and other services (such as interceptors) are not supported.
+In other words, it&#8217;s up to the extension to provide all required services to a synthetic bean instance.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There are several ways to register a <a href="cdi-reference#synthetic_beans">synthetic bean</a> in Quarkus.
+In this chapter, we will cover a use case that can be used to initialize extension beans in a safe manner (compared to <a href="#bean_init">Bean initialization</a>).</p>
+</div>
+<div class="paragraph">
+<p>The <code>SyntheticBeanBuildItem</code> can be used to register a synthetic bean:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>whose instance can be easily produced through a <a href="#bytecode-recording">recorder</a>,</p>
+</li>
+<li>
+<p>to provide a "context" bean that holds all the information collected during augmentation so that the real components do not need any "late initialization" because they can inject the context bean directly.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Instance Produced Through Recorder</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+@Record(STATIC_INIT)
+SyntheticBeanBuildItem syntheticBean(TestRecorder recorder) {
+   return SyntheticBeanBuildItem.configure(Foo.class).scope(Singleton.class)
+                .runtimeValue(recorder.createFoo("parameters are recorder in the bytecode")) <i class="conum" data-value="1"></i><b>(1)</b>
+                .done();
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The string value is recorded in the bytecode and used to initialize the instance of <code>Foo</code>.</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">"Context" Holder</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+@Record(STATIC_INIT)
+SyntheticBeanBuildItem syntheticBean(TestRecorder recorder) {
+   return SyntheticBeanBuildItem.configure(TestContext.class).scope(Singleton.class)
+                .runtimeValue(recorder.createContext("parameters are recorder in the bytecode")) <i class="conum" data-value="1"></i><b>(1)</b>
+                .done();
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The "real" components can inject the <code>TestContext</code> directly.</td>
 </tr>
 </table>
 </div>
@@ -1969,6 +2180,37 @@ in another module, and Undertow will consume it and pass it into the recorder me
 control the order that generated bytecode is run. In the example above we know that the bytecode that produces a
 <code>ServletExtensionBuildItem</code> will be run before the bytecode that consumes it.</p>
 </div>
+<div class="paragraph">
+<p>The following objects can be passed to recorders:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Primitives</p>
+</li>
+<li>
+<p>String</p>
+</li>
+<li>
+<p>Class&lt;?&gt; objects</p>
+</li>
+<li>
+<p>Objects returned from a previous recorder invocation</p>
+</li>
+<li>
+<p>Objects with a no-arg constructor and getter/setters for all properties (or public fields)</p>
+</li>
+<li>
+<p>Objects with a constructor annotated with <code>@RecordableConstructor</code> with parameter names that match field names</p>
+</li>
+<li>
+<p>Any arbitrary object via the <code>io.quarkus.deployment.recording.RecorderContext#registerSubstitution(Class, Class, Class)</code> mechanism</p>
+</li>
+<li>
+<p>Arrays, Lists and Maps of the above</p>
+</li>
+</ul>
+</div>
 <div class="sect3">
 <h4 id="recordercontext"><a class="anchor" href="#recordercontext"></a>2.6.1. RecorderContext</h4>
 <div class="paragraph">
@@ -1981,6 +2223,28 @@ a class proxy. This interface can be directly injected as a method parameter int
 <p>Calling <code>classProxy</code> with a given class name will create a <code>Class</code> that can be passed into recorder
 methods, and at runtime will be substituted with the class whose name was passed in to <code>classProxy</code>. This is basically a
 convenience to avoid the need to explicitly load classes in the recorders.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="printing-step-execution-time"><a class="anchor" href="#printing-step-execution-time"></a>2.6.2. Printing step execution time</h4>
+<div class="paragraph">
+<p>At times, it can be useful to know how the exact time each startup task (which is the result of each bytecode recording) takes when the application is run.
+The simplest way to determine this information is to set the <code>quarkus.debug.print-startup-times</code> property to <code>true</code> when running the application.
+The output will look something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">Build step LoggingResourceProcessor.setupLoggingRuntimeInit completed in: 42ms
+Build step ConfigGenerationBuildStep.checkForBuildTimeConfigChange completed in: 4ms
+Build step SyntheticBeansProcessor.initRuntime completed in: 0ms
+Build step ConfigBuildStep.validateConfigProperties completed in: 1ms
+Build step ResteasyStandaloneBuildStep.boot completed in: 95ms
+Build step VertxHttpProcessor.initializeRouter completed in: 1ms
+Build step VertxHttpProcessor.finalizeRouter completed in: 4ms
+Build step LifecycleEventsBuildStep.startupEvent completed in: 1ms
+Build step VertxHttpProcessor.openSocket completed in: 93ms
+Build step ShutdownListenerBuildStep.setupShutdown completed in: 1ms</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -2043,190 +2307,217 @@ HealthBuildItem addHealthCheck(AgroalBuildTimeConfig agroalBuildTimeConfig) {
 <div class="sect2">
 <h3 id="extension-metrics"><a class="anchor" href="#extension-metrics"></a>2.9. Extension Metrics</h3>
 <div class="paragraph">
-<p>An extension can decide to provide metrics through the <code>quarkus-smallrye-metrics</code> extension.
-A typical use case for this would be that an extension scans the application code for relevant components (like entities, messaging endpoints, etc.)
-and creates a set of metrics for each of these components. A unified mechanism for metric registration is provided via the <code>MetricBuildItem</code> class
-provided by the <code>quarkus-smallrye-metrics-spi</code> module.</p>
-</div>
-<div class="paragraph">
-<p>There are several distinct situations that can occur and each requires slightly different handling:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>The underlying library used by your extension is using the MicroProfile Metrics API directly.</p>
-</li>
-<li>
-<p>The underlying library uses its own way for collecting metrics and makes them available at runtime using its own API.</p>
-</li>
-<li>
-<p>The underlying library does not provide metrics (or there is no library at all) and you need to insert some code in the extension&#8217;s codebase that will collect the metrics.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>What is common for all cases is that the extension should have a build-time config property that enables metrics exposure for the extension,
-it should be named <code>quarkus.&lt;extension&gt;.metrics.enabled</code> and be <code>false</code> by default.</p>
-</div>
-<div class="sect3">
-<h4 id="case-1-the-library-uses-mp-metrics"><a class="anchor" href="#case-1-the-library-uses-mp-metrics"></a>2.9.1. Case 1: The library uses MP Metrics</h4>
-<div class="paragraph">
-<p>If the library exposes metrics by itself, we don&#8217;t have to do much. However, there are a few points to consider:</p>
+<p>The <code>quarkus-smallrye-metrics</code> extension (and other 3rd party or experimental extensions) provide support for collecting metrics. There are two broad patterns that extensions can use to interact with an optional metrics extension to add their own metrics:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>It should be possible to disable all metrics for an extension, which can be a bit problematic if the library registers them directly
-rather than through the unified registration mechanism in the <code>quarkus-smallrye-metrics-spi</code> module. Therefore the library should contain
-a way to turn all metrics off, for example using a library-specific system property that can be set during build time (by emitting a <code>SystemPropertyBuildItem</code>),
-and will disable metrics if at least one of the properties <code>quarkus.&lt;extensionName&gt;.metrics.enabled</code> and <code>quarkus.smallrye-metrics.extensions.enabled</code> is <code>false</code>.</p>
+<p>Consumer pattern: An extension declares a <code>MetricsFactoryConsumerBuildItem</code> and uses that to provide a bytecode recorder to the metrics extension. When the metrics extension has initialized, it will iterate over registered consumers to initialize them with a <code>MetricsFactory</code>. This factory can be used to declare API-agnostic metrics, which can be a good fit for extensions that provide an instrumentable object for gathering statistics (e.g. Hibernate&#8217;s <code>Statistics</code> class).</p>
 </li>
 <li>
-<p>It is desirable to be able to omit the MP Metrics dependency at runtime, so if possible, the library should be written in a way that
-it will still work when the MP Metrics dependencies (or at least the implementation, <code>io.smallrye:smallrye-metrics</code>) are unavailable. This can be achieved by
-wrapping all code that does something metric-related into an <code>if</code> condition that checks whether metrics integration is enabled. If the library performs injections
-of the <code>MetricRegistry</code>, which is not avoidable by introducing an <code>if</code> condition, it will unfortunately not be possible to remove the <code>microprofile-metrics</code> dependency,
-but it is still possible to avoid the need for <code>smallrye-metrics</code> (which contains the implementation class of the metric registry) by introducing a custom "no-op"
-implementation of the <code>MetricRegistry</code> which can, for example, return <code>null</code> from all its methods. This no-op implementation should be added to the application&#8217;s classes
-so that it can be injected instead of the regular <code>io.smallrye.metrics.MetricRegistryImpl</code>. An example of a no-op implementation can be found at
-<a href="https://github.com/quarkusio/quarkus/blob/master/extensions/smallrye-fault-tolerance/runtime/src/main/java/io/quarkus/smallrye/faulttolerance/runtime/NoopMetricRegistry.java">NoopMetricRegistry</a></p>
+<p>Binder pattern: An extension can opt to use completely different gathering implementations depending on the metrics system. An <code>Optional&lt;MetricsCapabilityBuildItem&gt; metricsCapability</code> build step parameter can be used to declare or otherwise initialize API-specific metrics based on the active metrics extension (e.g. "smallrye-metrics" or "micrometer"). This pattern can be combined with the consumer pattern by using <code>MetricsFactory::metricsSystemSupported()</code> to test the active metrics extension within the recorder.</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Remember that support for metrics is optional. Extensions can use an <code>Optional&lt;MetricsCapabilityBuildItem&gt; metricsCapability</code> parameter in their build step to test for the presence of an enabled metrics extension. Consider using additional configuration to control behavior of metrics. Datasource metrics can be expensive, for example, so additional configuration flags are used enable metrics collection on individual datasources.</p>
+</div>
+<div class="paragraph">
+<p>When adding metrics for your extension, you may find yourself in one of the following situations:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An underlying library used by the extension is using a specific Metrics API directly (either MP Metrics, micrometer, or some other).</p>
+</li>
+<li>
+<p>An underlying library uses its own mechanism for collecting metrics and makes them available at runtime using its own API, e.g. Hibernate&#8217;s <code>Statistics</code> class, or Vert.x <code>MetricsOptions</code>.</p>
+</li>
+<li>
+<p>An underlying library does not provide metrics (or there is no library at all) and you want to add instrumentation.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="case-1-the-library-uses-a-metrics-library-directly"><a class="anchor" href="#case-1-the-library-uses-a-metrics-library-directly"></a>2.9.1. Case 1: The library uses a metrics library directly</h4>
+<div class="paragraph">
+<p>If the library directly uses a metrics API, there are two options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Use an <code>Optional&lt;MetricsCapabilityBuildItem&gt; metricsCapability</code> parameter to test which metrics API is supported (e.g. "smallrye-metrics" or "micrometer") in your build step, and use that to selectively declare or initialize API-specific beans or build items.</p>
+</li>
+<li>
+<p>Create a separate build step that consumes a <code>MetricsFactory</code>, and use the <code>MetricsFactory::metricsSystemSupported()</code> method within the bytecode recorder to initialize required resources if the desired metrics API is supported (e.g. "smallrye-metrics" or "micrometer").</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Extensions may need to provide a fallback if there is no active metrics extension or the extension doesn&#8217;t support the API required by the library.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="case-2-the-library-provides-its-own-metric-api"><a class="anchor" href="#case-2-the-library-provides-its-own-metric-api"></a>2.9.2. Case 2: The library provides its own metric API</h4>
 <div class="paragraph">
-<p>In this case, the extension can make use of the <code>quarkus-smallrye-metrics-spi</code> module to expose the metrics from the library using MP Metrics.</p>
-</div>
-<div class="paragraph">
-<p>You should do the following:</p>
+<p>There are two examples of a library providing its own metrics API:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Import the <code>quarkus-smallrye-metrics-spi</code> library in your deployment module.</p>
+<p>The extension defines an instrumentable object as Agroal does with <code>io.agroal.api.AgroalDataSourceMetrics</code>, or</p>
 </li>
 <li>
-<p>Import the <code>quarkus-smallrye-metrics</code> extension as an <strong>optional</strong> dependency in your runtime module so it will not impact the size of the application if
-metrics are not included.</p>
+<p>The extension provides its own abstraction of metrics, as Jaeger does with <code>io.jaegertracing.spi.MetricsFactory</code>.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="observing-instrumentable-objects"><a class="anchor" href="#observing-instrumentable-objects"></a>2.9.2.1. Observing instrumentable objects</h5>
+<div class="paragraph">
+<p>Let&#8217;s take the instrumentable object (<code>io.agroal.api.AgroalDataSourceMetrics</code>) case first. In this case, you can do the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Define a <code>BuildStep</code> that produces a <code>MetricsFactoryConsumerBuildItem</code> that uses a <code>RUNTIME_INIT</code> or <code>STATIC_INIT</code> Recorder to define a <code>MetricsFactory</code> consumer. For example, the following creates a <code>MetricsFactoryConsumerBuildItem</code> if and only if metrics are enabled both for Agroal generally, and for a datasource specifically:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
+@Record(ExecutionTime.RUNTIME_INIT)
+void registerMetrics(AgroalMetricsRecorder recorder,
+        DataSourcesBuildTimeConfig dataSourcesBuildTimeConfig,
+        BuildProducer&lt;MetricsFactoryConsumerBuildItem&gt; datasourceMetrics,
+        List&lt;AggregatedDataSourceBuildTimeConfigBuildItem&gt; aggregatedDataSourceBuildTimeConfigs) {
+
+    for (AggregatedDataSourceBuildTimeConfigBuildItem aggregatedDataSourceBuildTimeConfig : aggregatedDataSourceBuildTimeConfigs) {
+        // Create a MetricsFactory consumer to register metrics for a data source
+        // IFF metrics are enabled globally and for the data source
+        // (they are enabled for each data source by default if they are also enabled globally)
+        if (dataSourcesBuildTimeConfig.metricsEnabled &amp;&amp;
+                aggregatedDataSourceBuildTimeConfig.getJdbcConfig().enableMetrics.orElse(true)) {
+            datasourceMetrics.produce(new MetricsFactoryConsumerBuildItem(
+                    recorder.registerDataSourceMetrics(aggregatedDataSourceBuildTimeConfig.getName())));
+        }
+    }
+}</code></pre>
+</div>
+</div>
 </li>
 <li>
-<p>In your processor, produce any number of <code>MetricBuildItem</code> items as shown in the example below.
-The metric name of all metrics should start with a short name of the extension that owns them.</p>
-</li>
-<li>
-<p>Pass the value of <code>quarkus.&lt;extension&gt;.metrics.enabled</code> to the constructor of <code>MetricBuildItem</code> objects that the extension produces and if it is false, the metric will be ignored.</p>
+<p>The associated recorder should use the provided <code>MetricsFactory</code> to register metrics. For Agroal, this means using the <code>MetricFactory</code> API to observe <code>io.agroal.api.AgroalDataSourceMetrics</code> methods. For example:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/* RUNTIME_INIT */
+public Consumer&lt;MetricsFactory&gt; registerDataSourceMetrics(String dataSourceName) {
+    return new Consumer&lt;MetricsFactory&gt;() {
+        @Override
+        public void accept(MetricsFactory metricsFactory) {
+            String tagValue = DataSourceUtil.isDefault(dataSourceName) ? "default" : dataSourceName;
+            AgroalDataSourceMetrics metrics = getDataSource(dataSourceName).getMetrics();
+
+            // When using MP Metrics, the builder uses the VENDOR registry by default.
+            metricsFactory.builder("agroal.active.count")
+                    .description(
+                            "Number of active connections. These connections are in use and not available to be acquired.")
+                    .tag("datasource", tagValue)
+                    .buildGauge(metrics::activeCount);
+            ....</code></pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>An example build step for build-time registration of metrics:</p>
+<p>The <code>MetricsFactory</code> provides a fluid builder for registration of metrics, with the final step constructing gauges or counters based on a <code>Supplier</code> or <code>ToDoubleFunction</code>. Timers can either wrap <code>Callable</code>, <code>Runnable</code>, or <code>Supplier</code> implementations, or can use a <code>TimeRecorder</code> to accumulate chunks of time. The underlying metrics extension will create appropriate artifacts to observe or measure the defined functions.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="using-a-metrics-api-specific-implementation"><a class="anchor" href="#using-a-metrics-api-specific-implementation"></a>2.9.2.2. Using a Metrics API-specific implementation</h5>
+<div class="paragraph">
+<p>Using metrics-API specific implementations may be preferred in some cases.nJaeger, for example, defines its own metrics interface, <code>io.jaegertracing.spi.MetricsFactory</code>, that it uses to define counters and gauges. A direct mapping from that interface to the metrics system will be the most efficient. In this case, it is important to isolate these specialized implementations and to avoid eager classloading to ensure the metrics API remains an optional, compile-time dependency.</p>
+</div>
+<div class="paragraph">
+<p><code>Optional&lt;MetricsCapabilityBuildItem&gt; metricsCapability</code> can be used in the build step to selectively control initialization of beans or the production of other build items. The Jaeger extension, for example, can use the following to control initialization of specialized Metrics API adapters:</p>
+</div>
+<div class="paragraph">
+<p>+</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
-void registerMetrics(BuildProducer&lt;MetricBuildItem&gt; metrics) {
-    Metadata activeCountMetadata = Metadata.builder()
-            .withName("agroal.active.count")
-            .withDescription("Count of active connections")
-            .withType(MetricType.GAUGE)
-            .build();
-    List&lt;DataSource&gt; dataSources = getAllDataSources(); // your relevant components specific to the extension
-    for(DataSource dataSource : dataSources) {
-        metrics.produce(new MetricBuildItem(activeCountMetadata,
-                new ActiveCountGauge(dataSource.getName()),
-                agroalBuildTimeConfig.metricsEnabled,
-                configRootName, // name of the config root pertaining to this extension
-                new Tag("datasource", dataSource.getName())));
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">/* RUNTIME_INIT */
+@BuildStep
+@Record(ExecutionTime.RUNTIME_INIT)
+void setupTracer(JaegerDeploymentRecorder jdr, JaegerBuildTimeConfig buildTimeConfig, JaegerConfig jaeger,
+        ApplicationConfig appConfig, Optional&lt;MetricsCapabilityBuildItem&gt; metricsCapability) {
+
+    // Indicates that this extension would like the SSL support to be enabled
+    extensionSslNativeSupport.produce(new ExtensionSslNativeSupportBuildItem(Feature.JAEGER.getName()));
+
+    if (buildTimeConfig.enabled) {
+        boolean metricsEnabled = buildTimeConfig.metricsEnabled &amp;&amp; metricsCapability.isPresent();
+        if ( metricsEnabled &amp;&amp; metricsCapability.get().metricsSupported(MetricsFactory.MP_METRICS)) {
+            jdr.registerTracerWithMpMetrics(jaeger, appConfig);
+        } else if ( metricsEnabled &amp;&amp; metricsCapability.get().metricsSupported(MetricsFactory.MICROMETER)) {
+            jdr.registerTracerWithMicrometer(jaeger, appConfig);
+        } else {
+            jdr.registerTracerWithoutMetrics(jaeger, appConfig);
+        }
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this example, there is a gauge per each data source that shows the current number of active connections.
-In this example, we provide an object that implements the logic of the metric, in the case of a gauge,
-it needs to implement <code>org.eclipse.microprofile.metrics.Gauge</code>. Example:</p>
+<p>A recorder consuming a <code>MetricsFactory</code> can use <code>MetricsFactory::metricsSystemSupported()</code> can be used to control initialization of metrics objects during bytecode recording in a similar way.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public class ActiveCountGauge implements Gauge&lt;Long&gt; {
-
-    private String dataSourceName;
-
-    public ActiveCountGauge() {
-
-    }
-
-    public ActiveCountGauge(String dataSourceName) {
-        this.dataSourceName = dataSourceName;
-    }
-
-    @Override
-    public Long getValue() {
-        DataSource ds = obtainDataSource(dataSourceName); // some logic to get hold of the data source
-        return ds.getMetrics().getActiveCount();
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When registering gauges, it is required to provide a custom object that implements the correct metric type.
-For metric types other than gauges, this is optional - you can choose whether to provide an implementation,
-or whether the default implementation class from <code>SmallRye Metrics</code> should be instantiated for the metric and registered
-in the metric registry. To update the metric value, it will be necessary to look them up in the metric registry
-and call the methods specific to each metric type.</p>
-</div>
-<div class="paragraph">
-<p>Look into the <code>AgroalProcessor#registerMetrics</code> method for an example how this was done for the Agroal extension.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="case-3-it-is-necessary-to-collect-metrics-within-the-extension-code"><a class="anchor" href="#case-3-it-is-necessary-to-collect-metrics-within-the-extension-code"></a>2.9.3. Case 3: It is necessary to collect metrics within the extension code</h4>
 <div class="paragraph">
-<p>In this case, the dependency setup and build-time registration is the same as in case 2. The difference will be that instead of introducing
-custom metric objects that bridge between library-specific metrics and MP Metrics, the extension&#8217;s code will contain metric collection code like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">public void methodThatShouldBeCounted() {
-    if(metricsEnabled) {
-        Counter counter = MetricRegistries.get(MetricRegistry.Type.VENDOR).counter("name");
-        counter.inc();
-    }
-    // proceed with the invocation normally
-}</code></pre>
-</div>
+<p>To define your own metrics from scratch, you have two basic options: Use the generic <code>MetricFactory</code> builders, or follow the binder pattern, and create instrumentation specific to the enabled metrics extension.</p>
 </div>
 <div class="paragraph">
-<p>In this case, be aware that the MP Metrics API and implementation might not be available on the runtime classpath!
-This is why there is a <code>if(metricsEnabled)</code> check that should make sure that if metrics are not enabled, we don&#8217;t touch MP Metrics classes,
-because that would fail. The extension itself will need to provide such check, and it must return true only if both of these conditions hold:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The Metrics capability is present and therefore the SmallRye Metrics library is available</p>
-</li>
-<li>
-<p>Metrics are not disabled for this extension</p>
-</li>
-</ul>
+<p>To use the extension-agnostic <code>MetricFactory</code> API, your processor can define a <code>BuildStep</code> that produces a <code>MetricsFactoryConsumerBuildItem</code> that uses a <code>RUNTIME_INIT</code> or <code>STATIC_INIT</code> Recorder to define a <code>MetricsFactory</code> consumer.</p>
 </div>
 <div class="paragraph">
-<p>The recommended way to implement this check would be to produce a specific <code>SystemPropertyBuildItem</code> during build, which will make it easy
-to evaluate these two conditions, and then check back to this system property at runtime. Example:</p>
+<p>+</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">@BuildStep
-SystemPropertyBuildItem produceMetricsEnabledProperty(AgroalBuildTimeConfig extensionSpecificConfig,
-        Capabilities capabilities) {
-    return new SystemPropertyBuildItem("metrics.enabled",
-            String.valueOf(capabilities.isCapabilityPresent(Capabilities.METRICS) &amp;&amp;
-                            extensionSpecificConfig.metricsEnabled));
+@Record(ExecutionTime.RUNTIME_INIT)
+MetricsFactoryConsumerBuildItem registerMetrics(MyExtensionRecorder recorder) {
+    return new MetricsFactoryConsumerBuildItem(recorder.registerMetrics());
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>+
+- The associated recorder should use the provided <code>MetricsFactory</code> to register metrics, for example</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="java" class="language-java hljs">final LongAdder extensionCounter = new LongAdder();
+
+/* RUNTIME_INIT */
+public Consumer&lt;MetricsFactory&gt; registerMetrics() {
+    return new Consumer&lt;MetricsFactory&gt;() {
+        @Override
+        public void accept(MetricsFactory metricsFactory) {
+            metricsFactory.builder("my.extension.counter")
+                    .buildGauge(extensionCounter::longValue);
+            ....</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Remember that metrics extensions are optional. Keep metrics-related initialization isolated from other setup for your extension, and structure your code to avoid eager imports of metrics APIs.</p>
+</div>
+<div class="paragraph">
+<p>Gathering metrics can be expensive. Consider using additional extension-specific configuration to control behavior of metrics if the presence/absence of metrics support isn&#8217;t sufficient. Datasource metrics can be expensive, for example, so there are additional flags to selectively enable collection of metrics on datasources.</p>
 </div>
 </div>
 </div>
@@ -2681,10 +2972,6 @@ executable. Some of these build items are listed below:</p>
 <dt class="hdlist1"><code>io.quarkus.deployment.builditem.NativeImageEnableAllCharsetsBuildItem</code></dt>
 <dd>
 <p>Indicates that all charsets should be enabled in native image.</p>
-</dd>
-<dt class="hdlist1"><code>io.quarkus.deployment.builditem.NativeImageEnableAllTimeZonesBuildItem</code></dt>
-<dd>
-<p>Indicates that all timezones should be enabled in native image.</p>
 </dd>
 <dt class="hdlist1"><code>io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem</code></dt>
 <dd>
