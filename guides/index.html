@@ -165,7 +165,7 @@
       </li>
     
       <li>
-        <a href="#writing-extensions">Writing Extensions</a>
+        <a href="#miscellaneous">Miscellaneous</a>
       </li>
     
       <li>
@@ -173,7 +173,7 @@
       </li>
     
       <li>
-        <a href="#miscellaneous">Miscellaneous</a>
+        <a href="#writing-extensions">Writing Extensions</a>
       </li>
     
     </ul>
@@ -207,9 +207,16 @@
           </li>
         
           <li class="card">
+              <a href="/guides/cdi"></a>
+              <p class="title">Introduction to CDI</p>
+              <div class="description"><p>Quarkus DI solution is based on the <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec">Contexts and Dependency Injection for Java 2.0</a> specification. This guide explains the basics of CDI.</p>
+</div>
+          </li>
+        
+          <li class="card">
               <a href="/guides/cdi-reference"></a>
-              <p class="title">Contexts and Dependency Injection</p>
-              <div class="description"><p>Quarkus DI solution is based on the <a href="https://docs.jboss.org/cdi/spec/2.0/cdi-spec">Contexts and Dependency Injection for Java 2.0</a> specification. However, it is not a full CDI implementation. Only a subset of the CDI features is implemented - see also the list of supported features and the list of limitations.</p>
+              <p class="title">CDI Reference</p>
+              <div class="description"><p>Go more in depth into the Quarkus implementation of CDI.</p>
 </div>
           </li>
         
@@ -458,6 +465,13 @@ This guide will walk you through all that.</p>
           </li>
         
           <li class="card">
+              <a href="/guides/elasticsearch"></a>
+              <p class="title">Elasticsearch Clients</p>
+              <div class="description"><p>This guide covers how to use an Elasticsearch cluster using the low level or high level REST clients.</p>
+</div>
+          </li>
+        
+          <li class="card">
               <a href="/guides/mongodb"></a>
               <p class="title">MongoDB Client</p>
               <div class="description"><p>This guide covers how to use MongoDB in Quarkus.</p>
@@ -468,6 +482,13 @@ This guide will walk you through all that.</p>
               <a href="/guides/mongodb-panache"></a>
               <p class="title">MongoDB with Panache</p>
               <div class="description"><p>This guide covers the usage of MongoDB using active records and repositories.</p>
+</div>
+          </li>
+        
+          <li class="card">
+              <a href="/guides/redis"></a>
+              <p class="title">Redis Client</p>
+              <div class="description"><p>This guide covers how to use a Redis datastore in Quarkus.</p>
 </div>
           </li>
         
@@ -557,113 +578,8 @@ This guide will walk you through all that.</p>
         
           <li class="card">
               <a href="/guides/security"></a>
-              <p class="title">Using Security</p>
-              <div class="description"><p>This quide demonstrates integration with the Elytron security subsystem to allow for RBAC based on the common security annotations <code class="highlighter-rouge">@RolesAllowed</code>, <code class="highlighter-rouge">@DenyAll</code>, <code class="highlighter-rouge">@PermitAll</code> on REST endpoints.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-properties"></a>
-              <p class="title">Using Security with .properties File</p>
-              <div class="description"><p>This guide demonstrates how your Quarkus application can use a .properties file to store your user identities.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-jpa"></a>
-              <p class="title">Using Security with JPA</p>
-              <div class="description"><p>This guide demonstrates how your Quarkus application can use a database to store your user identities with Hibernate ORM.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-jdbc"></a>
-              <p class="title">Using Security with JDBC</p>
-              <div class="description"><p>This guide demonstrates how your Quarkus application can use a database to store your user identities.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-ldap"></a>
-              <p class="title">Using Security with LDAP</p>
-              <div class="description"><p>This guide demonstrates how your Quarkus application can use a LDAP directory to store your user identities.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-openid-connect"></a>
-              <p class="title">Using OpenID Connect to Protect Service Applications</p>
-              <div class="description"><p>This guide demonstrates how your Quarkus application can use Keycloak to protect your JAX-RS applications using bearer token authorization, where these tokens are issued by a Keycloak server.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-openid-connect-web-authentication"></a>
-              <p class="title">Using OpenID Connect to Protect Web Applications</p>
-              <div class="description"><p>This guide demonstrates how to use the OpenID Connect Extension to protect your web application based on the Authorization Code Flow using Quarkus.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-openid-connect-multitenancy"></a>
-              <p class="title">Using OpenID Connect Multi-Tenancy</p>
-              <div class="description"><p>This guide demonstrates how your OpenID Connect application can support multi-tenancy so that you can serve multiple tenants from a single application.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-keycloak-authorization"></a>
-              <p class="title">Using OpenID Connect and Keycloak to Centralize Authorizations</p>
-              <div class="description"><p>This guide demonstrates how your Quarkus application can authorize access to protected resources using Keycloak Authorization Services.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-jwt"></a>
-              <p class="title">Using JWT RBAC</p>
-              <div class="description"><p>This guide explains how your application can utilize MicroProfile JWT RBAC to provide secured access to the JAX-RS endpoints.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/security-oauth2"></a>
-              <p class="title">Using OAuth2 RBAC</p>
-              <div class="description"><p>This guide explains how your Quarkus application can utilize OAuth2 tokens to provide secured access to the JAX-RS endpoints.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/vault"></a>
-              <p class="title">Using Vault</p>
-              <div class="description"><p>This quide explains how you can use HashiCorp Vault to securely store your credentials in Quarkus.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/vault-transit"></a>
-              <p class="title">Using Vault Transit Secret Engine</p>
-              <div class="description"><p>This quide explains how you can use HashiCorp Vault for “encryption as a service”.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/vault-datasource"></a>
-              <p class="title">Using HashiCorp Vault with Databases</p>
-              <div class="description"><p>Keep confidential your database credentials by storing them in Vault.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/vault-auth"></a>
-              <p class="title">Working with HashiCorp Vault’s Authentication</p>
-              <div class="description"><p>This guide explains the various methods supported by Quarkus to authenticate to your Vault.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/credentials-provider"></a>
-              <p class="title">Credentials Provider</p>
-              <div class="description"><p>This guides explains how to use the Vault credentials provider or implement your own custom one.</p>
+              <p class="title">Security Architecture and Guides</p>
+              <div class="description"><p>This guide is the entry point for everything security in Quarkus.</p>
 </div>
           </li>
         
@@ -860,6 +776,13 @@ This guide will walk you through all that.</p>
               <a href="/guides/funqy-azure-functions-http"></a>
               <p class="title">Quarkus Funqy Azure Functions HTTP</p>
               <div class="description"><p>This guide explains Funqy’s Azure Functions HTTP binding</p>
+</div>
+          </li>
+        
+          <li class="card">
+              <a href="/guides/funqy-gcp-functions"></a>
+              <p class="title">Quarkus Funqy Google Cloud Platform</p>
+              <div class="description"><p>This guide explains Funqy’s Google Cloud Platform binding</p>
 </div>
           </li>
         
@@ -1106,62 +1029,6 @@ This guide will walk you through all that.</p>
       </li>
     
       <li>
-        <h3 id="writing-extensions">Writing Extensions</h3>
-        <ul class="grid-wrapper list-item">
-        
-          <li class="card">
-              <a href="building-my-first-extension"></a>
-              <p class="title">Building My First Extension</p>
-              <div class="description"><p>Learn step by step how to build a simple extension.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/writing-extensions"></a>
-              <p class="title">Writing Your Own Extension</p>
-              <div class="description"><p>Quarkus extensions optimize your applications by pushing as much work as possible to the build operation. This guide explains the rationale of Quarkus extensions and guides you through authoring your own extensions.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/writing-native-applications-tips"></a>
-              <p class="title">Writing Native Applications</p>
-              <div class="description"><p>This guide is a collection of tips to help you solve the problems you encounter when compiling applications to native executable.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/class-loading-reference"></a>
-              <p class="title">Class Loading Reference</p>
-              <div class="description"><p>Learn more about Quarkus class loading infrastructure.</p>
-</div>
-          </li>
-        
-        </ul>
-      </li>
-    
-      <li>
-        <h3 id="alternative-languages">Alternative Languages</h3>
-        <ul class="grid-wrapper list-item">
-        
-          <li class="card">
-              <a href="/guides/kotlin"></a>
-              <p class="title">Using Kotlin</p>
-              <div class="description"><p>This guide explains how to use Kotlin.</p>
-</div>
-          </li>
-        
-          <li class="card">
-              <a href="/guides/hibernate-orm-panache-kotlin"></a>
-              <p class="title">Simplified Hibernate ORM with Panache and Kotlin</p>
-              <div class="description"><p>This explain the specifics of using Hibernate ORM with Panache in a Kotlin project.</p>
-</div>
-          </li>
-        
-        </ul>
-      </li>
-    
-      <li>
         <h3 id="miscellaneous">Miscellaneous</h3>
         <ul class="grid-wrapper list-item">
         
@@ -1169,6 +1036,13 @@ This guide will walk you through all that.</p>
               <a href="/guides/scheduler"></a>
               <p class="title">Scheduling Periodic Tasks</p>
               <div class="description"><p>Modern applications often need to run specific tasks periodically. In this guide, you learn how to schedule periodic tasks.</p>
+</div>
+          </li>
+        
+          <li class="card">
+              <a href="/guides/scheduler-reference"></a>
+              <p class="title">Scheduler Reference</p>
+              <div class="description"><p>Learn more about the Scheduler extension.</p>
 </div>
           </li>
         
@@ -1232,6 +1106,62 @@ This guide will walk you through all that.</p>
               <a href="/guides/performance-measure"></a>
               <p class="title">Measuring Performance</p>
               <div class="description"><p>This guide explains how to best measure the footprint of a Quarkus application.</p>
+</div>
+          </li>
+        
+        </ul>
+      </li>
+    
+      <li>
+        <h3 id="alternative-languages">Alternative Languages</h3>
+        <ul class="grid-wrapper list-item">
+        
+          <li class="card">
+              <a href="/guides/kotlin"></a>
+              <p class="title">Using Kotlin</p>
+              <div class="description"><p>This guide explains how to use Kotlin.</p>
+</div>
+          </li>
+        
+          <li class="card">
+              <a href="/guides/hibernate-orm-panache-kotlin"></a>
+              <p class="title">Simplified Hibernate ORM with Panache and Kotlin</p>
+              <div class="description"><p>This explain the specifics of using Hibernate ORM with Panache in a Kotlin project.</p>
+</div>
+          </li>
+        
+        </ul>
+      </li>
+    
+      <li>
+        <h3 id="writing-extensions">Writing Extensions</h3>
+        <ul class="grid-wrapper list-item">
+        
+          <li class="card">
+              <a href="building-my-first-extension"></a>
+              <p class="title">Building My First Extension</p>
+              <div class="description"><p>Learn step by step how to build a simple extension.</p>
+</div>
+          </li>
+        
+          <li class="card">
+              <a href="/guides/writing-extensions"></a>
+              <p class="title">Writing Your Own Extension</p>
+              <div class="description"><p>Quarkus extensions optimize your applications by pushing as much work as possible to the build operation. This guide explains the rationale of Quarkus extensions and guides you through authoring your own extensions.</p>
+</div>
+          </li>
+        
+          <li class="card">
+              <a href="/guides/writing-native-applications-tips"></a>
+              <p class="title">Writing Native Applications</p>
+              <div class="description"><p>This guide is a collection of tips to help you solve the problems you encounter when compiling applications to native executable.</p>
+</div>
+          </li>
+        
+          <li class="card">
+              <a href="/guides/class-loading-reference"></a>
+              <p class="title">Class Loading Reference</p>
+              <div class="description"><p>Learn more about Quarkus class loading infrastructure.</p>
 </div>
           </li>
         
