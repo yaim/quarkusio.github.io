@@ -455,6 +455,14 @@ quarkus.http.port=9090
 
 The Quarkus HTTP port will be 9090, unless the `dev` profile is active, in which case it will be 8181.
 
+To use profiles in `.env` file, you can follow a `_{PROFILE}_CONFIG_KEY=value` pattern. A equivalent of the above example in `.env` file would be:
+
+[source,.env]
+----
+QUARKUS_HTTP_PORT=9090
+_DEV_QUARKUS_HTTP_PORT=8181
+----
+
 By default Quarkus has three profiles, although it is possible to use as many as you like. The default profiles are:
 
 * *dev* - Activated when in development mode (i.e. `quarkus:dev`)
